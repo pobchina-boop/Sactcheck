@@ -12,9 +12,9 @@
     "published_date": "2022-12-19",
     "review_date": "2029-01-19",
     "source_url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-    "source_document_pages": null,
-    "source_checked_date": "2026-07-25",
-    "sactcheck_encoding_version": "0.42.0",
+    "source_document_pages": 7,
+    "source_checked_date": "2026-11-05",
+    "sactcheck_encoding_version": "0.84.39",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "neuro_subgroup": "recurrent_glioblastoma",
@@ -45,11 +45,16 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "audit_release": "0.84.39",
+      "source_boundary_tests_completed": true,
+      "source_boundary_test_evidence": "validation/neuro-oncology-v08439/lomustine-bev-source-audit/source-case-results.json",
+      "software_tests_scope_note": "Source-boundary/assessment/dose-output checks passed. Full release, browser, PDF and QR checks must be completed after integration; software_tests_completed remains false until then."
     },
     "tumour_group": "Neuro-oncology",
     "tumour_groups": [
@@ -69,17 +74,65 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.39",
+      "audit_date": "2026-11-05",
+      "scope_note": "NCCP and current product sources reconciled with explicit gaps/conflicts. Software evidence does not establish independent clinical approval."
     },
-    "canonical_protocol_id": "nccp-00742-v3"
+    "canonical_protocol_id": "nccp-00742-v3",
+    "clinical_audit_release": "0.84.39",
+    "source_pdf_sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+    "source_revision_date": "2024-01-19",
+    "source_review_date": "2029-01-19",
+    "source_document_version": "3",
+    "clinical_source_supplements": [
+      {
+        "document": "Lomustine medac common SmPC, revision2026-01-16",
+        "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+        "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+        "page": 2,
+        "retrieved": "2026-11-05",
+        "section": "4.2-4.6"
+      },
+      {
+        "document": "EMA Avastin SmPC",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+        "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+        "page": 5,
+        "retrieved": "2026-11-05",
+        "section": "4.2-4.6"
+      }
+    ],
+    "source_conflicts": [
+      {
+        "topic": "Platelets80 to<100",
+        "resolution": "Source table does not allocate a dose. Specialist review unless an existing hold still requires recovery to 100."
+      },
+      {
+        "topic": "Lomustine blood-count recovery",
+        "resolution": "NCCP ANC >=1 differs from common SmPC WBC >=4. These measures are not interchangeable; reconcile the product and clinical context before restart."
+      },
+      {
+        "topic": "Lomustine nadir table overlap",
+        "resolution": "Current common SmPC 70% row includes platelets 24,000-74,999 but 50% row includes <25,000. No automated dose from that overlapping source table."
+      },
+      {
+        "topic": "Lomustine contraception",
+        "resolution": "NCCP 6 months after treatment differs from current common SmPC 7 months for women/4 months for men. Confirm the actual products and combined regimen with pharmacy."
+      },
+      {
+        "topic": "Pulmonary monitoring",
+        "resolution": "NCCP PFTs are conditional; current common SmPC recommends baseline and ongoing tests. Source-specific planning must remain explicit."
+      },
+      {
+        "topic": "Renal dose basis and cap",
+        "resolution": "75% of original lomustine dose requires the actual original capped dose and prior reduction history. No automatic multiplication of a nominal 90 mg/m 2 reference."
+      }
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -94,10 +147,56 @@
   ],
   "treatment": {
     "cycle_length_days": 42,
-    "schedule_summary": "Bevacizumab 5 mg/kg IV on Days 1, 15 and 29 and lomustine 90 mg/m² orally on Day 1 every 42 days for up to 6 cycles.",
+    "schedule_summary": "Bevacizumab 5 mg/kg IV on Days 1,15,29 and lomustine 90 mg/m² orally on Day 1 (maximum 160 mg), every 42 days for up to six cycles.",
     "drugs": [
       "bevacizumab",
       "lomustine"
+    ],
+    "planned_cycles": 6,
+    "duration_type": "fixed_cycles",
+    "duration_text": "Up to six 42-day cycles; delays and dose changes depend on the individual plan.",
+    "source": {
+      "document": "NCCP 00742 v3",
+      "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+      "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+      "page": 1,
+      "retrieved": "2026-11-05"
+    },
+    "components": [
+      {
+        "drug": "bevacizumab",
+        "dose": "5 mg/kg",
+        "route": "IV",
+        "days": [
+          1,
+          15,
+          29
+        ],
+        "note": "Initial infusion 90 minutes, then 60 and 30 minutes only if tolerated; rapid infusion requires the separate approved local plan. No bolus.",
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
+        }
+      },
+      {
+        "drug": "lomustine",
+        "dose": "90 mg/m² (maximum 160 mg)",
+        "route": "PO",
+        "days": [
+          1
+        ],
+        "note": "Single Day 1 oral dose only, not daily. Confirm the actual capped dose, capsule strength and pharmacy supply. Never repeat before six weeks.",
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
+        }
+      }
     ]
   },
   "input_definitions": {
@@ -131,7 +230,7 @@
       "input_role": "decision"
     },
     "hypersensitivity": {
-      "label": "Relevant bevacizumab / CHO-product hypersensitivity",
+      "label": "Hypersensitivity to lomustine, bevacizumab, an excipient or a relevant CHO/recombinant antibody product",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -161,7 +260,7 @@
       "input_role": "decision"
     },
     "lomustine_renal_band": {
-      "label": "Renal function for lomustine",
+      "label": "Legacy lomustine renal band (use the exact CrCl field when available)",
       "type": "select",
       "required": false,
       "options": [
@@ -248,7 +347,7 @@
       "ctcae_category": "other_nonhaematological",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Identify the exact adverse event and assess severity, intervention required and functional impact.",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "anc_x10e9_l": {
       "label": "Absolute neutrophil count",
@@ -332,11 +431,6 @@
       ],
       "ui_section": "clinical",
       "demo_value": 0,
-      "visible_when": {
-        "field": "uncontrolled_or_symptomatic_hypertension",
-        "operator": "==",
-        "value": true
-      },
       "ctcae_version": "5.0",
       "ctcae_category": "hypertension",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
@@ -344,7 +438,7 @@
       "input_role": "decision"
     },
     "severe_bp_uncontrolled": {
-      "label": "Blood pressure >200/110 mmHg and uncontrolled",
+      "label": "Severe hypertension remains uncontrolled despite medication (legacy >200/110 flag)",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -399,15 +493,6 @@
       "demo_value": 2,
       "ui_section": "labs",
       "unit": "g/24 h",
-      "visible_when": {
-        "field": "proteinuria_dipstick",
-        "operator": "in",
-        "value": [
-          "2+",
-          "3+",
-          "4+"
-        ]
-      },
       "input_role": "decision"
     },
     "fistula_grade": {
@@ -573,6 +658,344 @@
       "demo_value": false,
       "ui_section": "clinical",
       "input_role": "decision"
+    },
+    "assessment_type": {
+      "label": "Assessment timing",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first treatment"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment / before a dose"
+        },
+        {
+          "value": "restart",
+          "label": "Considering restart after a delay or toxicity"
+        }
+      ],
+      "demo_value": "baseline"
+    },
+    "visit_type": {
+      "label": "Administration being considered",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "combination_day1",
+          "label": "Day 1: lomustine and bevacizumab"
+        },
+        {
+          "value": "bevacizumab_only",
+          "label": "Bevacizumab-only visit"
+        },
+        {
+          "value": "other",
+          "label": "Different visit: confirm prescription"
+        }
+      ],
+      "demo_value": "combination_day1"
+    },
+    "cycle_number": {
+      "label": "Planned 42-day cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 99,
+      "step": 1,
+      "unit": "cycle",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance for lomustine",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 300,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 80
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "lomustine_hepatic_severity": {
+      "label": "Clinically assessed hepatic impairment for lomustine",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        },
+        {
+          "value": "uncertain",
+          "label": "Severity not established"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "fvc_percent_predicted": {
+      "label": "FVC, if measured",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 200,
+      "step": 0.01,
+      "unit": "% predicted",
+      "input_role": "decision",
+      "demo_value": 90
+    },
+    "wbc_x10e9_l": {
+      "label": "Total white blood cell count (distinct from ANC)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 500,
+      "step": 0.01,
+      "unit": "x10^9/L",
+      "input_role": "decision",
+      "demo_value": 5
+    },
+    "days_since_last_lomustine": {
+      "label": "Days since the previous lomustine dose (repeat courses only)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 10000,
+      "step": 1,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 42
+    },
+    "lomustine_cumulative_mg_m2": {
+      "label": "Cumulative lomustine exposure before the proposed dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 10000,
+      "step": 0.01,
+      "unit": "mg/m2",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "lomustine_cumulative_with_next_mg_m2": {
+      "label": "Cumulative lomustine exposure INCLUDING the proposed next dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 10000,
+      "step": 0.01,
+      "unit": "mg/m2",
+      "input_role": "decision",
+      "demo_value": 90
+    },
+    "lomustine_marrow_delay_history": {
+      "label": "Previous lomustine count-related delay or clinically important marrow nadir",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restart_plan_uncertain": {
+      "label": "Previous dose, nadir or recovery information is incomplete",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypertension_grade3_persisting": {
+      "label": "Grade 3 hypertension persists despite treatment / reassessment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "clinically_significant_htn_not_controlled": {
+      "label": "Medically significant hypertension cannot be adequately controlled by treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "urine_protein_g_l": {
+      "label": "Spot laboratory urine protein CONCENTRATION (not a 24-hour total)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "unit": "g/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "nephrotic_syndrome": {
+      "label": "Nephrotic syndrome / source grade 4 proteinuria",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "tracheoesophageal_fistula": {
+      "label": "Tracheoesophageal fistula (any grade)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_internal_fistula": {
+      "label": "Other internal fistula needing specialist review",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recent_intracranial_haemorrhage": {
+      "label": "Recent intracranial haemorrhage",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recent_stroke_or_mi_lt1y": {
+      "label": "Stroke or myocardial infarction within one year",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "minimal_contrast_enhancement_or_gliomatosis": {
+      "label": "No/minimal contrast enhancement or gliomatosis cerebri",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "days_since_major_surgery": {
+      "label": "Days since major surgery",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 10000,
+      "step": 1,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 90
+    },
+    "wound_fully_healed": {
+      "label": "Surgical wound fully healed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "planned_minor_surgery": {
+      "label": "Minor surgery planned",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_pres_or_acute_neuro_symptoms": {
+      "label": "Suspected PRES or new severe headache, seizures, visual change or altered mental status",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "infusion_reaction": {
+      "label": "Current infusion reaction or anaphylaxis concern",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "new_major_bleeding": {
+      "label": "New concerning bleeding requiring urgent assessment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "high_bleeding_thrombotic_cardiovascular_or_fistula_risk": {
+      "label": "Significant bleeding, thrombotic, cardiovascular, aneurysm or fistula/perforation risk",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "concurrent_radiotherapy": {
+      "label": "Concurrent radiotherapy proposed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "wheat_allergy_or_nitrosourea_nonresponse": {
+      "label": "Lomustine product safety: wheat allergy or previous failure to respond to another nitrosourea",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "live_vaccine_planned_or_given": {
+      "label": "Live vaccine planned or recently given during immunosuppression",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "interaction_review_needed": {
+      "label": "Interaction concern, including antiepileptics, cimetidine, theophylline or anticoagulation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "monitoring_or_support_not_ready": {
+      "label": "Required tests, oral antiemetics, prescription or support plan not ready",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "eligible_recurrent_glioblastoma_confirmed": {
+      "label": "Source-defined recurrent malignant glioblastoma indication confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "lomustine_formulation_or_supply_uncertain": {
+      "label": "Lomustine formulation, capsule strength, single-dose instruction or supply is uncertain",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -606,7 +1029,7 @@
     "rules": [
       {
         "id": "ECOG_OUTSIDE_PATHWAY",
-        "priority": 8,
+        "priority": 50,
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -615,19 +1038,56 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "lomustine",
+            "bevacizumab"
           ],
-          "message": "ECOG above 2 is outside the routine encoded eligibility pathway; confirm individual benefit–risk with the prescribing consultant."
+          "message": "ECOG above 2 lies outside the routine NCCP eligibility range. Confirm individual benefit and risk; this is not a treatment clearance.",
+          "recommendation": "ECOG above 2 lies outside the routine NCCP eligibility range. Confirm individual benefit and risk; this is not a treatment clearance.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "ECOG above 2 is outside the routine encoded eligibility pathway; confirm individual benefit–risk with the prescribing consultant."
+        "explanation": "ECOG above 2 lies outside the routine NCCP eligibility range. Confirm individual benefit and risk; this is not a treatment clearance."
+      },
+      {
+        "id": "INDICATION_NOT_CONFIRMED",
+        "priority": 50,
+        "when": {
+          "field": "eligible_recurrent_glioblastoma_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "Confirm the recurrent malignant glioblastoma indication and the intended treatment plan before applying this regimen.",
+          "recommendation": "Confirm the recurrent malignant glioblastoma indication and the intended treatment plan before applying this regimen.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Confirm the recurrent malignant glioblastoma indication and the intended treatment plan before applying this regimen."
       },
       {
         "id": "HYPERSENSITIVITY",
-        "priority": 10,
+        "priority": 90,
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -636,19 +1096,27 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "lomustine",
+            "bevacizumab"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "message": "Relevant drug or product hypersensitivity is an exclusion.",
+          "recommendation": "Relevant drug or product hypersensitivity is an exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+        "explanation": "Relevant drug or product hypersensitivity is an exclusion."
       },
       {
         "id": "PREGNANCY",
-        "priority": 10,
+        "priority": 90,
         "when": {
           "field": "pregnancy",
           "operator": "==",
@@ -657,19 +1125,27 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "lomustine",
+            "bevacizumab"
           ],
-          "message": "Pregnancy is an exclusion or requires urgent specialist review under the current regimen."
+          "message": "Pregnancy is an exclusion.",
+          "recommendation": "Pregnancy is an exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Pregnancy is an exclusion or requires urgent specialist review under the current regimen."
+        "explanation": "Pregnancy is an exclusion."
       },
       {
         "id": "BREASTFEEDING",
-        "priority": 10,
+        "priority": 90,
         "when": {
           "field": "breastfeeding",
           "operator": "==",
@@ -678,19 +1154,114 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "lomustine",
+            "bevacizumab"
           ],
-          "message": "Breastfeeding is an exclusion under the current regimen."
+          "message": "Breastfeeding is an exclusion.",
+          "recommendation": "Breastfeeding is an exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Breastfeeding is an exclusion under the current regimen."
+        "explanation": "Breastfeeding is an exclusion."
+      },
+      {
+        "id": "RECENT_ICH",
+        "priority": 90,
+        "when": {
+          "field": "recent_intracranial_haemorrhage",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "Recent intracranial haemorrhage is an NCCP exclusion.",
+          "recommendation": "Recent intracranial haemorrhage is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Recent intracranial haemorrhage is an NCCP exclusion."
+      },
+      {
+        "id": "RECENT_STROKE_MI",
+        "priority": 90,
+        "when": {
+          "field": "recent_stroke_or_mi_lt1y",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "Stroke or MI within one year is an NCCP exclusion.",
+          "recommendation": "Stroke or MI within one year is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Stroke or MI within one year is an NCCP exclusion."
+      },
+      {
+        "id": "MINIMAL_ENHANCEMENT",
+        "priority": 90,
+        "when": {
+          "field": "minimal_contrast_enhancement_or_gliomatosis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "No/minimal contrast enhancement or gliomatosis cerebri is an NCCP exclusion.",
+          "recommendation": "No/minimal contrast enhancement or gliomatosis cerebri is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "No/minimal contrast enhancement or gliomatosis cerebri is an NCCP exclusion."
       },
       {
         "id": "ACTIVE_INFECTION",
-        "priority": 9,
+        "priority": 70,
         "when": {
           "field": "active_infection",
           "operator": "==",
@@ -699,154 +1270,208 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "lomustine",
+            "bevacizumab"
           ],
-          "message": "Active clinically significant infection requires treatment and reassessment before SACT."
+          "message": "Do not administer pending urgent infection assessment and a consultant plan. Infections may occur with delayed lomustine marrow suppression.",
+          "recommendation": "Do not administer pending urgent infection assessment and a consultant plan. Infections may occur with delayed lomustine marrow suppression.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Clinical assessment"
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
         },
-        "explanation": "Active clinically significant infection requires treatment and reassessment before SACT."
+        "explanation": "Do not administer pending urgent infection assessment and a consultant plan. Infections may occur with delayed lomustine marrow suppression.",
+        "evidence_interpretation": "Conservative assessment/review pathway derived from the cited warning; not a newly invented numeric NCCP dose-reduction table."
       },
       {
-        "id": "LOM_RENAL_30_50",
-        "priority": 8,
+        "id": "CYCLE_LIMIT",
+        "priority": 50,
         "when": {
-          "field": "lomustine_renal_band",
+          "field": "cycle_number",
+          "operator": ">",
+          "value": 6
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "NCCP specifies up to six 42-day cycles. Further treatment requires an explicit consultant plan, not automatic continuation.",
+          "recommendation": "NCCP specifies up to six 42-day cycles. Further treatment requires an explicit consultant plan, not automatic continuation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "NCCP specifies up to six 42-day cycles. Further treatment requires an explicit consultant plan, not automatic continuation."
+      },
+      {
+        "id": "VISIT_OTHER",
+        "priority": 50,
+        "when": {
+          "field": "visit_type",
           "operator": "==",
-          "value": "30_50"
+          "value": "other"
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "lomustine"
+            "lomustine",
+            "bevacizumab"
           ],
-          "message": "Use 75% of the original lomustine dose."
+          "message": "This schedule has Day 1 combination treatment and separate bevacizumab-only visits. Confirm the intended drugs and administration day.",
+          "recommendation": "This schedule has Day 1 combination treatment and separate bevacizumab-only visits. Confirm the intended drugs and administration day.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Use 75% of the original lomustine dose."
-      },
-      {
-        "id": "LOM_RENAL_LT30",
-        "priority": 10,
-        "when": {
-          "field": "lomustine_renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
-          ]
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "lomustine"
-          ],
-          "message": "Lomustine is not recommended at CrCl <30 mL/min or during haemodialysis."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Lomustine is not recommended at CrCl <30 mL/min or during haemodialysis."
-      },
-      {
-        "id": "LOM_PULMONARY",
-        "priority": 10,
-        "when": {
-          "field": "pulmonary_symptoms_or_concern",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "lomustine"
-          ],
-          "message": "Withhold lomustine and investigate suspected pulmonary toxicity; discuss with the prescribing consultant."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Withhold lomustine and investigate suspected pulmonary toxicity; discuss with the prescribing consultant."
-      },
-      {
-        "id": "LOM_DLCO_LT60",
-        "priority": 9,
-        "when": {
-          "field": "dlco_percent_predicted",
-          "operator": "<",
-          "value": 60
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "lomustine"
-          ],
-          "message": "DLCO below 60% predicted requires withholding and specialist pulmonary/consultant review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "DLCO below 60% predicted requires withholding and specialist pulmonary/consultant review."
+        "explanation": "This schedule has Day 1 combination treatment and separate bevacizumab-only visits. Confirm the intended drugs and administration day."
       },
       {
         "id": "LOM_ANC_LT1",
-        "priority": 9,
+        "priority": 70,
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "lomustine"
           ],
-          "message": "Delay lomustine until ANC is at least 1.0 ×10⁹/L and platelets are at least 100 ×10⁹/L; consider dose reduction."
+          "message": "Delay lomustine until ANC is at least 1.0 AND platelets at least 100 x 10^9/L. Review the prior nadir and dose; NCCP only says consider reduction and gives no percentage.",
+          "recommendation": "Delay lomustine until ANC is at least 1.0 AND platelets at least 100 x 10^9/L. Review the prior nadir and dose; NCCP only says consider reduction and gives no percentage.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
         },
-        "explanation": "Delay lomustine until ANC is at least 1.0 ×10⁹/L and platelets are at least 100 ×10⁹/L; consider dose reduction."
+        "explanation": "Delay lomustine until ANC is at least 1.0 AND platelets at least 100 x 10^9/L. Review the prior nadir and dose; NCCP only says consider reduction and gives no percentage."
       },
       {
         "id": "LOM_PLT_LT80",
-        "priority": 9,
+        "priority": 70,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 80
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 80
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "lomustine"
           ],
-          "message": "Delay lomustine until ANC is at least 1.0 ×10⁹/L and platelets are at least 100 ×10⁹/L; consider dose reduction."
+          "message": "Delay lomustine until ANC is at least 1.0 AND platelets at least 100 x 10^9/L. Any subsequent reduction needs the consultant/pharmacy plan.",
+          "recommendation": "Delay lomustine until ANC is at least 1.0 AND platelets at least 100 x 10^9/L. Any subsequent reduction needs the consultant/pharmacy plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
         },
-        "explanation": "Delay lomustine until ANC is at least 1.0 ×10⁹/L and platelets are at least 100 ×10⁹/L; consider dose reduction."
+        "explanation": "Delay lomustine until ANC is at least 1.0 AND platelets at least 100 x 10^9/L. Any subsequent reduction needs the consultant/pharmacy plan."
       },
       {
         "id": "LOM_PLT_80_99",
-        "priority": 7,
+        "priority": 50,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "between_inclusive",
-          "value": [
-            80,
-            99
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 80
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
           ]
         },
         "action": {
@@ -854,374 +1479,2356 @@
           "components": [
             "lomustine"
           ],
-          "message": "Platelets are below the stated full-dose threshold of 100 ×10⁹/L; confirm recovery and dosing with the prescribing consultant."
+          "message": "Platelets 80 to below 100 are not allocated a dose by NCCP Table 1. Do not infer a full dose. If already held for low counts, the recovery target remains at least 100.",
+          "recommendation": "Platelets 80 to below 100 are not allocated a dose by NCCP Table 1. Do not infer a full dose. If already held for low counts, the recovery target remains at least 100.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
         },
-        "explanation": "Platelets are below the stated full-dose threshold of 100 ×10⁹/L; confirm recovery and dosing with the prescribing consultant."
+        "explanation": "Platelets 80 to below 100 are not allocated a dose by NCCP Table 1. Do not infer a full dose. If already held for low counts, the recovery target remains at least 100."
       },
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "id": "LOM_PRIOR_DELAY_NOT_RECOVERED",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "lomustine_marrow_delay_history",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<",
+                      "value": 1
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": "<",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "contraindicated",
+          "type": "withhold",
           "components": [
-            "bevacizumab"
+            "lomustine"
           ],
-          "recommendation": "Do not administer bevacizumab; obtain consultant review."
+          "message": "The previous count-related delay has not met BOTH NCCP recovery targets. No lomustine dose now.",
+          "recommendation": "The previous count-related delay has not met BOTH NCCP recovery targets. No lomustine dose now.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
         },
-        "explanation": "Hypersensitivity is an exclusion."
+        "explanation": "The previous count-related delay has not met BOTH NCCP recovery targets. No lomustine dose now."
       },
       {
-        "rule_id": "PREGNANCY_REVIEW",
-        "field": "pregnancy",
-        "operator": "==",
-        "value": true,
+        "id": "LOM_PRIOR_DELAY_RECOVERY_REVIEW",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "lomustine_marrow_delay_history",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
-            "bevacizumab"
+            "lomustine"
           ],
-          "recommendation": "Do not administer bevacizumab during pregnancy; urgent consultant review is required."
+          "message": "Counts meet the NCCP recovery thresholds after a previous delay. Confirm the original dose, nadir, prior reductions and consultant decision; no percentage is specified by this NCCP table.",
+          "recommendation": "Counts meet the NCCP recovery thresholds after a previous delay. Confirm the original dose, nadir, prior reductions and consultant decision; no percentage is specified by this NCCP table.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
         },
-        "explanation": "Pregnancy is an exclusion."
+        "explanation": "Counts meet the NCCP recovery thresholds after a previous delay. Confirm the original dose, nadir, prior reductions and consultant decision; no percentage is specified by this NCCP table."
       },
       {
-        "rule_id": "UNHEALED_WOUND_OR_RECENT_SURGERY",
-        "field": "recent_major_surgery_or_unhealed_wound",
-        "operator": "==",
-        "value": true,
+        "id": "LOM_RESTART_MISSING_COUNTS",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "assessment_type",
+                  "operator": "==",
+                  "value": "restart"
+                },
+                {
+                  "any": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": "missing"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Restart cannot be assessed without both current ANC and platelets plus the prior nadir and dose history. Missing counts are not normal counts.",
+          "recommendation": "Restart cannot be assessed without both current ANC and platelets plus the prior nadir and dose history. Missing counts are not normal counts.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
+        },
+        "explanation": "Restart cannot be assessed without both current ANC and platelets plus the prior nadir and dose history. Missing counts are not normal counts."
+      },
+      {
+        "id": "RESTART_PLAN_UNCERTAIN",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "restart_plan_uncertain",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Confirm previous actual lomustine dose, prior nadir, recovery and reason for interruption. Do not calculate a restart from the standard schedule alone.",
+          "recommendation": "Confirm previous actual lomustine dose, prior nadir, recovery and reason for interruption. Do not calculate a restart from the standard schedule alone.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.2"
+        },
+        "explanation": "Confirm previous actual lomustine dose, prior nadir, recovery and reason for interruption. Do not calculate a restart from the standard schedule alone."
+      },
+      {
+        "id": "LOM_WBC_SOURCE_CONFLICT",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "assessment_type",
+                  "operator": "==",
+                  "value": "restart"
+                },
+                {
+                  "field": "wbc_x10e9_l",
+                  "operator": "<",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "The current product SmPC requests total WBC recovery to 4.0, while NCCP uses ANC 1.0. These are different measures; reconcile the actual product and protocol with oncology pharmacy before restart.",
+          "recommendation": "The current product SmPC requests total WBC recovery to 4.0, while NCCP uses ANC 1.0. These are different measures; reconcile the actual product and protocol with oncology pharmacy before restart.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.2"
+        },
+        "explanation": "The current product SmPC requests total WBC recovery to 4.0, while NCCP uses ANC 1.0. These are different measures; reconcile the actual product and protocol with oncology pharmacy before restart."
+      },
+      {
+        "id": "LOM_RENAL_30_50",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">=",
+                      "value": 30
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<=",
+                      "value": 50
+                    }
+                  ]
+                },
+                {
+                  "field": "lomustine_renal_band",
+                  "operator": "==",
+                  "value": "30_50"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "NCCP recommends 75% of the ORIGINAL lomustine dose at CrCl 30-50 mL/min. Confirm the actual original capped dose, prior reductions, recovery and product advice; do not calculate from a nominal 90 mg/m 2 schedule or re-escalate a reduced dose.",
+          "recommendation": "NCCP recommends 75% of the ORIGINAL lomustine dose at CrCl 30-50 mL/min. Confirm the actual original capped dose, prior reductions, recovery and product advice; do not calculate from a nominal 90 mg/m 2 schedule or re-escalate a reduced dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 2
+        },
+        "explanation": "NCCP recommends 75% of the ORIGINAL lomustine dose at CrCl 30-50 mL/min. Confirm the actual original capped dose, prior reductions, recovery and product advice; do not calculate from a nominal 90 mg/m 2 schedule or re-escalate a reduced dose."
+      },
+      {
+        "id": "LOM_RENAL_LT30",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 30
+                },
+                {
+                  "field": "lomustine_renal_band",
+                  "operator": "in",
+                  "value": [
+                    "lt30",
+                    "dialysis"
+                  ]
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Lomustine is not recommended at CrCl below 30 mL/min or during haemodialysis. Do not administer pending specialist review; the severe-renal product contraindication must be reconciled.",
+          "recommendation": "Lomustine is not recommended at CrCl below 30 mL/min or during haemodialysis. Do not administer pending specialist review; the severe-renal product contraindication must be reconciled.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 2
+        },
+        "explanation": "Lomustine is not recommended at CrCl below 30 mL/min or during haemodialysis. Do not administer pending specialist review; the severe-renal product contraindication must be reconciled."
+      },
+      {
+        "id": "LOM_RENAL_INPUT_CONFLICT",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "lomustine_renal_band",
+                      "operator": "==",
+                      "value": "gt50"
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<=",
+                      "value": 50
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "lomustine_renal_band",
+                      "operator": "==",
+                      "value": "30_50"
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "crcl_ml_min",
+                          "operator": "<",
+                          "value": 30
+                        },
+                        {
+                          "field": "crcl_ml_min",
+                          "operator": ">",
+                          "value": 50
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "lomustine_renal_band",
+                      "operator": "==",
+                      "value": "lt30"
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">=",
+                      "value": 30
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "lomustine_renal_band",
+                      "operator": "==",
+                      "value": "dialysis"
+                    },
+                    {
+                      "field": "haemodialysis",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Exact CrCl/dialysis status and the legacy band conflict. Resolve the discrepancy before any renal dose decision; no automatic dose.",
+          "recommendation": "Exact CrCl/dialysis status and the legacy band conflict. Resolve the discrepancy before any renal dose decision; no automatic dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 2
+        },
+        "explanation": "Exact CrCl/dialysis status and the legacy band conflict. Resolve the discrepancy before any renal dose decision; no automatic dose."
+      },
+      {
+        "id": "LOM_HEPATIC_SEVERE",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "lomustine_hepatic_severity",
+              "operator": "==",
+              "value": "severe"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Lomustine is not recommended in severe hepatic impairment. Obtain consultant/pharmacy review; NCCP does not define this by an isolated numeric liver result.",
+          "recommendation": "Lomustine is not recommended in severe hepatic impairment. Obtain consultant/pharmacy review; NCCP does not define this by an isolated numeric liver result.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 2
+        },
+        "explanation": "Lomustine is not recommended in severe hepatic impairment. Obtain consultant/pharmacy review; NCCP does not define this by an isolated numeric liver result."
+      },
+      {
+        "id": "LOM_HEPATIC_UNCERTAIN",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "lomustine_hepatic_severity",
+              "operator": "==",
+              "value": "uncertain"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Establish hepatic impairment severity before the lomustine decision. Mild/moderate impairment does not usually require adjustment; severe impairment is not recommended.",
+          "recommendation": "Establish hepatic impairment severity before the lomustine decision. Mild/moderate impairment does not usually require adjustment; severe impairment is not recommended.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 2
+        },
+        "explanation": "Establish hepatic impairment severity before the lomustine decision. Mild/moderate impairment does not usually require adjustment; severe impairment is not recommended."
+      },
+      {
+        "id": "LOM_REPEAT_TOO_EARLY",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "days_since_last_lomustine",
+                  "operator": "<",
+                  "value": 42
+                },
+                {
+                  "any": [
+                    {
+                      "field": "visit_type",
+                      "operator": "==",
+                      "value": "combination_day1"
+                    },
+                    {
+                      "field": "visit_type",
+                      "operator": "missing"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Do not repeat lomustine before six weeks after the preceding dose. This is a single Day 1 oral dose, not daily treatment. A separate bevacizumab-only visit must be assessed independently.",
+          "recommendation": "Do not repeat lomustine before six weeks after the preceding dose. This is a single Day 1 oral dose, not daily treatment. A separate bevacizumab-only visit must be assessed independently.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.2"
+        },
+        "explanation": "Do not repeat lomustine before six weeks after the preceding dose. This is a single Day 1 oral dose, not daily treatment. A separate bevacizumab-only visit must be assessed independently."
+      },
+      {
+        "id": "LOM_CUMULATIVE_LIMIT",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "lomustine_cumulative_mg_m2",
+                  "operator": ">=",
+                  "value": 1000
+                },
+                {
+                  "field": "lomustine_cumulative_with_next_mg_m2",
+                  "operator": ">",
+                  "value": 1000
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Current lomustine product SmPC limits cumulative exposure to 1000 mg/m 2. No further dose that exceeds this limit; reconcile previous exposure and the intended product with oncology pharmacy.",
+          "recommendation": "Current lomustine product SmPC limits cumulative exposure to 1000 mg/m 2. No further dose that exceeds this limit; reconcile previous exposure and the intended product with oncology pharmacy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.2"
+        },
+        "explanation": "Current lomustine product SmPC limits cumulative exposure to 1000 mg/m 2. No further dose that exceeds this limit; reconcile previous exposure and the intended product with oncology pharmacy."
+      },
+      {
+        "id": "LOM_CUMULATIVE_REVIEW",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "lomustine_cumulative_mg_m2",
+                  "operator": ">",
+                  "value": 0
+                },
+                {
+                  "field": "lomustine_cumulative_with_next_mg_m2",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Prior lomustine exposure is recorded. Confirm the proposed next dose and cumulative total before administration; do not assume this is the first course.",
+          "recommendation": "Prior lomustine exposure is recorded. Confirm the proposed next dose and cumulative total before administration; do not assume this is the first course.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.2"
+        },
+        "explanation": "Prior lomustine exposure is recorded. Confirm the proposed next dose and cumulative total before administration; do not assume this is the first course."
+      },
+      {
+        "id": "LOM_PULMONARY",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "pulmonary_symptoms_or_concern",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Withhold pending assessment of possible lomustine pulmonary toxicity and the prescribing consultant plan. New respiratory symptoms must not be dismissed as ordinary fatigue.",
+          "recommendation": "Withhold pending assessment of possible lomustine pulmonary toxicity and the prescribing consultant plan. New respiratory symptoms must not be dismissed as ordinary fatigue.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Withhold pending assessment of possible lomustine pulmonary toxicity and the prescribing consultant plan. New respiratory symptoms must not be dismissed as ordinary fatigue.",
+        "evidence_interpretation": "Conservative assessment/review pathway derived from the cited warning; not a newly invented numeric NCCP dose-reduction table."
+      },
+      {
+        "id": "LOM_LOW_PFT_CAUTION",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "fvc_percent_predicted",
+                  "operator": "<",
+                  "value": 70
+                },
+                {
+                  "field": "dlco_percent_predicted",
+                  "operator": "<",
+                  "value": 70
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "FVC or DLCO below 70% predicted identifies increased pulmonary toxicity risk. This is a caution requiring specialist assessment, not an automatic DLCO <60% stopping threshold.",
+          "recommendation": "FVC or DLCO below 70% predicted identifies increased pulmonary toxicity risk. This is a caution requiring specialist assessment, not an automatic DLCO <60% stopping threshold.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 6,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "FVC or DLCO below 70% predicted identifies increased pulmonary toxicity risk. This is a caution requiring specialist assessment, not an automatic DLCO <60% stopping threshold."
+      },
+      {
+        "id": "LOM_OTHER_SEVERE_TOXICITY",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Clinically significant severe toxicity requires assessment before another lomustine dose. This combination protocol does not specify the single-agent 50%/42-day re-escalation table; do not import it.",
+          "recommendation": "Clinically significant severe toxicity requires assessment before another lomustine dose. This combination protocol does not specify the single-agent 50%/42-day re-escalation table; do not import it.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "Adverse effects / current SmPC review"
+        },
+        "explanation": "Clinically significant severe toxicity requires assessment before another lomustine dose. This combination protocol does not specify the single-agent 50%/42-day re-escalation table; do not import it.",
+        "evidence_interpretation": "Conservative assessment/review pathway derived from the cited warning; not a newly invented numeric NCCP dose-reduction table."
+      },
+      {
+        "id": "UNHEALED_WOUND_OR_RECENT_SURGERY",
+        "priority": 70,
+        "when": {
+          "any": [
+            {
+              "field": "recent_major_surgery_or_unhealed_wound",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "days_since_major_surgery",
+              "operator": "<",
+              "value": 28
+            },
+            {
+              "field": "wound_fully_healed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Withhold bevacizumab until the wound is fully healed and the postoperative interval is appropriate."
+          "message": "Withhold bevacizumab until at least 28 days have elapsed after major surgery AND the wound is fully healed. Meeting only one condition is insufficient.",
+          "recommendation": "Withhold bevacizumab until at least 28 days have elapsed after major surgery AND the wound is fully healed. Meeting only one condition is insufficient.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
         },
-        "explanation": "Bevacizumab can impair wound healing."
+        "explanation": "Withhold bevacizumab until at least 28 days have elapsed after major surgery AND the wound is fully healed. Meeting only one condition is insufficient."
       },
       {
-        "rule_id": "PLANNED_MAJOR_SURGERY",
-        "field": "planned_major_surgery",
-        "operator": "==",
-        "value": true,
+        "id": "SURGERY_HEALING_UNCONFIRMED",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "field": "days_since_major_surgery",
+              "operator": ">=",
+              "value": 28
+            },
+            {
+              "field": "wound_fully_healed",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "The postoperative interval alone does not establish wound healing. Confirm complete healing before bevacizumab.",
+          "recommendation": "The postoperative interval alone does not establish wound healing. Confirm complete healing before bevacizumab.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "The postoperative interval alone does not establish wound healing. Confirm complete healing before bevacizumab."
+      },
+      {
+        "id": "PLANNED_MAJOR_SURGERY",
+        "priority": 70,
+        "when": {
+          "field": "planned_major_surgery",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "withhold",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Withhold bevacizumab around major elective surgery according to the NCCP timing guidance and consultant plan."
+          "message": "Withhold bevacizumab for major elective surgery and agree timing with the consultant/surgeon. NCCP 00742 describes 28 days before major surgery; individual plans may differ.",
+          "recommendation": "Withhold bevacizumab for major elective surgery and agree timing with the consultant/surgeon. NCCP 00742 describes 28 days before major surgery; individual plans may differ.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 5,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Bevacizumab should be withheld for major elective surgery."
+        "explanation": "Withhold bevacizumab for major elective surgery and agree timing with the consultant/surgeon. NCCP 00742 describes 28 days before major surgery; individual plans may differ."
       },
       {
-        "rule_id": "UNCONTROLLED_HYPERTENSION",
-        "field": "uncontrolled_or_symptomatic_hypertension",
-        "operator": "==",
-        "value": true,
+        "id": "PLANNED_MINOR_SURGERY",
+        "priority": 50,
+        "when": {
+          "field": "planned_minor_surgery",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Agree the bevacizumab interruption for the planned minor procedure. NCCP 00742 describes 7 days or consultant direction; this is not a universal interval for every procedure.",
+          "recommendation": "Agree the bevacizumab interruption for the planned minor procedure. NCCP 00742 describes 7 days or consultant direction; this is not a universal interval for every procedure.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 5,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Agree the bevacizumab interruption for the planned minor procedure. NCCP 00742 describes 7 days or consultant direction; this is not a universal interval for every procedure."
+      },
+      {
+        "id": "UNCONTROLLED_HYPERTENSION",
+        "priority": 70,
+        "when": {
+          "field": "uncontrolled_or_symptomatic_hypertension",
+          "operator": "==",
+          "value": true
+        },
         "action": {
           "type": "withhold",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Withhold bevacizumab and start or adjust antihypertensive treatment."
+          "message": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on the treatment day; start or adjust antihypertensive therapy.",
+          "recommendation": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on the treatment day; start or adjust antihypertensive therapy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
         },
-        "explanation": "Uncontrolled or symptomatic hypertension requires withholding."
+        "explanation": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on the treatment day; start or adjust antihypertensive therapy."
       },
       {
-        "rule_id": "PERSISTENT_G3_OR_G4_HYPERTENSION",
-        "field": "hypertension_grade",
-        "operator": ">=",
-        "value": 3,
+        "id": "GRADE2_HTN_REVIEW",
+        "priority": 50,
+        "when": {
+          "field": "hypertension_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Treat grade 2 hypertension and consider interruption until controlled, following the prescriber plan.",
+          "recommendation": "Treat grade 2 hypertension and consider interruption until controlled, following the prescriber plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
+        },
+        "explanation": "Treat grade 2 hypertension and consider interruption until controlled, following the prescriber plan."
+      },
+      {
+        "id": "GRADE3_HTN_REVIEW",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "field": "hypertension_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "hypertension_grade3_persisting",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "hypertension_grade3_persisting",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Treat grade 3 hypertension and consider interruption. Establish whether it persists despite treatment; grade 3 alone does not establish the NCCP discontinuation criterion.",
+          "recommendation": "Treat grade 3 hypertension and consider interruption. Establish whether it persists despite treatment; grade 3 alone does not establish the NCCP discontinuation criterion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
+        },
+        "explanation": "Treat grade 3 hypertension and consider interruption. Establish whether it persists despite treatment; grade 3 alone does not establish the NCCP discontinuation criterion."
+      },
+      {
+        "id": "PERSISTENT_G3_OR_G4_HYPERTENSION",
+        "priority": 90,
+        "when": {
+          "any": [
+            {
+              "field": "hypertension_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "all": [
+                {
+                  "field": "hypertension_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "hypertension_grade3_persisting",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "discontinue",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Discontinue bevacizumab for grade 4 or persisting grade 3 hypertension."
+          "message": "Discontinue bevacizumab for grade 4 hypertension or confirmed persisting grade 3 hypertension.",
+          "recommendation": "Discontinue bevacizumab for grade 4 hypertension or confirmed persisting grade 3 hypertension.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
         },
-        "explanation": "Persistent severe hypertension requires discontinuation."
+        "explanation": "Discontinue bevacizumab for grade 4 hypertension or confirmed persisting grade 3 hypertension."
       },
       {
-        "rule_id": "SEVERE_UNCONTROLLED_BP",
-        "field": "severe_bp_uncontrolled",
-        "operator": "==",
-        "value": true,
+        "id": "PERSISTENT_G3_HISTORY",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "field": "hypertension_grade3_persisting",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "hypertension_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hypertension_grade",
+                  "operator": "<",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "discontinue",
+          "type": "consultant_review",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Discontinue bevacizumab for severe blood pressure >200/110 mmHg that remains uncontrolled."
+          "message": "A history of persisting grade 3 hypertension is reported. Clarify whether a stop decision already applies; improved/current or missing grade does not authorise automatic restart.",
+          "recommendation": "A history of persisting grade 3 hypertension is reported. Clarify whether a stop decision already applies; improved/current or missing grade does not authorise automatic restart.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
         },
-        "explanation": "Severe uncontrolled hypertension requires discontinuation."
+        "explanation": "A history of persisting grade 3 hypertension is reported. Clarify whether a stop decision already applies; improved/current or missing grade does not authorise automatic restart."
       },
       {
-        "rule_id": "HYPERTENSIVE_CRISIS_PRES",
-        "field": "hypertensive_crisis_or_encephalopathy",
-        "operator": "==",
-        "value": true,
+        "id": "SEVERE_UNCONTROLLED_BP",
+        "priority": 90,
+        "when": {
+          "any": [
+            {
+              "field": "severe_bp_uncontrolled",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "clinically_significant_htn_not_controlled",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Permanently discontinue bevacizumab and manage urgently."
+          "message": "Discontinue bevacizumab when medically significant hypertension cannot be adequately controlled despite treatment. NCCP 00742 additionally describes severe uncontrolled BP >200/110; confirm the clinical context.",
+          "recommendation": "Discontinue bevacizumab when medically significant hypertension cannot be adequately controlled despite treatment. NCCP 00742 additionally describes severe uncontrolled BP >200/110; confirm the clinical context.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
         },
-        "explanation": "Hypertensive crisis/encephalopathy requires permanent discontinuation."
+        "explanation": "Discontinue bevacizumab when medically significant hypertension cannot be adequately controlled despite treatment. NCCP 00742 additionally describes severe uncontrolled BP >200/110; confirm the clinical context.",
+        "additional_sources": [
+          {
+            "document": "NCCP 00742 v3",
+            "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+            "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+            "page": 6,
+            "retrieved": "2026-11-05",
+            "section": "Regimen-specific complications"
+          }
+        ]
       },
       {
-        "rule_id": "PROTEIN_DIPSTICK_2_3",
-        "field": "proteinuria_dipstick",
-        "operator": "in",
-        "value": [
-          "2+",
-          "3+"
-        ],
+        "id": "HYPERTENSIVE_CRISIS_PRES",
+        "priority": 90,
+        "when": {
+          "field": "hypertensive_crisis_or_encephalopathy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue bevacizumab for hypertensive crisis or encephalopathy and manage urgently.",
+          "recommendation": "Permanently discontinue bevacizumab for hypertensive crisis or encephalopathy and manage urgently.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Permanently discontinue bevacizumab for hypertensive crisis or encephalopathy and manage urgently."
+      },
+      {
+        "id": "PROTEIN_DIPSTICK_2_3",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "proteinuria_dipstick",
+                  "operator": "in",
+                  "value": [
+                    "2+",
+                    "3+"
+                  ]
+                },
+                {
+                  "field": "urine_protein_g_l",
+                  "operator": ">=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "urine_protein_g_24h",
+                  "operator": "missing"
+                },
+                {
+                  "field": "urine_protein_g_24h",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "nephrotic_syndrome",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nephrotic_syndrome",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "proteinuria_dipstick",
+                  "operator": "missing"
+                },
+                {
+                  "field": "proteinuria_dipstick",
+                  "operator": "!=",
+                  "value": "4+"
+                }
+              ]
+            }
+          ]
+        },
         "action": {
           "type": "proceed_with_caution",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Bevacizumab may proceed while a 24-hour urine collection is arranged before the next dose."
+          "message": "NCCP permits the current scheduled dose after a 2+/3+ or >=1 g/L screen only if no other hold/stop applies. Arrange 24-hour protein within three days before the NEXT dose. A known 24-hour result or nephrotic syndrome takes priority.",
+          "recommendation": "NCCP permits the current scheduled dose after a 2+/3+ or >=1 g/L screen only if no other hold/stop applies. Arrange 24-hour protein within three days before the NEXT dose. A known 24-hour result or nephrotic syndrome takes priority.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 3
         },
-        "explanation": "2+ or 3+ dipstick requires quantification."
+        "explanation": "NCCP permits the current scheduled dose after a 2+/3+ or >=1 g/L screen only if no other hold/stop applies. Arrange 24-hour protein within three days before the NEXT dose. A known 24-hour result or nephrotic syndrome takes priority."
       },
       {
-        "rule_id": "PROTEIN_DIPSTICK_4",
-        "field": "proteinuria_dipstick",
-        "operator": "==",
-        "value": "4+",
+        "id": "PROTEIN_DIPSTICK_4",
+        "priority": 70,
+        "when": {
+          "field": "proteinuria_dipstick",
+          "operator": "==",
+          "value": "4+"
+        },
         "action": {
           "type": "withhold",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Withhold bevacizumab and obtain a 24-hour urine protein measurement."
+          "message": "Withhold bevacizumab for 4+ dipstick and obtain a 24-hour urine collection. Confirm the relevant specimen timing and consultant decision if a concurrent quantified result is available.",
+          "recommendation": "Withhold bevacizumab for 4+ dipstick and obtain a 24-hour urine collection. Confirm the relevant specimen timing and consultant decision if a concurrent quantified result is available.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 3
         },
-        "explanation": "4+ dipstick requires withholding pending quantification."
+        "explanation": "Withhold bevacizumab for 4+ dipstick and obtain a 24-hour urine collection. Confirm the relevant specimen timing and consultant decision if a concurrent quantified result is available."
       },
       {
-        "rule_id": "PROTEIN_2_TO_4",
-        "all": [
+        "id": "PROTEIN_2_TO_4",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "urine_protein_g_24h",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Hold bevacizumab, recheck 24-hour urine protein every two weeks and consider resumption only when <=2 g/24 h and no other restriction remains.",
+          "recommendation": "Hold bevacizumab, recheck 24-hour urine protein every two weeks and consider resumption only when <=2 g/24 h and no other restriction remains.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 3
+        },
+        "explanation": "Hold bevacizumab, recheck 24-hour urine protein every two weeks and consider resumption only when <=2 g/24 h and no other restriction remains."
+      },
+      {
+        "id": "PROTEIN_OVER_4",
+        "priority": 90,
+        "when": {
+          "field": "urine_protein_g_24h",
+          "operator": ">",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for 24-hour urine protein above 4 g/24 h.",
+          "recommendation": "Discontinue bevacizumab for 24-hour urine protein above 4 g/24 h.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 3
+        },
+        "explanation": "Discontinue bevacizumab for 24-hour urine protein above 4 g/24 h."
+      },
+      {
+        "id": "NEPHROTIC_SYNDROME",
+        "priority": 90,
+        "when": {
+          "field": "nephrotic_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue bevacizumab for nephrotic syndrome/source grade 4 proteinuria. This is distinct from dipstick 4+ and does not require a particular recorded 24-hour result.",
+          "recommendation": "Permanently discontinue bevacizumab for nephrotic syndrome/source grade 4 proteinuria. This is distinct from dipstick 4+ and does not require a particular recorded 24-hour result.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 7,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Permanently discontinue bevacizumab for nephrotic syndrome/source grade 4 proteinuria. This is distinct from dipstick 4+ and does not require a particular recorded 24-hour result."
+      },
+      {
+        "id": "TE_FISTULA",
+        "priority": 90,
+        "when": {
+          "field": "tracheoesophageal_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for any tracheoesophageal fistula, even when the entered fistula grade is below 4.",
+          "recommendation": "Discontinue bevacizumab for any tracheoesophageal fistula, even when the entered fistula grade is below 4.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
+        },
+        "explanation": "Discontinue bevacizumab for any tracheoesophageal fistula, even when the entered fistula grade is below 4."
+      },
+      {
+        "id": "GRADE4_FISTULA",
+        "priority": 90,
+        "when": {
+          "field": "fistula_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for any grade 4 fistula.",
+          "recommendation": "Discontinue bevacizumab for any grade 4 fistula.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
+        },
+        "explanation": "Discontinue bevacizumab for any grade 4 fistula."
+      },
+      {
+        "id": "OTHER_INTERNAL_FISTULA",
+        "priority": 50,
+        "when": {
+          "field": "other_internal_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Consider discontinuation for another internal fistula; obtain consultant review. Do not infer safety from a grade below 4.",
+          "recommendation": "Consider discontinuation for another internal fistula; obtain consultant review. Do not infer safety from a grade below 4.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Consider discontinuation for another internal fistula; obtain consultant review. Do not infer safety from a grade below 4."
+      },
+      {
+        "id": "THROMBOEMBOLIC_G4",
+        "priority": 90,
+        "when": {
+          "field": "thromboembolic_event_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for grade 4 thromboembolic events.",
+          "recommendation": "Discontinue bevacizumab for grade 4 thromboembolic events.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
+        },
+        "explanation": "Discontinue bevacizumab for grade 4 thromboembolic events."
+      },
+      {
+        "id": "THROMBOEMBOLIC_G2_G3",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "field": "thromboembolic_event_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "thromboembolic_event_grade",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Lower-grade thromboembolism requires close monitoring and a treatment/anticoagulation plan. An arterial event has a separate permanent-stop pathway.",
+          "recommendation": "Lower-grade thromboembolism requires close monitoring and a treatment/anticoagulation plan. An arterial event has a separate permanent-stop pathway.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 7,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Lower-grade thromboembolism requires close monitoring and a treatment/anticoagulation plan. An arterial event has a separate permanent-stop pathway."
+      },
+      {
+        "id": "ARTERIAL_THROMBOEMBOLIC_EVENT",
+        "priority": 90,
+        "when": {
+          "field": "arterial_thromboembolic_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue bevacizumab after an arterial thromboembolic event, independently of the entered event grade.",
+          "recommendation": "Permanently discontinue bevacizumab after an arterial thromboembolic event, independently of the entered event grade.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 7,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Permanently discontinue bevacizumab after an arterial thromboembolic event, independently of the entered event grade."
+      },
+      {
+        "id": "HAEMORRHAGE_G3PLUS",
+        "priority": 90,
+        "when": {
+          "field": "haemorrhage_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for grade 3 or higher haemorrhage.",
+          "recommendation": "Discontinue bevacizumab for grade 3 or higher haemorrhage.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 4,
+          "retrieved": "2026-11-05",
+          "table": 4
+        },
+        "explanation": "Discontinue bevacizumab for grade 3 or higher haemorrhage."
+      },
+      {
+        "id": "NEW_BLEEDING_REVIEW",
+        "priority": 70,
+        "when": {
+          "field": "new_major_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold pending urgent assessment of new significant bleeding, its site and grade. Intracranial haemorrhage is also a regimen exclusion.",
+          "recommendation": "Withhold pending urgent assessment of new significant bleeding, its site and grade. Intracranial haemorrhage is also a regimen exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 7,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Withhold pending urgent assessment of new significant bleeding, its site and grade. Intracranial haemorrhage is also a regimen exclusion.",
+        "evidence_interpretation": "Conservative assessment/review pathway derived from the cited warning; not a newly invented numeric NCCP dose-reduction table."
+      },
+      {
+        "id": "GI_PERFORATION",
+        "priority": 90,
+        "when": {
+          "field": "gi_perforation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue bevacizumab for GI perforation; manage urgently.",
+          "recommendation": "Permanently discontinue bevacizumab for GI perforation; manage urgently.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 5,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Permanently discontinue bevacizumab for GI perforation; manage urgently."
+      },
+      {
+        "id": "NECROTISING_FASCIITIS",
+        "priority": 90,
+        "when": {
+          "field": "necrotising_fasciitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab and institute urgent treatment for necrotising fasciitis.",
+          "recommendation": "Discontinue bevacizumab and institute urgent treatment for necrotising fasciitis.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Discontinue bevacizumab and institute urgent treatment for necrotising fasciitis."
+      },
+      {
+        "id": "PRES",
+        "priority": 90,
+        "when": {
+          "field": "pres_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab and manage confirmed PRES. Safety of restarting after PRES is not established.",
+          "recommendation": "Discontinue bevacizumab and manage confirmed PRES. Safety of restarting after PRES is not established.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Discontinue bevacizumab and manage confirmed PRES. Safety of restarting after PRES is not established."
+      },
+      {
+        "id": "SUSPECTED_PRES",
+        "priority": 70,
+        "when": {
+          "field": "suspected_pres_or_acute_neuro_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold pending urgent clinical and imaging assessment for suspected PRES or acute neurological deterioration. Do not assume these symptoms are expected tumour effects.",
+          "recommendation": "Withhold pending urgent clinical and imaging assessment for suspected PRES or acute neurological deterioration. Do not assume these symptoms are expected tumour effects.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 6,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Withhold pending urgent clinical and imaging assessment for suspected PRES or acute neurological deterioration. Do not assume these symptoms are expected tumour effects.",
+        "evidence_interpretation": "Conservative assessment/review pathway derived from the cited warning; not a newly invented numeric NCCP dose-reduction table."
+      },
+      {
+        "id": "INFUSION_REACTION",
+        "priority": 70,
+        "when": {
+          "field": "infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Stop the infusion and assess/manage the reaction promptly. Resumption, if any, requires a product-specific consultant plan.",
+          "recommendation": "Stop the infusion and assess/manage the reaction promptly. Resumption, if any, requires a product-specific consultant plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "page": 8,
+          "retrieved": "2026-11-05",
+          "section": "4.4"
+        },
+        "explanation": "Stop the infusion and assess/manage the reaction promptly. Resumption, if any, requires a product-specific consultant plan."
+      },
+      {
+        "id": "RISK_REVIEW",
+        "priority": 50,
+        "when": {
+          "field": "high_bleeding_thrombotic_cardiovascular_or_fistula_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Review bleeding/clotting, cardiovascular, aneurysm/dissection, prior radiation and fistula/perforation risks before bevacizumab. Cautions are not automatic clearance or a fixed dose reduction.",
+          "recommendation": "Review bleeding/clotting, cardiovascular, aneurysm/dissection, prior radiation and fistula/perforation risks before bevacizumab. Cautions are not automatic clearance or a fixed dose reduction.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review bleeding/clotting, cardiovascular, aneurysm/dissection, prior radiation and fistula/perforation risks before bevacizumab. Cautions are not automatic clearance or a fixed dose reduction.",
+        "additional_sources": [
           {
-            "field": "urine_protein_g_24h",
-            "operator": ">",
-            "value": 2
+            "document": "EMA Avastin SmPC",
+            "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+            "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+            "page": 7,
+            "retrieved": "2026-11-05",
+            "section": "4.4"
           },
           {
-            "field": "urine_protein_g_24h",
-            "operator": "<=",
-            "value": 4
+            "document": "EMA Avastin SmPC",
+            "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+            "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+            "page": 8,
+            "retrieved": "2026-11-05",
+            "section": "4.4"
           }
-        ],
+        ]
+      },
+      {
+        "id": "CONCURRENT_RT_REVIEW",
+        "priority": 50,
+        "when": {
+          "field": "concurrent_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "Review concurrent RT with the specialist team: bevacizumab/RT safety is not established in NCCP 00742, and RT can increase lomustine marrow toxicity.",
+          "recommendation": "Review concurrent RT with the specialist team: bevacizumab/RT safety is not established in NCCP 00742, and RT can increase lomustine marrow toxicity.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 6,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review concurrent RT with the specialist team: bevacizumab/RT safety is not established in NCCP 00742, and RT can increase lomustine marrow toxicity.",
+        "additional_sources": [
+          {
+            "document": "Lomustine medac common SmPC, revision2026-01-16",
+            "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+            "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+            "page": 3,
+            "retrieved": "2026-11-05",
+            "section": "4.5"
+          }
+        ]
+      },
+      {
+        "id": "PRODUCT_CONTRAINDICATION_REVIEW",
+        "priority": 90,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "wheat_allergy_or_nitrosourea_nonresponse",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine"
+          ],
+          "message": "The current lomustine medac product lists wheat allergy and prior nitrosourea nonresponse as contraindications. Confirm the supplied product with oncology pharmacy before treatment.",
+          "recommendation": "The current lomustine medac product lists wheat allergy and prior nitrosourea nonresponse as contraindications. Confirm the supplied product with oncology pharmacy before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.3"
+        },
+        "explanation": "The current lomustine medac product lists wheat allergy and prior nitrosourea nonresponse as contraindications. Confirm the supplied product with oncology pharmacy before treatment."
+      },
+      {
+        "id": "LIVE_VACCINE_REVIEW",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "live_vaccine_planned_or_given",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
         "action": {
           "type": "withhold",
           "components": [
-            "bevacizumab"
+            "lomustine"
           ],
-          "recommendation": "Hold bevacizumab; repeat 24-hour urine protein every 2 weeks and resume when ≤2 g/24 h."
+          "message": "Do not proceed until the live-vaccine and immunosuppression risk is urgently reviewed. Current lomustine product information contraindicates live vaccines during immunosuppression.",
+          "recommendation": "Do not proceed until the live-vaccine and immunosuppression risk is urgently reviewed. Current lomustine product information contraindicates live vaccines during immunosuppression.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 2,
+          "retrieved": "2026-11-05",
+          "section": "4.3-4.5"
         },
-        "explanation": "Urine protein >2–4 g/24 h requires holding."
+        "explanation": "Do not proceed until the live-vaccine and immunosuppression risk is urgently reviewed. Current lomustine product information contraindicates live vaccines during immunosuppression."
       },
       {
-        "rule_id": "PROTEIN_OVER_4",
-        "field": "urine_protein_g_24h",
-        "operator": ">",
-        "value": 4,
+        "id": "INTERACTION_REVIEW",
+        "priority": 50,
+        "when": {
+          "field": "interaction_review_needed",
+          "operator": "==",
+          "value": true
+        },
         "action": {
-          "type": "discontinue",
+          "type": "consultant_review",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "Reconcile all medicines, especially antiepileptics, cimetidine/theophylline and anticoagulants. Confirm INR monitoring if warfarin is used; do not silently stop antiseizure treatment.",
+          "recommendation": "Reconcile all medicines, especially antiepileptics, cimetidine/theophylline and anticoagulants. Confirm INR monitoring if warfarin is used; do not silently stop antiseizure treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC, revision2026-01-16",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "section": "4.5"
+        },
+        "explanation": "Reconcile all medicines, especially antiepileptics, cimetidine/theophylline and anticoagulants. Confirm INR monitoring if warfarin is used; do not silently stop antiseizure treatment."
+      },
+      {
+        "id": "MONITORING_SUPPORT_REVIEW",
+        "priority": 50,
+        "when": {
+          "field": "monitoring_or_support_not_ready",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine",
+            "bevacizumab"
+          ],
+          "message": "Review baseline/regular FBC, renal/liver results, urine protein and BP, plus a weekly CBC plan for at least six weeks after lomustine. Add conditional PFT/echo and warfarin INR. Confirm separate oral antiemetics on lomustine day; no routine antiemetics on bevacizumab-only visits.",
+          "recommendation": "Review baseline/regular FBC, renal/liver results, urine protein and BP, plus a weekly CBC plan for at least six weeks after lomustine. Add conditional PFT/echo and warfarin INR. Confirm separate oral antiemetics on lomustine day; no routine antiemetics on bevacizumab-only visits.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 2,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review baseline/regular FBC, renal/liver results, urine protein and BP, plus a weekly CBC plan for at least six weeks after lomustine. Add conditional PFT/echo and warfarin INR. Confirm separate oral antiemetics on lomustine day; no routine antiemetics on bevacizumab-only visits.",
+        "additional_sources": [
+          {
+            "document": "Lomustine medac common SmPC, revision2026-01-16",
+            "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+            "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+            "page": 2,
+            "retrieved": "2026-11-05",
+            "section": "4.4"
+          },
+          {
+            "document": "NCCP 00742 v3",
+            "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+            "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+            "page": 5,
+            "retrieved": "2026-11-05",
+            "section": "Emetogenic potential"
+          }
+        ],
+        "evidence_interpretation": "Conservative assessment/review pathway derived from the cited warning; not a newly invented numeric NCCP dose-reduction table."
+      },
+      {
+        "id": "LOM_SUPPLY_SAFETY",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "visit_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "visit_type",
+                  "operator": "!=",
+                  "value": "bevacizumab_only"
+                }
+              ]
+            },
+            {
+              "field": "lomustine_formulation_or_supply_uncertain",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Confirm prescribed single-course dose, capsule strength, supply and instructions with pharmacy. Lomustine is not a daily medicine and should not be repeated before six weeks.",
+          "recommendation": "Confirm prescribed single-course dose, capsule strength, supply and instructions with pharmacy. Lomustine is not a daily medicine and should not be repeated before six weeks.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
+        },
+        "source": {
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Confirm prescribed single-course dose, capsule strength, supply and instructions with pharmacy. Lomustine is not a daily medicine and should not be repeated before six weeks."
+      },
+      {
+        "id": "BEV_ONLY_VISIT_CONTEXT",
+        "priority": 50,
+        "when": {
+          "field": "visit_type",
+          "operator": "==",
+          "value": "bevacizumab_only"
+        },
+        "action": {
+          "type": "proceed_with_caution",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Discontinue bevacizumab for urine protein >4 g/24 h."
+          "message": "This is a bevacizumab-only administration. Do not repeat lomustine. Continue delayed-toxicity monitoring and assess bevacizumab using its own safety criteria.",
+          "recommendation": "This is a bevacizumab-only administration. Do not repeat lomustine. Continue delayed-toxicity monitoring and assess bevacizumab using its own safety criteria.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 1,
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Severe proteinuria requires discontinuation."
+        "explanation": "This is a bevacizumab-only administration. Do not repeat lomustine. Continue delayed-toxicity monitoring and assess bevacizumab using its own safety criteria."
       },
       {
-        "rule_id": "GRADE4_FISTULA",
-        "field": "fistula_grade",
-        "operator": ">=",
-        "value": 4,
+        "id": "BEV_ONLY_DELAYED_TOXICITY_REVIEW",
+        "priority": 50,
+        "when": {
+          "all": [
+            {
+              "field": "visit_type",
+              "operator": "==",
+              "value": "bevacizumab_only"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                },
+                {
+                  "field": "pulmonary_symptoms_or_concern",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
         "action": {
-          "type": "discontinue",
+          "type": "consultant_review",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Discontinue bevacizumab for grade 4 fistula."
+          "message": "Lomustine is not due at this visit, but possible delayed toxicity needs assessment. Do not apply a lomustine numeric dose threshold as an automatic bevacizumab hold; the consultant must assess fitness for the bevacizumab-only administration.",
+          "recommendation": "Lomustine is not due at this visit, but possible delayed toxicity needs assessment. Do not apply a lomustine numeric dose threshold as an automatic bevacizumab hold; the consultant must assess fitness for the bevacizumab-only administration.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00742 v3",
+          "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+          "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+          "page": 3,
+          "retrieved": "2026-11-05",
+          "table": 1
         },
-        "explanation": "Grade 4 fistula requires discontinuation."
-      },
-      {
-        "rule_id": "THROMBOEMBOLIC_G4",
-        "field": "thromboembolic_event_grade",
-        "operator": ">=",
-        "value": 4,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 4 thromboembolic toxicity."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Grade 4 thromboembolic event requires discontinuation."
-      },
-      {
-        "rule_id": "ARTERIAL_THROMBOEMBOLIC_EVENT",
-        "field": "arterial_thromboembolic_event",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Permanently discontinue bevacizumab after an arterial thromboembolic event."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Arterial thromboembolism requires permanent discontinuation."
-      },
-      {
-        "rule_id": "HAEMORRHAGE_G3PLUS",
-        "field": "haemorrhage_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 3 or higher haemorrhage."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Severe haemorrhage requires discontinuation."
-      },
-      {
-        "rule_id": "GI_PERFORATION",
-        "field": "gi_perforation",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Permanently discontinue bevacizumab for gastrointestinal perforation."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "GI perforation requires permanent discontinuation."
-      },
-      {
-        "rule_id": "NECROTISING_FASCIITIS",
-        "field": "necrotising_fasciitis",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab and institute urgent treatment for necrotising fasciitis."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Necrotising fasciitis requires discontinuation."
-      },
-      {
-        "rule_id": "PRES",
-        "field": "pres_confirmed",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab and urgently manage confirmed PRES."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "PRES requires discontinuation."
+        "explanation": "Lomustine is not due at this visit, but possible delayed toxicity needs assessment. Do not apply a lomustine numeric dose threshold as an automatic bevacizumab hold; the consultant must assess fitness for the bevacizumab-only administration."
       }
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "phase_dependent",
+    "emetogenic_risk": "oral_moderate_high",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Current NCCP regimen emetogenic classification; regimen phase/component and local policy must be considered.",
+    "mapping_basis": "NCCP: lomustine oral moderate-to-high risk on Day 1; bevacizumab minimal on each infusion day. Distinct phase/day plans require local pharmacy validation.",
     "mapping_confidence": "source_specific_pending_local_pharmacy_reconciliation",
     "validation_status": "pending_local_oncology_pharmacy_validation",
     "phase_profiles": {
@@ -1237,6 +3844,24 @@
     "other_supportive_care": [
       "Monitor blood pressure and urine protein before bevacizumab.",
       "Monitor for delayed lomustine myelosuppression and pulmonary toxicity."
-    ]
+    ],
+    "consent_notes": [
+      "Bevacizumab treatment of glioblastoma is outside the current EMA licensed indications; confirm local consent and governance.",
+      "NCCP identifies lomustine as an unlicensed product; coordinate pharmacy supply and consent.",
+      "Rapid bevacizumab infusion is a separate off-label administration method requiring local approval and consent."
+    ],
+    "script_id": "nccp-lomustine-bev-v08439",
+    "monitoring": "NCCP baseline/regular FBC, renal/liver, urine protein and BP; baseline glucose and conditional PFT/echo/INR. Current lomustine SmPC prefers weekly CBC for at least six weeks after each dose. No fixed MRI interval specified.",
+    "contraception": "Ask oncology pharmacy to confirm the actual products and all regimen components: NCCP six-month wording differs from the current lomustine common SmPC (women seven months; men four months).",
+    "administration_safety": "Single Day 1 lomustine dose with at least six weeks between courses. Bevacizumab-only visits do not require another lomustine dose.",
+    "source": {
+      "document": "NCCP 00742 v3",
+      "url": "https://healthservice.hse.ie/documents/6874/742_V3_Lomustine_and_Bevacizumab_5.pdf",
+      "sha256": "fd30e00d92ae8576c7b4c007f5f48a23db7490c22f120df9fc17267947241897",
+      "page": 5,
+      "retrieved": "2026-11-05"
+    },
+    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+    "supportive_medications_label": "Lomustine Day1 and separate bevacizumab-only support"
   }
 }

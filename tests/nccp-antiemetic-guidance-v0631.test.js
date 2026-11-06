@@ -98,6 +98,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00742":"oral_moderate_high", "00804":"oral_moderate_high", // v39: highest active component; bevacizumab-only phase remains minimal.
     "00505":"oral_moderate_high", // v37: NCCP00505 temozolomide Days10–14, exact source/hash checked above.
     "00642":"moderate", // v37: PRRT-specific amino-acid/5-HT3 plan, not a generic steroid script.
     "00555":"high", "00783":"high", "00238":"moderate", "00791":"low",
@@ -146,6 +147,14 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
+  if(['00742','00804'].includes(md.nccp_regimen_code)){
+    assert(require('./helpers/neuro-inputs-v08439.cjs').validate(protocol));
+    assert.equal(sc.emetogenic_risk,'oral_moderate_high');
+    assert.deepStrictEqual(Object.fromEntries(Object.entries(sc.phase_profiles).map(([k,v])=>[k,v.level])),{lomustine_day_1:'oral_moderate_high',bevacizumab_only_days:'minimal'});
+    const phases=readJson('data/phase-support-v0838.json').regimens[md.nccp_regimen_code];
+    assert.equal(phases.find(p=>p.id==='day1').emetogenic_risk,'oral_moderate_high');assert.equal(phases.find(p=>p.id==='bevacizumab_only').emetogenic_risk,'minimal');
+    assert.equal(phases.find(p=>p.id==='bevacizumab_only').medicines.length,0);
+  }
   const immune35=dualImmuneV35[md.nccp_regimen_code];
   if(immune35){
     assert.equal(relative,immune35.path);
@@ -164,6 +173,8 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "neuro-oncology/00742-lomustine-and-bevacizumab-5-mg-kg-therapy.json":"oral_moderate_high",
+      "neuro-oncology/00804-lomustine-and-bevacizumab-7-5-mg-kg-therapy.json":"oral_moderate_high",
       "gastrointestinal/00505-capecitabine-and-temozolomide-therapy.json":"oral_moderate_high",
       "gastrointestinal/00642-lutetium-177-oxodotreotide-lutathera-therapy.json":"moderate",
       "gastrointestinal/00555-folfoxiri.json":"high",

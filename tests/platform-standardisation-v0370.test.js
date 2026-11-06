@@ -5,6 +5,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const NET37Inputs = require('./helpers/neuroendocrine-inputs-v08437.cjs');
+const NEURO39Inputs = require('./helpers/neuro-inputs-v08439.cjs');
 const NEURO38Inputs = require('./helpers/neuro-inputs-v08438.cjs');
 const protocolRoot = path.join(root, 'protocols');
 const validSections = new Set([
@@ -182,7 +183,7 @@ for (const { file, data } of protocols) {
   const definitions = data.input_definitions || {};
   const rules = data.rule_engine?.rules || [];
   for (const [field, def] of Object.entries(definitions)) {
-    const sourceGrade = NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
+    const sourceGrade = NEURO39Inputs.grade(data, field, def) || NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
     if (!sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
@@ -285,7 +286,7 @@ for (const { file, data } of protocols) {
 
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
     if(['00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
-    if ((NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
+    if ((NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
     const renalText = `${field} ${def?.label || ''}`.toLowerCase();
     if (!/crcl|creatinine clearance|\bgfr\b|egfr/.test(renalText)) continue;
     if (!['number', 'select'].includes(def.type)) continue;

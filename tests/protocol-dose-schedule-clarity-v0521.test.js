@@ -55,8 +55,8 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.24 adds five targeted lung schedules and the missing Lonsurf phase.
 // v0.84.26 adds erlotinib, gefitinib and two atezolizumab schedules; the third is reconciled.
 // v0.84.37 adds four source-audited NET schedules; generic dose ladders remain absent.
-assert.strictEqual(usefulCoverage, 207);
-assert.strictEqual(scheduleCoverage, 207);
+assert.strictEqual(usefulCoverage, 212);
+assert.strictEqual(scheduleCoverage, 212);
 assert.strictEqual(doseLevelCoverage, 62);
 // Exactly five additional source-audited glioma schedules; dose-history decisions remain in assessment.
 for(const code of ['00334','00342','00379','00461','00658']) {
@@ -94,3 +94,5 @@ console.log(`v0.52.1 clarity guarantees retained in v0.55.0: ${usefulCoverage} u
 
 const abemaciclib = require('../protocols/breast/00619-abemaciclib-adjuvant.json');
 assert.deepStrictEqual(Array.from(DoseSchedule.buildModel(abemaciclib).doseLevels[0].levels, x=>x.dose), ['150 mg twice daily','100 mg twice daily','50 mg twice daily']);
+
+for(const code of ['00742','00804','00805','00806','00813']){const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));const p=require(path.join(root,entry.path));assert.equal(p.metadata.clinical_audit_release,'0.84.39');assert(DoseSchedule.buildModel(p).phases.length>0);assert.equal(DoseSchedule.buildModel(p).doseLevels.length,0);}

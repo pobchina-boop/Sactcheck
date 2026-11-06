@@ -12,9 +12,9 @@
     "published_date": "2023-05-15",
     "review_date": "2029-07-18",
     "source_url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
-    "source_document_pages": null,
-    "source_checked_date": "2026-07-25",
-    "sactcheck_encoding_version": "0.42.0",
+    "source_document_pages": 5,
+    "source_checked_date": "2026-11-05",
+    "sactcheck_encoding_version": "0.84.39",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "neuro_subgroup": "medulloblastoma_pnet",
@@ -47,11 +47,14 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "current_sources_reconciled_with_explicit_uncertainties_pending_independent_review",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.39",
+      "source_boundary_cases_passed": 478,
+      "independent_clinical_and_pharmacy_review_pending": true
     },
     "tumour_group": "Neuro-oncology",
     "tumour_groups": [
@@ -71,21 +74,62 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "current_source_reconciled_pending_independent_review",
+      "label": "Source reconciled; independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.39",
+      "audit_date": "2026-11-05",
+      "scope_note": "NCCP 00806 v2 and fresh lomustine/cisplatin product information reconciled; source gaps and conflicts remain explicit, not clinical authorisation."
     },
-    "canonical_protocol_id": "nccp-00806-v2"
+    "canonical_protocol_id": "nccp-00806-v2",
+    "source_pdf_sha256": "7975bce836e9b070cdc7f92aa64f9bd20339cec8c0c9b18e415116d9afc896d4",
+    "nccp_last_reviewed_date": "2024-07-18",
+    "clinical_audit_release": "0.84.39",
+    "source_conflicts": [
+      {
+        "issue": "Platelets 80 to < 100 with ANC ≥ 1 are unallocated by the NCCP initial/new-dose table; recovery after a hold still requires ≥ 100.",
+        "source": "NCCPp3Table1"
+      },
+      {
+        "issue": "Fractional cisplatin CrCl 49–50 and 59–60 bands are not allocated.",
+        "source": "NCCPp3Table2"
+      },
+      {
+        "issue": "Vincristine bilirubin fraction and neurotoxicity grading edition/recovery grade are not specified. Current linked HPRA vincristine PDF returned 404; no unverifiable product rule was substituted.",
+        "source": "NCCPpp3–4; retrieval evidence"
+      },
+      {
+        "issue": "NCCP lomustine 80% original/new full dose differs from product WBC/prior-dose/nadir table; product platelet 24– < 25 overlap is unresolved.",
+        "source": "NCCPp3; lomustineSmPC4.2"
+      },
+      {
+        "issue": "Cisplatin 1 h/local hydration and renal dose bands differ from current Accord 6–8 h/hydration/diuresis and pre-existing renal contraindication. Actual product/local prescribing plan requires pharmacy reconciliation.",
+        "source": "NCCPpp1,3; cisplatinSmPC4.2–4.4"
+      },
+      {
+        "issue": "NCCP conditional PFT/audiology differs from additional product baseline/ongoing monitoring.",
+        "source": "NCCPp2; lomustine/cisplatinSmPC4.4"
+      },
+      {
+        "issue": "NCCP lomustine contraception 6 months both sexes differs from current commonSmPC 7 months women/4 months men; obtain product-specific advice.",
+        "source": "NCCPp4; lomustineSmPC4.6"
+      },
+      {
+        "issue": "NCCP cited outcome studies are paediatric; do not present them as adult CLV survival estimates.",
+        "source": "NCCPp5references"
+      }
+    ],
+    "clinical_audit_evidence": {
+      "report": "validation/neuro-oncology-v08439/clv-source-audit/report.json",
+      "source_cases": "validation/neuro-oncology-v08439/clv-source-audit/source-cases.cjs"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "dose_modification_note": "Component-specific source decisions require current values, prior dose/nadir and the actual product. NCCP gaps and NCCP/SmPC conflicts remain explicit specialist reviews; no automatic cumulative reductions or restart dose is generated.",
     "disclaimer": "Decision-support encoding derived from NCCP 00806 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "indications": [
@@ -96,11 +140,53 @@
   ],
   "treatment": {
     "cycle_length_days": 42,
-    "schedule_summary": "Lomustine 75 mg/m² PO, cisplatin 75 mg/m² IV and vincristine 1.5 mg/m² IV (max 2 mg) on Day 1; vincristine also on Days 8 and 15; every 42 days for 8 cycles after craniospinal radiotherapy.",
+    "schedule_summary": "Begin 4–6 weeks after craniospinal radiotherapy. Eight 42-day cycles: lomustine 75 mg/m² orally once on Day 1; cisplatin 75 mg/m² IV on Day 1 with local hydration; vincristine 1.5 mg/m² IV(max 2 mg) on Days 1,8,15. Confirm product-specific administration and all dose modifications.",
     "drugs": [
       "lomustine",
       "cisplatin",
       "vincristine"
+    ],
+    "planned_cycles": 8,
+    "components": [
+      {
+        "drug": "lomustine",
+        "dose": {
+          "value": 75,
+          "unit": "mg/m²"
+        },
+        "route": "PO",
+        "days": [
+          1
+        ],
+        "note": "Single oral dose; unlicensed supply; never repeat before 6 weeks. Review delayed nadir and lifetime exposure."
+      },
+      {
+        "drug": "cisplatin",
+        "dose": {
+          "value": 75,
+          "unit": "mg/m²"
+        },
+        "route": "IV",
+        "days": [
+          1
+        ],
+        "note": "NCCP 1 h in 1000 mL NaCl 0.9% plus local pre/post hydration; current Accord SmPC 6–8 h differs. Pharmacy must reconcile actual product and local plan."
+      },
+      {
+        "drug": "vincristine",
+        "dose": {
+          "value": 1.5,
+          "unit": "mg/m²"
+        },
+        "route": "IV",
+        "days": [
+          1,
+          8,
+          15
+        ],
+        "max_dose_mg": 2,
+        "note": "Maximum 2 mg; 50 mL IV-only minibag over 15 minutes under local vinca safeguards. No intrathecal administration."
+      }
     ]
   },
   "input_definitions": {
@@ -180,7 +266,7 @@
       "input_role": "decision"
     },
     "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
+      "label": "Current pre-dose absolute neutrophil count (not preceding nadir)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -190,7 +276,7 @@
       "input_role": "decision"
     },
     "platelets_x10e9_l": {
-      "label": "Platelet count",
+      "label": "Current pre-dose platelet count (not preceding nadir)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -199,70 +285,8 @@
       "unit": "×10⁹/L",
       "input_role": "decision"
     },
-    "lomustine_renal_band": {
-      "label": "Renal function for lomustine",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "gt50",
-          "label": "CrCl >50 mL/min"
-        },
-        {
-          "value": "30_50",
-          "label": "CrCl 30–50 mL/min"
-        },
-        {
-          "value": "lt30",
-          "label": "CrCl <30 mL/min"
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis"
-        }
-      ],
-      "demo_value": "gt50",
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
-    },
-    "cisplatin_renal_band": {
-      "label": "Renal function for cisplatin",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge60",
-          "label": "CrCl ≥60 mL/min"
-        },
-        {
-          "value": "50_59",
-          "label": "CrCl 50–59 mL/min"
-        },
-        {
-          "value": "40_49",
-          "label": "CrCl 40–49 mL/min"
-        },
-        {
-          "value": "lt40",
-          "label": "CrCl <40 mL/min"
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis"
-        }
-      ],
-      "demo_value": "ge60",
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
-    },
     "bilirubin_umol_l": {
-      "label": "Bilirubin",
+      "label": "Bilirubin result (record fraction separately)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -272,57 +296,40 @@
       "input_role": "decision"
     },
     "neuropathy_grade": {
-      "label": "Vincristine-related peripheral neuropathy grade",
+      "label": "Current clinician-verified neurotoxicity source grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No peripheral sensory or motor neuropathy."
+          "label": "Source Grade 0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic or mild symptoms without functional limitation."
+          "label": "Source Grade 1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate symptoms limiting instrumental activities of daily living."
+          "label": "Source Grade 2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe symptoms limiting self-care activities of daily living."
+          "label": "Source Grade 3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening neurological consequences; urgent intervention required."
+          "label": "Source Grade 4"
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess sensory and motor symptoms, reflexes, gait and effect on instrumental or self-care activities of daily living.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00806 v2 neurotoxicity table",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+      "source_grading_note": "The NCCP table does not specify a grading edition or an exact recovery grade. Confirm a clinician-assigned source grade and documented recovery; do not silently convert to CTCAE v5/v6.",
+      "assessment_guidance": "Grade 1: full scheduled vincristine if otherwise suitable; Grade 2: withhold until recovery then 50% dose; Grade 3–4: omit. Recovery and previous reduction require prescriber confirmation."
     },
     "cisplatin_hydration_and_magnesium_ready": {
       "label": "Cisplatin hydration and magnesium plan confirmed",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "more_than_two_count_delays": {
-      "label": "More than two count-related delays",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -333,6 +340,468 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
+      "input_role": "decision"
+    },
+    "assessment_day": {
+      "label": "Scheduled treatment day",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "Day 1: lomustine, cisplatin and vincristine"
+        },
+        {
+          "value": 8,
+          "label": "Day 8: vincristine only"
+        },
+        {
+          "value": 15,
+          "label": "Day 15: vincristine only"
+        }
+      ],
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "cycle_number": {
+      "label": "CLV cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "demo_value": 1,
+      "unit": "cycle",
+      "input_role": "decision",
+      "max": 99
+    },
+    "high_risk_medulloblastoma_or_pnet_confirmed": {
+      "label": "Consultant confirms adult high-risk medulloblastoma / PNET indication",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision",
+      "assessment_guidance": "This is a diagnosis and risk classification, not a toxicity grade. NCCP examples are not a complete risk algorithm; confirm diagnosis and multidisciplinary plan."
+    },
+    "weeks_since_craniospinal_rt": {
+      "label": "Weeks since completion of craniospinal radiotherapy before Cycle 1",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 4,
+      "unit": "weeks",
+      "input_role": "decision"
+    },
+    "craniospinal_rt_complete": {
+      "label": "Planned craniospinal radiotherapy completed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (CrCl), exact result",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 90,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_numeric",
+        "exact_value_required": true,
+        "measure": "CrCl"
+      },
+      "assessment_guidance": "Use measured or locally validated calculated CrCl, not unadjusted eGFR. Preserve decimal values. NCCP cisplatin bands leave 49–50 and 59–60 gaps; seek review rather than round."
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_renal_impairment": {
+      "label": "Severe renal impairment, clinician assessed (NCCP exclusion)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hepatic_impairment": {
+      "label": "Liver impairment severity (clinician assessed)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild/moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none",
+      "input_role": "decision",
+      "assessment_guidance": "NCCP does not define a numeric threshold for severe impairment. Do not infer severity from bilirubin alone."
+    },
+    "bilirubin_fraction": {
+      "label": "Bilirubin fraction reported",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "total",
+          "label": "Total"
+        },
+        {
+          "value": "direct",
+          "label": "Direct"
+        },
+        {
+          "value": "unspecified",
+          "label": "Unspecified / uncertain"
+        }
+      ],
+      "demo_value": "total",
+      "input_role": "decision",
+      "assessment_guidance": "The NCCP vincristine table does not identify total versus direct bilirubin; confirm the applicable product and local interpretation before a numerical dose."
+    },
+    "prior_vincristine_neurotoxicity_grade": {
+      "label": "Highest prior vincristine neurotoxicity source grade requiring modification",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Source Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Source Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Source Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Source Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Source Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00806 v2 neurotoxicity table",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+      "source_grading_note": "The NCCP table does not specify a grading edition or an exact recovery grade. Confirm a clinician-assigned source grade and documented recovery; do not silently convert to CTCAE v5/v6.",
+      "assessment_guidance": "Grade 1: full scheduled vincristine if otherwise suitable; Grade 2: withhold until recovery then 50% dose; Grade 3–4: omit. Recovery and previous reduction require prescriber confirmation."
+    },
+    "vincristine_neurotoxicity_recovery_confirmed": {
+      "label": "Prescriber confirms recovery from prior Grade 2 neurotoxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "vincristine_prior_reduction_or_omission": {
+      "label": "Vincristine previously reduced or omitted (retain dose history)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "vincristine_iv_minibag_verified": {
+      "label": "Vincristine IV-only minibag and route safeguards verified",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "severe_constipation_or_ileus": {
+      "label": "Severe constipation, abdominal distension or possible ileus",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bowel_prophylaxis_plan_confirmed": {
+      "label": "Constipation prevention and monitoring plan confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "aprepitant_or_azole_exposure": {
+      "label": "Aprepitant or azole antifungal exposure requiring vincristine interaction review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "interaction_review_needed": {
+      "label": "Unresolved interaction / overlapping neuro-, renal- or marrow toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "antiemetic_plan_confirmed": {
+      "label": "Day 1 antiemetic plan confirmed after vincristine interaction review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "baseline_tests_complete": {
+      "label": "Baseline FBC, renal/liver profile and indicated hearing/PFT assessments reviewed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "scheduled_tests_complete": {
+      "label": "Current FBC, renal/liver/electrolytes and indicated hearing/PFT monitoring reviewed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "weekly_counts_plan_confirmed": {
+      "label": "Weekly blood-count plan for at least 6 weeks after lomustine confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "lomustine_supply_and_single_dose_verified": {
+      "label": "Unlicensed lomustine supply and single Day 1 dose instructions verified",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "lomustine_days_since_previous_dose": {
+      "label": "Days since previous lomustine dose (repeat-course assessment)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 42,
+      "unit": "days",
+      "input_role": "decision"
+    },
+    "lomustine_prior_count_delay": {
+      "label": "A previous lomustine count delay requires recovery / new baseline-dose review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "lomustine_count_delay_number": {
+      "label": "Number of lomustine count delays",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "unit": "delays",
+      "input_role": "decision"
+    },
+    "lomustine_dose_history_confirmed": {
+      "label": "Original, previous and new baseline lomustine doses reconciled with pharmacy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "lomustine_prior_reduction": {
+      "label": "Previous lomustine dose reduction (do not automatically re-escalate)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "lomustine_nadir_review_complete": {
+      "label": "Prior-cycle nadir and delayed blood counts reviewed before repeat lomustine",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "wbc_nadir_x10e9_l": {
+      "label": "Lowest WBC in preceding cycle (not ANC)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 4,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
+    "platelet_nadir_x10e9_l": {
+      "label": "Lowest platelets in preceding cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 150,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
+    "wbc_x10e9_l": {
+      "label": "Current total white cell count (not ANC)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 5,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
+    "cumulative_lomustine_mg_m2": {
+      "label": "Total previous lifetime lomustine exposure",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0,
+      "unit": "mg/m²",
+      "input_role": "decision"
+    },
+    "projected_lomustine_cumulative_mg_m2": {
+      "label": "Pharmacy-verified lifetime lomustine total INCLUDING proposed next dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 75,
+      "unit": "mg/m²",
+      "input_role": "decision"
+    },
+    "lomustine_cumulative_history_confirmed": {
+      "label": "All prior lomustine exposure and proposed-dose total reconciled",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "fvc_percent_predicted": {
+      "label": "Baseline forced vital capacity (FVC)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 95,
+      "unit": "%predicted",
+      "input_role": "decision",
+      "max": 250
+    },
+    "dlco_percent_predicted": {
+      "label": "Baseline carbon-monoxide diffusing capacity (DLCO)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 95,
+      "unit": "%predicted",
+      "input_role": "decision",
+      "max": 250
+    },
+    "severe_myelosuppression": {
+      "label": "Severe bone-marrow depression, clinician assessed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "wheat_allergy": {
+      "label": "Wheat allergy (lomustine medac contains wheat starch)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_nitrosourea_nonresponse": {
+      "label": "Previous tumour nonresponse to another nitrosourea",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "live_vaccine_exposure": {
+      "label": "Planned/current live vaccine during immunosuppressive treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "new_hearing_symptoms": {
+      "label": "New tinnitus, hearing loss or vestibular symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "new_renal_or_electrolyte_abnormality": {
+      "label": "New clinically important renal dysfunction or electrolyte disturbance",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cisplatin_product_and_local_plan_confirmed": {
+      "label": "Pharmacy reconciled cisplatin product, infusion duration, hydration and any renal exception",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "preexisting_renal_impairment": {
+      "label": "Pre-existing renal impairment requiring cisplatin product contraindication review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "antifungal_plan_confirmed": {
+      "label": "Local antifungal prophylaxis plan reviewed, avoiding vincristine/azole interaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "serum_creatinine_umol_l": {
+      "label": "Serum creatinine before repeat cisplatin",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "unit": "μmol/L",
+      "input_role": "decision"
+    },
+    "dehydrated": {
+      "label": "Clinically dehydrated",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cisplatin_product_recovery_verified": {
+      "label": "Product-specific cisplatin repeat-course blood, renal/urea and hearing criteria reconciled",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
       "input_role": "decision"
     }
   },
@@ -378,97 +847,42 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG above 2 is outside the routine encoded eligibility pathway; confirm individual benefit–risk with the prescribing consultant."
+          "message": "ECOG above 2 is outside the published eligibility range; confirm benefit, risk and the authorised plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
         },
-        "explanation": "ECOG above 2 is outside the routine encoded eligibility pathway; confirm individual benefit–risk with the prescribing consultant."
+        "explanation": "ECOG above 2 is outside the published eligibility range; confirm benefit, risk and the authorised plan."
       },
       {
-        "id": "HYPERSENSITIVITY",
-        "priority": 10,
+        "id": "ADULT_INDICATION",
+        "priority": 8,
         "when": {
-          "field": "hypersensitivity",
-          "operator": "==",
-          "value": true
+          "field": "age_years",
+          "operator": "<",
+          "value": 18
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "message": "This is the adult high-risk medulloblastoma/PNET protocol. Obtain the appropriate paediatric plan rather than infer eligibility.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
         },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
-      },
-      {
-        "id": "PREGNANCY",
-        "priority": 10,
-        "when": {
-          "field": "pregnancy",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Pregnancy is an exclusion or requires urgent specialist review under the current regimen."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions"
-        },
-        "explanation": "Pregnancy is an exclusion or requires urgent specialist review under the current regimen."
-      },
-      {
-        "id": "BREASTFEEDING",
-        "priority": 10,
-        "when": {
-          "field": "breastfeeding",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Breastfeeding is an exclusion under the current regimen."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions"
-        },
-        "explanation": "Breastfeeding is an exclusion under the current regimen."
-      },
-      {
-        "id": "ACTIVE_INFECTION",
-        "priority": 9,
-        "when": {
-          "field": "active_infection",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Active clinically significant infection requires treatment and reassessment before SACT."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Clinical assessment"
-        },
-        "explanation": "Active clinically significant infection requires treatment and reassessment before SACT."
+        "explanation": "This is the adult high-risk medulloblastoma/PNET protocol. Obtain the appropriate paediatric plan rather than infer eligibility."
       },
       {
         "id": "AGE_GT40",
@@ -483,13 +897,105 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Age over 40 years is an exclusion in this CLV regimen."
+          "message": "Age over 40 is an explicit exclusion in NCCP 00806; review an alternative regimen."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
         },
-        "explanation": "Age over 40 years is an exclusion in this CLV regimen."
+        "explanation": "Age over 40 is an explicit exclusion in NCCP 00806; review an alternative regimen."
+      },
+      {
+        "id": "INDICATION",
+        "priority": 8,
+        "when": {
+          "field": "high_risk_medulloblastoma_or_pnet_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm the diagnosis and high-risk indication. Do not apply the glioma schedule or an incomplete automated risk definition.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "Confirm the diagnosis and high-risk indication. Do not apply the glioma schedule or an incomplete automated risk definition."
+      },
+      {
+        "id": "HYPERSENSITIVITY",
+        "priority": 10,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: Known hypersensitivity to a regimen component. Resolve the regimen choice with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "NCCP exclusion: Known hypersensitivity to a regimen component. Resolve the regimen choice with the consultant."
+      },
+      {
+        "id": "PREGNANCY",
+        "priority": 10,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: Pregnant. Resolve the regimen choice with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "NCCP exclusion: Pregnant. Resolve the regimen choice with the consultant."
+      },
+      {
+        "id": "BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: Breastfeeding. Resolve the regimen choice with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "NCCP exclusion: Breastfeeding. Resolve the regimen choice with the consultant."
       },
       {
         "id": "HEARING",
@@ -504,17 +1010,258 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Significant hearing impairment or tinnitus is an exclusion."
+          "message": "NCCP exclusion: Significant hearing impairment or tinnitus. Resolve the regimen choice with the consultant."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
         },
-        "explanation": "Significant hearing impairment or tinnitus is an exclusion."
+        "explanation": "NCCP exclusion: Significant hearing impairment or tinnitus. Resolve the regimen choice with the consultant."
+      },
+      {
+        "id": "SEVERE_RENAL_EXCLUSION",
+        "priority": 10,
+        "when": {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP exclusion: Severe renal impairment, clinician assessed (NCCP exclusion). Resolve the regimen choice with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "NCCP exclusion: Severe renal impairment, clinician assessed (NCCP exclusion). Resolve the regimen choice with the consultant."
+      },
+      {
+        "id": "ACTIVE_INFECTION",
+        "priority": 9,
+        "when": {
+          "field": "active_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Urgently review active infection before further cytotoxic treatment, including delayed marrow suppression and sepsis risk. This is a clinical safety review, not a new numeric NCCP threshold."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2–3",
+          "section": "4.4"
+        },
+        "explanation": "Urgently review active infection before further cytotoxic treatment, including delayed marrow suppression and sepsis risk. This is a clinical safety review, not a new numeric NCCP threshold."
+      },
+      {
+        "id": "CYCLE_LIMIT",
+        "priority": 8,
+        "when": {
+          "field": "cycle_number",
+          "operator": ">",
+          "value": 8
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "NCCP plans eight 42-day cycles. Confirm any proposed course beyond eight with the consultant.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1"
+        },
+        "explanation": "NCCP plans eight 42-day cycles. Confirm any proposed course beyond eight with the consultant."
+      },
+      {
+        "id": "RT_INCOMPLETE",
+        "priority": 8,
+        "when": {
+          "field": "craniospinal_rt_complete",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "CLV follows completion of craniospinal radiotherapy; confirm sequencing before starting.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1"
+        },
+        "explanation": "CLV follows completion of craniospinal radiotherapy; confirm sequencing before starting."
+      },
+      {
+        "id": "RT_INTERVAL",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "weeks_since_craniospinal_rt",
+                  "operator": "<",
+                  "value": 4
+                },
+                {
+                  "field": "weeks_since_craniospinal_rt",
+                  "operator": ">",
+                  "value": 6
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Cycle 1 is scheduled 4–6 weeks after craniospinal radiotherapy; timing outside this range requires explicit review.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1"
+        },
+        "explanation": "Cycle 1 is scheduled 4–6 weeks after craniospinal radiotherapy; timing outside this range requires explicit review."
+      },
+      {
+        "id": "RT_TIMING_MISSING",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "weeks_since_craniospinal_rt",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "craniospinal_rt_complete",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm completion and the 4–6 week interval after craniospinal radiotherapy before Cycle 1.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1"
+        },
+        "explanation": "Confirm completion and the 4–6 week interval after craniospinal radiotherapy before Cycle 1."
+      },
+      {
+        "id": "BASELINE_TESTS",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "baseline_tests_complete",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Review baseline FBC, renal/liver function and indicated audiology/CrCl and pulmonary testing; product SmPCs add electrolyte, hearing and pulmonary monitoring requirements.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "Review baseline FBC, renal/liver function and indicated audiology/CrCl and pulmonary testing; product SmPCs add electrolyte, hearing and pulmonary monitoring requirements."
+      },
+      {
+        "id": "SCHEDULED_TESTS",
+        "priority": 8,
+        "when": {
+          "field": "scheduled_tests_complete",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Obtain the currently due blood, renal/liver/electrolyte and indicated hearing/pulmonary assessments before prescribing. No fixed MRI interval is supplied by this NCCP protocol.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "Obtain the currently due blood, renal/liver/electrolyte and indicated hearing/pulmonary assessments before prescribing. No fixed MRI interval is supplied by this NCCP protocol."
       },
       {
         "id": "ANC_LT1",
-        "priority": 10,
+        "priority": 9,
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
@@ -525,17 +1272,20 @@
           "components": [
             "lomustine"
           ],
-          "message": "Delay until ANC ≥1.0 and platelets ≥100; resume lomustine at 80% of the original dose, which becomes the new full dose."
+          "message": "Do not give lomustine with these current counts. NCCP requires recovery to ANC ≥ 1 AND platelets ≥ 100; after a qualifying delay it specifies 80% of the original dose as the new full dose. Confirm original/previous dose, cumulative nadir and all other restrictions before prescribing.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
         },
-        "explanation": "Delay until ANC ≥1.0 and platelets ≥100; resume lomustine at 80% of the original dose, which becomes the new full dose."
+        "explanation": "Do not give lomustine with these current counts. NCCP requires recovery to ANC ≥ 1 AND platelets ≥ 100; after a qualifying delay it specifies 80% of the original dose as the new full dose. Confirm original/previous dose, cumulative nadir and all other restrictions before prescribing."
       },
       {
         "id": "PLT_LT80",
-        "priority": 10,
+        "priority": 9,
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
@@ -546,23 +1296,76 @@
           "components": [
             "lomustine"
           ],
-          "message": "Delay until ANC ≥1.0 and platelets ≥100; resume lomustine at 80% of the original dose, which becomes the new full dose."
+          "message": "Do not give lomustine with these current counts. NCCP requires recovery to ANC ≥ 1 AND platelets ≥ 100; after a qualifying delay it specifies 80% of the original dose as the new full dose. Confirm original/previous dose, cumulative nadir and all other restrictions before prescribing.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
         },
-        "explanation": "Delay until ANC ≥1.0 and platelets ≥100; resume lomustine at 80% of the original dose, which becomes the new full dose."
+        "explanation": "Do not give lomustine with these current counts. NCCP requires recovery to ANC ≥ 1 AND platelets ≥ 100; after a qualifying delay it specifies 80% of the original dose as the new full dose. Confirm original/previous dose, cumulative nadir and all other restrictions before prescribing."
       },
       {
         "id": "PLT_80_99",
         "priority": 8,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "between_inclusive",
-          "value": [
-            80,
-            99
+          "all": [
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 80
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Platelets 80 to < 100 are not assigned a new-dose row when ANC ≥ 1 in NCCP Table 1. Do not round 99.5 to 100 or infer a dose. For recovery after a documented hold, platelets must reach 100.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
+        },
+        "explanation": "Platelets 80 to < 100 are not assigned a new-dose row when ANC ≥ 1 in NCCP Table 1. Do not round 99.5 to 100 or infer a dose. For recovery after a documented hold, platelets must reach 100."
+      },
+      {
+        "id": "COUNT_RECOVERY_INCOMPLETE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "lomustine_prior_count_delay",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
           ]
         },
         "action": {
@@ -570,226 +1373,875 @@
           "components": [
             "lomustine"
           ],
-          "message": "Platelets remain below the required recovery threshold of 100 ×10⁹/L."
+          "message": "A prior count delay remains unresolved until BOTH ANC ≥ 1 and platelets ≥ 100. Do not apply the 80% restart to an unrecovered count."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
         },
-        "explanation": "Platelets remain below the required recovery threshold of 100 ×10⁹/L."
+        "explanation": "A prior count delay remains unresolved until BOTH ANC ≥ 1 and platelets ≥ 100. Do not apply the 80% restart to an unrecovered count."
+      },
+      {
+        "id": "COUNT_HISTORY_MISSING",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "lomustine_prior_count_delay",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Both current ANC and platelet recovery results are required before reviewing a lomustine restart after a count delay.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
+        },
+        "explanation": "Both current ANC and platelet recovery results are required before reviewing a lomustine restart after a count delay."
+      },
+      {
+        "id": "COUNT_RECOVERED_REVIEW",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "lomustine_prior_count_delay",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Counts meet the NCCP recovery targets. Reconcile 80% of the documented original lomustine dose as the new full dose, prior reductions, nadir, organ function and delay number. Do not automatically multiply a previously reduced dose or return to 75 mg/m².",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
+        },
+        "explanation": "Counts meet the NCCP recovery targets. Reconcile 80% of the documented original lomustine dose as the new full dose, prior reductions, nadir, organ function and delay number. Do not automatically multiply a previously reduced dose or return to 75 mg/m²."
       },
       {
         "id": "DELAYS_GT2",
         "priority": 8,
         "when": {
-          "field": "more_than_two_count_delays",
+          "field": "lomustine_count_delay_number",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "More than two count delays requires the prescribing clinician to review the treatment plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
+        },
+        "explanation": "More than two count delays requires the prescribing clinician to review the treatment plan."
+      },
+      {
+        "id": "LOM_DOSE_HISTORY",
+        "priority": 8,
+        "when": {
+          "any": [
+            {
+              "field": "lomustine_dose_history_confirmed",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "lomustine_prior_reduction",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Retain the documented original, previous and new full lomustine doses; recovery does not authorise re-escalation. The NCCP 80% count-delay and 75% renal instructions must not be multiplied without a consultant/pharmacy decision.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 1
+        },
+        "explanation": "Retain the documented original, previous and new full lomustine doses; recovery does not authorise re-escalation. The NCCP 80% count-delay and 75% renal instructions must not be multiplied without a consultant/pharmacy decision."
+      },
+      {
+        "id": "LOM_REPEAT_TOO_SOON",
+        "priority": 9,
+        "when": {
+          "field": "lomustine_days_since_previous_dose",
+          "operator": "<",
+          "value": 42
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Do not repeat lomustine before 42 days: marrow toxicity is delayed and cumulative. The NCCP regimen uses ONE oral Day 1 dose, not a daily course."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–3",
+          "section": "4.2–4.4"
+        },
+        "explanation": "Do not repeat lomustine before 42 days: marrow toxicity is delayed and cumulative. The NCCP regimen uses ONE oral Day 1 dose, not a daily course."
+      },
+      {
+        "id": "LOM_HISTORY_REQUIRED",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "lomustine_days_since_previous_dose",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "lomustine_nadir_review_complete",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "lomustine_dose_history_confirmed",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "lomustine_cumulative_history_confirmed",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Before repeat lomustine confirm the interval, preceding nadir, all prior dose changes and lifetime cumulative exposure. Normal current counts alone are insufficient.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–3",
+          "section": "4.2–4.4"
+        },
+        "explanation": "Before repeat lomustine confirm the interval, preceding nadir, all prior dose changes and lifetime cumulative exposure. Normal current counts alone are insufficient."
+      },
+      {
+        "id": "LOM_NADIR_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "lomustine_nadir_review_complete",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Review preceding-cycle nadirs and delayed recovery before repeat lomustine; the current SmPC bases changes on previous response and is not identical to NCCP Table 1.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–2",
+          "section": "4.2"
+        },
+        "explanation": "Review preceding-cycle nadirs and delayed recovery before repeat lomustine; the current SmPC bases changes on previous response and is not identical to NCCP Table 1."
+      },
+      {
+        "id": "LOM_NADIR_LOW",
+        "priority": 8,
+        "when": {
+          "any": [
+            {
+              "field": "wbc_nadir_x10e9_l",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "field": "platelet_nadir_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Prior nadir crosses a lomustine product dose-adjustment band even if present counts recovered. The SmPC uses WBC and prior dose, while NCCP uses ANC and original-dose 80% after a delay. Resolve the regimen/product differences; do not automatically calculate a percentage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–2",
+          "section": "4.2"
+        },
+        "explanation": "Prior nadir crosses a lomustine product dose-adjustment band even if present counts recovered. The SmPC uses WBC and prior dose, while NCCP uses ANC and original-dose 80% after a delay. Resolve the regimen/product differences; do not automatically calculate a percentage."
+      },
+      {
+        "id": "LOM_NADIR_OVERLAP",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "platelet_nadir_x10e9_l",
+              "operator": ">=",
+              "value": 24
+            },
+            {
+              "field": "platelet_nadir_x10e9_l",
+              "operator": "<",
+              "value": 25
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "The current common SmPC platelet nadir rows overlap from 24 to < 25×10⁹/L (70% row starts 24;50% row extends below 25). This is unresolved source ambiguity, not a numeric-dose calculation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–2",
+          "section": "4.2"
+        },
+        "explanation": "The current common SmPC platelet nadir rows overlap from 24 to < 25×10⁹/L (70% row starts 24;50% row extends below 25). This is unresolved source ambiguity, not a numeric-dose calculation."
+      },
+      {
+        "id": "LOM_WBC_RECOVERY",
+        "priority": 8,
+        "when": {
+          "field": "wbc_x10e9_l",
+          "operator": "<",
+          "value": 4
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "The lomustine SmPC requires current WBC ≥ 4 before repeating, while NCCP Table 1 uses ANC ≥ 1. WBC and ANC are distinct; resolve recovery and the product-specific plan before further lomustine.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–2",
+          "section": "4.2"
+        },
+        "explanation": "The lomustine SmPC requires current WBC ≥ 4 before repeating, while NCCP Table 1 uses ANC ≥ 1. WBC and ANC are distinct; resolve recovery and the product-specific plan before further lomustine."
+      },
+      {
+        "id": "LOM_WEEKLY_MONITORING",
+        "priority": 8,
+        "when": {
+          "field": "weekly_counts_plan_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Arrange weekly counts for at least six weeks after each lomustine dose, including the delayed nadir and any extended recovery.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2–3",
+          "section": "4.4"
+        },
+        "explanation": "Arrange weekly counts for at least six weeks after each lomustine dose, including the delayed nadir and any extended recovery."
+      },
+      {
+        "id": "LOM_SINGLE_DOSE",
+        "priority": 9,
+        "when": {
+          "field": "lomustine_supply_and_single_dose_verified",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Verify unlicensed-drug supply with the dispensing pharmacy and ONE prescribed Day 1 lomustine dose. Do not repeat after vomiting or take extra doses without oncology advice."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1"
+        },
+        "explanation": "Verify unlicensed-drug supply with the dispensing pharmacy and ONE prescribed Day 1 lomustine dose. Do not repeat after vomiting or take extra doses without oncology advice."
+      },
+      {
+        "id": "LOM_CUMULATIVE_EXCEEDED",
+        "priority": 9,
+        "when": {
+          "field": "projected_lomustine_cumulative_mg_m2",
+          "operator": ">",
+          "value": 1000
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "The current lomustine SmPC maximum cumulative exposure is 1000 mg/m². The proposed lifetime total exceeds it: do not give the proposed lomustine dose; seek consultant/pharmacy review."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–3",
+          "section": "4.2–4.4"
+        },
+        "explanation": "The current lomustine SmPC maximum cumulative exposure is 1000 mg/m². The proposed lifetime total exceeds it: do not give the proposed lomustine dose; seek consultant/pharmacy review."
+      },
+      {
+        "id": "LOM_CUMULATIVE_REACHED",
+        "priority": 9,
+        "when": {
+          "field": "cumulative_lomustine_mg_m2",
+          "operator": ">=",
+          "value": 1000
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Previous lifetime lomustine exposure has reached or exceeded 1000 mg/m². Further positive dosing would exceed the product maximum; seek consultant/pharmacy review."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–3",
+          "section": "4.2–4.4"
+        },
+        "explanation": "Previous lifetime lomustine exposure has reached or exceeded 1000 mg/m². Further positive dosing would exceed the product maximum; seek consultant/pharmacy review."
+      },
+      {
+        "id": "LOM_CUMULATIVE_LIMIT",
+        "priority": 8,
+        "when": {
+          "field": "projected_lomustine_cumulative_mg_m2",
+          "operator": "==",
+          "value": 1000
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "The proposed lifetime total reaches the 1000 mg/m² maximum exactly. Recheck all prior exposure, proposed dose and pulmonary risk; this is not automatic clearance for the final dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–3",
+          "section": "4.2–4.4"
+        },
+        "explanation": "The proposed lifetime total reaches the 1000 mg/m² maximum exactly. Recheck all prior exposure, proposed dose and pulmonary risk; this is not automatic clearance for the final dose."
+      },
+      {
+        "id": "LOM_CUMULATIVE_HISTORY",
+        "priority": 8,
+        "when": {
+          "field": "lomustine_cumulative_history_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Reconcile lifetime lomustine exposure including previous regimens and the proposed next dose before prescribing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "1–3",
+          "section": "4.2–4.4"
+        },
+        "explanation": "Reconcile lifetime lomustine exposure including previous regimens and the proposed next dose before prescribing."
+      },
+      {
+        "id": "LOM_30_50",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 30
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "NCCP Table 2 specifies 75% of the original lomustine dose at CrCl 30–50 mL/min. Confirm dialysis status, original/current dose and any marrow reduction; do not combine reductions automatically.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "NCCP Table 2 specifies 75% of the original lomustine dose at CrCl 30–50 mL/min. Confirm dialysis status, original/current dose and any marrow reduction; do not combine reductions automatically."
+      },
+      {
+        "id": "LOM_LT30",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Lomustine is not recommended by NCCP at CrCl < 30 mL/min or during haemodialysis. Withhold the proposed dose for specialist review; the separate severe-renal exclusion remains applicable."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "Lomustine is not recommended by NCCP at CrCl < 30 mL/min or during haemodialysis. Withhold the proposed dose for specialist review; the separate severe-renal exclusion remains applicable."
+      },
+      {
+        "id": "LOM_SEVERE_HEPATIC",
+        "priority": 9,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lomustine"
+          ],
+          "message": "NCCP does not recommend lomustine in severe hepatic impairment. No numeric definition of severe is supplied; obtain consultant/pharmacy review."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "NCCP does not recommend lomustine in severe hepatic impairment. No numeric definition of severe is supplied; obtain consultant/pharmacy review."
+      },
+      {
+        "id": "LOM_MILD_MOD_HEPATIC",
+        "priority": 8,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "==",
+          "value": "mild_moderate"
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "lomustine"
+          ],
+          "message": "NCCP expects no hepatic dose adjustment for mild/moderate impairment, but abnormal liver tests, eligibility and other dose restrictions still require review."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "NCCP expects no hepatic dose adjustment for mild/moderate impairment, but abnormal liver tests, eligibility and other dose restrictions still require review."
+      },
+      {
+        "id": "CIS_40_49",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 49
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "NCCP specifies 50% of the original cisplatin dose at CrCl 40–49 mL/min. The current Accord SmPC contraindicates pre-existing renal impairment; reconcile the actual product and renal exception with the consultant/pharmacist before a dose. No automatic calculation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "NCCP specifies 50% of the original cisplatin dose at CrCl 40–49 mL/min. The current Accord SmPC contraindicates pre-existing renal impairment; reconcile the actual product and renal exception with the consultant/pharmacist before a dose. No automatic calculation."
+      },
+      {
+        "id": "CIS_50_59",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 59
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "NCCP specifies 75% of the original cisplatin dose at CrCl 50–59 mL/min. The current Accord SmPC contraindicates pre-existing renal impairment; reconcile the actual product and renal exception with the consultant/pharmacist before a dose. No automatic calculation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "NCCP specifies 75% of the original cisplatin dose at CrCl 50–59 mL/min. The current Accord SmPC contraindicates pre-existing renal impairment; reconcile the actual product and renal exception with the consultant/pharmacist before a dose. No automatic calculation."
+      },
+      {
+        "id": "CIS_RENAL_GAP",
+        "priority": 8,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 49
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 59
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "The printed NCCP cisplatin bands leave fractional CrCl 49–50 and 59–60 mL/min unallocated. Do not round or select a percentage without specialist interpretation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "The printed NCCP cisplatin bands leave fractional CrCl 49–50 and 59–60 mL/min unallocated. Do not round or select a percentage without specialist interpretation."
+      },
+      {
+        "id": "CIS_LT40",
+        "priority": 9,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 40
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Cisplatin is not recommended by NCCP below CrCl 40 mL/min. Seek specialist review of eligibility and alternatives."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "Cisplatin is not recommended by NCCP below CrCl 40 mL/min. Seek specialist review of eligibility and alternatives."
+      },
+      {
+        "id": "CIS_DIALYSIS",
+        "priority": 8,
+        "when": {
+          "field": "haemodialysis",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cisplatin"
           ],
-          "message": "More than two delays requires review by the prescribing clinician."
+          "message": "NCCP says 50% of the original cisplatin dose may be considered during haemodialysis. This conditional exception needs specialist pharmacy/renal review of product contraindications, schedule and dialysis timing; no automatic dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
         },
-        "explanation": "More than two delays requires review by the prescribing clinician."
+        "explanation": "NCCP says 50% of the original cisplatin dose may be considered during haemodialysis. This conditional exception needs specialist pharmacy/renal review of product contraindications, schedule and dialysis timing; no automatic dose."
       },
       {
-        "id": "LOM_30_50",
+        "id": "RENAL_DIALYSIS_UNKNOWN",
         "priority": 8,
         "when": {
-          "field": "lomustine_renal_band",
-          "operator": "==",
-          "value": "30_50"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "lomustine"
-          ],
-          "message": "Use 75% of the original lomustine dose."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Use 75% of the original lomustine dose."
-      },
-      {
-        "id": "LOM_LT30",
-        "priority": 10,
-        "when": {
-          "field": "lomustine_renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 0
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "missing",
+              "value": true
+            }
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
+            "cisplatin",
             "lomustine"
           ],
-          "message": "Lomustine is not recommended at CrCl <30 mL/min or during haemodialysis."
+          "message": "Confirm haemodialysis status before interpreting the renal table; a reported CrCl alone does not establish the non-dialysis pathway.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
         },
-        "explanation": "Lomustine is not recommended at CrCl <30 mL/min or during haemodialysis."
+        "explanation": "Confirm haemodialysis status before interpreting the renal table; a reported CrCl alone does not establish the non-dialysis pathway."
       },
       {
-        "id": "CIS_50_59",
+        "id": "CIS_PREEXISTING_RENAL",
         "priority": 8,
         "when": {
-          "field": "cisplatin_renal_band",
+          "field": "preexisting_renal_impairment",
           "operator": "==",
-          "value": "50_59"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Use 75% of the original cisplatin dose."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Use 75% of the original cisplatin dose."
-      },
-      {
-        "id": "CIS_40_49",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "40_49"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Use 50% of the original cisplatin dose."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Use 50% of the original cisplatin dose."
-      },
-      {
-        "id": "CIS_LT40",
-        "priority": 10,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "lt40"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Cisplatin is not recommended when CrCl is below 40 mL/min."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Cisplatin is not recommended when CrCl is below 40 mL/min."
-      },
-      {
-        "id": "CIS_DIALYSIS",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "dialysis"
+          "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "cisplatin"
           ],
-          "message": "A 50% cisplatin dose may be considered in haemodialysis only with specialist consultant/pharmacy planning."
+          "message": "The current Accord cisplatin product contraindicates pre-existing renal impairment, while NCCP lists reduced-dose bands. Resolve the actual product and consultant-approved plan explicitly.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "2–3",
+          "section": "4.3"
         },
-        "explanation": "A 50% cisplatin dose may be considered in haemodialysis only with specialist consultant/pharmacy planning."
+        "explanation": "The current Accord cisplatin product contraindicates pre-existing renal impairment, while NCCP lists reduced-dose bands. Resolve the actual product and consultant-approved plan explicitly."
       },
       {
-        "id": "VIN_BILI",
-        "priority": 8,
-        "when": {
-          "field": "bilirubin_umol_l",
-          "operator": ">",
-          "value": 51
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "vincristine"
-          ],
-          "message": "Use 50% of the original vincristine dose when bilirubin is above 51 µmol/L."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Use 50% of the original vincristine dose when bilirubin is above 51 µmol/L."
-      },
-      {
-        "id": "VIN_NEURO_G2",
+        "id": "CIS_PRODUCT_PLAN",
         "priority": 9,
         "when": {
-          "field": "neuropathy_grade",
+          "field": "cisplatin_product_and_local_plan_confirmed",
           "operator": "==",
-          "value": 2
+          "value": false
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
-            "vincristine"
+            "cisplatin"
           ],
-          "message": "Hold vincristine until recovery, then reduce the dose by 50%."
+          "message": "Reconcile the actual cisplatin product and local administration plan: NCCP lists a 1-hour infusion, whereas the current Accord SmPC describes 6–8 hours and different hydration/diuresis instructions. Do not generate a prescription from an unresolved source conflict."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "1–5",
+          "section": "4.2–4.4"
         },
-        "explanation": "Hold vincristine until recovery, then reduce the dose by 50%."
-      },
-      {
-        "id": "VIN_NEURO_G34",
-        "priority": 10,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "omit",
-          "components": [
-            "vincristine"
-          ],
-          "message": "Omit vincristine for Grade 3–4 neurotoxicity."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Omit vincristine for Grade 3–4 neurotoxicity."
+        "explanation": "Reconcile the actual cisplatin product and local administration plan: NCCP lists a 1-hour infusion, whereas the current Accord SmPC describes 6–8 hours and different hydration/diuresis instructions. Do not generate a prescription from an unresolved source conflict."
       },
       {
         "id": "HYDRATION",
@@ -804,13 +2256,538 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Do not administer cisplatin until the required hydration and magnesium plan is confirmed."
+          "message": "Confirm pre/post cisplatin hydration, magnesium/electrolytes, fluid status and urine-output plan under local policy before administration. NCCP does not recommend routine furosemide without fluid excess."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1,4"
         },
-        "explanation": "Do not administer cisplatin until the required hydration and magnesium plan is confirmed."
+        "explanation": "Confirm pre/post cisplatin hydration, magnesium/electrolytes, fluid status and urine-output plan under local policy before administration. NCCP does not recommend routine furosemide without fluid excess."
+      },
+      {
+        "id": "CIS_NEW_RENAL",
+        "priority": 9,
+        "when": {
+          "field": "new_renal_or_electrolyte_abnormality",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Investigate and correct clinically important renal/electrolyte abnormalities before further cisplatin; review cumulative nephrotoxicity and the individual hydration plan."
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "Investigate and correct clinically important renal/electrolyte abnormalities before further cisplatin; review cumulative nephrotoxicity and the individual hydration plan."
+      },
+      {
+        "id": "CIS_NEW_HEARING",
+        "priority": 9,
+        "when": {
+          "field": "new_hearing_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "New tinnitus, hearing or balance change needs assessment and audiology before further cisplatin; significant hearing impairment/tinnitus is a separate NCCP regimen exclusion."
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "New tinnitus, hearing or balance change needs assessment and audiology before further cisplatin; significant hearing impairment/tinnitus is a separate NCCP regimen exclusion."
+      },
+      {
+        "id": "CIS_NEUROTOXICITY",
+        "priority": 8,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Neurological toxicity also requires review of cisplatin, which can cause cumulative and irreversible neuropathy. The NCCP vincristine percentage is not a cisplatin reduction algorithm.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "Neurological toxicity also requires review of cisplatin, which can cause cumulative and irreversible neuropathy. The NCCP vincristine percentage is not a cisplatin reduction algorithm."
+      },
+      {
+        "id": "VIN_BILI",
+        "priority": 8,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 51
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "NCCP specifies 50% of original vincristine when bilirubin is above 51μmol/L, but does not name the bilirubin fraction. Confirm fraction, actual product, previous dose/cap and concurrent neurotoxicity before a numerical dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "NCCP specifies 50% of original vincristine when bilirubin is above 51μmol/L, but does not name the bilirubin fraction. Confirm fraction, actual product, previous dose/cap and concurrent neurotoxicity before a numerical dose."
+      },
+      {
+        "id": "VIN_BILI_FRACTION",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 51
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_fraction",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "bilirubin_fraction",
+                  "operator": "==",
+                  "value": "unspecified"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "The elevated bilirubin result has no confirmed fraction. NCCP does not specify total versus direct; ask pharmacy to reconcile the laboratory value and current product instructions.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "3",
+          "table": 2
+        },
+        "explanation": "The elevated bilirubin result has no confirmed fraction. NCCP does not specify total versus direct; ask pharmacy to reconcile the laboratory value and current product instructions."
+      },
+      {
+        "id": "VIN_NEURO_G2",
+        "priority": 9,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Withhold vincristine for source Grade 2 neurotoxicity until recovery, then review the source 50% dose. NCCP does not specify an exact recovery grade or how to combine previous reductions; do not automatically restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "Withhold vincristine for source Grade 2 neurotoxicity until recovery, then review the source 50% dose. NCCP does not specify an exact recovery grade or how to combine previous reductions; do not automatically restart."
+      },
+      {
+        "id": "VIN_NEURO_G34",
+        "priority": 10,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Omit vincristine for source Grade 3–4 neurotoxicity; review symptoms and the wider regimen with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "Omit vincristine for source Grade 3–4 neurotoxicity; review symptoms and the wider regimen with the consultant."
+      },
+      {
+        "id": "VIN_PRIOR_G2_RECOVERY",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "prior_vincristine_neurotoxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "vincristine_neurotoxicity_recovery_confirmed",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Prior Grade 2 neurotoxicity requires confirmed recovery before the source 50% vincristine restart. Reconcile current symptoms, previous/capped dose and hepatic adjustments; recovery alone must not restore the original full dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "Prior Grade 2 neurotoxicity requires confirmed recovery before the source 50% vincristine restart. Reconcile current symptoms, previous/capped dose and hepatic adjustments; recovery alone must not restore the original full dose."
+      },
+      {
+        "id": "VIN_PRIOR_G2_UNRECOVERED",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "prior_vincristine_neurotoxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "vincristine_neurotoxicity_recovery_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Prior Grade 2 neurotoxicity has not recovered; continue withholding vincristine even if a different current grade was entered."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "Prior Grade 2 neurotoxicity has not recovered; continue withholding vincristine even if a different current grade was entered."
+      },
+      {
+        "id": "VIN_PRIOR_G2_UNKNOWN",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "prior_vincristine_neurotoxicity_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "vincristine_neurotoxicity_recovery_confirmed",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Confirm recovery from prior Grade 2 neurotoxicity before any vincristine restart; a missing recovery assessment is not recovery.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "Confirm recovery from prior Grade 2 neurotoxicity before any vincristine restart; a missing recovery assessment is not recovery."
+      },
+      {
+        "id": "VIN_PRIOR_G34",
+        "priority": 8,
+        "when": {
+          "field": "prior_vincristine_neurotoxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "A previous Grade 3–4 event required vincristine omission. Normal current symptoms do not establish a supported restart pathway; obtain an explicit consultant plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "A previous Grade 3–4 event required vincristine omission. Normal current symptoms do not establish a supported restart pathway; obtain an explicit consultant plan."
+      },
+      {
+        "id": "VIN_PRIOR_REDUCTION",
+        "priority": 8,
+        "when": {
+          "field": "vincristine_prior_reduction_or_omission",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Preserve previous vincristine reductions or omissions. Do not use the reference 1.5 mg/m²(max 2 mg) as an automatic restart dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4",
+          "table": 3
+        },
+        "explanation": "Preserve previous vincristine reductions or omissions. Do not use the reference 1.5 mg/m²(max 2 mg) as an automatic restart dose."
+      },
+      {
+        "id": "VIN_ROUTE",
+        "priority": 9,
+        "when": {
+          "field": "vincristine_iv_minibag_verified",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Verify IV-only vincristine in the prescribed 50 mL minibag and all local vinca-alkaloid route safeguards before administration. Never administer intrathecally."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "1"
+        },
+        "explanation": "Verify IV-only vincristine in the prescribed 50 mL minibag and all local vinca-alkaloid route safeguards before administration. Never administer intrathecally."
+      },
+      {
+        "id": "VIN_BOWEL_URGENT",
+        "priority": 9,
+        "when": {
+          "field": "severe_constipation_or_ileus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Urgently assess severe constipation, abdominal distension or possible ileus before further vincristine; review autonomic neurotoxicity, hydration and the bowel plan."
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4"
+        },
+        "explanation": "Urgently assess severe constipation, abdominal distension or possible ileus before further vincristine; review autonomic neurotoxicity, hydration and the bowel plan."
+      },
+      {
+        "id": "VIN_BOWEL_PLAN",
+        "priority": 8,
+        "when": {
+          "field": "bowel_prophylaxis_plan_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Arrange constipation prophylaxis and clear bowel-symptom advice for vincristine under local policy.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4"
+        },
+        "explanation": "Arrange constipation prophylaxis and clear bowel-symptom advice for vincristine under local policy."
+      },
+      {
+        "id": "ANTIFUNGAL_PLAN",
+        "priority": 8,
+        "when": {
+          "field": "antifungal_plan_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Review the NCCP local-policy antifungal prophylaxis plan with pharmacy. Avoid concurrent azoles and vincristine; do not generate a generic antifungal prescription.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4"
+        },
+        "explanation": "Review the NCCP local-policy antifungal prophylaxis plan with pharmacy. Avoid concurrent azoles and vincristine; do not generate a generic antifungal prescription."
+      },
+      {
+        "id": "VIN_APREPITANT_AZOLE",
+        "priority": 8,
+        "when": {
+          "field": "aprepitant_or_azole_exposure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Review aprepitant/azole exposure before vincristine: CYP3A4 inhibition can increase neurotoxicity. NCCP advises avoiding azoles with vincristine; do not auto-generate aprepitant solely from cisplatin emetic risk.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4"
+        },
+        "explanation": "Review aprepitant/azole exposure before vincristine: CYP3A4 inhibition can increase neurotoxicity. NCCP advises avoiding azoles with vincristine; do not auto-generate aprepitant solely from cisplatin emetic risk."
+      },
+      {
+        "id": "ANTIEMETIC_PLAN",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_day",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "antiemetic_plan_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine",
+            "cisplatin",
+            "vincristine"
+          ],
+          "message": "Day 1 includes high-emetic-risk cisplatin and moderate-to-high oral lomustine. Confirm an individual antiemetic plan and vincristine interactions; Day 8/15 vincristine alone is minimally emetogenic.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4"
+        },
+        "explanation": "Day 1 includes high-emetic-risk cisplatin and moderate-to-high oral lomustine. Confirm an individual antiemetic plan and vincristine interactions; Day 8/15 vincristine alone is minimally emetogenic."
+      },
+      {
+        "id": "INTERACTION_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "interaction_review_needed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Review current medicines and product interactions, including anti-seizure agents, cimetidine/theophylline, nephrotoxic/ototoxic medicines and CYP3A4 inhibitors. Do not stop essential anti-seizure therapy automatically.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "3–4",
+          "section": "4.5"
+        },
+        "explanation": "Review current medicines and product interactions, including anti-seizure agents, cimetidine/theophylline, nephrotoxic/ototoxic medicines and CYP3A4 inhibitors. Do not stop essential anti-seizure therapy automatically."
       },
       {
         "id": "PULM",
@@ -825,13 +2802,369 @@
           "components": [
             "lomustine"
           ],
-          "message": "Withhold lomustine and investigate suspected pulmonary toxicity."
+          "message": "Assess new breathlessness/cough or suspected lomustine pulmonary toxicity before more lomustine; review cumulative exposure and pulmonary-function testing."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2–3",
+          "section": "4.4"
         },
-        "explanation": "Withhold lomustine and investigate suspected pulmonary toxicity."
+        "explanation": "Assess new breathlessness/cough or suspected lomustine pulmonary toxicity before more lomustine; review cumulative exposure and pulmonary-function testing."
+      },
+      {
+        "id": "LOM_PULMONARY_RISK",
+        "priority": 8,
+        "when": {
+          "any": [
+            {
+              "field": "fvc_percent_predicted",
+              "operator": "<",
+              "value": 70
+            },
+            {
+              "field": "dlco_percent_predicted",
+              "operator": "<",
+              "value": 70
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Baseline FVC or DLCO below 70% predicted identifies higher lomustine pulmonary risk in the product SmPC. It is a risk-review threshold, not an invented automatic DLCO < 60 stopping rule.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2–3",
+          "section": "4.4"
+        },
+        "explanation": "Baseline FVC or DLCO below 70% predicted identifies higher lomustine pulmonary risk in the product SmPC. It is a risk-review threshold, not an invented automatic DLCO < 60 stopping rule."
+      },
+      {
+        "id": "LOM_SEVERE_MARROW",
+        "priority": 10,
+        "when": {
+          "field": "severe_myelosuppression",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Current lomustine medac product contraindication: Severe bone-marrow depression, clinician assessed. Confirm the supplied product and alternative plan."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2",
+          "section": "4.3"
+        },
+        "explanation": "Current lomustine medac product contraindication: Severe bone-marrow depression, clinician assessed. Confirm the supplied product and alternative plan."
+      },
+      {
+        "id": "LOM_WHEAT",
+        "priority": 10,
+        "when": {
+          "field": "wheat_allergy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Current lomustine medac product contraindication: Wheat allergy (lomustine medac contains wheat starch). Confirm the supplied product and alternative plan."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2",
+          "section": "4.3"
+        },
+        "explanation": "Current lomustine medac product contraindication: Wheat allergy (lomustine medac contains wheat starch). Confirm the supplied product and alternative plan."
+      },
+      {
+        "id": "LOM_NITROSOUREA_NONRESPONSE",
+        "priority": 10,
+        "when": {
+          "field": "prior_nitrosourea_nonresponse",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lomustine"
+          ],
+          "message": "Current lomustine medac product contraindication: Previous tumour nonresponse to another nitrosourea. Confirm the supplied product and alternative plan."
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2",
+          "section": "4.3"
+        },
+        "explanation": "Current lomustine medac product contraindication: Previous tumour nonresponse to another nitrosourea. Confirm the supplied product and alternative plan."
+      },
+      {
+        "id": "LIVE_VACCINES",
+        "priority": 8,
+        "when": {
+          "field": "live_vaccine_exposure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Do not proceed with a live vaccine during immunosuppressive lomustine/cisplatin treatment. Obtain specialist advice; the product information contraindicates live vaccines in immunosuppressed patients. This finding is not an automatic cancellation of all chemotherapy.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "Lomustine medac common SmPC January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": "2–4",
+          "section": "4.3–4.5"
+        },
+        "explanation": "Do not proceed with a live vaccine during immunosuppressive lomustine/cisplatin treatment. Obtain specialist advice; the product information contraindicates live vaccines in immunosuppressed patients. This finding is not an automatic cancellation of all chemotherapy."
+      },
+      {
+        "id": "CIS_DEHYDRATED",
+        "priority": 10,
+        "when": {
+          "field": "dehydrated",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "The current cisplatin product contraindicates treatment in a dehydrated patient. Correct fluid status and reassess the complete plan before administration."
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "2–3",
+          "section": "4.3"
+        },
+        "explanation": "The current cisplatin product contraindicates treatment in a dehydrated patient. Correct fluid status and reassess the complete plan before administration."
+      },
+      {
+        "id": "CIS_MARROW",
+        "priority": 10,
+        "when": {
+          "field": "severe_myelosuppression",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "The current cisplatin product contraindicates treatment in myelosuppressed patients; severe marrow depression requires withholding this regimen and specialist reassessment."
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "2–3",
+          "section": "4.3"
+        },
+        "explanation": "The current cisplatin product contraindicates treatment in myelosuppressed patients; severe marrow depression requires withholding this regimen and specialist reassessment."
+      },
+      {
+        "id": "CIS_PRODUCT_COUNT_RECOVERY",
+        "priority": 8,
+        "when": {
+          "any": [
+            {
+              "field": "wbc_x10e9_l",
+              "operator": "<=",
+              "value": 4
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Current cisplatin product repeat-dose criteria use WBC > 4 and platelets > 100, whereas NCCP lomustine criteria use ANC ≥ 1 and platelets ≥ 100. Confirm component-specific recovery and the actual product; the lomustine count row does not clear cisplatin.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "Current cisplatin product repeat-dose criteria use WBC > 4 and platelets > 100, whereas NCCP lomustine criteria use ANC ≥ 1 and platelets ≥ 100. Confirm component-specific recovery and the actual product; the lomustine count row does not clear cisplatin."
+      },
+      {
+        "id": "CIS_CREATININE_HIGH",
+        "priority": 9,
+        "when": {
+          "field": "serum_creatinine_umol_l",
+          "operator": ">",
+          "value": 130
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Current cisplatin product repeat-course instructions require serum creatinine no higher than 130μmol/L; withhold and review renal function, CrCl and the full product-specific criteria."
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "Current cisplatin product repeat-course instructions require serum creatinine no higher than 130μmol/L; withhold and review renal function, CrCl and the full product-specific criteria."
+      },
+      {
+        "id": "CIS_CREATININE_BOUNDARY",
+        "priority": 8,
+        "when": {
+          "field": "serum_creatinine_umol_l",
+          "operator": "==",
+          "value": 130
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "At exactly 130μmol/L the product wording differs: one repeat-course list uses ≤ 130, another says below 130. Resolve the boundary with pharmacy; do not silently select a permissive interpretation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "At exactly 130μmol/L the product wording differs: one repeat-course list uses ≤ 130, another says below 130. Resolve the boundary with pharmacy; do not silently select a permissive interpretation."
+      },
+      {
+        "id": "CIS_PRODUCT_RECOVERY",
+        "priority": 8,
+        "when": {
+          "field": "cisplatin_product_recovery_verified",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Reconcile the actual cisplatin product repeat-dose criteria, including WBC, platelets, renal/urea values and audiology. The SmPC urea mass/SI values and comparator wording are inconsistent; no automated urea conversion or clearance is supplied.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "HPRA Accord cisplatin SmPC 10 July 2026",
+          "url": "https://assets.hpra.ie/products/Human/27566/Licence_PA2315-081-001_10072026160843.pdf",
+          "page": "3–5",
+          "section": "4.4"
+        },
+        "explanation": "Reconcile the actual cisplatin product repeat-dose criteria, including WBC, platelets, renal/urea values and audiology. The SmPC urea mass/SI values and comparator wording are inconsistent; no automated urea conversion or clearance is supplied."
+      },
+      {
+        "id": "SUPPORT_DAY_UNKNOWN",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "antiemetic_plan_confirmed",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "assessment_day",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm the administration day before selecting supportive care: Day 1 contains cisplatin/lomustine; Days 8/15 contain vincristine only. An absent day must not hide an unresolved antiemetic plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "4"
+        },
+        "explanation": "Confirm the administration day before selecting supportive care: Day 1 contains cisplatin/lomustine; Days 8/15 contain vincristine only. An absent day must not hide an unresolved antiemetic plan."
+      },
+      {
+        "id": "BASELINE_STAGE_UNKNOWN",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "baseline_tests_complete",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cycle_number",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Baseline investigations are incomplete and the cycle is unknown. Confirm treatment stage and review required tests before prescribing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00806 v2",
+          "url": "https://healthservice.hse.ie/documents/6870/806_V2_CLV_Therapy.pdf",
+          "page": "2"
+        },
+        "explanation": "Baseline investigations are incomplete and the cycle is unknown. Confirm treatment stage and review required tests before prescribing."
       }
     ]
   },

@@ -7,7 +7,7 @@ assert.equal(crypto.createHash('sha256').update(fs.readFileSync(before)).digest(
 const prior=require(before).codes;assert.equal(prior.length,178);
 const added=['00334','00342','00379','00461','00658'];assert(added.every(c=>!prior.includes(c)));
 const expected=[...prior,...added].sort();
-function registry(codes){assert.deepEqual([...codes].sort(),expected,'All178 preceding suites plus exactly five audited glioma suites');}
+function registry(codes){const next=require('./neuro-suite-registration-v08439.cjs');next.priorRegistry(expected);next.registry(codes);}
 function priorRegistry(codes){assert.deepEqual([...codes].sort(),[...prior].sort(),'Preceding registry is preserved exactly');}
 function profiles(names){registry(names.map(n=>n.replace(/\.json$/,'')));}
 module.exports={registry,profiles,priorRegistry,added};

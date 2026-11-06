@@ -1,0 +1,286 @@
+{
+  "release": "0.84.39",
+  "code": "00805",
+  "protocol_path": "protocols/neuro-oncology/00805-lomustine-130-mg-m2-therapy.json",
+  "baseline_sha256": "37449d1d3afe86a0806e02790254354168569f482c3c59ff0efec4f84ffdf638",
+  "final_sha256": "ed68dce742d2b33537926319f9a11d3675283a5a0e1c895fe8ecfb4afe3f012b",
+  "source_documents": [
+    {
+      "id": "nccp00805",
+      "title": "NCCP Lomustine130mg/m² Therapy",
+      "version": "2",
+      "last_reviewed": "2024-07-18",
+      "review_due": "2029-07-18",
+      "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+      "retrieved": "2026-11-05",
+      "status": 200,
+      "pages": 4,
+      "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+      "file": "sources/00805-nccp.pdf",
+      "acquisition": "Fresh download by next5_neuro_source_research; original timestamp2026-11-05T23:15:13.682208+00:00. Source opened again for this audit."
+    },
+    {
+      "id": "lomustine-medac-smPC",
+      "title": "Lomustine medac40mg capsules common SmPC",
+      "version": "01/2026",
+      "revised": "2026-01-16",
+      "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+      "retrieved": "2026-11-05",
+      "status": 200,
+      "pages": 8,
+      "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+      "file": "sources/lomustine-medac-smPC.pdf",
+      "role": "Manufacturer primary source explicitly linked by NCCP; current revision postdates NCCP2024. Supplied unlicensed product and pharmacy applicability require confirmation."
+    },
+    {
+      "id": "catalogue",
+      "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/neuro-oncology-sact-regimens/",
+      "retrieved": "2026-11-05",
+      "status": 200,
+      "sha256": "0627d899e951215da8ed220bcdb15cd14f9c4f0fcfb0da5560217ebf81f66d12",
+      "file": "sources/catalogue.html"
+    }
+  ],
+  "source_version_change": false,
+  "current_smpc_newer_than_nccp_reference": true,
+  "old_rules": 13,
+  "new_rules": 57,
+  "old_inputs": 11,
+  "new_inputs": 48,
+  "validation": {
+    "total": 484,
+    "passed": 484,
+    "failed": 0,
+    "rules_with_positive_executed_witnesses": 57,
+    "before_failed_expectations": 209,
+    "before_total": 484,
+    "interpretation": "Before failing cases include newly added domains and schedule/provenance checks; they are not a distinct clinical-defect count."
+  },
+  "findings": [
+    {
+      "id": "LOM805-01",
+      "title": "Unsupported DLCO stop threshold",
+      "before": "Original assessment automatically withheld atDLCO<60%, without support in NCCP00805.",
+      "after": "Remove the invented cutoff. Current SmPC FVC/DLCO<70% is a pulmonary-risk review flag; new respiratory symptoms still prompt urgent safety review.",
+      "source": "NCCP pp2–3; SmPC p3"
+    },
+    {
+      "id": "LOM805-02",
+      "title": "Platelet gap incomplete",
+      "before": "Original80–99 inclusive warning missed values99.1–99.999 and did not distinguish recovery from a documented delay.",
+      "after": "Cover80–<100 fully as an explicit source gap; prior delay continues to require recovery to≥100. RetainANC<1/<80 delay and≥1/≥100 minimum source row.",
+      "source": "NCCP p2 Table1"
+    },
+    {
+      "id": "LOM805-03",
+      "title": "Severe hepatic impairment unassessed",
+      "before": "No hepatic impairment field or rule existed.",
+      "after": "Add mild/moderate no-adjustment-expected and severe not-recommended pathways without fabricated ALT/bilirubin thresholds.",
+      "source": "NCCP p2 Table2"
+    },
+    {
+      "id": "LOM805-04",
+      "title": "Not-recommended vs formal contraindication conflated",
+      "before": "The prior numeric renal rule labelledCrCl<30/dialysis as contraindicated.",
+      "after": "Preserve NCCP not-recommended wording with an administration hold; separately encode the product formal severe-renal-impairment contraindication. Review30–50 original-dose75% against dose history rather than automatically multiplying the current dose.",
+      "source": "NCCP p2 Table2; SmPC p2"
+    },
+    {
+      "id": "LOM805-05",
+      "title": "Missing minimum interval and exposure limits",
+      "before": "No executable repeat-interval, course cap, dose-intensity or cumulative exposure check.",
+      "after": "Structured single-doseDay1q42 schedule;280mg cap; proposed>130mg/m², repeat<42days and projected>1000mg/m² restrictions. Existing≥1000mg/m² prevents further courses. Missing exposure is not zero.",
+      "source": "NCCP p1; SmPC pp1–3"
+    },
+    {
+      "id": "LOM805-06",
+      "title": "Delayed nadirs not assessed",
+      "before": "Only current ANC/platelets were encoded.",
+      "after": "Add priorWBC/platelet nadirs with source-labelled review; distinguishANCfromWBC, retain prior reductions, flag current SmPC repeat-doseWBC≥4 requirement. No automatic percentage from discordant/overlapping table rows.",
+      "source": "SmPC p2"
+    },
+    {
+      "id": "LOM805-07",
+      "title": "Product nadir-table overlap",
+      "before": "Current SmPC70% platelet row starts at24,000/mm³, overlapping50% row below25,000.",
+      "after": "Explicit24–<25×10⁹/L overlap warning; all nadir percentages require consultant/pharmacy reconciliation.",
+      "source": "SmPC p2 nadir table"
+    },
+    {
+      "id": "LOM805-08",
+      "title": "Nonhaematological reduction/restoration history missing",
+      "before": "A single active Grade≥3 rule included reduction and possible later restoration without verifying recovery, recurrence, dose history or42days.",
+      "after": "Separate active hold, history, baseline recovery, clinical relevance, already-applied reduction and42-day nonrecurrence review; no calculated50% or full-dose restoration.",
+      "source": "NCCP p3 Table3"
+    },
+    {
+      "id": "LOM805-09",
+      "title": "Missing product contraindications",
+      "before": "No direct flags for other nitrosourea allergy/nonresponse, severe marrow depression, product-specific wheat allergy or live vaccines.",
+      "after": "Add source-labelled exclusions, including careful distinction of wheat allergy from coeliac disease and supplier-specific product excipients.",
+      "source": "SmPC p2 section4.3"
+    },
+    {
+      "id": "LOM805-10",
+      "title": "Monitoring lacked source separation",
+      "before": "No explicit weeklyCBC≥6weeks or PFT source difference.",
+      "after": "NCCP baseline/regularFBCrenalLFT retained; current SmPC weeklyCBC for at least six weeks and baseline/frequentPFTs explicit. NCCP PFTs remain described as conditional high-risk testing; individualMRI plan retained.",
+      "source": "NCCP p2; SmPC pp2–3"
+    },
+    {
+      "id": "LOM805-11",
+      "title": "Contraception advice outdated relative to supplied product reference",
+      "before": "NCCP says6months for both men/women; January2026 common SmPC says7women/4men.",
+      "after": "Both positions clearly identified for pharmacy/product confirmation; do not silently shorten existing advice or claim a common universal duration.",
+      "source": "NCCP p3; SmPC p4"
+    },
+    {
+      "id": "LOM805-12",
+      "title": "Alkylator history, interactions and overdose guards missing",
+      "before": "No explicit prior-alkylator/marrow-reserve, antiseizure interaction or extra-dose pathways.",
+      "after": "Add consultant review for prior alkylation, compromised reserve and interacting medicines; urgent assessment for potential extra dosing, emphasising delayed toxicity.",
+      "source": "NCCP p1; SmPC pp1,3,6"
+    }
+  ],
+  "source_conflicts": [
+    {
+      "id": "PLATELET_GAP",
+      "sources": [
+        {
+          "document": "NCCP 00805 Lomustine 130 mg/m² v 2;18 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+          "retrieved": "2026-11-05"
+        }
+      ],
+      "resolution": "NCCP assigns no dose to platelets 80–<100 with ANC ≥1.0. Flag specialist review across the entire fractional interval. A previous hold requires recovery to platelets≥100."
+    },
+    {
+      "id": "WBC_VS_ANC",
+      "sources": [
+        {
+          "document": "NCCP 00805 Lomustine 130 mg/m² v 2;18 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+          "retrieved": "2026-11-05"
+        },
+        {
+          "document": "Lomustine medac SmPC January 2026; revised 16 January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": 2,
+          "section": "SmPC 4.2 recovery",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "retrieved": "2026-11-05"
+        }
+      ],
+      "resolution": "NCCP uses ANC ≥1.0 and platelets≥100; the product SmPC requires WBC ≥4.0 and platelets≥100 before repeat dosing. WBC is not ANC. Resolve any mismatch before a further course."
+    },
+    {
+      "id": "NADIR_TABLE_OVERLAP",
+      "sources": [
+        {
+          "document": "Lomustine medac SmPC January 2026; revised 16 January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": 2,
+          "section": "SmPC 4.2 nadir table",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "retrieved": "2026-11-05"
+        }
+      ],
+      "resolution": "The SmPC 70% row starts at platelets 24,000/mm³, overlapping its 50% row below 25,000/mm³. Values 24–<25×10⁹/L and discordant WBC/platelet rows need source clarification; no definitive percentage is calculated."
+    },
+    {
+      "id": "DOSE_DENOMINATORS",
+      "sources": [
+        {
+          "document": "NCCP 00805 Lomustine 130 mg/m² v 2;18 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+          "page": 2,
+          "section": "NCCPTable 2",
+          "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+          "retrieved": "2026-11-05"
+        },
+        {
+          "document": "NCCP 00805 Lomustine 130 mg/m² v 2;18 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+          "page": 3,
+          "section": "NCCPTable 3",
+          "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+          "retrieved": "2026-11-05"
+        },
+        {
+          "document": "Lomustine medac SmPC January 2026; revised 16 January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": 2,
+          "section": "SmPC 4.2 nadir table",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "retrieved": "2026-11-05"
+        }
+      ],
+      "resolution": "Renal 75% refers to the original dose; SmPC nadir 70/50% refers to prior dose; non-haematological reduction 50% and subsequent full-dose restoration require clinical interpretation. Do not multiply percentages or erase prior reductions."
+    },
+    {
+      "id": "PFT_SCOPE",
+      "sources": [
+        {
+          "document": "NCCP 00805 Lomustine 130 mg/m² v 2;18 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+          "page": 2,
+          "section": "Tests",
+          "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+          "retrieved": "2026-11-05"
+        },
+        {
+          "document": "Lomustine medac SmPC January 2026; revised 16 January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": 3,
+          "section": "SmPC 4.4",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "retrieved": "2026-11-05"
+        }
+      ],
+      "resolution": "NCCP makes PFTs conditional on high risk, whereas the product SmPC requests baseline and frequent ongoing PFTs. Retain both labelled recommendations and confirm local plan. FVC/DLCO <70% is a risk signal, not an automatic DLCO <60% withholding threshold."
+    },
+    {
+      "id": "CONTRACEPTION",
+      "sources": [
+        {
+          "document": "NCCP 00805 Lomustine 130 mg/m² v 2;18 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6871/805_V2_Lomustine_130mg_Therapy.pdf",
+          "page": 3,
+          "section": "Other supportive care",
+          "sha256": "b4b932f8f6193a3f6141d7d067f3a08b1a8c1590eb66d2a98ff0fe716c4f0808",
+          "retrieved": "2026-11-05"
+        },
+        {
+          "document": "Lomustine medac SmPC January 2026; revised 16 January 2026",
+          "url": "https://www.medac.eu/fileadmin/user_upload/medac-eu/SPCs/common_SPCs/Lomustine_medac-spc-common.pdf",
+          "page": 4,
+          "section": "SmPC 4.6",
+          "sha256": "d117b45306bd9ebe4a886356babf7eb879846f82ef5fe4146f66081c40e35d96",
+          "retrieved": "2026-11-05"
+        }
+      ],
+      "resolution": "NCCP says six months for men and women; January 2026 product SmPC says seven months for women and four months for men. Confirm product-specific pharmacy advice; do not publish an unqualified shared duration or silently shorten existing advice."
+    }
+  ],
+  "migration": {
+    "removed_legacy_rule_ids": [
+      "LOM_DLCO_LT60",
+      "LOM_PLT_80_99"
+    ],
+    "removed_OF590_ids": []
+  },
+  "limitations": [
+    "Independent clinical/pharmacy review pending; no clinical-use approval.",
+    "Staged-only candidate; main checkout not changed by this task. Full-suite patient/PDF/browser/release integration is separate.",
+    "Cumulative proposed total is an explicitly verified clinician-entered value, not an automated addition. The derived difference rejects non-increasing totals and cannot be forged by supplying a delta. Verify actual exposure and proposed dose with pharmacy.",
+    "All numerical dose modification calculations blocked due to source denominators, recovery/history and product differences; reference percentages remain visible with attribution.",
+    "Manufacturer common SmPC is the primary product document linked by NCCP; confirm the actual imported/unlicensed product and local pharmacy instructions."
+  ],
+  "clinical_use_authorised": false
+}

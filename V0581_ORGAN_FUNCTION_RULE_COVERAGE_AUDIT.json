@@ -12177,7 +12177,7 @@
       "protocol_id": "nccp-00742-v3",
       "path": "protocols/neuro-oncology/00742-lomustine-and-bevacizumab-5-mg-kg-therapy.json",
       "title": "Lomustine and Bevacizumab 5 mg/kg Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -12188,16 +12188,24 @@
       },
       "inputs": {
         "renal": [
-          "lomustine_renal_band"
+          "lomustine_renal_band",
+          "crcl_ml_min",
+          "haemodialysis"
         ],
-        "hepatic": []
+        "hepatic": [
+          "lomustine_hepatic_severity"
+        ]
       },
       "rules": {
         "renal": [
           "LOM_RENAL_30_50",
-          "LOM_RENAL_LT30"
+          "LOM_RENAL_LT30",
+          "LOM_RENAL_INPUT_CONFLICT"
         ],
-        "hepatic": []
+        "hepatic": [
+          "LOM_HEPATIC_SEVERE",
+          "LOM_HEPATIC_UNCERTAIN"
+        ]
       },
       "mismatches": []
     },
@@ -13263,65 +13271,7 @@
       "protocol_id": "nccp-00804-v2",
       "path": "protocols/neuro-oncology/00804-lomustine-and-bevacizumab-7-5-mg-kg-therapy.json",
       "title": "Lomustine and Bevacizumab 7.5 mg/kg Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
-      "claims": {
-        "renal": false,
-        "hepatic": false
-      },
-      "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
-      },
-      "inputs": {
-        "renal": [
-          "lomustine_renal_band"
-        ],
-        "hepatic": []
-      },
-      "rules": {
-        "renal": [
-          "LOM_RENAL_30_50",
-          "LOM_RENAL_LT30"
-        ],
-        "hepatic": []
-      },
-      "mismatches": []
-    },
-    {
-      "code": "00805",
-      "protocol_id": "nccp-00805-v2",
-      "path": "protocols/neuro-oncology/00805-lomustine-130-mg-m2-therapy.json",
-      "title": "Lomustine 130 mg/m² Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
-      "claims": {
-        "renal": false,
-        "hepatic": false
-      },
-      "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
-      },
-      "inputs": {
-        "renal": [
-          "lomustine_renal_band"
-        ],
-        "hepatic": []
-      },
-      "rules": {
-        "renal": [
-          "LOM_RENAL_30_50",
-          "LOM_RENAL_LT30"
-        ],
-        "hepatic": []
-      },
-      "mismatches": []
-    },
-    {
-      "code": "00806",
-      "protocol_id": "nccp-00806-v2",
-      "path": "protocols/neuro-oncology/00806-cisplatin-lomustine-and-vincristine-clv-therapy.json",
-      "title": "Cisplatin, Lomustine and Vincristine (CLV) Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -13333,23 +13283,125 @@
       "inputs": {
         "renal": [
           "lomustine_renal_band",
-          "cisplatin_renal_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "bilirubin_umol_l"
+          "lomustine_hepatic_severity"
         ]
       },
       "rules": {
         "renal": [
-          "LOM_30_50",
-          "LOM_LT30",
-          "CIS_50_59",
-          "CIS_40_49",
-          "CIS_LT40",
-          "CIS_DIALYSIS"
+          "LOM_RENAL_30_50",
+          "LOM_RENAL_LT30",
+          "LOM_RENAL_INPUT_CONFLICT"
         ],
         "hepatic": [
-          "VIN_BILI"
+          "LOM_HEPATIC_SEVERE",
+          "LOM_HEPATIC_UNCERTAIN"
+        ]
+      },
+      "mismatches": []
+    },
+    {
+      "code": "00805",
+      "protocol_id": "nccp-00805-v2",
+      "path": "protocols/neuro-oncology/00805-lomustine-130-mg-m2-therapy.json",
+      "title": "Lomustine 130 mg/m² Therapy",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
+      "claims": {
+        "renal": false,
+        "hepatic": false
+      },
+      "monitoring_mentions": {
+        "renal": true,
+        "hepatic": true
+      },
+      "inputs": {
+        "renal": [
+          "lomustine_renal_band",
+          "severe_renal_impairment",
+          "haemodialysis",
+          "crcl_ml_min"
+        ],
+        "hepatic": [
+          "hepatic_impairment_severity"
+        ]
+      },
+      "rules": {
+        "renal": [
+          "SEVERE_RENAL_CONTRAINDICATION",
+          "LOM_RENAL_30_50",
+          "LOM_RENAL_LT30",
+          "DIALYSIS_NOT_RECOMMENDED",
+          "RENAL_GT50",
+          "RENAL_INPUT_CONFLICT"
+        ],
+        "hepatic": [
+          "HEPATIC_MILD_MODERATE",
+          "HEPATIC_SEVERE",
+          "HEPATIC_UNCERTAIN"
+        ]
+      },
+      "mismatches": []
+    },
+    {
+      "code": "00806",
+      "protocol_id": "nccp-00806-v2",
+      "path": "protocols/neuro-oncology/00806-cisplatin-lomustine-and-vincristine-clv-therapy.json",
+      "title": "Cisplatin, Lomustine and Vincristine (CLV) Therapy",
+      "encoding_maturity": "current_source_reconciled_pending_independent_review",
+      "claims": {
+        "renal": false,
+        "hepatic": false
+      },
+      "monitoring_mentions": {
+        "renal": false,
+        "hepatic": false
+      },
+      "inputs": {
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis",
+          "severe_renal_impairment",
+          "interaction_review_needed",
+          "baseline_tests_complete",
+          "scheduled_tests_complete",
+          "new_renal_or_electrolyte_abnormality",
+          "cisplatin_product_and_local_plan_confirmed",
+          "preexisting_renal_impairment",
+          "serum_creatinine_umol_l",
+          "cisplatin_product_recovery_verified"
+        ],
+        "hepatic": [
+          "bilirubin_umol_l",
+          "hepatic_impairment",
+          "bilirubin_fraction",
+          "baseline_tests_complete",
+          "scheduled_tests_complete"
+        ]
+      },
+      "rules": {
+        "renal": [
+          "SEVERE_RENAL_EXCLUSION",
+          "LOM_30_50",
+          "LOM_LT30",
+          "CIS_40_49",
+          "CIS_50_59",
+          "CIS_RENAL_GAP",
+          "CIS_LT40",
+          "CIS_DIALYSIS",
+          "RENAL_DIALYSIS_UNKNOWN",
+          "CIS_PREEXISTING_RENAL",
+          "CIS_NEW_RENAL",
+          "CIS_CREATININE_HIGH",
+          "CIS_CREATININE_BOUNDARY"
+        ],
+        "hepatic": [
+          "LOM_SEVERE_HEPATIC",
+          "LOM_MILD_MOD_HEPATIC",
+          "VIN_BILI",
+          "VIN_BILI_FRACTION"
         ]
       },
       "mismatches": []
@@ -13459,7 +13511,7 @@
       "protocol_id": "nccp-00813-v2",
       "path": "protocols/neuro-oncology/00813-bevacizumab-5-mg-kg-monotherapy-14-day.json",
       "title": "Bevacizumab 5 mg/kg Monotherapy – 14 Day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -13469,12 +13521,22 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "organ_function_adequacy_confirmed",
+          "renal_disease_or_previous_proteinuria"
+        ],
+        "hepatic": [
+          "organ_function_adequacy_confirmed",
+          "hepatic_impairment"
+        ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "RENAL_CAUTION"
+        ],
+        "hepatic": [
+          "HEPATIC_CAUTION"
+        ]
       },
       "mismatches": []
     },

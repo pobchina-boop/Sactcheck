@@ -12,9 +12,9 @@
     "published_date": "2023-05-02",
     "review_date": "2029-07-24",
     "source_url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-    "source_document_pages": null,
-    "source_checked_date": "2026-07-25",
-    "sactcheck_encoding_version": "0.42.0",
+    "source_document_pages": 6,
+    "source_checked_date": "2026-11-05",
+    "sactcheck_encoding_version": "0.84.39",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "neuro_subgroup": "recurrent_glioblastoma",
@@ -42,11 +42,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.39"
     },
     "tumour_group": "Neuro-oncology",
     "tumour_groups": [
@@ -66,21 +67,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled; independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.39",
+      "audit_date": "2026-11-05",
+      "scope_note": "Fresh NCCP 00813 v2 and EMA reviewed. Timing, persistent toxicity and previous discontinuation are assessed separately. No numeric adverse-event dose reductions are inferred. Independent clinical/pharmacy approval remains pending."
     },
-    "canonical_protocol_id": "nccp-00813-v2"
+    "canonical_protocol_id": "nccp-00813-v2",
+    "source_pdf_sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+    "source_version_date": "2024-07-24",
+    "clinical_audit_release": "0.84.39"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "dose_modification_note": "Bevacizumab dose reduction for adverse events is not recommended. Temporarily withhold or discontinue according to the source-specific event, history and recovery; no numerical toxicity dose ladder.",
     "disclaimer": "Decision-support encoding derived from NCCP 00813 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "indications": [
@@ -94,7 +98,36 @@
     "schedule_summary": "Bevacizumab 5 mg/kg IV on Day 1 every 14 days until progression or unacceptable toxicity.",
     "drugs": [
       "bevacizumab"
-    ]
+    ],
+    "duration_type": "until_progression_or_toxicity",
+    "duration_text": "Continue every 14 days until progression or unacceptable toxicity.",
+    "components": [
+      {
+        "drug": "bevacizumab",
+        "dose": "5 mg/kg",
+        "route": "IV",
+        "days": [
+          1
+        ],
+        "note": "Dilute in 100 mL sodium chloride 0.9%. First infusion over 90 minutes; second over 60 minutes only if the first is tolerated; subsequent infusions over 30 minutes only if 60 minutes is tolerated. Flush with sodium chloride before and after; do not mix with glucose or give IV push/bolus. Rapid infusion requires a separate off-label consent and local governance process.",
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 1,
+          "section": "Treatment",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        }
+      }
+    ],
+    "source": {
+      "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+      "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "page": 1,
+      "section": "Treatment",
+      "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+      "retrieved": "2026-11-05"
+    }
   },
   "input_definitions": {
     "hypersensitivity": {
@@ -144,55 +177,46 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No treatment-emergent hypertension."
+          "label": "No event",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Pre-hypertension range or transient mild elevation; no antihypertensive treatment indicated."
+          "label": "Source grade 1",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Persistent or recurrent elevation requiring initiation or adjustment of one antihypertensive agent; generally 140–159/90–99 mmHg in adults."
+          "label": "Source grade 2",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe elevation requiring more than one drug or more intensive treatment; generally at least 160 systolic or 100 diastolic in adults."
+          "label": "Source grade 3",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences such as hypertensive crisis; urgent intervention required."
+          "label": "Source grade 4",
+          "description": "Clinician-confirmed event grade using the named source."
         }
       ],
       "ui_section": "clinical",
       "demo_value": 0,
-      "visible_when": {
-        "field": "uncontrolled_or_symptomatic_hypertension",
-        "operator": "==",
-        "value": true
-      },
-      "ctcae_version": "5.0",
-      "ctcae_category": "hypertension",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use repeated, correctly measured blood pressure readings and record whether antihypertensive treatment or urgent intervention is required.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00813 Table 3; EMA Avastin source grading (NCI-CTCAE v3 where specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "source_grading_note": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement."
     },
     "severe_bp_uncontrolled": {
-      "label": "Blood pressure >200/110 mmHg and uncontrolled",
+      "label": "Severe blood pressure concern requiring urgent assessment",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "ui_section": "clinical",
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "NCCP00813 does not specify >200/110 as a standalone stop threshold. Urgently assess control, persistence and crisis."
     },
     "hypertensive_crisis_or_encephalopathy": {
       "label": "Hypertensive crisis or hypertensive encephalopathy",
@@ -237,21 +261,13 @@
       "type": "number",
       "required": false,
       "min": 0,
-      "max": 20,
-      "step": 0.1,
+      "max": 100,
+      "step": 0.01,
       "demo_value": 2,
       "ui_section": "labs",
       "unit": "g/24 h",
-      "visible_when": {
-        "field": "proteinuria_dipstick",
-        "operator": "in",
-        "value": [
-          "2+",
-          "3+",
-          "4+"
-        ]
-      },
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Total protein from a 24-hour collection, in g/24 h. A single urine concentration (g/L) or protein/creatinine ratio is a different measurement."
     },
     "fistula_grade": {
       "label": "Fistula grade",
@@ -260,89 +276,79 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No fistula. Use the anatomical site-specific CTCAE fistula term."
+          "label": "No event",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic; clinical or diagnostic observations only."
+          "label": "Source grade 1",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Symptomatic; non-invasive intervention indicated."
+          "label": "Source grade 2",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe symptoms; invasive intervention indicated."
+          "label": "Source grade 3",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "label": "Source grade 4",
+          "description": "Clinician-confirmed event grade using the named source."
         }
       ],
       "ui_section": "clinical",
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "fistula",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the anatomical site-specific CTCAE fistula term; assess symptoms, need for invasive intervention and life-threatening consequences.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00813 Table 3; EMA Avastin source grading (NCI-CTCAE v3 where specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "source_grading_note": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement."
     },
     "thromboembolic_event_grade": {
-      "label": "Thromboembolic event grade",
+      "label": "Venous thromboembolic event grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No thromboembolic event."
+          "label": "No event",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Grade 1 is generally not used for clinically confirmed venous or arterial thromboembolism; use the specific CTCAE term."
+          "label": "Source grade 1",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Medical intervention such as anticoagulation is indicated without urgent instability."
+          "label": "Source grade 2",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Urgent medical intervention or hospital care is indicated."
+          "label": "Source grade 3",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening haemodynamic or neurological consequences; urgent intervention required."
+          "label": "Source grade 4",
+          "description": "Clinician-confirmed event grade using the named source."
         }
       ],
       "ui_section": "clinical",
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "thromboembolism",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Confirm the event and assess symptoms, need for anticoagulation or urgent intervention, hospitalisation, haemodynamic or neurological instability.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00813 Table 3; EMA Avastin source grading (NCI-CTCAE v3 where specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "source_grading_note": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement."
     },
     "arterial_thromboembolic_event": {
-      "label": "Arterial thromboembolic event",
+      "label": "New arterial thromboembolic event during treatment",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -356,42 +362,37 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No bleeding. Select the anatomical site-specific CTCAE haemorrhage term."
+          "label": "No event",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild bleeding for which intervention is not indicated."
+          "label": "Source grade 1",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate bleeding requiring medical treatment or minor intervention."
+          "label": "Source grade 2",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe bleeding requiring transfusion, invasive intervention or hospital care."
+          "label": "Source grade 3",
+          "description": "Clinician-confirmed event grade using the named source."
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening bleeding with urgent intervention required."
+          "label": "Source grade 4",
+          "description": "Clinician-confirmed event grade using the named source."
         }
       ],
       "ui_section": "clinical",
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "haemorrhage",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the site-specific CTCAE haemorrhage term, intervention required, transfusion need, hospitalisation and haemodynamic consequences.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00813 Table 3; EMA Avastin source grading (NCI-CTCAE v3 where specified)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "source_grading_note": "Confirm the named event and applicable source grade. EMA safety text cites NCI-CTCAE v3; do not automatically convert to CTCAE v5 or grade from a single measurement."
     },
     "gi_perforation": {
       "label": "Gastrointestinal perforation",
@@ -466,6 +467,377 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Recurrent malignant glioblastoma matches this NCCP indication",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "organ_function_adequacy_confirmed": {
+      "label": "Adequate haematological, renal and hepatic function confirmed clinically",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "assessment_stage": {
+      "label": "Treatment stage",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "starting",
+          "label": "Before first administration"
+        },
+        {
+          "value": "continuing",
+          "label": "Continuing treatment"
+        }
+      ],
+      "demo_value": "starting",
+      "input_role": "decision"
+    },
+    "days_since_major_surgery": {
+      "label": "Days since major surgery",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "demo_value": 35,
+      "input_role": "decision"
+    },
+    "wound_fully_healed": {
+      "label": "Surgical wound fully healed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "surgical_wound_complication": {
+      "label": "Wound-healing complication during bevacizumab",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "persistent_grade3_hypertension": {
+      "label": "Persisting grade 3 hypertension confirmed clinically",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "medically_significant_hypertension_uncontrolled_despite_treatment": {
+      "label": "Medically significant hypertension cannot be adequately controlled despite antihypertensive therapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "systolic_bp": {
+      "label": "Measured systolic blood pressure",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mmHg",
+      "demo_value": 125,
+      "input_role": "decision",
+      "max": 300
+    },
+    "diastolic_bp": {
+      "label": "Measured diastolic blood pressure",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mmHg",
+      "demo_value": 80,
+      "input_role": "decision",
+      "max": 200
+    },
+    "bp_sustained_on_antihypertensives": {
+      "label": "Raised blood pressure is sustained while receiving antihypertensive medication",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "urine_protein_concentration_g_l": {
+      "label": "Laboratory urine protein concentration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "g/L",
+      "demo_value": 0,
+      "input_role": "decision",
+      "assessment_guidance": "Laboratory urine protein concentration in g/L; do not enter the total from a 24-hour collection here."
+    },
+    "urine_collection_valid_and_current": {
+      "label": "24-hour urine collection is valid and current for this decision",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "proteinuria_assessment_context": {
+      "label": "Proteinuria testing context",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "first_screen",
+          "label": "Initial/routine screen with no outstanding quantitative follow-up"
+        },
+        {
+          "value": "next_dose",
+          "label": "Next dose after a previous abnormal screen requiring quantification"
+        },
+        {
+          "value": "after_hold",
+          "label": "Reassessment after a proteinuria hold"
+        }
+      ],
+      "demo_value": "first_screen",
+      "input_role": "decision"
+    },
+    "days_from_collection_to_next_dose": {
+      "label": "Days from urine collection to the next planned administration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "demo_value": 2,
+      "input_role": "decision"
+    },
+    "nephrotic_syndrome": {
+      "label": "Nephrotic syndrome confirmed (source grade 4 proteinuria)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "tracheoesophageal_fistula": {
+      "label": "Tracheoesophageal fistula present",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "other_internal_fistula": {
+      "label": "Other internal fistula identified",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "current_intracranial_bleeding": {
+      "label": "Intracranial bleeding during treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suspected_pres_or_new_neurological_symptoms": {
+      "label": "New seizure, headache, visual change or altered mental state raising an acute concern",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recent_haemoptysis_red_blood_ml": {
+      "label": "Recent haemoptysis: red-blood volume",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL",
+      "demo_value": 0,
+      "input_role": "decision"
+    },
+    "infusion_reaction": {
+      "label": "Infusion or hypersensitivity reaction occurring now",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cardiovascular_risk_or_prior_anthracycline_chestwall_rt": {
+      "label": "Significant cardiovascular disease, prior anthracycline or chest-wall radiotherapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "renal_disease_or_previous_proteinuria": {
+      "label": "Renal disease, dialysis or previous proteinuria",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hepatic_impairment": {
+      "label": "Hepatic impairment requiring clinical assessment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bleeding_clotting_or_vte_history": {
+      "label": "Bleeding/clotting disorder or significant venous thrombosis history",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_pelvic_rt_or_fistula_perforation_risk": {
+      "label": "Prior pelvic radiotherapy, surgery or condition raising fistula/perforation risk",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "arterial_thromboembolism_within_6_months": {
+      "label": "Arterial thromboembolic event within six months (historical, not a new treatment event)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "warfarin_use": {
+      "label": "Warfarin use",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "monitoring_missing": {
+      "label": "Required bloods, urine, blood pressure or indicated INR/cardiac assessment missing",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "aneurysm_or_dissection_risk": {
+      "label": "Aneurysm or arterial-dissection risk requiring review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bisphosphonate_or_dental_risk": {
+      "label": "IV bisphosphonate exposure or planned invasive dental procedure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "sunitinib_or_other_interaction_concern": {
+      "label": "Concomitant sunitinib or another clinically significant interaction concern",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "fertility_contraception_plan_missing": {
+      "label": "Contraception, breastfeeding or fertility advice not documented",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_bevacizumab_stop_reason": {
+      "label": "Previous bevacizumab discontinuation reason",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No previous discontinuation"
+        },
+        {
+          "value": "protein_over4",
+          "label": "Previous 24-hour protein >4 g"
+        },
+        {
+          "value": "nephrotic",
+          "label": "Nephrotic syndrome"
+        },
+        {
+          "value": "persistent_g3_htn",
+          "label": "Persisting grade 3 hypertension"
+        },
+        {
+          "value": "g4_htn",
+          "label": "Grade 4 hypertension"
+        },
+        {
+          "value": "gi_perforation",
+          "label": "Gastrointestinal perforation"
+        },
+        {
+          "value": "arterial_event",
+          "label": "Arterial event during treatment"
+        },
+        {
+          "value": "te_or_g4_fistula",
+          "label": "Tracheoesophageal or grade 4 fistula"
+        },
+        {
+          "value": "g3_4_bleed",
+          "label": "Grade 3–4 bleeding"
+        },
+        {
+          "value": "g4_vte",
+          "label": "Grade 4 venous thromboembolism"
+        },
+        {
+          "value": "pres",
+          "label": "PRES"
+        },
+        {
+          "value": "necrotising_fasciitis",
+          "label": "Necrotising fasciitis"
+        },
+        {
+          "value": "uncontrollable_htn",
+          "label": "Medically significant hypertension uncontrolled despite therapy"
+        },
+        {
+          "value": "hypertensive_crisis",
+          "label": "Hypertensive crisis or encephalopathy"
+        },
+        {
+          "value": "g4_proteinuria",
+          "label": "Source grade 4 proteinuria"
+        },
+        {
+          "value": "intracranial_bleeding",
+          "label": "Intracranial bleeding during treatment"
+        }
+      ],
+      "demo_value": "none",
+      "input_role": "decision"
+    },
+    "grade4_proteinuria": {
+      "label": "Grade 4 proteinuria confirmed using the source grading system",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "assessment_guidance": "NCCP Table 3 directs discontinuation for grade 4 proteinuria. EMA describes nephrotic syndrome as NCI-CTCAE v3 grade 4; this field is a clinician-confirmed source grade, not an inferred CTCAE v5 conversion."
     }
   },
   "required_inputs": [],
@@ -498,358 +870,31 @@
     ],
     "rules": [
       {
-        "rule_id": "EXCLUSION_HYPERSENSITIVITY",
-        "field": "hypersensitivity",
-        "operator": "==",
-        "value": true,
+        "id": "INDICATION",
+        "priority": 8,
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "bevacizumab"
           ],
-          "recommendation": "Do not administer bevacizumab; obtain consultant review."
+          "message": "This regimen is for recurrent malignant glioblastoma. Confirm diagnosis, intent and the off-label consent/local governance plan; its eligibility does not extend to every glioma.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 1,
+          "section": "Indication; off-label consent on page 6",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Hypersensitivity is an exclusion."
-      },
-      {
-        "rule_id": "PREGNANCY_REVIEW",
-        "field": "pregnancy",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Do not administer bevacizumab during pregnancy; urgent consultant review is required."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Pregnancy is an exclusion."
-      },
-      {
-        "rule_id": "UNHEALED_WOUND_OR_RECENT_SURGERY",
-        "field": "recent_major_surgery_or_unhealed_wound",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Withhold bevacizumab until the wound is fully healed and the postoperative interval is appropriate."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Bevacizumab can impair wound healing."
-      },
-      {
-        "rule_id": "PLANNED_MAJOR_SURGERY",
-        "field": "planned_major_surgery",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Withhold bevacizumab around major elective surgery according to the NCCP timing guidance and consultant plan."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Bevacizumab should be withheld for major elective surgery."
-      },
-      {
-        "rule_id": "UNCONTROLLED_HYPERTENSION",
-        "field": "uncontrolled_or_symptomatic_hypertension",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Withhold bevacizumab and start or adjust antihypertensive treatment."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Uncontrolled or symptomatic hypertension requires withholding."
-      },
-      {
-        "rule_id": "PERSISTENT_G3_OR_G4_HYPERTENSION",
-        "field": "hypertension_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 4 or persisting grade 3 hypertension."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Persistent severe hypertension requires discontinuation."
-      },
-      {
-        "rule_id": "SEVERE_UNCONTROLLED_BP",
-        "field": "severe_bp_uncontrolled",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for severe blood pressure >200/110 mmHg that remains uncontrolled."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Severe uncontrolled hypertension requires discontinuation."
-      },
-      {
-        "rule_id": "HYPERTENSIVE_CRISIS_PRES",
-        "field": "hypertensive_crisis_or_encephalopathy",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Permanently discontinue bevacizumab and manage urgently."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Hypertensive crisis/encephalopathy requires permanent discontinuation."
-      },
-      {
-        "rule_id": "PROTEIN_DIPSTICK_2_3",
-        "field": "proteinuria_dipstick",
-        "operator": "in",
-        "value": [
-          "2+",
-          "3+"
-        ],
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Bevacizumab may proceed while a 24-hour urine collection is arranged before the next dose."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "2+ or 3+ dipstick requires quantification."
-      },
-      {
-        "rule_id": "PROTEIN_DIPSTICK_4",
-        "field": "proteinuria_dipstick",
-        "operator": "==",
-        "value": "4+",
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Withhold bevacizumab and obtain a 24-hour urine protein measurement."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "4+ dipstick requires withholding pending quantification."
-      },
-      {
-        "rule_id": "PROTEIN_2_TO_4",
-        "all": [
-          {
-            "field": "urine_protein_g_24h",
-            "operator": ">",
-            "value": 2
-          },
-          {
-            "field": "urine_protein_g_24h",
-            "operator": "<=",
-            "value": 4
-          }
-        ],
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Hold bevacizumab; repeat 24-hour urine protein every 2 weeks and resume when ≤2 g/24 h."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Urine protein >2–4 g/24 h requires holding."
-      },
-      {
-        "rule_id": "PROTEIN_OVER_4",
-        "field": "urine_protein_g_24h",
-        "operator": ">",
-        "value": 4,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for urine protein >4 g/24 h."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Severe proteinuria requires discontinuation."
-      },
-      {
-        "rule_id": "GRADE4_FISTULA",
-        "field": "fistula_grade",
-        "operator": ">=",
-        "value": 4,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 4 fistula."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Grade 4 fistula requires discontinuation."
-      },
-      {
-        "rule_id": "THROMBOEMBOLIC_G4",
-        "field": "thromboembolic_event_grade",
-        "operator": ">=",
-        "value": 4,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 4 thromboembolic toxicity."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Grade 4 thromboembolic event requires discontinuation."
-      },
-      {
-        "rule_id": "ARTERIAL_THROMBOEMBOLIC_EVENT",
-        "field": "arterial_thromboembolic_event",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Permanently discontinue bevacizumab after an arterial thromboembolic event."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Arterial thromboembolism requires permanent discontinuation."
-      },
-      {
-        "rule_id": "HAEMORRHAGE_G3PLUS",
-        "field": "haemorrhage_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 3 or higher haemorrhage."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Severe haemorrhage requires discontinuation."
-      },
-      {
-        "rule_id": "GI_PERFORATION",
-        "field": "gi_perforation",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Permanently discontinue bevacizumab for gastrointestinal perforation."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "GI perforation requires permanent discontinuation."
-      },
-      {
-        "rule_id": "NECROTISING_FASCIITIS",
-        "field": "necrotising_fasciitis",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab and institute urgent treatment for necrotising fasciitis."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "Necrotising fasciitis requires discontinuation."
-      },
-      {
-        "rule_id": "PRES",
-        "field": "pres_confirmed",
-        "operator": "==",
-        "value": true,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab and urgently manage confirmed PRES."
-        },
-        "source": {
-          "document": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
-          "page": "Dose modification / adverse-event tables"
-        },
-        "explanation": "PRES requires discontinuation."
+        "explanation": "This regimen is for recurrent malignant glioblastoma. Confirm diagnosis, intent and the off-label consent/local governance plan; its eligibility does not extend to every glioma."
       },
       {
         "id": "ECOG_GT2",
@@ -862,15 +907,129 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "ECOG above 2 is outside routine eligibility."
+          "message": "ECOG above 2 is outside NCCP 00813 routine eligibility.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
         },
-        "explanation": "ECOG above 2 is outside routine eligibility."
+        "explanation": "ECOG above 2 is outside NCCP 00813 routine eligibility."
+      },
+      {
+        "id": "ORGAN_ADEQUACY",
+        "priority": 8,
+        "when": {
+          "field": "organ_function_adequacy_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Adequate haematological, renal and hepatic function requires clinical confirmation. NCCP provides no numerical ANC or platelet starting thresholds for this monotherapy; none are inferred.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Adequate haematological, renal and hepatic function requires clinical confirmation. NCCP provides no numerical ANC or platelet starting thresholds for this monotherapy; none are inferred."
+      },
+      {
+        "id": "EXCLUSION_HYPERSENSITIVITY",
+        "priority": 10,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Hypersensitivity to bevacizumab, excipients, CHO cell products or recombinant human/humanised antibodies is an exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Hypersensitivity to bevacizumab, excipients, CHO cell products or recombinant human/humanised antibodies is an exclusion."
+      },
+      {
+        "id": "PREGNANCY_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Pregnancy is an exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Pregnancy is an exclusion."
+      },
+      {
+        "id": "BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Breastfeeding is an NCCP exclusion. EMA advises no breastfeeding during treatment and for at least six months after the last dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Breastfeeding is an NCCP exclusion. EMA advises no breastfeeding during treatment and for at least six months after the last dose."
       },
       {
         "id": "RECENT_ICH",
@@ -883,15 +1042,21 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Recent intracranial haemorrhage is an exclusion."
+          "message": "Recent intracranial haemorrhage is an NCCP exclusion. The source does not define a numerical interval for recent.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Recent intracranial haemorrhage is an exclusion."
+        "explanation": "Recent intracranial haemorrhage is an NCCP exclusion. The source does not define a numerical interval for recent."
       },
       {
         "id": "MINIMAL_ENHANCEMENT",
@@ -904,15 +1069,21 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "No/minimal contrast enhancement or gliomatosis cerebri is an exclusion."
+          "message": "No/minimal contrast enhancement or evidence of gliomatosis cerebri is an exclusion in this NCCP protocol.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
         },
-        "explanation": "No/minimal contrast enhancement or gliomatosis cerebri is an exclusion."
+        "explanation": "No/minimal contrast enhancement or evidence of gliomatosis cerebri is an exclusion in this NCCP protocol."
       },
       {
         "id": "RECENT_STROKE_MI",
@@ -925,26 +1096,1809 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "bevacizumab"
           ],
-          "message": "Stroke or myocardial infarction within one year is an exclusion."
+          "message": "Stroke or myocardial infarction less than one year ago is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
         },
-        "explanation": "Stroke or myocardial infarction within one year is an exclusion."
+        "explanation": "Stroke or myocardial infarction less than one year ago is an NCCP exclusion."
+      },
+      {
+        "id": "UNHEALED_WOUND_OR_RECENT_SURGERY",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "recent_major_surgery_or_unhealed_wound",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "days_since_major_surgery",
+              "operator": "<",
+              "value": 28
+            },
+            {
+              "field": "wound_fully_healed",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "surgical_wound_complication",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Do not start within 28 days of major surgery or before the wound is fully healed. Hold for wound-healing complications until healed. Passing 28 days alone does not establish eligibility.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "NCCP exclusions; EMA page 6 wound healing",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Do not start within 28 days of major surgery or before the wound is fully healed. Hold for wound-healing complications until healed. Passing 28 days alone does not establish eligibility."
+      },
+      {
+        "id": "SURGERY_HEALING_CONFIRMATION",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "days_since_major_surgery",
+              "operator": ">=",
+              "value": 28
+            },
+            {
+              "field": "wound_fully_healed",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "At least 28 days have elapsed, but wound healing is not documented. Confirm complete healing and the individual surgical plan before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Wound healing",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "At least 28 days have elapsed, but wound healing is not documented. Confirm complete healing and the individual surgical plan before treatment."
+      },
+      {
+        "id": "PLANNED_MAJOR_SURGERY",
+        "priority": 10,
+        "when": {
+          "field": "planned_major_surgery",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold for elective surgery. Agree preoperative and postoperative timing with the oncology and surgical teams; these sources do not specify a fixed preoperative interval.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Wound healing",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Withhold for elective surgery. Agree preoperative and postoperative timing with the oncology and surgical teams; these sources do not specify a fixed preoperative interval."
+      },
+      {
+        "id": "UNCONTROLLED_HYPERTENSION",
+        "priority": 10,
+        "when": {
+          "field": "uncontrolled_or_symptomatic_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on Day 1; start or adjust antihypertensive therapy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Withhold bevacizumab for uncontrolled or symptomatic hypertension on Day 1; start or adjust antihypertensive therapy."
+      },
+      {
+        "id": "HYPERTENSION_G2_G3",
+        "priority": 8,
+        "when": {
+          "field": "hypertension_grade",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Start or adjust antihypertensive therapy and consider interruption until controlled. An isolated grade 3 finding does not establish persisting grade 3 hypertension or require automatic discontinuation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Start or adjust antihypertensive therapy and consider interruption until controlled. An isolated grade 3 finding does not establish persisting grade 3 hypertension or require automatic discontinuation."
+      },
+      {
+        "id": "PERSISTENT_G3_OR_G4_HYPERTENSION",
+        "priority": 12,
+        "when": {
+          "any": [
+            {
+              "field": "hypertension_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "persistent_grade3_hypertension",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for grade 4 hypertension or persisting grade 3 hypertension. Confirm persistence explicitly; it cannot be assumed from one grade 3 entry.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discontinue bevacizumab for grade 4 hypertension or persisting grade 3 hypertension. Confirm persistence explicitly; it cannot be assumed from one grade 3 entry."
+      },
+      {
+        "id": "SEVERE_UNCONTROLLED_BP",
+        "priority": 10,
+        "when": {
+          "field": "severe_bp_uncontrolled",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Severe blood pressure concern requires urgent assessment and withholding. The legacy >200/110 label is not a standalone NCCP 00813 discontinuation threshold. Assess crisis, persistence and response to therapy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3; interpretation of the legacy input",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Severe blood pressure concern requires urgent assessment and withholding. The legacy >200/110 label is not a standalone NCCP 00813 discontinuation threshold. Assess crisis, persistence and response to therapy."
+      },
+      {
+        "id": "BP_SOURCE_THRESHOLD",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "bp_sustained_on_antihypertensives",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "systolic_bp",
+                  "operator": ">",
+                  "value": 150
+                },
+                {
+                  "field": "diastolic_bp",
+                  "operator": ">",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "NCCP defines uncontrolled blood pressure for initiation as sustained >150/100 mmHg while receiving antihypertensives, without specifying AND/OR between the two components. Review the repeated readings and confirm uncontrolled/symptomatic status; no additional automatic stop threshold is inferred.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3 footnote",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "NCCP defines uncontrolled blood pressure for initiation as sustained >150/100 mmHg while receiving antihypertensives, without specifying AND/OR between the two components. Review the repeated readings and confirm uncontrolled/symptomatic status; no additional automatic stop threshold is inferred."
+      },
+      {
+        "id": "BP_SINGLE_READING",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "systolic_bp",
+                  "operator": ">",
+                  "value": 150
+                },
+                {
+                  "field": "diastolic_bp",
+                  "operator": ">",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bp_sustained_on_antihypertensives",
+                  "operator": "missing"
+                },
+                {
+                  "field": "bp_sustained_on_antihypertensives",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Confirm repeat blood pressure, symptoms and antihypertensive treatment. A single measurement cannot establish the source-defined sustained uncontrolled state or grade 3 persistence.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3 footnote",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Confirm repeat blood pressure, symptoms and antihypertensive treatment. A single measurement cannot establish the source-defined sustained uncontrolled state or grade 3 persistence."
+      },
+      {
+        "id": "HTN_UNCONTROLLABLE_DESPITE_TREATMENT",
+        "priority": 12,
+        "when": {
+          "field": "medically_significant_hypertension_uncontrolled_despite_treatment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "EMA: permanently discontinue for medically significant hypertension that cannot be adequately controlled with antihypertensive therapy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Hypertension",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "EMA: permanently discontinue for medically significant hypertension that cannot be adequately controlled with antihypertensive therapy."
+      },
+      {
+        "id": "HYPERTENSIVE_CRISIS_PRES",
+        "priority": 12,
+        "when": {
+          "field": "hypertensive_crisis_or_encephalopathy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for hypertensive crisis or hypertensive encephalopathy and manage urgently.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Hypertension",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for hypertensive crisis or hypertensive encephalopathy and manage urgently."
+      },
+      {
+        "id": "PROTEIN_LOW_SCREEN",
+        "priority": 4,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "proteinuria_dipstick",
+                  "operator": "in",
+                  "value": [
+                    "negative",
+                    "1+"
+                  ]
+                },
+                {
+                  "field": "urine_protein_concentration_g_l",
+                  "operator": "<",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "missing"
+            },
+            {
+              "field": "proteinuria_assessment_context",
+              "operator": "==",
+              "value": "first_screen"
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Negative/1+ dipstick or urine protein concentration <1 g/L meets the screening row only. Confirm that there is no outstanding quantitative follow-up, previous discontinuation or other treatment restriction.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Negative/1+ dipstick or urine protein concentration <1 g/L meets the screening row only. Confirm that there is no outstanding quantitative follow-up, previous discontinuation or other treatment restriction."
+      },
+      {
+        "id": "PROTEIN_DIPSTICK_2_3",
+        "priority": 4,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "proteinuria_dipstick",
+                  "operator": "in",
+                  "value": [
+                    "2+",
+                    "3+"
+                  ]
+                },
+                {
+                  "field": "urine_protein_concentration_g_l",
+                  "operator": ">=",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "proteinuria_dipstick",
+              "operator": "!=",
+              "value": "4+"
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "missing"
+            },
+            {
+              "field": "proteinuria_assessment_context",
+              "operator": "==",
+              "value": "first_screen"
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "For a new 2+/3+ dipstick or urine protein concentration ≥1 g/L, NCCP allows the scheduled dose while arranging 24-hour total protein collection within three days before the NEXT administration. Repeat dosing without the required quantification is not established by this row.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "For a new 2+/3+ dipstick or urine protein concentration ≥1 g/L, NCCP allows the scheduled dose while arranging 24-hour total protein collection within three days before the NEXT administration. Repeat dosing without the required quantification is not established by this row."
+      },
+      {
+        "id": "PROTEIN_SCREEN_LAB_ONLY",
+        "priority": 4,
+        "when": {
+          "all": [
+            {
+              "field": "urine_protein_concentration_g_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "proteinuria_dipstick",
+              "operator": "missing"
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "missing"
+            },
+            {
+              "field": "proteinuria_assessment_context",
+              "operator": "==",
+              "value": "first_screen"
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Urine protein concentration ≥1 g/L requires 24-hour total protein collection within three days before the next dose. The screening row allows the scheduled dose, subject to other restrictions. g/L and g/24 h are different measurements.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Urine protein concentration ≥1 g/L requires 24-hour total protein collection within three days before the next dose. The screening row allows the scheduled dose, subject to other restrictions. g/L and g/24 h are different measurements."
+      },
+      {
+        "id": "PROTEIN_CONTEXT_REQUIRED",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "proteinuria_dipstick",
+                  "operator": "exists"
+                },
+                {
+                  "field": "urine_protein_concentration_g_l",
+                  "operator": "exists"
+                }
+              ]
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "proteinuria_assessment_context",
+                  "operator": "missing"
+                },
+                {
+                  "field": "proteinuria_assessment_context",
+                  "operator": "==",
+                  "value": "next_dose"
+                },
+                {
+                  "field": "proteinuria_assessment_context",
+                  "operator": "==",
+                  "value": "after_hold"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Confirm whether this is an initial/routine screen, the next dose after an abnormal screen, or reassessment after a hold. Previous significant proteinuria requires valid quantitative follow-up; dipstick improvement alone does not establish restart.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Confirm whether this is an initial/routine screen, the next dose after an abnormal screen, or reassessment after a hold. Previous significant proteinuria requires valid quantitative follow-up; dipstick improvement alone does not establish restart."
+      },
+      {
+        "id": "PROTEIN_DIPSTICK_4",
+        "priority": 10,
+        "when": {
+          "field": "proteinuria_dipstick",
+          "operator": "==",
+          "value": "4+"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold for a 4+ dipstick at baseline or during treatment and collect 24-hour urine. If a concurrent quantitative result conflicts, confirm sequence, timing and validity before clearance.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Withhold for a 4+ dipstick at baseline or during treatment and collect 24-hour urine. If a concurrent quantitative result conflicts, confirm sequence, timing and validity before clearance."
+      },
+      {
+        "id": "PROTEIN_2_TO_4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "urine_protein_g_24h",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Hold for 24-hour total protein >2 to 4 g/24 h. Recheck every two weeks and consider resuming only when ≤2 g/24 h, provided no previous discontinuation or other restriction applies.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Hold for 24-hour total protein >2 to 4 g/24 h. Recheck every two weeks and consider resuming only when ≤2 g/24 h, provided no previous discontinuation or other restriction applies."
+      },
+      {
+        "id": "PROTEIN_OVER_4",
+        "priority": 12,
+        "when": {
+          "field": "urine_protein_g_24h",
+          "operator": ">",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue for 24-hour total protein >4 g/24 h. Subsequent improvement does not automatically erase this stop decision.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discontinue for 24-hour total protein >4 g/24 h. Subsequent improvement does not automatically erase this stop decision."
+      },
+      {
+        "id": "PROTEIN_QUANTIFIED_LOW",
+        "priority": 4,
+        "when": {
+          "all": [
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "urine_collection_valid_and_current",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "prior_bevacizumab_stop_reason",
+              "operator": "==",
+              "value": "none"
+            },
+            {
+              "any": [
+                {
+                  "field": "days_from_collection_to_next_dose",
+                  "operator": "missing"
+                },
+                {
+                  "field": "days_from_collection_to_next_dose",
+                  "operator": "<=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "A valid current 24-hour result ≤2 g/24 h meets the proteinuria table threshold when no previous discontinuation is reported. Confirm any previous hold reason and all other domains; this is not overall treatment clearance.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "A valid current 24-hour result ≤2 g/24 h meets the proteinuria table threshold when no previous discontinuation is reported. Confirm any previous hold reason and all other domains; this is not overall treatment clearance."
+      },
+      {
+        "id": "PROTEIN_VALIDITY_REVIEW",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "exists"
+            },
+            {
+              "any": [
+                {
+                  "field": "urine_collection_valid_and_current",
+                  "operator": "missing"
+                },
+                {
+                  "field": "urine_collection_valid_and_current",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Confirm collection completeness, timing and units before treating the 24-hour result as current. A spot concentration in g/L or protein/creatinine ratio must not be entered as g/24 h.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Confirm collection completeness, timing and units before treating the 24-hour result as current. A spot concentration in g/L or protein/creatinine ratio must not be entered as g/24 h."
+      },
+      {
+        "id": "PROTEIN_COLLECTION_STALE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "proteinuria_assessment_context",
+              "operator": "==",
+              "value": "next_dose"
+            },
+            {
+              "field": "days_from_collection_to_next_dose",
+              "operator": ">",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "After a 2+/3+ screening result, the 24-hour collection should be within three days before the next administration. Recheck the timing and plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 2",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "After a 2+/3+ screening result, the 24-hour collection should be within three days before the next administration. Recheck the timing and plan."
+      },
+      {
+        "id": "NEPHROTIC_SYNDROME",
+        "priority": 12,
+        "when": {
+          "field": "nephrotic_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for nephrotic syndrome (EMA source grade 4 proteinuria), regardless of a single lower urine protein result.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Proteinuria",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for nephrotic syndrome (EMA source grade 4 proteinuria), regardless of a single lower urine protein result."
+      },
+      {
+        "id": "TE_FISTULA",
+        "priority": 12,
+        "when": {
+          "field": "tracheoesophageal_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for a tracheoesophageal fistula at any grade.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Safety precautions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for a tracheoesophageal fistula at any grade."
+      },
+      {
+        "id": "ARTERIAL_THROMBOEMBOLIC_EVENT",
+        "priority": 12,
+        "when": {
+          "field": "arterial_thromboembolic_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for a new arterial thromboembolic event during treatment. Historical vascular risk and exclusions are assessed separately.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Safety precautions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for a new arterial thromboembolic event during treatment. Historical vascular risk and exclusions are assessed separately."
+      },
+      {
+        "id": "GI_PERFORATION",
+        "priority": 12,
+        "when": {
+          "field": "gi_perforation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for gastrointestinal perforation and manage urgently.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "4.4 Safety precautions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for gastrointestinal perforation and manage urgently."
+      },
+      {
+        "id": "NECROTISING_FASCIITIS",
+        "priority": 12,
+        "when": {
+          "field": "necrotising_fasciitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue and promptly treat necrotising fasciitis.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Safety precautions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discontinue and promptly treat necrotising fasciitis."
+      },
+      {
+        "id": "PRES",
+        "priority": 12,
+        "when": {
+          "field": "pres_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue for confirmed PRES and treat specific symptoms, including hypertension. MRI is preferred for confirmation; safety of restarting after PRES is unknown.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Safety precautions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discontinue for confirmed PRES and treat specific symptoms, including hypertension. MRI is preferred for confirmation; safety of restarting after PRES is unknown."
+      },
+      {
+        "id": "INTRACRANIAL_BLEEDING",
+        "priority": 12,
+        "when": {
+          "field": "current_intracranial_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue for intracranial bleeding during treatment and manage urgently.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Safety precautions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discontinue for intracranial bleeding during treatment and manage urgently."
+      },
+      {
+        "id": "GRADE4_FISTULA",
+        "priority": 12,
+        "when": {
+          "field": "fistula_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for any grade 4 fistula. Tracheoesophageal fistula requires permanent stopping at any grade.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Fistulae",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for any grade 4 fistula. Tracheoesophageal fistula requires permanent stopping at any grade."
+      },
+      {
+        "id": "OTHER_FISTULA_REVIEW",
+        "priority": 8,
+        "when": {
+          "any": [
+            {
+              "field": "other_internal_fistula",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "fistula_grade",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "fistula_grade",
+                  "operator": "<=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Consider discontinuation for other internal fistulae; information about continuation is limited. Assessment is required before an event reaches grade 4.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 Fistulae",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Consider discontinuation for other internal fistulae; information about continuation is limited. Assessment is required before an event reaches grade 4."
+      },
+      {
+        "id": "THROMBOEMBOLIC_G4",
+        "priority": 12,
+        "when": {
+          "field": "thromboembolic_event_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue for life-threatening grade 4 venous thromboembolism, including pulmonary embolism.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discontinue for life-threatening grade 4 venous thromboembolism, including pulmonary embolism."
+      },
+      {
+        "id": "VTE_LOWER_GRADE",
+        "priority": 8,
+        "when": {
+          "field": "thromboembolic_event_grade",
+          "operator": "in",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Closely monitor venous thromboembolism of grade 3 or lower and confirm the anticoagulation and continuation plan. A new arterial event requires permanent discontinuation irrespective of this grade.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Venous thromboembolism",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Closely monitor venous thromboembolism of grade 3 or lower and confirm the anticoagulation and continuation plan. A new arterial event requires permanent discontinuation irrespective of this grade."
+      },
+      {
+        "id": "HAEMORRHAGE_G3PLUS",
+        "priority": 12,
+        "when": {
+          "field": "haemorrhage_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Permanently discontinue for grade 3 or 4 bleeding during therapy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Haemorrhage",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Permanently discontinue for grade 3 or 4 bleeding during therapy."
+      },
+      {
+        "id": "HAEMORRHAGE_LOWER_GRADE",
+        "priority": 8,
+        "when": {
+          "field": "haemorrhage_grade",
+          "operator": "in",
+          "value": [
+            1,
+            2
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Assess bleeding site, severity and trend. Intracranial bleeding has a separate stop instruction and is not cleared by a low generic grade.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Haemorrhage",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Assess bleeding site, severity and trend. Intracranial bleeding has a separate stop instruction and is not cleared by a low generic grade."
+      },
+      {
+        "id": "HAEMOPTYSIS",
+        "priority": 10,
+        "when": {
+          "field": "recent_haemoptysis_red_blood_ml",
+          "operator": ">",
+          "value": 2.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "EMA: patients with recent haemoptysis >2.5 mL of red blood should not be treated. Assess urgently and confirm the source-specific risk; a universal numerical stop threshold for trace blood is not inferred.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Pulmonary haemorrhage",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "EMA: patients with recent haemoptysis >2.5 mL of red blood should not be treated. Assess urgently and confirm the source-specific risk; a universal numerical stop threshold for trace blood is not inferred."
+      },
+      {
+        "id": "PRES_SUSPECTED",
+        "priority": 10,
+        "when": {
+          "field": "suspected_pres_or_new_neurological_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "New neurological or visual symptoms require urgent assessment for PRES, intracranial bleeding, seizure or other causes. Hold pending assessment; do not assume all new symptoms represent tumour progression.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "4.4 PRES; urgent clinical assessment",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "New neurological or visual symptoms require urgent assessment for PRES, intracranial bleeding, seizure or other causes. Hold pending assessment; do not assume all new symptoms represent tumour progression."
+      },
+      {
+        "id": "INFUSION_REACTION",
+        "priority": 10,
+        "when": {
+          "field": "infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Stop the infusion and give appropriate medical treatment for an infusion or hypersensitivity reaction. This acute infusion stop does not itself define future rechallenge.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.4 Infusion reactions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Stop the infusion and give appropriate medical treatment for an infusion or hypersensitivity reaction. This acute infusion stop does not itself define future rechallenge."
+      },
+      {
+        "id": "PREVIOUS_PERMANENT_STOP",
+        "priority": 12,
+        "when": {
+          "field": "prior_bevacizumab_stop_reason",
+          "operator": "in",
+          "value": [
+            "nephrotic",
+            "gi_perforation",
+            "arterial_event",
+            "te_or_g4_fistula",
+            "g3_4_bleed",
+            "uncontrollable_htn",
+            "hypertensive_crisis"
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "A previous permanent-stop reason remains applicable even if current measurements improve. No automatic restart or dose reduction is offered.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4; previous stop instructions retained",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "A previous permanent-stop reason remains applicable even if current measurements improve. No automatic restart or dose reduction is offered."
+      },
+      {
+        "id": "PREVIOUS_DISCONTINUATION",
+        "priority": 12,
+        "when": {
+          "field": "prior_bevacizumab_stop_reason",
+          "operator": "in",
+          "value": [
+            "protein_over4",
+            "persistent_g3_htn",
+            "g4_vte",
+            "pres",
+            "necrotising_fasciitis",
+            "g4_htn",
+            "g4_proteinuria",
+            "intracranial_bleeding"
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Retain the source-directed previous discontinuation. A current normal result does not authorise restart; reinitiation after PRES has unknown safety.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Tables 2–3 and previous EMA safety events",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Retain the source-directed previous discontinuation. A current normal result does not authorise restart; reinitiation after PRES has unknown safety."
+      },
+      {
+        "id": "CARDIOVASCULAR_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "cardiovascular_risk_or_prior_anthracycline_chestwall_rt",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Review cardiovascular disease and consider echocardiography after prior anthracycline or chest-wall radiotherapy. NCCP does not make echocardiography mandatory for every patient.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Cautions and baseline tests",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review cardiovascular disease and consider echocardiography after prior anthracycline or chest-wall radiotherapy. NCCP does not make echocardiography mandatory for every patient."
+      },
+      {
+        "id": "RENAL_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "renal_disease_or_previous_proteinuria",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Renal disease and proteinuria increase concern. Table 1 expects no renal or dialysis dose adjustment, but this does not override eligibility or proteinuria hold/stop rules.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 3,
+          "section": "Table 1 and page 2 cautions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Renal disease and proteinuria increase concern. Table 1 expects no renal or dialysis dose adjustment, but this does not override eligibility or proteinuria hold/stop rules."
+      },
+      {
+        "id": "HEPATIC_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Table 1 expects no hepatic dose adjustment. Assess clinical adequacy and other restrictions; no generic bilirubin-based percentage reduction is supplied.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 3,
+          "section": "Table 1",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Table 1 expects no hepatic dose adjustment. Assess clinical adequacy and other restrictions; no generic bilirubin-based percentage reduction is supplied."
+      },
+      {
+        "id": "BLEED_CLOT_HISTORY",
+        "priority": 8,
+        "when": {
+          "field": "bleeding_clotting_or_vte_history",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Review bleeding/clotting disorders, prior venous thromboembolism and anticoagulation risks before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Cautions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review bleeding/clotting disorders, prior venous thromboembolism and anticoagulation risks before treatment."
+      },
+      {
+        "id": "PERFORATION_RISK",
+        "priority": 8,
+        "when": {
+          "field": "prior_pelvic_rt_or_fistula_perforation_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Prior pelvic radiotherapy, surgery or underlying conditions may increase fistula/perforation risk. Review before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Cautions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Prior pelvic radiotherapy, surgery or underlying conditions may increase fistula/perforation risk. Review before treatment."
+      },
+      {
+        "id": "RECENT_ATE_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "arterial_thromboembolism_within_6_months",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Recent arterial events require specialist caution. Stroke/MI less than one year ago is a separate NCCP exclusion. Distinguish historical risk from a new event during treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Cautions and exclusions",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Recent arterial events require specialist caution. Stroke/MI less than one year ago is a separate NCCP exclusion. Distinguish historical risk from a new event during treatment."
+      },
+      {
+        "id": "WARFARIN_MONITORING",
+        "priority": 8,
+        "when": {
+          "field": "warfarin_use",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "For warfarin, check INR weekly until a stable warfarin dose is established, then before each cycle. Anticoagulation alone is not an automatic discontinuation criterion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 2,
+          "section": "Baseline and regular INR",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "For warfarin, check INR weekly until a stable warfarin dose is established, then before each cycle. Anticoagulation alone is not an automatic discontinuation criterion."
+      },
+      {
+        "id": "MONITORING_MISSING",
+        "priority": 8,
+        "when": {
+          "field": "monitoring_missing",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Confirm FBC, renal/liver profile, urine protein and blood pressure. Blood pressure is required before each cycle AND after treatment; add indicated INR/cardiac assessment. MRI intervals are individualised.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 3,
+          "section": "Regular tests",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Confirm FBC, renal/liver profile, urine protein and blood pressure. Blood pressure is required before each cycle AND after treatment; add indicated INR/cardiac assessment. MRI intervals are individualised."
+      },
+      {
+        "id": "ANEURYSM_RISK",
+        "priority": 8,
+        "when": {
+          "field": "aneurysm_or_dissection_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Review aneurysm/dissection risk, especially hypertension or aneurysm history, before VEGF-inhibitor treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Aneurysms",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review aneurysm/dissection risk, especially hypertension or aneurysm history, before VEGF-inhibitor treatment."
+      },
+      {
+        "id": "DENTAL_ONJ_RISK",
+        "priority": 8,
+        "when": {
+          "field": "bisphosphonate_or_dental_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Review osteonecrosis of the jaw risk, especially prior/concurrent IV bisphosphonates. Consider dental assessment and preventive dentistry; coordinate invasive procedures.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.4 Osteonecrosis of the jaw",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review osteonecrosis of the jaw risk, especially prior/concurrent IV bisphosphonates. Consider dental assessment and preventive dentistry; coordinate invasive procedures."
+      },
+      {
+        "id": "INTERACTION_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "sunitinib_or_other_interaction_concern",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Review the current SmPC and interactions. Bevacizumab with sunitinib has been associated with microangiopathic haemolytic anaemia. Safety and efficacy of concomitant radiotherapy are not established.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 9,
+          "section": "4.5 Interactions",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Review the current SmPC and interactions. Bevacizumab with sunitinib has been associated with microangiopathic haemolytic anaemia. Safety and efficacy of concomitant radiotherapy are not established."
+      },
+      {
+        "id": "FERTILITY_CONTRACEPTION",
+        "priority": 8,
+        "when": {
+          "field": "fertility_contraception_plan_missing",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discuss fertility and effective contraception during treatment and up to six months after bevacizumab for women of childbearing potential. Avoid breastfeeding during treatment and for at least six months after the last dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA Avastin SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+          "page": 10,
+          "section": "4.6",
+          "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Discuss fertility and effective contraception during treatment and up to six months after bevacizumab for women of childbearing potential. Avoid breastfeeding during treatment and for at least six months after the last dose."
+      },
+      {
+        "id": "BP_CONFIRMED_INITIATION_THRESHOLD",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "starting"
+            },
+            {
+              "field": "bp_sustained_on_antihypertensives",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "systolic_bp",
+              "operator": ">",
+              "value": 150
+            },
+            {
+              "field": "diastolic_bp",
+              "operator": ">",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Before initiation, sustained blood pressure above both 150 systolic and 100 diastolic while on antihypertensives meets the NCCP uncontrolled threshold. Withhold and start or adjust treatment; confirm symptoms and the wider clinical situation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3 footnote",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "Both components exceed the source initiation threshold, so the AND/OR ambiguity does not change this result."
+      },
+      {
+        "id": "PROTEINURIA_GRADE4",
+        "priority": 12,
+        "when": {
+          "field": "grade4_proteinuria",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue for clinician-confirmed source grade 4 proteinuria, regardless of the numerical value entered separately.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+          "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+          "page": 4,
+          "section": "Table 3: grade 4 proteinuria",
+          "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+          "retrieved": "2026-11-05"
+        },
+        "explanation": "NCCP Table 3 independently directs discontinuation for grade 4 proteinuria."
       }
     ]
   },
   "supportive_care": {
     "emetogenic_risk": "minimal",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Current NCCP regimen emetogenic classification; regimen phase/component and local policy must be considered.",
+    "mapping_basis": "NCCP 00813 page 5: minimal emetogenic risk; no routine premedication unless previous hypersensitivity. Apply local policy and individual symptom needs.",
     "mapping_confidence": "source_specific_pending_local_pharmacy_reconciliation",
     "validation_status": "pending_local_oncology_pharmacy_validation",
     "script_id": "nccp-minimal-no-routine-prophylaxis",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance",
+    "source": {
+      "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+      "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "page": 5,
+      "section": "Supportive care",
+      "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+      "retrieved": "2026-11-05"
+    }
+  },
+  "source_audit": {
+    "release": "0.84.39",
+    "source": {
+      "document": "NCCP 00813 Bevacizumab 5 mg/kg every 14 days, v2, 24 July 2024",
+      "url": "https://healthservice.hse.ie/documents/6869/813_V2_Bevacizumab_5.pdf",
+      "page": 1,
+      "section": "Complete PDF",
+      "sha256": "decb6b4919927e99250813b07459f9482e30531eb31eb7b6adf21bc617347fe8",
+      "retrieved": "2026-11-05"
+    },
+    "supplemental_source": {
+      "document": "EMA Avastin SmPC",
+      "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf",
+      "page": 5,
+      "section": "EMA sections 4.2–4.6",
+      "sha256": "66d06bf8e8d4853783377bc4046bd6b4b0e313cc348c230743646f93a9381bb1",
+      "retrieved": "2026-11-05"
+    },
+    "uncertainties": [
+      "NCCP initiation blood pressure >150/100 does not specify AND/OR between components. Numerical readings trigger review; clinician-confirmed uncontrolled status is assessed separately.",
+      "NCCP uses recent intracranial haemorrhage without a numerical interval; no number of days is inferred.",
+      "Grade 2–3 hypertension prompts antihypertensive therapy and consideration of interruption. Persisting grade 3 requires explicit clinical confirmation.",
+      "Source event grading is not automatically converted from NCI-CTCAE v3 to CTCAE v5.",
+      "Previous proteinuria >4 g/24 h or another source-directed discontinuation is not erased by a subsequent normal result.",
+      "NCCP expects no renal/hepatic dose adjustment, while EMA notes these populations have not been studied. Eligibility, monitoring and toxicity assessment remain required.",
+      "Concurrent discordant dipstick and quantitative results require confirmation of timing and collection validity; a current 4+ screening result is not silently overridden."
+    ]
   }
 }
