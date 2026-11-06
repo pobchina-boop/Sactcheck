@@ -38498,6 +38498,1290 @@ const definitions={
         "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
       }
     ]
+  },
+  "00455:melanoma_advanced": {
+    "code": "00455",
+    "title": "Pembrolizumab · every 3 weeks · advanced melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Unresectable or metastatic melanoma in adults; the team confirms the source-specific eligibility and previous treatment.",
+    "summary": "Pembrolizumab every 3 weeks. Treatment continues until progression or unacceptable toxicity. For sustained response without progression, stopping after 24 months may be considered by the treating team; this is not an automatic stop.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines.",
+          "Blood count, kidney/liver tests and glucose before every 3-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue to report possible immune effects after the last dose; your team records the follow-up tests and dates. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 4 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Ongoing treatment and review",
+        "when": "Every 3 weeks",
+        "why": "Pembrolizumab helps immune cells act against melanoma that cannot be completely removed or has spread. The aim is disease control; benefit and side effects are reviewed for you.",
+        "clinical": "Pembrolizumab is given as 200 mg by IV infusion over 30 minutes, on Day 1 every 3 weeks. Allow extra time for assessment, preparation and observation. Treatment continues until progression or unacceptable toxicity. For sustained response without progression, stopping after 24 months may be considered by the treating team; this is not an automatic stop.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Pembrolizumab every 3 weeks. Treatment continues until progression or unacceptable toxicity. For sustained response without progression, stopping after 24 months may be considered by the treating team; this is not an automatic stop.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 3-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00455 v16: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00455:melanoma_adjuvant": {
+    "code": "00455",
+    "title": "Pembrolizumab · every 3 weeks · adjuvant melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Completely resected stage IIB/IIC or stage III cutaneous melanoma; the team confirms the applicable NCCP indication and timing.",
+    "summary": "Pembrolizumab every 3 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines.",
+          "Blood count, kidney/liver tests and glucose before every 3-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue to report possible immune effects after the last dose; your team records the follow-up tests and dates. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 4 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Adjuvant treatment after surgery",
+        "when": "Every 3 weeks",
+        "why": "Pembrolizumab helps immune cells act against melanoma. After complete surgery, its aim is to lower the risk of recurrence; this does not guarantee that melanoma will not return.",
+        "clinical": "Pembrolizumab is given as 200 mg by IV infusion over 30 minutes, on Day 1 every 3 weeks. Allow extra time for assessment, preparation and observation. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Pembrolizumab every 3 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 3-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00455 v16: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00558:melanoma_advanced": {
+    "code": "00558",
+    "title": "Pembrolizumab · every 6 weeks · advanced melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Unresectable or metastatic melanoma in adults; the team confirms the source-specific eligibility and previous treatment.",
+    "summary": "Pembrolizumab every 6 weeks. Treatment continues until progression or unacceptable toxicity. For sustained response without progression, stopping after 24 months may be considered by the treating team; this is not an automatic stop.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines.",
+          "Blood count, kidney/liver tests and glucose before every 6-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue to report possible immune effects after the last dose; your team records the follow-up tests and dates. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 4 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Ongoing treatment and review",
+        "when": "Every 6 weeks",
+        "why": "Pembrolizumab helps immune cells act against melanoma that cannot be completely removed or has spread. The aim is disease control; benefit and side effects are reviewed for you.",
+        "clinical": "Pembrolizumab is given as 400 mg by IV infusion over 30 minutes, on Day 1 every 6 weeks. Allow extra time for assessment, preparation and observation. Treatment continues until progression or unacceptable toxicity. For sustained response without progression, stopping after 24 months may be considered by the treating team; this is not an automatic stop.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Pembrolizumab every 6 weeks. Treatment continues until progression or unacceptable toxicity. For sustained response without progression, stopping after 24 months may be considered by the treating team; this is not an automatic stop.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 6-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00558 v13: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00558:melanoma_adjuvant": {
+    "code": "00558",
+    "title": "Pembrolizumab · every 6 weeks · adjuvant melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Completely resected stage IIB/IIC or stage III cutaneous melanoma; the team confirms the applicable NCCP indication and timing.",
+    "summary": "Pembrolizumab every 6 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines.",
+          "Blood count, kidney/liver tests and glucose before every 6-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue to report possible immune effects after the last dose; your team records the follow-up tests and dates. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 4 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Adjuvant treatment after surgery",
+        "when": "Every 6 weeks",
+        "why": "Pembrolizumab helps immune cells act against melanoma. After complete surgery, its aim is to lower the risk of recurrence; this does not guarantee that melanoma will not return.",
+        "clinical": "Pembrolizumab is given as 400 mg by IV infusion over 30 minutes, on Day 1 every 6 weeks. Allow extra time for assessment, preparation and observation. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Pembrolizumab every 6 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 6-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00558 v13: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00483:melanoma_advanced": {
+    "code": "00483",
+    "title": "Nivolumab · every 2 weeks · advanced melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Unresectable or metastatic melanoma in adults; the team confirms the source-specific eligibility and previous treatment.",
+    "summary": "Nivolumab every 2 weeks. Treatment continues until progression or unacceptable toxicity, with individual benefit and safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines. BRAF tumour status is checked for the advanced or adjuvant melanoma indication.",
+          "Blood count, kidney/liver tests and glucose before every 2-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue immune-toxicity monitoring for at least five months after the last dose, and longer when advised. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 5 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Ongoing treatment and review",
+        "when": "Every 2 weeks",
+        "why": "Nivolumab helps immune cells act against melanoma that cannot be completely removed or has spread. The aim is disease control; benefit and side effects are reviewed for you.",
+        "clinical": "Nivolumab is given as 240 mg by IV infusion over 30 minutes OR 600 mg by subcutaneous injection over 3–5 minutes, on Day 1 every 2 weeks. Allow extra time for assessment, preparation and observation. The team selects one formulation. A subcutaneous injection is given into the thigh or abdomen, alternating sites and avoiding damaged skin, scars or moles. IV and subcutaneous doses are not interchangeable milligram for milligram. Treatment continues until progression or unacceptable toxicity, with individual benefit and safety review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Nivolumab every 2 weeks. Treatment continues until progression or unacceptable toxicity, with individual benefit and safety review.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 2-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect.",
+      "If changing from two-weekly to four-weekly nivolumab, the first four-weekly dose is two weeks after the last two-weekly dose. For the reverse change, the first two-weekly dose is four weeks after the last four-weekly dose. The team confirms the formulation and dates."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00483 v13a: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00483:melanoma_adjuvant": {
+    "code": "00483",
+    "title": "Nivolumab · every 2 weeks · adjuvant melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Completely resected melanoma with lymph-node involvement or metastatic disease; the team confirms the stage III or resected stage IV indication. Uveal melanoma is excluded from this adjuvant pathway.",
+    "summary": "Nivolumab every 2 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines. BRAF tumour status is checked for the advanced or adjuvant melanoma indication.",
+          "Blood count, kidney/liver tests and glucose before every 2-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue immune-toxicity monitoring for at least five months after the last dose, and longer when advised. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 5 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Adjuvant treatment after surgery",
+        "when": "Every 2 weeks",
+        "why": "Nivolumab helps immune cells act against melanoma. After complete surgery, its aim is to lower the risk of recurrence; this does not guarantee that melanoma will not return.",
+        "clinical": "Nivolumab is given as 240 mg by IV infusion over 30 minutes OR 600 mg by subcutaneous injection over 3–5 minutes, on Day 1 every 2 weeks. Allow extra time for assessment, preparation and observation. The team selects one formulation. A subcutaneous injection is given into the thigh or abdomen, alternating sites and avoiding damaged skin, scars or moles. IV and subcutaneous doses are not interchangeable milligram for milligram. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Nivolumab every 2 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 2-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect.",
+      "If changing from two-weekly to four-weekly nivolumab, the first four-weekly dose is two weeks after the last two-weekly dose. For the reverse change, the first two-weekly dose is four weeks after the last four-weekly dose. The team confirms the formulation and dates."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00483 v13a: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00484:melanoma_advanced": {
+    "code": "00484",
+    "title": "Nivolumab · every 4 weeks · advanced melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Unresectable or metastatic melanoma in adults; the team confirms the source-specific eligibility and previous treatment.",
+    "summary": "Nivolumab every 4 weeks. Treatment continues until progression or unacceptable toxicity, with individual benefit and safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines. BRAF tumour status is checked for the advanced or adjuvant melanoma indication.",
+          "Blood count, kidney/liver tests and glucose before every 4-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue immune-toxicity monitoring for at least five months after the last dose, and longer when advised. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 5 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Ongoing treatment and review",
+        "when": "Every 4 weeks",
+        "why": "Nivolumab helps immune cells act against melanoma that cannot be completely removed or has spread. The aim is disease control; benefit and side effects are reviewed for you.",
+        "clinical": "Nivolumab is given as 480 mg by IV infusion over 60 minutes OR 1200 mg by subcutaneous injection over 3–5 minutes, on Day 1 every 4 weeks. Allow extra time for assessment, preparation and observation. The team selects one formulation. A subcutaneous injection is given into the thigh or abdomen, alternating sites and avoiding damaged skin, scars or moles. IV and subcutaneous doses are not interchangeable milligram for milligram. Treatment continues until progression or unacceptable toxicity, with individual benefit and safety review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Nivolumab every 4 weeks. Treatment continues until progression or unacceptable toxicity, with individual benefit and safety review.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 4-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect.",
+      "If changing from two-weekly to four-weekly nivolumab, the first four-weekly dose is two weeks after the last two-weekly dose. For the reverse change, the first two-weekly dose is four weeks after the last four-weekly dose. The team confirms the formulation and dates."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00484 v13a: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6499/484_Nivolumab_28-day_.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00484:melanoma_adjuvant": {
+    "code": "00484",
+    "title": "Nivolumab · every 4 weeks · adjuvant melanoma: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Completely resected melanoma with lymph-node involvement or metastatic disease; the team confirms the stage III or resected stage IV indication. Uveal melanoma is excluded from this adjuvant pathway.",
+    "summary": "Nivolumab every 4 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines. BRAF tumour status is checked for the advanced or adjuvant melanoma indication.",
+          "Blood count, kidney/liver tests and glucose before every 4-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue immune-toxicity monitoring for at least five months after the last dose, and longer when advised. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 5 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Adjuvant treatment after surgery",
+        "when": "Every 4 weeks",
+        "why": "Nivolumab helps immune cells act against melanoma. After complete surgery, its aim is to lower the risk of recurrence; this does not guarantee that melanoma will not return.",
+        "clinical": "Nivolumab is given as 480 mg by IV infusion over 60 minutes OR 1200 mg by subcutaneous injection over 3–5 minutes, on Day 1 every 4 weeks. Allow extra time for assessment, preparation and observation. The team selects one formulation. A subcutaneous injection is given into the thigh or abdomen, alternating sites and avoiding damaged skin, scars or moles. IV and subcutaneous doses are not interchangeable milligram for milligram. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Nivolumab every 4 weeks. Adjuvant treatment continues for up to 12 months, subject to safety review.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 4-week cycle. Thyroid function is checked once a month and when clinically indicated. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect.",
+      "If changing from two-weekly to four-weekly nivolumab, the first four-weekly dose is two weeks after the last two-weekly dose. For the reverse change, the first two-weekly dose is four weeks after the last four-weekly dose. The team confirms the formulation and dates."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00484 v13a: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6499/484_Nivolumab_28-day_.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
+  },
+  "00455:melanoma_perioperative": {
+    "code": "00455",
+    "title": "Pembrolizumab · every 3 weeks · melanoma before and after surgery: treatment and checks",
+    "release": "0.84.41",
+    "checked": "2026-11-06",
+    "status": "Draft source reconciliation; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Selected stage IIIB melanoma eligible for the NCCP adjuvant indication: the treating clinician may choose pembrolizumab 200 mg before and after surgery. This is a distinct, discretionary perioperative plan.",
+    "summary": "Pembrolizumab 200 mg every 3 weeks: 3 doses before surgery, then 15 doses after surgery, subject to recovery and clinical review. The team sets the operation date and postoperative restart; do not assume that surgery or a held dose follows the routine three-week calendar.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "Response / follow-up",
+      "After a hold or stop"
+    ],
+    "lanes": [
+      {
+        "label": "Bloods and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, glucose and thyroid tests; review autoimmune conditions, transplants, previous immune reactions and all current medicines.",
+          "Blood count, kidney/liver tests and glucose before every 3-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+          "Contact the team for new symptoms; extra tests may be needed between scheduled checks.",
+          "Safety bloods do not by themselves show whether cancer is responding.",
+          "Continue to report possible immune effects after the last dose; your team records the follow-up tests and dates. Keep any prescribed steroid taper, hormone replacement and specialist follow-up. Scans follow your individual disease plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Cancer, skin and daily function",
+        "kind": "monitoring",
+        "cells": [
+          "Record diagnosis, stage, current disease sites and the baseline assessment.",
+          "Keep the source-specific skin and clinical reviews and the individually agreed response assessments.",
+          "Record new lesions, lumps, wound changes, pain and effects on usual activities.",
+          "Write the next examination or scan date and the responsible team; no universal scan or tumour-marker interval is assumed.",
+          "Follow-up depends on stage, treatment and symptoms. Your team records the skin/lymph-node examination plan, whether body or brain imaging is needed, and which service owns each appointment. A general patient booklet does not set a universal scan interval for every patient."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      },
+      {
+        "label": "Medicines and continuing precautions",
+        "kind": "monitoring",
+        "cells": [
+          "Review all medicines and the pregnancy/fertility plan.",
+          "Review treatment taken or received, holds, adverse effects and supportive medicines.",
+          "Keep the actual urgent contacts and do not restart a held medicine yourself.",
+          "Bring the medicine list and treatment summary to other services.",
+          "Discuss fertility before starting. Use effective contraception during treatment and for at least 4 months after the last dose. Tell the team promptly about a possible pregnancy. Discuss breastfeeding restrictions with the team before treatment; do not breastfeed without their advice. Do not stop prescribed steroids or hormone replacement yourself."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The team supplies actual dates and resolves any source ambiguity. A reference period does not replace a prescription, a local monitoring plan or an individual treatment decision."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before surgery",
+        "when": "3 planned doses",
+        "why": "Pembrolizumab is given before and after planned surgery in this selected melanoma pathway. The team explains the expected benefit, uncertainty, surgical plan and how side effects could change the sequence.",
+        "clinical": "Pembrolizumab 200 mg IV over 30 minutes every 3 weeks for 3 doses. The team checks safety and coordinates the surgical assessment.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Surgery and recovery",
+        "when": "Team-agreed timing",
+        "why": "Pembrolizumab is given before and after planned surgery in this selected melanoma pathway. The team explains the expected benefit, uncertainty, surgical plan and how side effects could change the sequence.",
+        "clinical": "Surgery has its own date, assessment and recovery plan. Confirm the postoperative treatment decision; the calendar does not automatically authorise restarting.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "After surgery",
+        "when": "15 planned doses",
+        "why": "Pembrolizumab is given before and after planned surgery in this selected melanoma pathway. The team explains the expected benefit, uncertainty, surgical plan and how side effects could change the sequence.",
+        "clinical": "Pembrolizumab 200 mg IV over 30 minutes every 3 weeks for 15 postoperative doses, subject to recovery, safety and clinical review.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Pembrolizumab 200 mg every 3 weeks: 3 doses before surgery, then 15 doses after surgery, subject to recovery and clinical review. The team sets the operation date and postoperative restart; do not assume that surgery or a held dose follows the routine three-week calendar.",
+      "If a visit is missed or treatment is held, contact the unit for a new plan. Do not count a missed appointment as a dose received. An interval change, operation or new phase does not erase earlier immune toxicity or a permanent-stop decision.",
+      "Blood count, kidney/liver tests and glucose before every 3-week cycle. TSH is checked every 3–6 weeks, including between treatment visits when needed. Cortisol and other tests are added when clinically indicated. Report new symptoms at every visit and between visits; normal blood results do not rule out immune toxicity.",
+      "Routine dose reductions are not recommended for these immunotherapies. The clinician may hold or stop treatment and treat the immune effect."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00455 v16: current regimen source",
+        "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf",
+        "checked": "2026-11-06"
+      },
+      {
+        "id": "nccn-patient",
+        "title": "NCCN Guidelines for Patients: Melanoma, 2026 - supplied education reference",
+        "url": "https://www.nccn.org/patients/guidelines/content/PDF/melanoma-patient.pdf",
+        "page_anchors": {
+          "diagnosis": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "biomarkers": [
+            26,
+            27
+          ],
+          "stage": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "therapy": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "advanced": [
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "followup": [
+            88,
+            89
+          ],
+          "sun": [
+            12,
+            13,
+            14
+          ]
+        },
+        "role": "Education reference; source-specific Irish regimen decisions remain governed by NCCP"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

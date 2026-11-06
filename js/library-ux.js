@@ -142,13 +142,7 @@
     document.querySelectorAll(".header-version").forEach(node => { node.textContent = `v${SUSTAINABILITY_RELEASE}`; });
     const releaseSummary = document.querySelector(".release-summary > summary");
     if (releaseSummary) releaseSummary.textContent = `v${SUSTAINABILITY_RELEASE} · What changed?`;
-    const releaseBody = document.querySelector(".release-summary .details-body");
-    if (releaseBody) {
-      const strong = releaseBody.querySelector("strong");
-      const paragraph = releaseBody.querySelector("p");
-      if (strong) strong.textContent = "Unified information-pipeline homepage and patient routing";
-      if (paragraph) paragraph.textContent = "Removes the launch gate, stabilises the visible release and patient routes, and frames SACTCheck around connected clinician, patient, supportive-care, knowledge and sustainability workflows.";
-    }
+    // The authored release summary belongs to index.html; do not overwrite it with historical copy.
   }
 
   function decorateCards() {

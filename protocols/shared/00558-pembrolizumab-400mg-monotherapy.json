@@ -355,7 +355,8 @@
     "prescriptive_authority": "Treatment initiated by a Consultant Medical Oncologist or a Consultant Medical Haematologist experienced in haematological malignancies, as applicable to the indication.",
     "dose_modification_note": "Do not reduce pembrolizumab dose. Hold, discontinue or consider restart according to the specific toxicity and consultant review.",
     "anaphylaxis_facilities_required": true,
-    "disclaimer": "Development encoding of NCCP 00558 v13; independent clinical and oncology pharmacy validation pending. Clinical use is not authorised."
+    "disclaimer": "Development encoding of NCCP 00558 v13; independent clinical and oncology pharmacy validation pending. Clinical use is not authorised.",
+    "melanoma_audit_release": "0.84.41"
   },
   "indications": [
     {
@@ -1780,6 +1781,95 @@
       "input_role": "decision",
       "ui_section": "clinical",
       "help": ""
+    },
+    "melanoma_prior_advanced_systemic_lines": {
+      "label": "Previous systemic treatments for advanced melanoma (exclude current treatment)",
+      "type": "number",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": "",
+      "min": 0,
+      "max": 99,
+      "step": 1
+    },
+    "melanoma_plan": {
+      "label": "Melanoma treatment setting / current phase",
+      "type": "select",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": "",
+      "options": [
+        {
+          "value": "advanced",
+          "label": "Advanced disease"
+        },
+        {
+          "value": "postoperative",
+          "label": "Adjuvant after complete surgery"
+        }
+      ]
+    },
+    "melanoma_starting_adjuvant": {
+      "label": "Starting the postoperative adjuvant course now",
+      "type": "boolean",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": ""
+    },
+    "melanoma_weeks_since_surgery": {
+      "label": "Weeks since surgery at adjuvant initiation",
+      "type": "number",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": "",
+      "min": 0,
+      "max": 520,
+      "step": 0.01,
+      "unit": "weeks"
+    },
+    "melanoma_stage_iib_iic_ajcc8_confirmed": {
+      "label": "New stage IIB/IIC cutaneous melanoma confirmed (AJCC8)",
+      "type": "boolean",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": ""
+    },
+    "melanoma_stage_iii_criteria_confirmed": {
+      "label": "Stage III source indication and node/resection criteria reconciled",
+      "type": "boolean",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": ""
+    },
+    "melanoma_adult": {
+      "label": "Adult melanoma indication confirmed",
+      "type": "boolean",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": ""
+    },
+    "melanoma_ipilimumab_refractory": {
+      "label": "Ipilimumab-refractory disease confirmed for the selected refractory indication",
+      "type": "boolean",
+      "required": false,
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
+      "demo_value": ""
     }
   },
   "required_inputs": [],
@@ -3683,6 +3773,648 @@
           "checked_date": "2026-11-06",
           "table": "Table 1 and dose modifications"
         }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_ADULT_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558b",
+              "00558c",
+              "00558b-skin",
+              "00558c-skin",
+              "00558g",
+              "00558g-skin",
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_adult",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the adult melanoma indication; this regimen does not establish paediatric eligibility."
+        },
+        "explanation": "Confirm the adult melanoma indication; this regimen does not establish paediatric eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_ADULT_NOT_MET",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558b",
+              "00558c",
+              "00558b-skin",
+              "00558c-skin",
+              "00558g",
+              "00558g-skin",
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_adult",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the adult melanoma indication; this regimen does not establish paediatric eligibility."
+        },
+        "explanation": "Confirm the adult melanoma indication; this regimen does not establish paediatric eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_IPILIMUMAB_REFRACTORY_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558c",
+              "00558c-skin"
+            ]
+          },
+          {
+            "field": "melanoma_ipilimumab_refractory",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "The selected melanoma indication is ipilimumab-refractory disease. Confirm that history or select the appropriate alternative indication."
+        },
+        "explanation": "The selected melanoma indication is ipilimumab-refractory disease. Confirm that history or select the appropriate alternative indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_IPILIMUMAB_REFRACTORY_NOT_MET",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558c",
+              "00558c-skin"
+            ]
+          },
+          {
+            "field": "melanoma_ipilimumab_refractory",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "The selected melanoma indication is ipilimumab-refractory disease. Confirm that history or select the appropriate alternative indication."
+        },
+        "explanation": "The selected melanoma indication is ipilimumab-refractory disease. Confirm that history or select the appropriate alternative indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_PREVIOUS_ADVANCED_LIMIT",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558b",
+              "00558c",
+              "00558b-skin",
+              "00558c-skin"
+            ]
+          },
+          {
+            "field": "melanoma_prior_advanced_systemic_lines",
+            "operator": ">",
+            "value": 1
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Advanced melanoma eligibility permits no more than one previous systemic treatment for advanced disease. Confirm the history and reconcile the source indication before prescribing."
+        },
+        "explanation": "Advanced melanoma eligibility permits no more than one previous systemic treatment for advanced disease. Confirm the history and reconcile the source indication before prescribing.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_PREVIOUS_ADVANCED_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558b",
+              "00558c",
+              "00558b-skin",
+              "00558c-skin"
+            ]
+          },
+          {
+            "field": "melanoma_prior_advanced_systemic_lines",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Record the number of previous systemic treatments for advanced melanoma; the source limit is no more than one. Missing history does not establish eligibility."
+        },
+        "explanation": "Record the number of previous systemic treatments for advanced melanoma; the source limit is no more than one. Missing history does not establish eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_STAGE_IIB_IIC_AJCC8_CONFIRMED_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_stage_iib_iic_ajcc8_confirmed",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm a new stage IIB/IIC cutaneous melanoma diagnosis by AJCC8. The source adjuvant indication requires complete resection, ECOG 0–1 and initiation within 12 weeks of surgery."
+        },
+        "explanation": "Confirm a new stage IIB/IIC cutaneous melanoma diagnosis by AJCC8. The source adjuvant indication requires complete resection, ECOG 0–1 and initiation within 12 weeks of surgery.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_STAGE_IIB_IIC_AJCC8_CONFIRMED_NOT_MET",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_stage_iib_iic_ajcc8_confirmed",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm a new stage IIB/IIC cutaneous melanoma diagnosis by AJCC8. The source adjuvant indication requires complete resection, ECOG 0–1 and initiation within 12 weeks of surgery."
+        },
+        "explanation": "Confirm a new stage IIB/IIC cutaneous melanoma diagnosis by AJCC8. The source adjuvant indication requires complete resection, ECOG 0–1 and initiation within 12 weeks of surgery.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_STAGE_III_CRITERIA_CONFIRMED_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558g",
+              "00558g-skin"
+            ]
+          },
+          {
+            "field": "melanoma_stage_iii_criteria_confirmed",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the exact stage III melanoma indication and lymph-node/resection criteria from the current NCCP source. Clarify any indication/eligibility wording difference with the treating consultant."
+        },
+        "explanation": "Confirm the exact stage III melanoma indication and lymph-node/resection criteria from the current NCCP source. Clarify any indication/eligibility wording difference with the treating consultant.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_MELANOMA_STAGE_III_CRITERIA_CONFIRMED_NOT_MET",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558g",
+              "00558g-skin"
+            ]
+          },
+          {
+            "field": "melanoma_stage_iii_criteria_confirmed",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the exact stage III melanoma indication and lymph-node/resection criteria from the current NCCP source. Clarify any indication/eligibility wording difference with the treating consultant."
+        },
+        "explanation": "Confirm the exact stage III melanoma indication and lymph-node/resection criteria from the current NCCP source. Clarify any indication/eligibility wording difference with the treating consultant.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_PLAN_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558g",
+              "00558g-skin",
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_plan",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm postoperative adjuvant treatment, or the explicitly selected 200 mg stage IIIB perioperative phase, before interpreting surgery and cycle counts."
+        },
+        "explanation": "Confirm postoperative adjuvant treatment, or the explicitly selected 200 mg stage IIIB perioperative phase, before interpreting surgery and cycle counts.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_RESECTION_POSTOPERATIVE_INCOMPLETE",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558g",
+              "00558g-skin",
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_plan",
+            "operator": "==",
+            "value": "postoperative"
+          },
+          {
+            "field": "complete_resection",
+            "operator": "==",
+            "value": false
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Postoperative melanoma treatment requires complete resection under the source indication. Reconcile the surgery/pathology result before proceeding."
+        },
+        "explanation": "Postoperative melanoma treatment requires complete resection under the source indication. Reconcile the surgery/pathology result before proceeding.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_RESECTION_POSTOPERATIVE_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558g",
+              "00558g-skin",
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_plan",
+            "operator": "==",
+            "value": "postoperative"
+          },
+          {
+            "field": "complete_resection",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Postoperative melanoma treatment requires complete resection under the source indication. Reconcile the surgery/pathology result before proceeding."
+        },
+        "explanation": "Postoperative melanoma treatment requires complete resection under the source indication. Reconcile the surgery/pathology result before proceeding.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_START_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_starting_adjuvant",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm whether this is initiation of the stage IIB/IIC adjuvant course. The within-12-weeks surgery criterion applies at initiation, not at every later dose."
+        },
+        "explanation": "Confirm whether this is initiation of the stage IIB/IIC adjuvant course. The within-12-weeks surgery criterion applies at initiation, not at every later dose.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_SURGERY_WINDOW_LATE",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_starting_adjuvant",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "melanoma_weeks_since_surgery",
+            "operator": ">",
+            "value": 12
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Stage IIB/IIC adjuvant pembrolizumab should start within 12 weeks of surgery. Confirm the interval and specialist plan; do not apply this initiation limit to later cycles."
+        },
+        "explanation": "Stage IIB/IIC adjuvant pembrolizumab should start within 12 weeks of surgery. Confirm the interval and specialist plan; do not apply this initiation limit to later cycles.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_SURGERY_WINDOW_UNASSESSED",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_starting_adjuvant",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "melanoma_weeks_since_surgery",
+            "operator": "missing",
+            "value": null
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Stage IIB/IIC adjuvant pembrolizumab should start within 12 weeks of surgery. Confirm the interval and specialist plan; do not apply this initiation limit to later cycles."
+        },
+        "explanation": "Stage IIB/IIC adjuvant pembrolizumab should start within 12 weeks of surgery. Confirm the interval and specialist plan; do not apply this initiation limit to later cycles.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_ADVANCED_PLAN_CONFLICT",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558b",
+              "00558c",
+              "00558b-skin",
+              "00558c-skin"
+            ]
+          },
+          {
+            "field": "melanoma_plan",
+            "operator": "in",
+            "value": [
+              "postoperative"
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Advanced and perioperative/adjuvant melanoma are different treatment settings. Reconcile the selected indication and phase."
+        },
+        "explanation": "Advanced and perioperative/adjuvant melanoma are different treatment settings. Reconcile the selected indication and phase.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "MEL41_ADJUVANT_PLAN_CONFLICT",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558g",
+              "00558g-skin",
+              "00558l",
+              "00558l-skin"
+            ]
+          },
+          {
+            "field": "melanoma_plan",
+            "operator": "==",
+            "value": "advanced"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "The selected indication is adjuvant melanoma but the phase is advanced disease. Reconcile the treatment setting."
+        },
+        "explanation": "The selected indication is adjuvant melanoma but the phase is advanced disease. Reconcile the treatment setting.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / treatment setting",
+          "checked_date": "2026-11-06"
+        }
       }
     ]
   },
@@ -3714,7 +4446,9 @@
   "eligibility": [
     "Use the exact indication-specific criteria and NCCP PD-1/PD-L1 retreatment guidance.",
     "Metastatic NSCLC: first-line stage IV disease, validated TPS ≥50%, no EGFR mutation/ALK translocation, ECOG 0–1.",
-    "Adjuvant NSCLC: high recurrence risk, complete resection and prior platinum chemotherapy, source stage IB–IIIA AJCC7, ECOG 0–1; no metastatic TPS50 gate."
+    "Adjuvant NSCLC: high recurrence risk, complete resection and prior platinum chemotherapy, source stage IB–IIIA AJCC7, ECOG 0–1; no metastatic TPS50 gate.",
+    "Advanced melanoma: no more than one previous systemic treatment for advanced disease; ECOG 0–1.",
+    "Adjuvant melanoma: apply the exact stage/resection criteria; stage IIB/IIC cutaneous melanoma (AJCC8) should start within 12 weeks of surgery, ECOG 0–1."
   ],
   "exclusions": [
     "Hypersensitivity to pembrolizumab or excipients.",

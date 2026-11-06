@@ -39,7 +39,7 @@
   }
 
   function setDomain(next, { reset = true } = {}) {
-    const domain = next === "haem" ? "haem" : "solid";
+    const domain = window.SACTCheckLibraryScope?.domain(next) || (next === "haem" ? "haem" : "solid");
     document.body.dataset.libraryDomain = domain;
     if (domain !== "haem") document.body.dataset.haemRoute = "all";
     document.querySelectorAll("[data-library-domain-choice]").forEach(button => {
@@ -66,6 +66,9 @@
   }
 
   function initialise() {
+    const enabled = window.SACTCheckLibraryScope?.haematologyEnabled !== false;
+    document.body.dataset.haematologyEnabled = String(enabled);
+    document.querySelectorAll('[data-library-domain-choice="haem"], #haemDomainIntro').forEach(node => { node.hidden = !enabled; });
     document.querySelectorAll("[data-library-domain-choice]").forEach(button => {
       button.addEventListener("click", () => setDomain(button.dataset.libraryDomainChoice));
     });
@@ -74,7 +77,7 @@
     });
     let saved = "solid";
     try { saved = localStorage.getItem(STORAGE_KEY) === "haem" ? "haem" : "solid"; } catch (_) {}
-    setDomain(saved, { reset: false });
+    setDomain(saved, { reset: saved === "haem" && !enabled });
   }
 
   window.addEventListener("sactcheck:protocols-loaded", () => window.filterRegimens?.());

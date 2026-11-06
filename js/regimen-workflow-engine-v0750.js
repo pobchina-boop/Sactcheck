@@ -791,6 +791,7 @@
   }
 
   async function open(protocol,options={}){
+    if(root.SACTCheckLibraryScope?.isVisible(protocol)===false){root.showScreen?.('libraryScreen');return false;}
     ensureCss();
     const overlay=ensurePanel();
     if(!overlay||!protocol) return;

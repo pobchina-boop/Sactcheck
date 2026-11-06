@@ -388,6 +388,10 @@
   }
 
   function open(protocol, context = {}) {
+    if (root.SACTCheckLibraryScope?.isVisible(protocol) === false) {
+      root.showScreen?.("libraryScreen");
+      return false;
+    }
     ensureScreen();
     protocol = root.SACTCheckToxicityAttribution?.decorate?.(protocol) || protocol;
     activeProtocol = protocol;

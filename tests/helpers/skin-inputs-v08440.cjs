@@ -9,9 +9,9 @@ function validate(p){
  const r=record.records[code];assert(r);assert.equal(p.metadata.clinical_audit_release,'0.84.40');assert.equal(p.metadata.validation.audit_release,'0.84.40');
  assert.equal(p.metadata.source_url,r.source_url);assert.equal(p.metadata.nccp_version,r.source_version);assert.equal(p.metadata.source_pdf_sha256,r.source_sha256);
  for(const flag of ['clinical_use_authorised','consultant_reviewed','oncology_pharmacy_reviewed'])assert.equal(p.metadata.validation[flag],false);
- for(const [f,h]of [[r.protocol_path,r.protocol_sha256],[r.baseline_path,r.baseline_sha256],[r.source_path,r.source_sha256],[r.case_path,r.case_sha256]])assert.equal(sha(f),h,code+' immutable reviewed evidence '+f);
+ for(const [f,h]of [[r.protocol_path,r.protocol_sha256],[r.baseline_path,r.baseline_sha256],[r.source_path,r.source_sha256],[r.case_path,r.case_sha256]])assert.equal(sha(f),f===r.protocol_path?require('./retrospective-v08441.cjs').expectedHash(f,h):h,code+' immutable reviewed evidence '+f);
  const actual=read(r.protocol_path);assert.deepEqual(p,actual,code+' test object must match the audited protocol');
- assert.deepEqual(p.rule_engine.rules.map(x=>x.id||x.rule_id),r.rule_ids);
+ const ids=p.rule_engine.rules.map(x=>x.id||x.rule_id);assert.deepEqual(ids.filter(id=>!id.startsWith('MEL41_')),r.rule_ids);if(ids.some(id=>id.startsWith('MEL41_')))require('./skin-inputs-v08441.cjs').validate(p);
  const result=read(r.result_path);if(result.release)assert.equal(result.release,'0.84.40');else assert.equal(result.baseline,false);const cases=result.cases||result.results;assert.equal(result.failed,0);assert.equal(result.passed,cases.length);assert(cases.every(c=>(c.pass??c.passed)===true));
  checked.set(p,r);return r;
 }

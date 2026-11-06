@@ -531,6 +531,7 @@
   }
 
   function createProtocolLibrary(protocols) {
+    protocols = protocols.filter(record => window.SACTCheckLibraryScope?.isVisible(record) !== false);
     document.getElementById("json-protocol-library")?.remove();
     const grid = document.getElementById("regimenGrid");
     if (!grid) throw new Error("Could not find the existing regimen library grid.");

@@ -5,7 +5,7 @@ const scope=json('validation/neuro-oncology-v08438/scope.json'),presentation=jso
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08438-addendum.json');
 assert.deepEqual(scope.codes,['00334','00342','00379','00461','00658']);
 require('./helpers/neuro-suite-registration-v08438.cjs').registry(registry.codes);
-assert.equal(json('package.json').version,'0.84.40');assert.equal(json('data/app-release.json').release,'0.84.40');
+assert.equal(json('package.json').version,'0.84.41');assert.equal(json('data/app-release.json').release,'0.84.41');
 assert.equal(scope.base_release,'0.84.37');assert.equal(scope.independent_clinical_approval,false);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const code of scope.codes){

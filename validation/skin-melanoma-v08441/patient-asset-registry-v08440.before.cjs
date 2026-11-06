@@ -1,0 +1,338 @@
+/**
+ * SACTCheck v0.81.0 - canonical patient asset registry.
+ *
+ * This is the single source of truth for dedicated patient-facing routes.
+ * All clinician-card, workflow, QR and compatibility routing must resolve
+ * dedicated patient assets through this registry. Dynamic rendering is a
+ * fallback only for regimens that are not registered here.
+ */
+(function(root,factory){
+  const api=factory(root||{});
+  if(typeof module==='object'&&module.exports) module.exports=api;
+  root.SACTCheckPatientAssets=api;
+})(typeof globalThis!=='undefined'?globalThis:this,function(root){
+  'use strict';
+
+  const RELEASE='0.84.40';
+  const CONTENT_RELEASE='0.84.40';
+  const PUBLIC_ORIGIN='https://sactcheck.com/';
+  const DEFINITIONS=Object.freeze({
+    '00236':{"title": "Vismodegib for advanced basal cell skin cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00415':{"title": "Dabrafenib and trametinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00563':{"title": "Encorafenib and binimetinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00431':{"title": "Nivolumab and ipilimumab for advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Melanoma patient information only"},
+    '00812':{"title": "Cemiplimab for advanced cutaneous squamous cell cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Cutaneous squamous cell carcinoma patient information only"},
+    '00742':{"title": "Lomustine + bevacizumab 5 mg/kg", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00804':{"title": "Lomustine + bevacizumab 7.5 mg/kg", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00805':{"title": "Lomustine for recurrent malignant glioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00806':{"title": "Cisplatin, lomustine and vincristine (CLV)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00813':{"title": "Bevacizumab 5 mg/kg every 14 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00334':{"title": "Temozolomide with radiotherapy, then adjuvant temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00342':{"title": "Temozolomide for recurrent or progressive glioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00379':{"title": "PCV chemotherapy · 42-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00461':{"title": "Temozolomide with short-course radiotherapy, then adjuvant treatment", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00658':{"title": "PCV chemotherapy · 56-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00320':{"title": "Everolimus · neuroendocrine tumour context", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["neuroendocrine"], "scopeGuard": true, "scope": "NET patient suite only; kidney-cancer indication requires separate matching information"},
+    '00327':{"title": "Sunitinib · pancreatic neuroendocrine tumours", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00505':{"title": "CAPTEM · capecitabine and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00642':{"title": "Lutathera · peptide receptor radionuclide therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+
+    '00734':{"title": "weekly carboplatin AUC 2 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00348':{"title": "carboplatin AUC 6 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00861':{"title": "Pembrolizumab 400 mg + weekly carboplatin AUC 1.5 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00860':{"title": "Pembrolizumab 400 mg + carboplatin AUC 5 / paclitaxel \u2192 dose-dense AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00858':{"title": "Pembrolizumab 200 mg + weekly carboplatin AUC 1.5 / paclitaxel \u2192 AC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00797':{"title": "Phesgo + weekly paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00796':{"title": "Phesgo + docetaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00217':{"title": "Lapatinib + capecitabine", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00350':{"title": "Pertuzumab + trastuzumab · with selected chemotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00526':{"title": "Pertuzumab + trastuzumab + vinorelbine", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00775':{"title": "TRAIN-2 · IV pertuzumab / trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00798':{"title": "Phesgo + vinorelbine", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00262':{"title": "EC90", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00263':{"title": "EC75", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00265':{"title": "FEC100", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00269':{"title": "FEC50", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00423':{"title": "AT 50/75", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00377':{"title": "CMF · oral cyclophosphamide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00378':{"title": "CMF · IV · 28-day schedule", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00381':{"title": "CMF · IV · 21-day schedule", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00430':{"title": "Gemcitabine + carboplatin AUC2", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00749':{"title": "Gemcitabine 800 mg/m² · 28-day schedule", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00545':{"title": "Zoledronic acid · adjuvant breast treatment", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00605':{"title": "Talazoparib · breast monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00688':{"title": "Atezolizumab + nab-paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00720':{"title": "Neratinib · extended adjuvant treatment", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00738':{"title": "Bevacizumab + weekly paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00947':{"title": "Capivasertib + fulvestrant", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00232':{"title": "Vinorelbine IV · advanced breast cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00259':{"title": "Vinorelbine capsules · advanced breast cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00251':{"title": "Carboplatin · 28-day breast schedule", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00261':{"title": "Carboplatin · 21-day breast schedule", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00212':{"title": "Bevacizumab every 14 days · breast treatment component", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00215':{"title": "Bevacizumab every 21 days · breast treatment component", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00455':{"title": "Pembrolizumab 200 mg · every 3 weeks · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00558':{"title": "Pembrolizumab 400 mg · every 6 weeks · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00579':{"title": "Pembrolizumab + paclitaxel + carboplatin AUC6", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00576':{"title": "Durvalumab 10 mg/kg every 14 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00655':{"title": "Durvalumab 1500 mg every 28 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00689':{"title": "Atezolizumab + carboplatin + etoposide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00908':{"title": "Serplulimab, carboplatin and etoposide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00271':{"title": "Carboplatin + Etoposide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00280':{"title": "Cisplatin + Etoposide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00319':{"title": "Carboplatin + Oral Etoposide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00353':{"title": "Osimertinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00401':{"title": "Alectinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00562':{"title": "Brigatinib Therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00570':{"title": "Lorlatinib therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00243':{"title": "Crizotinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00340':{"title": "Ceritinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00823':{"title": "Tepotinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00702':{"title": "Entrectinib monotherapy · adult", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00221':{"title": "Afatinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00565':{"title": "Dacomitinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00544':{"title": "Atezolizumab 1200 mg · every 3 weeks · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00592':{"title": "Atezolizumab 840 mg · every 2 weeks · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00593':{"title": "Atezolizumab 1680 mg · every 4 weeks · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00219':{"title": "Erlotinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00220':{"title": "Gefitinib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00483':{"title": "Nivolumab · every 2 weeks · previously treated NSCLC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00484':{"title": "Nivolumab · every 4 weeks · previously treated NSCLC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00712':{"title": "Nivolumab, ipilimumab, paclitaxel and carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00792':{"title": "Nivolumab and ipilimumab for pleural mesothelioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00849':{"title": "Nivolumab and selected platinum chemotherapy before surgery", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Choose the prescribed neoadjuvant chemotherapy backbone", "contextOnly": true, "patientContexts": ["backbone_00304", "backbone_00310", "backbone_00281", "backbone_00318", "backbone_00317"]},
+    '00281':{"title": "Gemcitabine and cisplatin · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00310':{"title": "Gemcitabine and carboplatin · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00339':{"title": "Vinorelbine and cisplatin · 21-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00343':{"title": "Vinorelbine and cisplatin · 28-day cycle", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00304':{"title": "Carboplatin and paclitaxel · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00311':{"title": "Topotecan by infusion · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00587':{"title": "Topotecan capsules · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00388':{"title": "Oral etoposide · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["schedule_7d", "schedule_3d", "schedule_21d"], "scopeGuard": true, "scope": "Choose the prescribed oral etoposide schedule"},
+    '00284':{"title": "Gemcitabine alone · non-small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
+    '00614':{"title": "Carboplatin and vinorelbine · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00279':{"title": "Cisplatin + etoposide with radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Reference IV cisplatin/etoposide every21days; confirm any alternative prescription"},
+    '00309':{"title": "Weekly carboplatin + paclitaxel with radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00456':{"title": "Cisplatin + etoposide + chest radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00561':{"title": "Carboplatin + etoposide + chest radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00214':{"title": "Bevacizumab 7.5 · lung", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung indication only; confirm the prescribed chemotherapy partner"},
+    '00372':{"title": "Nintedanib treatment · choose current phase", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["combination", "continuation"], "scopeGuard": true, "scope": "Confirm the current prescribed treatment phase"},
+    '00660':{"title": "Fluorouracil + folinic acid every 14 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00421':{"title": "Continuous fluorouracil + radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00427':{"title": "Roswell Park modified fluorouracil + folinic acid", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00428':{"title": "QUASAR modified weekly fluorouracil + folinic acid", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00486':{"title": "FLOX: fluorouracil, folinic acid and oxaliplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00555':{"title": "FOLFOXIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00783':{"title": "Bevacizumab + FOLFOXIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00691':{"title": "FOLFIRINOX followed by chemoradiotherapy · rectal cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00238':{"title": "Aflibercept + FOLFIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00791':{"title": "Bevacizumab + fluorouracil / folinic acid", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00244':{"title": "Regorafenib (Stivarga) monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00551':{"title": "Nivolumab + ipilimumab · colorectal after chemotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Colorectal context only; confirm the exact NCCP indication and phase"},
+    '00890':{"title": "Fruquintinib (Fruzaqla) monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Colorectal context only; confirm the exact NCCP indication and phase"},
+    '00900':{"title": "Nivolumab + ipilimumab · first-line colorectal", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Colorectal context only; confirm the exact NCCP indication and phase"},
+    '00790':{"title": "TRAIN-2 with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00789':{"title": "TCHP with Phesgo", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00785':{"title": "Phesgo maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00588':{"title": "Olaparib · adjuvant breast treatment", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Breast adjuvant 00588h only"},
+    '00794':{"title": "Sacituzumab govitecan (Trodelvy)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00776':{"title": "Trastuzumab deruxtecan (Enhertu) · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00322':{"title": "Everolimus + exemestane", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00414':{"title": "Palbociclib with endocrine therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00361':{"title": "Fulvestrant · injections every 4 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00376':{"title": "Exemestane · daily hormone therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00371':{"title": "Letrozole · daily hormone therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00254':{"title": "Anastrozole · daily hormone therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00253':{"title": "Tamoxifen · daily hormone therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00205':{"title": "Pegylated liposomal doxorubicin · every 4 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00736':{"title": "Nab-paclitaxel · Days 1, 8 and 15 of 28", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00230':{"title": "Nab-paclitaxel · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00743':{"title": "Eribulin · Days 1 and 15 of 28", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00228':{"title": "Eribulin · Days 1 and 8 of 21", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00507':{"title": "Weekly paclitaxel + pertuzumab + trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00204':{"title": "Docetaxel + pertuzumab + trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00731':{"title": "TCHP · subcutaneous trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00258':{"title": "TCH → trastuzumab continuation", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00621':{"title": "Paclitaxel · Days 1, 8 and 15 of 28", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00512':{"title": "Weekly paclitaxel + weekly trastuzumab → trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00250':{"title": "Docetaxel + cyclophosphamide (TC)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00203':{"title": "Docetaxel 75 mg/m² · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00202':{"title": "Docetaxel 100 mg/m² · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00745':{"title": "Dose-dense AC → weekly paclitaxel + 3-weekly trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00433':{"title": "Dose-dense AC → weekly paclitaxel + weekly trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00432':{"title": "AC → weekly paclitaxel + weekly trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00316':{"title": "Dose-dense AC → fortnightly paclitaxel + weekly trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00278':{"title": "Dose-dense AC → paclitaxel every 2 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00260':{"title": "AC every 3 weeks → weekly paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00252':{"title": "AC · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00200':{"title": "Trastuzumab IV \u00b7 every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00201':{"title": "Trastuzumab IV \u00b7 weekly \u00b7 metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00272':{"title": "Trastuzumab SC · metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00285':{"title": "Trastuzumab SC · early breast cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00206':{"title": "Trastuzumab emtansine (T-DM1) \u00b7 metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00485':{"title": "Dose-dense AC → weekly paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00815':{"title": "Weekly paclitaxel + trastuzumab → trastuzumab continuation", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00659':{title:"Adjuvant trastuzumab emtansine (T-DM1)",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
+    '00892':{"title": "Adjuvant ribociclib + endocrine therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00936':{"title": "Tucatinib + capecitabine + trastuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00525':{"title": "Ribociclib + endocrine therapy · metastatic", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00726':{title:"Pertuzumab + trastuzumab maintenance",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true},
+    '00207':{"title": "Weekly cetuximab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00732':{"title": "Cetuximab · every two weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00328':{"title": "Weekly cetuximab + FOLFIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00585':{"title": "Fortnightly cetuximab + FOLFIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00330':{"title": "Weekly cetuximab + irinotecan", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00331':{"title": "Fortnightly cetuximab + irinotecan", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00692':{"title": "Weekly cetuximab + FOLFOX-4", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00733':{"title": "Fortnightly cetuximab + modified FOLFOX-6", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00210':{"title": "FOLFOX-4", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00213':{"title": "Irinotecan · every three weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00225':{"title": "Panitumumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00447':{"title": "Panitumumab + modified FOLFOX-6", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00448':{"title": "Panitumumab + FOLFIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00216':{"title": "Capecitabine", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00586':{"title": "Capecitabine + rectal radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00623':{"title": "Bevacizumab + capecitabine", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00227':{"title": "FOLFIRI", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00449':{"title": "FOLFIRI + bevacizumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00446':{"title": "Modified FOLFOX-6 + bevacizumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+
+    '00209':{"title": "Modified FOLFOX-6", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00226':{"title": "Weekly paclitaxel", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00321':{"title": "CAPOX / XELOX", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00222':{"title": "Pemetrexed Monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00317':{"title": "Pemetrexed + Cisplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00318':{"title": "Pemetrexed + Carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00382':{"title": "Trifluridine/tipiracil (Lonsurf) monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00568':{"title": "Pembrolizumab + pemetrexed + carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00569':{"title": "Pembrolizumab + pemetrexed + cisplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00619':{"title": "Adjuvant abemaciclib + endocrine therapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00713':{"title": "Nivolumab, ipilimumab, pemetrexed and carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00714':{"title": "Nivolumab, ipilimumab, pemetrexed and cisplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00722':{"title": "TCHP: docetaxel, carboplatin, trastuzumab and pertuzumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00831':{"title": "Atezolizumab + bevacizumab for HCC", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contactCard": true},
+    '00857':{title:"Pembrolizumab + carboplatin/paclitaxel \u2192 AC",guide:true,passport:true,sactCard:true,knowledge:true,consentDraft:true,supportiveCare:true,phaseSupport:true,longitudinal:true}
+  });
+  const CODES=Object.freeze(Object.keys(DEFINITIONS));
+  const COLORECTAL_CONTEXTS=Object.freeze({'00455':{lung:'',colorectal:'colorectal/'},'00558':{lung:'',colorectal:'colorectal/'},'00212':{breast:'',colorectal:'colorectal/'},'00214':{lung:'',colorectal:'colorectal/'},'00215':{breast:'',lung:'lung/',colorectal:'colorectal/'}});
+  const CONTEXT_CODES=Object.freeze(['00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
+
+  function contextFor(value,explicit=''){
+    if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
+    const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
+    const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(code==='00415')return ['advanced','adjuvant'].includes(selected)?selected:'';
+    if(code==='00320')return selected==='neuroendocrine'?'neuroendocrine':'';
+    const normalized=selected==='gastrointestinal'?'colorectal':selected;
+    if(COLORECTAL_CONTEXTS[code])return Object.hasOwn(COLORECTAL_CONTEXTS[code],normalized)?normalized:'';
+    return ['lung','breast'].includes(selected)?selected:'';
+  }
+
+  function text(v){return String(v??'').trim();}
+  function normaliseCode(value){
+    const digits=text(value).replace(/\D/g,'');
+    if(!digits) return '';
+    return digits.slice(-5).padStart(5,'0');
+  }
+  function codeFor(protocol){
+    return normaliseCode(protocol?.metadata?.nccp_regimen_code||protocol?.nccp_regimen_code||protocol?.nccp_code||'');
+  }
+  function definitionFor(value){
+    const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    return code&&DEFINITIONS[code]?Object.freeze({code,...DEFINITIONS[code]}):null;
+  }
+  function bundleRoutes(value){
+    const d=definitionFor(value);if(!d)return [];
+    if(d.code==='00415')return [d.code,d.code+'/adjuvant'];
+    if(!d.contextOnly)return [d.code];
+    if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!(d.code==='00320'?/^neuroendocrine$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00388'?/^schedule_(7d|3d|21d)$/:/^backbone_[0-9]{5}$/).test(s)))throw new Error('Invalid patient context routes');
+    return d.patientContexts.map(s=>d.code+'/'+s);
+  }
+  function hasDedicated(value){return Boolean(definitionFor(value));}
+  function relativePath(value,asset='portal',context=''){
+    const def=definitionFor(value); if(!def) return null;
+    if(CONTEXT_CODES.includes(def.code)){
+      const selected=contextFor(value,context);
+      if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
+      if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      return `patient/${def.code}/${def.code==='00415'?(selected==='adjuvant'?'adjuvant/':''):def.code==='00320'?'neuroendocrine/':COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
+    }
+    if(def.scopeGuard) return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
+    if(asset==='supportive-care-selector') return def.phaseSupport?`patient/${def.code}/supportive-care.html`:null;
+    if(asset==='longitudinal') return def.longitudinal?`patient/${def.code}/treatment-journey.html`:null;
+    if(asset==='supportive-care') return def.supportiveCare?`patient/${def.code}/supportive-care.pdf`:null;
+    if(asset==='knowledge') return def.knowledge?`patient/${def.code}/knowledge.html`:null;
+    // Clinic Workflow consent generator now opens the dedicated one-page form.
+    // The longer consent discussion adjunct remains available separately as patient/${code}/consent.html.
+    if(asset==='consent-draft') return def.consentDraft?`patient/${def.code}/consent-form.html`:null;
+    if(asset==='guide') return `patient/${def.code}/guide.pdf`;
+    if(asset==='passport') return `patient/${def.code}/passport.pdf`;
+    if(asset==='contact-card'&&def.contactCard) return `patient/${def.code}/contact-card.pdf`;
+    if(asset==='sact-card'&&def.sactCard) return `patient/${def.code}/sactcard.pdf`;
+    return `patient/${def.code}/`;
+  }
+  function publicUrl(value,asset='portal'){
+    const rel=relativePath(value,asset); return rel?new URL(rel,PUBLIC_ORIGIN).href:null;
+  }
+  function runtimeUrl(value,asset='portal'){
+    const rel=relativePath(value,asset); if(!rel) return null;
+    const base=root.location?.href||PUBLIC_ORIGIN;
+    try{return new URL(rel,base).href;}catch(_){return new URL(rel,PUBLIC_ORIGIN).href;}
+  }
+  function compatibilityUrl(value,asset='portal'){
+    const def=definitionFor(value); if(!def) return null;
+    if(CONTEXT_CODES.includes(def.code))return publicUrl(value,asset);
+    if(def.scopeGuard) return publicUrl(value,asset);
+    const suffix=asset==='guide'?'guide.pdf':asset==='passport'?'passport.pdf':asset==='contact-card'&&def.contactCard?'contact-card.pdf':asset==='sact-card'&&def.sactCard?'sactcard.pdf':'';
+    return new URL(`docs/patient/${def.code}/${suffix}`,PUBLIC_ORIGIN).href;
+  }
+  function fallbackUrl(protocol){
+    const id=text(protocol?.protocol_id);
+    const u=new URL(PUBLIC_ORIGIN);
+    if(id) u.searchParams.set('patientSupport',id);
+    return u.href;
+  }
+  function publicPortalUrl(protocol){return publicUrl(protocol,'portal')||fallbackUrl(protocol);}
+  function guideUrl(protocol){return publicUrl(protocol,'guide');}
+  function passportUrl(protocol){return publicUrl(protocol,'passport');}
+  function sactCardUrl(protocol){return publicUrl(protocol,'sact-card');}
+  function openTarget(url,target='_blank'){
+    if(!url) return null;
+    if(typeof root.open!=='function') return {url,opened:false};
+    const win=root.open(url,target);
+    if(win){try{win.opener=null;}catch(_){} return win;}
+    return {url,opened:false,blocked:true};
+  }
+  function openPortal(protocol){
+    const url=runtimeUrl(protocol,'portal');
+    if(!url) return false;
+    return openTarget(url);
+  }
+  function openGuide(protocol){
+    const url=runtimeUrl(protocol,'guide');
+    if(!url) return false;
+    return openTarget(url);
+  }
+  function openPassport(protocol){
+    const url=runtimeUrl(protocol,'passport');
+    if(!url) return false;
+    return openTarget(url);
+  }
+  function openSactCard(protocol){
+    const url=runtimeUrl(protocol,'sact-card');
+    if(!url) return false;
+    return openTarget(url);
+  }
+
+  return Object.freeze({
+    release:RELEASE,
+    contentRelease:CONTENT_RELEASE,
+    publicOrigin:PUBLIC_ORIGIN,
+    codes:CODES,
+    definitions:DEFINITIONS,
+    bundleRoutes,normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,contextCodes:CONTEXT_CODES,
+    publicUrl,runtimeUrl,compatibilityUrl,fallbackUrl,publicPortalUrl,
+    guideUrl,passportUrl,sactCardUrl,openPortal,openGuide,openPassport,openSactCard
+  });
+});

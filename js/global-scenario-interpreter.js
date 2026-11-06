@@ -300,7 +300,7 @@
   }
 
   function loadedRecords() {
-    return root.SACTCheckProtocolLoader?.getLoadedProtocols?.() || root.SACTCHECK_PROTOCOLS || [];
+    return (root.SACTCheckProtocolLoader?.getLoadedProtocols?.() || root.SACTCHECK_PROTOCOLS || []).filter(record=>root.SACTCheckLibraryScope?.isVisible(record)!==false);
   }
 
   function setStatus(message, type = "") {
