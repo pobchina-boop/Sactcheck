@@ -3,6 +3,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const root=path.resolve(__dirname,'../..'),read=f=>JSON.parse(fs.readFileSync(path.join(root,f))),sha=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');
 const CODES=['00236','00415','00563','00431','00812','00455','00558','00483','00484','00551'];let record;const checked=new WeakMap();
 function validate(p){
+ if(p.metadata.nccp_regimen_code==='00551'&&p.metadata.clinical_audit_release==='0.84.42')return require('./skin-inputs-v08442.cjs').validate(p);
  const code=p.metadata.nccp_regimen_code;if(!CODES.includes(code))return null;
  if(checked.has(p))return checked.get(p);
  record??=read('validation/skin-melanoma-v08440/clinical-migration.json');assert.deepEqual(record.codes,CODES);

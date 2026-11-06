@@ -47,7 +47,7 @@ for(const c of ['00551','00900']){
  for(const [f,hold,stop]of [['thyroid_grade',[2,3],[4]],['hypophysitis_grade',[2,3],[4]],['adrenal_grade',[2],[3,4]]]){
   for(const g of hold){
    yes(c,f+' symptomatic G'+g,{[f]:g,endocrine_symptoms:true},f.toUpperCase()+'_HOLD','withhold');
-   no(c,f+' replacement only asymptomatic G'+g,{[f]:g,endocrine_symptoms:false},[f.toUpperCase()+'_HOLD',f.toUpperCase()+'_CONTEXT']);
+   no(c,f+' replacement only asymptomatic G'+g,{[f]:g,endocrine_symptoms:false,...(c==='00551'&&f==='adrenal_grade'?{adrenal_stable_on_replacement:true}:{})},[f.toUpperCase()+'_HOLD',f.toUpperCase()+'_CONTEXT']);
    yes(c,f+' omitted symptoms not assumed absent G'+g,{[f]:g},f.toUpperCase()+'_CONTEXT','consultant_review');
   }
   for(const g of stop)yes(c,f+' permanent stop G'+g,{[f]:g},f.toUpperCase()+'_STOP',perm);

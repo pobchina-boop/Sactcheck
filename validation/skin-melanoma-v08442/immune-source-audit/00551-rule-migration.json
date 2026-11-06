@@ -1,0 +1,385 @@
+{
+  "changed_existing": {
+    "ADRENAL_GRADE_HOLD": {
+      "before": {
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "adrenal_grade",
+              "operator": "in",
+              "value": [
+                2
+              ]
+            },
+            {
+              "field": "endocrine_symptoms",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab",
+            "ipilimumab"
+          ],
+          "message": "Adrenal insufficiency: withhold until symptoms resolve and acute corticosteroid management if needed is complete. Hormone replacement alone in an asymptomatic patient does not require automatic withholding.",
+          "recommendation": "Adrenal insufficiency: withhold until symptoms resolve and acute corticosteroid management if needed is complete. Hormone replacement alone in an asymptomatic patient does not require automatic withholding."
+        },
+        "explanation": "Adrenal insufficiency: withhold until symptoms resolve and acute corticosteroid management if needed is complete. Hormone replacement alone in an asymptomatic patient does not require automatic withholding.",
+        "source": {
+          "document": "NCCP 00551 version 7a",
+          "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+          "page": 8,
+          "checked_date": "2026-11-05"
+        },
+        "rule_id": "ADRENAL_GRADE_HOLD"
+      },
+      "after": {
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "adrenal_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "any": [
+                    {
+                      "field": "adrenal_stable_on_replacement",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "adrenal_stable_on_replacement",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "field": "endocrine_symptoms",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "endocrine_symptoms",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab",
+            "ipilimumab"
+          ],
+          "message": "Grade 2 adrenal insufficiency: withhold pending management and resolution. The source permits continuation on established hormone replacement when no symptoms remain; both stable replacement and symptom-free status must be confirmed for that exception.",
+          "recommendation": "Grade 2 adrenal insufficiency: withhold pending management and resolution. The source permits continuation on established hormone replacement when no symptoms remain; both stable replacement and symptom-free status must be confirmed for that exception."
+        },
+        "explanation": "Grade 2 adrenal insufficiency: withhold pending management and resolution. The source permits continuation on established hormone replacement when no symptoms remain; both stable replacement and symptom-free status must be confirmed for that exception.",
+        "source": {
+          "document": "NCCP 00551 version 7a",
+          "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+          "page": 8,
+          "checked_date": "2026-11-06"
+        },
+        "rule_id": "ADRENAL_GRADE_HOLD"
+      }
+    }
+  },
+  "added": [
+    {
+      "rule_id": "SK42_ADRENAL_STABLE_REPLACEMENT",
+      "priority": 10,
+      "when": {
+        "all": [
+          {
+            "field": "adrenal_grade",
+            "operator": "==",
+            "value": 2
+          },
+          {
+            "field": "adrenal_stable_on_replacement",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "endocrine_symptoms",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "nivolumab",
+          "ipilimumab"
+        ],
+        "message": "Controlled adrenal insufficiency on established replacement without symptoms may continue under consultant direction; do not use this exception for grade 3\u20134 disease.",
+        "recommendation": "Controlled adrenal insufficiency on established replacement without symptoms may continue under consultant direction; do not use this exception for grade 3\u20134 disease."
+      },
+      "explanation": "Controlled adrenal insufficiency on established replacement without symptoms may continue under consultant direction; do not use this exception for grade 3\u20134 disease.",
+      "source": {
+        "document": "NCCP 00551 version 7a",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+        "page": 8,
+        "checked_date": "2026-11-06"
+      }
+    },
+    {
+      "rule_id": "SK42_MELANOMA_ADVANCED_INDICATION",
+      "priority": 10,
+      "when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00551b-skin"
+          },
+          {
+            "field": "melanoma_advanced_confirmed",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "nivolumab",
+          "ipilimumab"
+        ],
+        "message": "00551 melanoma is for adult unresectable/metastatic disease. Do not transfer this dose combination to an adjuvant indication.",
+        "recommendation": "00551 melanoma is for adult unresectable/metastatic disease. Do not transfer this dose combination to an adjuvant indication."
+      },
+      "explanation": "00551 melanoma is for adult unresectable/metastatic disease. Do not transfer this dose combination to an adjuvant indication.",
+      "source": {
+        "document": "NCCP 00551 version 7a",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+        "page": 1,
+        "checked_date": "2026-11-06"
+      }
+    },
+    {
+      "rule_id": "SK42_MELANOMA_OFF_LABEL_GOVERNANCE",
+      "priority": 10,
+      "when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00551b-skin"
+          },
+          {
+            "any": [
+              {
+                "field": "melanoma_unlicensed_posology_consent_confirmed",
+                "operator": "==",
+                "value": false
+              },
+              {
+                "field": "melanoma_dt_acknowledgement_confirmed",
+                "operator": "==",
+                "value": false
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "nivolumab",
+          "ipilimumab"
+        ],
+        "message": "Nivolumab 3 mg/kg/ipilimumab 1 mg/kg is an unlicensed melanoma dosing posology in Ireland. Confirm informed consent and D&T/equivalent acknowledgement under hospital policy; reimbursement does not remove this source requirement.",
+        "recommendation": "Nivolumab 3 mg/kg/ipilimumab 1 mg/kg is an unlicensed melanoma dosing posology in Ireland. Confirm informed consent and D&T/equivalent acknowledgement under hospital policy; reimbursement does not remove this source requirement."
+      },
+      "explanation": "Nivolumab 3 mg/kg/ipilimumab 1 mg/kg is an unlicensed melanoma dosing posology in Ireland. Confirm informed consent and D&T/equivalent acknowledgement under hospital policy; reimbursement does not remove this source requirement.",
+      "source": {
+        "document": "NCCP 00551 version 7a",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+        "page": "13 footnote i",
+        "checked_date": "2026-11-06"
+      }
+    },
+    {
+      "rule_id": "SK42_MELANOMA_START_CONTEXT",
+      "priority": 10,
+      "when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00551b-skin"
+          },
+          {
+            "field": "melanoma_starting_treatment",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "any": [
+                  {
+                    "field": "melanoma_advanced_confirmed",
+                    "operator": "missing"
+                  },
+                  {
+                    "field": "melanoma_advanced_confirmed",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "melanoma_unlicensed_posology_consent_confirmed",
+                    "operator": "missing"
+                  },
+                  {
+                    "field": "melanoma_unlicensed_posology_consent_confirmed",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "melanoma_dt_acknowledgement_confirmed",
+                    "operator": "missing"
+                  },
+                  {
+                    "field": "melanoma_dt_acknowledgement_confirmed",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "melanoma_braf_status_available",
+                    "operator": "missing"
+                  },
+                  {
+                    "field": "melanoma_braf_status_available",
+                    "operator": "==",
+                    "value": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "nivolumab",
+          "ipilimumab"
+        ],
+        "message": "Before initiating this melanoma schedule, confirm advanced disease, off-label informed consent, local D&T/equivalent acknowledgement and baseline BRAF status. A BRAF mutation is not required for this immunotherapy regimen.",
+        "recommendation": "Before initiating this melanoma schedule, confirm advanced disease, off-label informed consent, local D&T/equivalent acknowledgement and baseline BRAF status. A BRAF mutation is not required for this immunotherapy regimen."
+      },
+      "explanation": "Before initiating this melanoma schedule, confirm advanced disease, off-label informed consent, local D&T/equivalent acknowledgement and baseline BRAF status. A BRAF mutation is not required for this immunotherapy regimen.",
+      "source": {
+        "document": "NCCP 00551 version 7a",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+        "page": "1,5,13",
+        "checked_date": "2026-11-06"
+      }
+    },
+    {
+      "rule_id": "SK42_MELANOMA_BASELINE_BRAF",
+      "priority": 10,
+      "when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00551b-skin"
+          },
+          {
+            "field": "melanoma_braf_status_available",
+            "operator": "==",
+            "value": false
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "nivolumab",
+          "ipilimumab"
+        ],
+        "message": "Baseline BRAF status is a melanoma investigation in NCCP 00551. Arrange/confirm testing; do not confuse status availability with a requirement for a BRAF mutation.",
+        "recommendation": "Baseline BRAF status is a melanoma investigation in NCCP 00551. Arrange/confirm testing; do not confuse status availability with a requirement for a BRAF mutation."
+      },
+      "explanation": "Baseline BRAF status is a melanoma investigation in NCCP 00551. Arrange/confirm testing; do not confuse status availability with a requirement for a BRAF mutation.",
+      "source": {
+        "document": "NCCP 00551 version 7a",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+        "page": 5,
+        "checked_date": "2026-11-06"
+      }
+    },
+    {
+      "rule_id": "SK42_FIRST_MAINTENANCE_CONTEXT",
+      "priority": 10,
+      "when": {
+        "all": [
+          {
+            "field": "first_maintenance_dose",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "field": "indication_id",
+                "operator": "missing"
+              },
+              {
+                "field": "maintenance_schedule",
+                "operator": "missing"
+              },
+              {
+                "field": "days_since_last_combination",
+                "operator": "missing"
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "nivolumab",
+          "ipilimumab"
+        ],
+        "message": "Confirm indication, formulation/schedule and time since last combination before first maintenance. Melanoma/RCC wait 21 days forq 14 or 42 days forq 28; CRC waits 21 days. Missing information cannot establish that a dose is due.",
+        "recommendation": "Confirm indication, formulation/schedule and time since last combination before first maintenance. Melanoma/RCC wait 21 days forq 14 or 42 days forq 28; CRC waits 21 days. Missing information cannot establish that a dose is due."
+      },
+      "explanation": "Confirm indication, formulation/schedule and time since last combination before first maintenance. Melanoma/RCC wait 21 days forq 14 or 42 days forq 28; CRC waits 21 days. Missing information cannot establish that a dose is due.",
+      "source": {
+        "document": "NCCP 00551 version 7a",
+        "url": "https://healthservice.hse.ie/documents/6385/551_Nivolumab_3mgkg_Ipilimumab_1mgkg.pdf",
+        "page": "1\u20133",
+        "checked_date": "2026-11-06"
+      }
+    }
+  ],
+  "preserved_existing_count": 82
+}

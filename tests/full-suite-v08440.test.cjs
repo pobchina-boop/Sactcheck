@@ -5,7 +5,7 @@ const scope=json('validation/skin-melanoma-v08440/scope.json'),presentation=json
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08440-addendum.json');
 assert.deepEqual(scope.codes,['00236','00415','00563','00431','00812']);assert.equal(scope.clinical_audits.length,10);assert.equal(scope.presentation_routes.length,6);
 require('./helpers/skin-suite-registration-v08440.cjs').registry(registry.codes);
-assert.equal(json('package.json').version,'0.84.41');assert.equal(json('data/app-release.json').release,'0.84.41');
+assert(['0.84.41','0.84.42'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
 assert.equal(scope.base_release,'0.84.39');assert.equal(scope.independent_clinical_approval,false);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 const esc=t=>t.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');

@@ -1,0 +1,75 @@
+{
+  "release": "0.84.42",
+  "base_release": "0.84.41",
+  "base_commit": "cd94a2043d59da86ffec3dbb63ac49df6399e112",
+  "runtime": "Node24.22.1; CI specifies Node20",
+  "test_ci": {
+    "status": "passed",
+    "exit_code": 0,
+    "location": "fresh local clone of the exact baseline with only intended delta files overlaid",
+    "log": "checks/test-ci-clean.log",
+    "log_sha256": "98a059ba0e36293b294979d8f895c91f711bb379b907e14467b4bca9af36d267",
+    "includes": "release:gate, security:check, protocols:build, npm test, build:pages, security:site, all later release scripts through v08442"
+  },
+  "additional": [
+    {
+      "command": "PDF verifier v08442",
+      "status": "passed",
+      "exit_code": 0,
+      "routes": 13,
+      "pdfs": 132,
+      "pages": 924,
+      "qr_checks": 52,
+      "findings": 0
+    },
+    {
+      "command": "tests/handbook-chronology-print.test.py",
+      "status": "passed",
+      "exit_code": 0,
+      "tests": 4
+    },
+    {
+      "command": "tests/ui-asset-migration.test.cjs",
+      "status": "passed",
+      "exit_code": 0,
+      "tests": 18
+    },
+    {
+      "command": "tools/build-patient-knowledge.cjs --check and patient UI --check",
+      "status": "passed",
+      "exit_code": 0
+    },
+    {
+      "command": "CHROMIUM_PATH=/usr/bin/chromium npm run test:patient-browser",
+      "status": "blocked",
+      "exit_code": 1,
+      "reason": "Chromium local socket EPERM; execution escalation rejected automatically. No automated browser tests passed in this attempt."
+    },
+    {
+      "command": "HTTP preview byte comparison from execution namespace",
+      "status": "blocked",
+      "reason": "Managed browser preview endpoint is unreachable from this command namespace; connection refused. Browser journeys work through managed preview; no HTTP comparison claimed."
+    }
+  ],
+  "clean_apply": {
+    "input_manifest": "clean-apply-inputs.json",
+    "code_document_style_files_verified_identical": 331,
+    "independent_git_checkout": true,
+    "source_head_unchanged": "cd94a2043d59da86ffec3dbb63ac49df6399e112"
+  },
+  "new_checks": 1204,
+  "new_checks_failed": 0,
+  "retrospective_five_regimen_checks": 1617,
+  "previous_v41_checks": 196,
+  "independent_clinical_approval": false,
+  "publication_performed": false,
+  "ready_to_publish": false,
+  "pending": [
+    "Required automated mobile/desktop browser suite",
+    "Local HTTP comparison in an environment that can reach its server",
+    "Real-device installation/scanning/printing",
+    "Independent clinical/pharmacy/PPI review",
+    "Post-publication exact-SHA deployment and live page/PDF/QR checks"
+  ],
+  "note": "Resolved initial test failures are preserved in logs. Tests remain exact about source-backed migrations, current generation and unchanged unrelated content; no assertion was disabled."
+}

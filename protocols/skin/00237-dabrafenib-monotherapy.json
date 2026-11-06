@@ -14,9 +14,9 @@
     "short_title": "Dabrafenib Monotherapy",
     "indication": "Adult patients with unresectable or metastatic melanoma with a confirmed BRAF V600 mutation.",
     "source_url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.45.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.42",
+    "source_checked_date": "2026-11-06",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "skin_subgroups": [
@@ -62,11 +62,13 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_review",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "audit_release": "0.84.42"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -82,22 +84,64 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.42",
+      "audit_date": "2026-11-06",
+      "scope_note": "NCCP tables individually reconciled; proposed candidate awaits validation and independent clinical/pharmacy approval."
     },
-    "canonical_protocol_id": "nccp-00237-v6"
+    "canonical_protocol_id": "nccp-00237-v6",
+    "source_version_date": "2026-01-20",
+    "review_date": "2031-01-20",
+    "source_pdf_sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+    "source_sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+    "clinical_audit_release": "0.84.42",
+    "supplemental_source_documents": [
+      {
+        "document": "EMA tafinlar current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+        "page": 4,
+        "section": "Current EMA product information supplement, component-specific",
+        "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+        "checked_date": "2026-11-06"
+      }
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00237 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "dose_modification_note": "All modifications require consultant/pharmacy review. Component-specific advice and dose levels are reference text, never an automatically calculated prescription. Missing values remain unassessed.",
+    "disclaimer": "Decision-support encoding derived from NCCP 00237 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "source_conflicts": [
+      {
+        "id": "DABRAFENIB_PYREXIA_THRESHOLD",
+        "resolution": "NCCP 00237 v6 pp2/4 specifies ≥38.5°C, while current EMA Tafinlar p4 §4.2/p9 §4.4 explicitly specifies ≥38°C for monotherapy. Preserve the lower SmPC safety hold and label the discrepancy; require clinician/pharmacy resolution.",
+        "sources": [
+          {
+            "document": "NCCP 00237 v6",
+            "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+            "page": 2,
+            "section": "Pyrexia threshold",
+            "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+            "checked_date": "2026-11-06"
+          },
+          {
+            "document": "EMA tafinlar current product information",
+            "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+            "page": 4,
+            "section": "§4.2 Pyrexia",
+            "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+            "checked_date": "2026-11-06"
+          }
+        ]
+      }
+    ],
+    "removed_unsupported_generic_rules": [
+      "Legacy shared whole-regimen QT/LVEF/CK/ILD/haemorrhage shortcuts were replaced only where a source-specific pathway exists. Named symptoms without source dose criteria prompt assessment, not invented thresholds."
+    ]
   },
   "indications": [
     {
@@ -112,7 +156,47 @@
     "drugs": [
       "dabrafenib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "planned_cycles": null,
+    "cycle_convention_note": "28 days is an assessment convention; treatment is continuous without planned breaks.",
+    "administration": [
+      {
+        "drug": "dabrafenib",
+        "dose": "150 mg twice daily",
+        "route": "PO",
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "note": "About 12 hours apart, at least 1 hour before or 2 hours after food; continuous treatment."
+      }
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -172,119 +256,6 @@
       "demo_value": false,
       "input_role": "decision"
     },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention indicated or instrumental activities limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using objective findings, intervention required and functional impact; confirm against the current CTCAE and regimen source.",
-      "input_role": "decision"
-    },
-    "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Interruption or symptomatic treatment indicated with prompt response."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged/recurrent reaction or hospitalisation indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using objective findings, intervention required and functional impact; confirm against the current CTCAE and regimen source.",
-      "input_role": "decision"
-    },
     "braf_v600_confirmed": {
       "label": "BRAF V600 mutation confirmed by a validated test",
       "type": "boolean",
@@ -292,90 +263,435 @@
       "demo_value": true,
       "input_role": "decision"
     },
-    "temperature_c": {
-      "label": "Temperature",
-      "type": "number",
+    "adult_indication_confirmed": {
+      "label": "Adult unresectable/metastatic melanoma indication confirmed",
+      "type": "boolean",
       "required": false,
-      "min": 30,
-      "step": 0.1,
-      "demo_value": 36.8,
-      "unit": "°C",
-      "max": 45,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to a component or excipient",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "tests_missing": {
+      "label": "Required baseline/ongoing tests or surveillance plan incomplete",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "interaction_review_needed": {
+      "label": "Medication, supplement or contraception interaction review needed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dose_history_unverified": {
+      "label": "Current doses or prior dose reductions not reconciled",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "new_suspicious_skin_lesion": {
+      "label": "New suspicious skin lesion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cutaneous_scc_confirmed": {
+      "label": "Cutaneous squamous-cell carcinoma confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "new_visual_or_ocular_symptoms": {
+      "label": "New eye pain, photophobia or visual changes",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restarting_after_event": {
+      "label": "A restart after an adverse-event interruption is being assessed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "event_intolerable": {
+      "label": "Other adverse event is intolerable",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "event_resolved_grade_0_1": {
+      "label": "Other interrupted event has resolved to grade 0–1",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "further_dose_reduction_required": {
+      "label": "Further dose reduction considered necessary",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Baseline hepatic impairment category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none",
       "input_role": "decision"
     },
-    "qtc_ms": {
-      "label": "QTc interval",
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
-      "demo_value": 430,
-      "unit": "ms",
-      "max": 800,
+      "step": "any",
+      "unit": "mL/min",
+      "demo_value": 90,
+      "input_role": "decision",
+      "max": 300
+    },
+    "event_type": {
+      "label": "Adverse-event pathway",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "other",
+          "label": "Other adverse event; use named specific pathway when applicable"
+        },
+        {
+          "value": "qt",
+          "label": "QT prolongation"
+        },
+        {
+          "value": "cardiac",
+          "label": "LVEF/cardiac symptoms"
+        },
+        {
+          "value": "ck",
+          "label": "CPK/rhabdomyolysis"
+        },
+        {
+          "value": "hepatic",
+          "label": "Liver laboratory toxicity"
+        },
+        {
+          "value": "rash",
+          "label": "Rash"
+        },
+        {
+          "value": "photosensitivity",
+          "label": "Photosensitivity"
+        },
+        {
+          "value": "diarrhoea",
+          "label": "Diarrhoea"
+        },
+        {
+          "value": "haemorrhage",
+          "label": "Haemorrhage"
+        },
+        {
+          "value": "uveitis",
+          "label": "Uveitis"
+        },
+        {
+          "value": "pyrexia",
+          "label": "Pyrexia"
+        }
+      ],
+      "demo_value": "other",
       "input_role": "decision"
     },
-    "lvef_percent": {
-      "label": "LVEF",
+    "non_haematological_toxicity_grade": {
+      "label": "Current other adverse-event grade (exclude named specific pathways)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_label": "NCCP source grade (edition not specified in table)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+      "source_grading_note": "Use the named toxicity and source grading; no automatic grade is inferred from a lone result.",
+      "assessment_guidance": "Record current grade or highest episode grade as labelled; recovery must not erase an earlier permanent-stop indication."
+    },
+    "highest_event_grade": {
+      "label": "Highest grade of the selected adverse-event episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_label": "NCCP source grade (edition not specified in table)",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+      "source_grading_note": "Use the named toxicity and source grading; no automatic grade is inferred from a lone result.",
+      "assessment_guidance": "Record current grade or highest episode grade as labelled; recovery must not erase an earlier permanent-stop indication."
+    },
+    "event_occurrence": {
+      "label": "Occurrence number of this adverse event",
       "type": "number",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 60,
-      "unit": "%",
-      "max": 100,
-      "input_role": "decision"
+      "min": 1,
+      "step": "any",
+      "unit": "occurrence",
+      "demo_value": 1,
+      "input_role": "decision",
+      "max": 99
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_braf_treatment_failure": {
+      "label": "Previous disease progression/treatment failure with a BRAF inhibitor",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "previous_braf_intolerance_only": {
+      "label": "Previous BRAF inhibitor stopped for intolerance without treatment failure",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "uncontrolled_hypertension": {
       "label": "Uncontrolled hypertension",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "electrolyte_abnormality_uncorrected": {
-      "label": "Clinically significant uncorrected electrolyte abnormality",
+      "label": "Uncontrolled clinically significant electrolyte abnormality",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "new_visual_or_ocular_symptoms": {
-      "label": "New visual disturbance or ocular symptoms",
+    "uveitis_confirmed": {
+      "label": "Uveitis confirmed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "ck_uln_multiple": {
-      "label": "Creatine kinase",
+    "uveitis_controlled_locally": {
+      "label": "Uveitis controlled with effective local ocular therapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uveitis_resolved": {
+      "label": "Ocular inflammation resolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "fever_resolved": {
+      "label": "Fever has resolved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "fever_had_severe_features": {
+      "label": "Febrile episode associated with severe signs/symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ras_mutant_other_cancer": {
+      "label": "Prior/concurrent cancer associated with RAS mutation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "qt_risk_present": {
+      "label": "Congenital long QT, high cumulative anthracycline exposure, QT medicines or electrolyte disturbance",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "creatinine_increased": {
+      "label": "Creatinine rising during treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unexplained_abdominal_pain": {
+      "label": "Unexplained abdominal pain",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "new_primary_melanoma": {
+      "label": "New primary melanoma confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "temperature_c": {
+      "label": "Current temperature",
+      "type": "number",
+      "required": false,
+      "min": 30,
+      "step": "any",
+      "unit": "°C",
+      "demo_value": 36.8,
+      "input_role": "decision",
+      "max": 45
+    },
+    "creatinine_uln_multiple": {
+      "label": "Creatinine relative to laboratory ULN",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 1,
+      "step": "any",
       "unit": "×ULN",
+      "demo_value": 1,
       "input_role": "decision"
     },
-    "new_respiratory_symptoms_or_ild": {
-      "label": "New respiratory symptoms or suspected ILD/pneumonitis",
-      "type": "boolean",
+    "current_dabrafenib_mg": {
+      "label": "Current dabrafenib dose per administration",
+      "type": "number",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "min": 0,
+      "step": "any",
+      "unit": "mg",
+      "demo_value": 150,
+      "input_role": "decision",
+      "max": 300
     },
-    "severe_haemorrhage": {
-      "label": "Severe or clinically significant haemorrhage",
-      "type": "boolean",
+    "proposed_dabrafenib_mg": {
+      "label": "Proposed dabrafenib dose per administration",
+      "type": "number",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "min": 0,
+      "step": "any",
+      "unit": "mg",
+      "demo_value": 150,
+      "input_role": "decision",
+      "max": 1000
     },
-    "new_suspicious_skin_lesion": {
-      "label": "New suspicious skin lesion or possible secondary malignancy",
+    "pyrexia_recurrent_first_symptom": {
+      "label": "First symptom of recurrent pyrexia",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pyrexia_recurrent": {
+      "label": "The pyrexia episode is recurrent",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pyrexia_symptom_free_hours": {
+      "label": "Hours free of pyrexia symptoms before proposed restart",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "hours",
+      "demo_value": 0,
+      "input_role": "decision",
+      "max": 10000
     }
   },
   "required_inputs": [],
@@ -409,25 +725,112 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
+        "id": "ADULT_INDICATION_CONFIRMED",
         "priority": 8,
         "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "field": "adult_indication_confirmed",
+          "operator": "==",
+          "value": false
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "Confirm the adult unresectable/metastatic melanoma indication.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Indications/eligibility",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+        "explanation": "Confirm the adult unresectable/metastatic melanoma indication."
+      },
+      {
+        "id": "BRAF_V600_CONFIRMED",
+        "priority": 10,
+        "when": {
+          "field": "braf_v600_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Validated BRAF V600 mutation is required; do not use the regimen for wild-type melanoma.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Indications/eligibility",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Validated BRAF V600 mutation is required; do not use the regimen for wild-type melanoma."
+      },
+      {
+        "id": "ECOG_OUTSIDE_ELIGIBILITY",
+        "priority": 8,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Source eligibility is ECOG 0–2; reconcile performance status and individual consultant plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Source eligibility is ECOG 0–2; reconcile performance status and individual consultant plan."
+      },
+      {
+        "id": "HYPERSENSITIVITY",
+        "priority": 10,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Known component/excipient hypersensitivity is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Known component/excipient hypersensitivity is an NCCP exclusion."
       },
       {
         "id": "PREGNANCY",
@@ -440,15 +843,21 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "Pregnancy triggers the regimen-specific contraindication or urgent specialist pregnancy-exposure pathway."
+          "message": "Pregnancy is an NCCP exclusion; urgent specialist review is needed after exposure.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Pregnancy triggers the regimen-specific contraindication or urgent specialist pregnancy-exposure pathway."
+        "explanation": "Pregnancy is an NCCP exclusion; urgent specialist review is needed after exposure."
       },
       {
         "id": "BREASTFEEDING",
@@ -461,249 +870,200 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "Breastfeeding is not compatible with this regimen unless the current source explicitly directs otherwise."
+          "message": "Breastfeeding is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Breastfeeding is not compatible with this regimen unless the current source explicitly directs otherwise."
+        "explanation": "Breastfeeding is an NCCP exclusion."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "id": "MONITORING_REVIEW",
+        "priority": 8,
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and source-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and source-specific review."
-      },
-      {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "BRAF_REQUIRED",
-        "priority": 10,
-        "when": {
-          "field": "braf_v600_confirmed",
-          "operator": "==",
-          "value": false
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "A confirmed BRAF V600 mutation is required for this BRAF-targeted regimen."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "A confirmed BRAF V600 mutation is required for this BRAF-targeted regimen."
-      },
-      {
-        "id": "QT_OVER500",
-        "priority": 10,
-        "when": {
-          "field": "qtc_ms",
-          "operator": ">",
-          "value": 500
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "QTc >500 ms requires treatment interruption and correction of reversible causes before source-specific rechallenge."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "QTc >500 ms requires treatment interruption and correction of reversible causes before source-specific rechallenge."
-      },
-      {
-        "id": "LVEF_LOW",
-        "priority": 9,
-        "when": {
-          "field": "lvef_percent",
-          "operator": "<=",
-          "value": 50
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "LVEF ≤50% or a clinically meaningful decline requires interruption and cardiac/source-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "LVEF ≤50% or a clinically meaningful decline requires interruption and cardiac/source-specific review."
-      },
-      {
-        "id": "HTN_UNCONTROLLED",
-        "priority": 9,
-        "when": {
-          "field": "uncontrolled_hypertension",
+          "field": "tests_missing",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "Control hypertension before treatment or continuation."
+          "message": "Reconcile source-specific blood, ECG, skin and other surveillance before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Tests / dose modification / interactions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Control hypertension before treatment or continuation."
+        "explanation": "Reconcile source-specific blood, ECG, skin and other surveillance before treatment."
       },
       {
-        "id": "ELECTROLYTES",
-        "priority": 9,
+        "id": "INTERACTION_REVIEW",
+        "priority": 8,
         "when": {
-          "field": "electrolyte_abnormality_uncorrected",
+          "field": "interaction_review_needed",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "Correct clinically significant electrolyte abnormalities before QT-active therapy."
+          "message": "Review the current SmPC and interaction database, including all medicines/supplements and contraception.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 5,
+          "section": "Tests / dose modification / interactions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Correct clinically significant electrolyte abnormalities before QT-active therapy."
+        "explanation": "Review the current SmPC and interaction database, including all medicines/supplements and contraception."
       },
       {
-        "id": "OCULAR",
-        "priority": 10,
+        "id": "DOSE_HISTORY_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "dose_history_unverified",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Confirm the current dose, prior reductions, episode history and component attribution; do not calculate an automatic restart dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Tests / dose modification / interactions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Confirm the current dose, prior reductions, episode history and component attribution; do not calculate an automatic restart dose."
+      },
+      {
+        "id": "RESTART_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "restarting_after_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Restart requires confirmation of the exact pathway, peak/current severity, recovery, occurrence count and doses; recovery alone does not establish overall clearance.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Dose modification",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Restart requires confirmation of the exact pathway, peak/current severity, recovery, occurrence count and doses; recovery alone does not establish overall clearance."
+      },
+      {
+        "id": "OTHER_RESTART_UNRECOVERED",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "other"
+            },
+            {
+              "field": "event_resolved_grade_0_1",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Do not restart the interrupted other-toxicity pathway until grade 0–1 recovery; permanent-stop history remains separately assessed.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Dose modification",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Do not restart the interrupted other-toxicity pathway until grade 0–1 recovery; permanent-stop history remains separately assessed."
+      },
+      {
+        "id": "OCULAR_ASSESSMENT",
+        "priority": 8,
         "when": {
           "field": "new_visual_or_ocular_symptoms",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "New ocular symptoms require treatment interruption and urgent ophthalmic assessment."
+          "message": "Arrange prompt ophthalmic assessment and establish the diagnosis; a symptom alone does not mandate an invented universal whole-regimen interruption.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Ocular adverse effects / SmPC review",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "New ocular symptoms require treatment interruption and urgent ophthalmic assessment."
+        "explanation": "Arrange prompt ophthalmic assessment and establish the diagnosis; a symptom alone does not mandate an invented universal whole-regimen interruption."
       },
       {
-        "id": "CK_HIGH",
-        "priority": 9,
-        "when": {
-          "field": "ck_uln_multiple",
-          "operator": ">=",
-          "value": 5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "CK ≥5 ×ULN requires interruption and assessment for myopathy/rhabdomyolysis."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "CK ≥5 ×ULN requires interruption and assessment for myopathy/rhabdomyolysis."
-      },
-      {
-        "id": "ILD",
-        "priority": 10,
-        "when": {
-          "field": "new_respiratory_symptoms_or_ild",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "New respiratory symptoms or suspected ILD/pneumonitis require interruption and urgent assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "New respiratory symptoms or suspected ILD/pneumonitis require interruption and urgent assessment."
-      },
-      {
-        "id": "HAEMORRHAGE",
-        "priority": 10,
-        "when": {
-          "field": "severe_haemorrhage",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Clinically significant haemorrhage requires interruption and specialist review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Clinically significant haemorrhage requires interruption and specialist review."
-      },
-      {
-        "id": "SKIN_LESION",
+        "id": "SKIN_LESION_REVIEW",
         "priority": 8,
         "when": {
           "field": "new_suspicious_skin_lesion",
@@ -713,43 +1073,1146 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "A new suspicious skin lesion requires prompt dermatological evaluation; treatment disposition follows the source-specific pathway."
+          "message": "Arrange dermatology assessment and pathology for a new lesion; do not treat it as a proven diagnosis.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Skin surveillance / adverse effects",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "A new suspicious skin lesion requires prompt dermatological evaluation; treatment disposition follows the source-specific pathway."
+        "explanation": "Arrange dermatology assessment and pathology for a new lesion; do not treat it as a proven diagnosis."
       },
       {
-        "id": "PYREXIA",
-        "priority": 10,
+        "id": "CUTANEOUS_SCC_NO_AUTOMATIC_REDUCTION",
+        "priority": 4,
         "when": {
-          "field": "temperature_c",
+          "field": "cutaneous_scc_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Manage cutaneous SCC with dermatological excision/review. This finding alone does not require dose reduction; other toxicities remain separately assessed.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "cuSCC",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Manage cutaneous SCC with dermatological excision/review. This finding alone does not require dose reduction; other toxicities remain separately assessed."
+      },
+      {
+        "id": "RENAL_GE30",
+        "priority": 4,
+        "when": {
+          "field": "crcl_ml_min",
           "operator": ">=",
-          "value": 38
+          "value": 30
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "No renal dose adjustment is needed at CrCl ≥30 mL/min; this renal finding is not clearance of other domains.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "No renal dose adjustment is needed at CrCl ≥30 mL/min; this renal finding is not clearance of other domains."
+      },
+      {
+        "id": "RENAL_LT30",
+        "priority": 4,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "The source expects no renal dose adjustment at CrCl <30 mL/min. Individual clinical review remains necessary; do not invent a renal contraindication or reduction.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "The source expects no renal dose adjustment at CrCl <30 mL/min. Individual clinical review remains necessary; do not invent a renal contraindication or reduction."
+      },
+      {
+        "id": "HAEMODIALYSIS",
+        "priority": 4,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "The source expects no dose adjustment on haemodialysis; confirm the individual plan with oncology pharmacy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "The source expects no dose adjustment on haemodialysis; confirm the individual plan with oncology pharmacy."
+      },
+      {
+        "id": "HEPATIC_MILD",
+        "priority": 4,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "==",
+          "value": "mild"
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "No dose adjustment is needed for mild hepatic impairment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "No dose adjustment is needed for mild hepatic impairment."
+      },
+      {
+        "id": "HEPATIC_MODERATE_SEVERE",
+        "priority": 8,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "in",
+          "value": [
+            "moderate",
+            "severe"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "For moderate/severe hepatic impairment, 50% of the original dabrafenib dose MAY be considered. This is a consultant choice, not an automatic calculated dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "For moderate/severe hepatic impairment, 50% of the original dabrafenib dose MAY be considered. This is a consultant choice, not an automatic calculated dose."
+      },
+      {
+        "id": "PREVIOUS_BRAF_FAILURE",
+        "priority": 9,
+        "when": {
+          "field": "previous_braf_treatment_failure",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dabrafenib"
           ],
-          "message": "Pyrexia ≥38°C requires interruption of dabrafenib-containing therapy and assessment for infection/dehydration before restart."
+          "message": "Previous treatment failure with a BRAF inhibitor is an NCCP exclusion; intolerance is a different history.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Pyrexia ≥38°C requires interruption of dabrafenib-containing therapy and assessment for infection/dehydration before restart."
+        "explanation": "Previous treatment failure with a BRAF inhibitor is an NCCP exclusion; intolerance is a different history."
+      },
+      {
+        "id": "HYPERTENSION_EXCLUSION",
+        "priority": 9,
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Uncontrolled hypertension is an NCCP exclusion; correct and review before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Uncontrolled hypertension is an NCCP exclusion; correct and review before treatment."
+      },
+      {
+        "id": "ELECTROLYTE_EXCLUSION",
+        "priority": 9,
+        "when": {
+          "field": "electrolyte_abnormality_uncorrected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Uncontrolled electrolyte abnormalities are an NCCP exclusion; correct and review before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Uncontrolled electrolyte abnormalities are an NCCP exclusion; correct and review before treatment."
+      },
+      {
+        "id": "PREVIOUS_BRAF_INTOLERANCE",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "previous_braf_intolerance_only",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "previous_braf_treatment_failure",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Sequential BRAF inhibitor treatment may be considered after intolerance; confirm that this was not treatment failure.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Sequential BRAF inhibitor treatment may be considered after intolerance; confirm that this was not treatment failure."
+      },
+      {
+        "id": "PYREXIA_HOLD",
+        "priority": 9,
+        "when": {
+          "field": "temperature_c",
+          "operator": ">=",
+          "value": 38.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "NCCP dabrafenib monotherapy specifies interruption at ≥38.5°C; current EMA Tafinlar specifies ≥38°C for monotherapy. At this temperature both sources require interruption and assessment for infection; follow the reconciled treating-team pyrexia plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Dose modification / p4 pyrexia",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "NCCP dabrafenib monotherapy specifies interruption at ≥38.5°C; current EMA Tafinlar specifies ≥38°C for monotherapy. At this temperature both sources require interruption and assessment for infection; follow the reconciled treating-team pyrexia plan."
+      },
+      {
+        "id": "PYREXIA_SMPC_NCCP_DISCREPANCY",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "temperature_c",
+              "operator": ">=",
+              "value": 38
+            },
+            {
+              "field": "temperature_c",
+              "operator": "<",
+              "value": 38.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "SOURCE DISCREPANCY: current EMA Tafinlar §4.2/4.4 instructs interruption of MONOTHERAPY at ≥38°C; NCCP 00237 v6 specifies ≥38.5°C. At 38–38.49°C keep dabrafenib withheld, assess infection and obtain treating-team/pharmacy reconciliation. Do not treat this interval as cleared.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA tafinlar current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "§4.2 Pyrexia; §4.4 p9",
+          "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "SOURCE DISCREPANCY: current EMA Tafinlar §4.2/4.4 instructs interruption of MONOTHERAPY at ≥38°C; NCCP 00237 v6 specifies ≥38.5°C. At 38–38.49°C keep dabrafenib withheld, assess infection and obtain treating-team/pharmacy reconciliation. Do not treat this interval as cleared."
+      },
+      {
+        "id": "PYREXIA_RECURRENT_FIRST_SYMPTOM",
+        "priority": 9,
+        "when": {
+          "field": "pyrexia_recurrent_first_symptom",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Current EMA permits interruption at the first symptom of recurrent pyrexia, before a measured fever threshold; assess infection and obtain the agreed pyrexia plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA tafinlar current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "§4.2 Pyrexia",
+          "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Current EMA permits interruption at the first symptom of recurrent pyrexia, before a measured fever threshold; assess infection and obtain the agreed pyrexia plan."
+      },
+      {
+        "id": "PYREXIA_RESTART_UNDER24H",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "pyrexia"
+            },
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pyrexia_symptom_free_hours",
+              "operator": "<",
+              "value": 24
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Current EMA requires at least 24 hours symptom-free before restarting. Reported resolution alone is insufficient; assess infection and recurrence/severe features.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA tafinlar current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "§4.2 Pyrexia",
+          "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Current EMA requires at least 24 hours symptom-free before restarting. Reported resolution alone is insufficient; assess infection and recurrence/severe features."
+      },
+      {
+        "id": "PYREXIA_RESTART_TIME_UNKNOWN",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "pyrexia"
+            },
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pyrexia_symptom_free_hours",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Record at least 24 hours symptom-free before considering restart under current EMA product information; do not assume the elapsed time.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA tafinlar current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "§4.2 Pyrexia",
+          "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Record at least 24 hours symptom-free before considering restart under current EMA product information; do not assume the elapsed time."
+      },
+      {
+        "id": "PYREXIA_RECURRENT_RESTART_REDUCTION",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "pyrexia"
+            },
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pyrexia_recurrent",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Current EMA recommends one-dose-level reduction for recurrent and/or severe pyrexia after at least 24 hours symptom-free. The NCCP monotherapy document is less detailed; follow the reconciled consultant/pharmacy plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA tafinlar current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "§4.2 Pyrexia",
+          "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Current EMA recommends one-dose-level reduction for recurrent and/or severe pyrexia after at least 24 hours symptom-free. The NCCP monotherapy document is less detailed; follow the reconciled consultant/pharmacy plan."
+      },
+      {
+        "id": "PYREXIA_RESTART_PERSISTENT",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "pyrexia"
+            },
+            {
+              "field": "fever_resolved",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Do not restart dabrafenib while fever persists; assess infection and the severity of the episode.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Pyrexia",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Do not restart dabrafenib while fever persists; assess infection and the severity of the episode."
+      },
+      {
+        "id": "PYREXIA_RESOLVED_REVIEW",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "pyrexia"
+            },
+            {
+              "field": "fever_resolved",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pyrexia_symptom_free_hours",
+              "operator": ">=",
+              "value": 24
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "After fever resolves, consultant may restart with appropriate prescribed prophylaxis. Severe associated signs/symptoms require a reduced restart dose. Do not auto-prescribe NSAIDs/paracetamol or infer infection excluded.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Pyrexia",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "After fever resolves, consultant may restart with appropriate prescribed prophylaxis. Severe associated signs/symptoms require a reduced restart dose. Do not auto-prescribe NSAIDs/paracetamol or infer infection excluded."
+      },
+      {
+        "id": "PYREXIA_SEVERE_RESTART_REDUCTION",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "pyrexia"
+            },
+            {
+              "field": "fever_resolved",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "fever_had_severe_features",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Once severe febrile events resolve, restart at a reduced dabrafenib dose only when clinically appropriate and after review.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Pyrexia",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Once severe febrile events resolve, restart at a reduced dabrafenib dose only when clinically appropriate and after review."
+      },
+      {
+        "id": "UVEITIS_CONTROLLED",
+        "priority": 4,
+        "when": {
+          "all": [
+            {
+              "field": "uveitis_confirmed",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "uveitis_controlled_locally",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "No dabrafenib reduction is recommended while effective local therapy controls uveitis; continue ophthalmic review.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Uveitis",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "No dabrafenib reduction is recommended while effective local therapy controls uveitis; continue ophthalmic review."
+      },
+      {
+        "id": "UVEITIS_HOLD",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "uveitis_confirmed",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "uveitis_controlled_locally",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Uveitis not responding to local therapy: withhold until ocular inflammation resolves, then consultant may restart one dose level lower.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Uveitis",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Uveitis not responding to local therapy: withhold until ocular inflammation resolves, then consultant may restart one dose level lower."
+      },
+      {
+        "id": "UVEITIS_CONTROL_UNKNOWN",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "uveitis_confirmed",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "uveitis_controlled_locally",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Establish local ocular response; controlled uveitis does not automatically require a hold or reduction.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Uveitis",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Establish local ocular response; controlled uveitis does not automatically require a hold or reduction."
+      },
+      {
+        "id": "UVEITIS_NOT_RESOLVED_RESTART",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "uveitis"
+            },
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "uveitis_resolved",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "After an interruption for uncontrolled uveitis, wait for resolution of ocular inflammation before considering the reduced restart.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Uveitis",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "After an interruption for uncontrolled uveitis, wait for resolution of ocular inflammation before considering the reduced restart."
+      },
+      {
+        "id": "RAS_CANCER_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "ras_mutant_other_cancer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Carefully assess benefit and risk with prior/concurrent RAS-mutated non-cutaneous cancer.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Cautions / complications",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Carefully assess benefit and risk with prior/concurrent RAS-mutated non-cutaneous cancer."
+      },
+      {
+        "id": "QT_RISK_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "qt_risk_present",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Source cautions include congenital long QT, high cumulative anthracycline exposure, QT-prolonging medicines and electrolyte disturbances; no automatic QTc>500 permanent-stop algorithm is specified for dabrafenib monotherapy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Cautions / complications",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Source cautions include congenital long QT, high cumulative anthracycline exposure, QT-prolonging medicines and electrolyte disturbances; no automatic QTc>500 permanent-stop algorithm is specified for dabrafenib monotherapy."
+      },
+      {
+        "id": "CREATININE_RISE_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "creatinine_increased",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Review a rising creatinine; interruption may be needed as clinically appropriate.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Cautions / complications",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Review a rising creatinine; interruption may be needed as clinically appropriate."
+      },
+      {
+        "id": "PANCREATITIS_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "unexplained_abdominal_pain",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Promptly investigate unexplained abdominal pain, including amylase/lipase; assess pancreatitis and monitor closely on any restart.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Cautions / complications",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Promptly investigate unexplained abdominal pain, including amylase/lipase; assess pancreatitis and monitor closely on any restart."
+      },
+      {
+        "id": "CREATININE_GT1_5_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "creatinine_uln_multiple",
+          "operator": ">",
+          "value": 1.5
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Dabrafenib has not been studied at creatinine >1.5×ULN; use caution. This is not a numerical dose-reduction or absolute contraindication rule.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "Renal failure",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Dabrafenib has not been studied at creatinine >1.5×ULN; use caution. This is not a numerical dose-reduction or absolute contraindication rule."
+      },
+      {
+        "id": "NEW_PRIMARY_MELANOMA",
+        "priority": 4,
+        "when": {
+          "field": "new_primary_melanoma",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "New primary melanomas were managed by excision without treatment modification in the source; arrange dermatology management and continued surveillance.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 4,
+          "section": "New primary melanoma",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "New primary melanomas were managed by excision without treatment modification in the source; arrange dermatology management and continued surveillance."
+      },
+      {
+        "id": "OTHER_G2_INTOL_G3",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "event_intolerable",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Other intolerable grade 2 or grade 3 toxicity: interrupt until grade 0–1, then reduce one level. Reference steps are 150→100→75→50 mg twice daily; no reduction below 50 mg twice daily is recommended.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Other intolerable grade 2 or grade 3 toxicity: interrupt until grade 0–1, then reduce one level. Reference steps are 150→100→75→50 mg twice daily; no reduction below 50 mg twice daily is recommended."
+      },
+      {
+        "id": "OTHER_G4_CHOICE",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "all": [
+                {
+                  "field": "event_type",
+                  "operator": "==",
+                  "value": "other"
+                },
+                {
+                  "field": "highest_event_grade",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Grade 4: consultant chooses permanent discontinuation OR interruption until grade 0–1 and one-level reduction on restart. This source does not impose automatic permanent cessation solely for recurrence; review the full history.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Grade 4: consultant chooses permanent discontinuation OR interruption until grade 0–1 and one-level reduction on restart. This source does not impose automatic permanent cessation solely for recurrence; review the full history."
+      },
+      {
+        "id": "DABRA_FURTHER_REDUCTION_FLOOR",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "further_dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "current_dabrafenib_mg",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Further reduction below 50 mg twice daily is not recommended. Obtain a consultant decision rather than invent a lower dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Further reduction below 50 mg twice daily is not recommended. Obtain a consultant decision rather than invent a lower dose."
+      },
+      {
+        "id": "DABRA_PROPOSED_ABOVE_MAX",
+        "priority": 9,
+        "when": {
+          "field": "proposed_dabrafenib_mg",
+          "operator": ">",
+          "value": 150
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Dabrafenib dose must not exceed 150 mg twice daily. Re-escalation after toxicity is a consultant option only when adverse reactions are effectively controlled.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Dabrafenib dose must not exceed 150 mg twice daily. Re-escalation after toxicity is a consultant option only when adverse reactions are effectively controlled."
+      },
+      {
+        "id": "DABRA_PROPOSED_BELOW_MIN",
+        "priority": 8,
+        "when": {
+          "field": "proposed_dabrafenib_mg",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dabrafenib"
+          ],
+          "message": "Dose adjustment below 50 mg twice daily is not recommended. Reconcile the source and prescribing plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00237 v6",
+          "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Dose adjustment below 50 mg twice daily is not recommended. Reconcile the source and prescribing plan."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and molecular eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Adult unresectable/metastatic melanoma with validated BRAF V600 mutation",
+    "ECOG 0–2"
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
@@ -764,6 +2227,53 @@
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "source_audit_note": "Vemurafenib monotherapy: minimal emetogenic potential; dabrafenib and cobimetinib/vemurafenib: minimal-to-low. Premedication not usually required; antiemetics per local policy. No default prophylactic medicines prescribed."
+  },
+  "monitoring": {
+    "baseline": [
+      "FBC, renal and liver profile; ECG",
+      "Dermatological examination",
+      "Head/neck examination including oral mucosa and lymph nodes; chest/abdomen CT for secondary-malignancy assessment",
+      "Anal examination and pelvic examination for women as advised by source/clinical plan"
+    ],
+    "during": [
+      "FBC, renal and liver profile monthly; ECG as clinically indicated",
+      "Skin examination monthly; head/neck examination every three months",
+      "Review creatinine, unexplained abdominal pain and visual symptoms",
+      "Secondary-malignancy surveillance may include chest/abdomen CT every six months; this is distinct from response imaging"
+    ],
+    "after": [
+      "Skin and non-cutaneous secondary-malignancy surveillance up to six months after cessation or until another antineoplastic therapy",
+      "Anal/pelvic examinations at treatment end or as clinically indicated",
+      "Alternative effective contraception during therapy and for two weeks after, because hormonal methods may be less effective"
+    ],
+    "disease_monitoring": "Consultant treatment plan; secondary-malignancy surveillance is not a universal tumour-response imaging schedule.",
+    "sources": [
+      {
+        "document": "NCCP 00237 v6",
+        "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+        "page": 2,
+        "section": "Tests",
+        "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+        "checked_date": "2026-11-06"
+      },
+      {
+        "document": "NCCP 00237 v6",
+        "url": "https://healthservice.hse.ie/documents/6726/237_Dabrafenib.pdf",
+        "page": 4,
+        "section": "Complications/supportive care",
+        "sha256": "34ebe3ada72709b46a197f316159421749817096186b5cbd155c8b4151eed0f7",
+        "checked_date": "2026-11-06"
+      },
+      {
+        "document": "EMA tafinlar current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/tafinlar-epar-product-information_en.pdf",
+        "page": 4,
+        "section": "§4.2 pyrexia safety discrepancy",
+        "sha256": "9031057737e69f93f06bd97c0cab21f19ae76210a1d3e52f9c8020131fd58e8a",
+        "checked_date": "2026-11-06"
+      }
+    ]
   }
 }

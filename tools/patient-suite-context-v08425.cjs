@@ -3,15 +3,18 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const context=process.env.SACT_SUITE_CONTEXT||'';
+const skin42Contexts=['melanoma','merkel_cell'];
 const melanomaContexts=['melanoma_advanced','melanoma_adjuvant','melanoma_perioperative'];
 const v30Contexts=['combination','continuation'];
 if(v30Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00372'))throw new Error('Nintedanib context escaped00372');
 const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
 if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
 if(melanomaContexts.includes(context)&&codes.some(c=>!['00455','00558','00483','00484'].includes(c)||(context==='melanoma_perioperative'&&c!=='00455')))throw new Error('Unsupported melanoma regimen/context');
+if(context==='melanoma'&&codes.some(c=>c!=='00551'))throw new Error('Melanoma combination context escaped00551');
+if(context==='merkel_cell'&&codes.some(c=>c!=='00535'))throw new Error('Merkel-cell context escaped00535');
 if(context==='adjuvant'&&codes.some(c=>c!=='00415'))throw new Error('Adjuvant context escaped00415');
 if(context==='neuroendocrine'&&codes.some(c=>c!=='00320'))throw new Error('NET context escaped shared everolimus00320');
 if(v27Contexts.includes(context)&&codes.some(c=>c!=='00849'))throw new Error('Neoadjuvant backbone context escaped00849');
@@ -60,6 +63,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(skin.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const skin41=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08441.json'),'utf8'));
  for(const [c,plans]of Object.entries(skin41.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const skin42=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08442.json'),'utf8'));
+ for(const [c,plans]of Object.entries(skin42.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

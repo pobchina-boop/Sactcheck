@@ -1,0 +1,8 @@
+from pathlib import Path
+p=Path(__file__).with_name('build-candidates.py');t=p.read_text()
+t=t.replace('Dabrafenib MONOTHERAPY source: interrupt at temperature ≥38.5°C and assess for infection. Do not import the ≥38°C dabrafenib/trametinib combination dose-interruption threshold. Local urgent-contact instructions can be lower.','NCCP dabrafenib monotherapy specifies interruption at ≥38.5°C; current EMA Tafinlar specifies ≥38°C for monotherapy. At this temperature both sources require interruption and assessment for infection; follow the reconciled treating-team pyrexia plan.')
+for old,new in [('grade0–1','grade 0–1'),('grade≤1','grade ≤1'),('At38–38.49','At 38–38.49'),('least24hours','least 24 hours'),('NCCP00237v6p2/4','NCCP 00237 v6 pp2/4'),('NCCP00237v6','NCCP 00237 v6'),('Tafinlarp4§4.2/p9§4.4','Tafinlar p4 §4.2/p9 §4.4'),('week8 thenq12week','week 8 then q12-week'),('week8 thenq12weeks','week 8 then q12 weeks'),('andq3months','and every 3 months'),('chestCT baseline andq6months','chest CT baseline and every 6 months'),('remains2,4,10,16weeks','remains 2, 4, 10 and 16 weeks'),('days1–21','days 1–21'),('days22–28','days 22–28'),('CK≥5×ULN','CK ≥5×ULN')]:t=t.replace(old,new)
+needle=" if c in ['00102','00373']:vemu_rules(b)"
+replacement=needle+"\n if c=='00102':\n  b.b('breastfeeding','Breastfeeding')\n  b.ema_rule('zelboraf','BREASTFEEDING_REVIEW',eq('breastfeeding'),'consultant_review','Current EMA requires a decision to discontinue breastfeeding or vemurafenib after weighing maternal treatment benefit and infant risk. Confirm the specialist plan before exposure; do not assume concurrent breastfeeding is safe.',10,'§4.6 Breastfeeding',{'breastfeeding':True},['vemurafenib'])"
+assert needle in t;t=t.replace(needle,replacement)
+p.write_text(t)

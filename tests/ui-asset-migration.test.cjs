@@ -143,8 +143,9 @@ test('v34 manifest proves before/after bytes and covers the complete affected as
  const v40=require('./helpers/retrospective-v08440.cjs'),skin40Record=JSON.parse(fs.readFileSync(v40.RECORD,'utf8'));v40.createMigration(skin40Record);
  const v41=require('./helpers/retrospective-v08441.cjs'),skin41Record=JSON.parse(fs.readFileSync(path.join(root,'validation/skin-melanoma-v08441/retrospective-hashes.json'),'utf8'));
  const combined=[...new Set([...changed,...added])].sort();
- for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file)||v38.approvedPath(file)||v39.approvedPath(file)||v40.approvedPath(file)||v41.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
- assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files),...Object.keys(neuroRecord.files),...Object.keys(neuro39Record.files),...Object.keys(skin40Record.files),...Object.keys(skin41Record.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
+ const v42=require('./helpers/retrospective-v08442.cjs'),skin42Record=JSON.parse(fs.readFileSync(path.join(root,'validation/skin-melanoma-v08442/retrospective-hashes.json'),'utf8'));
+ for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file)||v38.approvedPath(file)||v39.approvedPath(file)||v40.approvedPath(file)||v41.approvedPath(file)||v42.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
+ assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files),...Object.keys(neuroRecord.files),...Object.keys(neuro39Record.files),...Object.keys(skin40Record.files),...Object.keys(skin41Record.files),...Object.keys(skin42Record.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
  const actual=combined.filter(f=>Object.hasOwn(migrationRecord.files,f));
  assert.deepEqual(Object.keys(migrationRecord.files).sort(),actual,'Every changed or new clinical/patient asset must be explicitly reviewed');
  for(const [file,entry] of Object.entries(migrationRecord.files)){
@@ -247,3 +248,16 @@ test('v38 additions prove exact remote v37 baseline, bounded neuro scope and cur
  for(const bad of ['patient/00334/guide.pdf','patient/00558/melanoma_perioperative/guide.pdf','patient/00455/colorectal/guide.pdf','patient/00455/unreviewed.js','patient/../../guide.pdf','protocols/skin/00415-unapproved.json'])assert.equal(m.approvedPath(bad),false,bad);
  assert.throws(()=>m.expectedHash('patient/00455/guide.pdf',sha('Unreviewed source')),/Unexpected/);
  });
+
+
+test('v42 preserves exact baseline provenance and confines seven new skin routes',()=>{
+ const m=require('./helpers/retrospective-v08442.cjs'),record=JSON.parse(fs.readFileSync(path.join(root,'validation/skin-melanoma-v08442/retrospective-hashes.json')));
+ assert.equal(record.base_commit,m.BASE_COMMIT);
+ for(const [file,e]of Object.entries(record.files)){
+  assert(m.approvedPath(file),file);const old=cp.spawnSync('git',['show',m.BASE_COMMIT+':'+file],{cwd:root,maxBuffer:64*1024*1024});
+  if(e.before===null)assert.notEqual(old.status,0,file+' must be new');else{assert.equal(old.status,0);assert.equal(sha(old.stdout),e.before,file+' baseline');}
+  assert.equal(sha(fs.readFileSync(path.join(root,file))),m.expectedHash(file,e.before),file+' current');
+ }
+ for(const bad of ['patient/00551/guide.pdf','patient/00535/renal/guide.pdf','patient/00431/guide.pdf','patient/../../index.html','data/patient-knowledge/00551.json','protocols/skin/00236-vismodegib-monotherapy.json'])assert.equal(m.approvedPath(bad),false,bad);
+ assert.throws(()=>m.expectedHash('patient/00102/guide.pdf',sha('unreviewed')),/Unexpected/);
+});

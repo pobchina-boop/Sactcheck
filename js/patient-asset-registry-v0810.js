@@ -13,10 +13,16 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.41';
-  const CONTENT_RELEASE='0.84.41';
+  const RELEASE='0.84.42';
+  const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00102':{"title": "Vemurafenib alone — advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00105':{"title": "Ipilimumab alone — advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00237':{"title": "Dabrafenib alone — advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00373':{"title": "Cobimetinib + vemurafenib — advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00464':{"title": "Dacarbazine — metastatic melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00535':{"title": "Avelumab — metastatic Merkel-cell carcinoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["merkel_cell"], "scopeGuard": true, "scope": "Merkel cell skin cancer only; other shared indications require separate information"},
     '00236':{"title": "Vismodegib for advanced basal cell skin cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00415':{"title": "Dabrafenib and trametinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00563':{"title": "Encorafenib and binimetinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -217,13 +223,15 @@
   const COLORECTAL_CONTEXTS=Object.freeze({'00455':{lung:'',colorectal:'colorectal/'},'00558':{lung:'',colorectal:'colorectal/'},'00212':{breast:'',colorectal:'colorectal/'},'00214':{lung:'',colorectal:'colorectal/'},'00215':{breast:'',lung:'lung/',colorectal:'colorectal/'}});
   const MELANOMA_CODES=['00455','00558','00483','00484'];
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
-  const CONTEXT_CODES=Object.freeze(['00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(code==='00535')return ['merkel_cell','skin','skin/melanoma','skin_melanoma'].includes(selected)?'merkel_cell':'';
+    if(code==='00551')return ['melanoma','skin','skin/melanoma','skin_melanoma'].includes(selected)?'melanoma':(['colorectal','gastrointestinal'].includes(selected)?'colorectal':'');
     if(code==='00415')return ['advanced','adjuvant'].includes(selected)?selected:'';
     if(code==='00320')return selected==='neuroendocrine'?'neuroendocrine':'';
     if(MELANOMA_CODES.includes(code)){
@@ -251,6 +259,8 @@
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
     if(MELANOMA_CODES.includes(d.code))return [d.code,...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[])];
+    if(d.code==='00535')return [d.code+'/merkel_cell'];
+    if(d.code==='00551')return [d.code,d.code+'/melanoma'];
     if(d.code==='00415')return [d.code,d.code+'/adjuvant'];
     if(!d.contextOnly)return [d.code];
     if(!Array.isArray(d.patientContexts)||!d.patientContexts.length||d.patientContexts.some(s=>!(d.code==='00320'?/^neuroendocrine$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00372'?/^(combination|continuation)$/:d.code==='00388'?/^schedule_(7d|3d|21d)$/:/^backbone_[0-9]{5}$/).test(s)))throw new Error('Invalid patient context routes');
@@ -263,6 +273,8 @@
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      if(def.code==='00535')return `patient/${def.code}/merkel_cell/${CONTEXT_ASSETS[asset]}`;
+      if(def.code==='00551')return `patient/${def.code}/${selected==='melanoma'?'melanoma/':''}${CONTEXT_ASSETS[asset]}`;
       if(MELANOMA_CODES.includes(def.code))return `patient/${def.code}/${selected==='lung'?'':selected+'/'}${CONTEXT_ASSETS[asset]}`;
       return `patient/${def.code}/${def.code==='00415'?(selected==='adjuvant'?'adjuvant/':''):def.code==='00320'?'neuroendocrine/':COLORECTAL_CONTEXTS[def.code]?COLORECTAL_CONTEXTS[def.code][selected]:(selected==='lung'?'lung/':'')}${CONTEXT_ASSETS[asset]}`;
     }

@@ -14,9 +14,9 @@
     "short_title": "Vemurafenib Monotherapy",
     "indication": "Adult patients with unresectable or metastatic melanoma with a confirmed BRAF V600 mutation.",
     "source_url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.45.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.42",
+    "source_checked_date": "2026-11-06",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "skin_subgroups": [
@@ -62,11 +62,13 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_review",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "audit_release": "0.84.42"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -82,22 +84,70 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.42",
+      "audit_date": "2026-11-06",
+      "scope_note": "NCCP tables individually reconciled; proposed candidate awaits validation and independent clinical/pharmacy approval."
     },
-    "canonical_protocol_id": "nccp-00102-v6"
+    "canonical_protocol_id": "nccp-00102-v6",
+    "source_version_date": "2025-02-24",
+    "review_date": "2030-02-24",
+    "source_pdf_sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+    "source_sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+    "clinical_audit_release": "0.84.42",
+    "supplemental_source_documents": [
+      {
+        "document": "EMA zelboraf current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/zelboraf-epar-product-information_en.pdf",
+        "page": 5,
+        "section": "Current EMA product information supplement, component-specific",
+        "sha256": "2d456fa760308f0a3cd38ceefcce188400597f529dcb630f5163ed6664af53db",
+        "checked_date": "2026-11-06"
+      }
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00102 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "dose_modification_note": "All modifications require consultant/pharmacy review. Component-specific advice and dose levels are reference text, never an automatically calculated prescription. Missing values remain unassessed.",
+    "disclaimer": "Decision-support encoding derived from NCCP 00102 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "source_conflicts": [
+      {
+        "id": "QT_EXACT_60",
+        "resolution": "Exactly 60 ms change is not covered by the printed <60 and >60 rows. Withhold and seek consultant interpretation.",
+        "sources": [
+          {
+            "document": "NCCP 00102 v6",
+            "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+            "page": 4,
+            "section": "QT table",
+            "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+            "checked_date": "2026-11-06"
+          }
+        ]
+      },
+      {
+        "id": "VEMU_SKIN_ECG_MONITORING",
+        "resolution": "NCCP baseline ECG is worded for at-risk patients and skin visits week 8 then q12-weeks; current EMA requires ECG/electrolytes for all patients and monthly prescriber skin examinations. Preserve the fuller SmPC surveillance, distinguish specialist dermatology visits from routine prescriber skin review, and confirm the team plan.",
+        "sources": [
+          {
+            "document": "NCCP 00102 v6",
+            "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+            "page": 2,
+            "section": "Tests",
+            "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+            "checked_date": "2026-11-06"
+          }
+        ]
+      }
+    ],
+    "removed_unsupported_generic_rules": [
+      "Legacy shared whole-regimen QT/LVEF/CK/ILD/haemorrhage shortcuts were replaced only where a source-specific pathway exists. Named symptoms without source dose criteria prompt assessment, not invented thresholds."
+    ]
   },
   "indications": [
     {
@@ -112,7 +162,47 @@
     "drugs": [
       "vemurafenib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "planned_cycles": null,
+    "cycle_convention_note": "28 days is an assessment convention; treatment is continuous without planned breaks.",
+    "administration": [
+      {
+        "drug": "vemurafenib",
+        "dose": "960 mg twice daily",
+        "route": "PO",
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "note": "Approximately 12 hours apart, continuously; 28 days is a review convention, not a planned break."
+      }
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -172,119 +262,6 @@
       "demo_value": false,
       "input_role": "decision"
     },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention indicated or instrumental activities limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using objective findings, intervention required and functional impact; confirm against the current CTCAE and regimen source.",
-      "input_role": "decision"
-    },
-    "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Interruption or symptomatic treatment indicated with prompt response."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged/recurrent reaction or hospitalisation indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using objective findings, intervention required and functional impact; confirm against the current CTCAE and regimen source.",
-      "input_role": "decision"
-    },
     "braf_v600_confirmed": {
       "label": "BRAF V600 mutation confirmed by a validated test",
       "type": "boolean",
@@ -292,90 +269,402 @@
       "demo_value": true,
       "input_role": "decision"
     },
-    "temperature_c": {
-      "label": "Temperature",
-      "type": "number",
-      "required": false,
-      "min": 30,
-      "step": 0.1,
-      "demo_value": 36.8,
-      "unit": "°C",
-      "max": 45,
-      "input_role": "context"
-    },
-    "qtc_ms": {
-      "label": "QTc interval",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 430,
-      "unit": "ms",
-      "max": 800,
-      "input_role": "decision"
-    },
-    "lvef_percent": {
-      "label": "LVEF",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 60,
-      "unit": "%",
-      "max": 100,
-      "input_role": "decision"
-    },
-    "uncontrolled_hypertension": {
-      "label": "Uncontrolled hypertension",
+    "adult_indication_confirmed": {
+      "label": "Adult unresectable/metastatic melanoma indication confirmed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "electrolyte_abnormality_uncorrected": {
-      "label": "Clinically significant uncorrected electrolyte abnormality",
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to a component or excipient",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "new_visual_or_ocular_symptoms": {
-      "label": "New visual disturbance or ocular symptoms",
+    "tests_missing": {
+      "label": "Required baseline/ongoing tests or surveillance plan incomplete",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "ck_uln_multiple": {
-      "label": "Creatine kinase",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "new_respiratory_symptoms_or_ild": {
-      "label": "New respiratory symptoms or suspected ILD/pneumonitis",
+    "interaction_review_needed": {
+      "label": "Medication, supplement or contraception interaction review needed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "severe_haemorrhage": {
-      "label": "Severe or clinically significant haemorrhage",
+    "dose_history_unverified": {
+      "label": "Current doses or prior dose reductions not reconciled",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "new_suspicious_skin_lesion": {
-      "label": "New suspicious skin lesion or possible secondary malignancy",
+      "label": "New suspicious skin lesion",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cutaneous_scc_confirmed": {
+      "label": "Cutaneous squamous-cell carcinoma confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "new_visual_or_ocular_symptoms": {
+      "label": "New eye pain, photophobia or visual changes",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "restarting_after_event": {
+      "label": "A restart after an adverse-event interruption is being assessed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "event_intolerable": {
+      "label": "Other adverse event is intolerable",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "event_resolved_grade_0_1": {
+      "label": "Other interrupted event has resolved to grade 0–1",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "further_dose_reduction_required": {
+      "label": "Further dose reduction considered necessary",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Baseline hepatic impairment category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none",
       "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "mL/min",
+      "demo_value": 90,
+      "input_role": "decision",
+      "max": 300
+    },
+    "event_type": {
+      "label": "Adverse-event pathway",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "other",
+          "label": "Other adverse event; use named specific pathway when applicable"
+        },
+        {
+          "value": "qt",
+          "label": "QT prolongation"
+        },
+        {
+          "value": "cardiac",
+          "label": "LVEF/cardiac symptoms"
+        },
+        {
+          "value": "ck",
+          "label": "CPK/rhabdomyolysis"
+        },
+        {
+          "value": "hepatic",
+          "label": "Liver laboratory toxicity"
+        },
+        {
+          "value": "rash",
+          "label": "Rash"
+        },
+        {
+          "value": "photosensitivity",
+          "label": "Photosensitivity"
+        },
+        {
+          "value": "diarrhoea",
+          "label": "Diarrhoea"
+        },
+        {
+          "value": "haemorrhage",
+          "label": "Haemorrhage"
+        },
+        {
+          "value": "uveitis",
+          "label": "Uveitis"
+        },
+        {
+          "value": "pyrexia",
+          "label": "Pyrexia"
+        }
+      ],
+      "demo_value": "other",
+      "input_role": "decision"
+    },
+    "non_haematological_toxicity_grade": {
+      "label": "Current other adverse-event grade (exclude named specific pathways)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_label": "NCCP CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+      "source_grading_note": "Use the named toxicity and source grading; no automatic grade is inferred from a lone result.",
+      "assessment_guidance": "Record current grade or highest episode grade as labelled; recovery must not erase an earlier permanent-stop indication."
+    },
+    "highest_event_grade": {
+      "label": "Highest grade of the selected adverse-event episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0"
+        },
+        {
+          "value": 1,
+          "label": "Grade 1"
+        },
+        {
+          "value": 2,
+          "label": "Grade 2"
+        },
+        {
+          "value": 3,
+          "label": "Grade 3"
+        },
+        {
+          "value": 4,
+          "label": "Grade 4"
+        }
+      ],
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_label": "NCCP CTCAE v4.0",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+      "source_grading_note": "Use the named toxicity and source grading; no automatic grade is inferred from a lone result.",
+      "assessment_guidance": "Record current grade or highest episode grade as labelled; recovery must not erase an earlier permanent-stop indication."
+    },
+    "event_occurrence": {
+      "label": "Occurrence number of this adverse event",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": "any",
+      "unit": "occurrence",
+      "demo_value": 1,
+      "input_role": "decision",
+      "max": 99
+    },
+    "radiotherapy_before_during_after": {
+      "label": "Radiotherapy planned/recent during BRAF treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "qtc_ms": {
+      "label": "Current QTc",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "ms",
+      "demo_value": 430,
+      "input_role": "decision",
+      "max": 800
+    },
+    "baseline_qtc_ms": {
+      "label": "Pretreatment QTc",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "ms",
+      "demo_value": 430,
+      "input_role": "decision",
+      "max": 800
+    },
+    "highest_qtc_ms": {
+      "label": "Highest QTc during this adverse-event episode",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "ms",
+      "demo_value": 430,
+      "input_role": "decision",
+      "max": 800
+    },
+    "qtc_occurrence": {
+      "label": "Occurrence number of QTc >500 ms",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "occurrence",
+      "demo_value": 1,
+      "input_role": "decision",
+      "max": 99
+    },
+    "current_vemurafenib_mg": {
+      "label": "Current vemurafenib dose per administration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "mg",
+      "demo_value": 960,
+      "input_role": "decision",
+      "max": 960
+    },
+    "qtc_increase_ms": {
+      "label": "Current QTc increase from baseline (calculated)",
+      "type": "number",
+      "required": false,
+      "min": -1000,
+      "step": "any",
+      "unit": "ms",
+      "demo_value": 0,
+      "input_role": "decision",
+      "derived_value": {
+        "operation": "difference",
+        "fields": [
+          "qtc_ms",
+          "baseline_qtc_ms"
+        ]
+      },
+      "ui_derived_from": "qtc_ms"
+    },
+    "highest_qtc_increase_ms": {
+      "label": "Highest QTc increase from baseline (calculated)",
+      "type": "number",
+      "required": false,
+      "min": -1000,
+      "step": "any",
+      "unit": "ms",
+      "demo_value": 0,
+      "input_role": "decision",
+      "derived_value": {
+        "operation": "difference",
+        "fields": [
+          "highest_qtc_ms",
+          "baseline_qtc_ms"
+        ]
+      },
+      "ui_derived_from": "highest_qtc_ms"
+    },
+    "severe_hypersensitivity_reaction": {
+      "label": "Severe hypersensitivity reaction to vemurafenib, including anaphylaxis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_dermatologic_reaction": {
+      "label": "Severe dermatological reaction to vemurafenib, including SJS/TEN/DRESS",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncorrectable_electrolytes_or_long_qt": {
+      "label": "Uncorrectable electrolyte abnormality or long QT syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "other_anticancer_therapy": {
+      "label": "Concomitant other anticancer therapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "electrolyte_abnormality_uncorrected": {
+      "label": "Uncontrolled electrolyte abnormality",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -409,25 +698,112 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
+        "id": "ADULT_INDICATION_CONFIRMED",
         "priority": 8,
         "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "field": "adult_indication_confirmed",
+          "operator": "==",
+          "value": false
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "Confirm the adult unresectable/metastatic melanoma indication.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Indications/eligibility",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+        "explanation": "Confirm the adult unresectable/metastatic melanoma indication."
+      },
+      {
+        "id": "BRAF_V600_CONFIRMED",
+        "priority": 10,
+        "when": {
+          "field": "braf_v600_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Validated BRAF V600 mutation is required; do not use the regimen for wild-type melanoma.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Indications/eligibility",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Validated BRAF V600 mutation is required; do not use the regimen for wild-type melanoma."
+      },
+      {
+        "id": "ECOG_OUTSIDE_ELIGIBILITY",
+        "priority": 8,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Source eligibility is ECOG 0–2; reconcile performance status and individual consultant plan.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Source eligibility is ECOG 0–2; reconcile performance status and individual consultant plan."
+      },
+      {
+        "id": "HYPERSENSITIVITY",
+        "priority": 10,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Known component/excipient hypersensitivity is an NCCP exclusion.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Known component/excipient hypersensitivity is an NCCP exclusion."
       },
       {
         "id": "PREGNANCY",
@@ -440,270 +816,200 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "Pregnancy triggers the regimen-specific contraindication or urgent specialist pregnancy-exposure pathway."
+          "message": "Pregnancy is an NCCP exclusion; urgent specialist review is needed after exposure.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Pregnancy triggers the regimen-specific contraindication or urgent specialist pregnancy-exposure pathway."
+        "explanation": "Pregnancy is an NCCP exclusion; urgent specialist review is needed after exposure."
       },
       {
-        "id": "BREASTFEEDING",
-        "priority": 10,
+        "id": "MONITORING_REVIEW",
+        "priority": 8,
         "when": {
-          "field": "breastfeeding",
+          "field": "tests_missing",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "Breastfeeding is not compatible with this regimen unless the current source explicitly directs otherwise."
+          "message": "Reconcile source-specific blood, ECG, skin and other surveillance before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 2,
+          "section": "Tests / dose modification / interactions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Breastfeeding is not compatible with this regimen unless the current source explicitly directs otherwise."
+        "explanation": "Reconcile source-specific blood, ECG, skin and other surveillance before treatment."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "id": "INTERACTION_REVIEW",
+        "priority": 8,
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and source-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and source-specific review."
-      },
-      {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "BRAF_REQUIRED",
-        "priority": 10,
-        "when": {
-          "field": "braf_v600_confirmed",
-          "operator": "==",
-          "value": false
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "A confirmed BRAF V600 mutation is required for this BRAF-targeted regimen."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "A confirmed BRAF V600 mutation is required for this BRAF-targeted regimen."
-      },
-      {
-        "id": "QT_OVER500",
-        "priority": 10,
-        "when": {
-          "field": "qtc_ms",
-          "operator": ">",
-          "value": 500
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "QTc >500 ms requires treatment interruption and correction of reversible causes before source-specific rechallenge."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "QTc >500 ms requires treatment interruption and correction of reversible causes before source-specific rechallenge."
-      },
-      {
-        "id": "LVEF_LOW",
-        "priority": 9,
-        "when": {
-          "field": "lvef_percent",
-          "operator": "<=",
-          "value": 50
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "LVEF ≤50% or a clinically meaningful decline requires interruption and cardiac/source-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "LVEF ≤50% or a clinically meaningful decline requires interruption and cardiac/source-specific review."
-      },
-      {
-        "id": "HTN_UNCONTROLLED",
-        "priority": 9,
-        "when": {
-          "field": "uncontrolled_hypertension",
+          "field": "interaction_review_needed",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "Control hypertension before treatment or continuation."
+          "message": "Review the current SmPC and interaction database, including all medicines/supplements and contraception.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 5,
+          "section": "Tests / dose modification / interactions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Control hypertension before treatment or continuation."
+        "explanation": "Review the current SmPC and interaction database, including all medicines/supplements and contraception."
       },
       {
-        "id": "ELECTROLYTES",
-        "priority": 9,
+        "id": "DOSE_HISTORY_REVIEW",
+        "priority": 8,
         "when": {
-          "field": "electrolyte_abnormality_uncorrected",
+          "field": "dose_history_unverified",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "Correct clinically significant electrolyte abnormalities before QT-active therapy."
+          "message": "Confirm the current dose, prior reductions, episode history and component attribution; do not calculate an automatic restart dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Tests / dose modification / interactions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "Correct clinically significant electrolyte abnormalities before QT-active therapy."
+        "explanation": "Confirm the current dose, prior reductions, episode history and component attribution; do not calculate an automatic restart dose."
       },
       {
-        "id": "OCULAR",
-        "priority": 10,
+        "id": "RESTART_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "restarting_after_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Restart requires confirmation of the exact pathway, peak/current severity, recovery, occurrence count and doses; recovery alone does not establish overall clearance.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Dose modification",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Restart requires confirmation of the exact pathway, peak/current severity, recovery, occurrence count and doses; recovery alone does not establish overall clearance."
+      },
+      {
+        "id": "OTHER_RESTART_UNRECOVERED",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "other"
+            },
+            {
+              "field": "event_resolved_grade_0_1",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Do not restart the interrupted other-toxicity pathway until grade 0–1 recovery; permanent-stop history remains separately assessed.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Dose modification",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Do not restart the interrupted other-toxicity pathway until grade 0–1 recovery; permanent-stop history remains separately assessed."
+      },
+      {
+        "id": "OCULAR_ASSESSMENT",
+        "priority": 8,
         "when": {
           "field": "new_visual_or_ocular_symptoms",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "New ocular symptoms require treatment interruption and urgent ophthalmic assessment."
+          "message": "Arrange prompt ophthalmic assessment and establish the diagnosis; a symptom alone does not mandate an invented universal whole-regimen interruption.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Ocular adverse effects / SmPC review",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "New ocular symptoms require treatment interruption and urgent ophthalmic assessment."
+        "explanation": "Arrange prompt ophthalmic assessment and establish the diagnosis; a symptom alone does not mandate an invented universal whole-regimen interruption."
       },
       {
-        "id": "CK_HIGH",
-        "priority": 9,
-        "when": {
-          "field": "ck_uln_multiple",
-          "operator": ">=",
-          "value": 5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "CK ≥5 ×ULN requires interruption and assessment for myopathy/rhabdomyolysis."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "CK ≥5 ×ULN requires interruption and assessment for myopathy/rhabdomyolysis."
-      },
-      {
-        "id": "ILD",
-        "priority": 10,
-        "when": {
-          "field": "new_respiratory_symptoms_or_ild",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "New respiratory symptoms or suspected ILD/pneumonitis require interruption and urgent assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "New respiratory symptoms or suspected ILD/pneumonitis require interruption and urgent assessment."
-      },
-      {
-        "id": "HAEMORRHAGE",
-        "priority": 10,
-        "when": {
-          "field": "severe_haemorrhage",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Clinically significant haemorrhage requires interruption and specialist review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Clinically significant haemorrhage requires interruption and specialist review."
-      },
-      {
-        "id": "SKIN_LESION",
+        "id": "SKIN_LESION_REVIEW",
         "priority": 8,
         "when": {
           "field": "new_suspicious_skin_lesion",
@@ -713,22 +1019,1329 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "vemurafenib"
           ],
-          "message": "A new suspicious skin lesion requires prompt dermatological evaluation; treatment disposition follows the source-specific pathway."
+          "message": "Arrange dermatology assessment and pathology for a new lesion; do not treat it as a proven diagnosis.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 2,
+          "section": "Skin surveillance / adverse effects",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
         },
-        "explanation": "A new suspicious skin lesion requires prompt dermatological evaluation; treatment disposition follows the source-specific pathway."
+        "explanation": "Arrange dermatology assessment and pathology for a new lesion; do not treat it as a proven diagnosis."
+      },
+      {
+        "id": "CUTANEOUS_SCC_NO_AUTOMATIC_REDUCTION",
+        "priority": 4,
+        "when": {
+          "field": "cutaneous_scc_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Manage cutaneous SCC with dermatological excision/review. This finding alone does not require dose reduction; other toxicities remain separately assessed.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 2,
+          "section": "cuSCC",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Manage cutaneous SCC with dermatological excision/review. This finding alone does not require dose reduction; other toxicities remain separately assessed."
+      },
+      {
+        "id": "RENAL_GE30",
+        "priority": 4,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": ">=",
+          "value": 30
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "No renal dose adjustment is needed at CrCl ≥30 mL/min; this renal finding is not clearance of other domains.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "No renal dose adjustment is needed at CrCl ≥30 mL/min; this renal finding is not clearance of other domains."
+      },
+      {
+        "id": "RENAL_LT30",
+        "priority": 4,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "The source expects no renal dose adjustment at CrCl <30 mL/min. Individual clinical review remains necessary; do not invent a renal contraindication or reduction.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "The source expects no renal dose adjustment at CrCl <30 mL/min. Individual clinical review remains necessary; do not invent a renal contraindication or reduction."
+      },
+      {
+        "id": "HAEMODIALYSIS",
+        "priority": 4,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "The source expects no dose adjustment on haemodialysis; confirm the individual plan with oncology pharmacy.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "The source expects no dose adjustment on haemodialysis; confirm the individual plan with oncology pharmacy."
+      },
+      {
+        "id": "HEPATIC_MILD_MODERATE",
+        "priority": 4,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "in",
+          "value": [
+            "mild",
+            "moderate"
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "No dose adjustment is needed for mild/moderate hepatic impairment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "No dose adjustment is needed for mild/moderate hepatic impairment."
+      },
+      {
+        "id": "HEPATIC_SEVERE",
+        "priority": 4,
+        "when": {
+          "field": "hepatic_impairment",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "No vemurafenib dose adjustment is expected in severe hepatic impairment, but monitor liver biochemistry twice weekly.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Renal/hepatic table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "No vemurafenib dose adjustment is expected in severe hepatic impairment, but monitor liver biochemistry twice weekly."
+      },
+      {
+        "id": "RADIOTHERAPY_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "radiotherapy_before_during_after",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Vemurafenib may potentiate radiation toxicity before, during or after radiotherapy; agree sequencing and interruption with the treating teams.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 2,
+          "section": "Cautions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Vemurafenib may potentiate radiation toxicity before, during or after radiotherapy; agree sequencing and interruption with the treating teams."
+      },
+      {
+        "id": "QT_BASELINE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 500
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "QTc >500 ms at baseline: vemurafenib treatment is not recommended.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "QTc >500 ms at baseline: vemurafenib treatment is not recommended."
+      },
+      {
+        "id": "QT_HOLD",
+        "priority": 9,
+        "when": {
+          "field": "qtc_ms",
+          "operator": ">",
+          "value": 500
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "QTc >500 ms requires interruption of vemurafenib and review of baseline change and prior occurrences. Correct reversible causes; resumption requires QTc strictly <500 ms.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "QTc >500 ms requires interruption of vemurafenib and review of baseline change and prior occurrences. Correct reversible causes; resumption requires QTc strictly <500 ms."
+      },
+      {
+        "id": "QT_GT60_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 500
+            },
+            {
+              "field": "qtc_increase_ms",
+              "operator": ">",
+              "value": 60
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "in",
+                  "value": [
+                    "on_treatment",
+                    "toxicity_review"
+                  ]
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "QTc >500 ms AND increase >60 ms from pretreatment: permanently discontinue vemurafenib.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "QTc >500 ms AND increase >60 ms from pretreatment: permanently discontinue vemurafenib."
+      },
+      {
+        "id": "QT_HISTORICAL_GT60_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "event_type",
+                  "operator": "==",
+                  "value": "qt"
+                },
+                {
+                  "field": "highest_qtc_ms",
+                  "operator": ">",
+                  "value": 500
+                }
+              ]
+            },
+            {
+              "field": "highest_qtc_increase_ms",
+              "operator": ">",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "An episode with QTc >500 ms and >60 ms increase requires permanent discontinuation even if the current QTc has recovered.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "An episode with QTc >500 ms and >60 ms increase requires permanent discontinuation even if the current QTc has recovered."
+      },
+      {
+        "id": "QT_DELTA_60_SOURCE_GAP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "qtc_ms",
+                  "operator": ">",
+                  "value": 500
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "qt"
+                    },
+                    {
+                      "field": "highest_qtc_ms",
+                      "operator": ">",
+                      "value": 500
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "qtc_increase_ms",
+                  "operator": "==",
+                  "value": 60
+                },
+                {
+                  "field": "highest_qtc_increase_ms",
+                  "operator": "==",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "SOURCE BOUNDARY GAP: the NCCP table specifies >60 ms for permanent cessation and <60 ms for the interruption/reduction rows; exactly 60 ms is not allocated. Keep vemurafenib withheld and obtain specialist interpretation; do not automatically restart or invent a permanent-stop boundary.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "SOURCE BOUNDARY GAP: the NCCP table specifies >60 ms for permanent cessation and <60 ms for the interruption/reduction rows; exactly 60 ms is not allocated. Keep vemurafenib withheld and obtain specialist interpretation; do not automatically restart or invent a permanent-stop boundary."
+      },
+      {
+        "id": "QT_BASELINE_MISSING",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 500
+            },
+            {
+              "field": "baseline_qtc_ms",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Record the actual pretreatment QTc before classifying the >60 ms change; current QTc >500 ms still independently requires interruption.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Record the actual pretreatment QTc before classifying the >60 ms change; current QTc >500 ms still independently requires interruption."
+      },
+      {
+        "id": "QT_RECURRENCE_MISSING",
+        "priority": 8,
+        "when": {
+          "all": [
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 500
+            },
+            {
+              "field": "qtc_increase_ms",
+              "operator": "<",
+              "value": 60
+            },
+            {
+              "field": "qtc_occurrence",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Record first, second or third QTc >500 ms occurrence; recurrence changes the reduction/permanent-stop pathway.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Record first, second or third QTc >500 ms occurrence; recurrence changes the reduction/permanent-stop pathway."
+      },
+      {
+        "id": "QT_OCCURRENCE_1",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 500
+            },
+            {
+              "field": "qtc_increase_ms",
+              "operator": "<",
+              "value": 60
+            },
+            {
+              "field": "qtc_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "First occurrence: interrupt until QTc <500 ms; reference restart is 720 mg twice daily, or 480 mg twice daily if already reduced. Consultant/pharmacy must verify the current dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "First occurrence: interrupt until QTc <500 ms; reference restart is 720 mg twice daily, or 480 mg twice daily if already reduced. Consultant/pharmacy must verify the current dose."
+      },
+      {
+        "id": "QT_OCCURRENCE_2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 500
+            },
+            {
+              "field": "qtc_increase_ms",
+              "operator": "<",
+              "value": 60
+            },
+            {
+              "field": "qtc_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Second occurrence: interrupt until QTc <500 ms; reference restart is 480 mg twice daily, or permanent discontinuation if already at 480 mg twice daily. Consultant/pharmacy must verify the current dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Second occurrence: interrupt until QTc <500 ms; reference restart is 480 mg twice daily, or permanent discontinuation if already at 480 mg twice daily. Consultant/pharmacy must verify the current dose."
+      },
+      {
+        "id": "QT_THIRD_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "qtc_ms",
+                  "operator": ">",
+                  "value": 500
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "qt"
+                    },
+                    {
+                      "field": "highest_qtc_ms",
+                      "operator": ">",
+                      "value": 500
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "qtc_occurrence",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Third QTc >500 ms occurrence requires permanent vemurafenib discontinuation; later QT recovery does not remove the stop history.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Third QTc >500 ms occurrence requires permanent vemurafenib discontinuation; later QT recovery does not remove the stop history."
+      },
+      {
+        "id": "QT_SECOND_AT_MIN_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "qtc_ms",
+                  "operator": ">",
+                  "value": 500
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "qt"
+                    },
+                    {
+                      "field": "highest_qtc_ms",
+                      "operator": ">",
+                      "value": 500
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "qtc_occurrence",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "current_vemurafenib_mg",
+              "operator": "<=",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Second QT episode when vemurafenib is already reduced to 480 mg twice daily: permanently discontinue.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Second QT episode when vemurafenib is already reduced to 480 mg twice daily: permanently discontinue."
+      },
+      {
+        "id": "QT_RESTART_NOT_RECOVERED",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "restarting_after_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "event_type",
+              "operator": "==",
+              "value": "qt"
+            },
+            {
+              "field": "qtc_ms",
+              "operator": ">=",
+              "value": 500
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Do not restart at QTc 500 ms: the source recovery threshold is strictly <500 ms.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 4,
+          "section": "QT table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Do not restart at QTc 500 ms: the source recovery threshold is strictly <500 ms."
+      },
+      {
+        "id": "VEMU_SEVERE_HSR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "severe_hypersensitivity_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Severe vemurafenib hypersensitivity requires permanent discontinuation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA zelboraf current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zelboraf-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "§4.4",
+          "sha256": "2d456fa760308f0a3cd38ceefcce188400597f529dcb630f5163ed6664af53db",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Severe vemurafenib hypersensitivity requires permanent discontinuation."
+      },
+      {
+        "id": "VEMU_SCAR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "severe_dermatologic_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "A severe dermatological reaction, including SJS/TEN/DRESS, requires permanent vemurafenib discontinuation. This overrides the generic first-grade4 consultant-choice row.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA zelboraf current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zelboraf-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "§4.4",
+          "sha256": "2d456fa760308f0a3cd38ceefcce188400597f529dcb630f5163ed6664af53db",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "A severe dermatological reaction, including SJS/TEN/DRESS, requires permanent vemurafenib discontinuation. This overrides the generic first-grade4 consultant-choice row."
+      },
+      {
+        "id": "VEMU_UNCORRECTABLE_QT_RISK",
+        "priority": 9,
+        "when": {
+          "field": "uncorrectable_electrolytes_or_long_qt",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Current EMA product information does not recommend vemurafenib with uncorrectable electrolyte abnormalities or long QT syndrome; reconcile before prescribing.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA zelboraf current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zelboraf-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "§4.4 QT prolongation",
+          "sha256": "2d456fa760308f0a3cd38ceefcce188400597f529dcb630f5163ed6664af53db",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Current EMA product information does not recommend vemurafenib with uncorrectable electrolyte abnormalities or long QT syndrome; reconcile before prescribing."
+      },
+      {
+        "id": "OTHER_G2_INTOL_G3",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "event_intolerable",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Other intolerable grade 2 or grade 3 toxicity: interrupt until grade 0–1. First event: reference restart 720 mg twice daily, or 480 mg if already reduced. Second event: 480 mg twice daily, or stop if already at 480 mg. Third event: permanently discontinue. Confirm recurrence/current dose.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "General adverse-event table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Other intolerable grade 2 or grade 3 toxicity: interrupt until grade 0–1. First event: reference restart 720 mg twice daily, or 480 mg if already reduced. Second event: 480 mg twice daily, or stop if already at 480 mg. Third event: permanently discontinue. Confirm recurrence/current dose."
+      },
+      {
+        "id": "OTHER_THIRD_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "all": [
+                    {
+                      "field": "non_haematological_toxicity_grade",
+                      "operator": "==",
+                      "value": 2
+                    },
+                    {
+                      "field": "event_intolerable",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "other"
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "highest_event_grade",
+                          "operator": "==",
+                          "value": 3
+                        },
+                        {
+                          "all": [
+                            {
+                              "field": "highest_event_grade",
+                              "operator": "==",
+                              "value": 2
+                            },
+                            {
+                              "field": "event_intolerable",
+                              "operator": "==",
+                              "value": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "event_occurrence",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Third occurrence/persistence after two reductions of intolerable grade 2/grade 3 toxicity requires permanent vemurafenib discontinuation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "General adverse-event table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Third occurrence/persistence after two reductions of intolerable grade 2/grade 3 toxicity requires permanent vemurafenib discontinuation."
+      },
+      {
+        "id": "OTHER_SECOND_MIN_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "all": [
+                    {
+                      "field": "non_haematological_toxicity_grade",
+                      "operator": "==",
+                      "value": 2
+                    },
+                    {
+                      "field": "event_intolerable",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "other"
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "highest_event_grade",
+                          "operator": "==",
+                          "value": 3
+                        },
+                        {
+                          "all": [
+                            {
+                              "field": "highest_event_grade",
+                              "operator": "==",
+                              "value": 2
+                            },
+                            {
+                              "field": "event_intolerable",
+                              "operator": "==",
+                              "value": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "event_occurrence",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "current_vemurafenib_mg",
+              "operator": "<=",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "The second intolerable grade 2/grade 3 event at an existing 480 mg twice-daily dose requires permanent discontinuation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "General adverse-event table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "The second intolerable grade 2/grade 3 event at an existing 480 mg twice-daily dose requires permanent discontinuation."
+      },
+      {
+        "id": "OTHER_G4_CHOICE",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "all": [
+                {
+                  "field": "event_type",
+                  "operator": "==",
+                  "value": "other"
+                },
+                {
+                  "field": "highest_event_grade",
+                  "operator": "==",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Grade 4 first occurrence: consultant chooses permanent discontinuation OR interruption until grade 0–1 with reference restart at 480 mg twice daily; stop if already at 480 mg. This is not an automatic restart decision.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "General adverse-event table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Grade 4 first occurrence: consultant chooses permanent discontinuation OR interruption until grade 0–1 with reference restart at 480 mg twice daily; stop if already at 480 mg. This is not an automatic restart decision."
+      },
+      {
+        "id": "OTHER_G4_RECURRENT_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "other"
+                    },
+                    {
+                      "field": "highest_event_grade",
+                      "operator": "==",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "event_occurrence",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Second grade 4 occurrence/persistence after first reduction requires permanent discontinuation; recovery cannot erase the episode history.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "General adverse-event table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Second grade 4 occurrence/persistence after first reduction requires permanent discontinuation; recovery cannot erase the episode history."
+      },
+      {
+        "id": "OTHER_G4_MIN_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "all": [
+                    {
+                      "field": "event_type",
+                      "operator": "==",
+                      "value": "other"
+                    },
+                    {
+                      "field": "highest_event_grade",
+                      "operator": "==",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_vemurafenib_mg",
+              "operator": "<=",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Grade 4 toxicity when vemurafenib is already 480 mg twice daily requires permanent discontinuation.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "General adverse-event table",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Grade 4 toxicity when vemurafenib is already 480 mg twice daily requires permanent discontinuation."
+      },
+      {
+        "id": "VEMU_FURTHER_REDUCTION_FLOOR",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "further_dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "current_vemurafenib_mg",
+              "operator": "<=",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "A further reduction below 480 mg twice daily is not recommended; reconcile the permanent-stop or consultant-choice pathway.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 1 / dose reduction floor",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "A further reduction below 480 mg twice daily is not recommended; reconcile the permanent-stop or consultant-choice pathway."
+      },
+      {
+        "id": "CONCOMITANT_ANTICANCER_EXCLUSION",
+        "priority": 9,
+        "when": {
+          "field": "other_anticancer_therapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Concomitant other anticancer therapy is an exclusion for this monotherapy protocol; select and verify an appropriate combination protocol instead.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Concomitant other anticancer therapy is an exclusion for this monotherapy protocol; select and verify an appropriate combination protocol instead."
+      },
+      {
+        "id": "ELECTROLYTE_CAUTION",
+        "priority": 8,
+        "when": {
+          "field": "electrolyte_abnormality_uncorrected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Uncontrolled electrolytes are a source caution; correct/review QT risk before treatment.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00102 v6",
+          "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+          "page": 2,
+          "section": "Caution",
+          "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Uncontrolled electrolytes are a source caution; correct/review QT risk before treatment."
+      },
+      {
+        "id": "BREASTFEEDING_REVIEW",
+        "priority": 8,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vemurafenib"
+          ],
+          "message": "Current EMA requires a decision to discontinue breastfeeding or vemurafenib after weighing maternal treatment benefit and infant risk. Confirm the specialist plan before exposure; do not assume concurrent breastfeeding is safe.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "EMA zelboraf current product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zelboraf-epar-product-information_en.pdf",
+          "page": 10,
+          "section": "§4.6 Breastfeeding",
+          "sha256": "2d456fa760308f0a3cd38ceefcce188400597f529dcb630f5163ed6664af53db",
+          "checked_date": "2026-11-06"
+        },
+        "explanation": "Current EMA requires a decision to discontinue breastfeeding or vemurafenib after weighing maternal treatment benefit and infant risk. Confirm the specialist plan before exposure; do not assume concurrent breastfeeding is safe."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and molecular eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Adult unresectable/metastatic melanoma with validated BRAF V600 mutation",
+    "ECOG 0–2"
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
@@ -743,6 +2356,64 @@
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "source_audit_note": "Vemurafenib monotherapy: minimal emetogenic potential; dabrafenib and cobimetinib/vemurafenib: minimal-to-low. Premedication not usually required; antiemetics per local policy. No default prophylactic medicines prescribed."
+  },
+  "monitoring": {
+    "baseline": [
+      "FBC, renal and liver profile",
+      "ECG/QT evaluation for patients at risk",
+      "Dermatological evaluation for other skin cancer",
+      "Chest CT as part of metastatic melanoma staging"
+    ],
+    "during": [
+      "FBC, renal and liver profile before each 28-day assessment cycle",
+      "ECG every four weeks for the first twelve weeks, then every twelve weeks and after dose modification",
+      "Dermatology at week eight, then every twelve weeks by oncology/dermatology",
+      "If severe hepatic impairment: liver biochemistry twice weekly"
+    ],
+    "after": [
+      "Follow the individual oncology/dermatology plan; contraception for at least six months after treatment"
+    ],
+    "disease_monitoring": "Consultant treatment plan; no universal response-imaging cadence or tumour-marker panel is specified.",
+    "sources": [
+      {
+        "document": "NCCP 00102 v6",
+        "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+        "page": 2,
+        "section": "Tests",
+        "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+        "checked_date": "2026-11-06"
+      },
+      {
+        "document": "NCCP 00102 v6",
+        "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+        "page": 3,
+        "section": "Table 2",
+        "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+        "checked_date": "2026-11-06"
+      },
+      {
+        "document": "NCCP 00102 v6",
+        "url": "https://healthservice.hse.ie/documents/6723/102_v6_Vemurafenib_Monotherapy.pdf",
+        "page": 4,
+        "section": "Supportive care",
+        "sha256": "bd9aff4530811ba217623ef097bc1ea18757dde0c65a174a807190e46c271d83",
+        "checked_date": "2026-11-06"
+      },
+      {
+        "document": "EMA zelboraf current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/zelboraf-epar-product-information_en.pdf",
+        "page": 5,
+        "section": "§4.4 ECG; p6 skin/noncutaneous malignancy surveillance",
+        "sha256": "2d456fa760308f0a3cd38ceefcce188400597f529dcb630f5163ed6664af53db",
+        "checked_date": "2026-11-06"
+      }
+    ],
+    "smPC_supplement": [
+      "EMA Zelboraf: ECG/electrolytes including magnesium in ALL patients before treatment, after one month and after dose modification (NCCP00102 baseline wording says at-risk only).",
+      "EMA Zelboraf: prescriber skin examination monthly during treatment and up to six months afterwards; reconcile with NCCP00102 week 8 then q12-week dermatology schedule.",
+      "EMA Zelboraf: head/neck baseline and every 3 months, chest CT baseline and every 6 months for secondary malignancy surveillance; anal/pelvic examination before/end treatment when indicated."
+    ]
   }
 }

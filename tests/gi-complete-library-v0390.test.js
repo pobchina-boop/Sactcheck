@@ -190,7 +190,7 @@ for (const { file, data } of gi) {
         assert.match(definition.assessment_guidance, /orientation only, not a source-edition conversion/);
       }else if(nivoFruqV35Source) {
         const expected = nivoFruqV35Grading[code];
-        assert.equal(metadata.clinical_audit_release, skin40 ? '0.84.40' : '0.84.35');
+        assert.equal(metadata.clinical_audit_release, metadata.nccp_regimen_code==='00551' ? '0.84.42' : skin40 ? '0.84.40' : '0.84.35');
         assert.equal(definition.ctcae_version, expected.version);
         assert.equal(definition.grading_system, `NCI CTCAE v${expected.version}`);
         assert.equal(definition.grading_source_label, expected.label);
