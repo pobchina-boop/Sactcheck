@@ -1,5 +1,6 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),vm=require('node:vm');
+const {assertVisibleTextIncludes}=require('./helpers/patient-visible-text-v08444.cjs');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const scope=json('validation/lung-backbones-v08428/scope.json'),idx=json('data/lung-backbones-v08428-source-index.json'),kb=json('data/regimen-knowledge-base-v08428-addendum.json'),protocols=json('protocols/index.json').protocols;
 const Engine=require('../js/assessment-engine'),Registry=require('../js/patient-asset-registry-v0810'),Journey=require('../js/treatment-journey-v0837'),Dose=require('../js/protocol-dose-schedule'),Evidence=require('../js/treatment-evidence-v08413');
@@ -23,7 +24,8 @@ for(const route of routes){
  assert(!/<details[^>]*\bopen\b/.test(html));assert(html.indexOf('id="urgent"')<html.indexOf('<details'));
  for(const id of ['urgent','side-effects','cycle','tools','medicines','monitoring-schedule','treatment-logistics'])assert(html.includes(`id="${id}"`));
  for(const text of ['Call 112 / 999','37.5°C','36°C','even with a normal temperature','Evening / weekend number','explain back','guide.pdf'])assert(html.includes(text),route+'/'+text);
- for(const text of ['My SACT card','ps-map','qr.png','Oncology phone','Out of hours'])assert(guide.includes(text),route+'/'+text);
+ assertVisibleTextIncludes(guide,'My SACT card',route+'/My SACT card');
+ for(const text of ['ps-map','qr.png','Oncology phone','Out of hours'])assert(guide.includes(text),route+'/'+text);
  }
  assert(!/undefined|\[object Object\]|<input|<select/.test(html));
  for(const file of fs.readdirSync(`${root}/patient/${route}`).filter(n=>n.endsWith('.html'))){

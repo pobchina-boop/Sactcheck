@@ -66,14 +66,15 @@ assert.ok(anti.includes('openSupportivePdf'),'traffic light must open regimen-de
 assert.ok(anti.includes('stopImmediatePropagation'),'traffic light action must own the click instead of falling through to older dropdown handlers');
 
 const protectedManifest=json('data/protected-patient-assets-v0810.json');
+const presentationMigration=require('./helpers/retrospective-v08443.cjs');
 assert.deepStrictEqual(Object.keys(protectedManifest.assets).sort(),registry.codes.slice().sort());
 for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
   for(const file of ['index.html','guide.pdf','passport.pdf']){
     const rel=`patient/${code}/${file}`;
     assert.ok(fs.existsSync(path.join(root,rel)),`${rel} missing`);
     const expected=protectedManifest.assets[code.split('/')[0]][[...code.split('/').slice(1),file].join('/')];
-    assert.strictEqual(sha(rel),expected.sha256,`${rel} changed without updating the protected-asset manifest`);
-    assert.strictEqual(fs.statSync(path.join(root,rel)).size,expected.bytes,`${rel} size drift`);
+    assert.strictEqual(sha(rel),presentationMigration.expectedHash(rel,expected.sha256),`${rel} changed without an exact reviewed presentation migration`);
+    assert.strictEqual(fs.statSync(path.join(root,rel)).size,presentationMigration.expectedBytes(rel,expected.bytes,expected.sha256),`${rel} size drift`);
   }
   assert.ok(read(`docs/patient/${code}/index.html`).includes(`https://sactcheck.com/patient/${code}/`),`legacy docs route ${code} must redirect to canonical portal`);
   assert.strictEqual(sha(`docs/patient/${code}/guide.pdf`),sha(`patient/${code}/guide.pdf`),`legacy guide copy drift for ${code}`);

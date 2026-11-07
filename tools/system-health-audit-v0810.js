@@ -39,11 +39,12 @@ report.metrics.repository={js_files:walk(path.join(root,"js")).filter(p=>p.endsW
 const registry=require(path.join(root,"js","patient-asset-registry-v0810.js"));
 report.metrics.patient_registry={codes:registry.codes.length,content_release:registry.contentRelease};
 const protectedManifest=json("data/protected-patient-assets-v0810.json");
+const presentationMigration=require('../tests/helpers/retrospective-v08443.cjs');
 for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
   for(const file of ["index.html","guide.pdf","passport.pdf"]){
     const rel=`patient/${code}/${file}`;
     if(!exists(rel))report.critical.push(`Missing canonical patient asset ${rel}`);
-    else if(protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')]?.sha256!==sha(rel))report.critical.push(`Protected patient asset drift: ${rel}`);
+    else if(presentationMigration.expectedHash(rel,protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')]?.sha256)!==sha(rel))report.critical.push(`Protected patient asset drift: ${rel}`);
   }
   for(const file of ["guide.pdf","passport.pdf"]){
     const a=`patient/${code}/${file}`,b=`docs/patient/${code}/${file}`;

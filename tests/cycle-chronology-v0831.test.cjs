@@ -2,6 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const chronology=require('../tools/cycle-chronology.cjs');
+const ivExpansion=require('../tools/patient-editorial-v08444.cjs').TERMS.find(([term])=>term==='IV')[1];
 assert.equal(read('assets/patient/cycle-chronology-v0831.css'),chronology.stylesheet);
 assert(chronology.stylesheet.includes(chronology.referenceStyles),'Use the accepted 00568 colours, type, bands and chart geometry.');
 for(const code of ['00209','00321','00226']){
@@ -9,7 +10,11 @@ for(const code of ['00209','00321','00226']){
  assert.equal((chart.match(/class="wiki-cycle-day"/g)||[]).length,d.cycle_days*(d.phase_cycles?.length||1));
  for(const file of ['index.html','knowledge.html']){
   const html=read(`patient/${code}/${file}`);
-  assert((file==='index.html'&&d.patient_layout_release==='0.84.32'?html.includes('knowledge.html#cycle'):html.includes(chart)),`${code}/${file} must use the same complete graph`);
+  // The first IV label may be expanded by the approved patient publication
+  // pass. Keep every other byte of the complete graph, including day spans,
+  // attributes, source links, treatment labels and safety wording, exact.
+  const sameChart=html.includes(chart)||html.includes(chart.replace('>IV<',`>${ivExpansion} (IV)<`));
+  assert((file==='index.html'&&d.patient_layout_release==='0.84.32'?html.includes('knowledge.html#cycle'):sameChart),`${code}/${file} must use the same complete graph`);
   assert.doesNotMatch(html,/<input|<select|id="pk-start"|class="pk-controls"|Select a day to explore/);
   assert(html.includes('id="cycle"'));
  }

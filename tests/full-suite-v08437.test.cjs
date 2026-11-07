@@ -1,11 +1,13 @@
 'use strict';
+// v44 replaces NCCN-based patient prose with original, source-audited SACTCheck
+// explanations. Keep disease-specific evidence checks and clinical invariants.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const scope=json('validation/neuroendocrine-v08437/scope.json'),presentation=json('data/patient-presentation-v08431.json'),index=json('protocols/index.json').protocols;
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08437-addendum.json');
 const groups={'00320':'everolimus','00327':'sunitinib','00505':'captem','00642':'prrt'};
 assert.deepEqual(scope.codes,['00320','00327','00505','00642']);require('./helpers/neuro-suite-registration-v08438.cjs').registry(registry.codes);
-assert(['0.84.41','0.84.42'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
+assert(['0.84.41','0.84.42','0.84.43','0.84.44'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const route of scope.presentation_routes){
  const code=route.slice(0,5),d=json(presentation.routes[route]),p=proto(code),audit='validation/neuroendocrine-v08437/'+groups[code]+'-source-audit/';
@@ -15,15 +17,15 @@ for(const route of scope.presentation_routes){
  assert.equal(d.sources.find(s=>s.id==='nccp').url,p.metadata.source_url,route+' matching clinical/patient source');
  assert.equal(sha(fs.readFileSync(path.join(root,audit+'sources/'+code+'.pdf'))),p.metadata.source_pdf_sha256,route+' retained current primary source');
  const result=json(audit+'source-case-results.json');assert.equal(result.failed,0);assert(result.passed>100);assert.equal(result.passed,result.total||result.cases.length);
- assert(d.anatomy.length>=8,route+' full anatomical detail');assert(d.chapters.length>=8,route+' extensive education');assert(d.monitoring_schedule.rows.length>=3);
- assert(d.sources.some(s=>s.id==='nccn-patient'),route+' user reference credited');assert.deepEqual(d.evidence.metrics,[],route+' no unsupported numeric trial claim');
+ assert(d.anatomy.length>=8,route+' full anatomical detail');if(code==='00642'){assert.deepEqual(d.chapters.map(c=>c.id),['prrt-monitoring','prrt-urgent','net-diagnosis','net-tests','net-symptoms','net-goals','net-support'],route+' consolidated chapters retain every required topic');}else assert(d.chapters.length>=8,route+' extensive education');assert(d.monitoring_schedule.rows.length>=3);
+ assert.equal(d.patient_editorial_revision.version,'0.84.44');assert(!d.sources.some(s=>/nccn/i.test(s.id+' '+s.url)),route+' independent SACTCheck patient text');assert(d.sources.some(s=>s.id==='ed-net-patient'&&new URL(s.url).hostname==='www.cancer.gov'),route+' open disease-specific patient evidence');assert.deepEqual(d.evidence.metrics,[],route+' no unsupported numeric trial claim');
  for(const name of ['index','guide','knowledge','consent-form','passport','sactcard','supportive-care','treatment-journey','logistics'])assert(fs.existsSync(path.join(root,'patient',route,name+'.html')),route+'/'+name);
  for(const name of ['guide','sactcard','knowledge','handbook','passport','consent-form','supportive-care','treatment-journey','logistics']){
   const b=fs.readFileSync(path.join(root,'patient',route,name+'.pdf'));assert.equal(b.subarray(0,4).toString(),'%PDF');assert.deepEqual(b,fs.readFileSync(path.join(root,'docs/patient',route,name+'.pdf')),route+' mirror '+name);
  }
  for(const leaf of ['index.html','guide.html','knowledge.html']){
   const h=read('patient/'+route+'/'+leaf);assert.equal((h.match(/data-authored-map/g)||[]).length,1,route+' one full map in '+leaf);assert.match(h,/Full-body anatomical illustration/);
-  for(const a of d.anatomy)assert(h.includes(a[3].replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')),route+' retained anatomy text '+a[0]);
+  for(const a of d.anatomy)require('./helpers/patient-visible-text-v08444.cjs').assertVisibleTextIncludes(h,a[3],route+' retained anatomy text '+a[0]);
  }
  const pass=read('patient/'+route+'/passport.html');for(const word of ['Ki-67','differentiation','SSTR','My tests, symptoms and support','My diagnosis, plan and priorities'])assert(pass.includes(word),route+' passport '+word);
  const card=read('patient/'+route+'/sactcard.html');assert.match(card,/85.6 × 54 mm/);assert.match(card,/EXAMPLE NUMBERS/);assert.match(card,/FOLD centre/);assert.match(card,/oncowiki-qr.png/);

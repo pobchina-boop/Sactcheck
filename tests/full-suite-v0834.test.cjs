@@ -2,6 +2,7 @@ const current21=new Set(require('../data/breast-completion-v08421-source-index.j
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
 const root=path.resolve(__dirname,'..'),json=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8')),registry=require('../js/patient-asset-registry-v0810'),workflow=require('../js/regimen-workflow-engine-v0750');
+const ivExpansion=require('../tools/patient-editorial-v08444.cjs').TERMS.find(([term])=>term==='IV')[1];
 for(const c of ['00216','00586','00623']){
  const d=json(`data/patient-knowledge/${c}.json`),protocol=json('protocols/gastrointestinal/'+fs.readdirSync(path.join(root,'protocols/gastrointestinal')).find(f=>f.startsWith(c)));
  assert.equal(d.suite_release,c==='00216'?'0.84.36':current21.has(d.code)?'0.84.21':('0.83.4'));assert.equal(d.anatomy.length,8);assert((d.logistics.steps||d.logistics.sections).length>=3);assert(d.chapters.length>=6);assert(d.questions.length>=6);
@@ -9,7 +10,16 @@ for(const c of ['00216','00586','00623']){
  for(const f of ['index','knowledge','consent','consent-form','guide','passport','sactcard','logistics','supportive-care']){
   const html=fs.readFileSync(path.join(root,`patient/${c}/${f}.html`),'utf8');assert(html.includes(c));assert.doesNotMatch(html,/Pembrolizumab|pemetrexed|carboplatin|KEYNOTE|oxaliplatin infusion|46-hour pump|Induction and maintenance/i);
   for(const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)){const u=m[1];if(/^(https?:|data:|mailto:|tel:)/.test(u))continue;assert(fs.existsSync(path.resolve(root,'patient',c,u.split(/[?#]/)[0])),`${c}/${f}: missing ${u}`);}
-  if(['index','knowledge'].includes(f)){if(f==='index'&&(['0.84.31','0.84.32'].includes(d.patient_layout_release)||(c==='00216'&&d.patient_layout_release==='0.84.36'))){assert(html.includes('id="cycle"'));assert(html.includes('knowledge.html#cycle'));}else assert(html.includes(require('../tools/cycle-chronology.cjs').render(d)));assert(!/<input|<select/.test(html));assert(html.includes((['0.84.31','0.84.32'].includes(d.patient_layout_release)||(c==='00216'&&d.patient_layout_release==='0.84.36'))&&f==='index'?'id="treatment-logistics"':'data-treatment-logistics'));}
+  if(['index','knowledge'].includes(f)){
+   if(f==='index'&&(['0.84.31','0.84.32'].includes(d.patient_layout_release)||(c==='00216'&&d.patient_layout_release==='0.84.36'))){assert(html.includes('id="cycle"'));assert(html.includes('knowledge.html#cycle'));}
+   else{
+    const chart=require('../tools/cycle-chronology.cjs').render(d);
+    // Preserve the entire graph except its approved first-use IV explanation.
+    assert(html.includes(chart)||html.includes(chart.replace('>IV<',`>${ivExpansion} (IV)<`)));
+   }
+   assert(!/<input|<select/.test(html));
+   assert(html.includes((['0.84.31','0.84.32'].includes(d.patient_layout_release)||(c==='00216'&&d.patient_layout_release==='0.84.36'))&&f==='index'?'id="treatment-logistics"':'data-treatment-logistics'));
+  }
  }
  for(const f of ['guide','consent-form','passport','sactcard','logistics','supportive-care']){const b=fs.readFileSync(path.join(root,`patient/${c}/${f}.pdf`));assert.equal(b.subarray(0,5).toString(),'%PDF-');assert.deepEqual(b,fs.readFileSync(path.join(root,`docs/patient/${c}/${f}.pdf`)));}
  assert.equal(registry.relativePath(protocol,'supportive-care'),`patient/${c}/supportive-care.pdf`);assert.equal(registry.relativePath(protocol,'consent-draft'),`patient/${c}/consent-form.html`);

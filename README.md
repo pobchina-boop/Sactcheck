@@ -1,29 +1,27 @@
-**Current development release: v0.62.0** — NCCP source change surveillance with a mandatory human review gate.
-
 # SACTCheck
 
-## Current release
+SACTCheck connects source-linked oncology assessment, clinical knowledge, consent, supportive care and patient information. The visible service currently focuses on solid tumours. Haematology source, data and tests are retained while that service is hidden.
 
-**SACTCheck v0.62.0 — NCCP Change Tracker**
+## Current manual update: v0.84.44
 
-SACTCheck provides separate Solid Tumour and Haematology SACT libraries with deterministic, source linked comparisons against encoded NCCP regimen criteria. v0.62.0 adds a version aware source surveillance and review layer while preserving all clinical assessment rules unchanged.
+This cumulative package replaces the unpublished v0.84.43 update and installs directly over v0.84.42 at commit `67aaa3579794278074478b3f6cce4e57c803e4db`.
 
-### v0.62.0 highlights
+The update applies a consistent clinical workflow and shared SACTCheck patient design across 228 authored treatment routes representing 199 regimen codes. It consolidates the full handbooks, keeps the concise patient packs separate, adds labelled investigation and molecular graphics, explains abbreviations at first use, and independently revises patient material with suitable openly accessible supporting sources. Clinical decision rules remain at their existing v0.84.42 release.
 
-1. Registers all 376 enabled protocols in a canonical NCCP source register.
-2. Adds detection for new sources, updated sources, silent PDF replacement and removed or moved source candidates.
-3. Adds PDF and extracted text fingerprint capture through a scheduled GitHub workflow.
-4. Adds clinical significance triage for possible treatment, safety workflow, information and formatting changes.
-5. Adds a dedicated What is New and What Has Changed dashboard.
-6. Adds previous and current source comparison and change history fields.
-7. Adds per regimen source status to the generic assessment screen.
-8. Preserves a mandatory human review gate and prohibits automatic clinical rule updates.
-9. Leaves all 382 protocol JSON assets unchanged from v0.61.0.
+- Installation: `INSTALL_v0.84.44.md`
+- Release details: `RELEASE_v0.84.44.md`
+- Proposed commit text: `COMMIT_MESSAGE_v08444.txt`
+- Current design and generation rules: `PATIENT_DESIGN_STANDARD.md`
+- Exact scope, source provenance and verification: `validation/patient-design-v08444/`
 
-The local baseline is complete. Remote fingerprints are captured by the first repository workflow run because the release preparation environment could not access the NCCP website directly.
+The ZIP contains the complete source and generated patient PDFs. Preparing the package does not commit, push or deploy the site. Historical release notes and audit reports remain in the repository as labelled evidence of those earlier versions.
 
-See `RELEASE_NOTES_v0.62.0.md`, `VALIDATION_REPORT_v0.62.0.md`, `NCCP_CHANGE_TRACKER_GUIDE_v0.62.0.md`, `NCCP_CHANGE_TRACKER_SOURCE_REGISTER_v0.62.0.md` and `V0620_PROTOCOL_JSON_HASHES.json`.
+## Development and publication
 
-## Safety and governance
+Run `npm run test:ci` for the repository's software gates. Run `npm run patient:ui` after intentional patient HTML generation and `npm run patient:design:check` to detect presentation drift. Keep full Git history: preservation tests authenticate historical baseline objects as well as current file hashes.
 
-SACTCheck is clinical decision support only and is not an autonomous prescribing system. Protocol-level dose derivation stops at the source dose unit and does not calculate a patient-specific final dose. Automated testing and evidence auditing do not constitute independent clinical validation. Always verify decisions against the current official NCCP regimen, local policy, the authorised prescribing system and clinical judgement.
+Use the current staged PDF builders and independent verifiers described in `PATIENT_DESIGN_STANDARD.md`. Review clinical content, anatomy, wallet and QR dimensions, pagination and canonical/download mirrors before publishing generated assets. Read the release report for the exact tested runtime and any browser or device limits.
+
+## Clinical governance
+
+SACTCheck supports clinical decisions and is not an autonomous prescribing system. Protocol-level dose derivation does not calculate a patient-specific final prescription. Automated software and document checks are separate from independent clinical, oncology-pharmacy and patient review. Verify treatment decisions against the current official NCCP regimen, local policy, the authorised prescribing system and clinical judgement.

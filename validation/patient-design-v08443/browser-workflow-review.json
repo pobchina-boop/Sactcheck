@@ -1,0 +1,133 @@
+{
+  "release": "0.84.43",
+  "reviewDate": "2026-11-06",
+  "scope": "Representative workflow, consent and supportive-care interaction review of the local cumulative build",
+  "observedBrowserChecks": {
+    "method": "Managed cloud browser through CUA; observations reported by the release owner",
+    "status": "passed_representative_checks",
+    "checks": [
+      {
+        "area": "PRRT clinical workflow, desktop",
+        "result": "All eight workflow rows measured exactly 66 CSS pixels high, including extravasation. Patient platform and NCCP source disclosures were closed initially. Sustainability was loaded."
+      },
+      {
+        "area": "Mobile viewport",
+        "viewportWidthCssPixels": 390,
+        "result": "Reviewed frames had no horizontal document overflow. The six-column supportive-medicine table scrolls horizontally within its own region."
+      },
+      {
+        "area": "Guidance and Generate script",
+        "routes": [
+          "patient/00642/supportive-care.html",
+          "patient/00348/supportive-care.html"
+        ],
+        "result": "Guidance and generated-script views were exercised, including selection of the AC phase."
+      },
+      {
+        "area": "PRRT source-only plan",
+        "route": "patient/00642/supportive-care.html",
+        "result": "The specialist source-only pathway was checked; it does not substitute a general moderate-risk chemotherapy prescription."
+      },
+      {
+        "area": "Empty endocrine support plan",
+        "route": "patient/00253/supportive-care.html",
+        "result": "The standalone authored plan and individual-support-plan output were checked without populated medicine orders."
+      },
+      {
+        "area": "Consent",
+        "result": "The complete authored SACTCheck consent form was opened and reviewed through the workflow action."
+      },
+      {
+        "area": "New complete handbook/reference download controls",
+        "route": "patient/00253/",
+        "result": "Both branded download controls are visible in the real browser. The handbook control points to handbook.pdf and uses the download attribute. Browser download-event capture timed out; downloaded bytes were not obtained through this browser API."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/workspace/shared/sactcheck-v43-evidence/desktop-workflow.png",
+        "purpose": "Internal review and conversation proof: eight collapsed workflow rows, 66 px each."
+      },
+      {
+        "path": "/workspace/shared/sactcheck-v43-evidence/mobile-workflow-patient-script.png",
+        "purpose": "Internal review and conversation proof: clinician workflow, patient guide and generated support script at 390 px."
+      },
+      {
+        "path": "/workspace/shared/sactcheck-v43-evidence/legacy-portal-downloads.png",
+        "purpose": "Internal review and conversation proof: branded handbook and reference download controls in a legacy patient portal."
+      }
+    ]
+  },
+  "automatedChecks": {
+    "method": "Local Node and source checks; separate from the observed CUA review",
+    "nodeVersion": "v24.22.1",
+    "results": [
+      {
+        "command": "node tests/patient-ui-refresh.test.cjs",
+        "exitCode": 0,
+        "passedTests": 12
+      },
+      {
+        "command": "node tests/supportive-phase-v0843.test.cjs",
+        "exitCode": 0,
+        "passedChecks": 106
+      },
+      {
+        "command": "node tests/workflow-ui-review.test.cjs",
+        "exitCode": 0,
+        "coverage": "Missing doses, PRRT source-only guard, missing-source fallback, dedicated guidance and exact consent-context routing"
+      },
+      {
+        "command": "node tests/regimen-workflow-v0720.test.js",
+        "exitCode": 0
+      },
+      {
+        "command": "node tests/supportive-script-tabs.e2e.cjs --check-only",
+        "exitCode": 0,
+        "coverage": "Actual route sources, phase IDs, standalone marker and current script links; no browser assertions"
+      },
+      {
+        "command": "node tests/homepage-service-layout.e2e.cjs --fixture-only --fixture-dir /workspace/scratch/7ac5c50db5c1/homepage-v43-qa",
+        "exitCode": 0,
+        "coverage": "Review fixture generation only; no browser assertions"
+      },
+      {
+        "check": "JavaScript syntax for workflow engine, shared support script, refresh helper and supportive-script browser test",
+        "exitCode": 0
+      },
+      {
+        "check": "Final focused git diff --check",
+        "exitCode": 0,
+        "note": "An earlier trailing blank line in homepage CSS was removed; the recheck passed."
+      }
+    ],
+    "detailedLog": "workflow-v43-focused-checks.json",
+    "sourceHashes": "workflow-v43-shared-files-manifest.json",
+    "supportHtmlPreservationAudit": "workflow-v43-support-refresh-audit.json"
+  },
+  "verificationLimits": [
+    "The shell Playwright suites supportive-script-tabs.e2e.cjs and homepage-service-layout.e2e.cjs were not executed in browser mode. CUA observations do not assert that every programmed browser assertion passed.",
+    "The local checks ran on Node v24.22.1. Repository CI and Pages workflows specify Node 20; this record does not establish a Node 20 CI run.",
+    "A 390px browser viewport is not a physical-device test. Actual phone/tablet, screen-reader and other assistive-technology checks were not performed in this review.",
+    "Physical printing and browser-generated script PDF pagination were not verified here. The separately generated patient documents have their own document-verification record.",
+    "Deployment, production routing and production cache behaviour were not verified. This was a local cumulative-build review.",
+    "Browser download-event capture for the newly added handbook control did not complete in the managed browser. A separate attempt to reach that managed preview via executor localhost was refused. Static href targets, source and build-output existence, full PDF contents and mirrored bytes are verified separately; no successful browser download capture or local-preview HTTP byte check is claimed."
+  ],
+  "ciVersionEvidence": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/pages.yml"
+  ],
+  "documentEvidence": "document-verification.json",
+  "finalBuild": {
+    "command": "npm run build:pages",
+    "exitCode": 0,
+    "log": "/workspace/scratch/7ac5c50db5c1/build-v43-final-preview.log",
+    "newHandbookInBuild": {
+      "path": "_site/patient/00253/handbook.pdf",
+      "bytes": 1578378
+    },
+    "allOutputVerification": "build-output-verification.json",
+    "pdfsMatchingValidatedSources": 684,
+    "patientDownloadPagesMatchingSources": 456
+  }
+}

@@ -1,11 +1,12 @@
 "use strict";
 const assert=require("assert"),fs=require("fs"),path=require("path"),crypto=require("crypto");
+const {assertVisibleTextIncludes}=require("./helpers/patient-visible-text-v08444.cjs");
 const root=path.resolve(__dirname,"..");
 const app=JSON.parse(fs.readFileSync(path.join(root,"data/app-release.json"),"utf8"));const pkg=JSON.parse(fs.readFileSync(path.join(root,"package.json"),"utf8"));assert.ok(pkg.version.localeCompare("0.81.4",undefined,{numeric:true})>=0);assert.strictEqual(app.version,pkg.version);assert.strictEqual(app.release,pkg.version);
 const portal=fs.readFileSync(path.join(root,"patient/00568/index.html"),"utf8");
 for(const m of ["passport.html","sactcard.html"]) assert(portal.includes(m),`portal missing ${m}`);
 const passport=fs.readFileSync(path.join(root,"patient/00568/passport.html"),"utf8");
-for(const m of ["Breathing / cough","Fever, shivers","not a validated questionnaire or a formal CTCAE grading tool","Induction cycle","Maintenance cycle"]) assert(passport.includes(m),`passport missing ${m}`);
+for(const m of ["Breathing / cough","Fever, shivers","not a validated questionnaire or a formal CTCAE grading tool","Induction cycle","Maintenance cycle"]) assertVisibleTextIncludes(passport,m,`passport missing ${m}`);
 assert(!passport.includes("Hormones / brain</td><td>C1"),"passport reverted to organ-first cycle grading");
 const card=fs.readFileSync(path.join(root,"patient/00568/sactcard.html"),"utf8");for(const m of ["pt-record","EXAMPLE NUMBERS","oncowiki-qr.png"])assert(card.includes(m),`SACTCard missing ${m}`);
 assert(portal.includes("carboplatin")&&/maintenance/i.test(portal),"Phase changes remain in the companion");

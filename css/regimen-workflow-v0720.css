@@ -212,3 +212,92 @@ body.workflow-panel-open{overflow:hidden}
 .workflow-module.source{display:grid!important;grid-template-columns:27px minmax(0,1fr)!important;align-items:start!important}
 .workflow-module.source>.workflow-source-actions{grid-column:2;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
 .workflow-module.source .workflow-module-action{display:flex!important;width:100%!important;min-width:0!important;margin:0!important;min-height:44px!important;font-size:12px!important;align-items:center}
+
+/* Shared workflow standard: one compact row; secondary tools open on demand.
+   Scoped selectors also neutralise generic details/summary card styling. */
+#regimenWorkflowOverlay .workflow-module{
+  box-sizing:border-box;display:grid!important;
+  grid-template-columns:34px minmax(0,1fr) auto!important;
+  align-items:center!important;gap:12px!important;
+  min-height:66px!important;padding:10px 12px!important;
+  height:auto!important;max-height:none!important;
+}
+#regimenWorkflowOverlay .workflow-module-icon{
+  grid-column:1;grid-row:1;align-self:start;margin:5px 0 0;
+  width:34px;height:34px;min-width:34px;box-sizing:border-box;
+}
+#regimenWorkflowOverlay .workflow-module>div:nth-of-type(2){min-width:0!important}
+#regimenWorkflowOverlay .workflow-module h3{font-size:16px!important;line-height:1.35!important;white-space:normal;overflow-wrap:anywhere}
+#regimenWorkflowOverlay .workflow-module>.workflow-module-action,
+#regimenWorkflowOverlay .workflow-module>.workflow-source-link{
+  grid-column:3;grid-row:1;box-sizing:border-box;
+  min-height:44px!important;min-width:112px!important;max-width:180px;
+  margin:0!important;padding:8px 10px!important;font-size:13px!important;
+  height:auto!important;max-height:none!important;white-space:normal!important;overflow-wrap:anywhere;
+  display:inline-flex;align-items:center;justify-content:center;line-height:1.35;
+}
+#regimenWorkflowOverlay .workflow-external-icon{display:inline-block;width:14px;height:14px;flex:none;vertical-align:-2px}
+#regimenWorkflowOverlay .workflow-module-icon .workflow-external-icon{width:18px;height:18px}
+#regimenWorkflowOverlay .workflow-source-link{gap:6px}
+@media(min-width:481px){
+  #regimenWorkflowOverlay .workflow-module.extravasation>.workflow-source-link{padding:4px 8px!important;line-height:1.25}
+}
+#regimenWorkflowOverlay .workflow-module.patient>.workflow-patient-disclosure,
+#regimenWorkflowOverlay .workflow-module.source>.workflow-source-disclosure{
+  grid-column:2/-1;grid-row:1;align-self:stretch;
+  width:100%;min-width:0;box-sizing:border-box;
+  margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+}
+#regimenWorkflowOverlay .workflow-patient-disclosure>summary,
+#regimenWorkflowOverlay .workflow-source-disclosure>summary{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:44px;margin:0;padding:0;border:0;background:transparent;
+  box-shadow:none;list-style:none;cursor:pointer;color:var(--workflow-navy);
+  font-size:16px;font-weight:800;line-height:1.35;
+  height:auto;max-height:none;white-space:normal;overflow-wrap:anywhere;
+}
+#regimenWorkflowOverlay .workflow-patient-disclosure>summary::-webkit-details-marker,
+#regimenWorkflowOverlay .workflow-source-disclosure>summary::-webkit-details-marker{display:none}
+#regimenWorkflowOverlay .workflow-patient-disclosure>summary::before,
+#regimenWorkflowOverlay .workflow-patient-disclosure>summary::after,
+#regimenWorkflowOverlay .workflow-source-disclosure>summary::before,
+#regimenWorkflowOverlay .workflow-source-disclosure>summary::after{content:none}
+#regimenWorkflowOverlay summary .workflow-disclosure-chevron{
+  display:grid;place-items:center;width:44px;min-width:44px;height:44px;
+  font-size:20px;line-height:1;
+}
+#regimenWorkflowOverlay details[open]>summary .workflow-disclosure-chevron{transform:rotate(180deg)}
+#regimenWorkflowOverlay .workflow-patient-disclosure>summary:focus-visible,
+#regimenWorkflowOverlay .workflow-source-disclosure>summary:focus-visible{
+  outline:3px solid #087d83;outline-offset:3px;border-radius:5px;
+}
+#regimenWorkflowOverlay .workflow-patient-disclosure:not([open])>.workflow-patient-actions,
+#regimenWorkflowOverlay .workflow-source-disclosure:not([open])>.workflow-source-actions{display:none!important}
+#regimenWorkflowOverlay details[open]>.workflow-patient-actions,
+#regimenWorkflowOverlay details[open]>.workflow-source-actions{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:8px;
+  padding:10px 0 2px;margin:2px 0 0;border-top:1px solid var(--workflow-line);
+}
+#regimenWorkflowOverlay details[open] .workflow-module-action{
+  min-height:44px!important;width:100%!important;max-width:none;
+  margin:0!important;justify-content:flex-start;text-align:left;font-size:13px!important;
+  height:auto!important;max-height:none!important;white-space:normal!important;overflow-wrap:anywhere;
+}
+#regimenWorkflowOverlay .workflow-source-disclosure[open]>.workflow-module-note{
+  display:block!important;margin:8px 0 0;font-size:11px;line-height:1.4;color:#4f6470;
+}
+@media(max-width:480px){
+  #regimenWorkflowOverlay .workflow-module{
+    grid-template-columns:28px minmax(0,1fr) auto!important;
+    gap:8px!important;padding:9px 8px!important;
+  }
+  #regimenWorkflowOverlay .workflow-module-icon{width:28px;height:28px;min-width:28px;margin-top:8px}
+  #regimenWorkflowOverlay .workflow-module h3,
+  #regimenWorkflowOverlay .workflow-patient-disclosure>summary,
+  #regimenWorkflowOverlay .workflow-source-disclosure>summary{font-size:15px!important}
+  #regimenWorkflowOverlay details[open] .workflow-module-action{font-size:12px!important}
+  #regimenWorkflowOverlay .workflow-module>.workflow-module-action,
+  #regimenWorkflowOverlay .workflow-module>.workflow-source-link{
+    min-width:98px!important;max-width:118px;padding:7px!important;font-size:12px!important;
+  }
+}

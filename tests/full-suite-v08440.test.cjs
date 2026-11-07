@@ -1,11 +1,13 @@
 'use strict';
+// v44 replaces NCCN-based patient prose with original, source-audited SACTCheck
+// explanations. Keep disease-specific evidence checks and clinical invariants.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const scope=json('validation/skin-melanoma-v08440/scope.json'),presentation=json('data/patient-presentation-v08431.json'),index=json('protocols/index.json').protocols;
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08440-addendum.json');
 assert.deepEqual(scope.codes,['00236','00415','00563','00431','00812']);assert.equal(scope.clinical_audits.length,10);assert.equal(scope.presentation_routes.length,6);
 require('./helpers/skin-suite-registration-v08440.cjs').registry(registry.codes);
-assert(['0.84.41','0.84.42'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
+assert(['0.84.41','0.84.42','0.84.43','0.84.44'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
 assert.equal(scope.base_release,'0.84.39');assert.equal(scope.independent_clinical_approval,false);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 const esc=t=>t.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
@@ -22,14 +24,14 @@ for(const route of scope.presentation_routes){
  assert.equal(d.sources.find(s=>s.id==='nccp').url,p.metadata.source_url,route+' clinical/patient source identity');
  assert.match(p.metadata.source_pdf_sha256,/^[a-f0-9]{64}$/);
  assert(d.anatomy.length>=8,route+' detailed anatomical anchors');assert(d.chapters.length>=8,route+' extended education');assert(d.monitoring_schedule.rows.length>=3);
- assert(d.sources.some(s=>s.id==='nccn-patient'),route+' supplied patient reference credited');assert.deepEqual(d.evidence.metrics,[],route+' no unverified numeric benefit claim');
+ assert.equal(d.patient_editorial_revision.version,'0.84.44');assert(!d.sources.some(s=>/nccn/i.test(s.id+' '+s.url)),route+' independent SACTCheck patient text');assert(d.sources.some(s=>['ed-melanoma','ed-skin'].includes(s.id)&&new URL(s.url).hostname==='www.cancer.gov'),route+' open disease-specific patient evidence');assert.deepEqual(d.evidence.metrics,[],route+' no unverified numeric benefit claim');
  for(const name of ['index','guide','knowledge','consent-form','passport','sactcard','supportive-care','treatment-journey','logistics'])assert(fs.existsSync(path.join(root,'patient',route,name+'.html')),route+'/'+name);
  for(const name of ['guide','sactcard','knowledge','handbook','passport','consent-form','supportive-care','treatment-journey','logistics']){
   const b=fs.readFileSync(path.join(root,'patient',route,name+'.pdf'));assert.equal(b.subarray(0,4).toString(),'%PDF');assert.deepEqual(b,fs.readFileSync(path.join(root,'docs/patient',route,name+'.pdf')),route+' mirror '+name);
  }
  for(const leaf of ['index.html','guide.html','knowledge.html']){
   const h=read('patient/'+route+'/'+leaf);assert(!/>\s*undefined(?:[:<])/.test(h),route+' no missing visible template value');assert.equal((h.match(/data-authored-map/g)||[]).length,1,route+' one anatomical map in '+leaf);assert.match(h,/Full-body anatomical illustration/);
-  for(const a of d.anatomy)assert(h.includes(esc(a[3])),route+' retained anatomical explanation '+a[0]);
+  for(const a of d.anatomy)require('./helpers/patient-visible-text-v08444.cjs').assertVisibleTextIncludes(h,a[3],route+' retained anatomical explanation '+a[0]);
  }
  const pass=read('patient/'+route+'/passport.html');for(const word of ['My diagnosis, plan and medicines','My checks, symptoms and support','My urgent contact plan'])assert(pass.includes(word),route+' passport '+word);
  const card=read('patient/'+route+'/sactcard.html');assert.match(card,/85.6 × 54 mm/);assert.match(card,/EXAMPLE NUMBERS/);assert.match(card,/FOLD centre/);assert.match(card,/oncowiki-qr.png/);

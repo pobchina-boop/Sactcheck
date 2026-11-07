@@ -13,7 +13,7 @@ function enhance(d,html){
  const groups=require('../validation/neuroendocrine-v08437/patient-content/net-passport-fields.json').groups;
  const recordGroup=g=>'<section class="net-passport-field"><h3>'+escape(g.group)+'</h3>'+((g.fields||[]).map(label=>'<div class="net-record-field"><b>'+escape(label)+'</b><div class="net-write-space"></div></div>').join(''))+(g.note?'<p>'+escape(g.note)+'</p>':'')+'</section>';
  const intro='<p>Complete these pages with your team. Leave an item blank if it does not apply or is not yet known. This personal record does not replace your prescription, clinical notes or consent discussion.</p>';
- const source='<p class="net-source-note">Education informed by NCCN Guidelines for Patients: Neuroendocrine Tumors (2026); written for this Irish treatment context. Your team confirms your individual plan.</p>';
+ const source='<p class="net-source-note">SACTCheck patient information. Your team confirms your personal plan. Open clinical and medicine sources are collected in your treatment reference.</p>';
  const makePage=(title,body)=>'<section class="suite-page net-passport-profile"><div class="wiki-kicker">My NET care record</div><h2>'+title+'</h2>'+body+source+'</section>';
  const tests=groups.find(g=>g.columns);
  let page=makePage('My diagnosis, plan and priorities',intro+recordGroup(groups[0])+recordGroup(groups[1]));

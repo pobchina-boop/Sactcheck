@@ -144,8 +144,12 @@ test('v34 manifest proves before/after bytes and covers the complete affected as
  const v41=require('./helpers/retrospective-v08441.cjs'),skin41Record=JSON.parse(fs.readFileSync(path.join(root,'validation/skin-melanoma-v08441/retrospective-hashes.json'),'utf8'));
  const combined=[...new Set([...changed,...added])].sort();
  const v42=require('./helpers/retrospective-v08442.cjs'),skin42Record=JSON.parse(fs.readFileSync(path.join(root,'validation/skin-melanoma-v08442/retrospective-hashes.json'),'utf8'));
- for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file)||v38.approvedPath(file)||v39.approvedPath(file)||v40.approvedPath(file)||v41.approvedPath(file)||v42.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
- assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files),...Object.keys(neuroRecord.files),...Object.keys(neuro39Record.files),...Object.keys(skin40Record.files),...Object.keys(skin41Record.files),...Object.keys(skin42Record.files)])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
+ const v43=require('./helpers/retrospective-v08443.cjs'),design43Record=JSON.parse(fs.readFileSync(v43.RECORD,'utf8'));v43.createMigration(design43Record);
+ const v44=require('./helpers/retrospective-v08444.cjs'),design44Record=JSON.parse(fs.readFileSync(v44.RECORD,'utf8'));v44.createMigration(design44Record);
+ const designPatientFiles=Object.keys(design43Record.files).filter(file=>domains.some(domain=>file===domain||file.startsWith(domain+'/')));
+ const contentPatientFiles=Object.keys(design44Record.files).filter(file=>domains.some(domain=>file===domain||file.startsWith(domain+'/')));
+ for(const file of combined)assert.ok(v34.approvedPath(file)||v35.approvedPath(file)||v36.approvedPath(file)||v37.approvedPath(file)||v38.approvedPath(file)||v39.approvedPath(file)||v40.approvedPath(file)||v41.approvedPath(file)||v42.approvedPath(file)||v43.approvedPath(file)||v44.approvedPath(file),'Unrelated patient/clinical asset changed: '+file);
+ assert.deepEqual([...new Set([...Object.keys(migrationRecord.files),...Object.keys(nextRecord.files),...Object.keys(latestRecord.files),...Object.keys(netRecord.files),...Object.keys(neuroRecord.files),...Object.keys(neuro39Record.files),...Object.keys(skin40Record.files),...Object.keys(skin41Record.files),...Object.keys(skin42Record.files),...designPatientFiles,...contentPatientFiles])].sort(),combined,'All explicit migrations must cover every changed patient/clinical asset');
  const actual=combined.filter(f=>Object.hasOwn(migrationRecord.files,f));
  assert.deepEqual(Object.keys(migrationRecord.files).sort(),actual,'Every changed or new clinical/patient asset must be explicitly reviewed');
  for(const [file,entry] of Object.entries(migrationRecord.files)){
@@ -261,3 +265,8 @@ test('v42 preserves exact baseline provenance and confines seven new skin routes
  for(const bad of ['patient/00551/guide.pdf','patient/00535/renal/guide.pdf','patient/00431/guide.pdf','patient/../../index.html','data/patient-knowledge/00551.json','protocols/skin/00236-vismodegib-monotherapy.json'])assert.equal(m.approvedPath(bad),false,bad);
  assert.throws(()=>m.expectedHash('patient/00102/guide.pdf',sha('unreviewed')),/Unexpected/);
 });
+
+// Included in the existing test:patient-ui gate without changing historical
+// manifest records or bypassing their provenance and current-byte checks.
+require('./patient-design-migration-v08443.test.cjs');
+require('./patient-design-migration-v08444.test.cjs');

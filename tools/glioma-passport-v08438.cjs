@@ -5,7 +5,7 @@ function enhance(d,html){
  if(d.suite_release!=='0.84.38'||!CODES.has(d.code))return html;
  const data=require('../validation/neuro-oncology-v08438/patient-content/glioma-passport-fields.json');
  const record=g=>'<section class="glioma-record"><h3>'+esc(g.group)+'</h3>'+(g.fields||[]).map(f=>'<div class="glioma-field"><b>'+esc(typeof f==='string'?f:f.label)+'</b><div class="glioma-write-space"></div></div>').join('')+(g.note?'<p>'+esc(g.note)+'</p>':'')+'</section>';
- const source='<p class="glioma-source">Education informed by NCCN Guidelines for Patients: Brain Cancer Glioma (2026). Your Irish treating team confirms the diagnosis, prescription and follow-up plan.</p>';
+ const source='<p class="glioma-source">SACTCheck patient information. Your team confirms your diagnosis, prescription and follow-up plan. Open clinical and medicine sources are collected in your treatment reference.</p>';
  const page=(title,body)=>'<section class="suite-page glioma-profile"><div class="wiki-kicker">My brain tumour care record</div><h2>'+title+'</h2>'+body+source+'</section>';
  const groups=data.groups.filter(g=>g.fields?.length);
  const find=name=>groups.find(g=>g.group===name);

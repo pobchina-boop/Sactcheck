@@ -6,6 +6,7 @@ const pkg=JSON.parse(fs.readFileSync(path.join(root,"package.json"),"utf8"));
 const registry=require(path.join(root,"js","patient-asset-registry-v0810.js"));
 const codes=registry.codes;
 const protectedManifest=JSON.parse(fs.readFileSync(path.join(root,"data","protected-patient-assets-v0810.json"),"utf8"));
+const presentationMigration=require('../tests/helpers/retrospective-v08443.cjs');
 const forbiddenTopLevel=[".git",".github","tests","tools","node_modules","package.json","SECURITY.md"];
 const required=[
   "index.html","about.html","css/about-sactcheck.css","css/homepage-search-v0847.css","sustainability.html","manifest.webmanifest","js","css","protocols/index.json","404.html",
@@ -82,7 +83,7 @@ for(const code of codes.flatMap(c=>registry.bundleRoutes(c))){
     const a=path.join(canonical,file),b=path.join(compat,file);
     if(fs.existsSync(a)&&fs.existsSync(b)&&sha(a)!==sha(b)) problems.push(`compatibility ${file} drift for ${code}`);
     const fixture=protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
-    if(fs.existsSync(a)&&fixture&&sha(a)!==fixture.sha256) problems.push(`protected canonical ${code}/${file} changed without fixture update`);
+    if(fs.existsSync(a)&&fixture&&sha(a)!==presentationMigration.expectedHash(`patient/${code}/${file}`,fixture.sha256)) problems.push(`protected canonical ${code}/${file} changed without an exact reviewed presentation migration`);
   }
 }
 const p568=path.join(site,"patient","00568","guide.pdf");

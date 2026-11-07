@@ -5,6 +5,7 @@ const Chronology=require('./cycle-chronology.cjs');
 const SUPPORT_LABEL='Supportive medicines: medicine, dose and timing';
 const SUPPORT_HINT='<p class="support-table-hint no-print">Scroll the table sideways to read all medicine, dose and timing columns.</p>';
 const SUPPORT_WRAPPER=`<div class="support-table-scroll" role="region" tabindex="0" aria-label="${SUPPORT_LABEL}">`;
+const SUPPORT_UI_RELEASE=require('../package.json').version;
 
 function attribute(tag,name){
  const escaped=name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
@@ -100,6 +101,43 @@ function refreshSupport(html,file){
   if(updated===raw)throw new Error('Unsupported body class attribute');
   changes.push({start:bodies[0].start,end:bodies[0].end,text:updated});
  }
+ // Selectors and source-authored single plans share the same guidance/script
+ // controls. Only presentation markers and the shared-script URL change;
+ // existing medicine, dose, timing, scope and source text stays untouched.
+ let scriptView=null;
+ if(path.posix.basename(file.replaceAll('\\','/'))==='supportive-care.html'){
+  const selector=all.some(t=>!t.closing&&t.name==='select'&&attribute(t.raw,'id')==='support-phase');
+  scriptView=selector?'phase-selector':'single-plan';
+  if(!selector){
+   const mains=all.filter(t=>!t.closing&&t.name==='main');
+   if(mains.length!==1)throw new Error('Standalone support plan requires one main element');
+   const main=mains[0],range=elementRange(all,main),headings=all.filter(t=>!t.closing&&t.name==='h1'&&t.start>range.start&&t.end<range.end);
+   if(headings.length!==1)throw new Error('Standalone support plan requires one treatment heading');
+   const heading=headings[0];
+   const nested=all.some(t=>!t.closing&&['div','section','article','header','nav'].includes(t.name)&&t.start>main.start&&t.start<heading.start&&elementRange(all,t).end>heading.end);
+   if(nested)throw new Error('Standalone support treatment heading must be a direct main child');
+   const marker=attribute(main.raw,'data-support-single-phase');
+   if(marker!==null&&marker!=='true')throw new Error('Unexpected single-plan support marker');
+   if(marker===null)changes.push({start:main.start,end:main.end,text:main.raw.replace(/>$/,' data-support-single-phase="true">')});
+  }
+  const scriptRelative=path.posix.relative(path.posix.dirname(file.replaceAll('\\','/')),'assets/patient/phase-support-v0838.js');
+  const expected=`${scriptRelative}?v=${SUPPORT_UI_RELEASE}`;
+  const scripts=all.filter(t=>!t.closing&&t.name==='script'&&/(?:^|\/)phase-support-v0838\.js(?:[?#]|$)/.test(attribute(t.raw,'src')||''));
+  if(scripts.length>1)throw new Error('Duplicate shared support scripts');
+  if(scripts.length){
+   const current=attribute(scripts[0].raw,'src');
+   if(current.split(/[?#]/)[0]!==scriptRelative)throw new Error('Unexpected shared support script route');
+   if(current!==expected){
+    const updated=scripts[0].raw.replace(/(\bsrc\s*=\s*)(["'])(.*?)\2/i,(_,prefix,quote)=>`${prefix}${quote}${expected}${quote}`);
+    if(updated===scripts[0].raw)throw new Error('Unsupported shared support script attribute');
+    changes.push({start:scripts[0].start,end:scripts[0].end,text:updated});
+   }
+  }else{
+   const endings=all.filter(t=>t.name==='body'&&t.closing);
+   if(endings.length!==1)throw new Error('Expected one closing body on a support page');
+   changes.push({start:endings[0].start,end:endings[0].start,text:`<script src="${expected}"></script>`});
+  }
+ }
  const tables=all.filter(t=>t.name==='table'&&!t.closing),wrappers=all.filter(t=>!t.closing&&hasClass(t.raw,'support-table-scroll'));
  const tableRanges=tables.map(t=>elementRange(all,t));
  for(const range of tableRanges){
@@ -114,13 +152,19 @@ function refreshSupport(html,file){
   }else changes.push({start:range.start,end:range.end,text:SUPPORT_HINT+SUPPORT_WRAPPER+html.slice(range.start,range.end)+'</div>'});
  }
  if(wrappers.length!==tableRanges.filter(r=>wrappers.some(w=>{const p=elementRange(all,w);return p.start<r.start&&p.end>r.end;})).length)throw new Error('Empty or shared support table region');
- return {html:replaceRanges(html,changes),tables:tables.length};
+ return {html:replaceRanges(html,changes),tables:tables.length,scriptView};
 }
 function walk(directory){
  return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?walk(path.join(directory,entry.name)):[path.join(directory,entry.name)]);
 }
 function planRefresh(root){
  if(!fs.existsSync(path.join(root,'assets/patient/clinical-screen.css')))throw new Error('Missing shared clinical-screen stylesheet');
+ // Compare the finished publication, including first-use explanations, with
+ // the stored page. The fragment renderers remain independent and exact;
+ // reduced fixture roots without a publication module retain that contract.
+ const publicationFile=path.join(root,'tools/patient-publication-v08444.cjs');
+ const publication=fs.existsSync(publicationFile)?require(publicationFile):null;
+ const finish=(file,html)=>publication?publication.decorateGenerated(file,html,root):html;
  const config=JSON.parse(fs.readFileSync(path.join(root,'data/patient-presentation-v08431.json'),'utf8'));
  const changes=[],report={knowledge:{mapped:0,discovered:0,static:0,additionalProfiles:[],preservedInteractive:[],preservedContinuousOral:[],preservedSpecialized:[],preservedUnrelatedDrift:[]},support:{pages:0,tables:0},mirrors:{updated:0,preserved:[]},changed:[]};
  function stage(file,before,after,kind){
@@ -138,7 +182,7 @@ function planRefresh(root){
   if(!fs.existsSync(path.join(root,source)))throw new Error(`${file}: no matching explicit patient profile (${source})`);
   const before=fs.readFileSync(path.join(root,file),'utf8'),profile=JSON.parse(fs.readFileSync(path.join(root,source),'utf8'));
   if(String(profile.code)!==route.split('/')[0])throw new Error(`${file}: patient profile code does not match its route`);
-  const result=refreshKnowledge(before,profile);inspected.add(file);
+  const result=refreshKnowledge(before,profile);result.html=finish(file,result.html);inspected.add(file);
   if(mapped)report.knowledge.mapped++;
   else {report.knowledge.discovered++;if(!report.knowledge.additionalProfiles.includes(source))report.knowledge.additionalProfiles.push(source);}
   if(result.status==='preserved-interactive')report.knowledge.preservedInteractive.push(file);
@@ -166,7 +210,7 @@ function planRefresh(root){
  }
  for(const absolute of patientFiles.filter(f=>/\/(supportive-care|support-[^/]+)\.html$/.test(f.replaceAll('\\','/')))){
   const file=path.relative(root,absolute).replaceAll('\\','/'),before=fs.readFileSync(absolute,'utf8'),result=refreshSupport(before,file);
-  report.support.pages++;report.support.tables+=result.tables;stage(file,before,result.html,'support');
+  report.support.pages++;report.support.tables+=result.tables;stage(file,before,finish(file,result.html),'support');
  }
  const css='assets/patient/cycle-chronology-v0831.css',cssAbsolute=path.join(root,css),before=fs.existsSync(cssAbsolute)?fs.readFileSync(cssAbsolute,'utf8'):null;
  if(before!==Chronology.stylesheet){changes.push({file:css,before,after:Chronology.stylesheet});report.changed.push({file:css,kind:'chronology-stylesheet'});}

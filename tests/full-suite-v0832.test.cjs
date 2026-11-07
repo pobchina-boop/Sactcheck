@@ -4,6 +4,7 @@ const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p
 const registry=require('../js/patient-asset-registry-v0810'),workflow=require('../js/regimen-workflow-engine-v0750'),engine=require('../js/assessment-engine');
 const kb=json('data/regimen-knowledge-base-v0832-addendum.json'),baseKb=json('data/regimen-knowledge-base-v0680.json'),index=json('protocols/index.json');
 const workflowData=json(workflow.dataUrl),supportivePdf=require('../js/supportive-care-pdf-v0750');
+const ivExpansion=require('../tools/patient-editorial-v08444.cjs').TERMS.find(([term])=>term==='IV')[1];
 for(const code of ['00227','00449','00446']){
  const d=json(`data/patient-knowledge/${code}.json`),entry=index.protocols.find(p=>p.id===d.protocol_id||p.protocol_id===d.protocol_id),protocol=json(entry.path);
  const kp=kb.regimen_profiles.find(p=>p.protocol_id===d.protocol_id);
@@ -29,7 +30,15 @@ for(const code of ['00227','00449','00446']){
  }
  for(const file of ['guide.pdf','consent-form.pdf','passport.pdf','sactcard.pdf','port-pump.pdf']){const b=fs.readFileSync(path.join(root,'patient',code,file));assert.equal(b.subarray(0,5).toString(),'%PDF-');assert(b.length>5000);assert.deepEqual(b,fs.readFileSync(path.join(root,'docs/patient',code,file)));}
  const defs=protocol.input_definitions;const anc=Object.keys(defs).find(k=>/anc.*x10|^anc$/i.test(k));assert(anc,`${code}: ANC input`);const result=engine.assess(protocol,{[anc]:0.3});assert.equal(result.complete,false,`${code}: missing domains must stay unassessed`);assert(result.findings.length>0,`${code}: ANC-only should yield a finding`);
- for(const f of ['index.html','knowledge.html']){const h=read(`patient/${code}/${f}`);assert(h.includes(f==='index.html'&&['0.84.32','0.84.33'].includes(d.patient_layout_release)?'knowledge.html':'data-port-pump'));assert(!/<input|<select/.test(h));assert(f==='index.html'&&['0.84.32','0.84.33'].includes(d.patient_layout_release)?h.includes('knowledge.html#cycle'):h.includes(require('../tools/cycle-chronology.cjs').render(d)));}
+ for(const f of ['index.html','knowledge.html']){
+  const h=read(`patient/${code}/${f}`),chart=require('../tools/cycle-chronology.cjs').render(d);
+  assert(h.includes(f==='index.html'&&['0.84.32','0.84.33'].includes(d.patient_layout_release)?'knowledge.html':'data-port-pump'));
+  assert(!/<input|<select/.test(h));
+  // Only the first IV label may carry its approved patient explanation; all
+  // day spans, graph markup and remaining clinical wording stay byte-exact.
+  const sameChart=h.includes(chart)||h.includes(chart.replace('>IV<',`>${ivExpansion} (IV)<`));
+  assert(f==='index.html'&&['0.84.32','0.84.33'].includes(d.patient_layout_release)?h.includes('knowledge.html#cycle'):sameChart);
+ }
  assert.equal(d.anatomy.length,8);assert.equal(d.timeline.find(x=>x.id==='pump').end,3);
  if(code==='00446'){assert.doesNotMatch(read(`patient/${code}/index.html`),/Irinotecan|MOSAIC|adjuvant colon/i);assert.equal(d.evidence.metrics.length,0);assert(!read(`patient/${code}/knowledge.html`).includes('9.4 months'));assert(JSON.stringify(json('data/regimen-knowledge-base-v08421-addendum.json')).includes('9.4'));}
  else assert.doesNotMatch(read(`patient/${code}/index.html`),/Oxaliplatin|Cold sensitivity|MOSAIC/i);

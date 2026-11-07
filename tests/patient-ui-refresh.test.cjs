@@ -59,6 +59,36 @@ test('support refresh fails on unexpected structures instead of silently droppin
  assert.throws(()=>refreshSupport(invalid,'patient/00555/supportive-care.html'),/region attributes/);
 });
 
+test('standalone support plans retain every authored main-content byte and gain the shared script',()=>{
+ const noRoutine='<p>No routine prophylactic antiemetic, steroid premedication or G-CSF is populated.</p><h2>Individual symptom support</h2><ul><li>Review the existing medicine and monitoring plan.</li></ul><p>Prescriber / date: __________________</p>';
+ const original=support.replace(table,noRoutine);
+ const result=refreshSupport(original,'patient/00253/supportive-care.html');
+ assert.equal(result.scriptView,'single-plan');
+ assert.ok(result.html.includes('<main data-support-single-phase="true">'));
+ assert.equal(result.html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1],original.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1]);
+ assert.ok(result.html.includes(`src="../../assets/patient/phase-support-v0838.js?v=${require('../package.json').version}"`));
+ assert.equal((result.html.match(/phase-support-v0838\.js/g)||[]).length,1);
+ assert.equal(refreshSupport(result.html,'patient/00253/supportive-care.html').html,result.html);
+ const nested=refreshSupport(original,'patient/00253/example/supportive-care.html');
+ assert.ok(nested.html.includes(`src="../../../assets/patient/phase-support-v0838.js?v=${require('../package.json').version}"`));
+});
+
+test('phase selectors keep their complete authored sections while only the shared script cache key changes',()=>{
+ const selector=support.replace(table,'<select id="support-phase"><option value="">Choose</option><option value="one">One</option></select><p id="phase-prompt">Choose the phase</p><section data-support-phase="one" hidden>'+table+'</section>')
+  .replace('</body>','<script src="../../assets/patient/phase-support-v0838.js?v=older"></script><script src="unrelated.js"></script></body>');
+ const result=refreshSupport(selector,'patient/00555/supportive-care.html');
+ assert.equal(result.scriptView,'phase-selector');
+ assert.ok(!result.html.includes('data-support-single-phase'));
+ assert.ok(result.html.includes('<section data-support-phase="one" hidden>'));
+ assert.equal(result.html.match(/<table\b[\s\S]*?<\/table>/)[0],table);
+ assert.ok(result.html.includes('<script src="unrelated.js"></script>'));
+ assert.equal((result.html.match(/phase-support-v0838\.js/g)||[]).length,1);
+ assert.equal(refreshSupport(result.html,'patient/00555/supportive-care.html').html,result.html);
+ assert.throws(()=>refreshSupport(selector.replace('</body>','<script src="../../assets/patient/phase-support-v0838.js"></script></body>'),'patient/00555/supportive-care.html'),/Duplicate shared support scripts/);
+ assert.throws(()=>refreshSupport(selector.replace('../../assets/patient/phase-support-v0838.js','elsewhere/phase-support-v0838.js'),'patient/00555/supportive-care.html'),/Unexpected shared support script route/);
+ assert.throws(()=>refreshSupport(support.replace('<h1>Supportive care</h1>','<header><h1>Supportive care</h1></header>'),'patient/00555/supportive-care.html'),/direct main child/);
+});
+
 function fixture(t){
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'sactcheck-patient-ui-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
  const write=(file,content)=>{fs.mkdirSync(path.dirname(path.join(root,file)),{recursive:true});fs.writeFileSync(path.join(root,file),content);};

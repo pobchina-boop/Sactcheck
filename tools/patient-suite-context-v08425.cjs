@@ -2,6 +2,9 @@
 // Explicit build context. The default build retains the original patient bundles.
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
+const patientVisualStandard=require('./patient-visual-standard-v08443.cjs');
+const patientPublication=require('./patient-publication-v08444.cjs');
+function publishPatient(file,html){return patientPublication.decorateGenerated(file,html,root);}
 const context=process.env.SACT_SUITE_CONTEXT||'';
 const skin42Contexts=['melanoma','merkel_cell'];
 const melanomaContexts=['melanoma_advanced','melanoma_adjuvant','melanoma_perioperative'];
@@ -32,7 +35,7 @@ function output(file,html){
   if(['00823','00702','00221','00565','00340','00219','00220'].includes(patient[1]))html=html.replace('class="suite-v08425 ','class="suite-v08425 new-targeted-v08425 ');
   if(patient[1]==='00226'&&patient[2]==='sactcard.html')html=html.replace('<div class="suite-stamps">','<p>Recording boxes — not a fixed treatment course.</p><div class="suite-stamps">');
  }
- if(!context)return {file,html};
+ if(!context)return {file,html:publishPatient(file,html)};
  const match=relative.match(/^(patient|docs\/patient)\/(\d{5})\/(.+)$/);
  if(!match)return {file,html};
  const [,base,code,tail]=match;
@@ -41,7 +44,8 @@ function output(file,html){
  // One additional route segment changes only local root-relative references.
  html=html.replace(/(\b(?:href|src|content)=["'][^"']*?)(\.\.\/)+/g,(all)=>all.replace('../','../../'));
  html=html.replace(new RegExp(`patient/${code}/(?!${context}/)`,'g'),`patient/${code}/${context}/`);
- return {file:path.isAbsolute(file)?path.join(root,destination):destination,html};
+ const finalFile=path.isAbsolute(file)?path.join(root,destination):destination;
+ return {file:finalFile,html:publishPatient(finalFile,html)};
 }
 function phases(defaultData){
  if(!context)return defaultData;

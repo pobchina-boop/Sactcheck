@@ -61,6 +61,9 @@
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
+  function externalLinkIcon(){
+    return '<svg class="workflow-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3 10 14"/><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg>';
+  }
   function normaliseDrug(value){
     return String(value??"").toLowerCase()
       .replace(/[®™]/g,"")
@@ -134,11 +137,14 @@
 
   function openConsentSupport(protocol){
     const registry=patientAssets();
-    const draft=registry?.runtimeUrl?.(protocol,"consent-draft");
-    if(draft&&typeof root.open==="function"){
-      const viewer=root.open(draft,"_blank");
+    // The registry retains the historical asset key, but resolves it to the
+    // finished, regimen/context-specific form with print/download controls.
+    // Preserve its scope-selection route rather than guessing a PDF filename.
+    const form=registry?.runtimeUrl?.(protocol,"consent-draft");
+    if(form&&typeof root.open==="function"){
+      const viewer=root.open(form,"_blank");
       if(viewer){try{viewer.opener=null;}catch(_){}return viewer;}
-      root.alert?.("The consent discussion draft was blocked. Allow this site's pop-up and try again.");
+      root.alert?.("The SACTCheck consent form was blocked. Allow this site's pop-up and try again.");
       return false;
     }
     const builder=root?.SACTCheckRegimenConsentBuilder;
@@ -234,6 +240,18 @@
   function chooseAntiemeticPlan(protocol,data,riskRecord={}){
     const level=String(riskRecord.level||riskRecord.baseLevel||"pending").toLowerCase();
     const components=componentNames(protocol);
+
+    // NCCP 00642 has its own PRRT/amino-acid supportive-care instructions.
+    // A moderate CINV category is not sufficient to select its prescription.
+    // The authored phase sheet retains the specialist agent/dose decisions.
+    if(nccpCodeFor(protocol)==="00642"){
+      return {
+        status:"source_only",
+        planId:null,
+        label:"PRRT antiemetic and kidney protection plan",
+        message:"Use the authored PRRT supportive-care sheet and the nuclear-medicine service's prescription. A general moderate-risk chemotherapy script does not apply."
+      };
+    }
 
     if(level==="phase_dependent" && !riskRecord.phaseResolved){
       return {
@@ -618,7 +636,7 @@
   function renderInteractions(manifest){
     if(!manifest.interactionOverrides.length) return "";
     return `<div class="workflow-alert"><strong>Regimen-specific supportive-care check</strong>${manifest.interactionOverrides.map(rule=>
-      `<p>${esc(rule.message)}</p>${rule.source?.url?`<a href="${esc(rule.source.url)}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:""}`
+      `<p>${esc(rule.message)}</p>${rule.source?.url?`<a href="${esc(rule.source.url)}" target="_blank" rel="noopener noreferrer">Source ${externalLinkIcon()}</a>`:""}`
     ).join("")}</div>`;
   }
 
@@ -680,9 +698,9 @@
 
         <article class="workflow-module consent">
           <div class="workflow-module-icon">✎</div>
-          <div><span>Clinic workflow</span><h3>Consent generator</h3><p>Generate the regimen-specific draft support PDF to use alongside the formal consent process.</p></div>
+          <div><span>Clinic workflow</span><h3>Consent generator</h3><p>Open the completed SACTCheck regimen form, ready for review, patient details and signatures.</p></div>
           ${moduleStatus("review_required")}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Generate draft consent support</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Generate consent</button>
           <small class="workflow-module-note">Content is awaiting consultant and oncology-pharmacy review. Supports discussion; it does not replace formal consent, the national consent form or clinical judgement.</small>
         </article>
 
@@ -700,9 +718,9 @@
           ${moduleStatus(supportive.status)}
           ${renderSupportPhaseSelector(manifest)}
           ${renderSupportiveScript(manifest)}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open supportive-care review":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open guidance":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
           ${supportive.status==="phase_review_required"&&!manifest.supportPhaseChoices.length&&!patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?`<p>A verified phase-specific script is not yet available for this regimen. <a href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the NCCP regimen for phase/day guidance</a>.</p>`:""}
-          <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer">NCCP antiemetic source ↗</a>
+          <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer"><span>NCCP antiemetic source</span>${externalLinkIcon()}</a>
         </article>
 
         <article class="workflow-module extravasation">
@@ -710,7 +728,7 @@
           <div><span>Administration safety</span><h3>Extravasation</h3><p>${extra.highest?`${esc(extra.highest.drug)} · ${esc(extra.highest.classLabel)}`:"Regimen-derived parenteral risk"}</p></div>
           ${moduleStatus(extra.status==="available"?"available":"review_required")}
           <div class="workflow-module-expanded">${renderExtravasation(manifest)}</div>
-          ${extra.sourceGuidance?.url?`<a class="workflow-source-link" href="${esc(extra.sourceGuidance.url)}" target="_blank" rel="noopener noreferrer">NCCP extravasation guidance ↗</a>`:""}
+          ${extra.sourceGuidance?.url?`<a class="workflow-source-link" href="${esc(extra.sourceGuidance.url)}" target="_blank" rel="noopener noreferrer"><span>NCCP extravasation guidance</span>${externalLinkIcon()}</a>`:""}
         </article>
 
         <article class="workflow-module patient">
@@ -728,14 +746,15 @@
         </article>
 
         <article class="workflow-module source">
-          <div class="workflow-module-icon">↗</div>
-          <div><span>Source</span><h3>NCCP source</h3><p>Keep the current national regimen source visible at the point of care.</p></div>
-          ${moduleStatus(manifest.sourceUrl?"available":"review_required")}
+          <div class="workflow-module-icon" aria-hidden="true">${externalLinkIcon()}</div>
+          <details class="workflow-source-disclosure">
+          <summary><span>NCCP source</span><span class="workflow-disclosure-chevron" aria-hidden="true">⌄</span></summary>
           <div class="workflow-source-actions">
           ${manifest.sourceUrl?`<a class="btn secondary workflow-module-action" href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Official NCCP PDF</a>`:""}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-nccp-tracker>Open NCCP tracker</button>
           </div>
           <small class="workflow-module-note">Review source updates and reconciliation status. The source register opens with this regimen selected.</small>
+          </details>
         </article>
       </div>
       ${renderInteractions(manifest)}

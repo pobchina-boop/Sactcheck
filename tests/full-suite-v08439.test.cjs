@@ -1,11 +1,14 @@
 'use strict';
+// v44 replaces NCCN-based patient prose with original, source-audited SACTCheck
+// explanations. Keep disease-specific evidence checks and clinical invariants.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const {assertVisibleTextIncludes}=require('./helpers/patient-visible-text-v08444.cjs');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const scope=json('validation/neuro-oncology-v08439/scope.json'),presentation=json('data/patient-presentation-v08431.json'),index=json('protocols/index.json').protocols;
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08439-addendum.json');
 assert.deepEqual(scope.codes,['00742', '00804', '00805', '00806', '00813']);
 require('./helpers/neuro-suite-registration-v08439.cjs').registry(registry.codes);
-assert(['0.84.41','0.84.42'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
+assert(['0.84.41','0.84.42','0.84.43','0.84.44'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
 assert.equal(scope.base_release,'0.84.38');assert.equal(scope.independent_clinical_approval,false);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const code of scope.codes){
@@ -16,14 +19,14 @@ for(const code of scope.codes){
  assert.equal(d.sources.find(s=>s.id==='nccp').url,p.metadata.source_url,code+' clinical/patient source identity');
  assert.match(p.metadata.source_pdf_sha256,/^[a-f0-9]{64}$/);
  assert(d.anatomy.length>=8,code+' detailed anatomical anchors');assert(d.chapters.length>=8,code+' extended education');assert(d.monitoring_schedule.rows.length>=3);
- if(code!=='00806')assert(d.sources.some(s=>s.id==='nccn-patient'),code+' educational reference credited');else assert.equal(d.passport_context,'medulloblastoma');assert.deepEqual(d.evidence.metrics,[],code+' no unverified numeric benefit claim');
+ if(code!=='00806'){assert.equal(d.patient_editorial_revision.version,'0.84.44');assert(!d.sources.some(s=>/nccn/i.test(s.id+' '+s.url)),code+' independent SACTCheck patient text');assert(d.sources.some(s=>s.id==='ed-brain-patient'&&new URL(s.url).hostname==='www.cancer.gov'),code+' open disease-specific patient evidence');}else assert.equal(d.passport_context,'medulloblastoma');assert.deepEqual(d.evidence.metrics,[],code+' no unverified numeric benefit claim');
  for(const name of ['index','guide','knowledge','consent-form','passport','sactcard','supportive-care','treatment-journey','logistics'])assert(fs.existsSync(path.join(root,'patient',route,name+'.html')),route+'/'+name);
  for(const name of ['guide','sactcard','knowledge','handbook','passport','consent-form','supportive-care','treatment-journey','logistics']){
   const b=fs.readFileSync(path.join(root,'patient',route,name+'.pdf'));assert.equal(b.subarray(0,4).toString(),'%PDF');assert.deepEqual(b,fs.readFileSync(path.join(root,'docs/patient',route,name+'.pdf')),route+' mirror '+name);
  }
  for(const leaf of ['index.html','guide.html','knowledge.html']){
   const h=read('patient/'+route+'/'+leaf);assert.equal((h.match(/data-authored-map/g)||[]).length,1,route+' one anatomical map in '+leaf);assert.match(h,/Full-body anatomical illustration/);
-  for(const a of d.anatomy)assert(h.includes(a[3].replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')),route+' retained explanatory text '+a[0]);
+  for(const a of d.anatomy)assertVisibleTextIncludes(h,a[3],route+' retained explanatory text '+a[0]);
  }
  const pass=read('patient/'+route+'/passport.html');for(const word of (code==='00806'?['My diagnosis, plan and medicines','My scans, symptoms and support','molecular subgroup','hearing']:['My diagnosis, plan and medicines','My scans, symptoms and support','IDH','1p/19q','MGMT']))assert(pass.includes(word),route+' passport '+word);
  const card=read('patient/'+route+'/sactcard.html');assert.match(card,/85.6 × 54 mm/);assert.match(card,/EXAMPLE NUMBERS/);assert.match(card,/FOLD centre/);assert.match(card,/oncowiki-qr.png/);
