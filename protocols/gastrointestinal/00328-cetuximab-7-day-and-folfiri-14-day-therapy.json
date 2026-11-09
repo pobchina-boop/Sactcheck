@@ -12,7 +12,7 @@
     "indication": "RAS wild-type metastatic colorectal cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
     "source_document_pages": 10,
-    "sactcheck_encoding_version": "0.84.34",
+    "sactcheck_encoding_version": "0.84.45",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -51,8 +51,10 @@
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "fresh_binary_source_audit_with_declared_conflicts_and_manual_domains_pending_independent_clinical_review",
-      "audit_release": "0.84.34",
-      "software_validation_record": "validation/colorectal-v08434/retro-combo-source-audit/AUDIT.md"
+      "audit_release": "0.84.45",
+      "software_validation_record": "validation/head-neck-v08445/cetux-chemo/proposed-results.json",
+      "audit_date": "2026-11-07",
+      "v08445_source_revalidation_record": "validation/head-neck-v08445/cetux-chemo/source-retrieval.json"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -101,7 +103,7 @@
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
     "canonical_protocol_id": "nccp-00328-v7",
-    "source_checked_date": "2026-11-05",
+    "source_checked_date": "2026-11-07",
     "full_suite_release": "0.84.21",
     "schedule_summary": "Cetuximab on Day 1 and Day 8. Day 1 FOLFIRI includes irinotecan, folinic acid and fluorouracil, followed by a 46-hour fluorouracil infusion with planned disconnection around Day 3. Repeat the reference cycle every 14 days while beneficial and tolerable.",
     "source_pdf_sha256": "78b2244839885f97731178aa53d9c94ec8d5e0130e2b48ccd0983c8b362d2703",
@@ -114,13 +116,24 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false
     },
-    "clinical_audit_release": "0.84.34"
+    "clinical_audit_release": "0.84.45",
+    "monitoring_source_conflict": {
+      "status": "requires_local_consultant_pharmacy_reconciliation",
+      "nccp_page": 1,
+      "product_information_url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "product_information_section": "4.2",
+      "checked_date": "2026-11-07",
+      "note": "Observation source conflict: NCCP permits stopping the post-infusion observation/vital-sign schedule after two tolerated doses, whereas current Erbitux SmPC section 4.2 requires close monitoring during and for at least one hour after each infusion. The clinical team must reconcile this and prescribe the local observation plan; do not promise earlier discharge."
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
     "disclaimer": "NCCP 00328 v7 source mapping reviewed in SACTCheck v0.84.34. Independent consultant/pharmacy validation and clinical authorisation remain pending. Declared source conflicts and manual domains require review; missing values are not normal results.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending.",
+    "consultant_reviewed": false,
+    "oncology_pharmacy_reviewed": false,
+    "clinical_use_authorised": false
   },
   "indications": [
     {
@@ -746,7 +759,8 @@
       "step": 0.01,
       "unit": "U/L",
       "input_role": "decision",
-      "demo_value": 20
+      "demo_value": 20,
+      "assessment_guidance": "Source Table 3 labels the analyte AST but does not print its unit beside 180. This field is an absolute AST result in U/L, not a multiple of ULN. Confirm local source interpretation; do not substitute ALT or a ULN ratio."
     },
     "mucositis_grade": {
       "label": "Current stomatitis / mucositis grade",
@@ -1041,6 +1055,34 @@
       "required": false,
       "input_role": "decision",
       "demo_value": false
+    },
+    "previous_severe_cetuximab_infusion_reaction": {
+      "label": "Previous grade 3 or 4 cetuximab infusion reaction, even if now recovered",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "fluorouracil_transaminase_source_uncertain": {
+      "label": "AST unit/analyte does not clearly match the source table, or only ALT/ULN ratio is available",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "concurrent_brivudin_sorivudin_or_analogue": {
+      "label": "Current or recent brivudin, sorivudin or analogous DPD inhibitor; safe washout not confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "ugt1a1_poor_metaboliser": {
+      "label": "Known UGT1A1 poor metaboliser, including homozygous *6 or *28, or another confirmed reduced-activity genotype",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
     }
   },
   "required_inputs": [],
@@ -1117,14 +1159,22 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Known hypersensitivity is an NCCP exclusion."
+          "recommendation": "Known hypersensitivity is an NCCP exclusion. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Known hypersensitivity is an NCCP exclusion.",
+        "explanation": "Known hypersensitivity is an NCCP exclusion. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 2,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "PREGNANCY_LACTATION",
@@ -1151,14 +1201,22 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions."
+          "recommendation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions.",
+        "explanation": "Pregnancy or breastfeeding requires specialist review; do not give routine treatment clearance. Follow the medicine-specific pregnancy, contraception and breastfeeding precautions. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 2,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "RAS_EXCLUSION",
@@ -1664,14 +1722,22 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review."
+          "recommendation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review.",
+        "explanation": "Urgent assessment and treatment of fever / active infection; defer chemotherapy pending review. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 6,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "ANC_HOLD",
@@ -1688,15 +1754,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart."
+          "recommendation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart.",
+        "explanation": "Hold chemotherapy for ANC <1.5 ×10⁹/L; repeat counts and assess recovery and nadir before restart. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 3,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 2
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "PLATELETS_HOLD",
@@ -1713,15 +1787,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart."
+          "recommendation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart.",
+        "explanation": "Hold chemotherapy for platelets <75 ×10⁹/L; assess recovery before restart. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 3,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 2
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "COUNT_STOP_anc_x10e9_l",
@@ -1747,15 +1829,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review."
+          "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review.",
+        "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 4,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 2
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "COUNT_STOP_platelets_x10e9_l",
@@ -1781,15 +1871,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review."
+          "recommendation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review.",
+        "explanation": "Count recovery has not occurred within the source stopping interval; discontinue chemotherapy and obtain consultant review. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 4,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 2
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "ANC_INTERVAL_CONFLICT",
@@ -1820,15 +1918,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Source conflict: maximum ANC delay is two weeks, but the stopping clause says four weeks. Continue withholding and obtain consultant/pharmacy clarification; no automatic restart in this gap."
+          "recommendation": "Source conflict: maximum ANC delay is two weeks, but the stopping clause says four weeks. Continue withholding and obtain consultant/pharmacy clarification; no automatic restart in this gap. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Source conflict: maximum ANC delay is two weeks, but the stopping clause says four weeks. Continue withholding and obtain consultant/pharmacy clarification; no automatic restart in this gap.",
+        "explanation": "Source conflict: maximum ANC delay is two weeks, but the stopping clause says four weeks. Continue withholding and obtain consultant/pharmacy clarification; no automatic restart in this gap. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 4,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 2
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "ANC_G3",
@@ -2260,24 +2366,34 @@
       {
         "rule_id": "UGT_REVIEW",
         "when": {
-          "field": "ugt1a1_homozygous_28",
-          "operator": "==",
-          "value": true
+          "any": [
+            {
+              "field": "ugt1a1_homozygous_28",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "ugt1a1_poor_metaboliser",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "irinotecan"
           ],
-          "recommendation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+          "recommendation": "UGT1A1 poor metabolisers, including homozygous *28 or *6, have increased irinotecan neutropenia/diarrhoea risk. Consider an individually reduced starting dose and enhanced monitoring; this regimen does not establish a fixed reduction percentage.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Consider reduced irinotecan starting dose and enhanced toxicity monitoring; no fixed source percentage.",
+        "explanation": "UGT1A1 poor metabolisers, including homozygous *28 or *6, have increased irinotecan neutropenia/diarrhoea risk. Consider an individually reduced starting dose and enhanced monitoring; this regimen does not establish a fixed reduction percentage.",
         "source": {
-          "document": "NCCP 00328 v7",
-          "page": 2,
-          "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
+          "document": "Irinotecan Hydrochloride SmPC (supplementary manufacturer source)",
+          "section": "4.4 and 5.2",
+          "url": "https://www.medicines.org.uk/emc/product/102441/smpc",
+          "checked_date": "2026-11-07"
         }
       },
       {
@@ -2399,16 +2515,25 @@
           "type": "contraindicated",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Complete DPD deficiency contraindicates fluorouracil."
+          "recommendation": "Complete DPD deficiency contraindicates fluorouracil. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Complete DPD deficiency contraindicates fluorouracil.",
+        "explanation": "Complete DPD deficiency contraindicates fluorouracil. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 2,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "DPD_UNKNOWN",
@@ -2421,16 +2546,25 @@
           "type": "withhold",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result."
+          "recommendation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result.",
+        "explanation": "Confirm DPD testing before first fluorouracil treatment. Do not infer a normal result. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 2,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "DPD_PARTIAL",
@@ -2476,17 +2610,26 @@
           "type": "contraindicated",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Source contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L."
+          "recommendation": "Source contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Source contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L.",
+        "explanation": "Source contraindicates fluorouracil above bilirubin 85 µmol/L or AST 180 U/L. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 4,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 3
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "FU_HEPATIC_EQUALITY",
@@ -2508,19 +2651,28 @@
           "type": "consultant_review",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification.",
+          "recommendation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification.",
+        "explanation": "Strict source inequalities leave equality at bilirubin 85 or AST 180 unassigned; obtain clarification. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 4,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 3
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "FU_HEPATIC_REDUCTION",
@@ -2536,19 +2688,28 @@
           "type": "consultant_review",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first.",
+          "recommendation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first.",
+        "explanation": "Source suggests initial fluorouracil reduction by one third for moderate, or one half for severe hepatic impairment. Confirm laboratory exclusions and clinical classification first. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 4,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 3
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "FU_CARDIAC",
@@ -2561,16 +2722,25 @@
           "type": "withhold",
           "components": [
             "fluorouracil_bolus",
-            "fluorouracil_infusion"
+            "fluorouracil_infusion",
+            "folinic_acid"
           ],
-          "recommendation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge."
+          "recommendation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge.",
+        "explanation": "Urgently assess suspected fluorouracil cardiotoxicity; withhold fluorouracil. No automated rechallenge. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
-          "page": 7,
+          "page": 8,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf"
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "MUCOSITIS_HOLD",
@@ -2587,15 +2757,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Hold chemotherapy until stomatitis is grade ≤1."
+          "recommendation": "Hold chemotherapy until stomatitis is grade ≤1. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Hold chemotherapy until stomatitis is grade ≤1.",
+        "explanation": "Hold chemotherapy until stomatitis is grade ≤1. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 5,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 5
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "SEVERE_RENAL_EXCLUSION",
@@ -2612,9 +2790,9 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "NCCP excludes severe renal impairment without defining a numeric threshold in this version; do not borrow a cutoff. Table 3 also mentions considering fluorouracil reduction in severe renal impairment without a percentage. This does not resolve the regimen-level exclusion: reconcile the source discrepancy with the consultant and oncology pharmacist before treatment."
+          "recommendation": "NCCP excludes severe renal impairment without defining a numeric threshold in this version; do not borrow a cutoff. Table 3 also mentions considering fluorouracil reduction in severe renal impairment without a percentage. This does not resolve the regimen-level exclusion: reconcile the source discrepancy with the consultant and oncology pharmacist before treatment. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "NCCP excludes severe renal impairment without defining a numeric threshold in this version; do not borrow a cutoff. Table 3 also mentions considering fluorouracil reduction in severe renal impairment without a percentage. This does not resolve the regimen-level exclusion: reconcile the source discrepancy with the consultant and oncology pharmacist before treatment.",
+        "explanation": "NCCP excludes severe renal impairment without defining a numeric threshold in this version; do not borrow a cutoff. Table 3 also mentions considering fluorouracil reduction in severe renal impairment without a percentage. This does not resolve the regimen-level exclusion: reconcile the source discrepancy with the consultant and oncology pharmacist before treatment. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 2,
@@ -2626,6 +2804,12 @@
             "page": 4,
             "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
             "table": 3
+          },
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
           }
         ]
       },
@@ -2653,15 +2837,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks."
+          "recommendation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks.",
+        "explanation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 5,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 5
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "DIARRHOEA_RESTART_3",
@@ -2797,15 +2989,23 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks."
+          "recommendation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks.",
+        "explanation": "Discontinue FOLFIRI if this toxicity has not recovered below grade 2 within two weeks. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 5,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "table": 5
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "MUCOSITIS_RESTART_3",
@@ -2961,16 +3161,24 @@
             "fluorouracil_bolus",
             "fluorouracil_infusion"
           ],
-          "recommendation": "Hold all FOLFIRI components for current diarrhoea grade 2 or worse; assess cetuximab independently. Irinotecan additionally requires complete resolution, including grade 1."
+          "recommendation": "Hold all FOLFIRI components for current diarrhoea grade 2 or worse; assess cetuximab independently. Irinotecan additionally requires complete resolution, including grade 1. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction."
         },
-        "explanation": "Hold all FOLFIRI components for current diarrhoea grade 2 or worse; assess cetuximab independently. Irinotecan additionally requires complete resolution, including grade 1.",
+        "explanation": "Hold all FOLFIRI components for current diarrhoea grade 2 or worse; assess cetuximab independently. Irinotecan additionally requires complete resolution, including grade 1. Folinic acid follows the bolus 5-FU hold/omission decision; it is not continued independently. Review-only findings do not invent a separate folinic acid dose reduction.",
         "source": {
           "document": "NCCP 00328 v7",
           "page": 5,
           "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
           "checked_date": "2026-11-05",
           "table": 5
-        }
+        },
+        "related_sources": [
+          {
+            "document": "NCCP 00328 v7",
+            "page": 3,
+            "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+            "note": "Folinic acid delayed or omitted when bolus 5-fluorouracil is delayed or omitted."
+          }
+        ]
       },
       {
         "rule_id": "SKIN_RESTART_1_DOSE_HISTORY_REVIEW",
@@ -3751,6 +3959,81 @@
           "url": "https://medicines.ie/medicines/campto-20-mg-ml-concentrate-for-solution-for-infusion~A0000945/document/spc/025730/file?download=1",
           "checked_date": "2026-11-05"
         }
+      },
+      {
+        "rule_id": "CETUXIMAB_PRIOR_SEVERE_REACTION",
+        "when": {
+          "field": "previous_severe_cetuximab_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "A previous grade 3 or 4 cetuximab infusion reaction contraindicates further cetuximab. Recovery of the current symptoms does not permit rechallenge.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A previous grade 3 or 4 cetuximab infusion reaction contraindicates further cetuximab. Recovery of the current symptoms does not permit rechallenge.",
+        "source": {
+          "document": "NCCP 00328 v7",
+          "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+          "page": 5,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "FU_TRANSAMINASE_SOURCE_LABEL_REVIEW",
+        "when": {
+          "field": "fluorouracil_transaminase_source_uncertain",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Confirm the source AST analyte and absolute-result unit with oncology pharmacy. Do not enter ALT or an ULN ratio as AST 180; no automatic dose is established.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "dose_calculation_blocked": true
+        },
+        "explanation": "Confirm the source AST analyte and absolute-result unit with oncology pharmacy. Do not enter ALT or an ULN ratio as AST 180; no automatic dose is established.",
+        "source": {
+          "document": "NCCP 00328 v7",
+          "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+          "page": 4,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "FU_DPD_INHIBITOR_CONTRAINDICATION",
+        "when": {
+          "field": "concurrent_brivudin_sorivudin_or_analogue",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil_bolus",
+            "fluorouracil_infusion",
+            "folinic_acid"
+          ],
+          "recommendation": "Do not administer 5-FU with brivudin, sorivudin or analogous potent DPD inhibitors. Oncology pharmacy must reconcile current/recent exposure and the medicine-specific washout before treatment. Folinic acid is omitted with bolus 5-FU.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Do not administer 5-FU with brivudin, sorivudin or analogous potent DPD inhibitors. Oncology pharmacy must reconcile current/recent exposure and the medicine-specific washout before treatment. Folinic acid is omitted with bolus 5-FU.",
+        "source": {
+          "document": "NCCP 00328 v7",
+          "url": "https://healthservice.hse.ie/documents/6773/328_Cetuximab_7_days_plus_FOLFIRI_14_Days.pdf",
+          "page": 9,
+          "checked_date": "2026-11-07"
+        }
       }
     ]
   },
@@ -3769,10 +4052,12 @@
     "Disease monitoring and imaging follow the individual consultant treatment plan; no fixed tumour-marker or imaging interval is prescribed by this regimen.",
     "FBC, renal and liver profile before every cycle; weekly FBC during a cytopenia-related delay.",
     "DPD testing before first fluorouracil; ECG where cardiac function is compromised; INR as clinically indicated during warfarin therapy.",
-    "Interpret uracil-based DPD phenotype cautiously in moderate/severe renal impairment; consider genotype testing."
+    "Interpret uracil-based DPD phenotype cautiously in moderate/severe renal impairment; consider genotype testing.",
+    "Observation source conflict: NCCP permits stopping the post-infusion observation/vital-sign schedule after two tolerated doses, whereas current Erbitux SmPC section 4.2 requires close monitoring during and for at least one hour after each infusion. The clinical team must reconcile this and prescribe the local observation plan; do not promise earlier discharge."
   ],
   "dose_modifications": [
-    "Use source-mapped component rules below. Relative reductions require the actual current component dose level; do not assume level 0. Source ambiguities require consultant/pharmacy clarification."
+    "Use source-mapped component rules below. Relative reductions require the actual current component dose level; do not assume level 0. Source ambiguities require consultant/pharmacy clarification.",
+    "AST threshold is the source absolute-result entry, not an ALT result or ULN multiple; unit interpretation and equality at bilirubin 85/AST 180 require consultant/pharmacy review. Folinic acid follows bolus 5-FU hold/omission."
   ],
   "supportive_care": {
     "emetogenic_risk": "moderate",

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00207-v5",
+  "protocol_id": "nccp-00207-v6",
   "file_name": "00207-cetuximab-therapy-7-days.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
@@ -12,7 +12,7 @@
     "indication": "Cetuximab monotherapy for EGFR-expressing RAS wild-type metastatic colorectal cancer after failure of oxaliplatin- and irinotecan-based therapy and intolerance to irinotecan; or with radiotherapy for locally advanced squamous head-and-neck cancer when platinum therapy is unsuitable.",
     "source_url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
     "source_document_pages": 5,
-    "sactcheck_encoding_version": "0.84.34",
+    "sactcheck_encoding_version": "0.84.45",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -48,16 +48,17 @@
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "source_mapped_with_declared_conflicts_pending_independent_clinical_review",
-      "audit_release": "0.84.34",
-      "software_validation_record": "validation/colorectal-v08434/retro-mono-source-audit/source-case-results.json",
+      "audit_release": "0.84.45",
+      "software_validation_record": "validation/head-neck-v08445/cetux-chemo/proposed-results.json",
       "source_reconciled": true,
-      "audit_date": "2026-11-05"
+      "audit_date": "2026-11-07",
+      "v08445_source_revalidation_record": "validation/head-neck-v08445/cetux-chemo/source-retrieval.json"
     },
     "tumour_groups": [
       "Gastrointestinal",
       "Head and Neck"
     ],
-    "source_checked_date": "2026-11-05",
+    "source_checked_date": "2026-11-07",
     "head_neck_subgroups": [
       "squamous_cell"
     ],
@@ -139,13 +140,25 @@
     "source_last_reviewed": "2025-01-27",
     "full_suite_release": "0.84.21",
     "schedule_summary": "One larger first infusion is followed by weekly infusions. Bowel-cancer treatment continues while helping and tolerated. For head-and-neck treatment, cetuximab starts one week before radiotherapy and continues until radiation treatment finishes.",
-    "clinical_audit_release": "0.84.34"
+    "clinical_audit_release": "0.84.45",
+    "monitoring_source_conflict": {
+      "status": "requires_local_consultant_pharmacy_reconciliation",
+      "nccp_page": 1,
+      "product_information_url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+      "product_information_section": "4.2",
+      "checked_date": "2026-11-07",
+      "note": "Observation source conflict: NCCP permits stopping the post-infusion observation/vital-sign schedule after two tolerated doses, whereas current Erbitux SmPC section 4.2 requires close monitoring during and for at least one hour after each infusion. The clinical team must reconcile this and prescribe the local observation plan; do not promise earlier discharge."
+    },
+    "source_identity_note": "NCCP source version 6; legacy protocol_id remains stable for existing application mappings. CRC and head/neck are separate indication contexts."
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
     "disclaimer": "NCCP 00207 v6 source mapping, SACTCheck v0.83.6. Independent consultant/pharmacy validation and clinical authorisation remain pending. Resolve declared source conflicts; missing inputs are unassessed.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending.",
+    "consultant_reviewed": false,
+    "oncology_pharmacy_reviewed": false,
+    "clinical_use_authorised": false
   },
   "indications": [
     {
@@ -517,6 +530,13 @@
     },
     "ulcerative_keratitis": {
       "label": "Confirmed ulcerative keratitis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "previous_severe_cetuximab_infusion_reaction": {
+      "label": "Previous grade 3 or 4 cetuximab infusion reaction, even if now recovered",
       "type": "boolean",
       "required": false,
       "input_role": "decision",
@@ -1769,6 +1789,29 @@
           "checked_date": "2026-11-05",
           "checked": "2026-11-05"
         }
+      },
+      {
+        "rule_id": "CETUXIMAB_PRIOR_SEVERE_REACTION",
+        "when": {
+          "field": "previous_severe_cetuximab_infusion_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "recommendation": "A previous grade 3 or 4 cetuximab infusion reaction contraindicates further cetuximab. Recovery of the current symptoms does not permit rechallenge.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A previous grade 3 or 4 cetuximab infusion reaction contraindicates further cetuximab. Recovery of the current symptoms does not permit rechallenge.",
+        "source": {
+          "document": "NCCP 00207 v6",
+          "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
+        }
       }
     ]
   },
@@ -1788,7 +1831,8 @@
     "Regular FBC, renal and liver profile; review skin, nails, eyes, respiratory symptoms, hydration and electrolyte abnormalities.",
     "Vital signs before, at one hour and after infusion; one-hour observation after doses 1 and 2. After two tolerated doses the source permits stopping that observation/vital-sign schedule.",
     "Monthly electrolytes, magnesium and calcium for two months after the last cetuximab dose; assign responsibility before treatment ends.",
-    "Response assessment follows the consultant plan; head/neck radiation follow-up is coordinated separately."
+    "Response assessment follows the consultant plan; head/neck radiation follow-up is coordinated separately.",
+    "Observation source conflict: NCCP permits stopping the post-infusion observation/vital-sign schedule after two tolerated doses, whereas current Erbitux SmPC section 4.2 requires close monitoring during and for at least one hour after each infusion. The clinical team must reconcile this and prescribe the local observation plan; do not promise earlier discharge."
   ],
   "dose_modifications": [
     "Use source-mapped component rules below. Relative reductions require the actual current component dose level; do not assume level 0. Source ambiguities require consultant/pharmacy clarification."
@@ -1831,7 +1875,7 @@
             "unit": "mg/m2"
           },
           "route": "IV infusion",
-          "notes": "Over 120 minutes; initial maximum 5 mg/min. Antihistamine and corticosteroid before infusion. Vital signs pre, at one hour and post; observe one hour after the first two doses."
+          "notes": "Over 120 minutes; initial maximum 5 mg/min. Antihistamine and corticosteroid before infusion. Vital signs pre, at one hour and post; observe one hour after the first two doses. Observation requirements differ from the current SmPC: confirm the local observation plan."
         }
       ]
     },
@@ -1852,7 +1896,7 @@
             "unit": "mg/m2"
           },
           "route": "IV infusion",
-          "notes": "Over 60 minutes; maximum 10 mg/min if prior infusion tolerated. After two tolerated doses the source permits stopping the observation period and vital signs."
+          "notes": "Over 60 minutes; maximum 10 mg/min if prior infusion tolerated. After two tolerated doses the source permits stopping the observation period and vital signs. Current SmPC instead requires at least one hour after every infusion; reconcile with the local team."
         }
       ]
     }

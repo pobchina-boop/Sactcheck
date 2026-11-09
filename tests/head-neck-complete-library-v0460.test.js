@@ -28,19 +28,23 @@ for(const {entry,data} of hn){
  assert(Object.keys(defs).length>0,`${code} inputs`);assert(rs.length>0,`${code} rules`);
  for(const [id,d] of Object.entries(defs)){assert.strictEqual(d.required,false,`${code}/${id} required`);assert.notStrictEqual(d.demo_value,undefined,`${code}/${id} demo`);}
  const card=m.regimen_card;assert(card&&Array.isArray(card.contexts)&&card.contexts.length,`${code} card contexts`);contexts+=card.contexts.length;
- assert(card.contexts.some(c=>c.id===(['00483','00484'].includes(code)?`${code}-source-${code==='00483'?'d':'e'}`:`${code}-head-neck`)&&Number(c.cycle_length_days)>0),`${code} Head and Neck card context`);
+ assert(card.contexts.some(c=>c.id===(code==='00385'?'00385d':['00483','00484'].includes(code)?`${code}-source-${code==='00483'?'d':'e'}`:`${code}-head-neck`)&&Number(c.cycle_length_days)>0),`${code} Head and Neck card context`);
  assert(sidecar.protocols.find(x=>x.id===data.protocol_id),`${code} sidecar`);
- if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/head-neck/'),`${code} new file path`);assert.strictEqual(m.sactcheck_encoding_version,'0.46.0',`${code} encoding version`);}
+ if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/head-neck/'),`${code} new file path`);if(['00387','00705','00706'].includes(code))require('./helpers/head-neck-inputs-v08445.cjs').validate(data);else assert.strictEqual(m.sactcheck_encoding_version,'0.46.0',`${code} encoding version`);}
 }
 assert.strictEqual(newCount,21);assert(inputs>=450,`inputs ${inputs}`);assert(rules>=350,`rules ${rules}`);assert(contexts>=45,`contexts ${contexts}`);
 const by=c=>hn.find(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')===c).data;
 assert.strictEqual(by('00552').treatment.planned_cycles,3);assert.strictEqual(by('00591').treatment.cycle_length_days,21);assert.strictEqual(by('00589').rule_engine.rules.find(r=>r.id==='ANC_LT1').action.type,'delay');
-assert(by('00387').rule_engine.rules.some(r=>r.id==='ANC_1_149'&&r.when.value[0]===1));assert(by('00387').rule_engine.rules.some(r=>r.id==='CIS_RENAL_40_49'));
+// Assert the clinical boundary through the engine, independent of predicate representation.
+require('./helpers/head-neck-inputs-v08445.cjs').validate(by('00387'));
+for(const [field,value,rule] of [['anc',1,'ANC_1_149'],['anc',1.49,'ANC_1_149'],['crcl_ml_min',40,'CRCL_40_49'],['crcl_ml_min',49,'CRCL_40_49']]){
+ const result=require('../js/assessment-engine.js').assess(by('00387'),{[field]:value});assert(result.findings.some(x=>x.ruleId===rule),field+' '+value+' source boundary');
+}
 assert.strictEqual(by('00323').treatment.planned_cycles,3);assert(/weekly carboplatin chemoradiation/i.test(by('00323').treatment.duration_text));
 assert(by('00903').rule_engine.rules.some(r=>r.id==='GC903_PLT_75_99'&&r.action.type==='consultant_review'));
 assert(by('00893').rule_engine.rules.some(r=>r.id==='MTX_RENAL_20_49'&&r.action.type==='dose_reduce'));assert(by('00893').rule_engine.rules.some(r=>r.id==='MTX_RENAL_LT20'&&r.action.type==='contraindicated'));
 assert(by('00696').rule_engine.rules.some(r=>r.id==='PC696_PLT_LT70'));assert(by('00696').input_definitions.paclitaxel_neuropathy_grade);
-for(const c of ['00705','00706']){assert.strictEqual(by(c).treatment.planned_cycles,6);assert(by(c).input_definitions.tsh?.required===false);assert(by(c).rule_engine.rules.some(r=>r.id==='ICI_PNEUM_G2'));}
+for(const c of ['00705','00706']){assert.strictEqual(by(c).treatment.planned_cycles,6);assert(by(c).input_definitions.tsh?.required===false);assert(by(c).rule_engine.rules.some(r=>(r.rule_id||r.id)==='ICI_PNEUM_G2'));}
 assert.strictEqual(by('00242').treatment.cycle_length_days,28);assert(by('00242').rule_engine.rules.some(r=>r.id==='VAN_QTC'));assert(by('00242').rule_engine.rules.some(r=>r.id==='VAN_RENAL'));
 assert.strictEqual(by('00295').metadata.nccp_version,'6');assert(by('00295').input_definitions.systolic_bp);assert(by('00295').rule_engine.rules.some(r=>r.id==='TKI_BP_SYS'));
 for(const c of ['00261','00419','00207','00385','00483','00484','00455','00558','00294']){assert(!by(c).metadata.tumour_group.includes('Head and Neck')||groups(by(c)).includes('Head and Neck'));assert(by(c).indications.some(i=>i.tumour_groups?.includes('Head and Neck')));}

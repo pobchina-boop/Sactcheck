@@ -9,6 +9,8 @@ const standard = require('./patient-visual-standard-v08443.cjs');
 const discovery = require('./apply-patient-visual-standard-v08443.cjs');
 const editorial = require('./patient-editorial-v08444.cjs');
 const visual = require('./patient-visual-language-v08444.cjs');
+const retention = require('./patient-canonical-retention-v08445.cjs');
+const overview = require('./patient-overview-v08445.cjs');
 const FILES = new Set(['index.html','guide.html','knowledge.html','knowledge-print.html','treatment-journey.html','logistics.html','passport.html','supportive-care.html','supportive-care-overview.html','consent.html']);
 const sha = s => crypto.createHash('sha256').update(s).digest('hex');
 const isRedirect = html => /<meta\b[^>]*\bhttp-equiv\s*=\s*(?:"\s*refresh\s*"|'\s*refresh\s*'|refresh(?=\s|\/?>))/i.test(html);
@@ -24,7 +26,7 @@ function target(file, root=ROOT) {
   return {relative,route:m[1],name:m[2],profileFile};
 }
 
-function decorateGenerated(file,html,root=ROOT) {
+function decorateGenerated(file,html,root=ROOT,options={}) {
   if(isRedirect(html))return html;
   root=path.resolve(root);
   const t=target(file,root);
@@ -38,6 +40,7 @@ function decorateGenerated(file,html,root=ROOT) {
     : clean;
   let result=editorial.applyEditorial(branded,{route:t.route,documentKind:t.name.replace(/\.html$/,''),data,root});
   if(typeof result!=='string')throw Error('Editorial publication must return HTML: '+t.relative);
+  if(t.name==='knowledge.html')result=retention.enhanceKnowledge(result,{root,route:t.route});
   const cssHref=path.posix.relative(path.posix.dirname(t.relative),'assets/patient/patient-visual-language-v08444.css');
   result=visual.upgradeVisualLanguage(result,{route:t.route,documentKind:t.name.replace(/\.html$/,''),file:t.relative,cssHref,data,root});
   if(typeof result!=='string')throw Error('Visual publication must return HTML: '+t.relative);
@@ -49,6 +52,8 @@ function decorateGenerated(file,html,root=ROOT) {
     const printHref=path.posix.relative(path.posix.dirname(t.relative),'assets/patient/patient-distilled-print-v08444.css');
     result=result.replace(/<\/head>/i,`<link rel="stylesheet" href="${printHref}"></head>`);
   }
+  if(t.name==='index.html'&&!t.relative.startsWith('docs/'))result=overview.buildOverview(result,{root,route:t.route,profile:data,guideHtml:options.guideHtml});
+  if(['index.html','knowledge.html'].includes(t.name))result=editorial.applyEditorial(result,{route:t.route,documentKind:t.name.replace(/\.html$/,''),data,root});
   if(t.relative.startsWith('docs/'))result=result.replace(/\b(href|src)=(["'])(?:\.\.\/)+((?:assets|js|data)\/[^"']+)\2/g,
     (_,attribute,quote,asset)=>`${attribute}=${quote}${path.posix.relative(path.posix.dirname(t.relative),asset)}${quote}`);
   return result;
@@ -105,11 +110,14 @@ function run({root=ROOT,routes,write=false,check=false,mirrorsOnly=false,report}
     for(const name of ['index.html','guide.html','knowledge.html','knowledge-print.html'])if(!fs.existsSync(path.join(root,'patient',route,name)))throw Error('Missing published patient document: patient/'+route+'/'+name);
   }
   const changes=[],documents=[],mirrors=[],fullMirrors=[];
-  for(const route of routes)for(const name of filesForRoute(root,route)) {
+  const finalGuides=new Map();
+  for(const route of routes)for(const name of filesForRoute(root,route).sort((a,b)=>(a==='guide.html'?-1:a==='index.html'?1:0)-(b==='guide.html'?-1:b==='index.html'?1:0))) {
     const file=path.posix.join('patient',route,name);
     const original=fs.readFileSync(path.join(root,file),'utf8');
-    const html=decorateGenerated(file,original,root);
-    if(decorateGenerated(file,html,root)!==html)throw Error('Non-idempotent patient publication: '+file);
+    const options={guideHtml:finalGuides.get(route)};
+    const html=decorateGenerated(file,original,root,options);
+    if(name==='guide.html')finalGuides.set(route,html);
+    if(decorateGenerated(file,html,root,options)!==html)throw Error('Non-idempotent patient publication: '+file);
     documents.push({file,route,before:sha(original),after:sha(html),changed:html!==original});
     if(html!==original)changes.push({file,original,html});
     const mirror=path.posix.join('docs',file),full=path.join(root,mirror);

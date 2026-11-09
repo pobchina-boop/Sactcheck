@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00558-v12b",
+  "protocol_id": "nccp-00558-v13",
   "file_name": "00558-pembrolizumab-400mg-monotherapy.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
@@ -52,14 +52,14 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "rule_level_source_reconciliation_status": "source_reconciled_v08440_independent_review_pending",
-      "audit_release": "0.84.40",
+      "rule_level_source_reconciliation_status": "source_reconciled_v08445_independent_review_pending",
+      "audit_release": "0.84.45",
       "official_catalogue_and_source_link_checked": true
     },
     "lung_subgroup": "immunotherapy",
     "tumour_group": "Lung",
     "gynaecology_subgroup": "cervical_immunotherapy",
-    "source_checked_date": "2026-10-29",
+    "source_checked_date": "2026-11-07",
     "treatment_context": [
       "gynaecology",
       "cervical_immunotherapy",
@@ -278,7 +278,7 @@
       "reconciled_release": "0.84.26",
       "reconciled_date": "2026-10-29"
     },
-    "canonical_protocol_id": "nccp-00558-v12b",
+    "canonical_protocol_id": "nccp-00558-v13",
     "source_pdf_sha256": "4390e1196dc42a92d7bbba4e8a2acbd07b4b282801032a0d40b0bfae73a1bcbe",
     "source_text_snapshot_sha256": "228aad11eb6abeb6814d1404066e6727ce1e4e0b30bb5a1ae642a42b8305eee8",
     "patient_service_scope": [
@@ -311,7 +311,7 @@
         "basis": "Audited product information supplement; NCCP differences remain explicit"
       }
     ],
-    "clinical_audit_release": "0.84.40",
+    "clinical_audit_release": "0.84.45",
     "retrospective_audit_v08435": {
       "source_retrieved": "2026-11-05",
       "source_bytes_unchanged": true,
@@ -349,6 +349,58 @@
         "source_sha256": null,
         "source_checked_date": "2026-10-29"
       }
+    },
+    "retrospective_audit_v08445": {
+      "source_retrieved": "2026-11-07",
+      "source_version": "13",
+      "source_bytes_unchanged": true,
+      "scope": "Source-reconciled missing HNSCC/RCC/urothelial/cervical indication checks and named immune-toxicity/restart paths; all prior clinical rule predicates/actions preserved.",
+      "new_rule_ids": [
+        "HN45_HN_ADULT",
+        "HN45_HN_FIRST_LINE",
+        "HN45_HN_HISTOLOGY_CONFIRMED",
+        "HN45_HN_RECURRENT_METASTATIC_INCURABLE_BY_LOCAL_THERAPY",
+        "HN45_HN_NASOPHARYNGEAL",
+        "HN45_HN_PDL1_ASSAY",
+        "HN45_HN_CPS_MISSING",
+        "HN45_HN_CPS_LOW",
+        "HN45_HN_PRIOR_CURATIVE_UNASSESSED",
+        "HN45_HN_RELAPSE_INTERVAL_UNASSESSED",
+        "HN45_HN_RELAPSE_WITHIN_SIX_MONTHS",
+        "HN45_HN_RELAPSE_EXACT_SIX_MONTHS",
+        "HN45_RCC_ADULT",
+        "HN45_RCC_CLEAR_CELL_CONFIRMED",
+        "HN45_RCC_INCREASED_RECURRENCE_RISK",
+        "HN45_RCC_NEPHRECTOMY_REQUIRED_RESECTION_COMPLETE",
+        "HN45_RCC_START_UNASSESSED",
+        "HN45_RCC_SURGERY_WINDOW_UNASSESSED",
+        "HN45_RCC_SURGERY_WINDOW_LATE",
+        "HN45_URO_ADULT",
+        "HN45_URO_HISTOLOGY_CONFIRMED",
+        "HN45_URO_ADVANCED_UNRESECTABLE_METASTATIC",
+        "HN45_URO_FIRST_LINE",
+        "HN45_URO_CISPLATIN_INELIGIBLE",
+        "HN45_URO_PROGRESSION_AFTER_PLATINUM",
+        "HN45_URO_PDL1_ASSAY",
+        "HN45_URO_CPS_MISSING",
+        "HN45_CERVICAL_ADULT",
+        "HN45_CERVICAL_INDUCTION_COMPLETED",
+        "HN45_CERVICAL_PERSISTENT_RECURRENT_METASTATIC",
+        "HN45_CERVICAL_PDL1_ASSAY",
+        "HN45_CERVICAL_CPS_MISSING",
+        "HN45_CERVICAL_CPS_LOW",
+        "HN45_CARDIAC_NEURO_G2_HOLD",
+        "HN45_OVERLAP_G2_HOLD",
+        "HN45_OVERLAP_G3_G4_STOP",
+        "HN45_ENDOCRINE_G2_CONTROLLED_REVIEW",
+        "HN45_PEMBRO_RESTART_HISTORY_UNASSESSED",
+        "HN45_PEMBRO_PRIOR_PERMANENT_STOP"
+      ],
+      "prior_rule_text_corrections": [
+        "MEL41_PLAN_UNASSESSED: recommendation/explanation only; predicates and action type preserved"
+      ],
+      "clinical_use_authorised": false,
+      "independent_clinical_approval": false
     }
   },
   "clinical_governance": {
@@ -878,6 +930,10 @@
         {
           "value": "failed_control_after_severe",
           "label": "Severe endocrine toxicity: continuation criteria not met after specialist review"
+        },
+        {
+          "value": "adrenal_g2_controlled",
+          "label": "Grade 2 adrenal insufficiency/hypophysitis, now controlled by hormone replacement"
         }
       ],
       "demo_value": "none",
@@ -1870,6 +1926,636 @@
       "input_role": "decision",
       "help": "Melanoma source eligibility only. Record the actual situation; blank is unassessed.",
       "demo_value": ""
+    },
+    "hn_adult": {
+      "label": "Adult patient with HNSCC",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      }
+    },
+    "hn_first_line": {
+      "label": "First-line treatment for recurrent/metastatic HNSCC",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      }
+    },
+    "hn_histology_confirmed": {
+      "label": "Histologically or cytologically confirmed HNSCC",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      }
+    },
+    "hn_recurrent_metastatic_incurable_by_local_therapy": {
+      "label": "Recurrent/metastatic HNSCC considered incurable by local therapies",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      }
+    },
+    "hn_nasopharyngeal_primary": {
+      "label": "Nasopharyngeal primary tumour",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      }
+    },
+    "hn_prior_curative_systemic_therapy": {
+      "label": "Previous curatively intended systemic treatment for locoregionally advanced HNSCC",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-head-neck",
+          "00558h"
+        ]
+      }
+    },
+    "hn_months_completion_to_progression": {
+      "label": "Months from completion of curatively intended systemic therapy to progression",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "Use treatment completion to documented progression, not time since the last clinic visit. Exactly six months requires source boundary review.",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "min": 0,
+      "max": 1200,
+      "step": 0.01,
+      "unit": "months",
+      "visible_when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558-head-neck",
+              "00558h"
+            ]
+          },
+          {
+            "field": "hn_prior_curative_systemic_therapy",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "required_when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "in",
+            "value": [
+              "00558-head-neck",
+              "00558h"
+            ]
+          },
+          {
+            "field": "hn_prior_curative_systemic_therapy",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      }
+    },
+    "rcc_adult": {
+      "label": "Adult patient with RCC",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      }
+    },
+    "rcc_clear_cell_confirmed": {
+      "label": "Histologically confirmed clear cell RCC",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      }
+    },
+    "rcc_increased_recurrence_risk": {
+      "label": "RCC at increased recurrence risk after surgery",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      }
+    },
+    "rcc_nephrectomy_required_resection_complete": {
+      "label": "Nephrectomy and any indicated metastatic-lesion resection completed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      }
+    },
+    "rcc_starting_adjuvant": {
+      "label": "Starting the postoperative adjuvant RCC course now",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558m"
+      }
+    },
+    "rcc_weeks_since_surgery": {
+      "label": "Weeks since RCC surgery when starting adjuvant pembrolizumab",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "min": 0,
+      "max": 1000,
+      "step": 0.01,
+      "unit": "weeks",
+      "visible_when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558m"
+          },
+          {
+            "field": "rcc_starting_adjuvant",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "required_when": {
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "00558m"
+          },
+          {
+            "field": "rcc_starting_adjuvant",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      }
+    },
+    "uro_adult": {
+      "label": "Adult patient with urothelial cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558e",
+          "00558f"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558e",
+          "00558f"
+        ]
+      }
+    },
+    "uro_histology_confirmed": {
+      "label": "Source-appropriate urothelial histology/cytology confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558e",
+          "00558f"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558e",
+          "00558f"
+        ]
+      }
+    },
+    "uro_advanced_unresectable_metastatic": {
+      "label": "Locally advanced/unresectable or metastatic urothelial cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558e",
+          "00558f"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558e",
+          "00558f"
+        ]
+      }
+    },
+    "uro_first_line": {
+      "label": "First-line advanced urothelial treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558f"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558f"
+      }
+    },
+    "uro_cisplatin_ineligible": {
+      "label": "Ineligible for cisplatin-containing chemotherapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558f"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558f"
+      }
+    },
+    "uro_progression_after_platinum": {
+      "label": "Urothelial progression/recurrence after first-line platinum",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558e"
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00558e"
+      }
+    },
+    "cervical_adult": {
+      "label": "Adult patient with cervical cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-gyn",
+          "00558j"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-gyn",
+          "00558j"
+        ]
+      }
+    },
+    "cervical_induction_completed": {
+      "label": "Induction chemotherapy component completed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-gyn",
+          "00558j"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-gyn",
+          "00558j"
+        ]
+      }
+    },
+    "cervical_persistent_recurrent_metastatic": {
+      "label": "Persistent, recurrent or metastatic cervical cancer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "treatment_context",
+      "help": "",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-gyn",
+          "00558j"
+        ]
+      },
+      "required_when": {
+        "field": "indication_id",
+        "operator": "in",
+        "value": [
+          "00558-gyn",
+          "00558j"
+        ]
+      }
+    },
+    "pembro_overlap_syndrome_grade": {
+      "label": "Myocarditis–myositis–myasthenia gravis overlap syndrome: highest individual CTCAE grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "Documented grade 0 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Documented grade 1 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Documented grade 2 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Documented grade 3 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Documented grade 4 of this named event. Confirm its event-specific grading definition; the dose-action table alone does not define the grade."
+        }
+      ],
+      "demo_value": "",
+      "ui_section": "clinical",
+      "ctcae_version": "4.0",
+      "ctcae_category": "myocarditis_myositis_myasthenia_gravis_overlap",
+      "assessment_guidance": "Record the clinician-assessed grade of the named event using the source-specific definition. Assess alternative causes and recovery separately; a generic grade does not diagnose immune toxicity.",
+      "input_role": "decision",
+      "source_url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+      "grading_source_label": "EMA Keytruda IV SmPC Table 1, CTCAE v4.0",
+      "grading_source_url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+      "source_grading_note": "This NCCP dose table names CTCAE v4.0, but is not a complete grading table. Confirm the exact event-specific definition in that edition; no CTCAE5/6 conversion is applied.",
+      "help": "Clinician-confirmed overlap of two or all three named conditions. Enter the most severe individual event grade; suspected symptoms require urgent assessment."
+    },
+    "pembro_prior_permanent_stop": {
+      "label": "Any previous event meeting pembrolizumab permanent-discontinuation criteria",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "help": "Review the documented immune-event history even when current symptoms and laboratory values have recovered. A prior permanent-stop event is not cleared by recovery or steroid taper.",
+      "source_url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+      "visible_when": {
+        "field": "pembro_restart_requested",
+        "operator": "==",
+        "value": true
+      },
+      "required_when": {
+        "field": "pembro_restart_requested",
+        "operator": "==",
+        "value": true
+      }
     }
   },
   "required_inputs": [],
@@ -4144,9 +4830,9 @@
           "components": [
             "pembrolizumab"
           ],
-          "recommendation": "Confirm postoperative adjuvant treatment, or the explicitly selected 200 mg stage IIIB perioperative phase, before interpreting surgery and cycle counts."
+          "recommendation": "Confirm postoperative adjuvant melanoma treatment before interpreting surgery and cycle counts. The discretionary stage IIIB preoperative/postoperative option is specified in the separate 200 mg NCCP regimen; it is not a 400 mg schedule."
         },
-        "explanation": "Confirm postoperative adjuvant treatment, or the explicitly selected 200 mg stage IIIB perioperative phase, before interpreting surgery and cycle counts.",
+        "explanation": "Confirm postoperative adjuvant melanoma treatment before interpreting surgery and cycle counts. The discretionary stage IIIB preoperative/postoperative option is specified in the separate 200 mg NCCP regimen; it is not a 400 mg schedule.",
         "source": {
           "document": "NCCP 00558 v13",
           "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
@@ -4414,6 +5100,1506 @@
           "page": 3,
           "table": "Eligibility / treatment setting",
           "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_ADULT",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "hn_adult",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hn_adult",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm adulthood for the selected HNSCC indication; a blank or negative answer does not establish eligibility."
+        },
+        "explanation": "Confirm adulthood for the selected HNSCC indication; a blank or negative answer does not establish eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_FIRST_LINE",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "hn_first_line",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hn_first_line",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm this is first-line treatment for metastatic or unresectable recurrent HNSCC."
+        },
+        "explanation": "Confirm this is first-line treatment for metastatic or unresectable recurrent HNSCC.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_HISTOLOGY_CONFIRMED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "hn_histology_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hn_histology_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm histological or cytological HNSCC diagnosis."
+        },
+        "explanation": "Confirm histological or cytological HNSCC diagnosis.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_RECURRENT_METASTATIC_INCURABLE_BY_LOCAL_THERAPY",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "hn_recurrent_metastatic_incurable_by_local_therapy",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hn_recurrent_metastatic_incurable_by_local_therapy",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm recurrent/metastatic HNSCC considered incurable by local therapies; the selected monotherapy indication is not a curative local-treatment pathway."
+        },
+        "explanation": "Confirm recurrent/metastatic HNSCC considered incurable by local therapies; the selected monotherapy indication is not a curative local-treatment pathway.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_NASOPHARYNGEAL",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "hn_nasopharyngeal_primary",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hn_nasopharyngeal_primary",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the primary site: NCCP eligibility for this HNSCC indication excludes nasopharyngeal cancer."
+        },
+        "explanation": "Confirm the primary site: NCCP eligibility for this HNSCC indication excludes nasopharyngeal cancer.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_PDL1_ASSAY",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "pd_l1_validated",
+                  "operator": "missing"
+                },
+                {
+                  "field": "pd_l1_validated",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm PD-L1 CPS by a validated assay before establishing HNSCC eligibility."
+        },
+        "explanation": "Confirm PD-L1 CPS by a validated assay before establishing HNSCC eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_CPS_MISSING",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "field": "pd_l1_cps",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Record the HNSCC PD-L1 CPS; the NCCP threshold is at least 1."
+        },
+        "explanation": "Record the HNSCC PD-L1 CPS; the NCCP threshold is at least 1.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_CPS_LOW",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "field": "pd_l1_cps",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "PD-L1 CPS below 1 is outside the selected HNSCC indication."
+        },
+        "explanation": "PD-L1 CPS below 1 is outside the selected HNSCC indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_PRIOR_CURATIVE_UNASSESSED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "field": "hn_prior_curative_systemic_therapy",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Establish prior curatively intended systemic treatment and, if given, the completion-to-progression interval before applying the six-month exclusion."
+        },
+        "explanation": "Establish prior curatively intended systemic treatment and, if given, the completion-to-progression interval before applying the six-month exclusion.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_RELAPSE_INTERVAL_UNASSESSED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "field": "hn_prior_curative_systemic_therapy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "hn_months_completion_to_progression",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Record the interval from completing curatively intended systemic therapy to progressive HNSCC; progression within six months is excluded."
+        },
+        "explanation": "Record the interval from completing curatively intended systemic therapy to progressive HNSCC; progression within six months is excluded.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_RELAPSE_WITHIN_SIX_MONTHS",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "field": "hn_prior_curative_systemic_therapy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "hn_months_completion_to_progression",
+              "operator": "<",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Progression within six months of completing curatively intended systemic treatment is an NCCP exclusion for this HNSCC indication. Consultant/pharmacy review is required; do not infer eligibility."
+        },
+        "explanation": "Progression within six months of completing curatively intended systemic treatment is an NCCP exclusion for this HNSCC indication. Consultant/pharmacy review is required; do not infer eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_HN_RELAPSE_EXACT_SIX_MONTHS",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558-head-neck",
+                "00558h"
+              ]
+            },
+            {
+              "field": "hn_prior_curative_systemic_therapy",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "hn_months_completion_to_progression",
+              "operator": "==",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "The source uses “within six months” without explicitly resolving the exact six-month boundary. Confirm dates and obtain consultant/pharmacy interpretation; do not treat the boundary as automatic eligibility."
+        },
+        "explanation": "The source uses “within six months” without explicitly resolving the exact six-month boundary. Confirm dates and obtain consultant/pharmacy interpretation; do not treat the boundary as automatic eligibility.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_ADULT",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "any": [
+                {
+                  "field": "rcc_adult",
+                  "operator": "missing"
+                },
+                {
+                  "field": "rcc_adult",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm adulthood for the adjuvant RCC indication."
+        },
+        "explanation": "Confirm adulthood for the adjuvant RCC indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_CLEAR_CELL_CONFIRMED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "any": [
+                {
+                  "field": "rcc_clear_cell_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "rcc_clear_cell_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm clear cell RCC histology; the source eligibility does not cover every RCC subtype."
+        },
+        "explanation": "Confirm clear cell RCC histology; the source eligibility does not cover every RCC subtype.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_INCREASED_RECURRENCE_RISK",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "any": [
+                {
+                  "field": "rcc_increased_recurrence_risk",
+                  "operator": "missing"
+                },
+                {
+                  "field": "rcc_increased_recurrence_risk",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm increased recurrence risk for the adjuvant RCC indication."
+        },
+        "explanation": "Confirm increased recurrence risk for the adjuvant RCC indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_NEPHRECTOMY_REQUIRED_RESECTION_COMPLETE",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "any": [
+                {
+                  "field": "rcc_nephrectomy_required_resection_complete",
+                  "operator": "missing"
+                },
+                {
+                  "field": "rcc_nephrectomy_required_resection_complete",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm nephrectomy, with metastatic-lesion resection where applicable, for the selected adjuvant RCC indication."
+        },
+        "explanation": "Confirm nephrectomy, with metastatic-lesion resection where applicable, for the selected adjuvant RCC indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_START_UNASSESSED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "field": "rcc_starting_adjuvant",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Establish whether the adjuvant RCC course is starting now before applying the postoperative initiation window."
+        },
+        "explanation": "Establish whether the adjuvant RCC course is starting now before applying the postoperative initiation window.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_SURGERY_WINDOW_UNASSESSED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "field": "rcc_starting_adjuvant",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "rcc_weeks_since_surgery",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Record weeks since surgery: adjuvant RCC pembrolizumab should start within 12 weeks."
+        },
+        "explanation": "Record weeks since surgery: adjuvant RCC pembrolizumab should start within 12 weeks.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_RCC_SURGERY_WINDOW_LATE",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558m"
+            },
+            {
+              "field": "rcc_starting_adjuvant",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "rcc_weeks_since_surgery",
+              "operator": ">",
+              "value": 12
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Starting adjuvant RCC pembrolizumab beyond 12 weeks after surgery is outside the source initiation window; seek consultant/pharmacy review."
+        },
+        "explanation": "Starting adjuvant RCC pembrolizumab beyond 12 weeks after surgery is outside the source initiation window; seek consultant/pharmacy review.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 4,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_ADULT",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558e",
+                "00558f"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "uro_adult",
+                  "operator": "missing"
+                },
+                {
+                  "field": "uro_adult",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm adulthood for the selected urothelial indication."
+        },
+        "explanation": "Confirm adulthood for the selected urothelial indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_HISTOLOGY_CONFIRMED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558e",
+                "00558f"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "uro_histology_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "uro_histology_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm urothelial histology/cytology and site. After platinum the source requires predominantly transitional-cell features; first-line allows transitional-cell or mixed histology."
+        },
+        "explanation": "Confirm urothelial histology/cytology and site. After platinum the source requires predominantly transitional-cell features; first-line allows transitional-cell or mixed histology.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_ADVANCED_UNRESECTABLE_METASTATIC",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558e",
+                "00558f"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "uro_advanced_unresectable_metastatic",
+                  "operator": "missing"
+                },
+                {
+                  "field": "uro_advanced_unresectable_metastatic",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the advanced disease setting for the selected urothelial indication."
+        },
+        "explanation": "Confirm the advanced disease setting for the selected urothelial indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_FIRST_LINE",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558f"
+            },
+            {
+              "any": [
+                {
+                  "field": "uro_first_line",
+                  "operator": "missing"
+                },
+                {
+                  "field": "uro_first_line",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the first-line urothelial setting for this cisplatin-ineligible pathway."
+        },
+        "explanation": "Confirm the first-line urothelial setting for this cisplatin-ineligible pathway.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_CISPLATIN_INELIGIBLE",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558f"
+            },
+            {
+              "any": [
+                {
+                  "field": "uro_cisplatin_ineligible",
+                  "operator": "missing"
+                },
+                {
+                  "field": "uro_cisplatin_ineligible",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm cisplatin ineligibility; it is required for this first-line urothelial pathway."
+        },
+        "explanation": "Confirm cisplatin ineligibility; it is required for this first-line urothelial pathway.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_PROGRESSION_AFTER_PLATINUM",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558e"
+            },
+            {
+              "any": [
+                {
+                  "field": "uro_progression_after_platinum",
+                  "operator": "missing"
+                },
+                {
+                  "field": "uro_progression_after_platinum",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm urothelial progression/recurrence after first-line platinum-containing chemotherapy (cisplatin or carboplatin)."
+        },
+        "explanation": "Confirm urothelial progression/recurrence after first-line platinum-containing chemotherapy (cisplatin or carboplatin).",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_PDL1_ASSAY",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558f"
+            },
+            {
+              "any": [
+                {
+                  "field": "pd_l1_validated",
+                  "operator": "missing"
+                },
+                {
+                  "field": "pd_l1_validated",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm a validated PD-L1 CPS assay for the first-line cisplatin-ineligible urothelial indication."
+        },
+        "explanation": "Confirm a validated PD-L1 CPS assay for the first-line cisplatin-ineligible urothelial indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_URO_CPS_MISSING",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00558f"
+            },
+            {
+              "field": "pd_l1_cps",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Record urothelial PD-L1 CPS. The indication table says ≥10 and eligibility text says >10; exact 10 requires source reconciliation."
+        },
+        "explanation": "Record urothelial PD-L1 CPS. The indication table says ≥10 and eligibility text says >10; exact 10 requires source reconciliation.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CERVICAL_ADULT",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558j"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cervical_adult",
+                  "operator": "missing"
+                },
+                {
+                  "field": "cervical_adult",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm adulthood for this cervical maintenance indication."
+        },
+        "explanation": "Confirm adulthood for this cervical maintenance indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CERVICAL_INDUCTION_COMPLETED",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558j"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cervical_induction_completed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "cervical_induction_completed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm completion of the induction chemotherapy component before selecting pembrolizumab cervical maintenance monotherapy."
+        },
+        "explanation": "Confirm completion of the induction chemotherapy component before selecting pembrolizumab cervical maintenance monotherapy.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CERVICAL_PERSISTENT_RECURRENT_METASTATIC",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558j"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cervical_persistent_recurrent_metastatic",
+                  "operator": "missing"
+                },
+                {
+                  "field": "cervical_persistent_recurrent_metastatic",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm the persistent, recurrent or metastatic cervical cancer setting."
+        },
+        "explanation": "Confirm the persistent, recurrent or metastatic cervical cancer setting.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CERVICAL_PDL1_ASSAY",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558j"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "pd_l1_validated",
+                  "operator": "missing"
+                },
+                {
+                  "field": "pd_l1_validated",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Confirm cervical PD-L1 CPS by a validated test."
+        },
+        "explanation": "Confirm cervical PD-L1 CPS by a validated test.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 3,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CERVICAL_CPS_MISSING",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558j"
+              ]
+            },
+            {
+              "field": "pd_l1_cps",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Record cervical PD-L1 CPS; maintenance indication requires CPS at least 1."
+        },
+        "explanation": "Record cervical PD-L1 CPS; maintenance indication requires CPS at least 1.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CERVICAL_CPS_LOW",
+        "priority": 200,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "in",
+              "value": [
+                "00558j"
+              ]
+            },
+            {
+              "field": "pd_l1_cps",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Cervical PD-L1 CPS below 1 is outside this maintenance indication."
+        },
+        "explanation": "Cervical PD-L1 CPS below 1 is outside this maintenance indication.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 1,
+          "table": "Eligibility / exclusions",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_CARDIAC_NEURO_G2_HOLD",
+        "priority": 940,
+        "when": {
+          "any": [
+            {
+              "field": "myocarditis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "encephalitis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "guillain_barre_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Withhold for grade 2 immune-mediated myocarditis, encephalitis or Guillain–Barré syndrome and arrange urgent specialist assessment. Grade 3–4 named events require permanent discontinuation. Safety of restarting after immune myocarditis is not established."
+        },
+        "explanation": "Withhold for grade 2 immune-mediated myocarditis, encephalitis or Guillain–Barré syndrome and arrange urgent specialist assessment. Grade 3–4 named events require permanent discontinuation. Safety of restarting after immune myocarditis is not established.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 6,
+          "table": "Table 1 other immune-related events; EMA SmPC 4.2/4.4",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_OVERLAP_G2_HOLD",
+        "priority": 940,
+        "when": {
+          "field": "pembro_overlap_syndrome_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Withhold for grade 2 myocarditis–myositis–myasthenia gravis overlap syndrome until grade 0–1 recovery and specialist review. Grade is the highest of the individual overlapping events."
+        },
+        "explanation": "Withhold for grade 2 myocarditis–myositis–myasthenia gravis overlap syndrome until grade 0–1 recovery and specialist review. Grade is the highest of the individual overlapping events.",
+        "source": {
+          "document": "EMA Keytruda IV SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+          "page": 8,
+          "table": "4.2 Table 1 overlap syndrome",
+          "checked_date": "2026-11-07",
+          "section": "4.2 Table 1; 4.4"
+        }
+      },
+      {
+        "rule_id": "HN45_OVERLAP_G3_G4_STOP",
+        "priority": 950,
+        "when": {
+          "field": "pembro_overlap_syndrome_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Permanently discontinue for grade 3–4 myocarditis–myositis–myasthenia gravis overlap syndrome. Grade is the highest of the individual overlapping events."
+        },
+        "explanation": "Permanently discontinue for grade 3–4 myocarditis–myositis–myasthenia gravis overlap syndrome. Grade is the highest of the individual overlapping events.",
+        "source": {
+          "document": "EMA Keytruda IV SmPC",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+          "page": 8,
+          "table": "4.2 Table 1 overlap syndrome",
+          "checked_date": "2026-11-07",
+          "section": "4.2 Table 1; 4.4"
+        }
+      },
+      {
+        "rule_id": "HN45_ENDOCRINE_G2_CONTROLLED_REVIEW",
+        "priority": 200,
+        "when": {
+          "field": "endocrine_status",
+          "operator": "==",
+          "value": "adrenal_g2_controlled"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "The source grade 2 adrenal/hypophysitis hold lasts until controlled by hormone replacement. Confirm clinical stability and specialist plan; this is not automatic global treatment clearance."
+        },
+        "explanation": "The source grade 2 adrenal/hypophysitis hold lasts until controlled by hormone replacement. Confirm clinical stability and specialist plan; this is not automatic global treatment clearance.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 5,
+          "table": "Table 1 endocrine exception",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_PEMBRO_RESTART_HISTORY_UNASSESSED",
+        "priority": 940,
+        "when": {
+          "all": [
+            {
+              "field": "pembro_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pembro_prior_permanent_stop",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "Before considering restart, establish whether any prior event required permanent discontinuation. Recovery and steroid-taper confirmations alone do not establish that rechallenge is permitted."
+        },
+        "explanation": "Before considering restart, establish whether any prior event required permanent discontinuation. Recovery and steroid-taper confirmations alone do not establish that rechallenge is permitted.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 6,
+          "table": "Table 1 permanent-discontinuation rules",
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "HN45_PEMBRO_PRIOR_PERMANENT_STOP",
+        "priority": 950,
+        "when": {
+          "field": "pembro_prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "recommendation": "A documented prior event requiring permanent discontinuation prevents routine pembrolizumab restart, including after current symptom recovery or completion of steroid taper."
+        },
+        "explanation": "A documented prior event requiring permanent discontinuation prevents routine pembrolizumab restart, including after current symptom recovery or completion of steroid taper.",
+        "source": {
+          "document": "NCCP 00558 v13",
+          "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf",
+          "page": 6,
+          "table": "Table 1 permanent-discontinuation rules",
+          "checked_date": "2026-11-07"
         }
       }
     ]

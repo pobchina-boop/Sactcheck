@@ -12,7 +12,7 @@
     "indication": "Stage III non-small-cell lung cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
     "source_document_pages": 5,
-    "sactcheck_encoding_version": "0.84.30",
+    "sactcheck_encoding_version": "0.84.45",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "chemoradiation",
@@ -46,7 +46,11 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "source_document_checked": true
+      "source_document_checked": true,
+      "audit_date": "2026-11-07",
+      "audit_release": "0.84.45",
+      "software_validation_record": "validation/head-neck-v08445/cetux-chemo/proposed-results.json",
+      "v08445_source_revalidation_record": "validation/head-neck-v08445/cetux-chemo/source-retrieval.json"
     },
     "source_title_exact": "CISplatin (50mg/m2) and Etoposide (50mg/m2) and Thoracic Radiotherapy (TRT) -28 day",
     "display_title_normalised": true,
@@ -82,7 +86,7 @@
     "canonical_protocol_id": "nccp-00456-v4",
     "source_pdf_sha256": "c5bd2d4e09c53948a5a9664dcc30fe05ffe513131f904a60f06339b776e9b3d5",
     "source_text_snapshot_sha256": "e54012ce1f4b1f92525a03b3773a8e3ea254578ab411c7f02863259f1d324a8f",
-    "source_checked_date": "2026-11-02",
+    "source_checked_date": "2026-11-07",
     "source_retrieval_method": "Official current catalogue-linked PDF retrieved; text and tabular page visually checked",
     "full_suite_release": "0.84.30",
     "source_schedule_interval_label": "Every28 days",
@@ -102,13 +106,16 @@
         "basis": "Audited companion regimen or product information; NCCP differences remain explicit"
       }
     ],
-    "review_date": "2025-05-13"
+    "review_date": "2025-05-13",
+    "clinical_audit_release": "0.84.45"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
     "disclaimer": "Source reconciliation from NCCP 00456 v4; independent clinical and pharmacy review remains pending. The current official source and individual prescribing decision remain authoritative.",
-    "clinical_use_authorised": false
+    "clinical_use_authorised": false,
+    "consultant_reviewed": false,
+    "oncology_pharmacy_reviewed": false
   },
   "indications": [
     {
@@ -513,6 +520,72 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "other_nonhaem_highest_grade": {
+      "label": "Highest grade of this treatment-related non-haematological toxicity, excluding mucositis/alopecia",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "assessment_guidance": "Record the highest documented grade of the named event under the source/local grading policy. Do not infer recovery or erase a previous severe event.",
+      "grading_source_label": "NCCP named adverse-event table; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+      "source_grading_note": "The source does not specify a grading edition for this table. Use the documented grade of this event under verified local policy; historical and current grades are separate."
+    },
+    "neuropathy_highest_grade": {
+      "label": "Highest treatment-emergent peripheral neuropathy grade, even if recovered",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "assessment_guidance": "Record the highest documented grade of the named event under the source/local grading policy. Do not infer recovery or erase a previous severe event.",
+      "grading_source_label": "NCCP named adverse-event table; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+      "source_grading_note": "The source does not specify a grading edition for this table. Use the documented grade of this event under verified local policy; historical and current grades are separate."
     }
   },
   "required_inputs": [],
@@ -796,7 +869,7 @@
                 },
                 {
                   "field": "anc_x10e9_l",
-                  "operator": "<=",
+                  "operator": "<",
                   "value": 1.5
                 }
               ]
@@ -810,7 +883,7 @@
                 },
                 {
                   "field": "platelets_x10e9_l",
-                  "operator": "<=",
+                  "operator": "<",
                   "value": 100
                 }
               ]
@@ -822,19 +895,20 @@
           "components": [
             "etoposide"
           ],
-          "recommendation": "The printed table leaves ANC>1.49 to 1.5 and platelets>99 to 100 unassigned (normal row uses strict >1.5 and >100). Do not round or silently assume full dose. Confirm with the consultant/pharmacist.",
-          "message": "The printed table leaves ANC>1.49 to 1.5 and platelets>99 to 100 unassigned (normal row uses strict >1.5 and >100). Do not round or silently assume full dose. Confirm with the consultant/pharmacist.",
+          "recommendation": "The rendered NCCP Table 1 full-dose row is ANC ≥1.5 AND platelets ≥100. Decimal intervals above 1.49 but below 1.5, or above 99 but below 100, remain unassigned: do not round. Exact 1.5 and 100 are not source gaps; all independent clinical restrictions still apply.",
+          "message": "The rendered NCCP Table 1 full-dose row is ANC ≥1.5 AND platelets ≥100. Decimal intervals above 1.49 but below 1.5, or above 99 but below 100, remain unassigned: do not round. Exact 1.5 and 100 are not source gaps; all independent clinical restrictions still apply.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review",
           "dose_calculation_blocked": true
         },
-        "explanation": "The printed table leaves ANC>1.49 to 1.5 and platelets>99 to 100 unassigned (normal row uses strict >1.5 and >100). Do not round or silently assume full dose. Confirm with the consultant/pharmacist.",
+        "explanation": "The rendered NCCP Table 1 full-dose row is ANC ≥1.5 AND platelets ≥100. Decimal intervals above 1.49 but below 1.5, or above 99 but below 100, remain unassigned: do not round. Exact 1.5 and 100 are not source gaps; all independent clinical restrictions still apply.",
         "source": {
           "document": "NCCP 00456 v4",
           "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
           "page": 3,
           "version": "4",
-          "checked_date": "2026-11-02"
+          "checked_date": "2026-11-07",
+          "visual_verification": "00456-page3.png: the source draws underlines separately; PDF extracted text incorrectly appears as strict >."
         }
       },
       {
@@ -1784,6 +1858,206 @@
           "page": 1,
           "version": "4",
           "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_G3_RECOVERY_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "After grade 3 toxicity other than mucositis/alopecia, continue withholding until recovery to grade 1 or less; grade 2 is not sufficient recovery.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After grade 3 toxicity other than mucositis/alopecia, continue withholding until recovery to grade 1 or less; grade 2 is not sufficient recovery.",
+        "source": {
+          "document": "NCCP 00456 v4",
+          "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_G3_RECOVERED_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_highest_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "After documented grade 3 toxicity has recovered to grade 1 or less, the source proposes 75% cisplatin and etoposide. Confirm the prescribed denominator, previous reductions and independent restrictions before restart; do not automatically restore full doses.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "dose_calculation_blocked": true
+        },
+        "explanation": "After documented grade 3 toxicity has recovered to grade 1 or less, the source proposes 75% cisplatin and etoposide. Confirm the prescribed denominator, previous reductions and independent restrictions before restart; do not automatically restore full doses.",
+        "source": {
+          "document": "NCCP 00456 v4",
+          "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_HISTORY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "other_nonhaem_highest_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "other_nonhaem_toxicity_grade",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "Prior severe toxicity is recorded but current recovery is not assessed. Obtain the current grade and consultant restart plan; missing information is not recovery.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "dose_calculation_blocked": true
+        },
+        "explanation": "Prior severe toxicity is recorded but current recovery is not assessed. Obtain the current grade and consultant restart plan; missing information is not recovery.",
+        "source": {
+          "document": "NCCP 00456 v4",
+          "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "NONHAEM_PRIOR_G4_REVIEW",
+        "when": {
+          "field": "other_nonhaem_highest_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "Previous grade 4 non-haematological toxicity is outside the source grade 3 restart row. Confirm specialist recovery/rechallenge advice; do not extrapolate a 75% restart.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "dose_calculation_blocked": true
+        },
+        "explanation": "Previous grade 4 non-haematological toxicity is outside the source grade 3 restart row. Confirm specialist recovery/rechallenge advice; do not extrapolate a 75% restart.",
+        "source": {
+          "document": "NCCP 00456 v4",
+          "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "CIS_NEURO_RECOVERED_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_highest_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "After grade 2 or worse neuropathy recovers to grade 1 or less, the source gives a consultant choice of carboplatin AUC5 substitution or 50% cisplatin. Confirm actual previous dose and other restrictions. Do not substitute the separate AUC3 regimen or restore full-dose cisplatin automatically.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "dose_calculation_blocked": true
+        },
+        "explanation": "After grade 2 or worse neuropathy recovers to grade 1 or less, the source gives a consultant choice of carboplatin AUC5 substitution or 50% cisplatin. Confirm actual previous dose and other restrictions. Do not substitute the separate AUC3 regimen or restore full-dose cisplatin automatically.",
+        "source": {
+          "document": "NCCP 00456 v4",
+          "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "rule_id": "CIS_NEURO_HISTORY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_highest_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Assess current neuropathy recovery and the prescribed restart/substitution plan before further cisplatin; missing current grade cannot establish recovery.",
+          "show_in_dose_actions": true,
+          "dose_calculation": "specialist_review",
+          "dose_calculation_blocked": true
+        },
+        "explanation": "Assess current neuropathy recovery and the prescribed restart/substitution plan before further cisplatin; missing current grade cannot establish recovery.",
+        "source": {
+          "document": "NCCP 00456 v4",
+          "url": "https://healthservice.hse.ie/documents/6902/456_V4_CISplatin_50_and_Etoposide.pdf",
+          "page": 3,
+          "checked_date": "2026-11-07"
         }
       }
     ]

@@ -7,6 +7,6 @@ assert.equal(crypto.createHash('sha256').update(fs.readFileSync(before)).digest(
 const prior=require(before).codes;assert.equal(prior.length,193);
 const added=['00102','00105','00237','00373','00464','00535'];assert(added.every(c=>!prior.includes(c)));
 const expected=[...prior,...added].sort();
-function registry(codes){assert.deepEqual([...codes].sort(),expected,'All193 preceding roots plus six skin roots; shared00551 adds a context only');}
+function registry(codes){require('./head-neck-suite-registration-v08445.cjs').registry(codes,expected);}
 function priorRegistry(codes){assert.deepEqual([...codes].sort(),[...prior].sort(),'Preceding registry is preserved exactly');}
 module.exports={registry,priorRegistry,added};

@@ -34,11 +34,13 @@
 
   function profileFor(data, ctx) {
     const profile = JSON.parse(JSON.stringify(data.default_profile || {}));
-    if (ctx.protocol && data.profiles?.[ctx.protocol]) Object.assign(profile, data.profiles[ctx.protocol]);
+    const keys = root.SACTCheckProtocolIds?.compatibleKeys(ctx.protocol) || [ctx.protocol];
+    const key = keys.find(value => data.profiles?.[value]);
+    if (key) Object.assign(profile, data.profiles[key]);
     if(profile.context_profiles){
       const context=String(ctx.tumour||'').toLowerCase();
       if(profile.context_profiles[context])Object.assign(profile,profile.context_profiles[context]);
-      else profile.administration_frequency={status:'evidence_required',value:'Confirm the treatment indication, schedule and planned doses with the oncology team.',source:'Indication-specific lung and breast profiles; exact context has not been selected.'};
+      else profile.administration_frequency={status:'evidence_required',value:'Confirm the treatment indication, schedule and planned doses with the oncology team.',source:'Indication-specific profiles; exact context has not been selected.'};
     }
     if (ctx.route) profile.route_classification = {
       status:"catalogue_derived", value:ctx.route, source:"SACTCheck regimen catalogue metadata"
@@ -118,6 +120,9 @@
         console.warn("SACTCheck v0.70.0 sustainability addendum could not be loaded; base sustainability module remains available.",addendumError);
       }
 
+      const currentResponse=await fetch('data/sustainability-regimen-metadata-v08445-addendum.json',{cache:'no-store'});
+      if(!currentResponse.ok)throw new Error(`Current sustainability metadata unavailable (${currentResponse.status})`);
+      mergeAddendum(data,await currentResponse.json());
       renderMetadata(data,ctx);
     } catch (error) {
       if ($("metadataSummary")) $("metadataSummary").textContent =
@@ -126,5 +131,5 @@
     }
   }
   if (document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
-  root.SACTCheckSustainability=Object.freeze({version:"0.69.1",addendumRelease:"0.70.0",mergeAddendum});
+  root.SACTCheckSustainability=Object.freeze({version:"0.69.1",addendumRelease:"0.84.45",mergeAddendum,profileFor});
 })(typeof globalThis!=="undefined"?globalThis:this);

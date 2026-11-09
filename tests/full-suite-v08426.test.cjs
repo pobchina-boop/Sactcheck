@@ -5,8 +5,8 @@ const idx=json('data/lung-next-v08426-source-index.json'),scope=json('validation
 const E=require('../js/assessment-engine'),D=require('../js/protocol-dose-schedule'),J=require('../js/treatment-journey-v0837'),V=require('../js/treatment-evidence-v08413'),R=require('../js/patient-asset-registry-v0810');
 assert.equal(idx.codes.length,10);assert.equal(idx.new_codes.length,5);assert.equal(idx.retrospective_codes.length,5);assert.equal(KB.regimen_profiles.length,10);
 for(const c of idx.codes){
- const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(x=>x.path.includes('/'+c+'-')).path),k=KB.regimen_profiles.find(x=>x.protocol_id===p.protocol_id),plans=support[c];
- assert.equal(d.suite_release,'0.84.26');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));assert.equal(k.full_suite_release,'0.84.26');
+ const d=json(`data/patient-knowledge/${c}.json`),p=json(protocols.find(x=>x.path.includes('/'+c+'-')).path),k=(['00455','00558'].includes(c)?json('data/regimen-knowledge-base-v08445-addendum.json'):KB).regimen_profiles.find(x=>x.protocol_id===p.protocol_id),plans=support[c];
+ if(['00455','00558'].includes(c)){require('./helpers/head-neck-inputs-v08445.cjs').validate(p);assert.equal(k.clinical_audit_release,'0.84.45');}assert.equal(d.suite_release,'0.84.26');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));assert.equal(k.full_suite_release,'0.84.26');
  for(const flag of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[flag],false,c+'/'+flag);
  const empty=E.assess(p,{});assert.equal(empty.complete,false);assert(!['proceed','proceed_with_caution'].includes(empty.actionType));assert.deepEqual(d.evidence.metrics,[]);
  assert(k.treatment_rationale.line&&k.evidence_at_a_glance.sources.length);assert.deepEqual(k.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);

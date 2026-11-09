@@ -44,7 +44,15 @@ for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
   for(const file of ["index.html","guide.pdf","passport.pdf"]){
     const rel=`patient/${code}/${file}`;
     if(!exists(rel))report.critical.push(`Missing canonical patient asset ${rel}`);
-    else if(presentationMigration.expectedHash(rel,protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')]?.sha256)!==sha(rel))report.critical.push(`Protected patient asset drift: ${rel}`);
+    else {
+      const fixture=protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
+      const migration45=require('../tests/helpers/retrospective-v08445.cjs');
+      if(!fixture&&!migration45.NEW_ROUTES.includes(code))report.critical.push(`Unrecorded patient route: ${code}`);
+      else {
+        const expected=fixture?presentationMigration.expectedHash(rel,fixture.sha256):migration45.expectedHash(rel,null);
+        if(expected!==sha(rel))report.critical.push(`Protected patient asset drift: ${rel}`);
+      }
+    }
   }
   for(const file of ["guide.pdf","passport.pdf"]){
     const a=`patient/${code}/${file}`,b=`docs/patient/${code}/${file}`;

@@ -5,7 +5,7 @@ const base=json('validation/patient-rollout-v08431/baseline-hashes.json').files,
 const visual=require('../tools/patient-visual-standard-v08443.cjs'),presentationMigration=require('./helpers/retrospective-v08443.cjs'),presentationBaseline=json('validation/patient-design-v08443/migration-baseline.json').files;
 for(const c of scope.codes){
  const d=json('data/patient-knowledge/'+c+'.json'),p=read('patient/'+c+'/index.html'),g=read('patient/'+c+'/guide.html'),w=read('patient/'+c+'/knowledge.html');
- assert.equal(d.patient_summary.template_version,c==='00216'?'0.84.36':'0.84.31');assert.equal((p.match(/data-patient-panel/g)||[]).length,5);assert(p.includes('Open the full OncoWiki'));
+ assert.equal(d.patient_summary.template_version,c==='00216'?'0.84.36':'0.84.31');require('./helpers/patient-overview-v08445.cjs').validate(p,c);assert(p.includes('Read the full OncoWiki'));
  assert.equal((g.match(/class="pt-page /g)||[]).length,3);assert(g.includes('Full-body anatomical illustration'));assert(g.includes('hcc-static-connectors'));
  assert.equal((g.match(/data-hcc-target=/g)||[]).length,d.anatomy.length);assert(g.includes('oncowiki-qr.png'));assert(!g.includes('viewBox="0 0 180 260"'));assert(!/typical null-day|undefined|\[object Object\]/.test(g));
  assert(w.includes('oncowiki-progressive-v08431.js'));

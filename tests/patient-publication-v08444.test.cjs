@@ -7,6 +7,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const publication = require('../tools/patient-publication-v08444.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -58,11 +59,28 @@ function temporaryRoot(t, options = {}) {
   const profile = route.includes('/') ? 'data/patient-knowledge-contexts/' + route + '.json' : 'data/patient-knowledge/' + route + '.json';
   t.after(() => fs.rmSync(root, {recursive:true, force:true}));
   writeFixture(root, 'package.json', JSON.stringify({version:'0.84.44'}));
+  // This synthetic wrapper fixture has no historical companion clauses. Supply
+  // its explicit empty review; production still requires the frozen real plan.
+  const audit = JSON.stringify({fixture:true, clauses:[]});
+  writeFixture(root, 'validation/fixture-retention-audit.json', audit);
+  writeFixture(root, 'tools/patient-editorial-v08444.cjs', fs.readFileSync(path.join(ROOT, 'tools/patient-editorial-v08444.cjs'), 'utf8'));
+  writeFixture(root, 'tools/patient-editorial-replacements-v08444.json', fs.readFileSync(path.join(ROOT, 'tools/patient-editorial-replacements-v08444.json'), 'utf8'));
+  const terms = require('../tools/patient-editorial-v08444.cjs').TERMS;
+  const hash = value => crypto.createHash('sha256').update(value).digest('hex');
+  writeFixture(root, 'data/patient-canonical-retention-v08445.json', JSON.stringify({
+    historical_audit:'validation/fixture-retention-audit.json', historical_audit_sha256:hash(audit),
+    normalization:{terms_sha256:hash(JSON.stringify(terms))}, rows:[]
+  }));
   writeFixture(root, 'validation/patient-design-v08443/scope.json', JSON.stringify({routes:[route]}));
   fs.mkdirSync(path.join(root, 'data/patient-knowledge'), {recursive:true});
   writeFixture(root, profile, fs.readFileSync(path.join(ROOT, profile), 'utf8'));
   writeFixture(root, 'data/patient-document-sections-v08443.json', fs.readFileSync(path.join(ROOT, 'data/patient-document-sections-v08443.json'), 'utf8'));
-  for (const name of CORE) if (name !== options.omit) writeFixture(root, 'patient/' + route + '/' + name, sourceHtml(route));
+  // The overview now depends on the authored guide, wallet and shared renderer.
+  // Keep the publication assertions independent using synthetic reference HTML.
+  writeFixture(root, 'tools/patient-visual-standard-v08443.cjs', fs.readFileSync(path.join(ROOT, 'tools/patient-visual-standard-v08443.cjs'), 'utf8'));
+  writeFixture(root, 'patient/' + route + '/sactcard.html', fs.readFileSync(path.join(ROOT, 'patient/' + route + '/sactcard.html'), 'utf8'));
+  for (const name of CORE) if (name !== options.omit) writeFixture(root, 'patient/' + route + '/' + name,
+    name === 'guide.html' ? fs.readFileSync(path.join(ROOT, 'patient/' + route + '/guide.html'), 'utf8') : sourceHtml(route));
   return root;
 }
 

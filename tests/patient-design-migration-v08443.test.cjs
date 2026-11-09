@@ -8,6 +8,7 @@ const cp = require('node:child_process');
 const test = require('node:test');
 const m = require('./helpers/retrospective-v08443.cjs');
 const next = require('./helpers/retrospective-v08444.cjs');
+const latest = require('./helpers/retrospective-v08445.cjs');
 const root = path.resolve(__dirname, '..');
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const before = sha('Original authored treatment document');
@@ -171,19 +172,21 @@ test('v43 recorded migration proves every before hash against the pinned v42 Git
   }
 });
 
-test('v43 and the explicit v44 content migration cover the complete current asset diff', () => {
+test('v43, v44 and the explicit source-reviewed v45 migration cover the complete current asset diff', () => {
   const record = readRecord();
   const migrate = m.createMigration(record);
   requireBaseline();
   const nextRecord=JSON.parse(fs.readFileSync(next.RECORD,'utf8'));
   next.createMigration(nextRecord);
+  const latestRecord=JSON.parse(fs.readFileSync(latest.RECORD,'utf8'));latest.createMigration(latestRecord);
   const domains = ['patient', 'docs/patient', 'data/patient-knowledge', 'data/patient-knowledge-contexts', 'protocols', 'assets/patient', 'js/patient-anatomy-v08431.js', ...m.SHARED_PATHS, ...next.SHARED_PATHS];
+  const latestFiles=Object.keys(latestRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
   const lines = args => cp.execFileSync('git', args, {cwd: root, maxBuffer: 32 * 1024 * 1024}).toString().split('\0').filter(Boolean);
   const changed = lines(['diff', '--name-only', '-z', m.BASE_COMMIT, '--', ...domains]);
   const added = lines(['ls-files', '--others', '--exclude-standard', '-z', '--', ...domains]);
   const actual = [...new Set([...changed, ...added])].sort();
-  for (const name of actual) assert(m.approvedPath(name)||next.approvedPath(name), 'Clinical, anatomy, wallet, QR or unapproved asset changed: ' + name);
-  assert.deepEqual([...new Set([...Object.keys(record.files),...Object.keys(nextRecord.files)])].sort(), actual, 'The immutable v43 record plus the reviewed v44 record must cover every changed/new asset');
+  for (const name of actual) assert(m.approvedPath(name)||next.approvedPath(name)||latest.approvedPath(name), 'Unapproved clinical, anatomy, wallet, QR or presentation change: ' + name);
+  assert.deepEqual([...new Set([...Object.keys(record.files),...Object.keys(nextRecord.files),...latestFiles])].sort(), actual, 'The immutable v43/v44 records plus the explicit v45 record must cover every changed/new asset');
   for (const [name, entry] of Object.entries(record.files)) {
     const bytes = fs.readFileSync(path.join(root, name));
     assert.equal(sha(bytes), next.expectedHash(name,migrate(name, entry.before)), name + ' exact candidate bytes');

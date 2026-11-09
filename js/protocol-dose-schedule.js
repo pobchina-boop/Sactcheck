@@ -635,8 +635,9 @@
 
   function componentUniverse(model) {
     const values = [];
-    model.allPhases.flatMap(phase => phase.components).forEach(item => values.push({ id: item.id, label: item.drug }));
-    model.doseLevels.forEach(group => values.push({ id: group.componentId, label: group.component }));
+    const phases = model.activePhase ? [model.activePhase] : model.allPhases;
+    phases.flatMap(phase => phase.components).forEach(item => values.push({ id: item.id, label: item.drug }));
+    if (!model.activePhase) model.doseLevels.forEach(group => values.push({ id: group.componentId, label: group.component }));
     return values.filter((item, index, array) => array.findIndex(other => componentMatches(other.id, item.id)) === index);
   }
 
@@ -713,7 +714,7 @@
     const phaseId = result.inputs?.[contextInput || 'treatment_phase'];
     const variant = protocol.metadata?.dose_schedule_variants?.[phaseId]?.[result.inputs?.[protocol.metadata?.dose_schedule_variant_input || 'trastuzumab_schedule']];
     const currentPhase = model.allPhases.find(p => p.id === (variant || phaseId));
-    if (currentPhase) model = {...model, allPhases:[currentPhase,...model.allPhases.filter(p=>p!==currentPhase)]};
+    if (currentPhase) model = {...model, activePhase:currentPhase, allPhases:[currentPhase,...model.allPhases.filter(p=>p!==currentPhase)]};
     const unresolvedSchedule=Boolean(contextInput&&!currentPhase);
     const actions = [];
     result.findings

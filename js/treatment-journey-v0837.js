@@ -40736,6 +40736,1060 @@ const definitions={
         "checked": "2026-11-06"
       }
     ]
+  },
+  "00387": {
+    "code": "00387",
+    "title": "Cisplatin every 3 weeks + head and neck radiotherapy: treatment and checks",
+    "release": "0.84.45",
+    "checked": "2026-11-07",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced stage III–IV squamous head and neck cancer.",
+    "summary": "Cisplatin 100 mg/m² on Day 1 every 21 days for three planned cycles during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Phase / dose review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver function; audiology and measured creatinine clearance when indicated. Review hearing, tinnitus, nerve symptoms and medicines. Dental and nutrition preparation and a swallowing plan are important before head and neck radiotherapy.",
+          "Blood count, kidney and liver function before every cisplatin cycle. Report hearing or tinnitus and nerve changes before each dose; audiology is repeated when indicated. Review weight, drinking, swallowing, mouth and skin symptoms during the radiation course.",
+          "Contact the team if symptoms develop; extra tests may be needed before the next visit.",
+          "Recheck relevant results after a hold or changed plan; previous toxicity remains relevant.",
+          "Follow kidney, mineral, hearing and nerve problems and continuing radiation effects. Dental, nutrition and swallowing care may remain necessary after the last dose. Scans, examinations and any thyroid or other late-effect tests are individualised by the radiation and oncology teams; no universal scan or blood tumour-marker schedule is specified here."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "monitoring",
+        "cells": [
+          "Planning appointment and separate radiation calendar.",
+          "Cisplatin before same-day radiation; hold cisplatin if radiation is cancelled.",
+          "Attend radiation on its own calendar; no assumption of weekend sessions.",
+          "Coordinate interruptions and recovery between both teams.",
+          "Late effects and response follow-up belong to the radiation plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the exact diagnosis, intent, prescription and calendar.",
+          "Cisplatin is given by IV infusion with fluids before and after, prescribed mineral replacement and anti-sickness medicines. The unit confirms infusion and hydration times and checks that radiotherapy is proceeding that day. Allow time for both departments.",
+          "Use the prescribed support plan and contact route.",
+          "Mouth, skin, swallowing, energy and hydration may need support after radiation ends. The team arranges response assessment and follows hearing, kidney or nerve problems. Any further chemotherapy is a separate prescription.",
+          "Record the final dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Eating, mouth and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Agree oral care and assess weight, intake and swallowing; arrange dental review before head/neck radiation.",
+          "Review pain, weight, hydration and safe swallowing.",
+          "Report poor intake, choking, weight loss or inability to drink promptly.",
+          "Dietitian and speech/language plans adapt to symptoms and recovery.",
+          "Continue dental, nutritional and swallowing follow-up as needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Imaging and tumour assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm staging and any relevant tumour tests; these are distinct from blood safety tests.",
+          "Discuss symptoms and treatment response.",
+          "The team arranges scans or examinations when indicated.",
+          "Use the agreed assessment to guide the next phase.",
+          "Record scan and clinic dates; this regimen does not impose a single timetable for everyone."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Cisplatin with radiotherapy",
+        "when": "3 cycles · 3 weeks apart",
+        "why": "Cisplatin and radiotherapy work together to treat locally advanced head and neck cancer. Your team explains the treatment aim, likely benefit and alternatives for your diagnosis.",
+        "clinical": "Cisplatin 100 mg/m² on Day 1 every 21 days for three planned cycles during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Recovery and follow-up",
+        "when": "After concurrent treatment",
+        "why": "Cisplatin and radiotherapy work together to treat locally advanced head and neck cancer. Your team explains the treatment aim, likely benefit and alternatives for your diagnosis.",
+        "clinical": "Mouth, skin, swallowing, energy and hydration may need support after radiation ends. The team arranges response assessment and follows hearing, kidney or nerve problems. Any further chemotherapy is a separate prescription.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Cisplatin 100 mg/m² on Day 1 every 21 days for three planned cycles during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+      "Cisplatin is given by IV infusion with fluids before and after, prescribed mineral replacement and anti-sickness medicines. The unit confirms infusion and hydration times and checks that radiotherapy is proceeding that day. Allow time for both departments.",
+      "Blood count, kidney and liver function; audiology and measured creatinine clearance when indicated. Review hearing, tinnitus, nerve symptoms and medicines. Dental and nutrition preparation and a swallowing plan are important before head and neck radiotherapy. Blood count, kidney and liver function before every cisplatin cycle. Report hearing or tinnitus and nerve changes before each dose; audiology is repeated when indicated. Review weight, drinking, swallowing, mouth and skin symptoms during the radiation course.",
+      "Follow kidney, mineral, hearing and nerve problems and continuing radiation effects. Dental, nutrition and swallowing care may remain necessary after the last dose. Scans, examinations and any thyroid or other late-effect tests are individualised by the radiation and oncology teams; no universal scan or blood tumour-marker schedule is specified here."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00387 v5: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6912/387_V5_CISplatin_100mgm2_with_RT.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "catalogue",
+        "title": "NCCP head and neck regimen catalogue",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/head-and-neck-sact-regimens/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ics-rt",
+        "title": "Irish Cancer Society: head and neck radiotherapy effects",
+        "url": "https://www.cancer.ie/cancer-treatments/radiotherapy/side-effects-from-radiotherapy-to-the-head-and-neck-area",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "rtog2003",
+        "title": "RTOG 91-11: original larynx-preservation report, 2003",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14645636/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "rtog2013",
+        "title": "RTOG 91-11: long-term larynx-preservation report, 2013",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23182993/",
+        "checked": "2026-11-07"
+      }
+    ]
+  },
+  "00385:head_neck": {
+    "code": "00385",
+    "title": "Weekly cisplatin + head and neck radiotherapy: treatment and checks",
+    "release": "0.84.45",
+    "checked": "2026-11-07",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced unresectable squamous head and neck cancer when three-weekly cisplatin cannot be tolerated.",
+    "summary": "Cisplatin 40 mg/m² once a week for six planned doses during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Phase / dose review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver function; audiology and measured creatinine clearance when indicated. Review hearing, tinnitus, nerve symptoms and medicines. Dental and nutrition preparation and a swallowing plan are important before head and neck radiotherapy.",
+          "Blood count, kidney and liver function before every cisplatin cycle. Report hearing or tinnitus and nerve changes before each dose; audiology is repeated when indicated. Review weight, drinking, swallowing, mouth and skin symptoms during the radiation course.",
+          "Contact the team if symptoms develop; extra tests may be needed before the next visit.",
+          "Recheck relevant results after a hold or changed plan; previous toxicity remains relevant.",
+          "Follow kidney, mineral, hearing and nerve problems and continuing radiation effects. Dental, nutrition and swallowing care may remain necessary after the last dose. Scans, examinations and any thyroid or other late-effect tests are individualised by the radiation and oncology teams; no universal scan or blood tumour-marker schedule is specified here."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "monitoring",
+        "cells": [
+          "Planning appointment and separate radiation calendar.",
+          "Cisplatin before same-day radiation; hold cisplatin if radiation is cancelled.",
+          "Attend radiation on its own calendar; no assumption of weekend sessions.",
+          "Coordinate interruptions and recovery between both teams.",
+          "Late effects and response follow-up belong to the radiation plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the exact diagnosis, intent, prescription and calendar.",
+          "Cisplatin is given by IV infusion with fluids before and after, prescribed mineral replacement and anti-sickness medicines. The unit confirms infusion and hydration times and checks that radiotherapy is proceeding that day. Allow time for both departments.",
+          "Use the prescribed support plan and contact route.",
+          "Mouth, skin, swallowing, energy and hydration may need support after radiation ends. The team arranges response assessment and follows hearing, kidney or nerve problems. Any further chemotherapy is a separate prescription.",
+          "Record the final dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Eating, mouth and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Agree oral care and assess weight, intake and swallowing; arrange dental review before head/neck radiation.",
+          "Review pain, weight, hydration and safe swallowing.",
+          "Report poor intake, choking, weight loss or inability to drink promptly.",
+          "Dietitian and speech/language plans adapt to symptoms and recovery.",
+          "Continue dental, nutritional and swallowing follow-up as needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Imaging and tumour assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm staging and any relevant tumour tests; these are distinct from blood safety tests.",
+          "Discuss symptoms and treatment response.",
+          "The team arranges scans or examinations when indicated.",
+          "Use the agreed assessment to guide the next phase.",
+          "Record scan and clinic dates; this regimen does not impose a single timetable for everyone."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Cisplatin with radiotherapy",
+        "when": "6 weekly doses",
+        "why": "Weekly cisplatin supports radiotherapy for locally advanced head and neck cancer when the three-weekly cisplatin schedule cannot be tolerated. The team explains why this approach fits your situation.",
+        "clinical": "Cisplatin 40 mg/m² once a week for six planned doses during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Recovery and follow-up",
+        "when": "After concurrent treatment",
+        "why": "Weekly cisplatin supports radiotherapy for locally advanced head and neck cancer when the three-weekly cisplatin schedule cannot be tolerated. The team explains why this approach fits your situation.",
+        "clinical": "Mouth, skin, swallowing, energy and hydration may need support after radiation ends. The team arranges response assessment and follows hearing, kidney or nerve problems. Any further chemotherapy is a separate prescription.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Cisplatin 40 mg/m² once a week for six planned doses during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+      "Cisplatin is given by IV infusion with fluids before and after, prescribed mineral replacement and anti-sickness medicines. The unit confirms infusion and hydration times and checks that radiotherapy is proceeding that day. Allow time for both departments.",
+      "Blood count, kidney and liver function; audiology and measured creatinine clearance when indicated. Review hearing, tinnitus, nerve symptoms and medicines. Dental and nutrition preparation and a swallowing plan are important before head and neck radiotherapy. Blood count, kidney and liver function before every cisplatin cycle. Report hearing or tinnitus and nerve changes before each dose; audiology is repeated when indicated. Review weight, drinking, swallowing, mouth and skin symptoms during the radiation course.",
+      "Follow kidney, mineral, hearing and nerve problems and continuing radiation effects. Dental, nutrition and swallowing care may remain necessary after the last dose. Scans, examinations and any thyroid or other late-effect tests are individualised by the radiation and oncology teams; no universal scan or blood tumour-marker schedule is specified here."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00385 v5: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6341/385_V5_CISplatin_40mgm2_weekly_with_RT.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "catalogue",
+        "title": "NCCP head and neck regimen catalogue",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/head-and-neck-sact-regimens/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ics-rt",
+        "title": "Irish Cancer Society: head and neck radiotherapy effects",
+        "url": "https://www.cancer.ie/cancer-treatments/radiotherapy/side-effects-from-radiotherapy-to-the-head-and-neck-area",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "jcog",
+        "title": "JCOG1008: postoperative weekly versus three-weekly cisplatin, 2022",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35230884/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "medina",
+        "title": "Medina et al: phase II weekly cisplatin with concomitant-boost radiation, 2006",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16626826/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "beckmann",
+        "title": "Beckmann et al: phase I/II weekly cisplatin with accelerated radiation, 2005",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15459918/",
+        "checked": "2026-11-07"
+      }
+    ]
+  },
+  "00385:nasopharyngeal": {
+    "code": "00385",
+    "title": "Weekly cisplatin + nasopharyngeal radiotherapy: treatment and checks",
+    "release": "0.84.45",
+    "checked": "2026-11-07",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Chemoradiation for locally advanced nasopharyngeal carcinoma.",
+    "summary": "Cisplatin 40 mg/m² once a week for six planned doses during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Phase / dose review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver function; audiology and measured creatinine clearance when indicated. Review hearing, tinnitus, nerve symptoms and medicines. Dental and nutrition preparation and a swallowing plan are important before head and neck radiotherapy.",
+          "Blood count, kidney and liver function before every cisplatin cycle. Report hearing or tinnitus and nerve changes before each dose; audiology is repeated when indicated. Review weight, drinking, swallowing, mouth and skin symptoms during the radiation course.",
+          "Contact the team if symptoms develop; extra tests may be needed before the next visit.",
+          "Recheck relevant results after a hold or changed plan; previous toxicity remains relevant.",
+          "Follow kidney, mineral, hearing and nerve problems and continuing radiation effects. Dental, nutrition and swallowing care may remain necessary after the last dose. Scans, examinations and any thyroid or other late-effect tests are individualised by the radiation and oncology teams; no universal scan or blood tumour-marker schedule is specified here."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "monitoring",
+        "cells": [
+          "Planning appointment and separate radiation calendar.",
+          "Cisplatin before same-day radiation; hold cisplatin if radiation is cancelled.",
+          "Attend radiation on its own calendar; no assumption of weekend sessions.",
+          "Coordinate interruptions and recovery between both teams.",
+          "Late effects and response follow-up belong to the radiation plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the exact diagnosis, intent, prescription and calendar.",
+          "Cisplatin is given by IV infusion with fluids before and after, prescribed mineral replacement and anti-sickness medicines. The unit confirms infusion and hydration times and checks that radiotherapy is proceeding that day. Allow time for both departments.",
+          "Use the prescribed support plan and contact route.",
+          "Mouth, skin, swallowing, energy and hydration may need support after radiation ends. The team arranges response assessment and follows hearing, kidney or nerve problems. Any further chemotherapy is a separate prescription.",
+          "Record the final dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Eating, mouth and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Agree oral care and assess weight, intake and swallowing; arrange dental review before head/neck radiation.",
+          "Review pain, weight, hydration and safe swallowing.",
+          "Report poor intake, choking, weight loss or inability to drink promptly.",
+          "Dietitian and speech/language plans adapt to symptoms and recovery.",
+          "Continue dental, nutritional and swallowing follow-up as needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Imaging and tumour assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm staging and any relevant tumour tests; these are distinct from blood safety tests.",
+          "Discuss symptoms and treatment response.",
+          "The team arranges scans or examinations when indicated.",
+          "Use the agreed assessment to guide the next phase.",
+          "Record scan and clinic dates; this regimen does not impose a single timetable for everyone."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Cisplatin with radiotherapy",
+        "when": "6 weekly doses",
+        "why": "Weekly cisplatin is given alongside radiotherapy for cancer of the nasopharynx, the space behind the nose. This information covers the concurrent treatment phase; any chemotherapy before or after it has a separate plan.",
+        "clinical": "Cisplatin 40 mg/m² once a week for six planned doses during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Recovery and follow-up",
+        "when": "After concurrent treatment",
+        "why": "Weekly cisplatin is given alongside radiotherapy for cancer of the nasopharynx, the space behind the nose. This information covers the concurrent treatment phase; any chemotherapy before or after it has a separate plan.",
+        "clinical": "Mouth, skin, swallowing, energy and hydration may need support after radiation ends. The team arranges response assessment and follows hearing, kidney or nerve problems. Any further chemotherapy is a separate prescription.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Cisplatin 40 mg/m² once a week for six planned doses during radiotherapy. Cisplatin is given before radiation on the same day. If radiotherapy is cancelled, cisplatin is held until radiation resumes; the team updates both calendars.",
+      "Cisplatin is given by IV infusion with fluids before and after, prescribed mineral replacement and anti-sickness medicines. The unit confirms infusion and hydration times and checks that radiotherapy is proceeding that day. Allow time for both departments.",
+      "Blood count, kidney and liver function; audiology and measured creatinine clearance when indicated. Review hearing, tinnitus, nerve symptoms and medicines. Dental and nutrition preparation and a swallowing plan are important before head and neck radiotherapy. Blood count, kidney and liver function before every cisplatin cycle. Report hearing or tinnitus and nerve changes before each dose; audiology is repeated when indicated. Review weight, drinking, swallowing, mouth and skin symptoms during the radiation course.",
+      "Follow kidney, mineral, hearing and nerve problems and continuing radiation effects. Dental, nutrition and swallowing care may remain necessary after the last dose. Scans, examinations and any thyroid or other late-effect tests are individualised by the radiation and oncology teams; no universal scan or blood tumour-marker schedule is specified here."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00385 v5: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6341/385_V5_CISplatin_40mgm2_weekly_with_RT.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "catalogue",
+        "title": "NCCP head and neck regimen catalogue",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/head-and-neck-sact-regimens/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ics-rt",
+        "title": "Irish Cancer Society: head and neck radiotherapy effects",
+        "url": "https://www.cancer.ie/cancer-treatments/radiotherapy/side-effects-from-radiotherapy-to-the-head-and-neck-area",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "chan",
+        "title": "Chan et al: concurrent weekly cisplatin in nasopharyngeal cancer, 2005",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15812080/",
+        "checked": "2026-11-07"
+      }
+    ]
+  },
+  "00207:head_neck": {
+    "code": "00207",
+    "title": "Weekly cetuximab + head and neck radiotherapy: treatment and checks",
+    "release": "0.84.45",
+    "checked": "2026-11-07",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced squamous head and neck cancer in people ineligible for platinum-based treatment.",
+    "summary": "Cetuximab starts one week before radiotherapy: a 400 mg/m² first infusion, then 250 mg/m² every week during radiation until radiotherapy ends. The number of weekly doses follows the actual radiotherapy plan.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Phase / dose review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver function with electrolytes, magnesium and calcium. Review allergies, previous reactions, red-meat allergy or tick bites. Before head and neck radiation, arrange dental, nutrition and swallowing assessment with the team.",
+          "Blood count, kidney/liver function and minerals are reviewed regularly as specified in the treatment plan. Vitals and symptoms are checked around infusions; skin, eyes, breathing and hydration are reviewed. Radiation has its own weekly support and assessment plan.",
+          "Contact the team if symptoms develop; extra tests may be needed before the next visit.",
+          "Recheck relevant results after a hold or changed plan; previous toxicity remains relevant.",
+          "Electrolytes, magnesium and calcium monthly for two months after the final cetuximab dose. Continue skin, dental, nutrition, swallowing and radiation follow-up. Scans and examinations follow the individual cancer plan; no universal scan date or tumour-marker test is required by this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Radiotherapy",
+        "kind": "monitoring",
+        "cells": [
+          "Planning appointment and separate radiation calendar.",
+          "Cetuximab begins one week before radiation, then continues weekly until radiation ends.",
+          "Attend radiation on its own calendar; no assumption of weekend sessions.",
+          "Coordinate interruptions and recovery between both teams.",
+          "Late effects and response follow-up belong to the radiation plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the exact diagnosis, intent, prescription and calendar.",
+          "The first cetuximab infusion runs over 120 minutes; later infusions usually run over 60 minutes. Premedication and observation add to visit time. Your team confirms the observation period; no early discharge is promised after two doses.",
+          "Use the prescribed support plan and contact route.",
+          "NCCP specifies monthly electrolytes, magnesium and calcium for two months after the final cetuximab dose; continue mouth, skin, swallowing and nutrition care as needed.",
+          "Record the final dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Eating, mouth and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Agree oral care and assess weight, intake and swallowing; arrange dental review before head/neck radiation.",
+          "Review pain, weight, hydration and safe swallowing.",
+          "Report poor intake, choking, weight loss or inability to drink promptly.",
+          "Dietitian and speech/language plans adapt to symptoms and recovery.",
+          "Continue dental, nutritional and swallowing follow-up as needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Imaging and tumour assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm staging and any relevant tumour tests; these are distinct from blood safety tests.",
+          "Discuss symptoms and treatment response.",
+          "The team arranges scans or examinations when indicated.",
+          "Use the agreed assessment to guide the next phase.",
+          "Record scan and clinic dates; this regimen does not impose a single timetable for everyone."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Cetuximab before radiotherapy",
+        "when": "One week before radiation",
+        "why": "Cetuximab is combined with radiotherapy for selected locally advanced head and neck cancer when platinum chemotherapy is unsuitable. The team discusses the reason for choosing this treatment and the alternatives.",
+        "clinical": "Cetuximab 400 mg/m² over 120 minutes, with prescribed premedication, monitoring and observation.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Weekly cetuximab with radiotherapy",
+        "when": "Weekly until radiation ends",
+        "why": "Cetuximab is combined with radiotherapy for selected locally advanced head and neck cancer when platinum chemotherapy is unsuitable. The team discusses the reason for choosing this treatment and the alternatives.",
+        "clinical": "Cetuximab 250 mg/m² over 60 minutes every week while radiotherapy continues. The team coordinates the final dose with the radiation plan.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Recovery and mineral checks",
+        "when": "After the last dose",
+        "why": "Cetuximab is combined with radiotherapy for selected locally advanced head and neck cancer when platinum chemotherapy is unsuitable. The team discusses the reason for choosing this treatment and the alternatives.",
+        "clinical": "NCCP specifies monthly electrolytes, magnesium and calcium for two months after the final cetuximab dose; continue mouth, skin, swallowing and nutrition care as needed.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Cetuximab starts one week before radiotherapy: a 400 mg/m² first infusion, then 250 mg/m² every week during radiation until radiotherapy ends. The number of weekly doses follows the actual radiotherapy plan.",
+      "The first cetuximab infusion runs over 120 minutes; later infusions usually run over 60 minutes. Premedication and observation add to visit time. Your team confirms the observation period; no early discharge is promised after two doses.",
+      "Blood count, kidney and liver function with electrolytes, magnesium and calcium. Review allergies, previous reactions, red-meat allergy or tick bites. Before head and neck radiation, arrange dental, nutrition and swallowing assessment with the team. Blood count, kidney/liver function and minerals are reviewed regularly as specified in the treatment plan. Vitals and symptoms are checked around infusions; skin, eyes, breathing and hydration are reviewed. Radiation has its own weekly support and assessment plan.",
+      "Electrolytes, magnesium and calcium monthly for two months after the final cetuximab dose. Continue skin, dental, nutrition, swallowing and radiation follow-up. Scans and examinations follow the individual cancer plan; no universal scan date or tumour-marker test is required by this regimen."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00207 v6: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "catalogue",
+        "title": "NCCP head and neck regimen catalogue",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/head-and-neck-sact-regimens/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ics-rt",
+        "title": "Irish Cancer Society: head and neck radiotherapy effects",
+        "url": "https://www.cancer.ie/cancer-treatments/radiotherapy/side-effects-from-radiotherapy-to-the-head-and-neck-area",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "erbitux",
+        "title": "EMA: Erbitux product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "bonner",
+        "title": "Bonner et al: radiotherapy with or without cetuximab, 2006",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16467544/",
+        "checked": "2026-11-07"
+      }
+    ]
+  },
+  "00705": {
+    "code": "00705",
+    "title": "Pembrolizumab + carboplatin + fluorouracil: treatment and checks",
+    "release": "0.84.45",
+    "checked": "2026-11-07",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line treatment of metastatic or unresectable recurrent head and neck squamous cell carcinoma in adults with tumour PD-L1 CPS ≥1.",
+    "summary": "Every 21 days: pembrolizumab and carboplatin on Day 1; fluorouracil over Days 1–4. Up to 6 combination cycles, then pembrolizumab alone while appropriate. Every dose depends on safety and benefit review.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Phase / dose review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver function, glucose and thyroid tests; hepatitis B surface antigen/core antibody and hepatitis C; tumour PD-L1 CPS and DPD assessment before fluorouracil. Review previous immune problems, transplants, medicines and infection. An isotope GFR measurement is preferred when assessing kidney function for carboplatin dosing; further kidney testing is arranged when indicated. Audiology is considered when indicated.",
+          "Blood count, kidney/liver tests and glucose each cycle; thyroid tests every 3–6 weeks and sooner if symptoms require. Ask about bowel, breathing, skin, hormone and other immune symptoms before every dose. A normal blood test does not exclude immune toxicity.",
+          "Contact the team if symptoms develop; extra tests may be needed before the next visit.",
+          "Recheck relevant results after a hold or changed plan; previous toxicity remains relevant.",
+          "Continue reporting possible immune effects after the last dose. Follow unresolved blood, kidney, hearing, nerve or endocrine problems and any prescribed steroid taper or hormone replacement. The team sets disease assessment scans and follow-up; this protocol does not mandate a universal imaging interval or routine blood tumour-marker schedule."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the exact diagnosis, intent, prescription and calendar.",
+          "Pembrolizumab 200 mg is infused over 30 minutes, followed by carboplatin AUC 5 over 30 minutes on Day 1. Fluorouracil is prescribed as 1,000 mg/m² each day by 22-hour infusion on Days 1–4, or 2,000 mg/m² over 48 hours twice. Staff confirm pump changes and disconnection from the actual connection time.",
+          "Use the prescribed support plan and contact route.",
+          "Pembrolizumab 200 mg over 30 minutes every 21 days continues after the combination phase when appropriate, until progression or unacceptable toxicity under this regimen. A six-cycle chemotherapy record is not a six-cycle total course; the protocol does not impose an automatic 24-month stop.",
+          "Record the final dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Eating, mouth and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Agree oral care and assess weight, intake and swallowing. If radiation is planned separately, arrange its dental preparation with the team.",
+          "Review pain, weight, hydration and safe swallowing.",
+          "Report poor intake, choking, weight loss or inability to drink promptly.",
+          "Dietitian and speech/language plans adapt to symptoms and recovery.",
+          "Continue dental, nutritional and swallowing follow-up as needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Imaging and tumour assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm staging and any relevant tumour tests; these are distinct from blood safety tests.",
+          "Discuss symptoms and treatment response.",
+          "The team arranges scans or examinations when indicated.",
+          "Use the agreed assessment to guide the next phase.",
+          "Record scan and clinic dates; this regimen does not impose a single timetable for everyone."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Combination treatment",
+        "when": "Up to 6 cycles · every 3 weeks",
+        "why": "Pembrolizumab and chemotherapy aim to control head and neck cancer that has spread or returned and cannot be removed. Your team explains the expected benefit, uncertainty and alternatives for you.",
+        "clinical": "Pembrolizumab 200 mg is infused over 30 minutes, followed by carboplatin AUC 5 over 30 minutes on Day 1. Fluorouracil is prescribed as 1,000 mg/m² each day by 22-hour infusion on Days 1–4, or 2,000 mg/m² over 48 hours twice. Staff confirm pump changes and disconnection from the actual connection time. The planned combination limit is six cycles; toxicity may change the plan earlier.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Pembrolizumab alone",
+        "when": "Every 3 weeks · ongoing review",
+        "why": "Pembrolizumab and chemotherapy aim to control head and neck cancer that has spread or returned and cannot be removed. Your team explains the expected benefit, uncertainty and alternatives for you.",
+        "clinical": "Pembrolizumab 200 mg over 30 minutes every 21 days continues after the combination phase when appropriate, until progression or unacceptable toxicity under this regimen. A six-cycle chemotherapy record is not a six-cycle total course; the protocol does not impose an automatic 24-month stop.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Every 21 days: pembrolizumab and carboplatin on Day 1; fluorouracil over Days 1–4. Up to 6 combination cycles, then pembrolizumab alone while appropriate. Every dose depends on safety and benefit review.",
+      "Pembrolizumab 200 mg is infused over 30 minutes, followed by carboplatin AUC 5 over 30 minutes on Day 1. Fluorouracil is prescribed as 1,000 mg/m² each day by 22-hour infusion on Days 1–4, or 2,000 mg/m² over 48 hours twice. Staff confirm pump changes and disconnection from the actual connection time.",
+      "Blood count, kidney and liver function, glucose and thyroid tests; hepatitis B surface antigen/core antibody and hepatitis C; tumour PD-L1 CPS and DPD assessment before fluorouracil. Review previous immune problems, transplants, medicines and infection. An isotope GFR measurement is preferred when assessing kidney function for carboplatin dosing; further kidney testing is arranged when indicated. Audiology is considered when indicated. Blood count, kidney/liver tests and glucose each cycle; thyroid tests every 3–6 weeks and sooner if symptoms require. Ask about bowel, breathing, skin, hormone and other immune symptoms before every dose. A normal blood test does not exclude immune toxicity.",
+      "Continue reporting possible immune effects after the last dose. Follow unresolved blood, kidney, hearing, nerve or endocrine problems and any prescribed steroid taper or hormone replacement. The team sets disease assessment scans and follow-up; this protocol does not mandate a universal imaging interval or routine blood tumour-marker schedule."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00705 v2d: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6881/705_V2d_Pembrolizumab_CARBOplatin_5FU.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "catalogue",
+        "title": "NCCP head and neck regimen catalogue",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/head-and-neck-sact-regimens/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ics-rt",
+        "title": "Irish Cancer Society: head and neck radiotherapy effects",
+        "url": "https://www.cancer.ie/cancer-treatments/radiotherapy/side-effects-from-radiotherapy-to-the-head-and-neck-area",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "keytruda",
+        "title": "EMA: Keytruda product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "key048",
+        "title": "KEYNOTE-048: original 2019 randomised trial report",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31679945/",
+        "checked": "2026-11-07"
+      }
+    ]
+  },
+  "00706": {
+    "code": "00706",
+    "title": "Pembrolizumab + cisplatin + fluorouracil: treatment and checks",
+    "release": "0.84.45",
+    "checked": "2026-11-07",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line treatment of metastatic or unresectable recurrent head and neck squamous cell carcinoma in adults with tumour PD-L1 CPS ≥1.",
+    "summary": "Every 21 days: pembrolizumab and cisplatin on Day 1; fluorouracil over Days 1–4. Up to 6 combination cycles, then pembrolizumab alone while appropriate. Every dose depends on safety and benefit review.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Phase / dose review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ tests",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver function, glucose and thyroid tests; hepatitis B surface antigen/core antibody and hepatitis C; tumour PD-L1 CPS and DPD assessment before fluorouracil. Review previous immune problems, transplants, medicines and infection. Audiology and measured creatinine clearance when indicated; assess hydration, hearing and nerves.",
+          "Blood count, kidney/liver tests and glucose each cycle; thyroid tests every 3–6 weeks and sooner if symptoms require. Ask about bowel, breathing, skin, hormone and other immune symptoms before every dose. A normal blood test does not exclude immune toxicity.",
+          "Contact the team if symptoms develop; extra tests may be needed before the next visit.",
+          "Recheck relevant results after a hold or changed plan; previous toxicity remains relevant.",
+          "Continue reporting possible immune effects after the last dose. Follow unresolved blood, kidney, hearing, nerve or endocrine problems and any prescribed steroid taper or hormone replacement. The team sets disease assessment scans and follow-up; this protocol does not mandate a universal imaging interval or routine blood tumour-marker schedule."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the exact diagnosis, intent, prescription and calendar.",
+          "Pembrolizumab 200 mg is infused over 30 minutes, followed by cisplatin 100 mg/m² over 2 hours with prescribed hydration on Day 1. Fluorouracil is prescribed as 1,000 mg/m² each day by 22-hour infusion on Days 1–4, or 2,000 mg/m² over 48 hours twice. Staff confirm pump changes and disconnection from the actual connection time.",
+          "Use the prescribed support plan and contact route.",
+          "Pembrolizumab 200 mg over 30 minutes every 21 days continues after the combination phase when appropriate, until progression or unacceptable toxicity under this regimen. A six-cycle chemotherapy record is not a six-cycle total course; the protocol does not impose an automatic 24-month stop.",
+          "Record the final dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Eating, mouth and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Agree oral care and assess weight, intake and swallowing. If radiation is planned separately, arrange its dental preparation with the team.",
+          "Review pain, weight, hydration and safe swallowing.",
+          "Report poor intake, choking, weight loss or inability to drink promptly.",
+          "Dietitian and speech/language plans adapt to symptoms and recovery.",
+          "Continue dental, nutritional and swallowing follow-up as needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      },
+      {
+        "label": "Imaging and tumour assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm staging and any relevant tumour tests; these are distinct from blood safety tests.",
+          "Discuss symptoms and treatment response.",
+          "The team arranges scans or examinations when indicated.",
+          "Use the agreed assessment to guide the next phase.",
+          "Record scan and clinic dates; this regimen does not impose a single timetable for everyone."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Source-required blood tests are distinguished from tests ordered for a particular symptom or disease plan. Imaging is not interchangeable with blood safety tests."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Combination treatment",
+        "when": "Up to 6 cycles · every 3 weeks",
+        "why": "Pembrolizumab and chemotherapy aim to control head and neck cancer that has spread or returned and cannot be removed. Your team explains the expected benefit, uncertainty and alternatives for you.",
+        "clinical": "Pembrolizumab 200 mg is infused over 30 minutes, followed by cisplatin 100 mg/m² over 2 hours with prescribed hydration on Day 1. Fluorouracil is prescribed as 1,000 mg/m² each day by 22-hour infusion on Days 1–4, or 2,000 mg/m² over 48 hours twice. Staff confirm pump changes and disconnection from the actual connection time. The planned combination limit is six cycles; toxicity may change the plan earlier.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Pembrolizumab alone",
+        "when": "Every 3 weeks · ongoing review",
+        "why": "Pembrolizumab and chemotherapy aim to control head and neck cancer that has spread or returned and cannot be removed. Your team explains the expected benefit, uncertainty and alternatives for you.",
+        "clinical": "Pembrolizumab 200 mg over 30 minutes every 21 days continues after the combination phase when appropriate, until progression or unacceptable toxicity under this regimen. A six-cycle chemotherapy record is not a six-cycle total course; the protocol does not impose an automatic 24-month stop.",
+        "action": "Confirm the current phase, prescription, tests and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Every 21 days: pembrolizumab and cisplatin on Day 1; fluorouracil over Days 1–4. Up to 6 combination cycles, then pembrolizumab alone while appropriate. Every dose depends on safety and benefit review.",
+      "Pembrolizumab 200 mg is infused over 30 minutes, followed by cisplatin 100 mg/m² over 2 hours with prescribed hydration on Day 1. Fluorouracil is prescribed as 1,000 mg/m² each day by 22-hour infusion on Days 1–4, or 2,000 mg/m² over 48 hours twice. Staff confirm pump changes and disconnection from the actual connection time.",
+      "Blood count, kidney and liver function, glucose and thyroid tests; hepatitis B surface antigen/core antibody and hepatitis C; tumour PD-L1 CPS and DPD assessment before fluorouracil. Review previous immune problems, transplants, medicines and infection. Audiology and measured creatinine clearance when indicated; assess hydration, hearing and nerves. Blood count, kidney/liver tests and glucose each cycle; thyroid tests every 3–6 weeks and sooner if symptoms require. Ask about bowel, breathing, skin, hormone and other immune symptoms before every dose. A normal blood test does not exclude immune toxicity.",
+      "Continue reporting possible immune effects after the last dose. Follow unresolved blood, kidney, hearing, nerve or endocrine problems and any prescribed steroid taper or hormone replacement. The team sets disease assessment scans and follow-up; this protocol does not mandate a universal imaging interval or routine blood tumour-marker schedule."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00706 v3: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "catalogue",
+        "title": "NCCP head and neck regimen catalogue",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/head-and-neck-sact-regimens/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ics-rt",
+        "title": "Irish Cancer Society: head and neck radiotherapy effects",
+        "url": "https://www.cancer.ie/cancer-treatments/radiotherapy/side-effects-from-radiotherapy-to-the-head-and-neck-area",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "keytruda",
+        "title": "EMA: Keytruda product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "key048",
+        "title": "KEYNOTE-048: original 2019 randomised trial report",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31679945/",
+        "checked": "2026-11-07"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

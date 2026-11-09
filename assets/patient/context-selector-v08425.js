@@ -4,6 +4,6 @@
   const requested=new URLSearchParams(window.location.search).get('asset')||'portal';
   const file=Object.prototype.hasOwnProperty.call(assets,requested)?assets[requested]:'';
   document.querySelectorAll('[data-context]').forEach(link=>{
-    link.setAttribute('href',(['melanoma/','merkel_cell/','melanoma_advanced/','melanoma_adjuvant/','melanoma_perioperative/','./','lung/','colorectal/','neuroendocrine/','adjuvant/','adjuvant/','adjuvant/','adjuvant/'].includes(link.dataset.route)?link.dataset.route:link.dataset.context==='colorectal'?'colorectal/':link.dataset.context==='lung'?'lung/':'./')+file);
+    link.setAttribute('href',(['head_neck/','nasopharyngeal/','melanoma/','merkel_cell/','melanoma_advanced/','melanoma_adjuvant/','melanoma_perioperative/','./','lung/','colorectal/','neuroendocrine/','adjuvant/','adjuvant/','adjuvant/','adjuvant/'].includes(link.dataset.route)?link.dataset.route:link.dataset.context==='colorectal'?'colorectal/':link.dataset.context==='lung'?'lung/':'./')+file);
   });
 })();

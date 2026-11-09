@@ -9,7 +9,7 @@ for(const c of codes){const d=json(`data/patient-knowledge/${c}.json`);assert.eq
   const h=read(`patient/${c}/${n}.html`);assert(!/undefined|\[object Object\]/.test(h));assert(h.includes(c));
   for(const m of h.matchAll(/(?:src|href)="([^"#]+)"/g)){if(/^(https?:|data:|mailto:|tel:)/.test(m[1]))continue;assert(fs.existsSync(path.resolve(root,'patient',c,m[1].split(/[?#]/)[0])),`${c}/${n}: missing ${m[1]}`);}
   if(['index','knowledge','treatment-journey'].includes(n))assert(!/<input|<select/.test(h),'Patient orientation must not require date or parameter entry');
-  if(['index','knowledge'].includes(n)){assert(h.includes('wikiCycleChronology'));const ids=[...h.matchAll(/id="(wikiCycleChronology[^"]*)"/g)].map(x=>x[1]);assert.equal(new Set(ids).size,ids.length);}
+  if(n==='index')require('./helpers/patient-overview-v08445.cjs').validate(h,c);if(n==='knowledge'){assert(h.includes('wikiCycleChronology'));const ids=[...h.matchAll(/id="(wikiCycleChronology[^"]*)"/g)].map(x=>x[1]);assert.equal(new Set(ids).size,ids.length);}
  }
  for(const n of ['guide','passport','consent-form','sactcard','logistics','supportive-care','treatment-journey',...support.regimens[c].map(p=>'support-'+p.id)]){const b=fs.readFileSync(path.join(root,`patient/${c}/${n}.pdf`));assert.equal(b.subarray(0,5).toString(),'%PDF-');assert.deepEqual(b,fs.readFileSync(path.join(root,`docs/patient/${c}/${n}.pdf`)));}
  assert.equal(R.relativePath(c,'supportive-care-selector'),`patient/${c}/supportive-care.html`);assert.equal(R.relativePath(c,'longitudinal'),`patient/${c}/treatment-journey.html`);assert(kb.regimen_profiles.some(k=>k.protocol_id===d.protocol_id));assert(kb.evidence_records.some(k=>k.protocol_id===d.protocol_id));

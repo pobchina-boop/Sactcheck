@@ -51,7 +51,10 @@ global.document = {
   getElementById(id) { return elements[id] || null; }
 };
 
-const protocol = require(path.join(root, 'protocols/head-neck/00705-pembrolizumab-carboplatin-auc-5-and-5-fluorouracil.json'));
+// Freeze the original no-schedule fixture now that v45 supplies a complete schedule.
+const protocol = require('../validation/head-neck-v08445/baseline-protocols/00705-pembrolizumab-carboplatin-auc-5-and-5-fluorouracil.json');
+const current = require('../protocols/head-neck/00705-pembrolizumab-carboplatin-auc-5-and-5-fluorouracil.json');
+assert.equal(Dose.hasData(current),true,'Current source-authored combination and maintenance schedule');
 assert.strictEqual(Dose.hasData(protocol), false, 'Test protocol must reproduce the no-structured-schedule state.');
 
 Dose.prepare(protocol);

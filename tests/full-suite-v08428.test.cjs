@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),vm=require('node:vm');
-const {assertVisibleTextIncludes}=require('./helpers/patient-visible-text-v08444.cjs');
+const {assertVisibleTextIncludes,visibleBodyText}=require('./helpers/patient-visible-text-v08444.cjs');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
 const scope=json('validation/lung-backbones-v08428/scope.json'),idx=json('data/lung-backbones-v08428-source-index.json'),kb=json('data/regimen-knowledge-base-v08428-addendum.json'),protocols=json('protocols/index.json').protocols;
 const Engine=require('../js/assessment-engine'),Registry=require('../js/patient-asset-registry-v0810'),Journey=require('../js/treatment-journey-v0837'),Dose=require('../js/protocol-dose-schedule'),Evidence=require('../js/treatment-evidence-v08413');
@@ -17,15 +17,16 @@ const routes=idx.codes.filter(c=>c!=='00621').concat(['00621/lung','00568']);
 for(const route of routes){
  const d=json(route.includes('/')?`data/patient-knowledge-contexts/${route}.json`:`data/patient-knowledge/${route}.json`),html=read(`patient/${route}/index.html`),guide=read(`patient/${route}/guide.html`);
  assert(d.patient_summary.phases.length>=2);assert.equal(d.evidence.metrics.length,0);assert(Journey.definitions[route.replace('/',':')]);
+ require('./helpers/patient-overview-v08445.cjs').validate(html,route);
  if(require('../data/patient-presentation-v08431.json').routes[route]){
-  assert.equal((html.match(/data-patient-panel/g)||[]).length,5);assert(html.includes('knowledge.html#cycle'));assert(html.includes('handbook.pdf'));assert(guide.includes('hcc-static-connectors'));assert(guide.includes('oncowiki-qr.png'));assert.equal((guide.match(/class="pt-page /g)||[]).length,3);
+  assert(guide.includes('hcc-static-connectors'));assert(guide.includes('oncowiki-qr.png'));assert.equal((guide.match(/class="pt-page /g)||[]).length,3);
  }else{
- assert.equal((html.match(/<details id="(?:side-effects|cycle|tools)"/g)||[]).length,3);
- assert(!/<details[^>]*\bopen\b/.test(html));assert(html.indexOf('id="urgent"')<html.indexOf('<details'));
- for(const id of ['urgent','side-effects','cycle','tools','medicines','monitoring-schedule','treatment-logistics'])assert(html.includes(`id="${id}"`));
- for(const text of ['Call 112 / 999','37.5°C','36°C','even with a normal temperature','Evening / weekend number','explain back','guide.pdf'])assert(html.includes(text),route+'/'+text);
- assertVisibleTextIncludes(guide,'My SACT card',route+'/My SACT card');
- for(const text of ['ps-map','qr.png','Oncology phone','Out of hours'])assert(guide.includes(text),route+'/'+text);
+  assertVisibleTextIncludes(guide,'My SACT card',route+'/My SACT card');
+  for(const text of ['ps-map','qr.png','Oncology phone','Out of hours'])assert(guide.includes(text),route+'/'+text);
+  const wiki=read(`patient/${route}/knowledge.html`);
+  for(const id of ['cycle','medicines','monitoring-schedule'])assert(wiki.includes(`id="${id}"`));
+  assert.match(visibleBodyText(html+wiki), /call 112 \/ 999/i, route+'/visible emergency phone instruction');
+  for(const text of ['37.5°C','36°C','even with a normal temperature'])assertVisibleTextIncludes(html+wiki,text,route+'/'+text);
  }
  assert(!/undefined|\[object Object\]|<input|<select/.test(html));
  for(const file of fs.readdirSync(`${root}/patient/${route}`).filter(n=>n.endsWith('.html'))){

@@ -15,7 +15,7 @@ for(const code of codes){
   const h=read(`patient/${code}/${name}.html`);assert(!/undefined|\[object Object\]/.test(h),code+'/'+name);assert(!forbidden.test(h),code+'/'+name+' evidence crossed audience boundary');
   for(const m of h.matchAll(/(?:src|href)="([^"#]+)"/g)){if(/^(https?:|data:|mailto:|tel:)/.test(m[1]))continue;assert(fs.existsSync(path.resolve(root,'patient',code,m[1].split(/[?#]/)[0])),`${code}/${name}: ${m[1]}`);}
   if(['index','knowledge','treatment-journey'].includes(name))assert(!/<input|<select|<textarea/.test(h));
-  if(['index','knowledge'].includes(name))assert(h.includes('wikiCycleChronology')||h.includes('class="pt-cycle"'));
+  if(name==='index')require('./helpers/patient-overview-v08445.cjs').validate(h,code);if(name==='knowledge')assert(h.includes('wikiCycleChronology')||h.includes('class="pt-cycle"'));
  }
  for(const name of ['guide','passport','consent-form','sactcard','logistics','supportive-care','treatment-journey',...phases.map(p=>'support-'+p.id)])assert.deepEqual(fs.readFileSync(path.join(root,`patient/${code}/${name}.pdf`)),fs.readFileSync(path.join(root,`docs/patient/${code}/${name}.pdf`)));
  for(const [asset,file] of [['knowledge','knowledge.html'],['longitudinal','treatment-journey.html'],['consent-draft','consent-form.html'],['supportive-care-selector','supportive-care.html']])assert.equal(R.relativePath(code,asset),`patient/${code}/${file}`);

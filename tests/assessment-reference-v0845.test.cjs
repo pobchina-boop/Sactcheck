@@ -77,6 +77,12 @@ for (const row of require('../protocols/index.json').protocols) {
           assert.equal(definition.derived_value.fields.length,2);
           for(const field of definition.derived_value.fields)assert(presented.some(d=>d.id===field&&d.type==='number'),'Calculated field requires visible numeric operands');
           assert.equal(Engine.assess(p,{[definition.id]:99}).inputs[definition.id],null,'Supplied calculated values cannot replace missing operands');
+        }else if(source?.derived_actual_fields){
+          const matching=Object.entries(source.derived_actual_fields).filter(([,target])=>target===definition.id);
+          assert.equal(matching.length,1,'Hidden absolute input has one explicit analyte mapping');
+          const lab=require('../js/local-lab-profile.js');
+          assert.equal(lab.derivedActualFields(source,{[matching[0][0]]:181})[definition.id],'181');
+          assert.equal(lab.derivedActualFields(source,{[matching[0][0]]:''})[definition.id],undefined);
         }else assert.equal(source?.derived_actual_field, definition.id, 'Hidden absolute input must have an explicit visible source');
         assert(presented.some(d => d.id === source.id));
       }

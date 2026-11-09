@@ -31,7 +31,7 @@ data.drug_profiles.forEach(profile => {
 });
 
 data.evidence_records.forEach(record => {
-  assert.ok(protocolIds.has(record.protocol_id), `Evidence mapped to missing protocol: ${record.protocol_id}`);
+  assert.ok(protocolIds.has(require("../js/protocol-id-migrations.js").canonicalId(record.protocol_id)), `Evidence mapped to missing protocol: ${record.protocol_id}`);
   assert.ok(/^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/.test(record.publication_url), `Non-stable PubMed URL: ${record.publication_url}`);
   assert.strictEqual(String(record.pmid), record.publication_url.match(/(\d+)/)[1]);
   assert.ok(record.publication_title && record.journal && record.year && record.study_design && record.relevance_summary && record.limitations && record.match_type);

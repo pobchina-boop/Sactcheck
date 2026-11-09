@@ -42,6 +42,7 @@ CHAPTERS = [
     ("sources", "Sources and further information"),
 ]
 GENERATED = ["guide.pdf", "knowledge.pdf", "handbook.pdf"]
+NEW_ROUTES_WITHOUT_PRIOR_BOOK = frozenset()
 WORD_MINIMUM = 110
 SHORT_PAGE_HEIGHT = 200
 COMPANION_TAIL_HEIGHT = 300
@@ -334,7 +335,8 @@ def deduplicate_explanations(tree, changes):
 
     answered_details = [element for element in tree.xpath('//details') if has_answer_content(element)]
     seen = {}
-    protected = {"book44-phase", "pk-phases", "scv-phase-path", "scv-schedule-graphic", "journey-checks"}
+    # Chapter identity is deliberate navigation, not duplicate clinical prose.
+    protected = {"book44-chapter-head", "book44-phase", "pk-phases", "scv-phase-path", "scv-schedule-graphic", "journey-checks"}
     for element in list(tree.xpath("//p | //li")):
         if element.getparent() is None or element.xpath(".//p | .//li | .//table"):
             continue
@@ -1090,7 +1092,7 @@ def fingerprint_inputs(route, profile_path, previous, companion_fingerprint):
                 if asset.is_relative_to(ROOT) and asset.is_file():
                     paths.append(asset)
     paths.extend(sorted((ROOT/"assets/patient").glob("*.css")))
-    paths.extend([previous/"patient"/route/name for name in ["guide.pdf", "sactcard.pdf", "handbook.pdf"]])
+    paths.extend([previous/"patient"/route/name for name in ["guide.pdf", "sactcard.pdf", "handbook.pdf"] if name!="handbook.pdf" or route not in NEW_ROUTES_WITHOUT_PRIOR_BOOK or (previous/"patient"/route/name).exists()])
     records = {str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path): HASH(path.read_bytes()) for path in paths}
     return HASH(json.dumps({'files':records,'companion_decisions':companion_fingerprint}, sort_keys=True).encode()), records
 
@@ -1426,7 +1428,8 @@ def build_route(route, stage, previous, resume=False):
     (output/"knowledge-print.html").write_text(complete_reference_html(printed, route, profile, reference_sources))
     (output/"cover.html").write_text(cover_html)
     (output/"records.html").write_text(record_proof.pop("html"))
-    previous_book = fitz.open(previous/"patient"/route/"handbook.pdf")
+    previous_book_path = previous/"patient"/route/"handbook.pdf"
+    previous_book = fitz.open(previous_book_path) if previous_book_path.exists() or route not in NEW_ROUTES_WITHOUT_PRIOR_BOOK else fitz.open()
     required = {row["sha256"]: row for row in reading["source_units"]+record_proof["required_units"]}
     report = {"route": route, "release": VERSION, "fingerprint": fingerprint, "inputs": input_hashes,
         "source_json": str(profile_path.relative_to(ROOT)), "documents": documents,

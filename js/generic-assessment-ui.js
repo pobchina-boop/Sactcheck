@@ -1053,13 +1053,18 @@
     });
     const targets = [...new Set([...document.querySelectorAll("[data-lab-target]")].filter(element => includeDisabled || !element.disabled).map(element => element.dataset.labTarget))];
     targets.forEach(target => {
+      const rawDefinitions = activeProtocol?.input_definitions || {};
+      const targetDefinition = Array.isArray(rawDefinitions)
+        ? rawDefinitions.find(definition => definition?.id === target)
+        : rawDefinitions[target];
+      const actualValues = {};
+      document.querySelectorAll(`[data-lab-target="${cssEscape(target)}"]`).forEach(element => {
+        if (includeDisabled || !element.disabled) actualValues[element.dataset.labAnalyte] = element.value;
+      });
+      Object.assign(inputs, LocalLab?.derivedActualFields?.(targetDefinition, actualValues) || {});
       const calculation = calculateLabTarget(target, includeDisabled);
       if (calculation) {
         inputs[target] = String(calculation.ratio);
-        const rawDefinitions = activeProtocol?.input_definitions || {};
-        const targetDefinition = Array.isArray(rawDefinitions)
-          ? rawDefinitions.find(definition => definition?.id === target)
-          : rawDefinitions[target];
         const derivedActualField = targetDefinition?.derived_actual_field;
         if (derivedActualField && calculation.highestPart?.actual !== undefined) {
           inputs[derivedActualField] = String(calculation.highestPart.actual);

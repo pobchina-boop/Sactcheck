@@ -27,6 +27,7 @@ from lxml import html as LH
 ROOT = Path(__file__).resolve().parents[1]
 HASH = lambda value: hashlib.sha256(value).hexdigest()
 GENERATED = ["guide.pdf", "knowledge.pdf", "handbook.pdf"]
+NEW_ROUTES_WITHOUT_PRIOR_BOOK = frozenset()
 COMPANION_AUDIT = ROOT/"validation/patient-design-v08444/companion-content-retention.json"
 CHAPTERS = ["Understanding your treatment", "Your schedule, tests and appointments",
     "Symptoms and supportive care", "Your record and contact card", "Sources and further information"]
@@ -296,7 +297,7 @@ def verify_route(arguments):
             candidates[name] = fitz.open(stream=data, filetype='pdf')
             require(len(candidates[name]) == docs[name]['pages'], 'Reported page count differs: '+name)
         guide, reference, book = [candidates[name] for name in GENERATED]
-        originals = {name: fitz.open(previous/'patient'/route/name) for name in ['guide.pdf','handbook.pdf','sactcard.pdf']}
+        originals = {name: (fitz.open() if name=='handbook.pdf' and route in NEW_ROUTES_WITHOUT_PRIOR_BOOK and not (previous/'patient'/route/name).exists() else fitz.open(previous/'patient'/route/name)) for name in ['guide.pdf','handbook.pdf','sactcard.pdf']}
         require(len(originals['handbook.pdf']) == row['previous_handbook_pages'], 'Previous page count mismatch')
         require(row['pages_saved'] == len(originals['handbook.pdf'])-len(book), 'Page reduction calculation differs')
         require(row['handbook_pages'] == len(book), 'Handbook page count differs')

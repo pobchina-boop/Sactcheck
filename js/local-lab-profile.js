@@ -223,6 +223,15 @@
     return null;
   }
 
+  function derivedActualFields(definition, actualValues = {}) {
+    const values = {};
+    for (const [analyte, field] of Object.entries(definition?.derived_actual_fields || {})) {
+      const raw = actualValues[analyte];
+      if (raw !== undefined && raw !== null && String(raw).trim() !== '' && Number.isFinite(Number(raw)) && Number(raw) >= 0) values[field] = String(Number(raw));
+    }
+    return values;
+  }
+
   function calculate(targetOrDefinition, actualValues = {}, settings = read()) {
     const adapter = adapterFor(targetOrDefinition);
     if (!adapter) return null;
@@ -303,6 +312,7 @@
     reset,
     validatePatch,
     adapterFor,
+    derivedActualFields,
     calculate,
     referenceText
   });

@@ -57,9 +57,10 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.37 adds four source-audited NET schedules; generic dose ladders remain absent.
 // v0.84.40 adds exactly five source-audited skin schedules.
 // v0.84.42 supplies seven complete source-audited skin schedules.
-assert.strictEqual(usefulCoverage, 224);
-assert.strictEqual(scheduleCoverage, 224);
-assert.strictEqual(doseLevelCoverage, 62);
+// v0.84.45 adds cisplatin RT (weekly/3-weekly) and two pembrolizumab/platinum/5-FU schedules.
+assert.strictEqual(usefulCoverage, 228);
+assert.strictEqual(scheduleCoverage, 228);
+assert.strictEqual(doseLevelCoverage, 64);
 // Exactly five additional source-audited glioma schedules; dose-history decisions remain in assessment.
 for(const code of ['00334','00342','00379','00461','00658']) {
  const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));

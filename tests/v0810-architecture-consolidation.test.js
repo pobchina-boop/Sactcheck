@@ -67,12 +67,13 @@ assert.ok(anti.includes('stopImmediatePropagation'),'traffic light action must o
 
 const protectedManifest=json('data/protected-patient-assets-v0810.json');
 const presentationMigration=require('./helpers/retrospective-v08443.cjs');
-assert.deepStrictEqual(Object.keys(protectedManifest.assets).sort(),registry.codes.slice().sort());
+require('./helpers/head-neck-suite-registration-v08445.cjs').registry(registry.codes,Object.keys(protectedManifest.assets));
 for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
   for(const file of ['index.html','guide.pdf','passport.pdf']){
     const rel=`patient/${code}/${file}`;
     assert.ok(fs.existsSync(path.join(root,rel)),`${rel} missing`);
-    const expected=protectedManifest.assets[code.split('/')[0]][[...code.split('/').slice(1),file].join('/')];
+    const expected=protectedManifest.assets[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
+    if(!expected){const next=require('./helpers/retrospective-v08445.cjs');assert(next.NEW_ROUTES.includes(code),rel+' unrecorded new route');assert.strictEqual(sha(rel),next.expectedHash(rel,null));assert.strictEqual(fs.statSync(path.join(root,rel)).size,next.expectedBytes(rel,null,null));continue;}
     assert.strictEqual(sha(rel),presentationMigration.expectedHash(rel,expected.sha256),`${rel} changed without an exact reviewed presentation migration`);
     assert.strictEqual(fs.statSync(path.join(root,rel)).size,presentationMigration.expectedBytes(rel,expected.bytes,expected.sha256),`${rel} size drift`);
   }

@@ -32,12 +32,12 @@ for(const code of ['00227','00449','00446']){
  const defs=protocol.input_definitions;const anc=Object.keys(defs).find(k=>/anc.*x10|^anc$/i.test(k));assert(anc,`${code}: ANC input`);const result=engine.assess(protocol,{[anc]:0.3});assert.equal(result.complete,false,`${code}: missing domains must stay unassessed`);assert(result.findings.length>0,`${code}: ANC-only should yield a finding`);
  for(const f of ['index.html','knowledge.html']){
   const h=read(`patient/${code}/${f}`),chart=require('../tools/cycle-chronology.cjs').render(d);
-  assert(h.includes(f==='index.html'&&['0.84.32','0.84.33'].includes(d.patient_layout_release)?'knowledge.html':'data-port-pump'));
+  assert(h.includes(f==='index.html'?'knowledge.html':'data-port-pump'));
   assert(!/<input|<select/.test(h));
   // Only the first IV label may carry its approved patient explanation; all
   // day spans, graph markup and remaining clinical wording stay byte-exact.
   const sameChart=h.includes(chart)||h.includes(chart.replace('>IV<',`>${ivExpansion} (IV)<`));
-  assert(f==='index.html'&&['0.84.32','0.84.33'].includes(d.patient_layout_release)?h.includes('knowledge.html#cycle'):sameChart);
+  if(f==='index.html')require('./helpers/patient-overview-v08445.cjs').validate(h,code);else assert(sameChart);
  }
  assert.equal(d.anatomy.length,8);assert.equal(d.timeline.find(x=>x.id==='pump').end,3);
  if(code==='00446'){assert.doesNotMatch(read(`patient/${code}/index.html`),/Irinotecan|MOSAIC|adjuvant colon/i);assert.equal(d.evidence.metrics.length,0);assert(!read(`patient/${code}/knowledge.html`).includes('9.4 months'));assert(JSON.stringify(json('data/regimen-knowledge-base-v08421-addendum.json')).includes('9.4'));}

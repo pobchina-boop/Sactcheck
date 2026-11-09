@@ -83,7 +83,14 @@ for(const code of codes.flatMap(c=>registry.bundleRoutes(c))){
     const a=path.join(canonical,file),b=path.join(compat,file);
     if(fs.existsSync(a)&&fs.existsSync(b)&&sha(a)!==sha(b)) problems.push(`compatibility ${file} drift for ${code}`);
     const fixture=protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
-    if(fs.existsSync(a)&&fixture&&sha(a)!==presentationMigration.expectedHash(`patient/${code}/${file}`,fixture.sha256)) problems.push(`protected canonical ${code}/${file} changed without an exact reviewed presentation migration`);
+    if(fs.existsSync(a)){
+      const rel=`patient/${code}/${file}`,migration45=require('../tests/helpers/retrospective-v08445.cjs');
+      if(!fixture&&!migration45.NEW_ROUTES.includes(code)) problems.push(`unrecorded canonical patient route ${code}`);
+      else {
+        const expected=fixture?presentationMigration.expectedHash(rel,fixture.sha256):migration45.expectedHash(rel,null);
+        if(sha(a)!==expected) problems.push(`protected canonical ${code}/${file} changed without an exact reviewed presentation migration`);
+      }
+    }
   }
 }
 const p568=path.join(site,"patient","00568","guide.pdf");

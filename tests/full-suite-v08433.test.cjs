@@ -25,7 +25,7 @@ for(const c of codes){
  assert(D.buildModel(p).phases.length);assert(k.treatment_rationale.line);assert(!/undefined|\[object Object\]/.test(Evidence.render(k)));
  if(scope.new_codes.includes(c)){assert.equal(D.buildModel(p).phases[0].cycleLength,expectedDays[c]);for(const f of ['trial','population','comparison','checked'])assert(k.evidence_at_a_glance[f],c+' evidence '+f);assert(!Evidence.render(k).includes('<strong></strong>'));}
  const guide=read(`patient/${c}/guide.html`),card=read(`patient/${c}/sactcard.html`),portal=read(`patient/${c}/index.html`),wiki=read(`patient/${c}/knowledge.html`);
- assert.equal((guide.match(/class="pt-page /g)||[]).length,3);assert.equal((portal.match(/data-patient-panel/g)||[]).length,5);
+ assert.equal((guide.match(/class="pt-page /g)||[]).length,3);require('./helpers/patient-overview-v08445.cjs').validate(portal,c);
  assert.equal((guide.match(/data-hcc-target=/g)||[]).length,d.anatomy.length);assert(guide.includes('Full-body anatomical illustration'));assert(guide.includes('hcc-static-connectors'));
  for(const t of ['pt-document-identity','Your personal plan',c==='00448'?'5 November 2026':'4 November 2026']){assert(guide.includes(t));assert(wiki.includes(t));}
  for(const t of ['FRONT / CONTACTS','BACK / TREATMENT RECORD','Do not cut the centre line','100%','oncowiki-qr.png','EXAMPLE ONLY','Add to Home Screen'])assert(card.includes(t),c+' card '+t);

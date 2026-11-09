@@ -55,7 +55,7 @@ for(const [c,absolute] of [['00689','bilirubin_micromol_l'],['00908','bilirubin_
  const p=json(protocols.find(p=>p.path.includes('/'+c+'-')).path);
  assert.equal(p.input_definitions[absolute].ui_derived_from,'bilirubin_uln_multiple');
  for(const [value,uln] of [[0,20],[49.99,20],[50,20],[60,30],['',20]]){
-  const ctx={document:{querySelectorAll:s=>s==='[data-lab-target]'?[{dataset:{labTarget:'bilirubin_uln_multiple'},disabled:false}]:[]},activeProtocol:p,inputControlSelector:x=>x,latestLabCalculations:{},calculateLabTarget:()=>Lab.calculate('bilirubin_uln_multiple',{bilirubin:value},{...Lab.defaults,bilirubinUln:uln})};
+  const ctx={document:{querySelectorAll:s=>s==='[data-lab-target]'?[{dataset:{labTarget:'bilirubin_uln_multiple'},disabled:false}]:[]},activeProtocol:p,cssEscape:x=>x,LocalLab:Lab,inputControlSelector:x=>x,latestLabCalculations:{},calculateLabTarget:()=>Lab.calculate('bilirubin_uln_multiple',{bilirubin:value},{...Lab.defaults,bilirubinUln:uln})};
   vm.createContext(ctx);vm.runInContext(collector+'; result=collectRawInputs();',ctx);
   if(value===''){assert.equal(ctx.result[absolute],undefined);assert.equal(ctx.result.bilirubin_uln_multiple,undefined);}
   else{assert.equal(Number(ctx.result[absolute]),value);assert.equal(Number(ctx.result.bilirubin_uln_multiple),value/uln);}

@@ -83,7 +83,7 @@ function createMigration(record){
 }
 let record,migrate;
 function load(){if(!migrate){record=JSON.parse(fs.readFileSync(RECORD,'utf8'));migrate=createMigration(record);}}
-function expectedHash(file,original){load();return migrate(file,original);}
-function expectedBytes(file,bytes,original){load();migrate(file,original);const c=record.files[file];if(!c)return bytes;if(bytes!==(original===c.before?c.before_bytes:c.after_bytes))throw Error('Unexpected v44 original byte count '+file);return c.after_bytes;}
+function expectedHash(file,original){load();return require('./retrospective-v08445.cjs').expectedHash(file,migrate(file,original));}
+function expectedBytes(file,bytes,original){load();migrate(file,original);const next=require('./retrospective-v08445.cjs');const c=record.files[file];if(!c)return next.expectedBytes(file,bytes,original);if(bytes!==(original===c.before?c.before_bytes:c.after_bytes))throw Error('Unexpected v44 original byte count '+file);return next.expectedBytes(file,c.after_bytes,c.after);}
 function expectedBuilderHash(file,original){if(!safeRelative(file)||!/^tools\/[a-zA-Z0-9_-]+\.(cjs|js|py)$/.test(file))throw Error('Unsafe v44 builder lookup '+file);return expectedHash(file,original);}
 module.exports={ROOT,BASE_COMMIT,BASE_TREE,BASELINE,BASELINE_MANIFEST_SHA256,BASELINE_ARCHIVE_SHA256,BASE_FILES,RECORD,ROUTES,ROUTE_SET_SHA256,FILE_NAMES,SHARED_PATHS,approvedPath,safeRelative,createMigration,expectedHash,expectedBytes,expectedBuilderHash};

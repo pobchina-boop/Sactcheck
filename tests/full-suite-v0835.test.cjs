@@ -16,7 +16,7 @@ for(const code of ['00225','00447','00448']){
    const chart=require('../tools/cycle-chronology.cjs').render(d);
    // The approved first-use IV explanation is the sole permitted graph change.
    const sameChart=html.includes(chart)||html.includes(chart.replace('>IV<',`>${ivExpansion} (IV)<`));
-   assert(name==='index'&&(d.patient_layout_release==='0.84.33'||(current35.has(code)&&d.patient_layout_release==='0.84.35')||(current34.has(code)&&d.patient_layout_release==='0.84.34'))?html.includes('knowledge.html#cycle'):sameChart);
+   if(name==='index')require('./helpers/patient-overview-v08445.cjs').validate(html,code);else assert(sameChart);
    assert(!/<input|<select/.test(html));
   }
  }

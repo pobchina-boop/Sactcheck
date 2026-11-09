@@ -4,6 +4,7 @@ const assert = require('assert');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const HEADNECK45 = require('./helpers/head-neck-grading-v08445.cjs');
 const SKIN42Inputs = require('./helpers/skin-inputs-v08442.cjs');
 const SKIN40Inputs = require('./helpers/skin-inputs-v08440.cjs');
 const NET37Inputs = require('./helpers/neuroendocrine-inputs-v08437.cjs');
@@ -121,6 +122,7 @@ for (const { file, data } of protocols) {
   const id = data.protocol_id;
   const code = String(metadata.nccp_regimen_code);
   NET37Inputs.validateProtocol(data);
+  HEADNECK45.validateProtocol(data, ctcae);
   const normalisedTitle = String(metadata.title || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ')
@@ -189,6 +191,7 @@ for (const { file, data } of protocols) {
     if (!sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
+      const headNeckV45Source = HEADNECK45.applies(data);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       const folfoxSourceDiarrhoea = (['00447','00733'].includes(code) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field)) || (code==='00791' && ['diarrhoea_grade','diarrhoea_highest_grade','mucositis_grade','stomatitis_highest_grade'].includes(field));
       const everolimusSource = code === '00322';
@@ -207,7 +210,9 @@ for (const { file, data } of protocols) {
       const lungV29Source=metadata.sactcheck_encoding_version==='0.84.29'&&['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code);
       const lungV28Source=metadata.sactcheck_encoding_version==='0.84.28'&&['00281','00310','00304','00339','00343','00317','00318','00271','00280','00621'].includes(code);
       const lungV27Source=metadata.sactcheck_encoding_version==='0.84.27'&&['00483','00484','00712','00792','00849','00713','00714','00568','00569','00579'].includes(code);
-      if(code==='00505') {
+      if(headNeckV45Source) {
+        HEADNECK45.check(data,field,def,ctcae);
+      }else if(code==='00505') {
         require('./helpers/captem-grading-v08437.cjs').check(data,field,def);
       }else if(code==='00216') {
         require('./helpers/capecitabine-grading-v08436.cjs').check(data,field,def);
@@ -247,7 +252,7 @@ for (const { file, data } of protocols) {
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      if(!antibodyV34Source && !oralV34Source && !pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!headNeckV45Source && !antibodyV34Source && !oralV34Source && !pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
       const net37Hfs = NET37Inputs.handFoot(data, field, def);
@@ -268,7 +273,7 @@ for (const { file, data } of protocols) {
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
       if((code==='00505'&&require('./helpers/captem-grading-v08437.cjs').sourceFields.has(field))||(code==='00216'&&require('./helpers/capecitabine-grading-v08436.cjs').sourceFields.has(field))||code==='00692'||antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
-      if(!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
+      if(!headNeckV45Source&&!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {
         assert.equal(def.ctcae_category, 'other_nonhaematological', `${code}/${field} is incorrectly classified as haematological`);
       }
@@ -287,8 +292,12 @@ for (const { file, data } of protocols) {
       }
     }
 
+    // This is a dimensionless comparison to a previous creatinine, not CrCl.
+    if(code==='00705' && field==='creatinine_ratio_to_isotope_baseline'){
+      assert.equal(def.type,'number');assert.equal(def.unit,'ratio');continue;
+    }
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
-    if(['00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
+    if(['00705','00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
     if ((SKIN42Inputs.numericRenal(data, field, def) || SKIN40Inputs.numericRenal(data, field, def) || NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
     const renalText = `${field} ${def?.label || ''}`.toLowerCase();
     if (!/crcl|creatinine clearance|\bgfr\b|egfr/.test(renalText)) continue;
@@ -302,7 +311,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00555','00783','00691','00214','00279','00309','00372','00456','00561','00284','00311','00388','00587','00614','00281','00310','00304','00339','00343','00621','00483','00484','00712','00792','00849','00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00385','00387','00706','00555','00783','00691','00214','00279','00309','00372','00456','00561','00284','00311','00388','00587','00614','00281','00310','00304','00339','00343','00621','00483','00484','00712','00792','00849','00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);
@@ -378,3 +387,5 @@ assert(html.includes('js/protocol-loader.js?v=0.56.1'), 'Protocol loader cache k
 assert(!loader.includes('\u0008'), 'Protocol loader contains a stray control character in treatment-class formatting.');
 
 console.log(`v0.37.0 platform standardisation tests passed: ${protocols.length} regimens, ${ctcaeFields} CTCAE fields, ${renalBandFields} renal-band fields, ${exactCarboplatinFields} carboplatin exact-value fields.`);
+
+console.log(`v0.84.45 source grading: ten explicit protocol contracts and ${HEADNECK45.negativeChecks(protocols,ctcae)} rejection checks passed.`);

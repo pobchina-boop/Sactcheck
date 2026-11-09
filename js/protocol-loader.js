@@ -365,7 +365,7 @@
   }
 
   function launchProtocol(protocolId) {
-    const protocol = protocolsById.get(protocolId);
+    const protocol = window.SACTCheckProtocolIds?.resolve(protocolId, protocolsById.values()) || protocolsById.get(protocolId);
     if (!protocol) throw new Error(`Protocol ${protocolId} is not loaded.`);
     if (!window.SACTCheckGenericAssessment?.open) {
       throw new Error("The generic JSON assessment interface is unavailable.");
@@ -778,7 +778,7 @@
     validateProtocol: protocolValidation,
     launchProtocol,
     getProtocolById(id) {
-      return protocolsById.get(id) || null;
+      return window.SACTCheckProtocolIds?.resolve(id, protocolsById.values()) || protocolsById.get(id) || null;
     },
     getLoadedProtocols() {
       return loadedProtocolRecords.slice();

@@ -52,7 +52,7 @@ class PrintableChronologyTest(unittest.TestCase):
   self.assertIn('Complete clinical reference content',bound[0].get_text())
 
  def test_consolidated_book_retains_clinical_content_and_exact_anatomy_and_cards(self):
-  import hashlib,json
+  import hashlib,json,gzip
   # Keep the historical extraction proof: the v43 preservation routine must
   # still recover the six non-reference source sections without changing their
   # body pixels. The user subsequently authorised v44 consolidation, so the
@@ -84,9 +84,14 @@ class PrintableChronologyTest(unittest.TestCase):
   guard=importlib.util.module_from_spec(spec_guard);spec_guard.loader.exec_module(guard)
   spec_content=importlib.util.spec_from_file_location('patient_document_content44',ROOT/'tools/verify-patient-documents-v08444.py')
   content=importlib.util.module_from_spec(spec_content);spec_content.loader.exec_module(content)
-  report=json.loads((ROOT/'validation/patient-design-v08444/document-build.json').read_text())
-  self.assertEqual(report['release'],'0.84.44')
-  self.assertTrue(report['published'],'Check the final published PDFs, not an earlier staged build')
+  report_path=ROOT/'validation/head-neck-v08445/books-unaffected-build.json.gz'
+  raw_report=gzip.decompress(report_path.read_bytes())
+  report=json.loads(raw_report)
+  verified=json.loads(gzip.decompress((ROOT/'validation/head-neck-v08445/books-unaffected-verification.json.gz').read_bytes()))
+  self.assertEqual(report['release'],'0.84.45')
+  self.assertEqual(verified['status'],'pass')
+  self.assertEqual(verified['build_report_sha256'],hashlib.sha256(raw_report).hexdigest())
+  self.assertTrue(verified['published_mirrors_verified'],'Check final published PDFs, not only a staged build')
   rows=[row for row in report['results'] if row['route']=='00555']
   self.assertEqual(len(rows),1)
   row=rows[0]

@@ -14,9 +14,9 @@ for(const code of ['00209','00321','00226']){
   // pass. Keep every other byte of the complete graph, including day spans,
   // attributes, source links, treatment labels and safety wording, exact.
   const sameChart=html.includes(chart)||html.includes(chart.replace('>IV<',`>${ivExpansion} (IV)<`));
-  assert((file==='index.html'&&d.patient_layout_release==='0.84.32'?html.includes('knowledge.html#cycle'):sameChart),`${code}/${file} must use the same complete graph`);
+  if(file==='index.html')require('./helpers/patient-overview-v08445.cjs').validate(html,code);else assert(sameChart,`${code}/${file} must use the same complete graph`);
   assert.doesNotMatch(html,/<input|<select|id="pk-start"|class="pk-controls"|Select a day to explore/);
-  assert(html.includes('id="cycle"'));
+  if(file==='knowledge.html')assert(html.includes('id="cycle"'));
  }
  assert.doesNotMatch(chart,/pembrolizumab|pemetrexed|carboplatin|immune-related effects/i);
  if(code==='00209')assert.match(chart,/data-cycle-track="pump"[\s\S]*?grid-column:2 \/ 5/);

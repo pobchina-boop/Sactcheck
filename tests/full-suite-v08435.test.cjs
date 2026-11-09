@@ -5,9 +5,9 @@ const scope=json('validation/colorectal-v08435/scope.json'),registry=require('..
 assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(new Set(scope.presentation_routes).size,10);
 for(const route of scope.presentation_routes){
  const code=route.split('/')[0],d=json(presentation.routes[route]),p=json(index.find(x=>x.path.includes('/'+code+'-')).path);
- assert.equal(d.protocol_id,p.protocol_id,route+' canonical ID');assert.equal(d.patient_summary.template_version,route==='00551'?'0.84.41':'0.84.35');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));
+ assert.equal(d.protocol_id,p.protocol_id,route+' canonical ID');assert.equal(d.patient_summary.template_version,code==='00733'?'0.84.45':route==='00551'?'0.84.41':'0.84.35');assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));
  if(['00455','00558','00551','00483','00484'].includes(code))require('./helpers/skin-inputs-v08440.cjs').validate(p);
- else assert.equal(p.metadata.clinical_audit_release,'0.84.35');
+ else if(code==='00733')require('./helpers/head-neck-inputs-v08445.cjs').validate(p);else assert.equal(p.metadata.clinical_audit_release,'0.84.35');
  assert.ok(d.anatomy.length>=6);assert.ok(d.monitoring_schedule.rows.length>=3);assert.ok(d.patient_summary.monitoring.length>=3);
  const sources=new Set(d.sources.map(s=>s.id));const walk=x=>{if(!x||typeof x!=='object')return;if(x.source_ids)for(const id of x.source_ids)assert.ok(sources.has(id),route+' missing source '+id);for(const v of Object.values(x))walk(v);};walk(d);
  for(const f of ['index.html','guide.html','knowledge.html','consent-form.html','passport.html','sactcard.html','supportive-care.html','treatment-journey.html'])assert.ok(fs.existsSync(path.join(root,'patient',route,f)),route+'/'+f);
