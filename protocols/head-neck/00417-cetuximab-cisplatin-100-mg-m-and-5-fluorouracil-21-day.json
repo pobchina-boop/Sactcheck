@@ -14,9 +14,9 @@
     "short_title": "Cetuximab, Cisplatin 100 mg/m² and 5-Fluorouracil – 21 day",
     "indication": "Locally advanced or metastatic squamous cell carcinoma of the head and neck.",
     "source_url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 9,
+    "sactcheck_encoding_version": "0.84.47",
+    "source_checked_date": "2026-11-10",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -52,7 +52,8 @@
           "intent": "advanced_disease",
           "cycle_length_days": 21,
           "provenance": "official_nccp_source_reconciled",
-          "duration_text": "Up to 6 combination cycles, then cetuximab maintenance until progression/toxicity"
+          "duration_text": "Up to six combination cycles every 21 days, stopping earlier for progression or unacceptable toxicity. After this, weekly cetuximab maintenance may be considered under a separate NCCP 00207 plan.",
+          "planned_cycles": 6
         }
       ],
       "provenance": {
@@ -65,11 +66,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.47"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -85,17 +87,30 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled · independent clinical validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.47",
+      "audit_date": "2026-11-10",
+      "scope_note": "Fresh NCCP v7 audit; source gaps and clinical choices remain visible. Independent clinical and oncology-pharmacy approval outstanding."
     },
-    "canonical_protocol_id": "nccp-00417-v7"
+    "canonical_protocol_id": "nccp-00417-v7",
+    "source_pdf_sha256": "5cf266c0716efaf2627e0f748866226c562ea1e75ff75de05ceef9e27b5dc2fc",
+    "clinical_audit_release": "0.84.47",
+    "supplementary_sources": [
+      {
+        "title": "Erbitux EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+        "retrieved_date": "2026-11-10",
+        "path": "validation/head-neck-v08447/sources/erbitux-ema.pdf",
+        "sha256": "073f5effd93351048ad74afee3f940b1c0ad5d24722452304a7b761a65e30f20",
+        "sections": "4.1, 4.2, 4.4",
+        "scope": "Intolerable skin toxicity, failed recovery, infusion observation and indication-context cross-check; NCCP regimen schedule retained."
+      }
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -114,13 +129,19 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Weekly cetuximab with cisplatin day 1 and fluorouracil days 1–4 every 21 days; combination phase followed by cetuximab maintenance where applicable.",
+    "schedule_summary": "Cetuximab 400 mg/m² loading day 1 then 250 mg/m² weekly on days 1,8,15; cisplatin 100 mg/m² day 1; fluorouracil 1000 mg/m²/day days 1–4. Repeat every 21 days for up to six cycles.",
     "drugs": [
       "cetuximab",
       "cisplatin",
       "fluorouracil"
     ],
-    "duration_text": "Up to 6 combination cycles, then cetuximab maintenance until progression/toxicity"
+    "duration_text": "Up to six combination cycles every 21 days, stopping earlier for progression or unacceptable toxicity. After this, weekly cetuximab maintenance may be considered under a separate NCCP 00207 plan.",
+    "planned_cycles": 6,
+    "administration_notes": [
+      "Antihistamine and corticosteroid at least one hour before every cetuximab infusion; chemotherapy begins at least one hour after cetuximab finishes.",
+      "Cetuximab first dose 120 minutes (maximum 5 mg/min), later weekly doses 60 minutes (maximum 10 mg/min). NCCP permits stopping the one-hour observation after two uneventful doses; current EMA SmPC requires close observation for at least one hour after every infusion. Follow the current authorised/local observation plan; do not assume early discharge.",
+      "Fluorouracil daily infusion 22 hours; alternative 2000 mg/m² over 46–48 hours repeated for days 3–4,total 4000 mg/m² over 96 hours."
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -181,17 +202,19 @@
       "step": 0.01,
       "demo_value": 2,
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Use ANC on the day of chemotherapy for Table 1; baseline eligibility is separate. The printed table overlaps at ANC 1.5."
     },
     "platelets": {
-      "label": "Platelets",
+      "label": "Lowest platelet count at any stage during the cycle",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 1,
       "demo_value": 180,
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Table 1 uses the lowest platelet result at any stage during the cycle, not just the treatment-day count."
     },
     "haemoglobin": {
       "label": "Haemoglobin",
@@ -295,7 +318,7 @@
       "input_role": "context"
     },
     "cisplatin_crcl_band": {
-      "label": "Renal function for cisplatin",
+      "label": "Legacy cisplatin renal band (exact CrCl preferred)",
       "type": "select",
       "required": false,
       "options": [
@@ -329,10 +352,11 @@
         }
       ],
       "demo_value": "ge60",
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Use exact CrCl for current assessment. Historic overlapping categories do not establish a precise dose."
     },
     "cisplatin_neuro_hearing_grade": {
-      "label": "Cisplatin-related neuropathy, tinnitus or hearing toxicity grade",
+      "label": "Legacy combined neuropathy/hearing grade — clarify the symptom",
       "type": "select",
       "required": false,
       "options": [
@@ -375,11 +399,11 @@
       "input_role": "decision"
     },
     "electrolytes_hydration_not_corrected": {
-      "label": "Required hydration/electrolyte correction incomplete",
+      "label": "Clinically important electrolyte disturbance / hydration issue remains uncorrected",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "dpd_status": {
       "label": "DPD status",
@@ -556,11 +580,317 @@
       "input_role": "decision"
     },
     "interstitial_lung_disease": {
-      "label": "Suspected or confirmed interstitial lung disease",
+      "label": "Confirmed interstitial lung disease / pneumonitis / lung infiltrates",
       "type": "boolean",
       "required": false,
       "demo_value": false,
+      "input_role": "decision",
+      "assessment_guidance": "Use confirmed disease here; new/worsening respiratory symptoms have a separate hold-and-investigate pathway."
+    },
+    "creatinine_uln_multiple": {
+      "label": "Serum creatinine / laboratory upper limit of normal",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
+      "unit": "× ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cycle_number": {
+      "label": "Combination cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "cycle",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "treatment_phase": {
+      "label": "Prescribed treatment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "combination",
+          "label": "Cetuximab + platinum + fluorouracil"
+        },
+        {
+          "value": "maintenance",
+          "label": "Separate cetuximab-only plan — use NCCP 00207"
+        }
+      ],
+      "input_role": "context",
+      "demo_value": "combination"
+    },
+    "prior_severe_haematological_toxicity": {
+      "label": "Prior ANC <0.5, platelets <50, or febrile neutropenia in this course",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_impairment": {
+      "label": "Clinically assessed renal impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "dpd_phenotype_used": {
+      "label": "DPD assessment uses blood uracil phenotyping",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment": {
+      "label": "Clinically assessed hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "brivudine_sorivudine_or_analogue": {
+      "label": "Concurrent brivudine, sorivudine or related DPD-inhibiting analogue",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "warfarin": {
+      "label": "Warfarin treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "phenytoin": {
+      "label": "Phenytoin treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "fluorouracil_cardiac_symptoms": {
+      "label": "New chest pain/angina or suspected fluorouracil cardiotoxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_first_infusion_first15_reaction": {
+      "label": "Reaction during first 15 minutes of first cetuximab infusion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "new_worsening_respiratory_symptoms": {
+      "label": "New or worsening respiratory symptoms awaiting investigation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_prior_permanent_stop": {
+      "label": "Cetuximab previously permanently stopped for severe reaction / lung disease / fourth severe skin event",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_skin_occurrence": {
+      "label": "Number of severe (grade ≥3) cetuximab skin episodes in this course",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "episode",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "cetuximab_skin_hold_days": {
+      "label": "Days cetuximab withheld for this severe skin episode",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 365,
+      "step": 0.01,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "cetuximab_skin_restart_requested": {
+      "label": "Assess restart after severe cetuximab skin toxicity",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_restart_consultant_approved": {
+      "label": "Consultant has approved cetuximab restart after this episode",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Verified absolute creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 250,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": true,
+        "reason": "Evaluate explicit source boundaries without rounding; not indexed eGFR."
+      },
+      "demo_value": 80
+    },
+    "peripheral_neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No toxicity."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
+    },
+    "significant_hearing_impairment_or_tinnitus": {
+      "label": "Significant hearing impairment or tinnitus",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "intolerable_skin_toxicity": {
+      "label": "Skin reaction clinically intolerable regardless of grade",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "skin_failed_recovery": {
+      "label": "Skin reaction failed to recover during the source withholding period",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_prior_dose_mg_m2": {
+      "label": "Most recent cetuximab dose before the skin interruption",
+      "type": "number",
+      "unit": "mg/m²",
+      "min": 1,
+      "max": 500,
+      "step": 1,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 250,
+      "assessment_guidance": "Record the actual prior dose. Do not automatically increase a previously reduced dose when selecting a source recurrence pathway."
+    },
+    "head_neck_combination_setting": {
+      "label": "Head-and-neck combination treatment setting",
+      "type": "select",
+      "required": false,
+      "input_role": "context",
+      "demo_value": "recurrent_metastatic",
+      "options": [
+        {
+          "value": "recurrent_metastatic",
+          "label": "Recurrent and/or metastatic disease"
+        },
+        {
+          "value": "locally_advanced",
+          "label": "Locally advanced disease without recurrence/metastases"
+        },
+        {
+          "value": "uncertain",
+          "label": "Setting or prescribing basis unconfirmed"
+        }
+      ]
     }
   },
   "required_inputs": [],
@@ -594,6 +924,50 @@
     ],
     "rules": [
       {
+        "id": "HN47_COMBINATION_LIMIT",
+        "priority": 10,
+        "when": {
+          "field": "cycle_number",
+          "operator": ">",
+          "value": 6
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "This combination source specifies up to six 21-day cycles. Do not continue platinum/fluorouracil automatically beyond six; confirm the next plan."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "This combination source specifies up to six 21-day cycles. Do not continue platinum/fluorouracil automatically beyond six; confirm the next plan."
+      },
+      {
+        "id": "HN47_MAINTENANCE_ROUTE",
+        "priority": 10,
+        "when": {
+          "field": "treatment_phase",
+          "operator": "==",
+          "value": "maintenance"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Use the separately prescribed weekly cetuximab pathway (NCCP 00207); this combination assessment is not maintenance clearance."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Use the separately prescribed weekly cetuximab pathway (NCCP 00207); this combination assessment is not maintenance clearance."
+      },
+      {
         "id": "HYPERSENSITIVITY",
         "priority": 10,
         "when": {
@@ -606,17 +980,18 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Known hypersensitivity to cetuximab, cisplatin, fluorouracil or excipients excludes this source regimen."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "2–3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Known hypersensitivity to cetuximab, cisplatin, fluorouracil or excipients excludes this source regimen."
       },
       {
         "id": "ECOG_3",
-        "priority": 8,
+        "priority": 10,
         "when": {
           "field": "ecog",
           "operator": ">=",
@@ -627,272 +1002,1435 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "ECOG above 2 lies outside source eligibility; Consultant review is required."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+        "explanation": "ECOG above 2 lies outside source eligibility; Consultant review is required."
+      },
+      {
+        "id": "HN47_LACTATION",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Lactation is a source exclusion."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Lactation is a source exclusion."
+      },
+      {
+        "id": "HN47_PREGNANCY_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pregnancy requires specialist review against current product information; this NCCP eligibility table does not provide a pregnancy dosing pathway."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Pregnancy requires specialist review against current product information; this NCCP eligibility table does not provide a pregnancy dosing pathway."
+      },
+      {
+        "id": "HN47_BASELINE_CREATININE_ULN_MULTIPLE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "creatinine_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Baseline creatinine uln multiple exceeds the NCCP eligibility limit of 1.5 × ULN. A treatment-day modification table does not override initial eligibility."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Baseline creatinine uln multiple exceeds the NCCP eligibility limit of 1.5 × ULN. A treatment-day modification table does not override initial eligibility."
+      },
+      {
+        "id": "HN47_BASELINE_ALT_AST_ULN_MULTIPLE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Baseline alt ast uln multiple exceeds the NCCP eligibility limit of 5 × ULN. A treatment-day modification table does not override initial eligibility."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Baseline alt ast uln multiple exceeds the NCCP eligibility limit of 5 × ULN. A treatment-day modification table does not override initial eligibility."
+      },
+      {
+        "id": "HN47_BASELINE_BILIRUBIN_ULN_MULTIPLE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Baseline bilirubin uln multiple exceeds the NCCP eligibility limit of 1.5 × ULN. A treatment-day modification table does not override initial eligibility."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Baseline bilirubin uln multiple exceeds the NCCP eligibility limit of 1.5 × ULN. A treatment-day modification table does not override initial eligibility."
+      },
+      {
+        "id": "HN47_BASELINE_ANC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "anc",
+                  "operator": "<=",
+                  "value": 1.5
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Baseline eligibility states ANC >1.5 ×10⁹/L. Do not assume the treatment-day ≥1.5 threshold establishes initial eligibility."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Baseline eligibility states ANC >1.5 ×10⁹/L. Do not assume the treatment-day ≥1.5 threshold establishes initial eligibility."
+      },
+      {
+        "id": "HN47_BASELINE_PLATELETS",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Baseline platelet entry prints 100 ×10⁹/L without a comparator; confirm eligibility, especially at 100, rather than inventing an inclusive boundary."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Baseline platelet entry prints 100 ×10⁹/L without a comparator; confirm eligibility, especially at 100, rather than inventing an inclusive boundary."
       },
       {
         "id": "NONHAEM_G3",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "non_haematological_toxicity_grade",
           "operator": ">=",
           "value": 3
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
+          "message": "Severe non-haematological toxicity requires urgent clinical assessment. The source has drug-specific actions; no generic whole-regimen dose reduction is specified."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "4–7",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
+        "explanation": "Severe non-haematological toxicity requires urgent clinical assessment. The source has drug-specific actions; no generic whole-regimen dose reduction is specified."
+      },
+      {
+        "id": "5FU_MUC_G2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Assess fluorouracil-related mucositis and oral intake urgently. This regimen source does not specify a grade-2 automatic hold/restart dose table; agree the action with the Consultant."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4,7",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Assess fluorouracil-related mucositis and oral intake urgently. This regimen source does not specify a grade-2 automatic hold/restart dose table; agree the action with the Consultant."
       },
       {
         "id": "FN",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
-      },
-      {
-        "id": "CIS_RENAL_50_59",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "50_59",
-            "45_59"
+          "all": [
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "delay",
           "components": [
-            "cisplatin"
+            "cisplatin",
+            "fluorouracil"
           ],
-          "message": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
+          "message": "Treat febrile neutropenia urgently. Delay cytotoxic treatment until recovery; consider reducing both platinum and fluorouracil by 25% for subsequent cycles with the Consultant (Table 1)."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
+        "explanation": "Treat febrile neutropenia urgently. Delay cytotoxic treatment until recovery; consider reducing both platinum and fluorouracil by 25% for subsequent cycles with the Consultant (Table 1)."
       },
       {
-        "id": "CIS_RENAL_40_49",
+        "id": "ANC_05_149",
         "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "40_49"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
-      },
-      {
-        "id": "CIS_RENAL_LOW",
-        "priority": 10,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "lt45",
-            "lt40",
-            "dialysis"
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "delay",
           "components": [
-            "cisplatin"
+            "cisplatin",
+            "fluorouracil"
           ],
-          "message": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+          "message": "ANC 0.5 to below 1.5 ×10⁹/L: delay cytotoxic treatment until recovery (Table 1)."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+        "explanation": "ANC 0.5 to below 1.5 ×10⁹/L: delay cytotoxic treatment until recovery (Table 1)."
       },
       {
-        "id": "CIS_NEURO_G2",
-        "priority": 9,
+        "id": "HN47_ANC_15_BOUNDARY",
+        "priority": 10,
         "when": {
-          "field": "cisplatin_neuro_hearing_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "anc",
+              "operator": "==",
+              "value": 1.5
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "cisplatin"
+            "cisplatin",
+            "fluorouracil"
           ],
-          "message": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+          "message": "At ANC exactly 1.5 ×10⁹/L the printed full-dose and delay rows overlap. Confirm the source interpretation; do not automatically clear treatment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+        "explanation": "At ANC exactly 1.5 ×10⁹/L the printed full-dose and delay rows overlap. Confirm the source interpretation; do not automatically clear treatment."
       },
       {
-        "id": "CIS_HYDRATION",
-        "priority": 9,
+        "id": "ANC_LT05",
+        "priority": 10,
         "when": {
-          "field": "electrolytes_hydration_not_corrected",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "delay",
           "components": [
-            "cisplatin"
+            "cisplatin",
+            "fluorouracil"
           ],
-          "message": "Correct hydration and electrolytes before cisplatin."
+          "message": "ANC below 0.5 ×10⁹/L: delay until recovery and consider a 25% reduction of both platinum and fluorouracil for subsequent cycles. The reduction is a Consultant decision."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Correct hydration and electrolytes before cisplatin."
+        "explanation": "ANC below 0.5 ×10⁹/L: delay until recovery and consider a 25% reduction of both platinum and fluorouracil for subsequent cycles. The reduction is a Consultant decision."
+      },
+      {
+        "id": "PLT_50_99",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 99
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Platelets 50–99 ×10⁹/L at any stage in the cycle: delay cytotoxic treatment until recovery."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Platelets 50–99 ×10⁹/L at any stage in the cycle: delay cytotoxic treatment until recovery."
+      },
+      {
+        "id": "HN47_PLT_99_100_GAP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">",
+                  "value": 99
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "A fractional platelet value above 99 but below 100 ×10⁹/L lies between printed Table 1 bands; do not round into full-dose eligibility."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "A fractional platelet value above 99 but below 100 ×10⁹/L lies between printed Table 1 bands; do not round into full-dose eligibility."
+      },
+      {
+        "id": "PLT_LT50",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Platelets below 50 ×10⁹/L at any stage: delay until recovery and consider a 25% reduction of both cytotoxic drugs for subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Platelets below 50 ×10⁹/L at any stage: delay until recovery and consider a 25% reduction of both cytotoxic drugs for subsequent cycles."
+      },
+      {
+        "id": "HN47_COUNTS_HISTORY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_severe_haematological_toxicity",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Recovered current counts do not erase prior severe cytopenia/febrile neutropenia. Confirm recovery and the Consultant decision on a 25% reduction for subsequent cycles; do not reset a previously reduced dose."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Recovered current counts do not erase prior severe cytopenia/febrile neutropenia. Confirm recovery and the Consultant decision on a 25% reduction for subsequent cycles; do not reset a previously reduced dose."
       },
       {
         "id": "DPD_COMPLETE",
         "priority": 10,
         "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "complete"
+          "all": [
+            {
+              "field": "dpd_status",
+              "operator": "==",
+              "value": "complete"
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
             "fluorouracil"
           ],
-          "message": "Complete DPD deficiency: fluorouracil is contraindicated."
+          "message": "Complete DPD deficiency contraindicates fluorouracil."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Complete DPD deficiency: fluorouracil is contraindicated."
+        "explanation": "Complete DPD deficiency contraindicates fluorouracil."
       },
       {
         "id": "DPD_PARTIAL",
         "priority": 10,
         "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "partial"
+          "all": [
+            {
+              "field": "dpd_status",
+              "operator": "==",
+              "value": "partial"
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+          "message": "Consider an individual reduced fluorouracil starting dose for partial DPD deficiency. No fixed percentage is specified here; cautiously titrate only if tolerated with close monitoring."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+        "explanation": "Consider an individual reduced fluorouracil starting dose for partial DPD deficiency. No fixed percentage is specified here; cautiously titrate only if tolerated with close monitoring."
       },
       {
-        "id": "5FU_HEPATIC",
+        "id": "HN47_DPD_UNKNOWN",
         "priority": 10,
         "when": {
-          "field": "bilirubin_umol_l",
-          "operator": ">",
-          "value": 85
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
-      },
-      {
-        "id": "5FU_AST",
-        "priority": 10,
-        "when": {
-          "field": "ast_u_l",
-          "operator": ">",
-          "value": 180
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "AST >180 U/L triggers the encoded fluorouracil contraindication."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "AST >180 U/L triggers the encoded fluorouracil contraindication."
-      },
-      {
-        "id": "5FU_MUC_G2",
-        "priority": 9,
-        "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "dpd_status",
+              "operator": "==",
+              "value": "unknown"
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "fluorouracil"
           ],
-          "message": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+          "message": "Confirm the pre-treatment DPD result before fluorouracil; an unavailable result is not normal."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+        "explanation": "Confirm the pre-treatment DPD result before fluorouracil; an unavailable result is not normal."
+      },
+      {
+        "id": "HN47_DPD_BASELINE_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "dpd_status",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "DPD phenotype/genotype testing is required before first fluorouracil unless previously tested; review the result before starting."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "DPD phenotype/genotype testing is required before first fluorouracil unless previously tested; review the result before starting."
+      },
+      {
+        "id": "HN47_DPD_RENAL_PHENOTYPE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "dpd_phenotype_used",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "renal_impairment",
+                  "operator": "in",
+                  "value": [
+                    "moderate",
+                    "severe",
+                    "dialysis"
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency. Interpret phenotyping cautiously and consider genotype testing; avoid an unsupported fluorouracil dose."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency. Interpret phenotyping cautiously and consider genotype testing; avoid an unsupported fluorouracil dose."
+      },
+      {
+        "id": "HN47_FU_SEVERE_RENAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "renal_impairment",
+              "operator": "in",
+              "value": [
+                "severe",
+                "dialysis"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Consider fluorouracil reduction only in severe renal impairment; this source gives no numerical renal reduction or dialysis schedule."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Consider fluorouracil reduction only in severe renal impairment; this source gives no numerical renal reduction or dialysis schedule."
+      },
+      {
+        "id": "5FU_HEPATIC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Bilirubin above 85 µmol/L contraindicates fluorouracil in Table 2."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Bilirubin above 85 µmol/L contraindicates fluorouracil in Table 2."
+      },
+      {
+        "id": "5FU_AST",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "ast_u_l",
+              "operator": ">",
+              "value": 180
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "AST above 180 U/L contraindicates fluorouracil in Table 2."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "AST above 180 U/L contraindicates fluorouracil in Table 2."
+      },
+      {
+        "id": "HN47_FU_BILIRUBIN_UMOL_L_EQUALITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "==",
+              "value": 85
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Table 2 uses strict less-than and greater-than signs and leaves bilirubin umol l exactly 85 unassigned. Confirm the source boundary; do not automatically return full dose."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Table 2 uses strict less-than and greater-than signs and leaves bilirubin umol l exactly 85 unassigned. Confirm the source boundary; do not automatically return full dose."
+      },
+      {
+        "id": "HN47_FU_AST_U_L_EQUALITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "ast_u_l",
+              "operator": "==",
+              "value": 180
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Table 2 uses strict less-than and greater-than signs and leaves ast u l exactly 180 unassigned. Confirm the source boundary; do not automatically return full dose."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Table 2 uses strict less-than and greater-than signs and leaves ast u l exactly 180 unassigned. Confirm the source boundary; do not automatically return full dose."
+      },
+      {
+        "id": "HN47_FU_HEPATIC_MODERATE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment",
+              "operator": "==",
+              "value": "moderate"
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Table 2 advises a one-third reduction of the initial dose for moderate hepatic impairment, with escalation only if tolerated. Classification is clinical and no lab-based severity definition is supplied; contraindication thresholds still take precedence."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Table 2 advises a one-third reduction of the initial dose for moderate hepatic impairment, with escalation only if tolerated. Classification is clinical and no lab-based severity definition is supplied; contraindication thresholds still take precedence."
+      },
+      {
+        "id": "HN47_FU_HEPATIC_SEVERE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment",
+              "operator": "==",
+              "value": "severe"
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Table 2 advises a one-half reduction of the initial dose for severe hepatic impairment, with escalation only if tolerated. Classification is clinical and no lab-based severity definition is supplied; contraindication thresholds still take precedence."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Table 2 advises a one-half reduction of the initial dose for severe hepatic impairment, with escalation only if tolerated. Classification is clinical and no lab-based severity definition is supplied; contraindication thresholds still take precedence."
+      },
+      {
+        "id": "HN47_DPD_DRUG_INTERACTION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "brivudine_sorivudine_or_analogue",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "These potent DPD-inhibiting antivirals are contraindicated with fluorouracil. Confirm medicines and current product interaction guidance."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "8",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "These potent DPD-inhibiting antivirals are contraindicated with fluorouracil. Confirm medicines and current product interaction guidance."
+      },
+      {
+        "id": "HN47_WARFARIN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "warfarin",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Fluorouracil may increase prothrombin time/INR; arrange appropriate anticoagulation monitoring."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "8",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Fluorouracil may increase prothrombin time/INR; arrange appropriate anticoagulation monitoring."
+      },
+      {
+        "id": "HN47_PHENYTOIN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "phenytoin",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Fluorouracil may increase phenytoin concentrations; arrange clinical/drug-level monitoring."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "8",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Fluorouracil may increase phenytoin concentrations; arrange clinical/drug-level monitoring."
+      },
+      {
+        "id": "HN47_FU_CARDIAC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "fluorouracil_cardiac_symptoms",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Urgent cardiac assessment is required for suspected fluorouracil cardiotoxicity. Pause fluorouracil pending assessment; this safety implementation does not establish a restart dose or authorise rechallenge."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "7",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Urgent cardiac assessment is required for suspected fluorouracil cardiotoxicity. Pause fluorouracil pending assessment; this safety implementation does not establish a restart dose or authorise rechallenge."
+      },
+      {
+        "id": "HN47_CETUX_FIRST15",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_first_infusion_first15_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Stop the first infusion if a reaction occurs in its first 15 minutes. Assess benefit/risk and possible pre-existing IgE before any subsequent infusion; severe reaction requires permanent cessation."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "6",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Stop the first infusion if a reaction occurs in its first 15 minutes. Assess benefit/risk and possible pre-existing IgE before any subsequent infusion; severe reaction requires permanent cessation."
+      },
+      {
+        "id": "HN47_CETUX_IR_G1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_infusion_reaction_grade",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "For a later grade 1 reaction, slow the infusion under close supervision. Retain the reduced rate for later infusions. The special first-15-minute stop and severe-reaction rules override this pathway."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "For a later grade 1 reaction, slow the infusion under close supervision. Retain the reduced rate for later infusions. The special first-15-minute stop and severe-reaction rules override this pathway."
+      },
+      {
+        "id": "HN47_CETUX_IR_G2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_infusion_reaction_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "For a later grade 2 reaction, slow the infusion under close supervision and treat symptoms immediately. Retain the reduced rate for later infusions. The special first-15-minute stop and severe-reaction rules override this pathway."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "For a later grade 2 reaction, slow the infusion under close supervision and treat symptoms immediately. Retain the reduced rate for later infusions. The special first-15-minute stop and severe-reaction rules override this pathway."
       },
       {
         "id": "CETUX_IR_G3",
@@ -907,34 +2445,36 @@
           "components": [
             "cetuximab"
           ],
-          "message": "Grade 3–4 cetuximab infusion reaction requires permanent discontinuation."
+          "message": "Stop infusion immediately, treat symptoms vigorously and do not give further cetuximab after grade 3–4 infusion reaction."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Grade 3–4 cetuximab infusion reaction requires permanent discontinuation."
+        "explanation": "Stop infusion immediately, treat symptoms vigorously and do not give further cetuximab after grade 3–4 infusion reaction."
       },
       {
-        "id": "CETUX_SKIN_G3",
-        "priority": 9,
+        "id": "HN47_CETUX_RESPIRATORY_HOLD",
+        "priority": 10,
         "when": {
-          "field": "cetuximab_skin_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "new_worsening_respiratory_symptoms",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
             "cetuximab"
           ],
-          "message": "Grade 3–4 skin toxicity requires interruption and the source re-challenge/dose pathway."
+          "message": "Withhold cetuximab and investigate new or worsening respiratory symptoms. Confirmed pneumonitis/lung infiltrates require discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "7",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Grade 3–4 skin toxicity requires interruption and the source re-challenge/dose pathway."
+        "explanation": "Withhold cetuximab and investigate new or worsening respiratory symptoms. Confirmed pneumonitis/lung infiltrates require discontinuation."
       },
       {
         "id": "CETUX_ILD",
@@ -949,115 +2489,1615 @@
           "components": [
             "cetuximab"
           ],
-          "message": "Suspected or confirmed interstitial lung disease requires cetuximab discontinuation and urgent assessment."
+          "message": "Confirmed interstitial lung disease/pneumonitis/lung infiltrates requires cetuximab discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Suspected or confirmed interstitial lung disease requires cetuximab discontinuation and urgent assessment."
+        "explanation": "Confirmed interstitial lung disease/pneumonitis/lung infiltrates requires cetuximab discontinuation."
       },
       {
-        "id": "ANC_05_149",
-        "priority": 9,
+        "id": "HN47_CETUX_PRIOR_STOP",
+        "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "between",
-          "value": [
-            0.5,
-            1.499
+          "field": "cetuximab_prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "A prior permanent cetuximab stop remains in force despite improved current symptoms; do not automatically restart."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5–7",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "A prior permanent cetuximab stop remains in force despite improved current symptoms; do not automatically restart."
+      },
+      {
+        "id": "CETUX_SKIN_G3",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_skin_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Hold cetuximab for severe skin toxicity for at most two weeks; restart only after source recovery criteria and episode-specific dose review. Fourth severe episode requires discontinuation."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Hold cetuximab for severe skin toxicity for at most two weeks; restart only after source recovery criteria and episode-specific dose review. Fourth severe episode requires discontinuation."
+      },
+      {
+        "id": "HN47_CETUX_SKIN_FOURTH",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_skin_occurrence",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Fourth severe skin episode requires cetuximab discontinuation, even if the current rash has improved."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Fourth severe skin episode requires cetuximab discontinuation, even if the current rash has improved."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_MISSING_CETUXIMAB_SKIN_OCCURRENCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "missing",
+              "value": true
+            }
           ]
         },
         "action": {
-          "type": "delay",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "ANC 0.5–1.49 ×10⁹/L: delay the cytotoxic components."
+          "message": "Do not infer absent restart history as normal: confirm cetuximab skin occurrence."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "ANC 0.5–1.49 ×10⁹/L: delay the cytotoxic components."
+        "explanation": "Do not infer absent restart history as normal: confirm cetuximab skin occurrence."
       },
       {
-        "id": "ANC_LT05",
+        "id": "HN47_CETUX_RESTART_MISSING_CETUXIMAB_SKIN_TOXICITY_GRADE",
         "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC <0.5 ×10⁹/L: delay and reduce carboplatin/cisplatin and fluorouracil by 25% when treatment resumes."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ANC <0.5 ×10⁹/L: delay and reduce carboplatin/cisplatin and fluorouracil by 25% when treatment resumes."
-      },
-      {
-        "id": "PLT_50_99",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            50,
-            99.999
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "missing",
+              "value": true
+            }
           ]
         },
         "action": {
-          "type": "delay",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cetuximab"
           ],
-          "message": "Platelets 50–99 ×10⁹/L: delay the cytotoxic components."
+          "message": "Do not infer absent restart history as normal: confirm cetuximab skin toxicity grade."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
         },
-        "explanation": "Platelets 50–99 ×10⁹/L: delay the cytotoxic components."
+        "explanation": "Do not infer absent restart history as normal: confirm cetuximab skin toxicity grade."
       },
       {
-        "id": "PLT_LT50",
+        "id": "HN47_CETUX_RESTART_MISSING_CETUXIMAB_SKIN_HOLD_DAYS",
         "priority": 10,
         "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 50
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "missing",
+              "value": true
+            }
+          ]
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Do not infer absent restart history as normal: confirm cetuximab skin hold days."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Do not infer absent restart history as normal: confirm cetuximab skin hold days."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_MISSING_CETUXIMAB_PRIOR_PERMANENT_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Do not infer absent restart history as normal: confirm cetuximab prior permanent stop."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Do not infer absent restart history as normal: confirm cetuximab prior permanent stop."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_MISSING_CETUXIMAB_RESTART_CONSULTANT_APPROVED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Do not infer absent restart history as normal: confirm cetuximab restart consultant approved."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Do not infer absent restart history as normal: confirm cetuximab restart consultant approved."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_APPROVAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Cetuximab restart after severe skin toxicity requires the Consultant decision."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4–5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Cetuximab restart after severe skin toxicity requires the Consultant decision."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_NO_EPISODE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 0
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "No severe skin episode recorded despite restart request: resolve the history before selecting a rechallenge dose."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "No severe skin episode recorded despite restart request: resolve the history before selecting a rechallenge dose."
+      },
+      {
+        "id": "HN47_CETUX_SKIN_OVER14",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": ">",
+              "value": 14
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "The source permits a maximum two-week interruption for the severe skin pathway. Beyond 14 days, do not automatically restart; obtain a Consultant decision."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "The source permits a maximum two-week interruption for the severe skin pathway. Beyond 14 days, do not automatically restart; obtain a Consultant decision."
+      },
+      {
+        "id": "HN47_CETUX_SKIN_RESTART_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "<=",
+              "value": 14
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "intolerable_skin_toxicity",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": ">=",
+              "value": 250
+            },
+            {
+              "any": [
+                {
+                  "field": "hypersensitivity",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "hypersensitivity",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "breastfeeding",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "breastfeeding",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "interstitial_lung_disease",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "interstitial_lung_disease",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "new_worsening_respiratory_symptoms",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "new_worsening_respiratory_symptoms",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_infusion_reaction_grade",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_infusion_reaction_grade",
+                  "operator": "<",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "After episode 1, recovery to grade 2 or better within two weeks and confirmed Consultant approval, the source weekly cetuximab restart dose is 250 mg/m². This does not clear other components or undo another contraindication. Other unentered domains remain unassessed; this is only the skin-restart pathway.",
+          "dose_mg_m2": 250
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "After episode 1, recovery to grade 2 or better within two weeks and confirmed Consultant approval, the source weekly cetuximab restart dose is 250 mg/m². This does not clear other components or undo another contraindication. Other unentered domains remain unassessed; this is only the skin-restart pathway."
+      },
+      {
+        "id": "HN47_CETUX_SKIN_RESTART_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "<=",
+              "value": 14
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "intolerable_skin_toxicity",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": ">=",
+              "value": 200
+            },
+            {
+              "any": [
+                {
+                  "field": "hypersensitivity",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "hypersensitivity",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "breastfeeding",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "breastfeeding",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "interstitial_lung_disease",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "interstitial_lung_disease",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "new_worsening_respiratory_symptoms",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "new_worsening_respiratory_symptoms",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_infusion_reaction_grade",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_infusion_reaction_grade",
+                  "operator": "<",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "After episode 2, recovery to grade 2 or better within two weeks and confirmed Consultant approval, the source weekly cetuximab restart dose is 200 mg/m². This does not clear other components or undo another contraindication. Other unentered domains remain unassessed; this is only the skin-restart pathway.",
+          "dose_mg_m2": 200
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "After episode 2, recovery to grade 2 or better within two weeks and confirmed Consultant approval, the source weekly cetuximab restart dose is 200 mg/m². This does not clear other components or undo another contraindication. Other unentered domains remain unassessed; this is only the skin-restart pathway."
+      },
+      {
+        "id": "HN47_CETUX_SKIN_RESTART_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "<=",
+              "value": 14
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "intolerable_skin_toxicity",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": ">=",
+              "value": 150
+            },
+            {
+              "any": [
+                {
+                  "field": "hypersensitivity",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "hypersensitivity",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "breastfeeding",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "breastfeeding",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "interstitial_lung_disease",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "interstitial_lung_disease",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "new_worsening_respiratory_symptoms",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "new_worsening_respiratory_symptoms",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_first_infusion_first15_reaction",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_infusion_reaction_grade",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_infusion_reaction_grade",
+                  "operator": "<",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "After episode 3, recovery to grade 2 or better within two weeks and confirmed Consultant approval, the source weekly cetuximab restart dose is 150 mg/m². This does not clear other components or undo another contraindication. Other unentered domains remain unassessed; this is only the skin-restart pathway.",
+          "dose_mg_m2": 150
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "After episode 3, recovery to grade 2 or better within two weeks and confirmed Consultant approval, the source weekly cetuximab restart dose is 150 mg/m². This does not clear other components or undo another contraindication. Other unentered domains remain unassessed; this is only the skin-restart pathway."
+      },
+      {
+        "id": "CIS_HYDRATION",
+        "priority": 10,
+        "when": {
+          "field": "electrolytes_hydration_not_corrected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "cetuximab"
+          ],
+          "message": "Review and correct magnesium/potassium/calcium or hydration deficits under local policy before treatment; no automatic numerical replacement prescription is given."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2,6–7",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Review and correct magnesium/potassium/calcium or hydration deficits under local policy before treatment; no automatic numerical replacement prescription is given."
+      },
+      {
+        "id": "CIS_RENAL_50_59",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cisplatin_crcl_band",
+              "operator": "in",
+              "value": [
+                "50_59",
+                "45_59"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Legacy band suggests the 45–59 mL/min row (75% cisplatin during treatment), but initial CrCl <60 is excluded. Confirm exact CrCl and assessment phase."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Legacy band suggests the 45–59 mL/min row (75% cisplatin during treatment), but initial CrCl <60 is excluded. Confirm exact CrCl and assessment phase."
+      },
+      {
+        "id": "CIS_RENAL_40_49",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cisplatin_crcl_band",
+              "operator": "==",
+              "value": "40_49"
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Historic 40–49 band crosses the source 45 mL/min boundary. Enter exact CrCl; do not infer 50% or 75%."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Historic 40–49 band crosses the source 45 mL/min boundary. Enter exact CrCl; do not infer 50% or 75%."
+      },
+      {
+        "id": "CIS_RENAL_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cisplatin_crcl_band",
+              "operator": "in",
+              "value": [
+                "lt45",
+                "lt40",
+                "dialysis"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Below 45 mL/min the source requires a clinical decision and consideration of carboplatin; no dialysis dosing algorithm is supplied."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Below 45 mL/min the source requires a clinical decision and consideration of carboplatin; no dialysis dosing algorithm is supplied."
+      },
+      {
+        "id": "HN47_CIS_BASELINE_RENAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl below 60 mL/min is an initial source exclusion. Do not apply the on-treatment 75% row to establish starting eligibility."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "CrCl below 60 mL/min is an initial source exclusion. Do not apply the on-treatment 75% row to establish starting eligibility."
+      },
+      {
+        "id": "HN47_CIS_RENAL_PHASE_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Renal impairment needs the assessment phase: baseline CrCl <60 is excluded, while the later dose table has separate bands."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "3–4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Renal impairment needs the assessment phase: baseline CrCl <60 is excluded, while the later dose table has separate bands."
+      },
+      {
+        "id": "HN47_CIS_RENAL_45_59",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "assessment_phase",
+                      "operator": "==",
+                      "value": "on_treatment"
+                    },
+                    {
+                      "field": "assessment_phase",
+                      "operator": "==",
+                      "value": "toxicity_review"
+                    }
+                  ]
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 45
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 59
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "On treatment, CrCl 45–59 mL/min: Table 2 specifies 75% cisplatin. Confirm prior dose modifications with the Consultant.",
+          "dose_percent": 75
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "On treatment, CrCl 45–59 mL/min: Table 2 specifies 75% cisplatin. Confirm prior dose modifications with the Consultant."
+      },
+      {
+        "id": "HN47_CIS_RENAL_59_60_GAP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "assessment_phase",
+                      "operator": "==",
+                      "value": "on_treatment"
+                    },
+                    {
+                      "field": "assessment_phase",
+                      "operator": "==",
+                      "value": "toxicity_review"
+                    }
+                  ]
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 59
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl above 59 and below 60 mL/min falls between printed dose bands. Do not round up to the full-dose band."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "CrCl above 59 and below 60 mL/min falls between printed dose bands. Do not round up to the full-dose band."
+      },
+      {
+        "id": "HN47_CIS_RENAL_LT45",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "assessment_phase",
+                      "operator": "==",
+                      "value": "on_treatment"
+                    },
+                    {
+                      "field": "assessment_phase",
+                      "operator": "==",
+                      "value": "toxicity_review"
+                    }
+                  ]
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 45
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl below 45 mL/min: Consultant decision; consider carboplatin. The source does not supply a cisplatin percentage."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "CrCl below 45 mL/min: Consultant decision; consider carboplatin. The source does not supply a cisplatin percentage."
+      },
+      {
+        "id": "CIS_NEURO_G2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cisplatin_neuro_hearing_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Clarify the symptom: grade ≥2 peripheral neuropathy requires cisplatin omission; significant hearing impairment/tinnitus is an exclusion. Do not equate hearing grade with the neuropathy table."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2–3,5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Clarify the symptom: grade ≥2 peripheral neuropathy requires cisplatin omission; significant hearing impairment/tinnitus is an exclusion. Do not equate hearing grade with the neuropathy table."
+      },
+      {
+        "id": "HN47_CIS_NEURO_G2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "peripheral_neuropathy_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Grade ≥2 peripheral neuropathy: omit cisplatin and consider carboplatin. Pre-existing grade ≥2 neuropathy is also a source exclusion."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "2,5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Grade ≥2 peripheral neuropathy: omit cisplatin and consider carboplatin. Pre-existing grade ≥2 neuropathy is also a source exclusion."
+      },
+      {
+        "id": "HN47_CIS_HEARING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "significant_hearing_impairment_or_tinnitus",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "treatment_phase",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "treatment_phase",
+                  "operator": "==",
+                  "value": "combination"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Significant hearing impairment/tinnitus is a source exclusion; obtain specialist review of an alternative."
+        },
+        "source": {
+          "document": "NCCP 00417 v7",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Significant hearing impairment/tinnitus is a source exclusion; obtain specialist review of an alternative."
+      },
+      {
+        "id": "HN47_CETUX_INTOLERABLE",
+        "priority": 10,
+        "when": {
+          "field": "intolerable_skin_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Interrupt cetuximab for clinically intolerable skin toxicity even below grade 3. Do not restart while the reaction remains intolerable."
+        },
+        "source": {
+          "document": "Erbitux EMA product information retrieved 10 November 2026",
+          "page": "6, section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        },
+        "explanation": "Interrupt cetuximab for clinically intolerable skin toxicity even below grade 3. Do not restart while the reaction remains intolerable."
+      },
+      {
+        "id": "HN47_CETUX_FAILED_RECOVERY",
+        "priority": 10,
+        "when": {
+          "field": "skin_failed_recovery",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Permanent cetuximab discontinuation is required when a severe skin reaction fails to resolve to grade 2 during treatment interruption (EMA SmPC 4.4); confirm the assessed history."
+        },
+        "source": {
+          "document": "Erbitux EMA product information retrieved 10 November 2026",
+          "page": "6, section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        },
+        "explanation": "Permanent cetuximab discontinuation is required when a severe skin reaction fails to resolve to grade 2 during treatment interruption (EMA SmPC 4.4); confirm the assessed history."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_MISSING_INTOLERABLE_SKIN_TOXICITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "intolerable_skin_toxicity",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Confirm intolerable skin toxicity before selecting a restart dose; missing information does not establish recovery."
+        },
+        "source": {
+          "document": "Erbitux EMA product information retrieved 10 November 2026",
+          "page": "6, section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        },
+        "explanation": "Confirm intolerable skin toxicity before selecting a restart dose; missing information does not establish recovery."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_MISSING_SKIN_FAILED_RECOVERY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "skin_failed_recovery",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Confirm skin failed recovery before selecting a restart dose; missing information does not establish recovery."
+        },
+        "source": {
+          "document": "Erbitux EMA product information retrieved 10 November 2026",
+          "page": "6, section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
+        },
+        "explanation": "Confirm skin failed recovery before selecting a restart dose; missing information does not establish recovery."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_MISSING_PRIOR_DOSE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Confirm the actual cetuximab dose before interruption; the recurrence table must not silently increase a previously reduced dose."
+        },
+        "source": {
+          "document": "NCCP 00417 v7; explicit prior-dose safety check",
+          "page": "4–5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "Confirm the actual cetuximab dose before interruption; the recurrence table must not silently increase a previously reduced dose."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_PRIOR_LOWER_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": "<",
+              "value": 250
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "The actual prior cetuximab dose is below the episode-specific source restart dose. Confirm the documented plan; do not escalate automatically."
+        },
+        "source": {
+          "document": "NCCP 00417 v7; explicit prior-dose safety check",
+          "page": "4–5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "The actual prior cetuximab dose is below the episode-specific source restart dose. Confirm the documented plan; do not escalate automatically."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_PRIOR_LOWER_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": "<",
+              "value": 200
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "The actual prior cetuximab dose is below the episode-specific source restart dose. Confirm the documented plan; do not escalate automatically."
+        },
+        "source": {
+          "document": "NCCP 00417 v7; explicit prior-dose safety check",
+          "page": "4–5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "The actual prior cetuximab dose is below the episode-specific source restart dose. Confirm the documented plan; do not escalate automatically."
+      },
+      {
+        "id": "HN47_CETUX_RESTART_PRIOR_LOWER_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "cetuximab_prior_dose_mg_m2",
+              "operator": "<",
+              "value": 150
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "The actual prior cetuximab dose is below the episode-specific source restart dose. Confirm the documented plan; do not escalate automatically."
+        },
+        "source": {
+          "document": "NCCP 00417 v7; explicit prior-dose safety check",
+          "page": "4–5",
+          "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf"
+        },
+        "explanation": "The actual prior cetuximab dose is below the episode-specific source restart dose. Confirm the documented plan; do not escalate automatically."
+      },
+      {
+        "id": "HN47_INDICATION_SOURCE_CONTEXT",
+        "priority": 10,
+        "when": {
+          "field": "head_neck_combination_setting",
+          "operator": "in",
+          "value": [
+            "locally_advanced",
+            "uncertain"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "Platelets <50 ×10⁹/L: delay and reduce cytotoxic components by 25%."
+          "message": "Confirm the prescribing and consent basis: NCCP wording includes locally advanced disease, while EMA SmPC specifies platinum combination for recurrent/metastatic disease and radiotherapy combination for locally advanced disease. Do not infer a curative combination pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00417 v7 p1 and current EMA Erbitux SmPC 4.1",
+          "page": "NCCP1; EMA2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf"
         },
-        "explanation": "Platelets <50 ×10⁹/L: delay and reduce cytotoxic components by 25%."
+        "explanation": "Keep NCCP and licensed-indication wording distinct; obtain a context-specific Consultant decision."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Locally advanced or metastatic squamous head-and-neck cancer.",
+    "ECOG 0–2. Baseline ANC>1.5 ×10⁹/L; platelet entry 100 ×10⁹/L has no comparator in source and requires interpretation.",
+    "Baseline creatinine≤1.5×ULN, transaminases≤5×ULN, bilirubin≤1.5×ULN; do not conflate eligibility with treatment-day modifications."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Component/excipient hypersensitivity; lactation; complete DPD deficiency.",
+    "Pre-existing neuropathy≥grade 2; CrCl<60 mL/min; significant hearing impairment/tinnitus."
   ],
   "supportive_care": {
     "emetogenic_risk": "high",
@@ -1068,5 +4108,171 @@
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
-  }
+  },
+  "monitoring": {
+    "baseline": [
+      "FBC; renal and hepatic profile including magnesium.",
+      "DPD phenotype and/or genotype before first fluorouracil unless already tested. Renal impairment may falsely elevate uracil; interpret phenotyping cautiously and consider genotype.",
+      "ECG if cardiac function compromised.",
+      "Prior antibody infusion reactions, red meat allergy, tick bites and known anti-cetuximab IgE history.",
+      "Audiology and creatinine clearance if clinically indicated."
+    ],
+    "each_cycle": [
+      "FBC; renal and hepatic profile including magnesium before each cycle.",
+      "Assess cetuximab skin toxicity, infusion history and respiratory symptoms.",
+      "Assess hearing/tinnitus and sensory symptoms before each cycle; confirm cisplatin hydration.",
+      "Observation-source difference: EMA SmPC requires at least one hour after every cetuximab infusion; NCCP allows discontinuation after two uneventful doses. The current authorised/local plan must resolve this; no automatic early discharge."
+    ],
+    "after": [
+      "Electrolytes, magnesium and calcium monthly for two months after the last cetuximab dose."
+    ],
+    "disease": [
+      "Imaging and any other tests follow the supervising Consultant plan; no universal routine tumour-marker or scan interval specified."
+    ]
+  },
+  "source_uncertainties": [
+    "ANC exactly 1.5 overlaps Table 1 full-dose/delay rows; baseline uses>1.5.",
+    "Baseline platelet 100 has no printed comparator; Table 1 leaves fractional 99–100 values unassigned.",
+    "Fluorouracil bilirubin 85µmol/L and AST 180 U/L exact values are unassigned; hepatic severity categories are not numerically defined.",
+    "Severe cytopenia/febrile neutropenia reduction is to be considered with Consultant, not forced.",
+    "Skin restart beyond two-week limit or missing history is not automatically authorised.",
+    "Cisplatin CrCl 59–60 mL/min fractional gap; baseline<60 exclusion distinct from later 45–59 row.",
+    "EMA SmPC observation is at least one hour after every infusion; NCCP allows stopping observation after two uneventful doses.",
+    "NCCP indication wording includes locally advanced disease; EMA SmPC specifies platinum combination for recurrent/metastatic disease and radiotherapy combination for locally advanced disease. Confirm the intended setting and prescribing/consent basis."
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "combination_cycle_1",
+      "label": "Combination cycle 1 — cetuximab loading dose",
+      "cycle_length_days": 21,
+      "cycles": [
+        1
+      ],
+      "active_drugs": [
+        "cetuximab",
+        "cisplatin",
+        "fluorouracil"
+      ],
+      "duration_text": "First of up to six combination cycles; stop earlier for disease progression or unacceptable toxicity.",
+      "schedule_summary": "Cetuximab loading on day 1, then weekly doses on days 8 and 15; platinum on day 1; fluorouracil on days 1–4.",
+      "administration": [
+        {
+          "drug": "cetuximab",
+          "dose": {
+            "dose_mg_m2": 400
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "order": 1,
+          "notes": "First dose in cycle 1 only: over 120 minutes, maximum 5 mg/min. Weekly cetuximab. Antihistamine and corticosteroid at least one hour before infusion. Later chemotherapy starts at least one hour after the cetuximab infusion ends. NCCP permits ending post-infusion observation after two uneventful doses, whereas current EMA SmPC requires at least one hour after every infusion; follow the agreed current observation plan."
+        },
+        {
+          "drug": "cetuximab",
+          "dose": {
+            "dose_mg_m2": 250
+          },
+          "days": [
+            8,
+            15
+          ],
+          "route": "IV infusion",
+          "order": 1,
+          "notes": "Subsequent weekly doses in cycle 1: over 60 minutes, maximum 10 mg/min. Weekly cetuximab. Antihistamine and corticosteroid at least one hour before infusion. Later chemotherapy starts at least one hour after the cetuximab infusion ends. NCCP permits ending post-infusion observation after two uneventful doses, whereas current EMA SmPC requires at least one hour after every infusion; follow the agreed current observation plan."
+        },
+        {
+          "drug": "cisplatin",
+          "dose": {
+            "dose_mg_m2": 100
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "order": 2,
+          "notes": "1000 mL sodium chloride 0.9% over 2 hours; pre- and post-hydration according to the source/local policy. Do not begin before one hour after cetuximab finishes."
+        },
+        {
+          "drug": "fluorouracil",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m²/day"
+          },
+          "days": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "route": "IV infusion",
+          "order": 3,
+          "notes": "Daily schedule: 1000 mg/m²/day over 22 hours on each of days 1–4. Alternative in NCCP: 2000 mg/m² over 46–48 hours across days 1–2, repeated across days 3–4; stated total 4000 mg/m² over 96 hours. Confirm which infusion schedule is prescribed; these are alternatives, not additional doses."
+        }
+      ]
+    },
+    {
+      "phase_id": "combination_cycles_2_6",
+      "label": "Combination cycles 2–6 — if treatment continues",
+      "cycle_length_days": 21,
+      "cycles": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "active_drugs": [
+        "cetuximab",
+        "cisplatin",
+        "fluorouracil"
+      ],
+      "duration_text": "Continue only as prescribed, to a maximum of six combination cycles in total. Up to six combination cycles every 21 days, stopping earlier for progression or unacceptable toxicity. After this, weekly cetuximab maintenance may be considered under a separate NCCP 00207 plan.",
+      "schedule_summary": "Weekly cetuximab on days 1, 8 and 15; platinum on day 1; fluorouracil on days 1–4. Maintenance requires a separate prescribed plan.",
+      "administration": [
+        {
+          "drug": "cetuximab",
+          "dose": {
+            "dose_mg_m2": 250
+          },
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV infusion",
+          "order": 1,
+          "notes": "Subsequent weekly doses: over 60 minutes, maximum 10 mg/min. Do not repeat the 400 mg/m² loading dose automatically. Weekly cetuximab. Antihistamine and corticosteroid at least one hour before infusion. Later chemotherapy starts at least one hour after the cetuximab infusion ends. NCCP permits ending post-infusion observation after two uneventful doses, whereas current EMA SmPC requires at least one hour after every infusion; follow the agreed current observation plan."
+        },
+        {
+          "drug": "cisplatin",
+          "dose": {
+            "dose_mg_m2": 100
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "order": 2,
+          "notes": "1000 mL sodium chloride 0.9% over 2 hours; pre- and post-hydration according to the source/local policy. Do not begin before one hour after cetuximab finishes."
+        },
+        {
+          "drug": "fluorouracil",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m²/day"
+          },
+          "days": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "route": "IV infusion",
+          "order": 3,
+          "notes": "Daily schedule: 1000 mg/m²/day over 22 hours on each of days 1–4. Alternative in NCCP: 2000 mg/m² over 46–48 hours across days 1–2, repeated across days 3–4; stated total 4000 mg/m² over 96 hours. Confirm which infusion schedule is prescribed; these are alternatives, not additional doses."
+        }
+      ]
+    }
+  ]
 }

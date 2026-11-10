@@ -108,28 +108,18 @@ async function verifyBeforeHashes(record){
 function assertRegular(f){const st=fs.lstatSync(path.join(ROOT,f));assert(st.isFile()&&!st.isSymbolicLink(),f+' must be a regular asset');return st;}
 function assertMember(f,record){assert(safeRelative(f),'Unsafe membership path');assert(baselineFiles().has(f)||Object.hasOwn(record.files,f),f+' unrecorded new protected file');}
 function verifyCurrent(record){
- const migrate=createMigration(record),base=baselineFiles();
- const next=require('./retrospective-v08446.cjs'),nextRecord=JSON.parse(fs.readFileSync(next.RECORD,'utf8'));next.createMigration(nextRecord);
- // The successor independently verifies every current file against exact Git45.
- next.verifyCurrent(nextRecord);
- let protectedCount=0,historicalCount=0,currentCount=0;
- for(const [f,c]of Object.entries(record.files)){assertRegular(f);const b=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(b),next.expectedHash(f,migrate(f,c.before)),f+' reviewed current hash');assert.equal(b.length,next.expectedBytes(f,c.after_bytes,c.after),f+' reviewed current size');}
- for(const [f,old]of base){
-  if(!protectedPath(f)&&!historicalPath(f))continue;
-  assert.equal(old.type,'blob');assert(['100644','100755'].includes(old.mode));assertRegular(f);
-  const b=fs.readFileSync(path.join(ROOT,f)),c=record.files[f];
-  if(c){assert.equal(sha(b),next.expectedHash(f,c.after),f+' explicit transition');assert.equal(b.length,next.expectedBytes(f,c.after_bytes,c.after));}
-  else if(Object.hasOwn(nextRecord.files,f)){const n=nextRecord.files[f];assert.equal(n.before_git_blob_sha1,old.blob,f+' unchanged Git44 to Git45 identity');assert.equal(n.before_bytes,old.bytes);assert.equal(sha(b),n.after);assert.equal(b.length,n.after_bytes);}
-  else{assert.equal(blobHash(b),old.blob,f+' immutable Git44 asset');assert.equal(b.length,old.bytes);}
-  if(protectedPath(f))protectedCount++;else historicalCount++;
+ createMigration(record);
+ const endpoint='628100a672ec51ccf25c7d27933fa9b43ac8f935';
+ const frozen=JSON.parse(readGitFiles(endpoint,['validation/head-neck-v08445/asset-migrations.json']).get('validation/head-neck-v08445/asset-migrations.json'));
+ assert.deepEqual(record,frozen,'Historical v45 migration record remains exactly committed');
+ // Read bounded batches so retained PDF history does not exceed spawnSync's
+ // output limit. Every endpoint byte/hash check is preserved.
+ const entries=Object.entries(record.files);
+ for(let i=0;i<entries.length;i+=16){const batch=entries.slice(i,i+16);const blobs=readGitFiles(endpoint,batch.map(([f])=>f));
+  for(const [f,c]of batch){const b=blobs.get(f);assert.equal(sha(b),c.after,f+' verified v45 endpoint hash');assert.equal(b.length,c.after_bytes,f+' verified v45 endpoint size');}
  }
- function walk(d){for(const e of fs.readdirSync(path.join(ROOT,d),{withFileTypes:true})){const f=d+'/'+e.name;if(e.isDirectory())walk(f);else{assert(e.isFile(),f+' must be regular');if(!base.has(f)&&!Object.hasOwn(record.files,f))next.assertMember(f,nextRecord);else assertMember(f,record);currentCount++;}}}
- for(const d of PROTECTED_DOMAINS)walk(d);
- const domains=[...new Set([...PROTECTED_DOMAINS,...SHARED_PATHS,...next.SHARED_PATHS])];
- const lines=a=>git(a).toString().split('\0').filter(Boolean);
- const actual=[...new Set([...lines(['diff','--name-only','-z',BASE_COMMIT,'--',...domains]),...lines(['ls-files','--others','--exclude-standard','-z','--',...domains])])].sort();
- assert.deepEqual([...new Set([...Object.keys(record.files),...Object.keys(nextRecord.files)])].sort(),actual,'Exact immutable v45 and reviewed v46 records cover every protected/shared change');
- return {protectedCount,historicalCount,currentCount,changedFiles:actual.length};
+ const next=require('./retrospective-v08446.cjs');
+ return next.verifyCurrent(JSON.parse(fs.readFileSync(next.RECORD,'utf8')));
 }
 let activeRecord,migrate;
 function load(){if(!migrate){activeRecord=JSON.parse(fs.readFileSync(RECORD,'utf8'));migrate=createMigration(activeRecord);}}

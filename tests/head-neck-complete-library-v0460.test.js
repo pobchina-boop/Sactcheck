@@ -30,7 +30,7 @@ for(const {entry,data} of hn){
  const card=m.regimen_card;assert(card&&Array.isArray(card.contexts)&&card.contexts.length,`${code} card contexts`);contexts+=card.contexts.length;
  assert(card.contexts.some(c=>c.id===(code==='00385'?'00385d':['00483','00484'].includes(code)?`${code}-source-${code==='00483'?'d':'e'}`:`${code}-head-neck`)&&Number(c.cycle_length_days)>0),`${code} Head and Neck card context`);
  assert(sidecar.protocols.find(x=>x.id===data.protocol_id),`${code} sidecar`);
- if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/head-neck/'),`${code} new file path`);if(['00387','00705','00706'].includes(code))require('./helpers/head-neck-inputs-v08445.cjs').validate(data);else assert.strictEqual(m.sactcheck_encoding_version,'0.46.0',`${code} encoding version`);}
+ if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/head-neck/'),`${code} new file path`);if(require('./helpers/head-neck-inputs-v08447.cjs').codes.includes(code))require('./helpers/head-neck-inputs-v08447.cjs').validate(data);else assert.strictEqual(m.sactcheck_encoding_version,'0.46.0',`${code} encoding version`);}
 }
 assert.strictEqual(newCount,21);assert(inputs>=450,`inputs ${inputs}`);assert(rules>=350,`rules ${rules}`);assert(contexts>=45,`contexts ${contexts}`);
 const by=c=>hn.find(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')===c).data;

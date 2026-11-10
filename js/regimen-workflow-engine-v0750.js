@@ -654,7 +654,7 @@
     const adjunctNames=[...new Set(local.map(x=>x.medicine).filter(Boolean))];
     const agent=asArray(supportive.agentSupport);
     return `<div class="workflow-support-script">
-      <div class="workflow-rx-block"><strong>Day 1 CINV prophylaxis</strong><div class="workflow-rx-pills">${medLine(supportive.day1)}</div></div>
+      <div class="workflow-rx-block"><strong>Selected-visit supportive medicines</strong><div class="workflow-rx-pills">${medLine(supportive.day1)}</div></div>
       ${asArray(supportive.subsequent).length?`<div class="workflow-rx-block"><strong>Subsequent / rescue</strong><div class="workflow-rx-pills">${medLine(supportive.subsequent)}</div></div>`:""}
       ${adjunctNames.length?`<div class="workflow-rx-note"><strong>Local-reference adjuncts retained:</strong> ${esc(adjunctNames.join(", "))}. These are not all antiemetics; verify the current local prescription.</div>`:""}
       ${agent.length?`<div class="workflow-rx-note"><strong>Agent-specific support:</strong> ${agent.map(x=>esc(x.label)).join(" · ")}</div>`:""}

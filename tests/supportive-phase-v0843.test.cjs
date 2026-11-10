@@ -8,7 +8,10 @@ const workflow=require('../js/regimen-workflow-engine-v0750.js'),pdf=require('..
 let count=0;
 const check=(v,message)=>{assert(v,message);count++;};
 const risk={level:'phase_dependent',baseLevel:'phase_dependent',phaseResolved:false};
-for(const [code,entry] of Object.entries(data.supportive_phase_selectors)){
+// Preserve the two historical breast selector contracts; current HN selectors
+// are exercised independently by supportive-phase-v08447.test.cjs.
+for(const code of ['00348','00734']){
+ const entry=data.supportive_phase_selectors[code];
  const protocol=byCode(code);
  check(workflow.buildManifest(protocol,data,risk).supportiveCare.status==='phase_review_required',code+' must require explicit selection');
  for(const phase of entry.phases){

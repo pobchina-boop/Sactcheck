@@ -15,7 +15,7 @@
     "indication": "First-line metastatic or unresectable recurrent HNSCC with PD-L1 CPS ≥1.",
     "source_url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
     "source_document_pages": 9,
-    "sactcheck_encoding_version": "0.84.45",
+    "sactcheck_encoding_version": "0.84.47",
     "source_checked_date": "2026-11-07",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
@@ -100,7 +100,17 @@
     "canonical_protocol_id": "nccp-00706-v3",
     "dose_schedule_context_input": "treatment_phase",
     "dose_schedule_context_kind": "phase",
-    "source_pdf_sha256": "3a17b3278bb4847de0aeadec4f18b86ab0009cb41434362057395da14b0cce28"
+    "source_pdf_sha256": "3a17b3278bb4847de0aeadec4f18b86ab0009cb41434362057395da14b0cce28",
+    "retrospective_audit_v08447": {
+      "release": "0.84.47",
+      "date": "2026-11-10",
+      "source_url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
+      "source_pdf_sha256": "3a17b3278bb4847de0aeadec4f18b86ab0009cb41434362057395da14b0cce28",
+      "retrieved_utc": "2026-11-10T07:20:01.319485+00:00",
+      "source_manifest": "validation/head-neck-v08447/sources/index.json",
+      "audit_report": "validation/head-neck-v08447/retrospective-audit.json",
+      "independent_clinical_and_pharmacy_review": "pending"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -314,7 +324,7 @@
         },
         {
           "value": "50_59",
-          "label": "CrCl 50 to <60 mL/min"
+          "label": "CrCl 50–59 mL/min (printed NCCP band)"
         },
         {
           "value": "lt50",
@@ -1500,6 +1510,14 @@
       "required": false,
       "input_role": "decision",
       "demo_value": false
+    },
+    "systemic_immunosuppressants_required": {
+      "label": "Requires systemic immunosuppressive medication other than corticosteroids",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false,
+      "help": "For baseline eligibility. Do not include inhaled/topical steroids. Immunosuppression prescribed after treatment for immune toxicity has a different purpose and is not an automatic baseline exclusion."
     }
   },
   "required_inputs": [],
@@ -2858,15 +2876,23 @@
                     },
                     {
                       "field": "crcl_ml_min",
-                      "operator": "<",
-                      "value": 60
+                      "operator": "<=",
+                      "value": 59
                     }
                   ]
                 },
                 {
-                  "field": "cisplatin_crcl_band",
-                  "operator": "==",
-                  "value": "50_59"
+                  "all": [
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "cisplatin_crcl_band",
+                      "operator": "==",
+                      "value": "50_59"
+                    }
+                  ]
                 }
               ]
             }
@@ -2877,8 +2903,8 @@
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl 50 to below 60: 75% of original cisplatin dose is the source recommendation. Reconcile previous reductions/other toxicity; never increase an already lower dose.",
-          "recommendation": "CrCl 50 to below 60: 75% of original cisplatin dose is the source recommendation. Reconcile previous reductions/other toxicity; never increase an already lower dose.",
+          "message": "CrCl 50–59 mL/min: the printed source recommends 75% of ORIGINAL cisplatin dose. Reconcile previous reductions/other toxicity; never increase an already lower dose. Exact numeric clearance takes precedence over a selected legacy band.",
+          "recommendation": "CrCl 50–59 mL/min: the printed source recommends 75% of ORIGINAL cisplatin dose. Reconcile previous reductions/other toxicity; never increase an already lower dose. Exact numeric clearance takes precedence over a selected legacy band.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true,
           "block_numeric_dose": true
@@ -2889,7 +2915,7 @@
           "page": 4,
           "table": 3
         },
-        "explanation": "CrCl 50 to below 60: 75% of original cisplatin dose is the source recommendation. Reconcile previous reductions/other toxicity; never increase an already lower dose."
+        "explanation": "CrCl 50–59 mL/min: the printed source recommends 75% of ORIGINAL cisplatin dose. Reconcile previous reductions/other toxicity; never increase an already lower dose. Exact numeric clearance takes precedence over a selected legacy band."
       },
       {
         "id": "CIS_RENAL_LOW",
@@ -4830,31 +4856,51 @@
                 {
                   "all": [
                     {
-                      "field": "crcl_ml_min",
-                      "operator": "<",
-                      "value": 50
-                    },
-                    {
                       "field": "cisplatin_crcl_band",
                       "operator": "==",
                       "value": "ge60"
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<",
+                      "value": 60
                     }
                   ]
                 },
                 {
                   "all": [
                     {
-                      "field": "crcl_ml_min",
-                      "operator": ">=",
-                      "value": 60
+                      "field": "cisplatin_crcl_band",
+                      "operator": "==",
+                      "value": "50_59"
                     },
                     {
-                      "field": "cisplatin_crcl_band",
-                      "operator": "in",
-                      "value": [
-                        "50_59",
-                        "lt50"
+                      "any": [
+                        {
+                          "field": "crcl_ml_min",
+                          "operator": "<",
+                          "value": 50
+                        },
+                        {
+                          "field": "crcl_ml_min",
+                          "operator": ">",
+                          "value": 59
+                        }
                       ]
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "cisplatin_crcl_band",
+                      "operator": "==",
+                      "value": "lt50"
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">=",
+                      "value": 50
                     }
                   ]
                 }
@@ -4880,6 +4926,188 @@
           "table": 3
         },
         "explanation": "Numeric CrCl and selected band disagree; reconcile before dose selection. Independent omission criteria remain active."
+      },
+      {
+        "id": "HN47_BASELINE_IMMUNOSUPPRESSANTS",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "systemic_immunosuppressants_required",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "A medical condition requiring systemic immunosuppressive medication is a baseline source exclusion. Confirm the medication, indication and Consultant eligibility decision; this does not prohibit immunosuppression used after treatment to manage an immune adverse reaction.",
+          "recommendation": "A medical condition requiring systemic immunosuppressive medication is a baseline source exclusion. Confirm the medication, indication and Consultant eligibility decision; this does not prohibit immunosuppression used after treatment to manage an immune adverse reaction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "A medical condition requiring systemic immunosuppressive medication is a baseline source exclusion. Confirm the medication, indication and Consultant eligibility decision; this does not prohibit immunosuppression used after treatment to manage an immune adverse reaction.",
+        "source": {
+          "document": "NCCP 00706 v3",
+          "url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
+          "page": 2,
+          "checked_date": "2026-11-10",
+          "basis": "source_criteria_with_local_guardrail"
+        }
+      },
+      {
+        "id": "HN47_IMMUNOSUPPRESSION_PHASE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "systemic_immunosuppressants_required",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "systemic_prednisolone_mg_day",
+                  "operator": ">",
+                  "value": 10
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Establish baseline eligibility versus treatment of an immune adverse reaction before interpreting systemic immunosuppression. Do not infer eligibility or a permanent-stop decision from an unconfirmed phase.",
+          "recommendation": "Establish baseline eligibility versus treatment of an immune adverse reaction before interpreting systemic immunosuppression. Do not infer eligibility or a permanent-stop decision from an unconfirmed phase.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Establish baseline eligibility versus treatment of an immune adverse reaction before interpreting systemic immunosuppression. Do not infer eligibility or a permanent-stop decision from an unconfirmed phase.",
+        "source": {
+          "document": "NCCP 00706 v3",
+          "url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
+          "page": 2,
+          "checked_date": "2026-11-10",
+          "basis": "source_criteria_with_local_guardrail"
+        }
+      },
+      {
+        "id": "HN47_ENDOCRINE_CONTROL_CONFLICT",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "immune_endocrinopathy_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "endocrine_controlled",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "endocrine_type",
+                  "operator": "missing"
+                },
+                {
+                  "field": "endocrine_type",
+                  "operator": "in",
+                  "value": [
+                    "adrenal",
+                    "hypophysitis",
+                    "hyperthyroidism",
+                    "type1_diabetes",
+                    "other"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Current grade 3–4 endocrine toxicity conflicts with a controlled-status entry: withhold while confirming clinical grade and control. The source continuation exception requires improvement to grade 2 or lower with hormone control and the appropriate steroid taper; this input conflict alone does not establish permanent discontinuation.",
+          "recommendation": "Current grade 3–4 endocrine toxicity conflicts with a controlled-status entry: withhold while confirming clinical grade and control. The source continuation exception requires improvement to grade 2 or lower with hormone control and the appropriate steroid taper; this input conflict alone does not establish permanent discontinuation.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Current grade 3–4 endocrine toxicity conflicts with a controlled-status entry: withhold while confirming clinical grade and control. The source continuation exception requires improvement to grade 2 or lower with hormone control and the appropriate steroid taper; this input conflict alone does not establish permanent discontinuation.",
+        "source": {
+          "document": "NCCP 00706 v3",
+          "url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
+          "page": 5,
+          "checked_date": "2026-11-10",
+          "basis": "source_criteria_with_local_guardrail",
+          "table": 4
+        }
+      },
+      {
+        "id": "HN47_CIS_RENAL_FRACTIONAL_GAP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 59
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Exact CrCl lies between the printed 50–59 mL/min band and 60 mL/min. Confirm clearance and Consultant/pharmacy interpretation without rounding or asserting an automatic dose percentage.",
+          "recommendation": "Exact CrCl lies between the printed 50–59 mL/min band and 60 mL/min. Confirm clearance and Consultant/pharmacy interpretation without rounding or asserting an automatic dose percentage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Exact CrCl lies between the printed 50–59 mL/min band and 60 mL/min. Confirm clearance and Consultant/pharmacy interpretation without rounding or asserting an automatic dose percentage.",
+        "source": {
+          "document": "NCCP 00706 v3",
+          "url": "https://healthservice.hse.ie/documents/6880/706_V3_Pembrolizumab_CISplatin_5FU_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-10",
+          "basis": "source_criteria_with_local_guardrail",
+          "table": 3
+        }
       }
     ]
   },

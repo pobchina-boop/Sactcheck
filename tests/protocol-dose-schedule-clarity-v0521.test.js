@@ -58,9 +58,20 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.40 adds exactly five source-audited skin schedules.
 // v0.84.42 supplies seven complete source-audited skin schedules.
 // v0.84.45 adds cisplatin RT (weekly/3-weekly) and two pembrolizumab/platinum/5-FU schedules.
-assert.strictEqual(usefulCoverage, 228);
-assert.strictEqual(scheduleCoverage, 228);
-assert.strictEqual(doseLevelCoverage, 64);
+// v0.84.47 adds exactly five audited H&N schedules. 00696 also exposes
+// its explicit source dose-level table; assessment retains recovery/history guards.
+assert.strictEqual(usefulCoverage, 233);
+assert.strictEqual(scheduleCoverage, 233);
+assert.strictEqual(doseLevelCoverage, 65);
+for(const code of ['00314','00552','00417','00418','00696']){
+ const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
+ const p=require(path.join(root,entry.path));require('./helpers/head-neck-inputs-v08447.cjs').validate(p);
+ const before=JSON.parse(require('./helpers/retrospective-v08447.cjs').readFrozen(entry.path));
+ assert.equal(DoseSchedule.hasData(before),false,code+' exact Git46 coverage baseline');
+ const current=DoseSchedule.buildModel(p);assert.equal(DoseSchedule.hasData(p),true);assert(current.phases.length>0);
+ assert.equal(current.doseLevels.length,code==='00696'?1:0,code+' only explicit source dose ladder');
+}
+
 // Exactly five additional source-audited glioma schedules; dose-history decisions remain in assessment.
 for(const code of ['00334','00342','00379','00461','00658']) {
  const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));

@@ -75,6 +75,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(hn45.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const hn46=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08446.json'),'utf8'));
  for(const [c,plans]of Object.entries(hn46.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const hn47=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08447.json'),'utf8'));
+ for(const [c,plans]of Object.entries(hn47.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

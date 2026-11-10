@@ -14,9 +14,9 @@
     "short_title": "Carboplatin AUC 5 and 5-Fluorouracil 1000 mg/m²/day – 28 day",
     "indication": "Adjuvant chemotherapy following chemoradiation for locally advanced stage III or IV nasopharyngeal carcinoma where cisplatin is contraindicated or not tolerated.",
     "source_url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.84.47",
+    "source_checked_date": "2026-11-10",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -63,7 +63,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -83,17 +83,25 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled · clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.47",
+      "audit_date": "2026-11-10",
+      "scope_note": "Source-specific schedule and assessment rules reconciled to the retrieved official NCCP document. Unresolved source boundaries require consultant review; this is not clinical authorisation."
     },
-    "canonical_protocol_id": "nccp-00552-v6"
+    "canonical_protocol_id": "nccp-00552-v6",
+    "clinical_audit_release": "0.84.47",
+    "source_audit": {
+      "release": "0.84.47",
+      "date": "2026-11-10",
+      "source_sha256": "da865b974499e2b56d3ddfc980a7d828cb8d83d05cfded0847b8525fbd9cbacc",
+      "source_path": "validation/head-neck-v08447/sources/00552.pdf",
+      "scope": "Current-source executable assessment audit; independent consultant and oncology-pharmacy approval remains pending."
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -112,12 +120,41 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Carboplatin day 1 and fluorouracil continuous infusion days 1–4 every 28 days for up to 3 cycles.",
+    "schedule_summary": "Adjuvant carboplatin AUC 5 day 1 plus fluorouracil 1000 mg/m²/day days 1–4, normally over 96 hours (22 hours on each day is a source alternative), every 28 days for up to 3 cycles. Begin 4 weeks after prior weekly carboplatin/radiotherapy 00419 following recovery.",
     "drugs": [
       "carboplatin",
       "fluorouracil"
     ],
-    "planned_cycles": 3
+    "planned_cycles": 3,
+    "start_after_chemoradiation_weeks": 4,
+    "administration": [
+      {
+        "drug": "carboplatin",
+        "day": [
+          1
+        ],
+        "dose": {
+          "dose_auc": 5
+        },
+        "route": "IV infusion",
+        "notes": "500 mL glucose 5% over 30 minutes; renal-based Calvert dosing."
+      },
+      {
+        "drug": "fluorouracil",
+        "day": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "dose": {
+          "value": 1000,
+          "unit": "mg/m²/day"
+        },
+        "route": "Continuous IV infusion",
+        "notes": "Normally 96 hours; alternative 22-hour infusion on each of days 1–4. Confirm the prescribed administration plan."
+      }
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -201,7 +238,7 @@
       "input_role": "monitoring"
     },
     "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
+      "label": "ALT / AST actual result (highest × ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -211,7 +248,7 @@
       "input_role": "context"
     },
     "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
+      "label": "Bilirubin actual result (× ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -339,7 +376,7 @@
       "step": 1,
       "demo_value": 12,
       "unit": "µmol/L",
-      "input_role": "decision"
+      "input_role": "monitoring"
     },
     "ast_u_l": {
       "label": "AST",
@@ -349,7 +386,7 @@
       "step": 1,
       "demo_value": 25,
       "unit": "U/L",
-      "input_role": "decision"
+      "input_role": "monitoring"
     },
     "mucositis_grade": {
       "label": "Mucositis/stomatitis grade",
@@ -390,6 +427,276 @@
       "demo_value": 0,
       "ctcae_version": "5.0",
       "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
+      "input_role": "decision"
+    },
+    "dpd_phenotype_renal_impairment": {
+      "label": "DPD uracil phenotype being interpreted with moderate/severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment_severity": {
+      "label": "Clinically assessed hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "concurrent_renal_impairment": {
+      "label": "Concurrent renal impairment with hepatic dysfunction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "weeks_since_chemoradiation": {
+      "label": "Weeks since completion of preceding weekly carboplatin/radiotherapy",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "chemoradiation_recovery_confirmed": {
+      "label": "Recovered from preceding weekly carboplatin/radiotherapy",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cycle_number": {
+      "label": "Adjuvant cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "unit": "cycle",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cisplatin_unsuitable": {
+      "label": "Cisplatin contraindicated or not tolerated",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "gfr_measurement_method": {
+      "label": "Carboplatin renal estimate method",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "measured",
+          "label": "Measured isotope GFR"
+        },
+        {
+          "value": "estimated",
+          "label": "Estimated Wright/Cockcroft–Gault GFR/CrCl"
+        }
+      ],
+      "demo_value": "measured"
+    },
+    "creatinine_sample_age_hours": {
+      "label": "Age of serum creatinine used for estimated carboplatin dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "hours",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "creatinine_percent_isotope_baseline": {
+      "label": "Current creatinine as percentage of value at isotope GFR",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "gfr_estimate_unreliable": {
+      "label": "Obesity/low creatinine makes estimated GFR unreliable",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dysphagia_grade": {
+      "label": "Dysphagia grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No toxicity."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "dysphagia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
+      "input_role": "decision"
+    },
+    "oral_toxicity_improved": {
+      "label": "Previous grade 3 dysphagia/stomatitis has improved",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_oral_toxicity_grade": {
+      "label": "Previous dysphagia/stomatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No toxicity."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "mucositis",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
+      "input_role": "decision"
+    },
+    "weight_loss_percent": {
+      "label": "Weight loss from baseline",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "hyperalimentation_instituted": {
+      "label": "Clinically prescribed hyperalimentation instituted",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ppe_grade": {
+      "label": "Palmar–plantar erythrodysaesthesia (hand-foot syndrome) grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No toxicity."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "palmar_plantar_erythrodysaesthesia",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
@@ -438,20 +745,140 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Do not give the ordinary regimen in known component hypersensitivity. Exceptional carboplatin desensitisation requires immunology advice and a separately prescribed supervised protocol with resuscitation facilities."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Do not give the ordinary regimen in known component hypersensitivity. Exceptional carboplatin desensitisation requires immunology advice and a separately prescribed supervised protocol with resuscitation facilities."
       },
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "id": "HN47_CIS_UNSUITABLE",
+        "priority": 10,
         "when": {
-          "field": "ecog",
-          "operator": ">=",
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "cisplatin_unsuitable",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cisplatin_unsuitable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm that cisplatin is contraindicated or not tolerated for this specific adjuvant nasopharyngeal indication.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Confirm that cisplatin is contraindicated or not tolerated for this specific adjuvant nasopharyngeal indication.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "Confirm that cisplatin is contraindicated or not tolerated for this specific adjuvant nasopharyngeal indication."
+      },
+      {
+        "id": "HN47_POST_RT_RECOVERY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "chemoradiation_recovery_confirmed",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "chemoradiation_recovery_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm recovery from the preceding weekly carboplatin/radiotherapy course before starting adjuvant treatment."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "1",
+          "table": "Eligibility p 2"
+        },
+        "explanation": "Confirm recovery from the preceding weekly carboplatin/radiotherapy course before starting adjuvant treatment."
+      },
+      {
+        "id": "HN47_POST_RT_TIMING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "weeks_since_chemoradiation",
+              "operator": "<",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "The source schedules adjuvant treatment 4 weeks after chemoradiation. Earlier commencement requires consultant review and must not be inferred from cycle numbering."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "The source schedules adjuvant treatment 4 weeks after chemoradiation. Earlier commencement requires consultant review and must not be inferred from cycle numbering."
+      },
+      {
+        "id": "HN47_COURSE_LIMIT",
+        "priority": 10,
+        "when": {
+          "field": "cycle_number",
+          "operator": ">",
           "value": 3
         },
         "action": {
@@ -459,76 +886,19 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "This adjuvant regimen is limited to up to 3 cycles; a fourth cycle requires a separately justified plan.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "This adjuvant regimen is limited to up to 3 cycles; a fourth cycle requires a separately justified plan.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
-      },
-      {
-        "id": "CARBO_GFR_LE20",
-        "priority": 10,
-        "when": {
-          "field": "gfr_or_crcl_ml_min",
-          "operator": "<=",
-          "value": 20
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "GFR/CrCl ≤20 mL/min: carboplatin is not recommended in the encoded NCCP pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "GFR/CrCl ≤20 mL/min: carboplatin is not recommended in the encoded NCCP pathway."
+        "explanation": "This adjuvant regimen is limited to up to 3 cycles; a fourth cycle requires a separately justified plan."
       },
       {
         "id": "DPD_COMPLETE",
@@ -543,13 +913,15 @@
           "components": [
             "fluorouracil"
           ],
-          "message": "Complete DPD deficiency: fluorouracil is contraindicated."
+          "message": "Complete DPD deficiency: do not administer fluorouracil."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": ""
         },
-        "explanation": "Complete DPD deficiency: fluorouracil is contraindicated."
+        "explanation": "Complete DPD deficiency: do not administer fluorouracil."
       },
       {
         "id": "DPD_PARTIAL",
@@ -560,107 +932,127 @@
           "value": "partial"
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+          "message": "Partial DPD deficiency: consultant to select a reduced starting dose; the source does not specify a percentage. Subsequent cautious escalation may be considered if serious toxicity is absent.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Partial DPD deficiency: consultant to select a reduced starting dose; the source does not specify a percentage. Subsequent cautious escalation may be considered if serious toxicity is absent.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": ""
         },
-        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+        "explanation": "Partial DPD deficiency: consultant to select a reduced starting dose; the source does not specify a percentage. Subsequent cautious escalation may be considered if serious toxicity is absent."
       },
       {
-        "id": "5FU_HEPATIC",
+        "id": "DPD_UNRESOLVED",
         "priority": 10,
         "when": {
-          "field": "bilirubin_umol_l",
-          "operator": ">",
-          "value": 85
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
-      },
-      {
-        "id": "5FU_AST",
-        "priority": 10,
-        "when": {
-          "field": "ast_u_l",
-          "operator": ">",
-          "value": 180
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "AST >180 U/L triggers the encoded fluorouracil contraindication."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "AST >180 U/L triggers the encoded fluorouracil contraindication."
-      },
-      {
-        "id": "5FU_MUC_G2",
-        "priority": 9,
-        "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "dpd_status",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "dpd_status",
+                  "operator": "==",
+                  "value": "unknown"
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "fluorouracil"
           ],
-          "message": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+          "message": "Complete and review DPD testing before first fluorouracil, unless previously tested. An omitted or unknown result is not a normal result."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": ""
         },
-        "explanation": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+        "explanation": "Complete and review DPD testing before first fluorouracil, unless previously tested. An omitted or unknown result is not a normal result."
       },
       {
-        "id": "ANC_05_099",
-        "priority": 9,
+        "id": "DPD_RENAL_PHENOTYPE",
+        "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "between",
-          "value": [
-            0.5,
-            0.999
+          "field": "dpd_phenotype_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency; interpret phenotyping cautiously and consider genotype testing before selecting a dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency; interpret phenotyping cautiously and consider genotype testing before selecting a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": ""
+        },
+        "explanation": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency; interpret phenotyping cautiously and consider genotype testing before selecting a dose."
+      },
+      {
+        "id": "ANC_INTERMEDIATE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            }
           ]
         },
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "carboplatin",
+            "fluorouracil"
           ],
-          "message": "ANC 0.5–0.99 ×10⁹/L: delay treatment until recovery."
+          "message": "Delay until blood-count recovery. Borderline fractional values below the printed full-dose threshold do not establish recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": "Table 1"
         },
-        "explanation": "ANC 0.5–0.99 ×10⁹/L: delay treatment until recovery."
+        "explanation": "Delay until blood-count recovery. Borderline fractional values below the printed full-dose threshold do not establish recovery."
       },
       {
-        "id": "ANC_LT05",
+        "id": "ANC_LOW",
         "priority": 10,
         "when": {
           "field": "anc",
@@ -670,42 +1062,56 @@
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
-            "whole_regimen"
+            "carboplatin",
+            "fluorouracil"
           ],
-          "message": "ANC <0.5 ×10⁹/L: delay and consider 25% dose reduction."
+          "message": "Delay until recovery and consider 25% reduction of both carboplatin and fluorouracil for subsequent cycles; reduction is a consultant decision.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Delay until recovery and consider 25% reduction of both carboplatin and fluorouracil for subsequent cycles; reduction is a consultant decision."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": "Table 1"
         },
-        "explanation": "ANC <0.5 ×10⁹/L: delay and consider 25% dose reduction."
+        "explanation": "Delay until recovery and consider 25% reduction of both carboplatin and fluorouracil for subsequent cycles; reduction is a consultant decision."
       },
       {
-        "id": "PLT_50_99",
-        "priority": 9,
+        "id": "PLT_INTERMEDIATE",
+        "priority": 10,
         "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            50,
-            99.999
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            }
           ]
         },
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "carboplatin",
+            "fluorouracil"
           ],
-          "message": "Platelets 50–99 ×10⁹/L: delay treatment until recovery."
+          "message": "Delay until blood-count recovery. Borderline fractional values below the printed full-dose threshold do not establish recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": "Table 1"
         },
-        "explanation": "Platelets 50–99 ×10⁹/L: delay treatment until recovery."
+        "explanation": "Delay until blood-count recovery. Borderline fractional values below the printed full-dose threshold do not establish recovery."
       },
       {
-        "id": "PLT_LT50",
+        "id": "PLT_LOW",
         "priority": 10,
         "when": {
           "field": "platelets",
@@ -715,27 +1121,667 @@
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
-            "whole_regimen"
+            "carboplatin",
+            "fluorouracil"
           ],
-          "message": "Platelets <50 ×10⁹/L: delay and consider 25% dose reduction."
+          "message": "Delay until recovery and consider 25% reduction of both carboplatin and fluorouracil for subsequent cycles; reduction is a consultant decision.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Delay until recovery and consider 25% reduction of both carboplatin and fluorouracil for subsequent cycles; reduction is a consultant decision."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": "Table 1"
         },
-        "explanation": "Platelets <50 ×10⁹/L: delay and consider 25% dose reduction."
+        "explanation": "Delay until recovery and consider 25% reduction of both carboplatin and fluorouracil for subsequent cycles; reduction is a consultant decision."
+      },
+      {
+        "id": "FN",
+        "priority": 10,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "carboplatin",
+            "fluorouracil"
+          ],
+          "message": "Urgently manage febrile neutropenia, delay until recovery and consider 25% reduction of both drugs for subsequent cycles.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Urgently manage febrile neutropenia, delay until recovery and consider 25% reduction of both drugs for subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "3",
+          "table": "Table 1"
+        },
+        "explanation": "Urgently manage febrile neutropenia, delay until recovery and consider 25% reduction of both drugs for subsequent cycles."
+      },
+      {
+        "id": "CARBO_GFR_LE20",
+        "priority": 10,
+        "when": {
+          "field": "gfr_or_crcl_ml_min",
+          "operator": "<=",
+          "value": 20
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "GFR ≤ 20 mL/min: do not administer carboplatin."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Table 2"
+        },
+        "explanation": "GFR ≤ 20 mL/min: do not administer carboplatin."
+      },
+      {
+        "id": "CARBO_GFR_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": ">",
+              "value": 20
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "CrCl < 60 mL/min increases myelosuppression risk; review renal-based dosing and blood counts. This does not clear the regimen."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Table 2"
+        },
+        "explanation": "CrCl < 60 mL/min increases myelosuppression risk; review renal-based dosing and blood counts. This does not clear the regimen."
+      },
+      {
+        "id": "CARBO_GFR_CAP",
+        "priority": 10,
+        "when": {
+          "field": "gfr_or_crcl_ml_min",
+          "operator": ">",
+          "value": 125
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "The GFR value used in the Calvert equation must not exceed 125 mL/min. Confirm the correct renal estimate before calculating carboplatin.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The GFR value used in the Calvert equation must not exceed 125 mL/min. Confirm the correct renal estimate before calculating carboplatin.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "The GFR value used in the Calvert equation must not exceed 125 mL/min. Confirm the correct renal estimate before calculating carboplatin."
+      },
+      {
+        "id": "CARBO_ESTIMATED_CREATININE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "gfr_measurement_method",
+              "operator": "==",
+              "value": "estimated"
+            },
+            {
+              "any": [
+                {
+                  "field": "creatinine_sample_age_hours",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "creatinine_sample_age_hours",
+                  "operator": ">",
+                  "value": 48
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "For estimated renal dosing, obtain creatinine within 48 hours of administration and recalculate each cycle. A missing or stale sample does not support dosing."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": ""
+        },
+        "explanation": "For estimated renal dosing, obtain creatinine within 48 hours of administration and recalculate each cycle. A missing or stale sample does not support dosing."
+      },
+      {
+        "id": "CARBO_ISOTOPE_RECHECK",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "gfr_measurement_method",
+              "operator": "==",
+              "value": "measured"
+            },
+            {
+              "field": "creatinine_percent_isotope_baseline",
+              "operator": ">",
+              "value": 110
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Creatinine exceeds 110% of the isotope-GFR baseline: consider repeat measured GFR or recalculation using the source formulae before reusing the previous dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Creatinine exceeds 110% of the isotope-GFR baseline: consider repeat measured GFR or recalculation using the source formulae before reusing the previous dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": ""
+        },
+        "explanation": "Creatinine exceeds 110% of the isotope-GFR baseline: consider repeat measured GFR or recalculation using the source formulae before reusing the previous dose."
+      },
+      {
+        "id": "CARBO_ESTIMATE_UNRELIABLE",
+        "priority": 10,
+        "when": {
+          "field": "gfr_estimate_unreliable",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Obesity or a low creatinine can make formula estimates inaccurate; measured GFR is recommended.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Obesity or a low creatinine can make formula estimates inaccurate; measured GFR is recommended.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "Obesity or a low creatinine can make formula estimates inaccurate; measured GFR is recommended."
+      },
+      {
+        "id": "FU_SEVERE_HEPATIC",
+        "priority": 10,
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Severe hepatic impairment: fluorouracil is not recommended by the current source. No AST 180/bilirubin 85 rule is specified here."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Table 2"
+        },
+        "explanation": "Severe hepatic impairment: fluorouracil is not recommended by the current source. No AST 180/bilirubin 85 rule is specified here."
+      },
+      {
+        "id": "FU_COMBINED_ORGAN_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_severity",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "concurrent_renal_impairment",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "concurrent_renal_impairment",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "The no-adjustment expectation for mild/moderate hepatic impairment is expressly conditioned on absence of renal impairment. Confirm the renal context; combined impairment is not assigned a numerical dose by this source.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The no-adjustment expectation for mild/moderate hepatic impairment is expressly conditioned on absence of renal impairment. Confirm the renal context; combined impairment is not assigned a numerical dose by this source.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Table 2"
+        },
+        "explanation": "The no-adjustment expectation for mild/moderate hepatic impairment is expressly conditioned on absence of renal impairment. Confirm the renal context; combined impairment is not assigned a numerical dose by this source."
+      },
+      {
+        "id": "STOMATITIS_G3",
+        "priority": 10,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 3 dysphagia/stomatitis: delay until improvement, then consultant selects 75–100%. The adverse-event table does not explicitly identify the component; do not calculate a drug dose without confirmation."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Grade 3 dysphagia/stomatitis: delay until improvement, then consultant selects 75–100%. The adverse-event table does not explicitly identify the component; do not calculate a drug dose without confirmation."
+      },
+      {
+        "id": "STOMATITIS_G4",
+        "priority": 10,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 4 dysphagia/stomatitis: discontinue according to the adverse-event table; confirm the component plan with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Grade 4 dysphagia/stomatitis: discontinue according to the adverse-event table; confirm the component plan with the consultant."
+      },
+      {
+        "id": "DYSPHAGIA_G3",
+        "priority": 10,
+        "when": {
+          "field": "dysphagia_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 3 dysphagia/stomatitis: delay until improvement, then consultant selects 75–100%. The adverse-event table does not explicitly identify the component; do not calculate a drug dose without confirmation."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Grade 3 dysphagia/stomatitis: delay until improvement, then consultant selects 75–100%. The adverse-event table does not explicitly identify the component; do not calculate a drug dose without confirmation."
+      },
+      {
+        "id": "DYSPHAGIA_G4",
+        "priority": 10,
+        "when": {
+          "field": "dysphagia_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 4 dysphagia/stomatitis: discontinue according to the adverse-event table; confirm the component plan with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Grade 4 dysphagia/stomatitis: discontinue according to the adverse-event table; confirm the component plan with the consultant."
+      },
+      {
+        "id": "ORAL_RESTART_UNRECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_oral_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "oral_toxicity_improved",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "oral_toxicity_improved",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Previous grade 3 oral toxicity has no confirmed improvement; do not apply the 75–100% restart range until recovery is assessed."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Previous grade 3 oral toxicity has no confirmed improvement; do not apply the 75–100% restart range until recovery is assessed."
+      },
+      {
+        "id": "ORAL_RESTART_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_oral_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "oral_toxicity_improved",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "After improvement from grade 3 dysphagia/stomatitis, the source allows 75–100%; dose and component selection require consultant judgement, not an automatic default.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "After improvement from grade 3 dysphagia/stomatitis, the source allows 75–100%; dose and component selection require consultant judgement, not an automatic default.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "After improvement from grade 3 dysphagia/stomatitis, the source allows 75–100%; dose and component selection require consultant judgement, not an automatic default."
+      },
+      {
+        "id": "WEIGHT_LOSS_NUTRITION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "weight_loss_percent",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "hyperalimentation_instituted",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Weight loss > 10%: source gives 75% if hyperalimentation is instituted. Confirm nutritional support and the relevant component/dose plan with the consultant.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Weight loss > 10%: source gives 75% if hyperalimentation is instituted. Confirm nutritional support and the relevant component/dose plan with the consultant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Weight loss > 10%: source gives 75% if hyperalimentation is instituted. Confirm nutritional support and the relevant component/dose plan with the consultant."
+      },
+      {
+        "id": "WEIGHT_LOSS_NO_NUTRITION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "weight_loss_percent",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "hyperalimentation_instituted",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Weight loss > 10% without instituted hyperalimentation: source says discontinue; arrange urgent nutrition/oncology review."
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Weight loss > 10% without instituted hyperalimentation: source says discontinue; arrange urgent nutrition/oncology review."
+      },
+      {
+        "id": "WEIGHT_LOSS_MISSING_NUTRITION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "weight_loss_percent",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "hyperalimentation_instituted",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Weight loss > 10%: establish whether hyperalimentation has been instituted before choosing the source 75% or discontinue branches.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Weight loss > 10%: establish whether hyperalimentation has been instituted before choosing the source 75% or discontinue branches.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Weight loss > 10%: establish whether hyperalimentation has been instituted before choosing the source 75% or discontinue branches."
+      },
+      {
+        "id": "PPE_G3",
+        "priority": 10,
+        "when": {
+          "field": "ppe_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 3 PPE: source adverse-event table specifies 75%; confirm the fluorouracil and overall treatment plan because the table does not label a drug component.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Grade 3 PPE: source adverse-event table specifies 75%; confirm the fluorouracil and overall treatment plan because the table does not label a drug component.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Grade 3 PPE: source adverse-event table specifies 75%; confirm the fluorouracil and overall treatment plan because the table does not label a drug component."
+      },
+      {
+        "id": "PPE_G4_UNSPECIFIED",
+        "priority": 10,
+        "when": {
+          "field": "ppe_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade 4 PPE is not given a separate row in this source; urgent consultant assessment is required without inventing a 75% dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Grade 4 PPE is not given a separate row in this source; urgent consultant assessment is required without inventing a 75% dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": "Adverse-event table"
+        },
+        "explanation": "Grade 4 PPE is not given a separate row in this source; urgent consultant assessment is required without inventing a 75% dose."
+      },
+      {
+        "id": "NONHAEM_G3",
+        "priority": 10,
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Assess the named severe toxicity using its specific source pathway. There is no blanket non-haematological grade 3 dose rule in this regimen.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Assess the named severe toxicity using its specific source pathway. There is no blanket non-haematological grade 3 dose rule in this regimen.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00552 v6",
+          "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+          "page": "4",
+          "table": ""
+        },
+        "explanation": "Assess the named severe toxicity using its specific source pathway. There is no blanket non-haematological grade 3 dose rule in this regimen."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Adjuvant treatment after chemoradiation for stage III/IV locally advanced nasopharyngeal carcinoma where cisplatin is contraindicated or not tolerated.",
+    "Recovery from preceding weekly carboplatin AUC 2 with radiotherapy; page 1 correctly identifies 00419, while page 2 erroneously prints 00417. Confirm the original treatment record."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Hypersensitivity to carboplatin, fluorouracil or excipients. A prior mild carboplatin reaction may exceptionally undergo specialist desensitisation under the source conditions; the ordinary regimen cannot authorise this.",
+    "Complete DPD deficiency."
   ],
   "supportive_care": {
     "emetogenic_risk": "high",

@@ -42466,6 +42466,619 @@ const definitions={
         "checked": "2026-11-09"
       }
     ]
+  },
+  "00314": {
+    "code": "00314",
+    "title": "Cisplatin + fluorouracil · 28-day cycle: treatment and checks",
+    "release": "0.84.47",
+    "checked": "2026-11-10",
+    "status": "Source reconciled draft; independent clinical, oncology-pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced or metastatic head and neck cancer under NCCP 00314; confirm the individual treatment aim and relationship to any separately planned local treatment.",
+    "summary": "Both medicines are given on Days 1–4 of each 28-day cycle. Treatment continues while appropriate, until the cancer progresses or side effects become unacceptable; this protocol does not set a fixed number of cycles.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Dose / phase review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; DPD testing before the first fluorouracil treatment unless already tested. An ECG is indicated if heart function is compromised. Hearing tests and creatinine clearance are arranged when clinically indicated; discuss any hearing loss, tinnitus or nerve symptoms.",
+          "Full blood count, kidney and liver tests before each cycle. Report vomiting, fluid intake, urine output, hearing change and nerve symptoms before treatment; further checks depend on results and symptoms.",
+          "Report new symptoms promptly; extra tests may be needed.",
+          "A held or changed dose needs a new clinical review and relevant repeat results.",
+          "Continue review of any kidney, hearing, nerve, mouth or nutritional problems. The team sets blood tests, examinations and imaging after treatment; no universal scan interval or blood tumour-marker panel is specified."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the diagnosis, aim, prescription and actual calendar.",
+          "Cisplatin 25 mg/m² runs over 2 hours on each of Days 1–4, with prescribed hydration before each dose. Fluorouracil 1,000 mg/m² runs over 22 hours on each of Days 1–4. These are four daily cisplatin doses and four daily fluorouracil infusions; confirm the daily attendance or inpatient arrangement and pump-change times with your unit.",
+          "Follow the written home plan and keep pump or line appointments where applicable.",
+          "Both medicines are given on Days 1–4 of each 28-day cycle. Treatment continues while appropriate, until the cancer progresses or side effects become unacceptable; this protocol does not set a fixed number of cycles.",
+          "Record the last dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Review oral health, weight, nutrition and safe swallowing.",
+          "Discuss mouth pain, intake, weight and hydration.",
+          "Report poor drinking, choking or weight loss promptly.",
+          "Dietitian and swallowing plans change with symptoms and recovery.",
+          "Continue dental, nutritional and swallowing support when needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Cancer assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Agree staging, pathology and any relevant disease tests.",
+          "Discuss symptoms and the planned response review.",
+          "Scans or examinations may be added if symptoms require them.",
+          "The team sets imaging and cancer-assessment timing.",
+          "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Combination treatment",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Cisplatin and fluorouracil are used to treat head and neck cancer. The treatment aim depends on the extent of the cancer and your wider plan; ask your team to record whether the aim is disease control, symptom relief or part of another treatment strategy.",
+        "clinical": "Both medicines are given on Days 1–4 of each 28-day cycle. Treatment continues while appropriate, until the cancer progresses or side effects become unacceptable; this protocol does not set a fixed number of cycles.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Both medicines are given on Days 1–4 of each 28-day cycle. Treatment continues while appropriate, until the cancer progresses or side effects become unacceptable; this protocol does not set a fixed number of cycles.",
+      "Full blood count, kidney and liver tests before each cycle. Report vomiting, fluid intake, urine output, hearing change and nerve symptoms before treatment; further checks depend on results and symptoms.",
+      "Continue review of any kidney, hearing, nerve, mouth or nutritional problems. The team sets blood tests, examinations and imaging after treatment; no universal scan interval or blood tumour-marker panel is specified.",
+      "Cisplatin 25 mg/m² runs over 2 hours on each of Days 1–4, with prescribed hydration before each dose. Fluorouracil 1,000 mg/m² runs over 22 hours on each of Days 1–4. These are four daily cisplatin doses and four daily fluorouracil infusions; confirm the daily attendance or inpatient arrangement and pump-change times with your unit.",
+      "Record the last dose and follow-up appointments.",
+      "Discuss mouth pain, intake, weight and hydration.",
+      "Continue dental, nutritional and swallowing support when needed.",
+      "Discuss symptoms and the planned response review.",
+      "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00314 v4b · current official regimen",
+        "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+        "checked": "2026-11-10"
+      }
+    ]
+  },
+  "00552": {
+    "code": "00552",
+    "title": "Carboplatin + fluorouracil after chemoradiotherapy · nasopharyngeal cancer: treatment and checks",
+    "release": "0.84.47",
+    "checked": "2026-11-10",
+    "status": "Source reconciled draft; independent clinical, oncology-pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adjuvant chemotherapy after chemoradiotherapy for locally advanced stage III or IV nasopharyngeal carcinoma when cisplatin is contraindicated or not tolerated.",
+    "summary": "After recovery, adjuvant chemotherapy is planned to begin 4 weeks after completion of weekly carboplatin with radiotherapy (NCCP 00419). Carboplatin is given on Day 1 and fluorouracil over Days 1–4, every 28 days for up to 3 cycles. The treating team confirms readiness and dates.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Dose / phase review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, a kidney filtration assessment to calculate carboplatin, and DPD testing before the first fluorouracil unless already tested. Measured kidney filtration is preferred where feasible. Hearing assessment is arranged when indicated. Confirm recovery from chemoradiotherapy, swallowing, weight and intake.",
+          "Full blood count, kidney and liver tests before each cycle. Review mouth soreness, swallowing, weight, intake and painful palms or soles; hearing and nerve symptoms also need review. If kidney function changes, the carboplatin calculation may need reassessment.",
+          "Report new symptoms promptly; extra tests may be needed.",
+          "A held or changed dose needs a new clinical review and relevant repeat results.",
+          "Continue recovery and follow-up after chemoradiotherapy and chemotherapy, including mouth, dental, swallowing, nutritional, hearing or nerve problems. Examinations, scans and any tumour-specific tests follow the agreed nasopharyngeal cancer plan; this regimen does not prescribe a universal interval."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the diagnosis, aim, prescription and actual calendar.",
+          "Carboplatin is infused over 30 minutes on Day 1. Its dose is calculated from kidney function using a target exposure called AUC 5. Fluorouracil 1,000 mg/m² per day is given as a continuous 96-hour infusion, or as the source-listed daily 22-hour option on Days 1–4. Your unit confirms the actual prescription, pump changes and disconnection time.",
+          "Follow the written home plan and keep pump or line appointments where applicable.",
+          "After recovery, adjuvant chemotherapy is planned to begin 4 weeks after completion of weekly carboplatin with radiotherapy (NCCP 00419). Carboplatin is given on Day 1 and fluorouracil over Days 1–4, every 28 days for up to 3 cycles. The treating team confirms readiness and dates.",
+          "Record the last dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Review oral health, weight, nutrition and safe swallowing.",
+          "Discuss mouth pain, intake, weight and hydration.",
+          "Report poor drinking, choking or weight loss promptly.",
+          "Dietitian and swallowing plans change with symptoms and recovery.",
+          "Continue dental, nutritional and swallowing support when needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Cancer assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Agree staging, pathology and any relevant disease tests.",
+          "Discuss symptoms and the planned response review.",
+          "Scans or examinations may be added if symptoms require them.",
+          "The team sets imaging and cancer-assessment timing.",
+          "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Adjuvant chemotherapy after chemoradiotherapy",
+        "when": "Up to 3 cycles · every 4 weeks",
+        "why": "This chemotherapy is an additional treatment after chemoradiotherapy for nasopharyngeal cancer. It aims to treat cancer cells that may remain. The team explains the expected benefit and burden for you, including recovery from the earlier treatment.",
+        "clinical": "After recovery, adjuvant chemotherapy is planned to begin 4 weeks after completion of weekly carboplatin with radiotherapy (NCCP 00419). Carboplatin is given on Day 1 and fluorouracil over Days 1–4, every 28 days for up to 3 cycles. The treating team confirms readiness and dates.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "After recovery, adjuvant chemotherapy is planned to begin 4 weeks after completion of weekly carboplatin with radiotherapy (NCCP 00419). Carboplatin is given on Day 1 and fluorouracil over Days 1–4, every 28 days for up to 3 cycles. The treating team confirms readiness and dates.",
+      "Full blood count, kidney and liver tests before each cycle. Review mouth soreness, swallowing, weight, intake and painful palms or soles; hearing and nerve symptoms also need review. If kidney function changes, the carboplatin calculation may need reassessment.",
+      "Continue recovery and follow-up after chemoradiotherapy and chemotherapy, including mouth, dental, swallowing, nutritional, hearing or nerve problems. Examinations, scans and any tumour-specific tests follow the agreed nasopharyngeal cancer plan; this regimen does not prescribe a universal interval.",
+      "Carboplatin is infused over 30 minutes on Day 1. Its dose is calculated from kidney function using a target exposure called AUC 5. Fluorouracil 1,000 mg/m² per day is given as a continuous 96-hour infusion, or as the source-listed daily 22-hour option on Days 1–4. Your unit confirms the actual prescription, pump changes and disconnection time.",
+      "Record the last dose and follow-up appointments.",
+      "Discuss mouth pain, intake, weight and hydration.",
+      "Continue dental, nutritional and swallowing support when needed.",
+      "Discuss symptoms and the planned response review.",
+      "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00552 v6 · current official regimen",
+        "url": "https://healthservice.hse.ie/documents/6983/552_CARBOplatin_auc5_5fu.pdf",
+        "checked": "2026-11-10"
+      }
+    ]
+  },
+  "00417": {
+    "code": "00417",
+    "title": "Cetuximab + cisplatin + fluorouracil · 21-day cycle: treatment and checks",
+    "release": "0.84.47",
+    "checked": "2026-11-10",
+    "status": "Source reconciled draft; independent clinical, oncology-pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced or metastatic head and neck squamous cell carcinoma.",
+    "summary": "Cisplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15 of each 21-day cycle, for up to 6 combination cycles. The team may then consider weekly cetuximab alone under a separate maintenance plan (NCCP 00207). This is not an automatic continuation.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Dose / phase review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests and magnesium; DPD testing before fluorouracil unless already tested. Review previous antibody reactions, red-meat allergy, tick bites and any cetuximab allergy-test results. An ECG is indicated with compromised heart function; hearing tests and creatinine clearance are arranged when indicated.",
+          "Full blood count, kidney and liver tests and magnesium before each cycle. Check skin, eyes, bowel symptoms and infusion reactions. Ask about hearing, tinnitus, tingling and hydration at each cycle. Report symptoms before every weekly cetuximab visit, even when chemotherapy is not scheduled.",
+          "Report new symptoms promptly; extra tests may be needed.",
+          "A held or changed dose needs a new clinical review and relevant repeat results.",
+          "After the final cetuximab dose, electrolytes including magnesium and calcium are checked monthly for 2 months. Continue review of persistent skin, kidney, hearing, nerve and nutritional problems. Disease examinations and scans are individually planned."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the diagnosis, aim, prescription and actual calendar.",
+          "Cetuximab starts with a 400 mg/m² loading dose over 120 minutes, then 250 mg/m² over 60 minutes weekly. Chemotherapy starts at least 1 hour after cetuximab finishes. Cisplatin 100 mg/m² is given over 2 hours on Day 1 with prescribed fluids before and after. Fluorouracil is 1,000 mg/m² over 22 hours daily on Days 1–4, or the alternative 2,000 mg/m² over 46–48 hours repeated on Days 3–4. Staff confirm the chosen pump schedule. Plan for monitoring during and for at least 1 hour after each cetuximab infusion under the current medicine information; confirm the observation plan with your unit.",
+          "Follow the written home plan and keep pump or line appointments where applicable.",
+          "Cisplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15 of each 21-day cycle, for up to 6 combination cycles. The team may then consider weekly cetuximab alone under a separate maintenance plan (NCCP 00207). This is not an automatic continuation.",
+          "Record the last dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Review oral health, weight, nutrition and safe swallowing.",
+          "Discuss mouth pain, intake, weight and hydration.",
+          "Report poor drinking, choking or weight loss promptly.",
+          "Dietitian and swallowing plans change with symptoms and recovery.",
+          "Continue dental, nutritional and swallowing support when needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Cancer assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Agree staging, pathology and any relevant disease tests.",
+          "Discuss symptoms and the planned response review.",
+          "Scans or examinations may be added if symptoms require them.",
+          "The team sets imaging and cancer-assessment timing.",
+          "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Combination treatment",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Cetuximab with cisplatin and fluorouracil is used to treat squamous head and neck cancer. Discuss the individual aim, likely benefit, symptom control and alternatives with your oncology team.",
+        "clinical": "Cisplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15 of each 21-day cycle, for up to 6 combination cycles. The team may then consider weekly cetuximab alone under a separate maintenance plan (NCCP 00207). This is not an automatic continuation.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Days 8 and 15 within the same combination cycle",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Cetuximab with cisplatin and fluorouracil is used to treat squamous head and neck cancer. Discuss the individual aim, likely benefit, symptom control and alternatives with your oncology team.",
+        "clinical": "Cisplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15 of each 21-day cycle, for up to 6 combination cycles. The team may then consider weekly cetuximab alone under a separate maintenance plan (NCCP 00207). This is not an automatic continuation.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Possible cetuximab-only maintenance, if separately agreed",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Cetuximab with cisplatin and fluorouracil is used to treat squamous head and neck cancer. Discuss the individual aim, likely benefit, symptom control and alternatives with your oncology team.",
+        "clinical": "Cisplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15 of each 21-day cycle, for up to 6 combination cycles. The team may then consider weekly cetuximab alone under a separate maintenance plan (NCCP 00207). This is not an automatic continuation.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Cisplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15 of each 21-day cycle, for up to 6 combination cycles. The team may then consider weekly cetuximab alone under a separate maintenance plan (NCCP 00207). This is not an automatic continuation.",
+      "Full blood count, kidney and liver tests and magnesium before each cycle. Check skin, eyes, bowel symptoms and infusion reactions. Ask about hearing, tinnitus, tingling and hydration at each cycle. Report symptoms before every weekly cetuximab visit, even when chemotherapy is not scheduled.",
+      "After the final cetuximab dose, electrolytes including magnesium and calcium are checked monthly for 2 months. Continue review of persistent skin, kidney, hearing, nerve and nutritional problems. Disease examinations and scans are individually planned.",
+      "Cetuximab starts with a 400 mg/m² loading dose over 120 minutes, then 250 mg/m² over 60 minutes weekly. Chemotherapy starts at least 1 hour after cetuximab finishes. Cisplatin 100 mg/m² is given over 2 hours on Day 1 with prescribed fluids before and after. Fluorouracil is 1,000 mg/m² over 22 hours daily on Days 1–4, or the alternative 2,000 mg/m² over 46–48 hours repeated on Days 3–4. Staff confirm the chosen pump schedule. Plan for monitoring during and for at least 1 hour after each cetuximab infusion under the current medicine information; confirm the observation plan with your unit.",
+      "Record the last dose and follow-up appointments.",
+      "Discuss mouth pain, intake, weight and hydration.",
+      "Continue dental, nutritional and swallowing support when needed.",
+      "Discuss symptoms and the planned response review.",
+      "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00417 v7 · current official regimen",
+        "url": "https://healthservice.hse.ie/documents/6975/417_Cetux_CIS_5-FU_v7.pdf",
+        "checked": "2026-11-10"
+      },
+      {
+        "id": "erbitux",
+        "title": "EMA Erbitux · current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+        "checked": "2026-11-10"
+      }
+    ]
+  },
+  "00418": {
+    "code": "00418",
+    "title": "Cetuximab + carboplatin + fluorouracil · 21-day cycle: treatment and checks",
+    "release": "0.84.47",
+    "checked": "2026-11-10",
+    "status": "Source reconciled draft; independent clinical, oncology-pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced or metastatic head and neck squamous cell carcinoma when cisplatin is contraindicated or not tolerated.",
+    "summary": "Carboplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15, for up to 6 cycles every 21 days. Review determines what happens afterwards. Your team confirms any treatment after the combination phase; continuing cetuximab needs an agreed prescription and calendar.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Dose / phase review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests and magnesium; kidney filtration assessment for carboplatin; DPD testing before fluorouracil unless already tested. Review previous antibody reactions, red-meat allergy, tick bites and any cetuximab allergy tests. Hearing tests and an ECG for compromised heart function are arranged when indicated.",
+          "Full blood count, kidney and liver tests and magnesium before each cycle, with a current kidney result for carboplatin calculation. Review hearing, nerves, skin, eyes, bowel symptoms and any reactions; report changes before every weekly cetuximab visit. The team may reassess kidney filtration if function changes.",
+          "Report new symptoms promptly; extra tests may be needed.",
+          "A held or changed dose needs a new clinical review and relevant repeat results.",
+          "Electrolytes including magnesium and calcium are checked monthly for 2 months after the final cetuximab. Continue review of unresolved skin, blood, hearing, nerve, mouth and nutritional problems. Examinations and scans follow the individually agreed cancer plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the diagnosis, aim, prescription and actual calendar.",
+          "Cetuximab starts with a 400 mg/m² loading dose over 120 minutes, then 250 mg/m² over 60 minutes weekly. Chemotherapy starts at least 1 hour after cetuximab finishes. Carboplatin is infused over 30 minutes on Day 1 at a kidney-calculated target exposure of AUC 5. Fluorouracil 1,000 mg/m² is infused over 16–22 hours daily on Days 1–4, or 2,000 mg/m² over 48 hours twice. Plan for monitoring during and for at least 1 hour after each cetuximab infusion under the current medicine information; confirm the observation plan with your unit.",
+          "Follow the written home plan and keep pump or line appointments where applicable.",
+          "Carboplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15, for up to 6 cycles every 21 days. Review determines what happens afterwards. Your team confirms any treatment after the combination phase; continuing cetuximab needs an agreed prescription and calendar.",
+          "Record the last dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Review oral health, weight, nutrition and safe swallowing.",
+          "Discuss mouth pain, intake, weight and hydration.",
+          "Report poor drinking, choking or weight loss promptly.",
+          "Dietitian and swallowing plans change with symptoms and recovery.",
+          "Continue dental, nutritional and swallowing support when needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Cancer assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Agree staging, pathology and any relevant disease tests.",
+          "Discuss symptoms and the planned response review.",
+          "Scans or examinations may be added if symptoms require them.",
+          "The team sets imaging and cancer-assessment timing.",
+          "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Combination treatment",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Cetuximab with carboplatin and fluorouracil is used to treat squamous head and neck cancer when cisplatin is unsuitable. Your team explains the treatment aim, possible benefit and alternatives for your situation.",
+        "clinical": "Carboplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15, for up to 6 cycles every 21 days. Review determines what happens afterwards. Your team confirms any treatment after the combination phase; continuing cetuximab needs an agreed prescription and calendar.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Days 8 and 15 within the same combination cycle",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Cetuximab with carboplatin and fluorouracil is used to treat squamous head and neck cancer when cisplatin is unsuitable. Your team explains the treatment aim, possible benefit and alternatives for your situation.",
+        "clinical": "Carboplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15, for up to 6 cycles every 21 days. Review determines what happens afterwards. Your team confirms any treatment after the combination phase; continuing cetuximab needs an agreed prescription and calendar.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Carboplatin is given on Day 1, fluorouracil on Days 1–4, and cetuximab on Days 1, 8 and 15, for up to 6 cycles every 21 days. Review determines what happens afterwards. Your team confirms any treatment after the combination phase; continuing cetuximab needs an agreed prescription and calendar.",
+      "Full blood count, kidney and liver tests and magnesium before each cycle, with a current kidney result for carboplatin calculation. Review hearing, nerves, skin, eyes, bowel symptoms and any reactions; report changes before every weekly cetuximab visit. The team may reassess kidney filtration if function changes.",
+      "Electrolytes including magnesium and calcium are checked monthly for 2 months after the final cetuximab. Continue review of unresolved skin, blood, hearing, nerve, mouth and nutritional problems. Examinations and scans follow the individually agreed cancer plan.",
+      "Cetuximab starts with a 400 mg/m² loading dose over 120 minutes, then 250 mg/m² over 60 minutes weekly. Chemotherapy starts at least 1 hour after cetuximab finishes. Carboplatin is infused over 30 minutes on Day 1 at a kidney-calculated target exposure of AUC 5. Fluorouracil 1,000 mg/m² is infused over 16–22 hours daily on Days 1–4, or 2,000 mg/m² over 48 hours twice. Plan for monitoring during and for at least 1 hour after each cetuximab infusion under the current medicine information; confirm the observation plan with your unit.",
+      "Record the last dose and follow-up appointments.",
+      "Discuss mouth pain, intake, weight and hydration.",
+      "Continue dental, nutritional and swallowing support when needed.",
+      "Discuss symptoms and the planned response review.",
+      "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00418 v7 · current official regimen",
+        "url": "https://healthservice.hse.ie/documents/6976/418_Cetux_Carbo5-FU.pdf",
+        "checked": "2026-11-10"
+      },
+      {
+        "id": "erbitux",
+        "title": "EMA Erbitux · current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+        "checked": "2026-11-10"
+      }
+    ]
+  },
+  "00696": {
+    "code": "00696",
+    "title": "Paclitaxel Days 1, 8, 15 + cetuximab Days 1, 15 · 28-day cycle: treatment and checks",
+    "release": "0.84.47",
+    "checked": "2026-11-10",
+    "status": "Source reconciled draft; independent clinical, oncology-pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Recurrent and/or metastatic head and neck squamous cell carcinoma under NCCP 00696.",
+    "summary": "Paclitaxel is given on Days 1, 8 and 15, with cetuximab on Days 1 and 15 of each 28-day cycle. There is no scheduled treatment dose on Day 22. Both medicines continue while appropriate, until progression or unacceptable side effects; the protocol does not set a fixed total number of cycles.",
+    "stages": [
+      "Before starting",
+      "Treatment visit",
+      "Between visits",
+      "Dose / phase review",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; assessment of nerve symptoms when indicated. Review previous reactions to antibody infusions, red-meat allergy, tick bites and any cetuximab allergy-test results, as well as all medicines and allergies.",
+          "Regular full blood count, kidney and liver tests, with nerve assessment as indicated. The NCCP source does not give one universal testing interval: your unit must specify tests due before each planned visit. Cetuximab product information also requires electrolyte assessment before and periodically during treatment; the team confirms magnesium and other mineral checks.",
+          "Report new symptoms promptly; extra tests may be needed.",
+          "A held or changed dose needs a new clinical review and relevant repeat results.",
+          "Continue review of nerve symptoms, skin or nail problems and any abnormal blood or mineral results. The team sets the follow-up tests and disease assessments; this regimen does not mandate a universal post-treatment scan or tumour-marker timetable."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm the diagnosis, aim, prescription and actual calendar.",
+          "Cetuximab 500 mg/m² is infused on Days 1 and 15. The initial infusion has a slower maximum rate than later tolerated doses; total time depends on the prescribed dose. Plan for monitoring during and for at least 1 hour after each cetuximab infusion under the current medicine information; confirm the observation plan with your unit. Paclitaxel is usually 80 mg/m² over 1 hour on Days 1, 8 and 15; a consultant may select a 100 mg/m² starting dose for some patients. The actual prescribed dose and premedicines must be confirmed. Day 8 is paclitaxel only.",
+          "Follow the written home plan and keep pump or line appointments where applicable.",
+          "Paclitaxel is given on Days 1, 8 and 15, with cetuximab on Days 1 and 15 of each 28-day cycle. There is no scheduled treatment dose on Day 22. Both medicines continue while appropriate, until progression or unacceptable side effects; the protocol does not set a fixed total number of cycles.",
+          "Record the last dose and follow-up appointments."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "monitoring",
+        "cells": [
+          "Review oral health, weight, nutrition and safe swallowing.",
+          "Discuss mouth pain, intake, weight and hydration.",
+          "Report poor drinking, choking or weight loss promptly.",
+          "Dietitian and swallowing plans change with symptoms and recovery.",
+          "Continue dental, nutritional and swallowing support when needed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      },
+      {
+        "label": "Cancer assessment",
+        "kind": "monitoring",
+        "cells": [
+          "Agree staging, pathology and any relevant disease tests.",
+          "Discuss symptoms and the planned response review.",
+          "Scans or examinations may be added if symptoms require them.",
+          "The team sets imaging and cancer-assessment timing.",
+          "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response investigations serve different purposes; dates remain individual."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Combination treatment",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Paclitaxel and cetuximab aim to control head and neck cancer that has returned or spread and may help symptoms. Your team explains expected benefit, uncertainty and options in light of your previous treatment.",
+        "clinical": "Paclitaxel is given on Days 1, 8 and 15, with cetuximab on Days 1 and 15 of each 28-day cycle. There is no scheduled treatment dose on Day 22. Both medicines continue while appropriate, until progression or unacceptable side effects; the protocol does not set a fixed total number of cycles.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Day 8 within the same 28-day cycle",
+        "when": "Follow your agreed treatment calendar",
+        "why": "Paclitaxel and cetuximab aim to control head and neck cancer that has returned or spread and may help symptoms. Your team explains expected benefit, uncertainty and options in light of your previous treatment.",
+        "clinical": "Paclitaxel is given on Days 1, 8 and 15, with cetuximab on Days 1 and 15 of each 28-day cycle. There is no scheduled treatment dose on Day 22. Both medicines continue while appropriate, until progression or unacceptable side effects; the protocol does not set a fixed total number of cycles.",
+        "action": "Confirm active medicines, written support plan and review criteria.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Paclitaxel is given on Days 1, 8 and 15, with cetuximab on Days 1 and 15 of each 28-day cycle. There is no scheduled treatment dose on Day 22. Both medicines continue while appropriate, until progression or unacceptable side effects; the protocol does not set a fixed total number of cycles.",
+      "Regular full blood count, kidney and liver tests, with nerve assessment as indicated. The NCCP source does not give one universal testing interval: your unit must specify tests due before each planned visit. Cetuximab product information also requires electrolyte assessment before and periodically during treatment; the team confirms magnesium and other mineral checks.",
+      "Continue review of nerve symptoms, skin or nail problems and any abnormal blood or mineral results. The team sets the follow-up tests and disease assessments; this regimen does not mandate a universal post-treatment scan or tumour-marker timetable.",
+      "Cetuximab 500 mg/m² is infused on Days 1 and 15. The initial infusion has a slower maximum rate than later tolerated doses; total time depends on the prescribed dose. Plan for monitoring during and for at least 1 hour after each cetuximab infusion under the current medicine information; confirm the observation plan with your unit. Paclitaxel is usually 80 mg/m² over 1 hour on Days 1, 8 and 15; a consultant may select a 100 mg/m² starting dose for some patients. The actual prescribed dose and premedicines must be confirmed. Day 8 is paclitaxel only.",
+      "Record the last dose and follow-up appointments.",
+      "Discuss mouth pain, intake, weight and hydration.",
+      "Continue dental, nutritional and swallowing support when needed.",
+      "Discuss symptoms and the planned response review.",
+      "No universal imaging interval or routine tumour-marker panel is imposed by this regimen."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00696 v2 · current official regimen",
+        "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+        "checked": "2026-11-10"
+      },
+      {
+        "id": "erbitux",
+        "title": "EMA Erbitux · current product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/erbitux-epar-product-information_en.pdf",
+        "checked": "2026-11-10"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

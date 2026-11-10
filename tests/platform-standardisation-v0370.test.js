@@ -4,6 +4,7 @@ const assert = require('assert');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const HEADNECK47Inputs = require('./helpers/head-neck-inputs-v08447.cjs');
 const HEADNECK45 = require('./helpers/head-neck-grading-v08445.cjs');
 const SKIN42Inputs = require('./helpers/skin-inputs-v08442.cjs');
 const SKIN40Inputs = require('./helpers/skin-inputs-v08440.cjs');
@@ -298,7 +299,7 @@ for (const { file, data } of protocols) {
     }
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
     if(['00705','00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
-    if ((SKIN42Inputs.numericRenal(data, field, def) || SKIN40Inputs.numericRenal(data, field, def) || NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
+    if ((HEADNECK47Inputs.numericRenal(data, field, def) || SKIN42Inputs.numericRenal(data, field, def) || SKIN40Inputs.numericRenal(data, field, def) || NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
     const renalText = `${field} ${def?.label || ''}`.toLowerCase();
     if (!/crcl|creatinine clearance|\bgfr\b|egfr/.test(renalText)) continue;
     if (!['number', 'select'].includes(def.type)) continue;

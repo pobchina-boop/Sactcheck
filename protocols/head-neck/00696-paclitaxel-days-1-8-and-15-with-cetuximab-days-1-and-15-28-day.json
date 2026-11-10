@@ -14,9 +14,9 @@
     "short_title": "Paclitaxel Days 1, 8 and 15 with Cetuximab Days 1 and 15 – 28 day",
     "indication": "Recurrent or metastatic squamous cell carcinoma of the head and neck.",
     "source_url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 8,
+    "sactcheck_encoding_version": "0.84.47",
+    "source_checked_date": "2026-11-10",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -64,7 +64,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -84,17 +84,25 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled · clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.47",
+      "audit_date": "2026-11-10",
+      "scope_note": "Source-specific schedule and assessment rules reconciled to the retrieved official NCCP document. Unresolved source boundaries require consultant review; this is not clinical authorisation."
     },
-    "canonical_protocol_id": "nccp-00696-v2"
+    "canonical_protocol_id": "nccp-00696-v2",
+    "clinical_audit_release": "0.84.47",
+    "source_audit": {
+      "release": "0.84.47",
+      "date": "2026-11-10",
+      "source_sha256": "d8463ac9955196bb3b6fd875c5a15ad74697ee2fd0d7534ba8642dfdce5d7cf4",
+      "source_path": "validation/head-neck-v08447/sources/00696.pdf",
+      "scope": "Current-source executable assessment audit; independent consultant and oncology-pharmacy approval remains pending."
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -113,12 +121,41 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Paclitaxel days 1, 8 and 15 plus cetuximab days 1 and 15 every 28 days until progression or unacceptable toxicity.",
+    "schedule_summary": "Cetuximab 500 mg/m² on days 1 and 15 and paclitaxel 80 mg/m² on days 1, 8 and 15 of each 28-day cycle until progression or unacceptable toxicity. Paclitaxel 100 mg/m² is an explicit consultant-selected alternative starting dose.",
     "drugs": [
       "paclitaxel",
       "cetuximab"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "dose_level_note": "The standard paclitaxel reduction sequence is 80 → 65 → 50 mg/m². An optional consultant-selected 100 mg/m² start reduces first to 80 mg/m². Grade 2 neuropathy or other grade 2 toxicity uses a separate 10 mg/m² reduction from the current dose; do not substitute the one-level sequence.",
+    "cetuximab_skin_restart_note": "After eligible recovery within two weeks, cetuximab severe-skin episode 1/2/3 restart doses are 500/400/300 mg/m² every two weeks; episode 4 requires discontinuation.",
+    "administration": [
+      {
+        "drug": "cetuximab",
+        "day": [
+          1,
+          15
+        ],
+        "dose": {
+          "dose_mg_m2": 500
+        },
+        "route": "IV infusion",
+        "notes": "Initial maximum rate 5 mg/min; subsequent maximum 10 mg/min if first infusion tolerated. One-hour observation after the first two doses; follow source observation conditions."
+      },
+      {
+        "drug": "paclitaxel",
+        "day": [
+          1,
+          8,
+          15
+        ],
+        "dose": {
+          "dose_mg_m2": 80
+        },
+        "route": "IV infusion",
+        "notes": "250 mL sodium chloride 0.9% over 1 hour, non-PVC equipment and 0.22 μm inline filter. Optional 100 mg/m² start only by explicit consultant prescription."
+      }
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -202,24 +239,24 @@
       "input_role": "monitoring"
     },
     "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
+      "label": "ALT / AST actual result (highest × ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "context"
+      "input_role": "monitoring"
     },
     "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
+      "label": "Bilirubin actual result (× ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "non_haematological_toxicity_grade": {
       "label": "Other clinically relevant non-haematological toxicity grade",
@@ -283,14 +320,14 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "cetuximab_infusion_reaction_grade": {
       "label": "Cetuximab infusion-reaction grade",
@@ -379,7 +416,7 @@
       "input_role": "decision"
     },
     "interstitial_lung_disease": {
-      "label": "Suspected or confirmed interstitial lung disease",
+      "label": "Diagnosed interstitial lung disease",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -427,6 +464,112 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
+    },
+    "alt_ratio_uln": {
+      "label": "ALT / upper limit of normal",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "anc_below_0_5_duration_days": {
+      "label": "Duration ANC below 0.5",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cetuximab_skin_occurrence": {
+      "label": "Number of severe cetuximab skin-reaction episodes",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "unit": "episodes",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cetuximab_skin_hold_days": {
+      "label": "Days cetuximab withheld for severe skin reaction",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cetuximab_skin_restart_requested": {
+      "label": "Considering cetuximab restart after severe skin reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_prior_permanent_stop": {
+      "label": "Previous permanent cetuximab stop / grade 3–4 infusion reaction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_restart_consultant_approved": {
+      "label": "Consultant has approved cetuximab restart",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "paclitaxel_current_dose_mg_m2": {
+      "label": "Current prescribed paclitaxel dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "paclitaxel_prior_grade2_toxicity": {
+      "label": "Previous other grade 2 paclitaxel toxicity awaiting restart",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "paclitaxel_toxicity_recovered_grade1": {
+      "label": "Previous paclitaxel toxicity recovered to ≤ grade 1",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_hepatic_impairment": {
+      "label": "Clinically assessed severe hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cetuximab_allergy_risk_history": {
+      "label": "Red meat/tick-bite allergy, prior antibody infusion reaction or relevant IgE result",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_interstitial_lung_disease": {
+      "label": "New symptoms suspicious for interstitial lung disease",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -472,208 +615,309 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Component hypersensitivity excludes the routine regimen; assess any exceptional specialist plan separately."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Component hypersensitivity excludes the routine regimen; assess any exceptional specialist plan separately."
       },
       {
         "id": "ECOG_3",
-        "priority": 8,
+        "priority": 10,
         "when": {
           "field": "ecog",
-          "operator": ">=",
-          "value": 3
+          "operator": ">",
+          "value": 2
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "ECOG exceeds the source 0–2 eligibility range.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "ECOG exceeds the source 0–2 eligibility range.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+        "explanation": "ECOG exceeds the source 0–2 eligibility range."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "FN",
+        "id": "HN47_PREGNANCY",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
+          "field": "pregnancy",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+          "message": "Pregnancy and breastfeeding are source exclusions."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+        "explanation": "Pregnancy and breastfeeding are source exclusions."
       },
       {
-        "id": "CETUX_IR_G3",
+        "id": "HN47_BREASTFEEDING",
         "priority": 10,
         "when": {
-          "field": "cetuximab_infusion_reaction_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "cetuximab"
-          ],
-          "message": "Grade 3–4 cetuximab infusion reaction requires permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3–4 cetuximab infusion reaction requires permanent discontinuation."
-      },
-      {
-        "id": "CETUX_SKIN_G3",
-        "priority": 9,
-        "when": {
-          "field": "cetuximab_skin_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "cetuximab"
-          ],
-          "message": "Grade 3–4 skin toxicity requires interruption and the source re-challenge/dose pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3–4 skin toxicity requires interruption and the source re-challenge/dose pathway."
-      },
-      {
-        "id": "CETUX_ILD",
-        "priority": 10,
-        "when": {
-          "field": "interstitial_lung_disease",
+          "field": "breastfeeding",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "contraindicated",
           "components": [
-            "cetuximab"
+            "whole_regimen"
           ],
-          "message": "Suspected or confirmed interstitial lung disease requires cetuximab discontinuation and urgent assessment."
+          "message": "Pregnancy and breastfeeding are source exclusions."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "Suspected or confirmed interstitial lung disease requires cetuximab discontinuation and urgent assessment."
+        "explanation": "Pregnancy and breastfeeding are source exclusions."
+      },
+      {
+        "id": "HN47_BASELINE_ANC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Baseline ANC < 1.5 ×10⁹/L is an exclusion. Do not substitute the lower on-treatment threshold."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
+        },
+        "explanation": "Baseline ANC < 1.5 ×10⁹/L is an exclusion. Do not substitute the lower on-treatment threshold."
+      },
+      {
+        "id": "HN47_BASELINE_HEPATIC",
+        "priority": 10,
+        "when": {
+          "field": "severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Severe hepatic impairment is excluded; assess the paclitaxel ALT/bilirubin table and whole-regimen suitability."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
+        },
+        "explanation": "Severe hepatic impairment is excluded; assess the paclitaxel ALT/bilirubin table and whole-regimen suitability."
       },
       {
         "id": "PC696_ANC_05_099",
-        "priority": 9,
+        "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "between",
-          "value": [
-            0.5,
-            0.999
+          "all": [
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            }
           ]
         },
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "paclitaxel"
           ],
-          "message": "ANC 0.5–0.99 ×10⁹/L: delay and consider dose reduction."
+          "message": "Delay paclitaxel and consider reduction at the subsequent cycle. This is the paclitaxel-specific table; cetuximab requires its own assessment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2"
         },
-        "explanation": "ANC 0.5–0.99 ×10⁹/L: delay and consider dose reduction."
+        "explanation": "Delay paclitaxel and consider reduction at the subsequent cycle. This is the paclitaxel-specific table; cetuximab requires its own assessment."
       },
       {
         "id": "PC696_ANC_LT05",
         "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 0.5
+          "all": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "anc_below_0_5_duration_days",
+              "operator": ">=",
+              "value": 7
+            }
+          ]
         },
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
-            "whole_regimen"
+            "paclitaxel"
           ],
-          "message": "ANC <0.5 ×10⁹/L for ≥7 days: delay and reduce one dose level."
+          "message": "ANC < 0.5 for ≥ 7 days: delay paclitaxel and reduce by one dose level after recovery; verify dose history before selecting the next level.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "ANC < 0.5 for ≥ 7 days: delay paclitaxel and reduce by one dose level after recovery; verify dose history before selecting the next level."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2"
         },
-        "explanation": "ANC <0.5 ×10⁹/L for ≥7 days: delay and reduce one dose level."
+        "explanation": "ANC < 0.5 for ≥ 7 days: delay paclitaxel and reduce by one dose level after recovery; verify dose history before selecting the next level."
+      },
+      {
+        "id": "PC696_ANC_DURATION_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_below_0_5_duration_days",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "anc_below_0_5_duration_days",
+                  "operator": "<",
+                  "value": 7
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Severe neutropenia requires assessment and recovery; the source one-level reduction is conditioned on duration ≥ 7 days. Do not assume that condition when duration is absent or shorter."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2; conservative unresolved-duration guard"
+        },
+        "explanation": "Severe neutropenia requires assessment and recovery; the source one-level reduction is conditioned on duration ≥ 7 days. Do not assume that condition when duration is absent or shorter."
       },
       {
         "id": "PC696_PLT_70_89",
-        "priority": 9,
+        "priority": 10,
         "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            70,
-            89.999
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 70
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 90
+            }
           ]
         },
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "paclitaxel"
           ],
-          "message": "Platelets 70–89 ×10⁹/L: delay and consider dose reduction."
+          "message": "Delay paclitaxel and consider dose reduction at the next cycle."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2"
         },
-        "explanation": "Platelets 70–89 ×10⁹/L: delay and consider dose reduction."
+        "explanation": "Delay paclitaxel and consider dose reduction at the next cycle."
+      },
+      {
+        "id": "PC696_PLT_90_BOUNDARY",
+        "priority": 10,
+        "when": {
+          "field": "platelets",
+          "operator": "==",
+          "value": 90
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "At platelets 90, Table 2 overlaps its ≥ 90 full-dose and 70–90 delay rows. Resolve with the consultant; do not silently choose one.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "At platelets 90, Table 2 overlaps its ≥ 90 full-dose and 70–90 delay rows. Resolve with the consultant; do not silently choose one.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "At platelets 90, Table 2 overlaps its ≥ 90 full-dose and 70–90 delay rows. Resolve with the consultant; do not silently choose one."
       },
       {
         "id": "PC696_PLT_LT70",
@@ -686,22 +930,250 @@
         "action": {
           "type": "delay_then_dose_reduce",
           "components": [
-            "whole_regimen"
+            "paclitaxel"
           ],
-          "message": "Platelets <70 ×10⁹/L: delay and reduce one dose level."
+          "message": "Platelets < 70: delay paclitaxel and reduce by one dose level after recovery.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Platelets < 70: delay paclitaxel and reduce by one dose level after recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2"
         },
-        "explanation": "Platelets <70 ×10⁹/L: delay and reduce one dose level."
+        "explanation": "Platelets < 70: delay paclitaxel and reduce by one dose level after recovery."
+      },
+      {
+        "id": "FN",
+        "priority": 10,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "delay_then_dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Urgently assess and manage febrile neutropenia. In the source Table 2, its row shares the dose cell: delay paclitaxel, reduce by one dose level after recovery and consider G-CSF. Confirm dose history and recovery before selecting the next dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Urgently assess and manage febrile neutropenia. In the source Table 2, its row shares the dose cell: delay paclitaxel, reduce by one dose level after recovery and consider G-CSF. Confirm dose history and recovery before selecting the next dose."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "Urgently assess and manage febrile neutropenia. In the source Table 2, its row shares the dose cell: delay paclitaxel, reduce by one dose level after recovery and consider G-CSF. Confirm dose history and recovery before selecting the next dose."
+      },
+      {
+        "id": "PAC_HEPATIC_CONTRA",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "alt_ratio_uln",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Paclitaxel contraindicated if ALT ≥ 10 × ULN OR bilirubin > 5 × ULN. A single qualifying result is independently actionable."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 3"
+        },
+        "explanation": "Paclitaxel contraindicated if ALT ≥ 10 × ULN OR bilirubin > 5 × ULN. A single qualifying result is independently actionable."
+      },
+      {
+        "id": "PAC_HEPATIC_60",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ratio_uln",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "between",
+              "value": [
+                1.26,
+                2
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Table 3 specifies paclitaxel 60 mg/m² for this ALT/bilirubin band. Confirm any lower existing dose or other toxicity reduction; no automatic re-escalation.",
+          "dose_mg_m2": 60
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 3"
+        },
+        "explanation": "Table 3 specifies paclitaxel 60 mg/m² for this ALT/bilirubin band. Confirm any lower existing dose or other toxicity reduction; no automatic re-escalation."
+      },
+      {
+        "id": "PAC_HEPATIC_40",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ratio_uln",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "between",
+              "value": [
+                2.01,
+                5
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Table 3 specifies paclitaxel 40 mg/m² for this ALT/bilirubin band. Confirm any lower existing dose or other toxicity reduction; no automatic re-escalation.",
+          "dose_mg_m2": 40
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 3"
+        },
+        "explanation": "Table 3 specifies paclitaxel 40 mg/m² for this ALT/bilirubin band. Confirm any lower existing dose or other toxicity reduction; no automatic re-escalation."
+      },
+      {
+        "id": "PAC_HEPATIC_FRACTION_GAP",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<",
+                  "value": 1.26
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<",
+                  "value": 2.01
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Bilirubin falls between the source printed decimal bands; confirm interpretation without rounding into a dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Bilirubin falls between the source printed decimal bands; confirm interpretation without rounding into a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 3"
+        },
+        "explanation": "Bilirubin falls between the source printed decimal bands; confirm interpretation without rounding into a dose."
+      },
+      {
+        "id": "PAC_HEPATIC_ALT_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.25
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "alt_ratio_uln",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "The reduced-dose hepatic rows require ALT < 10 × ULN AND the bilirubin band. Obtain ALT before assigning a numerical dose; AST is not a substitute for the table ALT criterion.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The reduced-dose hepatic rows require ALT < 10 × ULN AND the bilirubin band. Obtain ALT before assigning a numerical dose; AST is not a substitute for the table ALT criterion.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Table 3"
+        },
+        "explanation": "The reduced-dose hepatic rows require ALT < 10 × ULN AND the bilirubin band. Obtain ALT before assigning a numerical dose; AST is not a substitute for the table ALT criterion."
       },
       {
         "id": "PC696_NEURO_G2",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
+          "operator": "==",
           "value": 2
         },
         "action": {
@@ -709,13 +1181,17 @@
           "components": [
             "paclitaxel"
           ],
-          "message": "Grade 2 neuropathy requires paclitaxel reduction."
+          "message": "Grade 2 motor/sensory neuropathy: reduce the current paclitaxel dose by 10 mg/m². This differs from the 80→65→50 one-level schedule.",
+          "dose_change_mg_m2": -10,
+          "dose_input_field": "paclitaxel_current_dose_mg_m2"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 4"
         },
-        "explanation": "Grade 2 neuropathy requires paclitaxel reduction."
+        "explanation": "Grade 2 motor/sensory neuropathy: reduce the current paclitaxel dose by 10 mg/m². This differs from the 80→65→50 one-level schedule."
       },
       {
         "id": "PC696_NEURO_G3",
@@ -730,34 +1206,903 @@
           "components": [
             "paclitaxel"
           ],
-          "message": "Grade 3–4 neuropathy requires withholding and further reduction/omission review."
+          "message": "Assess severe neuropathy and recovery; consider one dose-level reduction after recovery, with consultant review. No automatic restart dose before recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 4"
         },
-        "explanation": "Grade 3–4 neuropathy requires withholding and further reduction/omission review."
+        "explanation": "Assess severe neuropathy and recovery; consider one dose-level reduction after recovery, with consultant review. No automatic restart dose before recovery."
+      },
+      {
+        "id": "PAC_OTHER_G2",
+        "priority": 10,
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Other grade 2 paclitaxel toxicity: hold until ≤ grade 1, then decrease subsequent dose by 10 mg/m².",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Other grade 2 paclitaxel toxicity: hold until ≤ grade 1, then decrease subsequent dose by 10 mg/m²."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 4"
+        },
+        "explanation": "Other grade 2 paclitaxel toxicity: hold until ≤ grade 1, then decrease subsequent dose by 10 mg/m²."
+      },
+      {
+        "id": "NONHAEM_G3",
+        "priority": 10,
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Grade ≥ 3 paclitaxel reaction: assess recovery and consider one dose-level reduction after recovery. Do not infer a cetuximab dose change from this paclitaxel table."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 4"
+        },
+        "explanation": "Grade ≥ 3 paclitaxel reaction: assess recovery and consider one dose-level reduction after recovery. Do not infer a cetuximab dose change from this paclitaxel table."
+      },
+      {
+        "id": "PAC_RESTART_G2_UNRECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "paclitaxel_prior_grade2_toxicity",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "paclitaxel_toxicity_recovered_grade1",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "paclitaxel_toxicity_recovered_grade1",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Previous other grade 2 paclitaxel toxicity requires confirmed recovery to ≤ grade 1 before restart."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 4"
+        },
+        "explanation": "Previous other grade 2 paclitaxel toxicity requires confirmed recovery to ≤ grade 1 before restart."
+      },
+      {
+        "id": "PAC_RESTART_G2_RECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "paclitaxel_prior_grade2_toxicity",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "paclitaxel_toxicity_recovered_grade1",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "After recovery from other grade 2 toxicity, reduce the prior paclitaxel dose by 10 mg/m²; confirm current dose and any other reduction before restart.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "After recovery from other grade 2 toxicity, reduce the prior paclitaxel dose by 10 mg/m²; confirm current dose and any other reduction before restart.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 4"
+        },
+        "explanation": "After recovery from other grade 2 toxicity, reduce the prior paclitaxel dose by 10 mg/m²; confirm current dose and any other reduction before restart."
+      },
+      {
+        "id": "CETUX_IR_G1",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_infusion_reaction_grade",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Grade 1 infusion reaction: continue only as a slow infusion under close clinical supervision."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "Grade 1 infusion reaction: continue only as a slow infusion under close clinical supervision."
+      },
+      {
+        "id": "CETUX_IR_G2",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_infusion_reaction_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Grade 2 infusion reaction: slow infusion and immediately treat symptoms under supervision; reassess promptly if worsening."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "Grade 2 infusion reaction: slow infusion and immediately treat symptoms under supervision; reassess promptly if worsening."
+      },
+      {
+        "id": "CETUX_IR_G3",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_infusion_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Stop infusion immediately, treat vigorously and contraindicate further cetuximab use after a grade 3–4 reaction."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "Stop infusion immediately, treat vigorously and contraindicate further cetuximab use after a grade 3–4 reaction."
+      },
+      {
+        "id": "CETUX_PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "A previous permanent cetuximab stop is not reversed by current symptom recovery; do not restart."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "A previous permanent cetuximab stop is not reversed by current symptom recovery; do not restart."
+      },
+      {
+        "id": "CETUX_ILD",
+        "priority": 10,
+        "when": {
+          "field": "interstitial_lung_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Interstitial lung disease: discontinue cetuximab and obtain specialist assessment."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "Interstitial lung disease: discontinue cetuximab and obtain specialist assessment."
+      },
+      {
+        "id": "CETUX_ILD_SUSPECTED",
+        "priority": 10,
+        "when": {
+          "field": "suspected_interstitial_lung_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Withhold and urgently assess suspected interstitial lung disease; a diagnosis is not assumed from symptoms alone."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Clinical safety guard pending diagnosis"
+        },
+        "explanation": "Withhold and urgently assess suspected interstitial lung disease; a diagnosis is not assumed from symptoms alone."
+      },
+      {
+        "id": "CETUX_ALLERGY_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_allergy_risk_history",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Review prior antibody reactions, red-meat/tick-bite allergy and any cetuximab IgE testing before treatment; this history is a risk assessment, not an automatic proven allergy.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Review prior antibody reactions, red-meat/tick-bite allergy and any cetuximab IgE testing before treatment; this history is a risk assessment, not an automatic proven allergy.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "2",
+          "table": ""
+        },
+        "explanation": "Review prior antibody reactions, red-meat/tick-bite allergy and any cetuximab IgE testing before treatment; this history is a risk assessment, not an automatic proven allergy."
+      },
+      {
+        "id": "CETUX_SKIN_G3",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_skin_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Hold cetuximab for severe skin toxicity, up to 2 weeks, and determine occurrence count. Restart only following source recovery criteria and consultant approval."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "Hold cetuximab for severe skin toxicity, up to 2 weeks, and determine occurrence count. Restart only following source recovery criteria and consultant approval."
+      },
+      {
+        "id": "CETUX_SKIN_FOURTH",
+        "priority": 10,
+        "when": {
+          "field": "cetuximab_skin_occurrence",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Fourth severe skin-reaction occurrence: discontinue cetuximab, even if the skin grade has now improved."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "Fourth severe skin-reaction occurrence: discontinue cetuximab, even if the skin grade has now improved."
+      },
+      {
+        "id": "CETUX_SKIN_OVER_TWO_WEEKS",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": ">",
+              "value": 14
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "The maximum 2-week interruption has been exceeded. The source provides no restart pathway here; seek consultant review rather than automatically resume."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "The maximum 2-week interruption has been exceeded. The source provides no restart pathway here; seek consultant review rather than automatically resume."
+      },
+      {
+        "id": "CETUX_RESTART_CETUXIMAB_SKIN_OCCURRENCE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5; restart completeness guard"
+        },
+        "explanation": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+      },
+      {
+        "id": "CETUX_RESTART_CETUXIMAB_SKIN_HOLD_DAYS",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5; restart completeness guard"
+        },
+        "explanation": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+      },
+      {
+        "id": "CETUX_RESTART_CETUXIMAB_SKIN_TOXICITY_GRADE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5; restart completeness guard"
+        },
+        "explanation": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+      },
+      {
+        "id": "CETUX_RESTART_CETUXIMAB_PRIOR_PERMANENT_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5; restart completeness guard"
+        },
+        "explanation": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+      },
+      {
+        "id": "CETUX_RESTART_CETUXIMAB_RESTART_CONSULTANT_APPROVED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "cetuximab_restart_consultant_approved",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "cetuximab_restart_consultant_approved",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5; restart completeness guard"
+        },
+        "explanation": "Before considering cetuximab restart, document severe-skin episode count, interruption duration, recovered skin grade, absence of a prior permanent stop, and consultant approval. Missing history is not normal."
+      },
+      {
+        "id": "CETUX_RESTART_EPISODE_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "<=",
+              "value": 14
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 1 is 500 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 1 is 500 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 1 is 500 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications."
+      },
+      {
+        "id": "CETUX_RESTART_EPISODE_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "<=",
+              "value": 14
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 2 is 400 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 2 is 400 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 2 is 400 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications."
+      },
+      {
+        "id": "CETUX_RESTART_EPISODE_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cetuximab_skin_restart_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "cetuximab_skin_occurrence",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "cetuximab_skin_toxicity_grade",
+              "operator": "<=",
+              "value": 2
+            },
+            {
+              "field": "cetuximab_skin_hold_days",
+              "operator": "<=",
+              "value": 14
+            },
+            {
+              "field": "cetuximab_prior_permanent_stop",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "cetuximab_restart_consultant_approved",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 3 is 300 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 3 is 300 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Table 5"
+        },
+        "explanation": "After recovery to grade 2 or better within the 2-week limit, the source restart dose for severe-skin occurrence 3 is 300 mg/m² every 2 weeks. Confirm the prescriber order and absence of other contraindications."
+      },
+      {
+        "id": "PAC_G2_CURRENT_DOSE_UNRESOLVED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "paclitaxel_current_dose_mg_m2",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "paclitaxel_current_dose_mg_m2",
+                  "operator": "<=",
+                  "value": 10
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Confirm the current paclitaxel prescription before subtracting 10 mg/m². Do not assume an 80 mg/m² starting dose, calculate zero, or ignore prior reductions.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Confirm the current paclitaxel prescription before subtracting 10 mg/m². Do not assume an 80 mg/m² starting dose, calculate zero, or ignore prior reductions.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "4",
+          "table": "Source criteria with implementation guard for unresolved clinical context"
+        },
+        "explanation": "Confirm the current paclitaxel prescription before subtracting 10 mg/m². Do not assume an 80 mg/m² starting dose, calculate zero, or ignore prior reductions."
+      },
+      {
+        "id": "PAC_HEPATIC_CURRENT_DOSE_60",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ratio_uln",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "between",
+              "value": [
+                1.26,
+                2
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "paclitaxel_current_dose_mg_m2",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "paclitaxel_current_dose_mg_m2",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "The hepatic reference dose is 60 mg/m², but the current prescription is missing or already lower. Reconcile previous reductions and all current toxicities; do not automatically re-escalate to the table dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The hepatic reference dose is 60 mg/m², but the current prescription is missing or already lower. Reconcile previous reductions and all current toxicities; do not automatically re-escalate to the table dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Source criteria with implementation guard for unresolved clinical context"
+        },
+        "explanation": "The hepatic reference dose is 60 mg/m², but the current prescription is missing or already lower. Reconcile previous reductions and all current toxicities; do not automatically re-escalate to the table dose."
+      },
+      {
+        "id": "PAC_HEPATIC_CURRENT_DOSE_40",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "alt_ratio_uln",
+              "operator": "<",
+              "value": 10
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "between",
+              "value": [
+                2.01,
+                5
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "paclitaxel_current_dose_mg_m2",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "paclitaxel_current_dose_mg_m2",
+                  "operator": "<",
+                  "value": 40
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "The hepatic reference dose is 40 mg/m², but the current prescription is missing or already lower. Reconcile previous reductions and all current toxicities; do not automatically re-escalate to the table dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The hepatic reference dose is 40 mg/m², but the current prescription is missing or already lower. Reconcile previous reductions and all current toxicities; do not automatically re-escalate to the table dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00696 v2",
+          "url": "https://healthservice.hse.ie/documents/6769/696_PACLitaxel_Cetuximab_28day.pdf",
+          "page": "3",
+          "table": "Source criteria with implementation guard for unresolved clinical context"
+        },
+        "explanation": "The hepatic reference dose is 40 mg/m², but the current prescription is missing or already lower. Reconcile previous reductions and all current toxicities; do not automatically re-escalate to the table dose."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Recurrent/metastatic squamous-cell carcinoma of the head and neck; ECOG 0–2 and adequate organ function.",
+    "Baseline ANC must not be below 1.5 ×10⁹/L; this differs from on-treatment Table 2."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Hypersensitivity to cetuximab, paclitaxel or excipients; pregnancy;breastfeeding.",
+    "Baseline ANC < 1.5 ×10⁹/L andsevere hepatic impairment."
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "emetogenic_risk": "low",
+    "script_id": "nccp-parenteral-low",
+    "mapping_basis": "NCCP 00696 v 2 page 5: cetuximabLOW and paclitaxelLOW. Infusion-reaction premedication is a separate requirement.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
+  },
+  "dose_levels": {
+    "paclitaxel": {
+      "0": {
+        "dose_mg_m2": 80
+      },
+      "-1": {
+        "dose_mg_m2": 65
+      },
+      "-2": {
+        "dose_mg_m2": 50
+      }
+    }
   }
 }

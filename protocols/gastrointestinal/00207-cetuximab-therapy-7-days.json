@@ -12,7 +12,7 @@
     "indication": "Cetuximab monotherapy for EGFR-expressing RAS wild-type metastatic colorectal cancer after failure of oxaliplatin- and irinotecan-based therapy and intolerance to irinotecan; or with radiotherapy for locally advanced squamous head-and-neck cancer when platinum therapy is unsuitable.",
     "source_url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
     "source_document_pages": 5,
-    "sactcheck_encoding_version": "0.84.45",
+    "sactcheck_encoding_version": "0.84.47",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "colorectal",
@@ -149,7 +149,17 @@
       "checked_date": "2026-11-07",
       "note": "Observation source conflict: NCCP permits stopping the post-infusion observation/vital-sign schedule after two tolerated doses, whereas current Erbitux SmPC section 4.2 requires close monitoring during and for at least one hour after each infusion. The clinical team must reconcile this and prescribe the local observation plan; do not promise earlier discharge."
     },
-    "source_identity_note": "NCCP source version 6; legacy protocol_id remains stable for existing application mappings. CRC and head/neck are separate indication contexts."
+    "source_identity_note": "NCCP source version 6; legacy protocol_id remains stable for existing application mappings. CRC and head/neck are separate indication contexts.",
+    "retrospective_audit_v08447": {
+      "release": "0.84.47",
+      "date": "2026-11-10",
+      "source_url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+      "source_pdf_sha256": "06bbdf5a1d097665e64f61c3c7ef88f0ef957afdd7726b4924bfb3a293c623b9",
+      "retrieved_utc": "2026-11-10T07:19:49.937471+00:00",
+      "source_manifest": "validation/head-neck-v08447/sources/index.json",
+      "audit_report": "validation/head-neck-v08447/retrospective-audit.json",
+      "independent_clinical_and_pharmacy_review": "pending"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -851,6 +861,19 @@
               "field": "previous_cetuximab_dose_mg_m2",
               "operator": ">=",
               "value": 250
+            },
+            {
+              "any": [
+                {
+                  "field": "intolerable_skin_toxicity",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "intolerable_skin_toxicity",
+                  "operator": "missing"
+                }
+              ]
             }
           ]
         },
@@ -910,6 +933,19 @@
               "field": "previous_cetuximab_dose_mg_m2",
               "operator": ">=",
               "value": 200
+            },
+            {
+              "any": [
+                {
+                  "field": "intolerable_skin_toxicity",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "intolerable_skin_toxicity",
+                  "operator": "missing"
+                }
+              ]
             }
           ]
         },
@@ -968,6 +1004,19 @@
               "field": "previous_cetuximab_dose_mg_m2",
               "operator": ">=",
               "value": 150
+            },
+            {
+              "any": [
+                {
+                  "field": "intolerable_skin_toxicity",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "intolerable_skin_toxicity",
+                  "operator": "missing"
+                }
+              ]
             }
           ]
         },
@@ -1811,6 +1860,53 @@
           "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
           "page": 3,
           "checked_date": "2026-11-07"
+        }
+      },
+      {
+        "id": "HN47_SKIN_RECOVERY_CONFLICT",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "intolerable_skin_toxicity",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "skin_occurrence",
+              "operator": "in",
+              "value": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "field": "acneiform_rash_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cetuximab"
+          ],
+          "message": "A low numerical skin grade does not establish tolerable recovery when the reaction is still recorded as intolerable. Withhold and reconcile recovery before displaying a recurrence-based cetuximab restart dose.",
+          "recommendation": "A low numerical skin grade does not establish tolerable recovery when the reaction is still recorded as intolerable. Withhold and reconcile recovery before displaying a recurrence-based cetuximab restart dose.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "A low numerical skin grade does not establish tolerable recovery when the reaction is still recorded as intolerable. Withhold and reconcile recovery before displaying a recurrence-based cetuximab restart dose.",
+        "source": {
+          "document": "NCCP 00207 v6",
+          "url": "https://healthservice.hse.ie/documents/6941/207_Cetuximab_7day_.pdf",
+          "page": 3,
+          "checked_date": "2026-11-10",
+          "basis": "local_conflicting_input_guardrail_consistent_with_existing_intolerable_skin_hold",
+          "table": 2
         }
       }
     ]

@@ -14,9 +14,9 @@
     "short_title": "Cisplatin and 5-Fluorouracil – 28 day",
     "indication": "Locally advanced or metastatic head and neck cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.47",
+    "source_checked_date": "2026-11-10",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -63,7 +63,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -83,17 +83,25 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled · clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.47",
+      "audit_date": "2026-11-10",
+      "scope_note": "Source-specific schedule and assessment rules reconciled to the retrieved official NCCP document. Unresolved source boundaries require consultant review; this is not clinical authorisation."
     },
-    "canonical_protocol_id": "nccp-00314-v4b"
+    "canonical_protocol_id": "nccp-00314-v4b",
+    "clinical_audit_release": "0.84.47",
+    "source_audit": {
+      "release": "0.84.47",
+      "date": "2026-11-10",
+      "source_sha256": "123af3519054096f1799979ae991b6baca96347778fd7d74c9b9181d3ed456d7",
+      "source_path": "validation/head-neck-v08447/sources/00314.pdf",
+      "scope": "Current-source executable assessment audit; independent consultant and oncology-pharmacy approval remains pending."
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -112,12 +120,44 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Cisplatin day 1 and fluorouracil continuous infusion days 1–4 every 28 days until progression or unacceptable toxicity.",
+    "schedule_summary": "Cisplatin 25 mg/m² daily on days 1–4, each over 2 hours, followed by fluorouracil 1000 mg/m²/day over 22 hours on each of days 1–4; repeat every 28 days until progression or unacceptable toxicity.",
     "drugs": [
       "cisplatin",
       "fluorouracil"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "administration": [
+      {
+        "drug": "cisplatin",
+        "day": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "dose": {
+          "value": 25,
+          "unit": "mg/m²"
+        },
+        "route": "IV infusion",
+        "notes": "2 hours on each treatment day"
+      },
+      {
+        "drug": "fluorouracil",
+        "day": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "dose": {
+          "value": 1000,
+          "unit": "mg/m²/day"
+        },
+        "route": "IV infusion",
+        "notes": "22 hours on each treatment day"
+      }
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -171,7 +211,7 @@
       "input_role": "decision"
     },
     "anc": {
-      "label": "ANC",
+      "label": "ANC on the day of chemotherapy",
       "type": "number",
       "required": false,
       "min": 0,
@@ -181,7 +221,7 @@
       "input_role": "decision"
     },
     "platelets": {
-      "label": "Platelets",
+      "label": "Current platelets (also enter a lower count from earlier in the cycle)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -201,24 +241,24 @@
       "input_role": "monitoring"
     },
     "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
+      "label": "ALT / AST actual result (highest × ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
+      "label": "Bilirubin actual result (× ULN calculated automatically)",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "non_haematological_toxicity_grade": {
       "label": "Other clinically relevant non-haematological toxicity grade",
@@ -282,23 +322,23 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "cisplatin_crcl_band": {
-      "label": "Renal function for cisplatin",
+      "label": "Legacy cisplatin renal band (numeric GFR/CrCl is preferred)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": "ge60",
-          "label": "CrCl ≥60 mL/min"
+          "label": "CrCl ≥ 60 mL/min"
         },
         {
           "value": "50_59",
@@ -314,11 +354,11 @@
         },
         {
           "value": "lt45",
-          "label": "<45 mL/min"
+          "label": "< 45 mL/min"
         },
         {
           "value": "lt40",
-          "label": "<40 mL/min"
+          "label": "< 40 mL/min"
         },
         {
           "value": "dialysis",
@@ -465,6 +505,125 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
+    },
+    "gfr_or_crcl_ml_min": {
+      "label": "GFR / creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "creatinine_ratio_uln": {
+      "label": "Serum creatinine / upper limit of normal",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "platelet_nadir_x10e9_l": {
+      "label": "Lowest platelet count at any stage during the cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "cisplatin_peripheral_neuropathy_grade": {
+      "label": "Peripheral neuropathy grade (separate from hearing toxicity)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No toxicity."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; self-care activities may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
+      "input_role": "decision"
+    },
+    "significant_hearing_impairment_or_tinnitus": {
+      "label": "Significant hearing impairment or tinnitus",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_impairment_severity": {
+      "label": "Clinically assessed hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "severe_renal_impairment": {
+      "label": "Clinically assessed severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dpd_phenotype_renal_impairment": {
+      "label": "DPD uracil phenotype being interpreted with moderate/severe renal impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -510,132 +669,300 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Known hypersensitivity to cisplatin, fluorouracil or relevant excipients excludes this regimen."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Known hypersensitivity to cisplatin, fluorouracil or relevant excipients excludes this regimen."
       },
       {
         "id": "ECOG_3",
-        "priority": 8,
+        "priority": 10,
         "when": {
           "field": "ecog",
-          "operator": ">=",
-          "value": 3
+          "operator": ">",
+          "value": 2
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "ECOG exceeds the source eligibility range 0–2; reassess suitability before treatment.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "ECOG exceeds the source eligibility range 0–2; reassess suitability before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+        "explanation": "ECOG exceeds the source eligibility range 0–2; reassess suitability before treatment."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "id": "HN47_PREGNANCY",
+        "priority": 10,
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pregnancy or lactation is excluded by the source."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "Pregnancy or lactation is excluded by the source."
+      },
+      {
+        "id": "HN47_BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pregnancy or lactation is excluded by the source."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "Pregnancy or lactation is excluded by the source."
+      },
+      {
+        "id": "HN47_BASELINE_ANC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "anc",
+              "operator": "<=",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "whole_regimen"
           ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
+          "message": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
+        "explanation": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
       },
       {
-        "id": "FN",
+        "id": "HN47_BASELINE_PLATELETS",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
-      },
-      {
-        "id": "CIS_RENAL_50_59",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "50_59",
-            "45_59"
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            }
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "cisplatin"
+            "whole_regimen"
           ],
-          "message": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
+          "message": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
+        "explanation": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
       },
       {
-        "id": "CIS_RENAL_40_49",
+        "id": "HN47_BASELINE_CREATININE_RATIO_ULN",
         "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "40_49"
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "creatinine_ratio_uln",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "cisplatin"
+            "whole_regimen"
           ],
-          "message": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
+          "message": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
+        "explanation": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
       },
       {
-        "id": "CIS_RENAL_LOW",
+        "id": "HN47_BASELINE_ALT_AST_ULN_MULTIPLE",
         "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "lt45",
-            "lt40",
-            "dialysis"
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
+      },
+      {
+        "id": "HN47_BASELINE_BILIRUBIN_ULN_MULTIPLE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "The entered result does not meet the source baseline organ-function eligibility; do not treat an on-treatment dose table as permission to start."
+      },
+      {
+        "id": "HN47_BASELINE_PLT_BOUNDARY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "platelets",
+              "operator": "==",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "The baseline source prints platelets 100 ×10⁹/L without an inequality. Confirm eligibility at exactly 100 rather than inventing a comparator.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The baseline source prints platelets 100 ×10⁹/L without an inequality. Confirm eligibility at exactly 100 rather than inventing a comparator.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "The baseline source prints platelets 100 ×10⁹/L without an inequality. Confirm eligibility at exactly 100 rather than inventing a comparator."
+      },
+      {
+        "id": "HN47_BASELINE_RENAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
           ]
         },
         "action": {
@@ -643,17 +970,468 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+          "message": "Baseline CrCl below 60 mL/min is an exclusion; the separate treatment-modification table does not establish initial eligibility."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+        "explanation": "Baseline CrCl below 60 mL/min is an exclusion; the separate treatment-modification table does not establish initial eligibility."
+      },
+      {
+        "id": "HN47_PHASE_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "exists",
+                  "value": true
+                },
+                {
+                  "field": "platelets",
+                  "operator": "exists",
+                  "value": true
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Specify baseline versus on-treatment assessment: source eligibility and dose-modification thresholds differ.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Specify baseline versus on-treatment assessment: source eligibility and dose-modification thresholds differ.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "Specify baseline versus on-treatment assessment: source eligibility and dose-modification thresholds differ."
+      },
+      {
+        "id": "ANC_REDUCED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "anc",
+              "operator": "between",
+              "value": [
+                1,
+                1.5
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Source Table 1 gives fluorouracil 750 mg/m²/day for four days. ANC is assessed on chemotherapy day; the platelet criterion includes any stage in the cycle. Use the more restrictive applicable pathway after consultant review.",
+          "dose_mg_m2": 750
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": "Table 1"
+        },
+        "explanation": "Source Table 1 gives fluorouracil 750 mg/m²/day for four days. ANC is assessed on chemotherapy day; the platelet criterion includes any stage in the cycle. Use the more restrictive applicable pathway after consultant review."
+      },
+      {
+        "id": "ANC_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Source Table 1 gives fluorouracil 375 mg/m²/day for four days. Assess infection/bleeding and confirm with the consultant; this component dose is not overall clearance.",
+          "dose_mg_m2": 375
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": "Table 1"
+        },
+        "explanation": "Source Table 1 gives fluorouracil 375 mg/m²/day for four days. Assess infection/bleeding and confirm with the consultant; this component dose is not overall clearance."
+      },
+      {
+        "id": "PLT_REDUCED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "platelets",
+              "operator": "between",
+              "value": [
+                75,
+                100
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Source Table 1 gives fluorouracil 750 mg/m²/day for four days. ANC is assessed on chemotherapy day; the platelet criterion includes any stage in the cycle. Use the more restrictive applicable pathway after consultant review.",
+          "dose_mg_m2": 750
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": "Table 1"
+        },
+        "explanation": "Source Table 1 gives fluorouracil 750 mg/m²/day for four days. ANC is assessed on chemotherapy day; the platelet criterion includes any stage in the cycle. Use the more restrictive applicable pathway after consultant review."
+      },
+      {
+        "id": "PLT_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Source Table 1 gives fluorouracil 375 mg/m²/day for four days. Assess infection/bleeding and confirm with the consultant; this component dose is not overall clearance.",
+          "dose_mg_m2": 375
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": "Table 1"
+        },
+        "explanation": "Source Table 1 gives fluorouracil 375 mg/m²/day for four days. Assess infection/bleeding and confirm with the consultant; this component dose is not overall clearance."
+      },
+      {
+        "id": "NADIR_PLT_REDUCED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "platelet_nadir_x10e9_l",
+              "operator": "between",
+              "value": [
+                75,
+                100
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Source Table 1 gives fluorouracil 750 mg/m²/day for four days. ANC is assessed on chemotherapy day; the platelet criterion includes any stage in the cycle. Use the more restrictive applicable pathway after consultant review.",
+          "dose_mg_m2": 750
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": "Table 1"
+        },
+        "explanation": "Source Table 1 gives fluorouracil 750 mg/m²/day for four days. ANC is assessed on chemotherapy day; the platelet criterion includes any stage in the cycle. Use the more restrictive applicable pathway after consultant review."
+      },
+      {
+        "id": "NADIR_PLT_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "platelet_nadir_x10e9_l",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Source Table 1 gives fluorouracil 375 mg/m²/day for four days. Assess infection/bleeding and confirm with the consultant; this component dose is not overall clearance.",
+          "dose_mg_m2": 375
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": "Table 1"
+        },
+        "explanation": "Source Table 1 gives fluorouracil 375 mg/m²/day for four days. Assess infection/bleeding and confirm with the consultant; this component dose is not overall clearance."
+      },
+      {
+        "id": "CIS_RENAL_45_59",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "between",
+              "value": [
+                45,
+                59
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "For on-treatment GFR 45–59 mL/min, Table 2 specifies cisplatin 75%. Confirm the individual plan; this does not override baseline CrCl exclusion.",
+          "dose_percent": 75
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "For on-treatment GFR 45–59 mL/min, Table 2 specifies cisplatin 75%. Confirm the individual plan; this does not override baseline CrCl exclusion."
+      },
+      {
+        "id": "CIS_RENAL_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<",
+              "value": 45
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "GFR below 45 mL/min: clinical decision; consider carboplatin. The source does not prescribe an automatic reduced cisplatin dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "GFR below 45 mL/min: clinical decision; consider carboplatin. The source does not prescribe an automatic reduced cisplatin dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "GFR below 45 mL/min: clinical decision; consider carboplatin. The source does not prescribe an automatic reduced cisplatin dose."
+      },
+      {
+        "id": "CIS_RENAL_BOUNDARY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": ">",
+              "value": 59
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Table 2 prints 45–59 and ≥ 60 mL/min. This fractional gap requires clinical interpretation, not automatic rounding or dosing.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Table 2 prints 45–59 and ≥ 60 mL/min. This fractional gap requires clinical interpretation, not automatic rounding or dosing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "Table 2 prints 45–59 and ≥ 60 mL/min. This fractional gap requires clinical interpretation, not automatic rounding or dosing."
+      },
+      {
+        "id": "CIS_RENAL_LEGACY_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "cisplatin_crcl_band",
+          "operator": "not_in",
+          "value": [
+            "ge60"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Enter numeric GFR/CrCl and assessment phase. Legacy bands overlap the source 45 mL/min boundary and cannot safely select a dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Enter numeric GFR/CrCl and assessment phase. Legacy bands overlap the source 45 mL/min boundary and cannot safely select a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": "Table 2 p 3"
+        },
+        "explanation": "Enter numeric GFR/CrCl and assessment phase. Legacy bands overlap the source 45 mL/min boundary and cannot safely select a dose."
       },
       {
         "id": "CIS_NEURO_G2",
-        "priority": 9,
+        "priority": 10,
+        "when": {
+          "field": "cisplatin_peripheral_neuropathy_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Grade ≥ 2 peripheral neuropathy: omit cisplatin and consider substitution with carboplatin. Baseline grade ≥ 2 neuropathy also excludes the regimen."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 3"
+        },
+        "explanation": "Grade ≥ 2 peripheral neuropathy: omit cisplatin and consider substitution with carboplatin. Baseline grade ≥ 2 neuropathy also excludes the regimen."
+      },
+      {
+        "id": "CIS_NEURO_HEARING_UNSEPARATED",
+        "priority": 10,
         "when": {
           "field": "cisplatin_neuro_hearing_grade",
           "operator": ">=",
@@ -664,17 +1442,46 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+          "message": "Separate peripheral neuropathy from hearing/tinnitus. The source specifies omission for grade ≥ 2 neuropathy; significant hearing impairment is a separate exclusion.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Separate peripheral neuropathy from hearing/tinnitus. The source specifies omission for grade ≥ 2 neuropathy; significant hearing impairment is a separate exclusion.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": "Table 3 p 3"
         },
-        "explanation": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+        "explanation": "Separate peripheral neuropathy from hearing/tinnitus. The source specifies omission for grade ≥ 2 neuropathy; significant hearing impairment is a separate exclusion."
+      },
+      {
+        "id": "CIS_HEARING",
+        "priority": 10,
+        "when": {
+          "field": "significant_hearing_impairment_or_tinnitus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Significant hearing impairment/tinnitus is an exclusion; obtain specialist review before further cisplatin."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
+        },
+        "explanation": "Significant hearing impairment/tinnitus is an exclusion; obtain specialist review before further cisplatin."
       },
       {
         "id": "CIS_HYDRATION",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "electrolytes_hydration_not_corrected",
           "operator": "==",
@@ -685,13 +1492,15 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Correct hydration and electrolytes before cisplatin."
+          "message": "Complete the prescribed cisplatin hydration/electrolyte plan before administration."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": ""
         },
-        "explanation": "Correct hydration and electrolytes before cisplatin."
+        "explanation": "Complete the prescribed cisplatin hydration/electrolyte plan before administration."
       },
       {
         "id": "DPD_COMPLETE",
@@ -706,13 +1515,15 @@
           "components": [
             "fluorouracil"
           ],
-          "message": "Complete DPD deficiency: fluorouracil is contraindicated."
+          "message": "Complete DPD deficiency: do not administer fluorouracil."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "Complete DPD deficiency: fluorouracil is contraindicated."
+        "explanation": "Complete DPD deficiency: do not administer fluorouracil."
       },
       {
         "id": "DPD_PARTIAL",
@@ -723,17 +1534,91 @@
           "value": "partial"
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+          "message": "Partial DPD deficiency: consultant to select a reduced starting dose; the source does not specify a percentage. Subsequent cautious escalation may be considered if serious toxicity is absent.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Partial DPD deficiency: consultant to select a reduced starting dose; the source does not specify a percentage. Subsequent cautious escalation may be considered if serious toxicity is absent.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": ""
         },
-        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+        "explanation": "Partial DPD deficiency: consultant to select a reduced starting dose; the source does not specify a percentage. Subsequent cautious escalation may be considered if serious toxicity is absent."
+      },
+      {
+        "id": "DPD_UNRESOLVED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "dpd_status",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "dpd_status",
+                  "operator": "==",
+                  "value": "unknown"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Complete and review DPD testing before first fluorouracil, unless previously tested. An omitted or unknown result is not a normal result."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": ""
+        },
+        "explanation": "Complete and review DPD testing before first fluorouracil, unless previously tested. An omitted or unknown result is not a normal result."
+      },
+      {
+        "id": "DPD_RENAL_PHENOTYPE",
+        "priority": 10,
+        "when": {
+          "field": "dpd_phenotype_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency; interpret phenotyping cautiously and consider genotype testing before selecting a dose.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency; interpret phenotyping cautiously and consider genotype testing before selecting a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "2",
+          "table": ""
+        },
+        "explanation": "Renal impairment can raise blood uracil and falsely suggest DPD deficiency; interpret phenotyping cautiously and consider genotype testing before selecting a dose."
       },
       {
         "id": "5FU_HEPATIC",
@@ -748,13 +1633,42 @@
           "components": [
             "fluorouracil"
           ],
-          "message": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
+          "message": "Table 2 contraindicates fluorouracil above bilirubin 85 µmol/L OR AST 180 U/L. Review other hepatic statements with the consultant; do not override this boundary with a percentage reduction."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
         },
-        "explanation": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
+        "explanation": "Table 2 contraindicates fluorouracil above bilirubin 85 µmol/L OR AST 180 U/L. Review other hepatic statements with the consultant; do not override this boundary with a percentage reduction."
+      },
+      {
+        "id": "5FU_HEPATIC_EXACT_BOUNDARY",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": "==",
+          "value": 85
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "The source uses strict < and > thresholds, leaving equality undefined. Do not automatically assign full dose or contraindication at this exact result.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The source uses strict < and > thresholds, leaving equality undefined. Do not automatically assign full dose or contraindication at this exact result.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "The source uses strict < and > thresholds, leaving equality undefined. Do not automatically assign full dose or contraindication at this exact result."
       },
       {
         "id": "5FU_AST",
@@ -769,136 +1683,240 @@
           "components": [
             "fluorouracil"
           ],
-          "message": "AST >180 U/L triggers the encoded fluorouracil contraindication."
+          "message": "Table 2 contraindicates fluorouracil above bilirubin 85 µmol/L OR AST 180 U/L. Review other hepatic statements with the consultant; do not override this boundary with a percentage reduction."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
         },
-        "explanation": "AST >180 U/L triggers the encoded fluorouracil contraindication."
+        "explanation": "Table 2 contraindicates fluorouracil above bilirubin 85 µmol/L OR AST 180 U/L. Review other hepatic statements with the consultant; do not override this boundary with a percentage reduction."
+      },
+      {
+        "id": "5FU_AST_EXACT_BOUNDARY",
+        "priority": 10,
+        "when": {
+          "field": "ast_u_l",
+          "operator": "==",
+          "value": 180
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "The source uses strict < and > thresholds, leaving equality undefined. Do not automatically assign full dose or contraindication at this exact result.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "The source uses strict < and > thresholds, leaving equality undefined. Do not automatically assign full dose or contraindication at this exact result.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "The source uses strict < and > thresholds, leaving equality undefined. Do not automatically assign full dose or contraindication at this exact result."
+      },
+      {
+        "id": "HN47_MODERATE_HEPATIC",
+        "priority": 10,
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Table 2 suggests reducing the initial fluorouracil dose by one third in moderate hepatic impairment, with possible escalation if tolerated. Confirm the clinical definition and separate bilirubin/AST contraindications.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Table 2 suggests reducing the initial fluorouracil dose by one third in moderate hepatic impairment, with possible escalation if tolerated. Confirm the clinical definition and separate bilirubin/AST contraindications.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "Table 2 suggests reducing the initial fluorouracil dose by one third in moderate hepatic impairment, with possible escalation if tolerated. Confirm the clinical definition and separate bilirubin/AST contraindications."
+      },
+      {
+        "id": "HN47_SEVERE_HEPATIC",
+        "priority": 10,
+        "when": {
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Severe hepatic impairment is an exclusion on page 1, although Table 2 mentions an initial fluorouracil half-dose. This source conflict requires consultant resolution; no automatic dose is supplied."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": "Table 2 p 3"
+        },
+        "explanation": "Severe hepatic impairment is an exclusion on page 1, although Table 2 mentions an initial fluorouracil half-dose. This source conflict requires consultant resolution; no automatic dose is supplied."
+      },
+      {
+        "id": "HN47_SEVERE_RENAL_FU",
+        "priority": 10,
+        "when": {
+          "field": "severe_renal_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Consider fluorouracil reduction in severe renal impairment; the source supplies no numerical percentage.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Consider fluorouracil reduction in severe renal impairment; the source supplies no numerical percentage.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": "Table 2"
+        },
+        "explanation": "Consider fluorouracil reduction in severe renal impairment; the source supplies no numerical percentage."
+      },
+      {
+        "id": "FN",
+        "priority": 10,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Urgently assess and treat febrile neutropenia. The regimen does not provide an automatic post-FN percentage reduction; reassess the source blood-count table and individual recovery."
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": ""
+        },
+        "explanation": "Urgently assess and treat febrile neutropenia. The regimen does not provide an automatic post-FN percentage reduction; reassess the source blood-count table and individual recovery."
       },
       {
         "id": "5FU_MUC_G2",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "mucositis_grade",
           "operator": ">=",
           "value": 2
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+          "message": "Assess clinically significant mucositis and hydration urgently as appropriate. NCCP 00314 does not provide a grade-specific mucositis dose/restart table; do not import a neighbouring regimen rule.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Assess clinically significant mucositis and hydration urgently as appropriate. NCCP 00314 does not provide a grade-specific mucositis dose/restart table; do not import a neighbouring regimen rule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": ""
         },
-        "explanation": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+        "explanation": "Assess clinically significant mucositis and hydration urgently as appropriate. NCCP 00314 does not provide a grade-specific mucositis dose/restart table; do not import a neighbouring regimen rule."
       },
       {
-        "id": "ANC_1_15",
-        "priority": 9,
+        "id": "NONHAEM_G3",
+        "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "between",
-          "value": [
-            1,
-            1.5
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Severe non-haematological toxicity needs prompt clinical assessment. This source has no blanket grade-3 reduction/restart table; use the named toxicity pathway and consultant review.",
+          "dose_calculation": "specialist_review",
+          "recommendation": "Severe non-haematological toxicity needs prompt clinical assessment. This source has no blanket grade-3 reduction/restart table; use the named toxicity pathway and consultant review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "source": {
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "3",
+          "table": ""
+        },
+        "explanation": "Severe non-haematological toxicity needs prompt clinical assessment. This source has no blanket grade-3 reduction/restart table; use the named toxicity pathway and consultant review."
+      },
+      {
+        "id": "CIS_BASELINE_NEUROPATHY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "cisplatin_peripheral_neuropathy_grade",
+              "operator": ">=",
+              "value": 2
+            }
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "contraindicated",
           "components": [
-            "fluorouracil"
+            "cisplatin"
           ],
-          "message": "ANC 1.0–1.5 ×10⁹/L: use the reduced fluorouracil dose in the source table."
+          "message": "Baseline grade ≥2 peripheral neuropathy is a source exclusion; do not interpret the on-treatment omission pathway as permission to start cisplatin."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00314 v4b",
+          "url": "https://healthservice.hse.ie/documents/6955/314_V4b_Cisplatin_and_5-Fluorouracil.pdf",
+          "page": "1",
+          "table": "Source criteria with implementation guard for unresolved clinical context"
         },
-        "explanation": "ANC 1.0–1.5 ×10⁹/L: use the reduced fluorouracil dose in the source table."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 10,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "ANC <1.0 ×10⁹/L: use the major fluorouracil reduction in the source table."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ANC <1.0 ×10⁹/L: use the major fluorouracil reduction in the source table."
-      },
-      {
-        "id": "PLT_75_100",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            75,
-            100
-          ]
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Platelets 75–100 ×10⁹/L: use the reduced fluorouracil dose."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Platelets 75–100 ×10⁹/L: use the reduced fluorouracil dose."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 10,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "fluorouracil"
-          ],
-          "message": "Platelets <75 ×10⁹/L: use the major fluorouracil reduction."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Platelets <75 ×10⁹/L: use the major fluorouracil reduction."
+        "explanation": "Baseline grade ≥2 peripheral neuropathy is a source exclusion; do not interpret the on-treatment omission pathway as permission to start cisplatin."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Locally advanced or metastatic head and neck cancer; ECOG 0–2.",
+    "Baseline ANC > 1.5 ×10⁹/L; the source prints platelets 100 ×10⁹/L without an inequality, requiring clarification at the exact boundary.",
+    "Serum creatinine ≤ 1.5 × ULN, transaminases ≤ 5 × ULN and bilirubin ≤ 1.5 × ULN."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Hypersensitivity to cisplatin, fluorouracil or excipients; pregnancy or lactation.",
+    "Baseline peripheral neuropathy grade ≥ 2; severe hepatic impairment; baseline CrCl < 60 mL/min; significant hearing impairment/tinnitus.",
+    "Complete DPD deficiency."
   ],
   "supportive_care": {
     "emetogenic_risk": "high",

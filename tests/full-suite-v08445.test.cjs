@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f));
 const S=json('validation/head-neck-v08445/scope.json'),idx=json('protocols/index.json').protocols,registry=require('../js/patient-asset-registry-v0810.js'),KB=json('data/regimen-knowledge-base-v08445-addendum.json'),Evidence=require('../js/treatment-evidence-v08413.js'),Engine=require('../js/assessment-engine.js');
-assert(['0.84.45','0.84.46'].includes(json('package.json').version));assert.equal(registry.release,json('package.json').version);assert.equal(S.new_codes.length,5);assert.equal(S.new_routes.length,6);assert.equal(S.retrospective_codes.length,5);assert.equal(S.clinical_routes.length,19);assert.equal(idx.length,377);
+assert(['0.84.45','0.84.46','0.84.47'].includes(json('package.json').version));assert.equal(registry.release,json('package.json').version);assert.equal(S.new_codes.length,5);assert.equal(S.new_routes.length,6);assert.equal(S.retrospective_codes.length,5);assert.equal(S.clinical_routes.length,19);assert.equal(idx.length,377);
 const by=c=>json(idx.find(x=>x.path.includes('/'+c+'-')).path);
 for(const c of [...S.new_codes,...S.retrospective_codes]){
  const p=by(c);require('./helpers/head-neck-inputs-v08445.cjs').validate(p);

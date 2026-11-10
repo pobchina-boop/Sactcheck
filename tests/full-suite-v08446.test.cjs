@@ -11,8 +11,8 @@ const registry = require('../js/patient-asset-registry-v0810.js');
 const codes = ['00261', '00455', '00483', '00484', '00558'];
 const routes = codes.map(c => c + '/head_neck');
 const index = json('protocols/index.json').protocols;
-assert.equal(json('package.json').version, '0.84.46');
-assert.equal(registry.release, '0.84.46');
+assert(['0.84.46','0.84.47'].includes(json('package.json').version));
+assert.equal(registry.release,json('package.json').version);
 assert.equal(index.length, 377);
 for (const route of routes) {
   const code = route.split('/')[0];
