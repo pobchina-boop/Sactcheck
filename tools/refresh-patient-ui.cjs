@@ -5,7 +5,8 @@ const Chronology=require('./cycle-chronology.cjs');
 const SUPPORT_LABEL='Supportive medicines: medicine, dose and timing';
 const SUPPORT_HINT='<p class="support-table-hint no-print">Scroll the table sideways to read all medicine, dose and timing columns.</p>';
 const SUPPORT_WRAPPER=`<div class="support-table-scroll" role="region" tabindex="0" aria-label="${SUPPORT_LABEL}">`;
-const SUPPORT_UI_RELEASE=require('../package.json').version;
+// Cache identity follows the unchanged support UI asset, not each content batch.
+const SUPPORT_UI_RELEASE='0.84.45';
 
 function attribute(tag,name){
  const escaped=name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');

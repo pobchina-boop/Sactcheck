@@ -49,7 +49,7 @@
     ],
     "gynaecology_subgroup": "ovarian",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-10-25",
+    "source_checked_date": "2026-11-09",
     "treatment_context": [
       "breast",
       "advanced_breast",
@@ -202,7 +202,8 @@
       "The physically rendered q21 table uses ANC≥1 and platelets≥100. Text extraction drops the underline/equality; visual source inspection controls this boundary."
     ],
     "schedule_summary": "Carboplatin is infused on Day 1 of each 21-day cycle. The team selects the dose using the prescribed AUC and kidney function. Treatment continues while helpful and tolerated; there is no fixed breast course length.",
-    "source_schedule_interval_label": "Every 21 days"
+    "source_schedule_interval_label": "Every 21 days",
+    "clinical_audit_release": "0.84.46"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -733,6 +734,68 @@
       "ui_section": "clinical",
       "input_role": "decision",
       "always_show": true
+    },
+    "head_neck_cisplatin_unsuitable": {
+      "label": "Cisplatin is inappropriate for the selected head-and-neck chemoradiation indication",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "indication_id": {
+      "label": "Selected source indication",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "options": [
+        {
+          "value": "00261-gyn",
+          "label": "First-line adjuvant treatment where combination therapy is unsuitable: ovarian carcinoma of epithelial origin."
+        },
+        {
+          "value": "00261b",
+          "label": "First-line adjuvant treatment where combination therapy is unsuitable: primary peritoneal carcinoma."
+        },
+        {
+          "value": "00261c",
+          "label": "First-line adjuvant treatment where combination therapy is unsuitable: fallopian tube cancer."
+        },
+        {
+          "value": "00261d",
+          "label": "First-line advanced stage3/4 disease where surgery is not feasible and combination therapy is unsuitable: ovarian carcinoma of epithelial origin."
+        },
+        {
+          "value": "00261e",
+          "label": "First-line advanced stage3/4 disease where surgery is not feasible and combination therapy is unsuitable: primary peritoneal carcinoma."
+        },
+        {
+          "value": "00261f",
+          "label": "First-line advanced stage3/4 disease where surgery is not feasible and combination therapy is unsuitable: fallopian tube cancer."
+        },
+        {
+          "value": "00261g",
+          "label": "Platinum-sensitive recurrent disease: ovarian carcinoma of epithelial origin."
+        },
+        {
+          "value": "00261h",
+          "label": "Platinum-sensitive recurrent disease: primary peritoneal carcinoma."
+        },
+        {
+          "value": "00261i",
+          "label": "Platinum-sensitive recurrent disease: fallopian tube cancer."
+        },
+        {
+          "value": "00261j",
+          "label": "Metastatic breast carcinoma; off-label indication in Ireland."
+        },
+        {
+          "value": "00261-head-neck",
+          "label": "Concurrent chemoradiation for stage III–IV locally advanced head and neck squamous carcinoma when cisplatin is unsuitable; AUC 5."
+        }
+      ]
     }
   },
   "required_inputs": [],
@@ -1923,9 +1986,18 @@
         "when": {
           "all": [
             {
-              "field": "disease_context",
-              "operator": "==",
-              "value": "head_neck"
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
             },
             {
               "field": "target_auc",
@@ -1962,9 +2034,18 @@
         "when": {
           "all": [
             {
-              "field": "disease_context",
-              "operator": "==",
-              "value": "head_neck"
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
             },
             {
               "field": "head_neck_radiotherapy_confirmed",
@@ -1997,9 +2078,18 @@
         "when": {
           "all": [
             {
-              "field": "disease_context",
-              "operator": "==",
-              "value": "head_neck"
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
             },
             {
               "field": "cycle_number",
@@ -2314,6 +2404,227 @@
           "version": "2024-07-02",
           "checked_date": "2026-10-25",
           "interpretation_note": "Supplementary product safety precaution; distinct NCCP schedule/count rules remain the regimen-specific source."
+        }
+      },
+      {
+        "id": "HN46_CARBO_HN_CISPLATIN_SUITABILITY",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "head_neck_cisplatin_unsuitable",
+                  "operator": "missing"
+                },
+                {
+                  "field": "head_neck_cisplatin_unsuitable",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Confirm why cisplatin is inappropriate: this NCCP head-and-neck indication is specifically a carboplatin alternative when cisplatin is not appropriate.",
+          "recommendation": "Confirm why cisplatin is inappropriate: this NCCP head-and-neck indication is specifically a carboplatin alternative when cisplatin is not appropriate.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm why cisplatin is inappropriate: this NCCP head-and-neck indication is specifically a carboplatin alternative when cisplatin is not appropriate.",
+        "source": {
+          "document": "NCCP 00261 v7",
+          "url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf",
+          "page": 1,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_CARBO_HN_TARGET_AUC_MISSING",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
+            },
+            {
+              "field": "target_auc",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Confirm the actual prescribed AUC (source AUC 5) before head-and-neck treatment. Missing information does not establish the source schedule.",
+          "recommendation": "Confirm the actual prescribed AUC (source AUC 5) before head-and-neck treatment. Missing information does not establish the source schedule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm the actual prescribed AUC (source AUC 5) before head-and-neck treatment. Missing information does not establish the source schedule.",
+        "source": {
+          "document": "NCCP 00261 v7",
+          "url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf",
+          "page": "1–2",
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_CARBO_HN_CYCLE_NUMBER_MISSING",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
+            },
+            {
+              "field": "cycle_number",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Confirm the cycle number (source three cycles) before head-and-neck treatment. Missing information does not establish the source schedule.",
+          "recommendation": "Confirm the cycle number (source three cycles) before head-and-neck treatment. Missing information does not establish the source schedule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm the cycle number (source three cycles) before head-and-neck treatment. Missing information does not establish the source schedule.",
+        "source": {
+          "document": "NCCP 00261 v7",
+          "url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf",
+          "page": "1–2",
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_CARBO_HN_HEAD_NECK_RADIOTHERAPY_CONFIRMED_MISSING",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "indication_id",
+                  "operator": "==",
+                  "value": "00261-head-neck"
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "==",
+                  "value": "head_neck"
+                }
+              ]
+            },
+            {
+              "field": "head_neck_radiotherapy_confirmed",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Confirm the concurrent radiotherapy plan before head-and-neck treatment. Missing information does not establish the source schedule.",
+          "recommendation": "Confirm the concurrent radiotherapy plan before head-and-neck treatment. Missing information does not establish the source schedule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm the concurrent radiotherapy plan before head-and-neck treatment. Missing information does not establish the source schedule.",
+        "source": {
+          "document": "NCCP 00261 v7",
+          "url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf",
+          "page": "1–2",
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_CARBO_HN_CONTEXT_CONFLICT",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00261-head-neck"
+            },
+            {
+              "field": "disease_context",
+              "operator": "exists",
+              "value": null
+            },
+            {
+              "field": "disease_context",
+              "operator": "!=",
+              "value": "head_neck"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "The selected head-and-neck indication conflicts with the separately entered disease context. Reconcile them before assessing dose, radiotherapy and course length.",
+          "recommendation": "The selected head-and-neck indication conflicts with the separately entered disease context. Reconcile them before assessing dose, radiotherapy and course length.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "The selected head-and-neck indication conflicts with the separately entered disease context. Reconcile them before assessing dose, radiotherapy and course length.",
+        "source": {
+          "document": "NCCP 00261 v7",
+          "url": "https://healthservice.hse.ie/documents/6366/261_CARBOplatinAUC4-6_21days.pdf",
+          "page": 1,
+          "checked_date": "2026-11-09"
         }
       }
     ]

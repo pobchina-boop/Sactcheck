@@ -59,6 +59,9 @@ function temporaryRoot(t, options = {}) {
   const profile = route.includes('/') ? 'data/patient-knowledge-contexts/' + route + '.json' : 'data/patient-knowledge/' + route + '.json';
   t.after(() => fs.rmSync(root, {recursive:true, force:true}));
   writeFixture(root, 'package.json', JSON.stringify({version:'0.84.44'}));
+  // The presentation layer now has a version separate from the content batch.
+  // Preserve the original synthetic v44 rendering contract explicitly.
+  writeFixture(root, 'data/patient-presentation-v08431.json', JSON.stringify({default_visual_release:'0.84.44'}));
   // This synthetic wrapper fixture has no historical companion clauses. Supply
   // its explicit empty review; production still requires the frozen real plan.
   const audit = JSON.stringify({fixture:true, clauses:[]});

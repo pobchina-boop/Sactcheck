@@ -70,7 +70,7 @@
       "bladder",
       "renal"
     ],
-    "source_checked_date": "2026-10-29",
+    "source_checked_date": "2026-11-09",
     "regimen_card": {
       "contexts": [
         {
@@ -258,7 +258,7 @@
         "basis": "Audited companion regimen or product information; NCCP differences remain explicit"
       }
     ],
-    "clinical_audit_release": "0.84.40",
+    "clinical_audit_release": "0.84.46",
     "retrospective_audit_v08440": {
       "source_retrieved": "2026-11-06",
       "source_pdf_sha256": "212aecf4eaa6ba864f96392cbc845dffbeb3e9e1a9c87b43e9fdc7d519c5903d",
@@ -1543,6 +1543,57 @@
       "input_role": "decision",
       "ui_section": "clinical",
       "help": "Relevant to restart after immune toxicity. Physiological hormone replacement alone is not immunosuppressive treatment."
+    },
+    "nivo_prior_permanent_stop": {
+      "label": "Prior event required permanent nivolumab discontinuation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "nivo_consultant_restart_approved": {
+      "label": "Consultant has explicitly approved restart after reviewing source recovery criteria and history",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "hnscc_histology_sites_confirmed": {
+      "label": "Confirm histologically proven squamous carcinoma of the oral cavity, pharynx or larynx.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "hnscc_no_curative_local_option": {
+      "label": "Confirm recurrent/metastatic disease is not amenable to local treatment with curative intent.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "hnscc_progressed_after_platinum": {
+      "label": "Confirm progression or recurrence after platinum-based treatment in the source-listed setting.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "hnscc_months_platinum_to_progression": {
+      "label": "Months from last platinum dose to tumour progression or recurrence",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "min": 0,
+      "step": 0.01,
+      "unit": "months"
     }
   },
   "required_inputs": [],
@@ -4488,6 +4539,427 @@
           "page": 6,
           "checked_date": "2026-11-06",
           "table": "Dose modifications"
+        }
+      },
+      {
+        "id": "HN46_NIVO_PRIOR_PERMANENT_STOP",
+        "priority": 100,
+        "when": {
+          "field": "nivo_prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "A documented prior event requiring permanent nivolumab discontinuation prevents routine restart even after current symptoms or grades improve.",
+          "recommendation": "A documented prior event requiring permanent nivolumab discontinuation prevents routine restart even after current symptoms or grades improve.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "A documented prior event requiring permanent nivolumab discontinuation prevents routine restart even after current symptoms or grades improve.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": "7–8",
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_NIVO_RESTART_HISTORY_UNASSESSED",
+        "priority": 90,
+        "when": {
+          "all": [
+            {
+              "field": "restart_assessment_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "nivo_prior_permanent_stop",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Before considering restart, establish whether a previous event required permanent discontinuation. Current recovery does not erase the previous toxicity decision.",
+          "recommendation": "Before considering restart, establish whether a previous event required permanent discontinuation. Current recovery does not erase the previous toxicity decision.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Before considering restart, establish whether a previous event required permanent discontinuation. Current recovery does not erase the previous toxicity decision.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": "6–8",
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_NIVO_RESTART_APPROVAL",
+        "priority": 90,
+        "when": {
+          "all": [
+            {
+              "field": "restart_assessment_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "nivo_consultant_restart_approved",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nivo_consultant_restart_approved",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Continue to withhold until the consultant has reviewed the event-specific recovery criteria, prior toxicity history and immunosuppression and approved restart. An improved grade alone does not authorise treatment.",
+          "recommendation": "Continue to withhold until the consultant has reviewed the event-specific recovery criteria, prior toxicity history and immunosuppression and approved restart. An improved grade alone does not authorise treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Continue to withhold until the consultant has reviewed the event-specific recovery criteria, prior toxicity history and immunosuppression and approved restart. An improved grade alone does not authorise treatment.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": "6–8",
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_NIVO_RESTART_MEDICINES_UNASSESSED",
+        "priority": 90,
+        "when": {
+          "all": [
+            {
+              "field": "restart_assessment_requested",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "systemic_steroids_mg_pred",
+                  "operator": "missing"
+                },
+                {
+                  "field": "other_immunosuppressive_treatment",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Confirm the current systemic steroid dose and whether another immunosuppressive treatment is being received before restart. A blank medicine history is not evidence that immunosuppression has stopped.",
+          "recommendation": "Confirm the current systemic steroid dose and whether another immunosuppressive treatment is being received before restart. A blank medicine history is not evidence that immunosuppression has stopped.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm the current systemic steroid dose and whether another immunosuppressive treatment is being received before restart. A blank medicine history is not evidence that immunosuppression has stopped.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 6,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_ADULT_PATIENT",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "any": [
+                {
+                  "field": "adult_patient",
+                  "operator": "missing"
+                },
+                {
+                  "field": "adult_patient",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Confirm adulthood for this HNSCC indication. Missing or negative confirmation does not establish source eligibility.",
+          "recommendation": "Confirm adulthood for this HNSCC indication. Missing or negative confirmation does not establish source eligibility.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm adulthood for this HNSCC indication. Missing or negative confirmation does not establish source eligibility.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_HNSCC_HISTOLOGY_SITES_CONFIRMED",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "any": [
+                {
+                  "field": "hnscc_histology_sites_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hnscc_histology_sites_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Confirm histologically proven squamous carcinoma of the oral cavity, pharynx or larynx. Missing or negative confirmation does not establish source eligibility.",
+          "recommendation": "Confirm histologically proven squamous carcinoma of the oral cavity, pharynx or larynx. Missing or negative confirmation does not establish source eligibility.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm histologically proven squamous carcinoma of the oral cavity, pharynx or larynx. Missing or negative confirmation does not establish source eligibility.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_HNSCC_NO_CURATIVE_LOCAL_OPTION",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "any": [
+                {
+                  "field": "hnscc_no_curative_local_option",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hnscc_no_curative_local_option",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Confirm recurrent/metastatic disease is not amenable to local treatment with curative intent. Missing or negative confirmation does not establish source eligibility.",
+          "recommendation": "Confirm recurrent/metastatic disease is not amenable to local treatment with curative intent. Missing or negative confirmation does not establish source eligibility.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm recurrent/metastatic disease is not amenable to local treatment with curative intent. Missing or negative confirmation does not establish source eligibility.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_HNSCC_PROGRESSED_AFTER_PLATINUM",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "any": [
+                {
+                  "field": "hnscc_progressed_after_platinum",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hnscc_progressed_after_platinum",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Confirm progression or recurrence after platinum-based treatment in the source-listed setting. Missing or negative confirmation does not establish source eligibility.",
+          "recommendation": "Confirm progression or recurrence after platinum-based treatment in the source-listed setting. Missing or negative confirmation does not establish source eligibility.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Confirm progression or recurrence after platinum-based treatment in the source-listed setting. Missing or negative confirmation does not establish source eligibility.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_HNSCC_INTERVAL_MISSING",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "field": "hnscc_months_platinum_to_progression",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "Record the interval from the last platinum dose to recurrence/progression; NCCP eligibility specifies within six months. This is not time from the last platinum dose to today.",
+          "recommendation": "Record the interval from the last platinum dose to recurrence/progression; NCCP eligibility specifies within six months. This is not time from the last platinum dose to today.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "Record the interval from the last platinum dose to recurrence/progression; NCCP eligibility specifies within six months. This is not time from the last platinum dose to today.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_HNSCC_INTERVAL_LATE",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "field": "hnscc_months_platinum_to_progression",
+              "operator": ">",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "A progression/recurrence interval longer than six months is outside the explicit NCCP HNSCC eligibility criterion. Reconcile the treatment indication with the consultant.",
+          "recommendation": "A progression/recurrence interval longer than six months is outside the explicit NCCP HNSCC eligibility criterion. Reconcile the treatment indication with the consultant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "A progression/recurrence interval longer than six months is outside the explicit NCCP HNSCC eligibility criterion. Reconcile the treatment indication with the consultant.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
+        }
+      },
+      {
+        "id": "HN46_HNSCC_INTERVAL_BOUNDARY",
+        "priority": 70,
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00483-source-d"
+            },
+            {
+              "field": "hnscc_months_platinum_to_progression",
+              "operator": "==",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "nivolumab"
+          ],
+          "message": "The source says within six months without defining an exact-date boundary. Confirm the actual dates and consultant interpretation; do not infer eligibility from a rounded six-month entry.",
+          "recommendation": "The source says within six months without defining an exact-date boundary. Confirm the actual dates and consultant interpretation; do not infer eligibility from a rounded six-month entry.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true
+        },
+        "explanation": "The source says within six months without defining an exact-date boundary. Confirm the actual dates and consultant interpretation; do not infer eligibility from a rounded six-month entry.",
+        "source": {
+          "document": "NCCP 00483 v13a",
+          "url": "https://healthservice.hse.ie/documents/6498/483_Nivolumab_14-day_.pdf",
+          "page": 4,
+          "checked_date": "2026-11-09"
         }
       }
     ]

@@ -1,5 +1,13 @@
 # SACTCheck development and release workflow
 
+## Batch size and handbook scope — user instruction, 9 November 2026
+
+- Return to five new full service suites plus five retrospective audits per batch. This supersedes the earlier flexible-size preference; explain indication/context counts separately from new protocol counts.
+- Include the complete current-standard patient handbook for every affected suite, together with the clinical decision tool, knowledge, consent, monitoring, support, portal, three-page pack, anatomical illustrations, wallet and QR checks.
+- Keep handbook generation scoped to the affected suites. Do not turn an ordinary 5+5 batch into another whole-catalogue presentation migration or redesign.
+- Preserve the approved v0.84.45 presentation and all unique clinical content. Current-source threshold audits and source-boundary regression checks remain required; batch size does not reduce validation.
+- Deliver the validated update manually with a ZIP and copyable GitHub commit summary and description. Do not commit or publish automatically.
+
 ## Current delivery preference — manual ZIP
 
 - The user has returned to the original manual delivery workflow. Prepare and validate changes in the existing checkout, then provide a ZIP containing the update files, a copyable GitHub commit summary and description, and concise audit/review evidence.

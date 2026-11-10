@@ -46,10 +46,10 @@ for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
     if(!exists(rel))report.critical.push(`Missing canonical patient asset ${rel}`);
     else {
       const fixture=protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
-      const migration45=require('../tests/helpers/retrospective-v08445.cjs');
-      if(!fixture&&!migration45.NEW_ROUTES.includes(code))report.critical.push(`Unrecorded patient route: ${code}`);
+      const migration=[require('../tests/helpers/retrospective-v08445.cjs'),require('../tests/helpers/retrospective-v08446.cjs')].find(m=>m.NEW_ROUTES.includes(code));
+      if(!fixture&&!migration)report.critical.push(`Unrecorded patient route: ${code}`);
       else {
-        const expected=fixture?presentationMigration.expectedHash(rel,fixture.sha256):migration45.expectedHash(rel,null);
+        const expected=fixture?presentationMigration.expectedHash(rel,fixture.sha256):migration.expectedHash(rel,null);
         if(expected!==sha(rel))report.critical.push(`Protected patient asset drift: ${rel}`);
       }
     }

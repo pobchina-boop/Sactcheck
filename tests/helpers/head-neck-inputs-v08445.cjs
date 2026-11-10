@@ -3,6 +3,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const root=path.resolve(__dirname,'../..'),codes=['00385','00387','00207','00705','00706','00455','00558','00328','00733','00456'];
 const read=f=>JSON.parse(fs.readFileSync(path.join(root,f))),sha=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');
 function validate(p){
+ const current46=require('./head-neck-inputs-v08446.cjs').validate(p);if(current46)return current46;
  const code=p.metadata?.nccp_regimen_code;if(!codes.includes(code))return null;
  const all=read('validation/head-neck-v08445/clinical-migration.json');assert.equal(all.release,'0.84.45');assert.deepEqual(all.codes,codes);const row=all.records[code];assert(row);
  assert.equal(sha(row.protocol_path),row.protocol_sha256,'Exact audited current protocol '+code);assert.deepEqual(p,read(row.protocol_path),'Test object differs from source-audited protocol');

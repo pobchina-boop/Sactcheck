@@ -3,6 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process');
 const m=require('./helpers/retrospective-v08444.cjs');
 const latest=require('./helpers/retrospective-v08445.cjs');
+const successor=require('./helpers/retrospective-v08446.cjs');
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const file='patient/00642/knowledge.pdf',old=m.BASE_FILES.get(file),after=sha('An independently reviewed revised document');
 const fixture=(files={[file]:{before:old.sha256,before_bytes:old.bytes,after,after_bytes:43}})=>({schema_version:1,release:'0.84.44',base_release:'0.84.43',base_commit:m.BASE_COMMIT,baseline_tree_sha:m.BASE_TREE,baseline_manifest_sha256:m.BASELINE_MANIFEST_SHA256,baseline_archive_sha256:m.BASELINE_ARCHIVE_SHA256,route_set_sha256:m.ROUTE_SET_SHA256,routes:m.ROUTES,status:'recorded',files});
@@ -26,6 +27,7 @@ test('v44 allowed scope excludes clinician rules, anatomy artwork, wallet and QR
 test('v44 exact current bytes follow the pinned v43 package; every protected asset remains accounted for',()=>{
  const record=JSON.parse(fs.readFileSync(m.RECORD,'utf8')),migrate=m.createMigration(record);
  const latestRecord=JSON.parse(fs.readFileSync(latest.RECORD,'utf8'));latest.createMigration(latestRecord);
+ const successorRecord=JSON.parse(fs.readFileSync(successor.RECORD,'utf8'));successor.createMigration(successorRecord);
  assert.equal(cp.execFileSync('git',['rev-parse',m.BASE_COMMIT+'^{tree}'],{cwd:m.ROOT,encoding:'utf8'}).trim(),m.BASE_TREE);
  const historical=JSON.parse(fs.readFileSync(path.join(m.ROOT,'validation/patient-design-v08443/asset-migrations.json'),'utf8'));
  assert.equal(sha(fs.readFileSync(path.join(m.ROOT,'validation/patient-design-v08443/asset-migrations.json'))),m.BASE_FILES.get('validation/patient-design-v08443/asset-migrations.json').sha256,'Historical v43 approvals are immutable');
@@ -54,7 +56,7 @@ test('v44 exact current bytes follow the pinned v43 package; every protected ass
    if(entry.isDirectory())checkMembership(f);
    else{
     assert(entry.isFile(),f+' must be a regular protected asset');
-    assert(m.BASE_FILES.has(f)||Object.hasOwn(record.files,f)||Object.hasOwn(latestRecord.files,f),f+' is an unrecorded addition to a protected directory');
+    assert(m.BASE_FILES.has(f)||Object.hasOwn(record.files,f)||Object.hasOwn(latestRecord.files,f)||Object.hasOwn(successorRecord.files,f),f+' is an unrecorded addition to a protected directory');
    }
   }
  }

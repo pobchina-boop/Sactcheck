@@ -2,6 +2,12 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),test=require('node:test');
 const Chronology=require('../tools/cycle-chronology.cjs');
 const {refreshKnowledge,refreshSupport,planRefresh,applyRefresh,SUPPORT_HINT,SUPPORT_WRAPPER}=require('../tools/refresh-patient-ui.cjs');
+const SUPPORT_ASSET_RELEASE='0.84.45';
+test('support cache identity remains pinned to the unchanged published UI asset',()=>{
+ const file='assets/patient/phase-support-v0838.js';
+ const baseline=require('./helpers/retrospective-v08446.cjs').readFrozen(file);
+ assert(fs.readFileSync(path.join(__dirname,'..',file)).equals(baseline),'A changed support UI asset needs an explicitly reviewed cache-key update');
+});
 const profile={code:'00555',cycle_days:14,schedule_summary:'Every 14 days; review before treatment.',timeline:[{id:'pump',label:'Fluorouracil pump',start:1,end:3,style:'treatment',text:'48 hours; disconnect as arranged'}],sources:[],chronology_notes:[{title:'Variation',text:'Timing varies for each person.'}],timeline_note:'Broad possible timing.',safety_note:'There are no guaranteed safe days. Call the team when unwell.'};
 const oldChart='<div id="wikiCycleChronology" class="wiki-cycle-map"><h3>Existing chart</h3><div><div>46-hour pump</div></div><!-- </div> --></div>';
 const table='<table class="prescription"><thead><tr><th>Medicine</th><th>Dose / route</th><th>When</th></tr></thead><tbody><tr><td>Ondansetron &amp; other medicines</td><td>8 mg orally</td><td>On treatment day<small>Review QT, constipation and hepatic dosing; no automatic repeat.</small></td></tr></tbody></table>';
@@ -66,11 +72,11 @@ test('standalone support plans retain every authored main-content byte and gain 
  assert.equal(result.scriptView,'single-plan');
  assert.ok(result.html.includes('<main data-support-single-phase="true">'));
  assert.equal(result.html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1],original.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1]);
- assert.ok(result.html.includes(`src="../../assets/patient/phase-support-v0838.js?v=${require('../package.json').version}"`));
+ assert.ok(result.html.includes(`src="../../assets/patient/phase-support-v0838.js?v=${SUPPORT_ASSET_RELEASE}"`));
  assert.equal((result.html.match(/phase-support-v0838\.js/g)||[]).length,1);
  assert.equal(refreshSupport(result.html,'patient/00253/supportive-care.html').html,result.html);
  const nested=refreshSupport(original,'patient/00253/example/supportive-care.html');
- assert.ok(nested.html.includes(`src="../../../assets/patient/phase-support-v0838.js?v=${require('../package.json').version}"`));
+ assert.ok(nested.html.includes(`src="../../../assets/patient/phase-support-v0838.js?v=${SUPPORT_ASSET_RELEASE}"`));
 });
 
 test('phase selectors keep their complete authored sections while only the shared script cache key changes',()=>{

@@ -13,7 +13,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.45';
+  const RELEASE='0.84.46';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
@@ -227,13 +227,16 @@
   const COLORECTAL_CONTEXTS=Object.freeze({'00455':{lung:'',colorectal:'colorectal/'},'00558':{lung:'',colorectal:'colorectal/'},'00212':{breast:'',colorectal:'colorectal/'},'00214':{lung:'',colorectal:'colorectal/'},'00215':{breast:'',lung:'lung/',colorectal:'colorectal/'}});
   const MELANOMA_CODES=['00455','00558','00483','00484'];
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
-  const CONTEXT_CODES=Object.freeze(['00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const HEAD_NECK46_CODES=Object.freeze(['00261','00483','00484','00455','00558']);
+  const CONTEXT_CODES=Object.freeze(['00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(HEAD_NECK46_CODES.includes(code)&&['head_neck','head and neck','head/neck'].includes(selected))return 'head_neck';
+    if(code==='00261')return selected==='breast'?'breast':'';
     if(code==='00385')return ['head_neck','nasopharyngeal'].includes(selected)?selected:'';
     if(code==='00207')return ['head_neck','head and neck','head/neck','head_neck_squamous_cell'].includes(selected)?'head_neck':(['gastrointestinal','colorectal'].includes(selected)?'colorectal':'');
     if(code==='00535')return ['merkel_cell','skin','skin/melanoma','skin_melanoma'].includes(selected)?'merkel_cell':'';
@@ -264,7 +267,8 @@
   }
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
-    if(MELANOMA_CODES.includes(d.code))return [d.code,...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[])];
+    if(d.code==='00261')return [d.code,d.code+'/head_neck'];
+    if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[])];
     if(d.code==='00385')return ['00385/head_neck','00385/nasopharyngeal'];
     if(d.code==='00207')return ['00207','00207/head_neck'];
     if(d.code==='00535')return [d.code+'/merkel_cell'];
@@ -281,6 +285,8 @@
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      if(HEAD_NECK46_CODES.includes(def.code)&&selected==='head_neck')return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
+      if(def.code==='00261')return `patient/${def.code}/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00385')return `patient/${def.code}/${selected}/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00207')return `patient/${def.code}/${selected==='head_neck'?'head_neck/':''}${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00535')return `patient/${def.code}/merkel_cell/${CONTEXT_ASSETS[asset]}`;

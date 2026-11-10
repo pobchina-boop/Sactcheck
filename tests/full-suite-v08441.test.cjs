@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('assert/strict'),fs=require('fs'),path=require('path'),crypto=require('crypto'),vm=require('vm'),R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f),'utf8'),json=f=>JSON.parse(read(f)),sha=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(R,f))).digest('hex');
 const S=json('validation/skin-melanoma-v08441/scope.json'),P=json('data/patient-presentation-v08431.json'),A=require('../js/patient-asset-registry-v0810.js'),L=require('../js/library-scope-v08441.js'),idx=json('protocols/index.json').protocols,base=json('validation/skin-melanoma-v08441/baseline-v08440-file-hashes.json'),KB=json('data/regimen-knowledge-base-v08441-addendum.json'),ER=require('../js/treatment-evidence-v08413.js');
-assert(['0.84.41','0.84.42','0.84.43','0.84.44','0.84.45'].includes(json('package.json').version));assert.equal(A.release,json('package.json').version);assert.equal(S.presentation_routes.length,9);assert.equal(S.codes.length,4);assert.equal(S.retrospective_codes.length,5);assert.equal(idx.length,377);
+assert(['0.84.41','0.84.42','0.84.43','0.84.44','0.84.45','0.84.46'].includes(json('package.json').version));assert.equal(A.release,json('package.json').version);assert.equal(S.presentation_routes.length,9);assert.equal(S.codes.length,4);assert.equal(S.retrospective_codes.length,5);assert.equal(idx.length,377);
 for(const route of S.presentation_routes){
  const [code,ctx]=route.split('/'),d=json(P.routes[route]),p=json(idx.find(x=>x.path.includes('/'+code+'-')).path);assert.equal(d.protocol_id,p.protocol_id);assert.equal(d.protocol_version,p.metadata.nccp_version);assert.equal(d.patient_context,ctx);assert.equal(d.patient_summary.template_version,'0.84.41');assert.equal(d.agents.length,1);assert.equal(d.anatomy.length,8);assert(d.chapters.length>=8);assert(!JSON.stringify(d).includes('ipilimumab'));assert(!JSON.stringify(d).includes('before cycle 8'));assert(!JSON.stringify(d).includes('PD-L1 TPS ≥50'));
  assert.equal(A.relativePath(code,'knowledge',ctx),'patient/'+route+'/knowledge.html');assert(A.relativePath(code,'portal','skin').includes('scope.html'));assert(A.bundleRoutes(code).includes(route));
@@ -14,7 +14,8 @@ for(const route of S.presentation_routes){
  if(ctx==='melanoma_perioperative'){assert.equal(code,'00455');assert.equal(d.phases.length,3);assert.equal(d.patient_summary.card_cycle_count,3);assert(read('patient/'+route+'/sactcard.html').includes('15 postoperative doses in passport'));}else assert.equal(d.patient_summary.card_cycle_count,null);
  if(ctx==='melanoma_adjuvant')assert(d.schedule_summary.includes('12 months'));
  if(code==='00484')assert(d.administration_text.includes('over 60 minutes'));
- assert(d.monitoring_summary.includes(['00455','00558'].includes(code)?'every 3–6 weeks':'once a month'));
+ // NCCP00484v13a p6 specifies TFT before each cycle;00483 remains monthly.
+ assert(d.monitoring_summary.includes(['00455','00558'].includes(code)?'every 3–6 weeks':code==='00484'?'before each cycle':'once a month'));
 }
 for(const code of S.retrospective_codes){const d=json(P.routes[code]);assert.equal(d.patient_summary.template_version,'0.84.41');assert(d.anatomy.length>=7);assert(!JSON.stringify(d).includes('melanoma_prior_advanced'));}
 for(const code of S.codes){assert.equal(A.relativePath(code,'portal','lung'),'patient/'+code+'/');if(['00455','00558'].includes(code))assert.equal(A.relativePath(code,'portal','colorectal'),'patient/'+code+'/colorectal/');}
