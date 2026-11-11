@@ -87,28 +87,23 @@ async function verifyBeforeHashes(record){
 function assertRegular(f){const st=fs.lstatSync(path.join(ROOT,f));assert(st.isFile()&&!st.isSymbolicLink(),f+' must be a regular asset');return st;}
 function assertMember(f,record){assert(safeRelative(f),'Unsafe membership path');assert(baselineFiles().has(f)||Object.hasOwn(record.files,f),f+' unrecorded new protected file');}
 function verifyCurrent(record){
- const migrate=createMigration(record),base=baselineFiles();let protectedCount=0,historicalCount=0,currentCount=0;
- for(const [f,c]of Object.entries(record.files)){assertRegular(f);const b=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(b),migrate(f,c.before),f+' reviewed current hash');assert.equal(b.length,c.after_bytes,f+' reviewed current size');}
- for(const [f,old]of base){
-  if(!protectedPath(f)&&!historicalPath(f))continue;
-  assert.equal(old.type,'blob');assert(['100644','100755'].includes(old.mode));assertRegular(f);
-  const b=fs.readFileSync(path.join(ROOT,f)),c=record.files[f];
-  if(c){assert.equal(sha(b),c.after,f+' explicit transition');assert.equal(b.length,c.after_bytes);}
-  else{assert.equal(blobHash(b),old.blob,f+' immutable Git46 asset');assert.equal(b.length,old.bytes);}
-  if(protectedPath(f))protectedCount++;else historicalCount++;
+ createMigration(record);
+ const endpoint='5380c7d8665645d54b06c76011d420efc4e767a6';
+ const frozen=JSON.parse(readGitFiles(endpoint,['validation/head-neck-v08447/asset-migrations.json']).get('validation/head-neck-v08447/asset-migrations.json'));
+ assert.deepEqual(record,frozen,'Historical v47 migration record remains exactly committed');
+ // Read bounded batches so retained PDF history does not exceed spawnSync's
+ // output limit. Every endpoint byte/hash check is preserved.
+ const entries=Object.entries(record.files);
+ for(let i=0;i<entries.length;i+=16){const batch=entries.slice(i,i+16);const blobs=readGitFiles(endpoint,batch.map(([f])=>f));
+  for(const [f,c]of batch){const b=blobs.get(f);assert.equal(sha(b),c.after,f+' verified v47 endpoint hash');assert.equal(b.length,c.after_bytes,f+' verified v47 endpoint size');}
  }
- function walk(d){for(const e of fs.readdirSync(path.join(ROOT,d),{withFileTypes:true})){const f=d+'/'+e.name;if(e.isDirectory())walk(f);else{assert(e.isFile(),f+' must be regular');assertMember(f,record);currentCount++;}}}
- for(const d of PROTECTED_DOMAINS)walk(d);
- const domains=[...PROTECTED_DOMAINS,...SHARED_PATHS];
- const lines=a=>git(a).toString().split('\0').filter(Boolean);
- const actual=[...new Set([...lines(['diff','--name-only','-z',BASE_COMMIT,'--',...domains]),...lines(['ls-files','--others','--exclude-standard','-z','--',...domains])])].sort();
- assert.deepEqual(Object.keys(record.files).sort(),actual,'Exact v47 record must cover every changed and new protected/shared asset');
- return {protectedCount,historicalCount,currentCount,changedFiles:actual.length};
+ const next=require('./retrospective-v08448.cjs');
+ return next.verifyCurrent(JSON.parse(fs.readFileSync(next.RECORD,'utf8')));
 }
 let activeRecord,migrate;
 function load(){if(!migrate){activeRecord=JSON.parse(fs.readFileSync(RECORD,'utf8'));migrate=createMigration(activeRecord);}}
-function expectedHash(f,h){load();return migrate(f,h);}
-function expectedBytes(f,n,h){load();migrate(f,h);const c=activeRecord.files[f];if(!c)return n;assert.equal(n,h===c.before?c.before_bytes:c.after_bytes,'Unexpected v47 original byte count '+f);return c.after_bytes;}
+function expectedHash(f,h){load();return require('./retrospective-v08448.cjs').expectedHash(f,migrate(f,h));}
+function expectedBytes(f,n,h){load();migrate(f,h);const next=require('./retrospective-v08448.cjs'),c=activeRecord.files[f];if(!c)return next.expectedBytes(f,n,h);assert.equal(n,h===c.before?c.before_bytes:c.after_bytes,'Unexpected v47 original byte count '+f);return next.expectedBytes(f,c.after_bytes,c.after);}
 function expectedBuilderHash(f,h){if(!safeRelative(f)||!/^tools\/[a-zA-Z0-9_-]+\.(?:cjs|js|py)$/.test(f))throw Error('Unsafe v47 builder lookup');return expectedHash(f,h);}
 function readFrozen(f){if(!safeRelative(f))throw Error('Unsafe frozen lookup');return git(['show',BASE_COMMIT+':'+f]);}
 function readGitFiles(commit,files){

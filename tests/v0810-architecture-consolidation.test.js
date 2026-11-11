@@ -73,7 +73,7 @@ for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
     const rel=`patient/${code}/${file}`;
     assert.ok(fs.existsSync(path.join(root,rel)),`${rel} missing`);
     const expected=protectedManifest.assets[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
-    if(!expected){const migrations=[require('./helpers/retrospective-v08445.cjs'),require('./helpers/retrospective-v08446.cjs'),require('./helpers/retrospective-v08447.cjs')];const next=migrations.find(m=>m.NEW_ROUTES.includes(code));assert(next,rel+' unrecorded new route');assert.strictEqual(sha(rel),next.expectedHash(rel,null));assert.strictEqual(fs.statSync(path.join(root,rel)).size,next.expectedBytes(rel,null,null));continue;}
+    if(!expected){const migrations=[require('./helpers/retrospective-v08445.cjs'),require('./helpers/retrospective-v08446.cjs'),require('./helpers/retrospective-v08447.cjs'),require('./helpers/retrospective-v08448.cjs')];const next=migrations.find(m=>m.NEW_ROUTES.includes(code));assert(next,rel+' unrecorded new route');assert.strictEqual(sha(rel),next.expectedHash(rel,null));assert.strictEqual(fs.statSync(path.join(root,rel)).size,next.expectedBytes(rel,null,null));continue;}
     assert.strictEqual(sha(rel),presentationMigration.expectedHash(rel,expected.sha256),`${rel} changed without an exact reviewed presentation migration`);
     assert.strictEqual(fs.statSync(path.join(root,rel)).size,presentationMigration.expectedBytes(rel,expected.bytes,expected.sha256),`${rel} size drift`);
   }

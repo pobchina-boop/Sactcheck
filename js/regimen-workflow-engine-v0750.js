@@ -359,7 +359,8 @@
   }
 
   function supportPhaseChoices(protocol,data){
-    const entry=data?.supportive_phase_selectors?.[nccpCodeFor(protocol)];
+    const code=nccpCodeFor(protocol),context=patientAssets()?.contextFor?.(protocol)||'';
+    const entry=data?.context_supportive_phase_selectors?.[code]?.[context]||data?.supportive_phase_selectors?.[code];
     // Exact protocol binding: an assessment-profile alias is not a prescribing phase.
     return entry?.protocol_id===protocol?.protocol_id && String(entry.source_version)===String(protocol?.metadata?.nccp_version)?entry.phases:[];
   }
@@ -377,8 +378,9 @@
     if(phase){
       supportive=planWithSources(phase.plan_id,data.antiemetic_plans[phase.plan_id],data);
       // Phase scripts use the national schedule, not a conflicting legacy local proforma.
-      supportive={...supportive,local_prescription_items:[],localPrescriptionSource:null,
-        local_adjunct_note:"",warnings:[...(supportive.warnings||[]),...phase.notes]};
+      const retainLocal=String(phase.plan_id).startsWith('hn48_')&&supportive.preserve_local_adjunct_reference===true;
+      supportive={...supportive,local_prescription_items:retainLocal?supportive.local_prescription_items:[],localPrescriptionSource:retainLocal?supportive.localPrescriptionSource:null,
+        local_adjunct_note:retainLocal?supportive.local_adjunct_note:"",warnings:[...(supportive.warnings||[]),...phase.notes]};
       riskRecord={...riskRecord,level:supportive.risk_level,label:supportive.label,phaseResolved:true,phaseKey:phase.id};
     }
     const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);

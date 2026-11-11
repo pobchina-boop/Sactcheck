@@ -8,5 +8,5 @@ const prior=require(before).codes;assert.equal(prior.length,174);
 const added=['00320','00327','00505','00642'];assert(added.every(c=>!prior.includes(c)));
 const expected=[...prior,...added].sort();
 function registry(codes){const next=require('./neuro-suite-registration-v08438.cjs');next.priorRegistry(expected);next.registry(codes);}
-function profiles(names){registry(names.map(n=>n.replace(/\.json$/,'')));}
+function profiles(names){const codes=names.map(n=>n.replace(/\.json$/,''));assert(!codes.includes('00419'),'00419 has a context-only profile');const context=JSON.parse(fs.readFileSync(path.join(__dirname,'../../data/patient-knowledge-contexts/00419/head_neck.json')));assert.equal(context.code,'00419');assert.equal(context.patient_context,'head_neck');registry([...codes,'00419']);}
 module.exports={registry,profiles};

@@ -1,0 +1,54 @@
+{
+  "protocol": "00418",
+  "scope": "replace rule message/explanation/source provenance only; preserve action, condition and dose history",
+  "replacement_rule": {
+    "id": "HN47_CARBO_20_30",
+    "priority": 10,
+    "when": {
+      "all": [
+        {
+          "all": [
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": ">",
+              "value": 20
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<=",
+              "value": 30
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing",
+              "value": true
+            },
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            }
+          ]
+        }
+      ]
+    },
+    "action": {
+      "type": "consultant_review",
+      "components": [
+        "carboplatin"
+      ],
+      "message": "GFR above 20 through 30 mL/min: obtain Consultant and pharmacy review before carboplatin. This conservative review band is an authored safety policy; NCCP 00418 itself specifies no 30 mL/min cutoff, but does state increased marrow toxicity risk below 60 and no administration at or below 20."
+    },
+    "source": {
+      "document": "NCCP 00418 v7",
+      "page": "4",
+      "url": "https://healthservice.hse.ie/documents/6976/418_Cetux_Carbo5-FU.pdf",
+      "implementation_note": "The >20–30 review band is authored safety policy, not a threshold in NCCP00418. The cited p4 supports ≤20 do-not-administer and<60 myelosuppression risk. Independent local clinical/pharmacy validation remains pending."
+    },
+    "explanation": "GFR above 20 through 30 mL/min: obtain Consultant and pharmacy review before carboplatin. This conservative review band is an authored safety policy; NCCP 00418 itself specifies no 30 mL/min cutoff, but does state increased marrow toxicity risk below 60 and no administration at or below 20."
+  }
+}

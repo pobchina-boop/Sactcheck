@@ -1,0 +1,3180 @@
+{
+  "status": "integrated_source_tests",
+  "tested_at": "2026-11-10T23:03:12.284Z",
+  "scope": "Integrated protocol JSON plus existing deterministic engine and raw-laboratory adapters; no browser/CI/clinical authorisation.",
+  "passed": 181,
+  "failed": 0,
+  "cases": [
+    {
+      "code": "00315",
+      "name": "Empty assessment cannot authorise treatment",
+      "input": {},
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [],
+      "action": "incomplete",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ECOG2 outside0–1 eligibility",
+      "input": {
+        "ecog": 2
+      },
+      "expected_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ECOG1 has no performance restriction",
+      "input": {
+        "ecog": 1
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Pregnancy exclusion",
+      "input": {
+        "pregnancy": true
+      },
+      "expected_rule_ids": [
+        "PREGNANCY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PREGNANCY"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Lactation exclusion",
+      "input": {
+        "breastfeeding": true
+      },
+      "expected_rule_ids": [
+        "BREASTFEEDING"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BREASTFEEDING"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Baseline neuropathy2 excluded",
+      "input": {
+        "pre_existing_neuropathy_grade": 2
+      },
+      "expected_rule_ids": [
+        "BASELINE_NEUROPATHY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_NEUROPATHY"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Baseline ANC1.5 does not meet >1.5",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "anc": 1.5
+      },
+      "expected_rule_ids": [
+        "BASELINE_ANC"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_ANC"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ANC1.49 requires delay independently",
+      "input": {
+        "anc": 1.49
+      },
+      "expected_rule_ids": [
+        "ANC_LOW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ANC_LOW"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Platelets99.9 low",
+      "input": {
+        "platelets": 99.9
+      },
+      "expected_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Partial DPD no invented fixed dose",
+      "input": {
+        "dpd_status": "partial"
+      },
+      "expected_rule_ids": [
+        "DPD_PARTIAL"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_PARTIAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Complete DPD blocks FU only",
+      "input": {
+        "dpd_status": "complete"
+      },
+      "expected_rule_ids": [
+        "DPD_COMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_COMPLETE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Before first FU unresolved DPD",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "dpd_status": "unknown"
+      },
+      "expected_rule_ids": [
+        "DPD_TESTING_INCOMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_TESTING_INCOMPLETE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Renal uracil phenotype caution",
+      "input": {
+        "renal_impairment_severity": "moderate",
+        "dpd_test_method": "phenotype"
+      },
+      "expected_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Renal genotype is not uracil phenotype",
+      "input": {
+        "renal_impairment_severity": "moderate",
+        "dpd_test_method": "genotype"
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "actual_rule_ids": [
+        "PARTIAL_RENAL_IMPAIRMENT_SEVERITY_CONTEXT_REQUIRED"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl59.5 source interval gap",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 59.5
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_GAP_59"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_GAP_59"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Current grade2 mucositis alone has no imported table cutoff",
+      "input": {
+        "mucositis_grade": 2
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "5FU_MUC_G2",
+        "MUCOSITIS_ACTIVE",
+        "MUCOSITIS_ACTIVE_REVIEW"
+      ],
+      "actual_rule_ids": [
+        "PARTIAL_MUCOSITIS_GRADE_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Persistent FU stop survives recovered mucositis",
+      "input": {
+        "mucositis_grade": 0,
+        "fluorouracil_permanently_stopped_for_mucositis": true
+      },
+      "expected_rule_ids": [
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "PARTIAL_MUCOSITIS_GRADE_CONTEXT_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Second grade4 diarrhoea stops treatment",
+      "input": {
+        "diarrhoea_worst_grade": 4,
+        "diarrhoea_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G4_O2"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G4_O2",
+        "DIARRHOEA_HISTORY_REQUIRED"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Second grade3 mucositis stops FU permanently",
+      "input": {
+        "mucositis_worst_grade": 3,
+        "mucositis_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "MUCOSITIS_G3_O2",
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "MUCOSITIS_G3_O2",
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "MUCOSITIS_HISTORY_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "First grade4 mucositis stops FU permanently",
+      "input": {
+        "mucositis_worst_grade": 4,
+        "mucositis_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "MUCOSITIS_G4_O1",
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "MUCOSITIS_G4_O1",
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "MUCOSITIS_HISTORY_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "PPE2 holds only FU",
+      "input": {
+        "ppe_grade": 2
+      },
+      "expected_rule_ids": [
+        "PPE_ACTIVE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PPE_ACTIVE"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Recovered PPE reduces20 percent with dose history review",
+      "input": {
+        "ppe_grade": 1,
+        "ppe_worst_grade": 2
+      },
+      "expected_rule_ids": [
+        "PPE_RECOVERED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PPE_RECOVERED"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Recurrent grade3 skin reaction at doc60 stops treatment",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_at_docetaxel_60": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_AT60_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "SKIN_REACTION_AT60_STOP",
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Grade4 skin is not extrapolated into grade3 dose pathway",
+      "input": {
+        "skin_reaction_worst_grade": 4,
+        "skin_reaction_grade": 0,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 75,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_G4_UNSPECIFIED"
+      ],
+      "forbidden_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "actual_rule_ids": [
+        "SKIN_G4_UNSPECIFIED",
+        "PARTIAL_CURRENT_DOCETAXEL_DOSE_MG_M2_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Missing dexamethasone requires consultant choice",
+      "input": {
+        "docetaxel_premedication_complete": false
+      },
+      "expected_rule_ids": [
+        "DOC_PREMED_INCOMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_PREMED_INCOMPLETE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "First recovered grade3 diarrhoea modifies FU",
+      "input": {
+        "diarrhoea_grade": 1,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Second recovered grade3 diarrhoea modifies doc",
+      "input": {
+        "diarrhoea_grade": 1,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G3_O2"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G3_O2"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Recovered skin3 at doc75 reduces to60",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_grade": 1,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 75,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Skin recurrence cannot raise doc45 to60",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_grade": 1,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 45,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "forbidden_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "actual_rule_ids": [
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Empty assessment cannot authorise treatment",
+      "input": {},
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [],
+      "action": "incomplete",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ECOG2 outside0–1 eligibility",
+      "input": {
+        "ecog": 2
+      },
+      "expected_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ECOG1 has no performance restriction",
+      "input": {
+        "ecog": 1
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Pregnancy exclusion",
+      "input": {
+        "pregnancy": true
+      },
+      "expected_rule_ids": [
+        "PREGNANCY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PREGNANCY"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Lactation exclusion",
+      "input": {
+        "breastfeeding": true
+      },
+      "expected_rule_ids": [
+        "BREASTFEEDING"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BREASTFEEDING"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Baseline neuropathy2 excluded",
+      "input": {
+        "pre_existing_neuropathy_grade": 2
+      },
+      "expected_rule_ids": [
+        "BASELINE_NEUROPATHY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_NEUROPATHY"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Baseline ANC1.5 does not meet >1.5",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "anc": 1.5
+      },
+      "expected_rule_ids": [
+        "BASELINE_ANC"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_ANC",
+        "ANC_EXACT_SOURCE_CONFLICT"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ANC1.49 requires delay independently",
+      "input": {
+        "anc": 1.49
+      },
+      "expected_rule_ids": [
+        "ANC_LOW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ANC_LOW"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Platelets99.9 low",
+      "input": {
+        "platelets": 99.9
+      },
+      "expected_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Partial DPD no invented fixed dose",
+      "input": {
+        "dpd_status": "partial"
+      },
+      "expected_rule_ids": [
+        "DPD_PARTIAL"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_PARTIAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Complete DPD blocks FU only",
+      "input": {
+        "dpd_status": "complete"
+      },
+      "expected_rule_ids": [
+        "DPD_COMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_COMPLETE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Before first FU unresolved DPD",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "dpd_status": "unknown"
+      },
+      "expected_rule_ids": [
+        "DPD_TESTING_INCOMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_TESTING_INCOMPLETE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Renal uracil phenotype caution",
+      "input": {
+        "renal_impairment_severity": "moderate",
+        "dpd_test_method": "phenotype"
+      },
+      "expected_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Renal genotype is not uracil phenotype",
+      "input": {
+        "renal_impairment_severity": "moderate",
+        "dpd_test_method": "genotype"
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "CrCl59.5 source interval gap",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 59.5
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_GAP_59"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_GAP_59"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Current grade2 mucositis alone has no imported table cutoff",
+      "input": {
+        "mucositis_grade": 2
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "5FU_MUC_G2",
+        "MUCOSITIS_ACTIVE",
+        "MUCOSITIS_ACTIVE_REVIEW"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Persistent FU stop survives recovered mucositis",
+      "input": {
+        "mucositis_grade": 0,
+        "fluorouracil_permanently_stopped_for_mucositis": true
+      },
+      "expected_rule_ids": [
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Second grade4 diarrhoea stops treatment",
+      "input": {
+        "diarrhoea_worst_grade": 4,
+        "diarrhoea_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G4_O2"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G4_O2",
+        "DIARRHOEA_HISTORY_REQUIRED"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Second grade3 mucositis stops FU permanently",
+      "input": {
+        "mucositis_worst_grade": 3,
+        "mucositis_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "MUCOSITIS_G3_O2",
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "MUCOSITIS_G3_O2",
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "MUCOSITIS_HISTORY_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "First grade4 mucositis stops FU permanently",
+      "input": {
+        "mucositis_worst_grade": 4,
+        "mucositis_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "MUCOSITIS_G4_O1",
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "MUCOSITIS_G4_O1",
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "MUCOSITIS_HISTORY_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "PPE2 holds only FU",
+      "input": {
+        "ppe_grade": 2
+      },
+      "expected_rule_ids": [
+        "PPE_ACTIVE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PPE_ACTIVE"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Recovered PPE reduces20 percent with dose history review",
+      "input": {
+        "ppe_grade": 1,
+        "ppe_worst_grade": 2
+      },
+      "expected_rule_ids": [
+        "PPE_RECOVERED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PPE_RECOVERED"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Recurrent grade3 skin reaction at doc60 stops treatment",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_at_docetaxel_60": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_AT60_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "SKIN_REACTION_AT60_STOP",
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Grade4 skin is not extrapolated into grade3 dose pathway",
+      "input": {
+        "skin_reaction_worst_grade": 4,
+        "skin_reaction_grade": 0,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 75,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_G4_UNSPECIFIED"
+      ],
+      "forbidden_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "actual_rule_ids": [
+        "SKIN_G4_UNSPECIFIED",
+        "PARTIAL_CURRENT_DOCETAXEL_DOSE_MG_M2_CONTEXT_REQUIRED",
+        "PARTIAL_TOXICITY_RECOVERY_CONFIRMED_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Missing dexamethasone requires consultant choice",
+      "input": {
+        "docetaxel_premedication_complete": false
+      },
+      "expected_rule_ids": [
+        "DOC_PREMED_INCOMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_PREMED_INCOMPLETE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "First recovered grade3 diarrhoea modifies FU",
+      "input": {
+        "diarrhoea_grade": 1,
+        "toxicity_recovery_confirmed": true,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Second recovered grade3 diarrhoea modifies doc",
+      "input": {
+        "diarrhoea_grade": 1,
+        "toxicity_recovery_confirmed": true,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G3_O2"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G3_O2"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Recovered skin3 at doc75 reduces to60",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_grade": 1,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 75,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Skin recurrence cannot raise doc45 to60",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_grade": 1,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 45,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "forbidden_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "actual_rule_ids": [
+        "SKIN_REACTION_DOSE_HISTORY",
+        "PARTIAL_TOXICITY_RECOVERY_CONFIRMED_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Empty assessment cannot authorise treatment",
+      "input": {},
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [],
+      "action": "incomplete",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ECOG2 outside0–1 eligibility",
+      "input": {
+        "ecog": 2
+      },
+      "expected_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ECOG1 has no performance restriction",
+      "input": {
+        "ecog": 1
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "ECOG_OUTSIDE_ELIGIBILITY"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Pregnancy exclusion",
+      "input": {
+        "pregnancy": true
+      },
+      "expected_rule_ids": [
+        "PREGNANCY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PREGNANCY"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Lactation exclusion",
+      "input": {
+        "breastfeeding": true
+      },
+      "expected_rule_ids": [
+        "BREASTFEEDING"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BREASTFEEDING"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Baseline neuropathy2 excluded",
+      "input": {
+        "pre_existing_neuropathy_grade": 2
+      },
+      "expected_rule_ids": [
+        "BASELINE_NEUROPATHY"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_NEUROPATHY"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Baseline ANC1.5 does not meet >1.5",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "anc": 1.5
+      },
+      "expected_rule_ids": [
+        "BASELINE_ANC"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_ANC",
+        "ANC_EXACT_SOURCE_CONFLICT"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ANC1.49 requires delay independently",
+      "input": {
+        "anc": 1.49
+      },
+      "expected_rule_ids": [
+        "ANC_LOW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ANC_LOW"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Platelets99.9 low",
+      "input": {
+        "platelets": 99.9
+      },
+      "expected_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Partial DPD no invented fixed dose",
+      "input": {
+        "dpd_status": "partial"
+      },
+      "expected_rule_ids": [
+        "DPD_PARTIAL"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_PARTIAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Complete DPD blocks FU only",
+      "input": {
+        "dpd_status": "complete"
+      },
+      "expected_rule_ids": [
+        "DPD_COMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_COMPLETE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Before first FU unresolved DPD",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "dpd_status": "unknown"
+      },
+      "expected_rule_ids": [
+        "DPD_TESTING_INCOMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_TESTING_INCOMPLETE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Renal uracil phenotype caution",
+      "input": {
+        "renal_impairment_severity": "moderate",
+        "dpd_test_method": "phenotype"
+      },
+      "expected_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Renal genotype is not uracil phenotype",
+      "input": {
+        "renal_impairment_severity": "moderate",
+        "dpd_test_method": "genotype"
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DPD_PHENOTYPE_RENAL_CAUTION"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "CrCl59.5 source interval gap",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 59.5
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_GAP_59"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_GAP_59"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Current grade2 mucositis alone has no imported table cutoff",
+      "input": {
+        "mucositis_grade": 2
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "5FU_MUC_G2",
+        "MUCOSITIS_ACTIVE",
+        "MUCOSITIS_ACTIVE_REVIEW"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Persistent FU stop survives recovered mucositis",
+      "input": {
+        "mucositis_grade": 0,
+        "fluorouracil_permanently_stopped_for_mucositis": true
+      },
+      "expected_rule_ids": [
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Second grade4 diarrhoea stops treatment",
+      "input": {
+        "diarrhoea_worst_grade": 4,
+        "diarrhoea_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G4_O2"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G4_O2",
+        "DIARRHOEA_HISTORY_REQUIRED"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Second grade3 mucositis stops FU permanently",
+      "input": {
+        "mucositis_worst_grade": 3,
+        "mucositis_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "MUCOSITIS_G3_O2",
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "MUCOSITIS_G3_O2",
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "MUCOSITIS_HISTORY_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "First grade4 mucositis stops FU permanently",
+      "input": {
+        "mucositis_worst_grade": 4,
+        "mucositis_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "MUCOSITIS_G4_O1",
+        "FU_MUCOSITIS_PERMANENT_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "MUCOSITIS_G4_O1",
+        "FU_MUCOSITIS_PERMANENT_STOP",
+        "MUCOSITIS_HISTORY_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "PPE2 holds only FU",
+      "input": {
+        "ppe_grade": 2
+      },
+      "expected_rule_ids": [
+        "PPE_ACTIVE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PPE_ACTIVE"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Recovered PPE reduces20 percent with dose history review",
+      "input": {
+        "ppe_grade": 1,
+        "ppe_worst_grade": 2
+      },
+      "expected_rule_ids": [
+        "PPE_RECOVERED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PPE_RECOVERED"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Recurrent grade3 skin reaction at doc60 stops treatment",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_at_docetaxel_60": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_AT60_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "SKIN_REACTION_AT60_STOP",
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "action": "discontinue",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Grade4 skin is not extrapolated into grade3 dose pathway",
+      "input": {
+        "skin_reaction_worst_grade": 4,
+        "skin_reaction_grade": 0,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 75,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_G4_UNSPECIFIED"
+      ],
+      "forbidden_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "actual_rule_ids": [
+        "SKIN_G4_UNSPECIFIED",
+        "PARTIAL_CURRENT_DOCETAXEL_DOSE_MG_M2_CONTEXT_REQUIRED",
+        "PARTIAL_TOXICITY_RECOVERY_CONFIRMED_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Missing dexamethasone requires consultant choice",
+      "input": {
+        "docetaxel_premedication_complete": false
+      },
+      "expected_rule_ids": [
+        "DOC_PREMED_INCOMPLETE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_PREMED_INCOMPLETE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "First recovered grade3 diarrhoea modifies FU",
+      "input": {
+        "diarrhoea_grade": 1,
+        "toxicity_recovery_confirmed": true,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Second recovered grade3 diarrhoea modifies doc",
+      "input": {
+        "diarrhoea_grade": 1,
+        "toxicity_recovery_confirmed": true,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 2
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_G3_O2"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DIARRHOEA_G3_O2"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Recovered skin3 at doc75 reduces to60",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_grade": 1,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 75,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Skin recurrence cannot raise doc45 to60",
+      "input": {
+        "skin_reaction_worst_grade": 3,
+        "skin_reaction_grade": 1,
+        "skin_reaction_at_docetaxel_60": false,
+        "current_docetaxel_dose_mg_m2": 45,
+        "toxicity_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "SKIN_REACTION_DOSE_HISTORY"
+      ],
+      "forbidden_rule_ids": [
+        "SKIN_REACTION_DOC60"
+      ],
+      "actual_rule_ids": [
+        "SKIN_REACTION_DOSE_HISTORY",
+        "PARTIAL_TOXICITY_RECOVERY_CONFIRMED_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Platelets100 permitted by count table",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "platelets": 100
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "PLATELETS_LOW",
+        "PLATELETS_EXACT_SOURCE_GAP"
+      ],
+      "actual_rule_ids": [
+        "PARTIAL_PLATELETS_CONTEXT_REQUIRED"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "On-treatment ANC1.5 permitted by count table",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 1.5
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "BASELINE_ANC",
+        "ANC_LOW",
+        "ANC_EXACT_SOURCE_CONFLICT"
+      ],
+      "actual_rule_ids": [
+        "PARTIAL_ANC_CONTEXT_REQUIRED"
+      ],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ANC1.5 phase needed",
+      "input": {
+        "anc": 1.5
+      },
+      "expected_rule_ids": [
+        "BASELINE_ANC_PHASE_UNKNOWN"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_ANC_PHASE_UNKNOWN"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "GCSF mandatory every cycle",
+      "input": {
+        "gcsf_prophylaxis_planned": false
+      },
+      "expected_rule_ids": [
+        "GCSF_REQUIRED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "GCSF_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Post-FN recovery changes all3",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_RECOVERED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_RECOVERED"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Unresolved complicated neutropenia does not restart",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": false
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_UNRECOVERED"
+      ],
+      "forbidden_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_RECOVERED"
+      ],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_UNRECOVERED"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Persistent FN after reduction is not invented second step",
+      "input": {
+        "neutropenia_persists_after_reduction_and_gcsf": true
+      },
+      "expected_rule_ids": [
+        "PERSISTENT_NEUTROPENIA_AFTER_REDUCTION"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PERSISTENT_NEUTROPENIA_AFTER_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl 40",
+      "input": {
+        "crcl_ml_min": 40
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_40_49"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_40_49"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl 49",
+      "input": {
+        "crcl_ml_min": 49
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_40_49"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_40_49"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl 49.5",
+      "input": {
+        "crcl_ml_min": 49.5
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_GAP_49"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_GAP_49"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl 50",
+      "input": {
+        "crcl_ml_min": 50
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_50_59"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_50_59"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl 59",
+      "input": {
+        "crcl_ml_min": 59
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_50_59"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_50_59"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "CrCl39.99 not recommended off dialysis",
+      "input": {
+        "crcl_ml_min": 39.99,
+        "haemodialysis": false
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_BELOW40"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_BELOW40"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Dialysis uses discretionary50 percent",
+      "input": {
+        "crcl_ml_min": 10,
+        "haemodialysis": true
+      },
+      "expected_rule_ids": [
+        "CIS_HAEMODIALYSIS"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_BELOW40"
+      ],
+      "actual_rule_ids": [
+        "CIS_HAEMODIALYSIS"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Dialysis status takes precedence over numeric band",
+      "input": {
+        "crcl_ml_min": 50,
+        "haemodialysis": true
+      },
+      "expected_rule_ids": [
+        "CIS_HAEMODIALYSIS"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_50_59"
+      ],
+      "actual_rule_ids": [
+        "CIS_HAEMODIALYSIS"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Obsolete FU85/180 rules removed",
+      "input": {
+        "bilirubin_umol_l": 86,
+        "ast_u_l": 181
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "5FU_HEPATIC",
+        "5FU_AST",
+        "FU_BILIRUBIN_UMOL_L_HIGH",
+        "FU_AST_U_L_HIGH"
+      ],
+      "actual_rule_ids": [],
+      "action": "incomplete",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Severe hepatic FU not recommended",
+      "input": {
+        "hepatic_impairment_severity": "severe"
+      },
+      "expected_rule_ids": [
+        "FU_HEPATIC_SEVERE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_HEPATIC_SEVERE"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Mild hepatic with renal disease lacks normal-dose permission",
+      "input": {
+        "hepatic_impairment_severity": "mild",
+        "renal_impairment_severity": "moderate"
+      },
+      "expected_rule_ids": [
+        "FU_HEPATIC_RENAL_COIMPAIRMENT"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_HEPATIC_RENAL_COIMPAIRMENT"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Mild hepatic renal status missing",
+      "input": {
+        "hepatic_impairment_severity": "mild"
+      },
+      "expected_rule_ids": [
+        "FU_HEPATIC_RENAL_UNKNOWN"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_HEPATIC_RENAL_UNKNOWN"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Doc first combined row considers75 percent",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 3,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_CONSIDER75"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_CONSIDER75"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Isolated AST2 cannot trigger combined75 row",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 2,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_CONSIDER75"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Doc second row remains specialist review",
+      "input": {
+        "ast_uln_multiple": 6,
+        "alt_uln_multiple": 2,
+        "alp_uln_multiple": 4,
+        "bilirubin_uln_multiple": 1.2
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_ROW2_REVIEW"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_ROW2_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ALP exact6 not silently contraindicated",
+      "input": {
+        "alp_uln_multiple": 6
+      },
+      "expected_rule_ids": [
+        "DOC_ALP_EXACT6"
+      ],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "actual_rule_ids": [
+        "DOC_ALP_EXACT6"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ast_uln_multiple exact upper threshold",
+      "input": {
+        "ast_uln_multiple": 10
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_ROW2_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "ast_uln_multiple just above upper threshold",
+      "input": {
+        "ast_uln_multiple": 10.001
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "alt_uln_multiple exact upper threshold",
+      "input": {
+        "alt_uln_multiple": 10
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_ROW2_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "alt_uln_multiple just above upper threshold",
+      "input": {
+        "alt_uln_multiple": 10.001
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "alp_uln_multiple exact upper threshold",
+      "input": {
+        "alp_uln_multiple": 6
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "actual_rule_ids": [
+        "DOC_ALP_EXACT6"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "alp_uln_multiple just above upper threshold",
+      "input": {
+        "alp_uln_multiple": 6.001
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "bilirubin_uln_multiple exact upper threshold",
+      "input": {
+        "bilirubin_uln_multiple": 1.5
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_ROW2_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "bilirubin_uln_multiple just above upper threshold",
+      "input": {
+        "bilirubin_uln_multiple": 1.501
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Grade3 diarrhoea now2 still delays to≤1",
+      "input": {
+        "diarrhoea_grade": 2,
+        "diarrhoea_worst_grade": 3,
+        "diarrhoea_occurrence": 1
+      },
+      "expected_rule_ids": [
+        "DIARRHOEA_ACTIVE"
+      ],
+      "forbidden_rule_ids": [
+        "DIARRHOEA_G3_O1"
+      ],
+      "actual_rule_ids": [
+        "DIARRHOEA_ACTIVE"
+      ],
+      "action": "delay",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Platelets100 unresolved printed equality",
+      "input": {
+        "platelets": 100
+      },
+      "expected_rule_ids": [
+        "PLATELETS_EXACT_SOURCE_GAP"
+      ],
+      "forbidden_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "actual_rule_ids": [
+        "PLATELETS_EXACT_SOURCE_GAP"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ANC1.5 source narrative/table conflict",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 1.5
+      },
+      "expected_rule_ids": [
+        "ANC_EXACT_SOURCE_CONFLICT"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ANC_EXACT_SOURCE_CONFLICT",
+        "PARTIAL_ASSESSMENT_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Baseline renal59 excluded",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "crcl_ml_min": 59
+      },
+      "expected_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "actual_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "On-treatment renal 45",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 45
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "forbidden_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "actual_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "On-treatment renal 59",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 59
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "forbidden_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "actual_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "CrCl44.99 is clinical decision not absolute contraindication",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 44.99
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_BELOW45"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_BELOW45"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Low renal phase missing cannot borrow on-treatment table",
+      "input": {
+        "crcl_ml_min": 50
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_PHASE_UNKNOWN"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "actual_rule_ids": [
+        "CIS_RENAL_PHASE_UNKNOWN"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "GCSF not required for all cycles by this source alone",
+      "input": {
+        "gcsf_prophylaxis_planned": false
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "GCSF_REQUIRED"
+      ],
+      "actual_rule_ids": [
+        "PARTIAL_GCSF_PROPHYLAXIS_PLANNED_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "FNfirst75→60",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": false,
+        "current_docetaxel_dose_mg_m2": 75
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_60"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_60"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "FNrecurrent60→45",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": true,
+        "current_docetaxel_dose_mg_m2": 60
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "FN at45 no fabricated dose escalation",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": true,
+        "current_docetaxel_dose_mg_m2": 45
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "forbidden_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_60",
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "FN first at60 needs source-history review",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": false,
+        "current_docetaxel_dose_mg_m2": 60
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "forbidden_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Recovered platelet nadir24.99 changes doc only",
+      "input": {
+        "platelet_nadir": 24.99,
+        "haematological_recovery_confirmed": true,
+        "current_docetaxel_dose_mg_m2": 75
+      },
+      "expected_rule_ids": [
+        "PLATELET_NADIR_LT25_RECOVERED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PLATELET_NADIR_LT25_RECOVERED"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "bilirubin_umol_l exact boundary",
+      "input": {
+        "bilirubin_umol_l": 85
+      },
+      "expected_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_EQUAL"
+      ],
+      "forbidden_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH"
+      ],
+      "actual_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_EQUAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "bilirubin_umol_l above boundary",
+      "input": {
+        "bilirubin_umol_l": 85.01
+      },
+      "expected_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "bilirubin_umol_l below boundary",
+      "input": {
+        "bilirubin_umol_l": 84.99
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH",
+        "FU_BILIRUBIN_UMOL_L_EQUAL"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ast_u_l exact boundary",
+      "input": {
+        "ast_u_l": 180
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_EQUAL"
+      ],
+      "forbidden_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "actual_rule_ids": [
+        "FU_AST_U_L_EQUAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ast_u_l above boundary",
+      "input": {
+        "ast_u_l": 180.01
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "ast_u_l below boundary",
+      "input": {
+        "ast_u_l": 179.99
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "FU_AST_U_L_EQUAL"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "FU numeric prohibition outranks qualitative reduction",
+      "input": {
+        "hepatic_impairment_severity": "moderate",
+        "ast_u_l": 181
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "FU_HEPATIC_MODERATE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "FU_HEPATIC_MODERATE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Doc hepatic75mg row is no75percent reduction",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 3,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Doc bilirubin>ULN stops independently",
+      "input": {
+        "bilirubin_uln_multiple": 1.001
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Combined AST and ALT both>3.5 ALP>6 stops",
+      "input": {
+        "ast_uln_multiple": 3.51,
+        "alt_uln_multiple": 3.51,
+        "alp_uln_multiple": 6.01,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_STOP",
+        "DOC_HEPATIC_75MG_REFERENCE",
+        "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Single enzyme high is not silent AST/ALTOR substitution",
+      "input": {
+        "ast_uln_multiple": 3.51,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 6.01,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
+      ],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE",
+        "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Exact AST/ALT3.5 not greater than3.5",
+      "input": {
+        "ast_uln_multiple": 3.5,
+        "alt_uln_multiple": 3.5,
+        "alp_uln_multiple": 6.1,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Severe liver baseline excluded",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "hepatic_impairment_severity": "severe"
+      },
+      "expected_rule_ids": [
+        "BASELINE_SEVERE_LIVER"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_SEVERE_LIVER",
+        "FU_HEPATIC_SEVERE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Platelets100 unresolved printed equality",
+      "input": {
+        "platelets": 100
+      },
+      "expected_rule_ids": [
+        "PLATELETS_EXACT_SOURCE_GAP"
+      ],
+      "forbidden_rule_ids": [
+        "PLATELETS_LOW"
+      ],
+      "actual_rule_ids": [
+        "PLATELETS_EXACT_SOURCE_GAP"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ANC1.5 source narrative/table conflict",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 1.5
+      },
+      "expected_rule_ids": [
+        "ANC_EXACT_SOURCE_CONFLICT"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "ANC_EXACT_SOURCE_CONFLICT",
+        "PARTIAL_ASSESSMENT_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Baseline renal59 excluded",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "crcl_ml_min": 59
+      },
+      "expected_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "actual_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "On-treatment renal 45",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 45
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "forbidden_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "actual_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "On-treatment renal 59",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 59
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "forbidden_rule_ids": [
+        "BASELINE_CIS_RENAL"
+      ],
+      "actual_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "CrCl44.99 is clinical decision not absolute contraindication",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 44.99
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_BELOW45"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "CIS_RENAL_BELOW45"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Low renal phase missing cannot borrow on-treatment table",
+      "input": {
+        "crcl_ml_min": 50
+      },
+      "expected_rule_ids": [
+        "CIS_RENAL_PHASE_UNKNOWN"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_45_59"
+      ],
+      "actual_rule_ids": [
+        "CIS_RENAL_PHASE_UNKNOWN"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "GCSF not required for all cycles by this source alone",
+      "input": {
+        "gcsf_prophylaxis_planned": false
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "GCSF_REQUIRED"
+      ],
+      "actual_rule_ids": [
+        "PARTIAL_GCSF_PROPHYLAXIS_PLANNED_CONTEXT_REQUIRED"
+      ],
+      "action": "partial_context_required",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "FNfirst75→60",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": false,
+        "current_docetaxel_dose_mg_m2": 75
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_60"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_60"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "FNrecurrent60→45",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": true,
+        "current_docetaxel_dose_mg_m2": 60
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "FN at45 no fabricated dose escalation",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": true,
+        "current_docetaxel_dose_mg_m2": 45
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "forbidden_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_60",
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "FN first at60 needs source-history review",
+      "input": {
+        "complicated_neutropenia_despite_gcsf": true,
+        "haematological_recovery_confirmed": true,
+        "complicated_neutropenia_recurrent": false,
+        "current_docetaxel_dose_mg_m2": 60
+      },
+      "expected_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "forbidden_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_DOC_45"
+      ],
+      "actual_rule_ids": [
+        "COMPLICATED_NEUTROPENIA_HISTORY_REVIEW"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Recovered platelet nadir24.99 changes doc only",
+      "input": {
+        "platelet_nadir": 24.99,
+        "haematological_recovery_confirmed": true,
+        "current_docetaxel_dose_mg_m2": 75
+      },
+      "expected_rule_ids": [
+        "PLATELET_NADIR_LT25_RECOVERED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "PLATELET_NADIR_LT25_RECOVERED"
+      ],
+      "action": "dose_reduce",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "bilirubin_umol_l exact boundary",
+      "input": {
+        "bilirubin_umol_l": 85
+      },
+      "expected_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_EQUAL"
+      ],
+      "forbidden_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH"
+      ],
+      "actual_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_EQUAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "bilirubin_umol_l above boundary",
+      "input": {
+        "bilirubin_umol_l": 85.01
+      },
+      "expected_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "bilirubin_umol_l below boundary",
+      "input": {
+        "bilirubin_umol_l": 84.99
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "FU_BILIRUBIN_UMOL_L_HIGH",
+        "FU_BILIRUBIN_UMOL_L_EQUAL"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ast_u_l exact boundary",
+      "input": {
+        "ast_u_l": 180
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_EQUAL"
+      ],
+      "forbidden_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "actual_rule_ids": [
+        "FU_AST_U_L_EQUAL"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ast_u_l above boundary",
+      "input": {
+        "ast_u_l": 180.01
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "ast_u_l below boundary",
+      "input": {
+        "ast_u_l": 179.99
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "FU_AST_U_L_EQUAL"
+      ],
+      "actual_rule_ids": [],
+      "action": "proceed_with_caution",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "FU numeric prohibition outranks qualitative reduction",
+      "input": {
+        "hepatic_impairment_severity": "moderate",
+        "ast_u_l": 181
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "FU_HEPATIC_MODERATE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "FU_HEPATIC_MODERATE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Doc hepatic75mg row is no75percent reduction",
+      "input": {
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 3,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Doc bilirubin>ULN stops independently",
+      "input": {
+        "bilirubin_uln_multiple": 1.001
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Combined AST and ALT both>3.5 ALP>6 stops",
+      "input": {
+        "ast_uln_multiple": 3.51,
+        "alt_uln_multiple": 3.51,
+        "alp_uln_multiple": 6.01,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_STOP",
+        "DOC_HEPATIC_75MG_REFERENCE",
+        "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Single enzyme high is not silent AST/ALTOR substitution",
+      "input": {
+        "ast_uln_multiple": 3.51,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 6.01,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
+      ],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE",
+        "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Exact AST/ALT3.5 not greater than3.5",
+      "input": {
+        "ast_uln_multiple": 3.5,
+        "alt_uln_multiple": 3.5,
+        "alp_uln_multiple": 6.1,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [],
+      "forbidden_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Severe liver baseline excluded",
+      "input": {
+        "assessment_phase": "pre_treatment",
+        "hepatic_impairment_severity": "severe"
+      },
+      "expected_rule_ids": [
+        "BASELINE_SEVERE_LIVER"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "BASELINE_SEVERE_LIVER",
+        "FU_HEPATIC_SEVERE"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Chemoradiation excludes induction component rules",
+      "input": {
+        "treatment_phase": "chemoradiation",
+        "assessment_phase": "on_treatment",
+        "crcl_ml_min": 20,
+        "ast_uln_multiple": 11,
+        "platelets": 20
+      },
+      "expected_rule_ids": [
+        "FOLLOWON_PHASE"
+      ],
+      "forbidden_rule_ids": [
+        "CIS_RENAL_BELOW45",
+        "PLATELETS_LOW",
+        "DOC_HEPATIC_STOP",
+        "CARBO_GFR_LE20"
+      ],
+      "actual_rule_ids": [
+        "FOLLOWON_PHASE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Raw AST/ALT/ALP correctly reach combined hepatic row",
+      "input": {
+        "ast_u_l": "80",
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 3,
+        "bilirubin_umol_l": "20",
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_CONSIDER75"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_CONSIDER75"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00315",
+      "name": "Raw bilirubin minimal threshold crossing not rounded into equality",
+      "input": {
+        "bilirubin_umol_l": "30.001",
+        "bilirubin_uln_multiple": 1.50005
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Raw AST/ALT/ALP correctly reach combined hepatic row",
+      "input": {
+        "ast_u_l": "80",
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 3,
+        "bilirubin_umol_l": "20",
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Raw bilirubin minimal threshold crossing not rounded into equality",
+      "input": {
+        "bilirubin_umol_l": "20.001",
+        "bilirubin_uln_multiple": 1.00005
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00323",
+      "name": "Raw AST also reaches absolute FU threshold",
+      "input": {
+        "ast_u_l": "180.001",
+        "ast_uln_multiple": 4.500025
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "PARTIAL_AST_ULN_MULTIPLE_CONTEXT_REQUIRED"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Raw AST/ALT/ALP correctly reach combined hepatic row",
+      "input": {
+        "ast_u_l": "80",
+        "ast_uln_multiple": 2,
+        "alt_uln_multiple": 1,
+        "alp_uln_multiple": 3,
+        "bilirubin_umol_l": "20",
+        "bilirubin_uln_multiple": 1
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_75MG_REFERENCE"
+      ],
+      "action": "consultant_review",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Raw bilirubin minimal threshold crossing not rounded into equality",
+      "input": {
+        "bilirubin_umol_l": "20.001",
+        "bilirubin_uln_multiple": 1.00005
+      },
+      "expected_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "DOC_HEPATIC_STOP"
+      ],
+      "action": "withhold",
+      "passed": true
+    },
+    {
+      "code": "00324",
+      "name": "Raw AST also reaches absolute FU threshold",
+      "input": {
+        "ast_u_l": "180.001",
+        "ast_uln_multiple": 4.500025
+      },
+      "expected_rule_ids": [
+        "FU_AST_U_L_HIGH"
+      ],
+      "forbidden_rule_ids": [],
+      "actual_rule_ids": [
+        "FU_AST_U_L_HIGH",
+        "PARTIAL_AST_ULN_MULTIPLE_CONTEXT_REQUIRED"
+      ],
+      "action": "contraindicated",
+      "passed": true
+    },
+    {
+      "code": "shared",
+      "name": "Missing ALP ULN cannot generate a ratio",
+      "passed": true
+    }
+  ]
+}

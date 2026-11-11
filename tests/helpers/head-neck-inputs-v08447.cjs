@@ -3,6 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../..'),codes=['00207','00314','00385','00387','00417','00418','00552','00696','00705','00706'];
 const read=f=>JSON.parse(fs.readFileSync(path.join(root,f))),sha=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');
 function validate(p){
+ const current48=require('./head-neck-inputs-v08448.cjs').validate(p);if(current48)return current48;
  const code=p.metadata?.nccp_regimen_code;if(!codes.includes(code))return null;
  const all=read('validation/head-neck-v08447/clinical-migration.json');assert.equal(all.release,'0.84.47');assert.equal(all.baseline_commit,'a47e75b2765fdb10f5795152c0866f016aceb14e');
  const row=all.records.find(x=>x.code===code);assert(row,code+' current audit');
@@ -19,6 +20,7 @@ function validate(p){
 // Preserve source-audited exact renal inputs and distinguish creatinine ratios
 // from clearance values; the historical band-only UI contract is superseded.
 function numericRenal(p,field,d){
+ if(require('./head-neck-inputs-v08448.cjs').numericRenal(p,field,d))return true;
  const expected={'00314':{gfr_or_crcl_ml_min:'mL/min'},'00417':{crcl_ml_min:'mL/min'},'00418':{baseline_creatinine:'µmol/L',creatinine_isotope_ratio:'ratio'},'00552':{creatinine_percent_isotope_baseline:'%'}};
  const unit=expected[p.metadata?.nccp_regimen_code]?.[field];if(!unit)return false;
  const row=validate(p);assert(row);assert.deepEqual(d,p.input_definitions[field]);assert.equal(d.type,'number');assert.equal(d.required,false);assert.equal(d.unit,unit);

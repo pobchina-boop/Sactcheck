@@ -150,6 +150,7 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
+  if(md.nccp_regimen_code==='00419'){require('./helpers/head-neck-inputs-v08448.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'moderate');assert.deepStrictEqual(sc.phase_profiles||{},{});assert(readJson('data/phase-support-contexts-v08448.json').regimens['00419'].head_neck.every(p=>p.emetogenic_risk==='moderate'));}
   if(md.nccp_regimen_code==='00696'){require('./helpers/head-neck-inputs-v08447.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'low');assert(readJson('data/phase-support-v0838.json').regimens['00696'].every(p=>p.emetogenic_risk==='low'));}
   if(['00742','00804'].includes(md.nccp_regimen_code)){
     assert(require('./helpers/neuro-inputs-v08439.cjs').validate(protocol));
@@ -217,7 +218,7 @@ for (const record of index.protocols || []) {
     const auditedPhases = md.nccp_regimen_code==='00486'?{oxaliplatin_days:'moderate',fluorouracil:'low'}:familyPhases[md.nccp_regimen_code];
     assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
-    assert.deepStrictEqual(phaseLevels, md.nccp_regimen_code==='00309'?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
+    assert.deepStrictEqual(phaseLevels, ['00309','00419'].includes(md.nccp_regimen_code)?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
   }
   for (const [label, url] of [["supportive", sc.supportive_medications_pdf_url], ["metadata", md.antiemetic_proforma_url]]) {
     if (!url) continue;

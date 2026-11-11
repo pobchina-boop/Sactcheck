@@ -14,9 +14,9 @@
     "short_title": "Docetaxel 75, Cisplatin 75 and 5-Fluorouracil 1000 – Induction TPF",
     "indication": "Induction treatment for stage III–IV non-metastatic squamous cell carcinoma of the head and neck.",
     "source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 8,
+    "sactcheck_encoding_version": "0.84.48",
+    "source_checked_date": "2026-11-10",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -92,14 +92,27 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.48",
+      "audit_date": "2026-11-10",
+      "scope_note": "Scratch review proposal based on current source bytes; independent clinical/pharmacy validation and parent integration remain outstanding."
     },
-    "canonical_protocol_id": "nccp-00315-v7a"
+    "canonical_protocol_id": "nccp-00315-v7a",
+    "source_sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef",
+    "source_audit": {
+      "status": "source_reconciled_proposal_pending_parent_review_and_independent_clinical_pharmacy_validation",
+      "checked_date": "2026-11-10",
+      "document_version": "7a",
+      "published": "2016-05-03",
+      "review_date": "2030-12-05",
+      "source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "resolved_url": "https://assets.hse.ie/media/documents/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef",
+      "retrieved_at": "2026-11-10T22:17:00.814433+00:00",
+      "review_date_note": "Current catalogue-linked PDF."
+    }
   },
   "clinical_governance": {
-    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
     "disclaimer": "Decision-support encoding derived from NCCP 00315 Version 7a. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
@@ -115,13 +128,42 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Docetaxel, cisplatin and fluorouracil every 21 days for 3 induction cycles.",
+    "schedule_summary": "Docetaxel 75 mg/m² and cisplatin 75 mg/m² day 1; fluorouracil 1000 mg/m²/day days 1–4 as a continuous 96-hour infusion (source alternative daily 22-hour infusions); every 21 days for 3 induction cycles unless progression/unacceptable toxicity.",
     "drugs": [
       "docetaxel",
       "cisplatin",
       "fluorouracil"
     ],
-    "planned_cycles": 3
+    "planned_cycles": 3,
+    "source_page": 1,
+    "administration": [
+      {
+        "component": "docetaxel",
+        "dose_mg_m2": 75,
+        "day": 1,
+        "duration_minutes": 60,
+        "route": "IV infusion"
+      },
+      {
+        "component": "cisplatin",
+        "dose_mg_m2": 75,
+        "day": 1,
+        "duration_minutes": 60,
+        "route": "IV infusion"
+      },
+      {
+        "component": "fluorouracil",
+        "dose_mg_m2_per_day": 1000,
+        "days": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "duration_description": "continuous 96 hours; alternative daily 22-hour infusions on days 1–4",
+        "route": "IV infusion"
+      }
+    ]
   },
   "input_definitions": {
     "assessment_phase": {
@@ -143,7 +185,7 @@
         }
       ],
       "demo_value": "pre_treatment",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -204,16 +246,6 @@
       "unit": "g/dL",
       "input_role": "monitoring"
     },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin actual result (×ULN calculated automatically)",
       "type": "number",
@@ -222,7 +254,10 @@
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "decision"
+      "input_role": "decision",
+      "derived_actual_fields": {
+        "bilirubin": "bilirubin_umol_l"
+      }
     },
     "non_haematological_toxicity_grade": {
       "label": "Other clinically relevant non-haematological toxicity grade",
@@ -232,40 +267,35 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
+          "description": "No recorded toxicity of this type."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator."
     },
     "febrile_neutropenia": {
       "label": "Febrile neutropenia or neutropenic sepsis",
@@ -286,93 +316,13 @@
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
-    },
-    "cisplatin_crcl_band": {
-      "label": "Renal function for cisplatin",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge60",
-          "label": "CrCl ≥60 mL/min"
-        },
-        {
-          "value": "50_59",
-          "label": "50–59 mL/min"
-        },
-        {
-          "value": "45_59",
-          "label": "45–59 mL/min where specified"
-        },
-        {
-          "value": "40_49",
-          "label": "40–49 mL/min"
-        },
-        {
-          "value": "lt45",
-          "label": "<45 mL/min"
-        },
-        {
-          "value": "lt40",
-          "label": "<40 mL/min"
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis"
-        }
-      ],
-      "demo_value": "ge60",
-      "input_role": "decision"
-    },
-    "cisplatin_neuro_hearing_grade": {
-      "label": "Cisplatin-related neuropathy, tinnitus or hearing toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
     },
     "electrolytes_hydration_not_corrected": {
@@ -415,7 +365,8 @@
       "step": 1,
       "demo_value": 12,
       "unit": "µmol/L",
-      "input_role": "decision"
+      "input_role": "context",
+      "ui_derived_from": "bilirubin_uln_multiple"
     },
     "ast_u_l": {
       "label": "AST",
@@ -425,7 +376,8 @@
       "step": 1,
       "demo_value": 25,
       "unit": "U/L",
-      "input_role": "decision"
+      "input_role": "context",
+      "ui_derived_from": "ast_uln_multiple"
     },
     "mucositis_grade": {
       "label": "Mucositis/stomatitis grade",
@@ -435,83 +387,687 @@
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
+          "description": "No recorded toxicity of this type."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator."
     },
-    "docetaxel_neuropathy_grade": {
-      "label": "Docetaxel peripheral neuropathy grade",
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (source-specific cisplatin bands)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 75
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "renal_impairment_severity": {
+      "label": "Clinician-classified renal impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "hepatic_impairment_severity": {
+      "label": "Clinician-classified hepatic impairment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "none"
+    },
+    "ast_uln_multiple": {
+      "label": "AST actual result (automatic ×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "×ULN",
+      "input_role": "decision",
+      "derived_actual_fields": {
+        "ast": "ast_u_l"
+      },
+      "demo_value": 1
+    },
+    "alt_uln_multiple": {
+      "label": "ALT actual result (automatic ×ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "alp_uln_multiple": {
+      "label": "ALP actual result (automatic ×ULN; enter local ALP ULN)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "×ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "pre_existing_neuropathy_grade": {
+      "label": "Pre-existing peripheral neuropathy grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
+          "description": "No recorded toxicity of this type."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
+      "input_role": "decision",
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "significant_hearing_impairment_or_tinnitus": {
+      "label": "Significant hearing impairment or tinnitus",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dpd_testing_complete": {
+      "label": "DPD phenotype/genotype assessed before first fluorouracil (including prior testing)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "dpd_test_method": {
+      "label": "DPD testing method",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "genotype",
+          "label": "Genotype"
+        },
+        {
+          "value": "phenotype",
+          "label": "Uracil phenotype"
+        },
+        {
+          "value": "both",
+          "label": "Phenotype and genotype"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "genotype"
+    },
+    "gcsf_prophylaxis_planned": {
+      "label": "G-CSF prophylaxis arranged for this cycle",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "complicated_neutropenia_despite_gcsf": {
+      "label": "Febrile/prolonged neutropenia or neutropenic infection despite G-CSF",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "complicated_neutropenia_recurrent": {
+      "label": "Subsequent episode of complicated neutropenia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "neutropenia_persists_after_reduction_and_gcsf": {
+      "label": "Complicated neutropenia persists despite reduction and G-CSF",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haematological_recovery_confirmed": {
+      "label": "Complicated neutropenia has resolved and blood counts have recovered",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "previous_haematological_delay": {
+      "label": "Previous cycle delayed for ANC/platelets below source threshold",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "platelet_nadir": {
+      "label": "Lowest platelet count in the episode being reviewed",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 150
+    },
+    "current_docetaxel_dose_mg_m2": {
+      "label": "Current prescribed docetaxel dose before further modification",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "mg/m²",
+      "input_role": "decision",
+      "demo_value": 75
+    },
+    "current_cisplatin_dose_mg_m2": {
+      "label": "Current prescribed cisplatin dose before further modification",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "mg/m²",
+      "input_role": "decision",
+      "demo_value": 75
+    },
+    "current_fluorouracil_daily_dose_mg_m2": {
+      "label": "Current prescribed fluorouracil daily dose before modification",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": "any",
+      "unit": "mg/m²/day",
+      "input_role": "decision",
+      "demo_value": 1000
+    },
+    "diarrhoea_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "skin_reaction_grade": {
+      "label": "Current skin reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "neuropathy_grade": {
+      "label": "Current peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "ppe_grade": {
+      "label": "Current palmar-plantar erythrodysaesthesia (hand-foot syndrome) grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "fluorouracil_permanently_stopped_for_mucositis": {
+      "label": "Fluorouracil already stopped for all later cycles after source mucositis event",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "docetaxel_premedication_complete": {
+      "label": "Required docetaxel dexamethasone premedication completed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
+    },
+    "diarrhoea_worst_grade": {
+      "label": "Worst grade of the diarrhoea episode being reviewed",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "diarrhoea_occurrence": {
+      "label": "Occurrence number at the recorded worst diarrhoea grade",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": "any",
+      "unit": "",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "mucositis_worst_grade": {
+      "label": "Worst grade of the mucositis episode being reviewed",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "mucositis_occurrence": {
+      "label": "Occurrence number at the recorded worst mucositis grade",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": "any",
+      "unit": "",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "skin_reaction_worst_grade": {
+      "label": "Worst grade of the skin reaction episode being reviewed",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "skin_reaction_at_docetaxel_60": {
+      "label": "This skin reaction episode persisted/recurred while receiving docetaxel 60 mg/m²",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "neuropathy_worst_grade": {
+      "label": "Worst grade of the neuropathy episode being reviewed",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "neuropathy_at_docetaxel_60": {
+      "label": "This neuropathy episode persisted/recurred while receiving docetaxel 60 mg/m²",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ppe_worst_grade": {
+      "label": "Worst grade of the ppe episode being reviewed",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": 0,
+      "grading_source_url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf",
+      "grading_source_label": "NCCP 00315 toxicity action grades; edition not specified",
+      "source_grading_note": "The NCCP regimen uses toxicity grades but does not specify a CTCAE edition or supply a complete symptom-grading table. Confirm the named toxicity and grade using the locally adopted clinical standard; the choices below select source actions and are not an automatic grading calculator.",
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity. Distinguish current grade from worst prior grade and confirm recovery and previous dose reductions."
+    },
+    "definitive_local_treatment_planned": {
+      "label": "Definitive chemoradiation and/or surgery planned",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": true
     }
   },
   "required_inputs": [],
@@ -557,58 +1113,367 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Source exclusion: known hypersensitivity to a regimen drug or excipient."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Source exclusion: known hypersensitivity to a regimen drug or excipient."
       },
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "id": "PREGNANCY",
+        "priority": 10,
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Source exclusion: pregnancy."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Source exclusion: pregnancy."
+      },
+      {
+        "id": "BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Source exclusion: lactation."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Source exclusion: lactation."
+      },
+      {
+        "id": "ECOG_OUTSIDE_ELIGIBILITY",
+        "priority": 10,
         "when": {
           "field": "ecog",
-          "operator": ">=",
-          "value": 3
+          "operator": ">",
+          "value": 1
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+          "message": "Source eligibility is ECOG 0–1. ECOG ≥2 requires Consultant reassessment of suitability; no automatic ECOG-based dose is specified.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
+        "explanation": "Source eligibility is ECOG 0–1. ECOG ≥2 requires Consultant reassessment of suitability; no automatic ECOG-based dose is specified."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "id": "BASELINE_NEUROPATHY",
+        "priority": 10,
         "when": {
-          "field": "non_haematological_toxicity_grade",
+          "field": "pre_existing_neuropathy_grade",
           "operator": ">=",
-          "value": 3
+          "value": 2
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pre-existing neuropathy grade ≥2 is a source exclusion; distinguish from treatment-emergent neuropathy."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Pre-existing neuropathy grade ≥2 is a source exclusion; distinguish from treatment-emergent neuropathy."
+      },
+      {
+        "id": "HEARING_EXCLUSION",
+        "priority": 10,
+        "when": {
+          "field": "significant_hearing_impairment_or_tinnitus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Significant hearing impairment/tinnitus is a source exclusion; do not substitute a generic grade-2 hearing cutoff."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Significant hearing impairment/tinnitus is a source exclusion; do not substitute a generic grade-2 hearing cutoff."
+      },
+      {
+        "id": "LOCAL_TREATMENT_PLAN",
+        "priority": 10,
+        "when": {
+          "field": "definitive_local_treatment_planned",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Induction eligibility requires planned definitive chemoradiation and/or surgery.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Induction eligibility requires planned definitive chemoradiation and/or surgery."
+      },
+      {
+        "id": "BASELINE_RENAL_CAUTION",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "renal_impairment_severity",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate",
+                "severe"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Pre-existing renal impairment is a source caution. Apply this document’s own renal table; do not import the <60 baseline exclusion from 00323/00324.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Caution",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Pre-existing renal impairment is a source caution. Apply this document’s own renal table; do not import the <60 baseline exclusion from 00323/00324."
+      },
+      {
+        "id": "BASELINE_ANC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "anc",
+              "operator": "<=",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
           ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
+          "message": "Baseline eligibility states ANC >1.5 ×10⁹/L; do not start at or below 1.5 without resolving eligibility."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
+        "explanation": "Baseline eligibility states ANC >1.5 ×10⁹/L; do not start at or below 1.5 without resolving eligibility."
       },
       {
-        "id": "FN",
+        "id": "ANC_LOW",
+        "priority": 10,
+        "when": {
+          "field": "anc",
+          "operator": "<",
+          "value": 1.5
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay until recovery; consider a 25% reduction of all three drugs in subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay until recovery; consider a 25% reduction of all three drugs in subsequent cycles."
+      },
+      {
+        "id": "PLATELETS_LOW",
+        "priority": 10,
+        "when": {
+          "field": "platelets",
+          "operator": "<",
+          "value": 100
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay until recovery; consider reducing all three drugs by 25% for subsequent cycles (also applies below 50)."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Haematological table",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay until recovery; consider reducing all three drugs by 25% for subsequent cycles (also applies below 50)."
+      },
+      {
+        "id": "BASELINE_ANC_PHASE_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": "==",
+              "value": 1.5
+            },
+            {
+              "field": "assessment_phase",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "ANC 1.5 meets the on-treatment table but not the baseline >1.5 eligibility statement; select assessment phase.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Eligibility; p3 Table 2",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "ANC 1.5 meets the on-treatment table but not the baseline >1.5 eligibility statement; select assessment phase."
+      },
+      {
+        "id": "COUNTS_PRIOR_DELAY_RECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "previous_haematological_delay",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 1.5
+            },
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "After count recovery, consider reducing docetaxel, cisplatin and fluorouracil by 25% for subsequent cycles. Confirm prior dose reductions; the source does not specify repeated compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "After count recovery, consider reducing docetaxel, cisplatin and fluorouracil by 25% for subsequent cycles. Confirm prior dose reductions; the source does not specify repeated compounding."
+      },
+      {
+        "id": "FN_ACUTE_REVIEW",
         "priority": 10,
         "when": {
           "field": "febrile_neutropenia",
@@ -616,27 +1481,218 @@
           "value": true
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
           ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+          "message": "Urgent clinical assessment of febrile neutropenia. Complete event timing, G-CSF, recovery and dose history before choosing the source subsequent-cycle reduction.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Haematological toxicity",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+        "explanation": "Urgent clinical assessment of febrile neutropenia. Complete event timing, G-CSF, recovery and dose history before choosing the source subsequent-cycle reduction."
+      },
+      {
+        "id": "COMPLICATED_NEUTROPENIA_UNRECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "complicated_neutropenia_despite_gcsf",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "haematological_recovery_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay while complicated neutropenia is unresolved. Confirm count and clinical recovery before a subsequent-cycle dose."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Haematological toxicity",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay while complicated neutropenia is unresolved. Confirm count and clinical recovery before a subsequent-cycle dose."
+      },
+      {
+        "id": "COMPLICATED_NEUTROPENIA_RECOVERY_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "complicated_neutropenia_despite_gcsf",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "haematological_recovery_confirmed",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Complicated neutropenia despite G-CSF: recovery is not documented; no restart dose can be assigned.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Haematological toxicity",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Complicated neutropenia despite G-CSF: recovery is not documented; no restart dose can be assigned."
+      },
+      {
+        "id": "COMPLICATED_NEUTROPENIA_RECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "complicated_neutropenia_despite_gcsf",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "haematological_recovery_confirmed",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "On recovery after febrile/prolonged neutropenia or neutropenic infection despite G-CSF, reduce all three drugs by 25% for subsequent cycles. Confirm dose history and avoid automatically compounding prior reductions.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "On recovery after febrile/prolonged neutropenia or neutropenic infection despite G-CSF, reduce all three drugs by 25% for subsequent cycles. Confirm dose history and avoid automatically compounding prior reductions."
+      },
+      {
+        "id": "PERSISTENT_NEUTROPENIA_AFTER_REDUCTION",
+        "priority": 10,
+        "when": {
+          "field": "neutropenia_persists_after_reduction_and_gcsf",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Toxicity persisting despite reduction and G-CSF requires treating-Consultant discussion of further dose de-escalation or regimen change; no fixed second reduction is supplied.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Toxicity persisting despite reduction and G-CSF requires treating-Consultant discussion of further dose de-escalation or regimen change; no fixed second reduction is supplied."
+      },
+      {
+        "id": "GCSF_REQUIRED",
+        "priority": 10,
+        "when": {
+          "field": "gcsf_prophylaxis_planned",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "G-CSF prophylaxis (standard or pegylated according to local policy) is required in every cycle. Arrange it before the next cycle.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 1,
+          "section": "Treatment footnote; p3 Table 2; p6 supportive care",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=1",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "G-CSF prophylaxis (standard or pegylated according to local policy) is required in every cycle. Arrange it before the next cycle."
       },
       {
         "id": "CIS_RENAL_50_59",
-        "priority": 9,
+        "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "50_59",
-            "45_59"
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 59
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
           ]
         },
         "action": {
@@ -644,84 +1700,233 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
+          "message": "Cisplatin CrCl 50–59 mL/min: 75% of original dose. Verify current dose/history; this must not increase an already lower dose.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Organ impairment",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
+        "explanation": "Cisplatin CrCl 50–59 mL/min: 75% of original dose. Verify current dose/history; this must not increase an already lower dose."
       },
       {
         "id": "CIS_RENAL_40_49",
         "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "40_49"
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 40
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 49
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "dose_reduce",
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
+          "message": "Cisplatin CrCl 40–49 mL/min: 50% of original dose. Verify current dose/history; this must not increase an already lower dose.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Organ impairment",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
+        "explanation": "Cisplatin CrCl 40–49 mL/min: 50% of original dose. Verify current dose/history; this must not increase an already lower dose."
       },
       {
-        "id": "CIS_RENAL_LOW",
+        "id": "CIS_RENAL_BELOW40",
         "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "lt45",
-            "lt40",
-            "dialysis"
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 40
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": false
+            }
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "withhold",
           "components": [
             "cisplatin"
           ],
-          "message": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+          "message": "Cisplatin is not recommended at CrCl <40 mL/min; haemodialysis has a separate discretionary pathway."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+        "explanation": "Cisplatin is not recommended at CrCl <40 mL/min; haemodialysis has a separate discretionary pathway."
       },
       {
-        "id": "CIS_NEURO_G2",
-        "priority": 9,
+        "id": "CIS_RENAL_DIALYSIS_UNKNOWN",
+        "priority": 10,
         "when": {
-          "field": "cisplatin_neuro_hearing_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 40
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "missing",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "cisplatin"
           ],
-          "message": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+          "message": "CrCl <40: source says cisplatin is not recommended except for a separate haemodialysis consideration. Establish dialysis status; no dose is authorised.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+        "explanation": "CrCl <40: source says cisplatin is not recommended except for a separate haemodialysis consideration. Establish dialysis status; no dose is authorised."
+      },
+      {
+        "id": "CIS_HAEMODIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "On haemodialysis, 50% of original cisplatin dose may be considered by Consultant/pharmacy. This is not an automatic contraindication or routine permission.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "On haemodialysis, 50% of original cisplatin dose may be considered by Consultant/pharmacy. This is not an automatic contraindication or routine permission."
+      },
+      {
+        "id": "CIS_RENAL_GAP_49",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 49
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl strictly between 49 and 50 mL/min falls between printed integer bands. Do not round or silently interpolate; Consultant/pharmacy review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Organ impairment",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "CrCl strictly between 49 and 50 mL/min falls between printed integer bands. Do not round or silently interpolate; Consultant/pharmacy review."
+      },
+      {
+        "id": "CIS_RENAL_GAP_59",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 59
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl strictly between 59 and 60 mL/min falls between printed integer bands. Do not round or silently interpolate; Consultant/pharmacy review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Organ impairment",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "CrCl strictly between 59 and 60 mL/min falls between printed integer bands. Do not round or silently interpolate; Consultant/pharmacy review."
       },
       {
         "id": "CIS_HYDRATION",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "electrolytes_hydration_not_corrected",
           "operator": "==",
@@ -732,13 +1937,16 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Correct hydration and electrolytes before cisplatin."
+          "message": "Complete prescribed pre/post hydration and any required electrolyte correction before cisplatin; use local hydration policy."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 1,
+          "section": "Treatment hydration footnote",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=1",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Correct hydration and electrolytes before cisplatin."
+        "explanation": "Complete prescribed pre/post hydration and any required electrolyte correction before cisplatin; use local hydration policy."
       },
       {
         "id": "DPD_COMPLETE",
@@ -753,13 +1961,16 @@
           "components": [
             "fluorouracil"
           ],
-          "message": "Complete DPD deficiency: fluorouracil is contraindicated."
+          "message": "Complete DPD deficiency is a contraindication to fluorouracil."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Complete DPD deficiency: fluorouracil is contraindicated."
+        "explanation": "Complete DPD deficiency is a contraindication to fluorouracil."
       },
       {
         "id": "DPD_PARTIAL",
@@ -770,218 +1981,1721 @@
           "value": "partial"
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+          "message": "Consider an individualised reduced starting dose for partial DPD deficiency. No fixed percentage is supplied. Dose may increase only with careful monitoring and absence of serious toxicity.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Partial DPD deficiency requires an individualised reduced fluorouracil starting dose and close monitoring."
+        "explanation": "Consider an individualised reduced starting dose for partial DPD deficiency. No fixed percentage is supplied. Dose may increase only with careful monitoring and absence of serious toxicity."
       },
       {
-        "id": "5FU_HEPATIC",
+        "id": "DPD_TESTING_INCOMPLETE",
         "priority": 10,
         "when": {
-          "field": "bilirubin_umol_l",
-          "operator": ">",
-          "value": 85
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "any": [
+                {
+                  "field": "dpd_testing_complete",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "dpd_status",
+                  "operator": "==",
+                  "value": "unknown"
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
+          "message": "DPD phenotype and/or genotype testing is required before first fluorouracil unless previously tested. Resolve missing status before starting.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Baseline tests",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Bilirubin >85 µmol/L triggers the encoded fluorouracil contraindication."
+        "explanation": "DPD phenotype and/or genotype testing is required before first fluorouracil unless previously tested. Resolve missing status before starting."
       },
       {
-        "id": "5FU_AST",
+        "id": "DPD_PHENOTYPE_RENAL_CAUTION",
         "priority": 10,
         "when": {
-          "field": "ast_u_l",
-          "operator": ">",
-          "value": 180
+          "all": [
+            {
+              "field": "renal_impairment_severity",
+              "operator": "in",
+              "value": [
+                "moderate",
+                "severe"
+              ]
+            },
+            {
+              "field": "dpd_test_method",
+              "operator": "in",
+              "value": [
+                "phenotype",
+                "both"
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "fluorouracil"
           ],
-          "message": "AST >180 U/L triggers the encoded fluorouracil contraindication."
+          "message": "Moderate/severe renal impairment may elevate uracil and cause a false diagnosis of DPD deficiency. Interpret phenotype cautiously and consider genotype; do not automatically relabel deficiency or assign a reduction.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 2,
+          "section": "Baseline DPD testing",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "AST >180 U/L triggers the encoded fluorouracil contraindication."
+        "explanation": "Moderate/severe renal impairment may elevate uracil and cause a false diagnosis of DPD deficiency. Interpret phenotype cautiously and consider genotype; do not automatically relabel deficiency or assign a reduction."
       },
       {
-        "id": "5FU_MUC_G2",
-        "priority": 9,
+        "id": "FU_HEPATIC_SEVERE",
+        "priority": 10,
         "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
+          "field": "hepatic_impairment_severity",
+          "operator": "==",
+          "value": "severe"
         },
         "action": {
           "type": "withhold",
           "components": [
             "fluorouracil"
           ],
-          "message": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+          "message": "Fluorouracil is not recommended in severe hepatic impairment. Current 00315 no longer supplies bilirubin 85/AST 180 cutoffs."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Grade 2 or worse mucositis requires treatment interruption and source-directed recovery/dose review."
+        "explanation": "Fluorouracil is not recommended in severe hepatic impairment. Current 00315 no longer supplies bilirubin 85/AST 180 cutoffs."
       },
       {
-        "id": "DOC_NEURO_G3",
+        "id": "FU_HEPATIC_RENAL_COIMPAIRMENT",
         "priority": 10,
         "when": {
-          "field": "docetaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "hepatic_impairment_severity",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate"
+              ]
+            },
+            {
+              "field": "renal_impairment_severity",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate",
+                "severe"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "The source expects no fluorouracil reduction for mild/moderate hepatic impairment only without renal impairment. Combined impairment needs Consultant/pharmacy judgement; no fixed dose is specified.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "The source expects no fluorouracil reduction for mild/moderate hepatic impairment only without renal impairment. Combined impairment needs Consultant/pharmacy judgement; no fixed dose is specified."
+      },
+      {
+        "id": "FU_HEPATIC_RENAL_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatic_impairment_severity",
+              "operator": "in",
+              "value": [
+                "mild",
+                "moderate"
+              ]
+            },
+            {
+              "field": "renal_impairment_severity",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Mild/moderate hepatic advice is conditional on absence of renal impairment. Record renal status; no normal status is inferred.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 3,
+          "section": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=3",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Mild/moderate hepatic advice is conditional on absence of renal impairment. Record renal status; no normal status is inferred."
+      },
+      {
+        "id": "DOC_HEPATIC_NOT_RECOMMENDED",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 6
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "docetaxel"
           ],
-          "message": "Grade 3–4 neuropathy requires docetaxel interruption and source-directed reduction/omission."
+          "message": "Docetaxel not recommended if AST >10×ULN OR ALT >10×ULN OR ALP >6×ULN OR bilirubin >1.5×ULN."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Grade 3–4 neuropathy requires docetaxel interruption and source-directed reduction/omission."
+        "explanation": "Docetaxel not recommended if AST >10×ULN OR ALT >10×ULN OR ALP >6×ULN OR bilirubin >1.5×ULN."
       },
       {
-        "id": "DOC_BILI",
-        "priority": 9,
+        "id": "DOC_HEPATIC_CONSIDER75",
+        "priority": 10,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "docetaxel"
           ],
-          "message": "Elevated bilirubin requires the docetaxel hepatic dose-modification table."
+          "message": "Table 4 first row: AST and/or ALT >1.5–5×ULN AND ALP >2.5–5×ULN AND normal bilirubin: consider 75% of original docetaxel. Confirm all values and dose history; consideration is not automatic dosing.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Elevated bilirubin requires the docetaxel hepatic dose-modification table."
+        "explanation": "Table 4 first row: AST and/or ALT >1.5–5×ULN AND ALP >2.5–5×ULN AND normal bilirubin: consider 75% of original docetaxel. Confirm all values and dose history; consideration is not automatic dosing."
       },
       {
-        "id": "TPF_ANC",
+        "id": "DOC_HEPATIC_ROW2_REVIEW",
         "priority": 10,
         "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1.5
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": "<=",
+                  "value": 10
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<=",
+                  "value": 10
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "delay",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC <1.5 ×10⁹/L: delay induction treatment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ANC <1.5 ×10⁹/L: delay induction treatment."
-      },
-      {
-        "id": "TPF_PLT",
-        "priority": 10,
-        "when": {
-          "field": "platelets",
-          "operator": "<=",
-          "value": 100
-        },
-        "action": {
-          "type": "delay",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets ≤100 ×10⁹/L: delay induction treatment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Platelets ≤100 ×10⁹/L: delay induction treatment."
-      },
-      {
-        "id": "TPF_PLT_LT25",
-        "priority": 10,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 25
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "consultant_review",
           "components": [
             "docetaxel"
           ],
-          "message": "Platelets <25 ×10⁹/L: delay and reduce docetaxel according to the source."
+          "message": "Table 4 second row prints AST >5–10 OR ALT >5–10, AND ALP <6, AND/OR bilirubin ≤1–1.5×ULN, then consider 50% original dose. Boolean grouping and bilirubin range are ambiguous; review the whole row, do not auto-calculate 50%. Any not-recommended criterion overrides.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Platelets <25 ×10⁹/L: delay and reduce docetaxel according to the source."
+        "explanation": "Table 4 second row prints AST >5–10 OR ALT >5–10, AND ALP <6, AND/OR bilirubin ≤1–1.5×ULN, then consider 50% original dose. Boolean grouping and bilirubin range are ambiguous; review the whole row, do not auto-calculate 50%. Any not-recommended criterion overrides."
       },
       {
-        "id": "TPF_FN",
+        "id": "DOC_ALP_EXACT6",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
+          "field": "alp_uln_multiple",
           "operator": "==",
-          "value": true
+          "value": 6
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "consultant_review",
           "components": [
             "docetaxel"
           ],
-          "message": "Febrile neutropenia despite G-CSF requires delay and docetaxel dose reduction."
+          "message": "Exact ALP 6×ULN is omitted between <6 and >6 source rows. Resolve with Consultant; do not substitute ≥6.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
         },
-        "explanation": "Febrile neutropenia despite G-CSF requires delay and docetaxel dose reduction."
+        "explanation": "Exact ALP 6×ULN is omitted between <6 and >6 source rows. Resolve with Consultant; do not substitute ≥6."
+      },
+      {
+        "id": "DOC_ALP_5_TO6",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": "<",
+              "value": 6
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": "<=",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "ALP >5 to <6 with transaminases ≤5 and normal bilirubin is not clearly assigned by the first/second rows; review rather than infer a dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "ALP >5 to <6 with transaminases ≤5 and normal bilirubin is not clearly assigned by the first/second rows; review rather than infer a dose."
+      },
+      {
+        "id": "DIARRHOEA_ACTIVE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_worst_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay treatment until diarrhoea has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay treatment until diarrhoea has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+      },
+      {
+        "id": "MUCOSITIS_ACTIVE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "mucositis_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": ">",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay treatment until mucositis has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay treatment until mucositis has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+      },
+      {
+        "id": "SKIN_REACTION_ACTIVE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "skin_reaction_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "skin_reaction_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "skin_reaction_grade",
+                  "operator": ">",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay treatment until skin reaction has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay treatment until skin reaction has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+      },
+      {
+        "id": "NEUROPATHY_ACTIVE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_worst_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Delay treatment until neuropathy has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay treatment until neuropathy has resolved to grade ≤1 before the table’s subsequent-cycle modification."
+      },
+      {
+        "id": "DIARRHOEA_G3_O1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Reduce fluorouracil dose by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Reduce fluorouracil dose by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding."
+      },
+      {
+        "id": "DIARRHOEA_G3_O2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Reduce docetaxel dose by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Reduce docetaxel dose by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding."
+      },
+      {
+        "id": "DIARRHOEA_G4_O1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_worst_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "diarrhoea_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel",
+            "fluorouracil"
+          ],
+          "message": "Reduce docetaxel and fluorouracil by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Reduce docetaxel and fluorouracil by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding."
+      },
+      {
+        "id": "DIARRHOEA_G4_O2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Discontinue treatment after the second grade 4 diarrhoea episode."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Discontinue treatment after the second grade 4 diarrhoea episode."
+      },
+      {
+        "id": "MUCOSITIS_G3_O1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Reduce fluorouracil by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Reduce fluorouracil by 20%. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding."
+      },
+      {
+        "id": "MUCOSITIS_G3_O2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Stop fluorouracil for all subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Stop fluorouracil for all subsequent cycles."
+      },
+      {
+        "id": "MUCOSITIS_G3_O3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Reduce docetaxel by 20%; fluorouracil remains stopped for all subsequent cycles. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Reduce docetaxel by 20%; fluorouracil remains stopped for all subsequent cycles. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding."
+      },
+      {
+        "id": "MUCOSITIS_G4_O1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_worst_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Stop fluorouracil for all subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Stop fluorouracil for all subsequent cycles."
+      },
+      {
+        "id": "MUCOSITIS_G4_O2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Reduce docetaxel by 20%; fluorouracil remains stopped for all subsequent cycles. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Reduce docetaxel by 20%; fluorouracil remains stopped for all subsequent cycles. Confirm current dose and prior modifications; source does not specify a fixed original-dose percentage or cumulative compounding."
+      },
+      {
+        "id": "DIARRHOEA_HISTORY_REQUIRED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_worst_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "fluorouracil"
+          ],
+          "message": "Worst diarrhoea grade is known but occurrence/current recovery information is incomplete; no numerical restart dose is inferred.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Worst diarrhoea grade is known but occurrence/current recovery information is incomplete; no numerical restart dose is inferred."
+      },
+      {
+        "id": "DIARRHOEA_BEYOND_TABLE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_worst_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "diarrhoea_occurrence",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "fluorouracil"
+          ],
+          "message": "Occurrence exceeds this source table. Preserve all prior permanent stops and obtain Consultant review; no additional sequence is invented.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Occurrence exceeds this source table. Preserve all prior permanent stops and obtain Consultant review; no additional sequence is invented."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_REQUIRED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "mucositis_worst_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": "missing",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "fluorouracil"
+          ],
+          "message": "Worst mucositis grade is known but occurrence/current recovery information is incomplete; no numerical restart dose is inferred.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Worst mucositis grade is known but occurrence/current recovery information is incomplete; no numerical restart dose is inferred."
+      },
+      {
+        "id": "MUCOSITIS_BEYOND_TABLE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "fluorouracil"
+          ],
+          "message": "Occurrence exceeds this source table. Preserve all prior permanent stops and obtain Consultant review; no additional sequence is invented.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Occurrence exceeds this source table. Preserve all prior permanent stops and obtain Consultant review; no additional sequence is invented."
+      },
+      {
+        "id": "FU_MUCOSITIS_PERMANENT_STOP",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "fluorouracil_permanently_stopped_for_mucositis",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "mucositis_worst_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "mucositis_occurrence",
+                  "operator": ">=",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Fluorouracil remains stopped for every subsequent cycle after second grade 3 or first grade 4 mucositis, even after current symptoms resolve."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Fluorouracil remains stopped for every subsequent cycle after second grade 3 or first grade 4 mucositis, even after current symptoms resolve."
+      },
+      {
+        "id": "SKIN_REACTION_AT60_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "skin_reaction_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_reaction_at_docetaxel_60",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Source says discontinue treatment when skin reaction persists/recurs at docetaxel 60 mg/m²; symptom recovery alone does not erase that stop decision."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Source says discontinue treatment when skin reaction persists/recurs at docetaxel 60 mg/m²; symptom recovery alone does not erase that stop decision."
+      },
+      {
+        "id": "SKIN_REACTION_DOC60",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "skin_reaction_worst_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "skin_reaction_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "skin_reaction_at_docetaxel_60",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "current_docetaxel_dose_mg_m2",
+              "operator": "==",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Decrease docetaxel from 75 to 60 mg/m² for source grade 3 skin reaction.",
+          "dose_mg_m2": 60
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Decrease docetaxel from 75 to 60 mg/m² for source grade 3 skin reaction."
+      },
+      {
+        "id": "SKIN_REACTION_DOSE_HISTORY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "skin_reaction_worst_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "current_docetaxel_dose_mg_m2",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "skin_reaction_at_docetaxel_60",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "current_docetaxel_dose_mg_m2",
+                  "operator": "not_in",
+                  "value": [
+                    75,
+                    60
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Confirm current docetaxel dose and whether this reaction occurred at 60 mg/m². Do not increase a lower dose or apply the 60 mg/m² restart without history.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Confirm current docetaxel dose and whether this reaction occurred at 60 mg/m². Do not increase a lower dose or apply the 60 mg/m² restart without history."
+      },
+      {
+        "id": "NEUROPATHY_AT60_STOP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_worst_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "neuropathy_at_docetaxel_60",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Source says discontinue treatment when neuropathy persists/recurs at docetaxel 60 mg/m²; symptom recovery alone does not erase that stop decision."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Source says discontinue treatment when neuropathy persists/recurs at docetaxel 60 mg/m²; symptom recovery alone does not erase that stop decision."
+      },
+      {
+        "id": "NEUROPATHY_DOC60",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_worst_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "field": "neuropathy_at_docetaxel_60",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "current_docetaxel_dose_mg_m2",
+              "operator": "==",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Decrease docetaxel from 75 to 60 mg/m² for source grade >2 peripheral neuropathy.",
+          "dose_mg_m2": 60
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Decrease docetaxel from 75 to 60 mg/m² for source grade >2 peripheral neuropathy."
+      },
+      {
+        "id": "NEUROPATHY_DOSE_HISTORY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_worst_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "current_docetaxel_dose_mg_m2",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "neuropathy_at_docetaxel_60",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "current_docetaxel_dose_mg_m2",
+                  "operator": "not_in",
+                  "value": [
+                    75,
+                    60
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Confirm current docetaxel dose and whether this reaction occurred at 60 mg/m². Do not increase a lower dose or apply the 60 mg/m² restart without history.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Confirm current docetaxel dose and whether this reaction occurred at 60 mg/m². Do not increase a lower dose or apply the 60 mg/m² restart without history."
+      },
+      {
+        "id": "SKIN_G4_UNSPECIFIED",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "skin_reaction_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "skin_reaction_worst_grade",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Grade 4 skin toxicity is not assigned by the source grade-3 dose row. Obtain urgent Consultant assessment; do not extrapolate a 60 mg/m² restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Grade 4 skin toxicity is not assigned by the source grade-3 dose row. Obtain urgent Consultant assessment; do not extrapolate a 60 mg/m² restart."
+      },
+      {
+        "id": "NEUROPATHY_CISPLATIN",
+        "priority": 10,
+        "when": {
+          "field": "neuropathy_worst_grade",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "For grade >2 neuropathy, consider cisplatin dose reduction at prescribing-Consultant discretion; no fixed cisplatin percentage is supplied.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "For grade >2 neuropathy, consider cisplatin dose reduction at prescribing-Consultant discretion; no fixed cisplatin percentage is supplied."
+      },
+      {
+        "id": "PPE_ACTIVE",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "ppe_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "all": [
+                {
+                  "field": "ppe_worst_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "ppe_grade",
+                  "operator": ">",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "Delay fluorouracil until PPE recovers to grade ≤1."
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Delay fluorouracil until PPE recovers to grade ≤1."
+      },
+      {
+        "id": "PPE_RECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "ppe_worst_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "ppe_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "fluorouracil"
+          ],
+          "message": "After PPE grade ≥2 recovers to ≤1, reduce subsequent fluorouracil doses by 20%. Verify dose history; no automatic repeated compounding is supplied.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "After PPE grade ≥2 recovers to ≤1, reduce subsequent fluorouracil doses by 20%. Verify dose history; no automatic repeated compounding is supplied."
+      },
+      {
+        "id": "OTHER_G3_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "cisplatin",
+            "fluorouracil"
+          ],
+          "message": "Other severe non-haematological toxicity needs Consultant assessment. This source does not provide a universal grade-3 whole-regimen dose rule; use the named toxicity pathway where applicable.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 4,
+          "section": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=4",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Other severe non-haematological toxicity needs Consultant assessment. This source does not provide a universal grade-3 whole-regimen dose rule; use the named toxicity pathway where applicable."
+      },
+      {
+        "id": "DOC_PREMED_INCOMPLETE",
+        "priority": 10,
+        "when": {
+          "field": "docetaxel_premedication_complete",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Source dexamethasone is 8 mg orally twice daily for 3 days from the day before docetaxel, minimum 3 doses before treatment. If missed, 20 mg IV immediately before chemotherapy may be considered only at prescribing-Consultant discretion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00315 version 7a",
+          "page": 5,
+          "section": "Premedication",
+          "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=5",
+          "sha256": "894eb837aac4705fc7a7ca752331ac2ff4ed51cd0daf780dee5f7f607fc304ef"
+        },
+        "explanation": "Source dexamethasone is 8 mg orally twice daily for 3 days from the day before docetaxel, minimum 3 doses before treatment. If missed, 20 mg IV immediately before chemotherapy may be considered only at prescribing-Consultant discretion."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Stage III/IV non-metastatic head and neck squamous cell carcinoma for the source-specific induction pathway",
+    "ECOG 0–1",
+    "Baseline ANC >1.5 ×10⁹/L; platelet eligibility prints 100 ×10⁹/L without a comparator—consult source/count table",
+    "Definitive chemoradiation and/or surgery planned"
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Known hypersensitivity to docetaxel, cisplatin, fluorouracil or an excipient",
+    "Pregnancy",
+    "Lactation",
+    "Pre-existing neuropathy grade ≥2",
+    "Significant hearing impairment or tinnitus",
+    "Complete DPD deficiency"
   ],
   "supportive_care": {
     "emetogenic_risk": "high",
@@ -991,6 +3705,61 @@
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "docetaxel_dexamethasone": "8 mg orally twice daily for 3 days starting the day before docetaxel; at least 3 doses pre-treatment. If missed, 20 mg IV immediately before treatment may be considered by the prescribing Consultant.",
+    "cisplatin_hydration": "Required before and after cisplatin, according to local policy and source suggested schedule. Routine furosemide is not recommended unless fluid overload.",
+    "gcsf": "Required in all cycles; standard or pegylated according to local policy.",
+    "source_pages": [
+      1,
+      3,
+      5,
+      6
+    ],
+    "oral_hydration": "Encourage for 24 hours.",
+    "antimicrobial_prophylaxis": "Trial ciprofloxacin 500 mg twice daily days 5–15 may be added at physician discretion/local policy; not universally required."
+  },
+  "monitoring": {
+    "baseline": [
+      "FBC, renal and liver profile",
+      "ECG if cardiac function is compromised",
+      "Audiology and creatinine clearance if clinically indicated",
+      "DPD phenotype and/or genotype before first fluorouracil unless previously tested"
+    ],
+    "before_each_cycle": [
+      "FBC, renal and liver profile"
+    ],
+    "disease_monitoring": "Individualised to treatment plan and supervising Consultant; no fixed imaging interval is supplied.",
+    "dpd_renal_caution": "Uracil phenotyping may overdiagnose DPD deficiency in moderate/severe renal impairment; consider genotype.",
+    "source": {
+      "page": 2,
+      "url": "https://healthservice.hse.ie/documents/6956/315_DOCEtaxel_CISplatin_5FU_TPF_1.pdf#page=2"
+    }
+  },
+  "source_audit_pending_integration": {
+    "removed_rule_ids": [
+      "HYPERSENSITIVITY",
+      "ECOG_3",
+      "NONHAEM_G3",
+      "FN",
+      "CIS_RENAL_50_59",
+      "CIS_RENAL_40_49",
+      "CIS_RENAL_LOW",
+      "CIS_NEURO_G2",
+      "CIS_HYDRATION",
+      "DPD_COMPLETE",
+      "DPD_PARTIAL",
+      "5FU_HEPATIC",
+      "5FU_AST",
+      "5FU_MUC_G2",
+      "DOC_NEURO_G3",
+      "DOC_BILI",
+      "TPF_ANC",
+      "TPF_PLT",
+      "TPF_PLT_LT25",
+      "TPF_FN"
+    ],
+    "reason": "Replaced generic/obsolete pathways with source-specific conditions, separate phase, history, recovery and ambiguity review.",
+    "dose_rendering_policy": "Ambiguous, discretionary, repeat-reduction and unresolved dose-history pathways use specialist_review so a reference percentage cannot generate an automatic restart or escalation.",
+    "independent_validation": "Not performed by this source/software proposal."
   }
 }
