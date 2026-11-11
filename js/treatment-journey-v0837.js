@@ -43747,6 +43747,678 @@ const definitions={
       }
     ],
     "context": "head_neck"
+  },
+  "00514": {
+    "code": "00514",
+    "title": "Gemcitabine alone: nasopharyngeal cancer: treatment and checks",
+    "release": "0.84.49",
+    "checked": "2026-11-11",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Recurrent or metastatic nasopharyngeal cancer that cannot be treated with local treatment aimed at cure.",
+    "summary": "Gemcitabine 1,250 mg/m² on Days 1 and 8 every 21 days, for up to 6 cycles or until progression or unacceptable side effects.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle / phase",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review medicines, allergies, weight, oral intake and symptoms.",
+          "Full blood count before each treatment; kidney and liver blood tests before each cycle.",
+          "Extra tests may be needed for symptoms or abnormal results.",
+          "Review results, recovery and earlier toxicity before another dose.",
+          "The team follows recovery, response and persistent side effects. Scans and tumour tests follow the individual plan; there is no universal scan or tumour-marker schedule in this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Confirm the complete treatment plan.",
+          "Gemcitabine is given into a vein over 30 minutes on Days 1 and 8. Checks, preparation and observation add to the time in the unit.",
+          "Follow written medicine and contact instructions.",
+          "The team reviews symptoms, side effects and response. Treatment may finish earlier if it is no longer helping or causes unacceptable problems.",
+          "Record completion and the named follow-up team."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "support",
+        "cells": [
+          "Assess symptoms, teeth, eating and drinking.",
+          "Review weight, intake and mouth symptoms.",
+          "Call for difficulty swallowing, worsening pain or weight loss.",
+          "Dietitian and swallowing support according to need.",
+          "Continue rehabilitation and dental care if advised."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment course",
+        "when": "Days 1 and 8; every 21 days; up to 6 cycles.",
+        "why": "Gemcitabine is used to control the cancer and relieve symptoms. Your team discusses expected benefit, alternatives and when to review whether treatment is helping.",
+        "clinical": "Gemcitabine 1,250 mg/m² on Days 1 and 8 every 21 days, for up to 6 cycles or until progression or unacceptable side effects.",
+        "action": "Confirm active medicines, safety checks and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review / next phase",
+        "when": "After the planned course and recovery review",
+        "why": "Review response and recovery.",
+        "clinical": "The team reviews symptoms, side effects and response. Treatment may finish earlier if it is no longer helping or causes unacceptable problems.",
+        "action": "Confirm actual dates and the next prescription.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Gemcitabine 1,250 mg/m² on Days 1 and 8 every 21 days, for up to 6 cycles or until progression or unacceptable side effects.",
+      "Full blood count before each treatment; kidney and liver blood tests before each cycle.",
+      "The team reviews symptoms, side effects and response. Treatment may finish earlier if it is no longer helping or causes unacceptable problems."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00514 v3: retrieved official regimen",
+        "url": "https://healthservice.hse.ie/documents/6899/514_V3_Gemcitabine_1250_21day.pdf",
+        "checked": "2026-11-11",
+        "sha256": "f33641abc286fceeef537e314b85bcc81426395926db6a238355621ba470c79e",
+        "retrieved_at": "2026-11-11T06:54:36.551994+00:00"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00517": {
+    "code": "00517",
+    "title": "Gemcitabine 1250 and cisplatin: nasopharyngeal cancer: treatment and checks",
+    "release": "0.84.49",
+    "checked": "2026-11-11",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced nasopharyngeal cancer; the full treatment strategy is agreed by the multidisciplinary team.",
+    "summary": "Gemcitabine 1,250 mg/m² on Days 1 and 8, with cisplatin 80 mg/m² on Day 1, every 21 days for 4–6 cycles or until progression or unacceptable side effects.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle / phase",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review medicines, allergies, weight, oral intake and symptoms. Review nerve symptoms and hearing; audiology when indicated. Cisplatin eligibility includes adequate kidney function.",
+          "Day 1: full blood count, kidney and liver tests. Day 8: full blood count and creatinine. Hearing assessment and measured kidney clearance are arranged when indicated.",
+          "Extra tests may be needed for symptoms or abnormal results.",
+          "Review results, recovery and earlier toxicity before another dose.",
+          "The team follows recovery, response and persistent side effects. Scans and tumour tests follow the individual plan; there is no universal scan or tumour-marker schedule in this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Confirm the complete treatment plan.",
+          "Gemcitabine runs over 30 minutes, followed on Day 1 by cisplatin over 2 hours. Cisplatin requires prescribed fluids before and after treatment. Day 8 is gemcitabine alone.",
+          "Follow written medicine and contact instructions.",
+          "Confirm the full treatment sequence and any separate radiotherapy plan. The linked NCCP document gives 4–6 cycles; this is not the three-cycle 00903 induction schedule.",
+          "Record completion and the named follow-up team."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "support",
+        "cells": [
+          "Assess symptoms, teeth, eating and drinking.",
+          "Review weight, intake and mouth symptoms.",
+          "Call for difficulty swallowing, worsening pain or weight loss.",
+          "Dietitian and swallowing support according to need.",
+          "Continue rehabilitation and dental care if advised."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment course",
+        "when": "Day 1: both drugs; Day 8: gemcitabine. Every 21 days, 4–6 cycles.",
+        "why": "The medicines act together to shrink or control nasopharyngeal cancer. Your team records how this course fits any planned radiation treatment and your overall treatment aim.",
+        "clinical": "Gemcitabine 1,250 mg/m² on Days 1 and 8, with cisplatin 80 mg/m² on Day 1, every 21 days for 4–6 cycles or until progression or unacceptable side effects.",
+        "action": "Confirm active medicines, safety checks and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review / next phase",
+        "when": "After the planned course and recovery review",
+        "why": "Review response and recovery.",
+        "clinical": "Confirm the full treatment sequence and any separate radiotherapy plan. The linked NCCP document gives 4–6 cycles; this is not the three-cycle 00903 induction schedule.",
+        "action": "Confirm actual dates and the next prescription.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Gemcitabine 1,250 mg/m² on Days 1 and 8, with cisplatin 80 mg/m² on Day 1, every 21 days for 4–6 cycles or until progression or unacceptable side effects.",
+      "Day 1: full blood count, kidney and liver tests. Day 8: full blood count and creatinine. Hearing assessment and measured kidney clearance are arranged when indicated.",
+      "Confirm the full treatment sequence and any separate radiotherapy plan. The linked NCCP document gives 4–6 cycles; this is not the three-cycle 00903 induction schedule."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00517 v2: retrieved official regimen",
+        "url": "https://healthservice.hse.ie/documents/6897/517_V2_GemCis80.pdf",
+        "checked": "2026-11-11",
+        "sha256": "55646fda200cfdd8a10c858b9f5b68f65e65adf9dbb2cf84a73d2e62d28594e2",
+        "retrieved_at": "2026-11-11T06:54:36.555633+00:00"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "trial",
+        "title": "Yau et al., Head Neck 2006",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16721741/",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00903": {
+    "code": "00903",
+    "title": "Gemcitabine and cisplatin induction before chemoradiotherapy: treatment and checks",
+    "release": "0.84.49",
+    "checked": "2026-11-11",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Induction chemotherapy before concurrent chemoradiotherapy for locally advanced nasopharyngeal cancer.",
+    "summary": "Gemcitabine 1,000 mg/m² on Days 1 and 8, with cisplatin 80 mg/m² on Day 1, every 21 days for a maximum of 3 cycles.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle / phase",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review medicines, allergies, weight, oral intake and symptoms. Review nerve symptoms and hearing; audiology when indicated. Cisplatin eligibility includes adequate kidney function.",
+          "Day 1: full blood count, kidney and liver tests. Day 8: full blood count. Audiology is arranged when clinically indicated; extra tests depend on symptoms and results.",
+          "Extra tests may be needed for symptoms or abnormal results.",
+          "Review results, recovery and earlier toxicity before another dose.",
+          "The team follows recovery, response and persistent side effects. Scans and tumour tests follow the individual plan; there is no universal scan or tumour-marker schedule in this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Confirm the complete treatment plan.",
+          "Gemcitabine runs over 30 minutes, followed on Day 1 by cisplatin over 1 hour. Prescribed fluids before and after cisplatin lengthen the visit. Day 8 is gemcitabine alone.",
+          "Follow written medicine and contact instructions.",
+          "The NCCP plan starts chemoradiotherapy 21–28 days after Day 1 of the last induction cycle, subject to review and recovery. This is measured from the first day, not from Day 8 or the end of that cycle. The later regimen has its own prescription.",
+          "Record completion and the named follow-up team."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "support",
+        "cells": [
+          "Assess symptoms, teeth, eating and drinking.",
+          "Review weight, intake and mouth symptoms.",
+          "Call for difficulty swallowing, worsening pain or weight loss.",
+          "Dietitian and swallowing support according to need.",
+          "Continue rehabilitation and dental care if advised."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment course",
+        "when": "Day 1: both drugs; Day 8: gemcitabine. Every 21 days, up to 3 cycles.",
+        "why": "This chemotherapy is given before chemoradiotherapy to improve cancer control. Induction is the first stage of the planned pathway, and does not replace the later treatment.",
+        "clinical": "Gemcitabine 1,000 mg/m² on Days 1 and 8, with cisplatin 80 mg/m² on Day 1, every 21 days for a maximum of 3 cycles.",
+        "action": "Confirm active medicines, safety checks and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review / next phase",
+        "when": "After the planned course and recovery review",
+        "why": "Review response and recovery.",
+        "clinical": "The NCCP plan starts chemoradiotherapy 21–28 days after Day 1 of the last induction cycle, subject to review and recovery. This is measured from the first day, not from Day 8 or the end of that cycle. The later regimen has its own prescription.",
+        "action": "Confirm actual dates and the next prescription.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Gemcitabine 1,000 mg/m² on Days 1 and 8, with cisplatin 80 mg/m² on Day 1, every 21 days for a maximum of 3 cycles.",
+      "Day 1: full blood count, kidney and liver tests. Day 8: full blood count. Audiology is arranged when clinically indicated; extra tests depend on symptoms and results.",
+      "The NCCP plan starts chemoradiotherapy 21–28 days after Day 1 of the last induction cycle, subject to review and recovery. This is measured from the first day, not from Day 8 or the end of that cycle. The later regimen has its own prescription."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00903 v1: retrieved official regimen",
+        "url": "https://healthservice.hse.ie/documents/6859/903_V1_Gemcitabine_1g_CISplatin_80.pdf",
+        "checked": "2026-11-11",
+        "sha256": "b3ab00a5490b80442fcd5e5eb6727eb1d882cd25e9a72022a6ad6c1518f106de",
+        "retrieved_at": "2026-11-11T06:54:36.516212+00:00"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "trial",
+        "title": "Zhang et al., NEJM 2019: gemcitabine/cisplatin induction",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31150573/",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00589": {
+    "code": "00589",
+    "title": "Four-day carboplatin and fluorouracil with radiotherapy: treatment and checks",
+    "release": "0.84.49",
+    "checked": "2026-11-11",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced head and neck squamous cell cancer when cisplatin is unsuitable. Source eligibility specifically describes stage III/IV oropharyngeal cancer without distant metastases.",
+    "summary": "Carboplatin 70 mg/m² each day on Days 1–4, with fluorouracil 600 mg/m²/day on Days 1–4, every 21 days for 3 cycles, only concurrently with radiotherapy.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle / phase",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review medicines, allergies, weight, oral intake and symptoms. DPD testing before first fluorouracil unless already tested; kidney measurement and hearing assessment as indicated. Arrange dental and swallowing/nutrition review before head and neck radiation.",
+          "Before each cycle: full blood count, kidney and liver tests. Review weight, eating, drinking, swallowing, mouth symptoms, hands and feet. Kidney measurement and hearing tests follow the source and individual plan.",
+          "Extra tests may be needed for symptoms or abnormal results.",
+          "Review results, recovery and earlier toxicity before another dose.",
+          "The team follows recovery, response and persistent side effects. Scans and tumour tests follow the individual plan; there is no universal scan or tumour-marker schedule in this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Confirm the complete treatment plan.",
+          "Carboplatin runs over 30 minutes on each of Days 1–4. Fluorouracil runs continuously over 96 hours; the source also permits a separate 22-hour infusion on each of Days 1–4. Confirm the actual pump or bag-change and disconnection times.",
+          "Follow written medicine and contact instructions.",
+          "Chemotherapy is given only during radiotherapy. If radiation is interrupted, contact the team before the next chemotherapy dose. Radiation oncology sets the radiation visits and follow-up.",
+          "Record completion and the named follow-up team."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "support",
+        "cells": [
+          "Assess symptoms, teeth, eating and drinking.",
+          "Review weight, intake and mouth symptoms.",
+          "Call for difficulty swallowing, worsening pain or weight loss.",
+          "Dietitian and swallowing support according to need.",
+          "Continue rehabilitation and dental care if advised."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment course",
+        "when": "Days 1–4: both drugs. Every 21 days ×3, during radiotherapy.",
+        "why": "Chemotherapy is given with radiation to improve control of cancer in the head and neck. Your team confirms that this particular four-day carboplatin schedule suits your cancer and health.",
+        "clinical": "Carboplatin 70 mg/m² each day on Days 1–4, with fluorouracil 600 mg/m²/day on Days 1–4, every 21 days for 3 cycles, only concurrently with radiotherapy.",
+        "action": "Confirm active medicines, safety checks and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review / next phase",
+        "when": "After the planned course and recovery review",
+        "why": "Review response and recovery.",
+        "clinical": "Chemotherapy is given only during radiotherapy. If radiation is interrupted, contact the team before the next chemotherapy dose. Radiation oncology sets the radiation visits and follow-up.",
+        "action": "Confirm actual dates and the next prescription.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Carboplatin 70 mg/m² each day on Days 1–4, with fluorouracil 600 mg/m²/day on Days 1–4, every 21 days for 3 cycles, only concurrently with radiotherapy.",
+      "Before each cycle: full blood count, kidney and liver tests. Review weight, eating, drinking, swallowing, mouth symptoms, hands and feet. Kidney measurement and hearing tests follow the source and individual plan.",
+      "Chemotherapy is given only during radiotherapy. If radiation is interrupted, contact the team before the next chemotherapy dose. Radiation oncology sets the radiation visits and follow-up."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00589 v5: retrieved official regimen",
+        "url": "https://healthservice.hse.ie/documents/6986/589_CARBOplatin_70_5_Fluorouracil_600.pdf",
+        "checked": "2026-11-11",
+        "sha256": "ba2d1d333c6d4ac1f2629f6bb93c855c1c76e2183f2130f320b0dc870ce25979",
+        "retrieved_at": "2026-11-11T06:54:36.484446+00:00"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00591": {
+    "code": "00591",
+    "title": "Carboplatin AUC 4 and fluorouracil with radiotherapy: treatment and checks",
+    "release": "0.84.49",
+    "checked": "2026-11-11",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced head and neck squamous cell cancer when cisplatin-based treatment is unsuitable.",
+    "summary": "Carboplatin AUC 4 on Day 1, with fluorouracil 600 mg/m²/day on Days 1–4, every 21 days for 3 cycles, only concurrently with radiotherapy.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle / phase",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ checks",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review medicines, allergies, weight, oral intake and symptoms. DPD testing before first fluorouracil unless already tested; kidney measurement and hearing assessment as indicated. Arrange dental and swallowing/nutrition review before head and neck radiation.",
+          "Before each cycle: full blood count, kidney and liver tests. Review weight, intake, swallowing, mouth symptoms, hands and feet. Measured kidney function is preferred when feasible; audiology is arranged when indicated.",
+          "Extra tests may be needed for symptoms or abnormal results.",
+          "Review results, recovery and earlier toxicity before another dose.",
+          "The team follows recovery, response and persistent side effects. Scans and tumour tests follow the individual plan; there is no universal scan or tumour-marker schedule in this regimen."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Confirm the complete treatment plan.",
+          "Carboplatin is given over 30 minutes on Day 1; its dose is calculated from kidney function. Fluorouracil runs continuously over 96 hours; the source also permits separate 22-hour infusions on Days 1–4. Confirm the actual pump or bag-change and disconnection times.",
+          "Follow written medicine and contact instructions.",
+          "Chemotherapy is given only during radiotherapy. If radiation is interrupted, contact the team before the next chemotherapy dose. Radiation oncology sets the radiation visits and follow-up.",
+          "Record completion and the named follow-up team."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      },
+      {
+        "label": "Mouth, weight and swallowing",
+        "kind": "support",
+        "cells": [
+          "Assess symptoms, teeth, eating and drinking.",
+          "Review weight, intake and mouth symptoms.",
+          "Call for difficulty swallowing, worsening pain or weight loss.",
+          "Dietitian and swallowing support according to need.",
+          "Continue rehabilitation and dental care if advised."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use the individual prescription and appointment calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment course",
+        "when": "Day 1: carboplatin; Days 1–4: 5-FU. Every 21 days ×3, during RT.",
+        "why": "Chemotherapy is given with radiation to improve control of cancer in the head and neck. Your team confirms the treatment aim and why carboplatin is suitable for your circumstances.",
+        "clinical": "Carboplatin AUC 4 on Day 1, with fluorouracil 600 mg/m²/day on Days 1–4, every 21 days for 3 cycles, only concurrently with radiotherapy.",
+        "action": "Confirm active medicines, safety checks and support plan.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review / next phase",
+        "when": "After the planned course and recovery review",
+        "why": "Review response and recovery.",
+        "clinical": "Chemotherapy is given only during radiotherapy. If radiation is interrupted, contact the team before the next chemotherapy dose. Radiation oncology sets the radiation visits and follow-up.",
+        "action": "Confirm actual dates and the next prescription.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Carboplatin AUC 4 on Day 1, with fluorouracil 600 mg/m²/day on Days 1–4, every 21 days for 3 cycles, only concurrently with radiotherapy.",
+      "Before each cycle: full blood count, kidney and liver tests. Review weight, intake, swallowing, mouth symptoms, hands and feet. Measured kidney function is preferred when feasible; audiology is arranged when indicated.",
+      "Chemotherapy is given only during radiotherapy. If radiation is interrupted, contact the team before the next chemotherapy dose. Radiation oncology sets the radiation visits and follow-up."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00591 v4: retrieved official regimen",
+        "url": "https://healthservice.hse.ie/documents/6988/591_CARBOplatin_AUC4_and_5-Fluorouracil_600.pdf",
+        "checked": "2026-11-11",
+        "sha256": "66bf7720bd0af9ba5c72ceb0f8d80ae1ff81678f6c54f4c1c3c7348f7ce96627",
+        "retrieved_at": "2026-11-11T06:54:36.554166+00:00"
+      },
+      {
+        "id": "head-neck",
+        "title": "NCI: head and neck cancers",
+        "url": "https://www.cancer.gov/types/head-and-neck/head-neck-fact-sheet",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -7,7 +7,7 @@ const scope=json('validation/neuroendocrine-v08437/scope.json'),presentation=jso
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08437-addendum.json');
 const groups={'00320':'everolimus','00327':'sunitinib','00505':'captem','00642':'prrt'};
 assert.deepEqual(scope.codes,['00320','00327','00505','00642']);require('./helpers/neuro-suite-registration-v08438.cjs').registry(registry.codes);
-assert(['0.84.41','0.84.42','0.84.43','0.84.44','0.84.45','0.84.46','0.84.47','0.84.48'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
+assert(['0.84.41','0.84.42','0.84.43','0.84.44','0.84.45','0.84.46','0.84.47','0.84.48','0.84.49'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const route of scope.presentation_routes){
  const code=route.slice(0,5),d=json(presentation.routes[route]),p=proto(code),audit='validation/neuroendocrine-v08437/'+groups[code]+'-source-audit/';

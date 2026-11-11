@@ -98,6 +98,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00514":"low", "00589":"moderate", // v49: retained NCCP00514v3 /00589v5 supportive-care tables.
     "00696":"low", // v47: NCCP00696v2 supportive-care section, retained source hash and integrated day8/combination checks.
     "00105":"low", "00551":"low", // v42: current NCCP ipilimumab-containing phase; nivolumab-only maintenance remains minimal.
     "00415":"oral_moderate_high", "00563":"oral_moderate_high", // NCCP00415 v5, v40 source-audited oral risk.
@@ -150,6 +151,7 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
+  if(['00514','00589'].includes(md.nccp_regimen_code)){require('./helpers/head-neck-inputs-v08449.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,md.nccp_regimen_code==='00514'?'low':'moderate');}
   if(md.nccp_regimen_code==='00419'){require('./helpers/head-neck-inputs-v08448.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'moderate');assert.deepStrictEqual(sc.phase_profiles||{},{});assert(readJson('data/phase-support-contexts-v08448.json').regimens['00419'].head_neck.every(p=>p.emetogenic_risk==='moderate'));}
   if(md.nccp_regimen_code==='00696'){require('./helpers/head-neck-inputs-v08447.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'low');assert(readJson('data/phase-support-v0838.json').regimens['00696'].every(p=>p.emetogenic_risk==='low'));}
   if(['00742','00804'].includes(md.nccp_regimen_code)){
@@ -180,6 +182,8 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "head-neck/00514-gemcitabine-1250-mg-m-monotherapy-21-day.json":"low",
+      "head-neck/00589-carboplatin-70-mg-m-and-5-fluorouracil-600-mg-m-with-radiotherapy.json":"moderate",
       "head-neck/00696-paclitaxel-days-1-8-and-15-with-cetuximab-days-1-and-15-28-day.json":"low",
       "skin/00105-ipilimumab-monotherapy.json":"low",
       "skin/00563-encorafenib-and-binimetinib-therapy.json":"oral_moderate_high",

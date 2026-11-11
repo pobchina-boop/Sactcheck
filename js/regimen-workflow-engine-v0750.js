@@ -378,7 +378,7 @@
     if(phase){
       supportive=planWithSources(phase.plan_id,data.antiemetic_plans[phase.plan_id],data);
       // Phase scripts use the national schedule, not a conflicting legacy local proforma.
-      const retainLocal=String(phase.plan_id).startsWith('hn48_')&&supportive.preserve_local_adjunct_reference===true;
+      const retainLocal=(/^(?:hn48_|hn49_(?:00514|00517|00903|00589|00591)_)/.test(String(phase.plan_id)))&&supportive.preserve_local_adjunct_reference===true;
       supportive={...supportive,local_prescription_items:retainLocal?supportive.local_prescription_items:[],localPrescriptionSource:retainLocal?supportive.localPrescriptionSource:null,
         local_adjunct_note:retainLocal?supportive.local_adjunct_note:"",warnings:[...(supportive.warnings||[]),...phase.notes]};
       riskRecord={...riskRecord,level:supportive.risk_level,label:supportive.label,phaseResolved:true,phaseKey:phase.id};

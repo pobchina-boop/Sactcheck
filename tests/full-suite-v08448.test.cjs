@@ -2,7 +2,7 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),crypto=require('crypto');
 const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const s=json('validation/head-neck-v08448/scope.json'),index=json('protocols/index.json').protocols,A=require('../js/patient-asset-registry-v0810.js'),K=json('data/regimen-knowledge-base-v08448-addendum.json'),W=require('../js/regimen-workflow-engine-v0750.js'),workflow=json('data/regimen-workflow-v0750.json');
-assert.equal(json('package.json').version,'0.84.48');assert.equal(A.release,'0.84.48');assert.equal(index.length,377);assert.equal(s.new_routes.length,5);assert.equal(s.retrospective_codes.length,5);assert.equal(s.new_codes.length,0);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,240);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,249);
+assert.equal(json('package.json').version,'0.84.49');assert.equal(A.release,'0.84.49');assert.equal(index.length,377);assert.equal(s.new_routes.length,5);assert.equal(s.retrospective_codes.length,5);assert.equal(s.new_codes.length,0);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,245);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,254);
 const norm=s=>s.replace(/&#(?:039|39);/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim();
 let checks=0;
 for(const route of s.clinical_routes){

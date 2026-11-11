@@ -595,7 +595,7 @@
     },
     {
       "code": "00207",
-      "protocol_id": "nccp-00207-v5",
+      "protocol_id": "nccp-00207-v6",
       "path": "protocols/gastrointestinal/00207-cetuximab-therapy-7-days.json",
       "title": "Cetuximab Therapy – 7 days",
       "encoding_maturity": "source_reconciled_rule_encoding",
@@ -3738,7 +3738,7 @@
       "protocol_id": "nccp-00314-v4b",
       "path": "protocols/head-neck/00314-cisplatin-and-5-fluorouracil-28-day.json",
       "title": "Cisplatin and 5-Fluorouracil – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3749,24 +3749,41 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "gfr_or_crcl_ml_min",
+          "creatinine_ratio_uln",
+          "severe_renal_impairment",
+          "dpd_phenotype_renal_impairment"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "HN47_BASELINE_CREATININE_RATIO_ULN",
+          "HN47_BASELINE_RENAL",
+          "HN47_PHASE_MISSING",
+          "CIS_RENAL_45_59",
+          "CIS_RENAL_LOW",
+          "CIS_RENAL_BOUNDARY",
+          "CIS_RENAL_LEGACY_REVIEW",
+          "DPD_RENAL_PHENOTYPE",
+          "HN47_SEVERE_RENAL_FU"
         ],
         "hepatic": [
+          "HN47_BASELINE_ALT_AST_ULN_MULTIPLE",
+          "HN47_BASELINE_BILIRUBIN_ULN_MULTIPLE",
           "5FU_HEPATIC",
-          "5FU_AST"
+          "5FU_HEPATIC_EXACT_BOUNDARY",
+          "5FU_AST",
+          "5FU_AST_EXACT_BOUNDARY",
+          "HN47_MODERATE_HEPATIC",
+          "HN47_SEVERE_HEPATIC"
         ]
       },
       "mismatches": []
@@ -3782,30 +3799,48 @@
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis",
+          "renal_impairment_severity"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity",
+          "ast_uln_multiple",
+          "alt_uln_multiple",
+          "alp_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
+          "BASELINE_RENAL_CAUTION",
           "CIS_RENAL_50_59",
           "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "CIS_RENAL_BELOW40",
+          "CIS_RENAL_DIALYSIS_UNKNOWN",
+          "CIS_HAEMODIALYSIS",
+          "CIS_RENAL_GAP_49",
+          "CIS_RENAL_GAP_59",
+          "DPD_PHENOTYPE_RENAL_CAUTION",
+          "FU_HEPATIC_RENAL_COIMPAIRMENT",
+          "FU_HEPATIC_RENAL_UNKNOWN"
         ],
         "hepatic": [
-          "5FU_HEPATIC",
-          "5FU_AST",
-          "DOC_BILI"
+          "FU_HEPATIC_SEVERE",
+          "FU_HEPATIC_RENAL_COIMPAIRMENT",
+          "FU_HEPATIC_RENAL_UNKNOWN",
+          "DOC_HEPATIC_NOT_RECOMMENDED",
+          "DOC_HEPATIC_CONSIDER75",
+          "DOC_HEPATIC_ROW2_REVIEW",
+          "DOC_ALP_EXACT6",
+          "DOC_ALP_5_TO6"
         ]
       },
       "mismatches": []
@@ -4171,32 +4206,48 @@
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min",
-          "cisplatin_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis",
+          "renal_impairment_severity"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity",
+          "ast_uln_multiple",
+          "alt_uln_multiple",
+          "alp_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20",
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "BASELINE_CIS_RENAL",
+          "DOC_RENAL_SEVERE",
+          "CIS_RENAL_45_59",
+          "CIS_RENAL_BELOW45",
+          "CIS_RENAL_PHASE_UNKNOWN",
+          "CIS_HAEMODIALYSIS",
+          "CIS_RENAL_GAP_59",
+          "DPD_PHENOTYPE_RENAL_CAUTION",
+          "FU_RENAL_SEVERE"
         ],
         "hepatic": [
-          "5FU_HEPATIC",
-          "5FU_AST",
-          "DOC_BILI"
+          "BASELINE_SEVERE_LIVER",
+          "FU_BILIRUBIN_UMOL_L_HIGH",
+          "FU_BILIRUBIN_UMOL_L_EQUAL",
+          "FU_AST_U_L_HIGH",
+          "FU_AST_U_L_EQUAL",
+          "FU_HEPATIC_MODERATE",
+          "FU_HEPATIC_SEVERE",
+          "DOC_HEPATIC_STOP",
+          "DOC_HEPATIC_75MG_REFERENCE",
+          "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
         ]
       },
       "mismatches": []
@@ -4212,30 +4263,48 @@
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis",
+          "renal_impairment_severity"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity",
+          "ast_uln_multiple",
+          "alt_uln_multiple",
+          "alp_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "BASELINE_CIS_RENAL",
+          "DOC_RENAL_SEVERE",
+          "CIS_RENAL_45_59",
+          "CIS_RENAL_BELOW45",
+          "CIS_RENAL_PHASE_UNKNOWN",
+          "CIS_HAEMODIALYSIS",
+          "CIS_RENAL_GAP_59",
+          "DPD_PHENOTYPE_RENAL_CAUTION",
+          "FU_RENAL_SEVERE"
         ],
         "hepatic": [
-          "5FU_HEPATIC",
-          "5FU_AST",
-          "DOC_BILI"
+          "BASELINE_SEVERE_LIVER",
+          "FU_BILIRUBIN_UMOL_L_HIGH",
+          "FU_BILIRUBIN_UMOL_L_EQUAL",
+          "FU_AST_U_L_HIGH",
+          "FU_AST_U_L_EQUAL",
+          "FU_HEPATIC_MODERATE",
+          "FU_HEPATIC_SEVERE",
+          "DOC_HEPATIC_STOP",
+          "DOC_HEPATIC_75MG_REFERENCE",
+          "DOC_HEPATIC_SINGLE_ENZYME_HIGH"
         ]
       },
       "mismatches": []
@@ -4366,7 +4435,8 @@
           "bilirubin_uln_multiple",
           "fluorouracil_bilirubin_umol_l",
           "fluorouracil_ast_u_l",
-          "adequate_renal_hepatic_function"
+          "adequate_renal_hepatic_function",
+          "fluorouracil_transaminase_source_uncertain"
         ]
       },
       "rules": {
@@ -4377,6 +4447,7 @@
           "(unnamed)"
         ],
         "hepatic": [
+          "(unnamed)",
           "(unnamed)",
           "(unnamed)",
           "(unnamed)",
@@ -4517,7 +4588,7 @@
       "protocol_id": "nccp-00332-v4",
       "path": "protocols/head-neck/00332-carboplatin-auc-1-5-chemoradiation-7-day.json",
       "title": "Carboplatin AUC 1.5 Chemoradiation – 7 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -4528,7 +4599,11 @@
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "gfr_measurement_method",
+          "creatinine_sample_age_hours",
+          "creatinine_percent_isotope_baseline",
+          "gfr_estimate_unreliable"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
@@ -4537,7 +4612,14 @@
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20"
+          "CARBO_GFR_LE20",
+          "CARBO_GFR_LOW",
+          "CARBO_GFR_CAP",
+          "CARBO_METHOD",
+          "CARBO_ESTIMATED_CREATININE",
+          "CARBO_ISOTOPE_RECHECK",
+          "CARBO_ISOTOPE_TREND_MISSING",
+          "CARBO_ESTIMATE_UNRELIABLE"
         ],
         "hepatic": []
       },
@@ -5720,29 +5802,48 @@
       "protocol_id": "nccp-00385-v5",
       "path": "protocols/gynaecology/00385-cisplatin-40-mg-m-weekly-with-radiotherapy.json",
       "title": "Cisplatin 40 mg/m² Weekly with Radiotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "cisplatin_renal_band"
+          "cisplatin_renal_band",
+          "crcl_ml_min",
+          "haemodialysis",
+          "pre_existing_renal_impairment",
+          "required_tests_missing"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "required_tests_missing"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_50_59",
-          "CIS_40_49",
-          "CIS_LT40"
+          "BASELINE_RENAL_EXCLUSION",
+          "BASELINE_RENAL_PHASE_UNCLEAR",
+          "CRCL_40_49",
+          "LEGACY_CRCL_40_49",
+          "CRCL_50_59",
+          "LEGACY_CRCL_50_59",
+          "CRCL_LT40",
+          "LEGACY_CRCL_LT40",
+          "CRCL_PRINTED_GAP",
+          "HAEMODIALYSIS",
+          "RENAL_CONFLICT_lt40",
+          "RENAL_CONFLICT_40_49",
+          "RENAL_CONFLICT_50_59",
+          "RENAL_CONFLICT_ge60",
+          "DIALYSIS_CONFLICT",
+          "RENAL_NEURO_COMBINATION",
+          "PRIOR_REDUCED_DOSE"
         ],
         "hepatic": []
       },
@@ -5787,29 +5888,49 @@
       "protocol_id": "nccp-00387-v5",
       "path": "protocols/head-neck/00387-cisplatin-100-mg-m-with-radiotherapy.json",
       "title": "Cisplatin 100 mg/m² with Radiotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_review",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "crcl_ml_min",
+          "haemodialysis",
+          "pre_existing_renal_impairment",
+          "required_tests_missing"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "required_tests_missing"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "BASELINE_RENAL_CAUTION",
+          "CRCL_40_49",
+          "LEGACY_CRCL_40_49",
+          "CRCL_50_59",
+          "LEGACY_CRCL_50_59",
+          "CRCL_LT40",
+          "LEGACY_CRCL_LT40",
+          "CRCL_PRINTED_GAP",
+          "HAEMODIALYSIS",
+          "LEGACY_AMBIGUOUS_RENAL",
+          "RENAL_CONFLICT_lt40",
+          "RENAL_CONFLICT_40_49",
+          "RENAL_CONFLICT_50_59",
+          "RENAL_CONFLICT_ge60",
+          "DIALYSIS_CONFLICT",
+          "RENAL_NEURO_COMBINATION",
+          "PRIOR_REDUCED_DOSE",
+          "COUNTS_ORGAN_COMBINATION"
         ],
         "hepatic": []
       },
@@ -6079,35 +6200,53 @@
       "protocol_id": "nccp-00417-v7",
       "path": "protocols/head-neck/00417-cetuximab-cisplatin-100-mg-m-and-5-fluorouracil-21-day.json",
       "title": "Cetuximab, Cisplatin 100 mg/m² and 5-Fluorouracil – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "creatinine_uln_multiple",
+          "renal_impairment",
+          "crcl_ml_min"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [
+          "HN47_BASELINE_CREATININE_ULN_MULTIPLE",
+          "HN47_DPD_RENAL_PHENOTYPE",
+          "HN47_FU_SEVERE_RENAL",
           "CIS_RENAL_50_59",
           "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "CIS_RENAL_LOW",
+          "HN47_CIS_BASELINE_RENAL",
+          "HN47_CIS_RENAL_PHASE_MISSING",
+          "HN47_CIS_RENAL_45_59",
+          "HN47_CIS_RENAL_59_60_GAP",
+          "HN47_CIS_RENAL_LT45"
         ],
         "hepatic": [
+          "HN47_BASELINE_ALT_AST_ULN_MULTIPLE",
+          "HN47_BASELINE_BILIRUBIN_ULN_MULTIPLE",
           "5FU_HEPATIC",
-          "5FU_AST"
+          "5FU_AST",
+          "HN47_FU_BILIRUBIN_UMOL_L_EQUALITY",
+          "HN47_FU_AST_U_L_EQUALITY",
+          "HN47_FU_HEPATIC_MODERATE",
+          "HN47_FU_HEPATIC_SEVERE"
         ]
       },
       "mismatches": []
@@ -6117,43 +6256,68 @@
       "protocol_id": "nccp-00418-v7",
       "path": "protocols/head-neck/00418-cetuximab-carboplatin-auc-5-and-5-fluorouracil-21-day.json",
       "title": "Cetuximab, Carboplatin AUC 5 and 5-Fluorouracil – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "creatinine_uln_multiple",
+          "renal_impairment",
+          "renal_measure_type",
+          "creatinine_result_age_hours",
+          "baseline_creatinine",
+          "current_creatinine",
+          "creatinine_isotope_ratio"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20"
+          "HN47_BASELINE_CREATININE_ULN_MULTIPLE",
+          "HN47_DPD_RENAL_PHENOTYPE",
+          "HN47_FU_SEVERE_RENAL",
+          "CARBO_GFR_LE20",
+          "HN47_CARBO_20_30",
+          "HN47_CARBO_MYELO",
+          "HN47_CARBO_CAP",
+          "HN47_CARBO_METHOD",
+          "HN47_CARBO_ESTIMATE_OLD",
+          "HN47_CARBO_ESTIMATE_AGE_MISSING",
+          "HN47_CARBO_ISOTOPE_TREND",
+          "HN47_CARBO_ISOTOPE_TREND_MISSING"
         ],
         "hepatic": [
+          "HN47_BASELINE_ALT_AST_ULN_MULTIPLE",
+          "HN47_BASELINE_BILIRUBIN_ULN_MULTIPLE",
           "5FU_HEPATIC",
-          "5FU_AST"
+          "5FU_AST",
+          "HN47_FU_BILIRUBIN_UMOL_L_EQUALITY",
+          "HN47_FU_AST_U_L_EQUALITY",
+          "HN47_FU_HEPATIC_MODERATE",
+          "HN47_FU_HEPATIC_SEVERE"
         ]
       },
       "mismatches": []
     },
     {
       "code": "00419",
-      "protocol_id": "nccp-00419-v4",
+      "protocol_id": "nccp-00419-v6",
       "path": "protocols/gynaecology/00419-carboplatin-auc-2-weekly-with-radiotherapy.json",
       "title": "Carboplatin AUC 2 Weekly with Radiotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -6164,7 +6328,11 @@
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "gfr_measurement_method",
+          "creatinine_sample_age_hours",
+          "creatinine_percent_isotope_baseline",
+          "gfr_estimate_unreliable"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
@@ -6173,7 +6341,15 @@
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LOW"
+          "CARBO_GFR_LE20",
+          "HN48_CARBO_20_30",
+          "CARBO_GFR_LOW",
+          "CARBO_GFR_CAP",
+          "CARBO_METHOD",
+          "CARBO_ESTIMATED_CREATININE",
+          "CARBO_ISOTOPE_RECHECK",
+          "CARBO_ISOTOPE_TREND_MISSING",
+          "CARBO_ESTIMATE_UNRELIABLE"
         ],
         "hepatic": []
       },
@@ -7044,7 +7220,7 @@
     },
     {
       "code": "00455",
-      "protocol_id": "nccp-00455-v15b",
+      "protocol_id": "nccp-00455-v16",
       "path": "protocols/shared/00455-pembrolizumab-200-mg-monotherapy.json",
       "title": "Pembrolizumab 200 mg Monotherapy",
       "encoding_maturity": "source_reconciled_pending_independent_review",
@@ -8286,7 +8462,7 @@
       "protocol_id": "nccp-00514-v3",
       "path": "protocols/head-neck/00514-gemcitabine-1250-mg-m-monotherapy-21-day.json",
       "title": "Gemcitabine 1250 mg/m² Monotherapy – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8297,18 +8473,19 @@
       },
       "inputs": {
         "renal": [
-          "gemcitabine_crcl_band"
+          "crcl_ml_min"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "bilirubin_umol_l"
         ]
       },
       "rules": {
-        "renal": [
-          "GEM_RENAL_LT30"
-        ],
-        "hepatic": []
+        "renal": [],
+        "hepatic": [
+          "GEM_BILIRUBIN"
+        ]
       },
       "mismatches": []
     },
@@ -8360,7 +8537,7 @@
       "protocol_id": "nccp-00517-v2",
       "path": "protocols/head-neck/00517-gemcitabine-1250-mg-m-and-cisplatin-80-mg-m-21-day.json",
       "title": "Gemcitabine 1250 mg/m² and Cisplatin 80 mg/m² – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8371,22 +8548,29 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band",
-          "gemcitabine_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "bilirubin_umol_l"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW",
-          "GEM_RENAL_LT30"
+          "GEM_RENAL_LT30",
+          "BASELINE_RENAL",
+          "RENAL_PHASE_UNKNOWN",
+          "CIS_RENAL_45",
+          "CIS_RENAL_GAP_59",
+          "CIS_RENAL_BELOW",
+          "CIS_DIALYSIS",
+          "CIS_EXACT60"
         ],
-        "hepatic": []
+        "hepatic": [
+          "GEM_BILIRUBIN"
+        ]
       },
       "mismatches": []
     },
@@ -8870,7 +9054,7 @@
       "protocol_id": "nccp-00552-v6",
       "path": "protocols/head-neck/00552-carboplatin-auc-5-and-5-fluorouracil-1000-mg-m-day-28-day.json",
       "title": "Carboplatin AUC 5 and 5-Fluorouracil 1000 mg/m²/day – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -8881,22 +9065,37 @@
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "dpd_phenotype_renal_impairment",
+          "concurrent_renal_impairment",
+          "gfr_measurement_method",
+          "creatinine_sample_age_hours",
+          "creatinine_percent_isotope_baseline",
+          "gfr_estimate_unreliable"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity",
+          "concurrent_renal_impairment"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20"
+          "DPD_RENAL_PHENOTYPE",
+          "CARBO_GFR_LE20",
+          "CARBO_GFR_LOW",
+          "CARBO_GFR_CAP",
+          "CARBO_ESTIMATED_CREATININE",
+          "CARBO_ISOTOPE_RECHECK",
+          "CARBO_ESTIMATE_UNRELIABLE",
+          "FU_COMBINED_ORGAN_REVIEW"
         ],
         "hepatic": [
-          "5FU_HEPATIC",
-          "5FU_AST"
+          "FU_SEVERE_HEPATIC",
+          "FU_COMBINED_ORGAN_REVIEW"
         ]
       },
       "mismatches": []
@@ -8991,7 +9190,7 @@
     },
     {
       "code": "00558",
-      "protocol_id": "nccp-00558-v12b",
+      "protocol_id": "nccp-00558-v13",
       "path": "protocols/shared/00558-pembrolizumab-400mg-monotherapy.json",
       "title": "Pembrolizumab 400 mg Monotherapy",
       "encoding_maturity": "source_reconciled_pending_independent_review",
@@ -9878,10 +10077,10 @@
     },
     {
       "code": "00589",
-      "protocol_id": "nccp-00589-v4",
+      "protocol_id": "nccp-00589-v5",
       "path": "protocols/head-neck/00589-carboplatin-70-mg-m-and-5-fluorouracil-600-mg-m-with-radiotherapy.json",
       "title": "Carboplatin 70 mg/m² and 5-Fluorouracil 600 mg/m² with Radiotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9892,32 +10091,52 @@
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "crcl_ml_min",
+          "creatinine_umol_l",
+          "renal_impairment_present",
+          "renal_impairment_severity",
+          "gfr_measurement_method",
+          "creatinine_sample_age_hours",
+          "creatinine_percent_isotope_baseline",
+          "gfr_estimate_unreliable"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity",
+          "renal_impairment_present"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20"
+          "BASELINE_RENAL",
+          "CARBO_LE20",
+          "CARBO_LT60",
+          "DPD_RENAL_PHENOTYPE",
+          "FU_HEPATIC_RENAL",
+          "CARBO_METHOD",
+          "CARBO_ESTIMATED_CREATININE",
+          "CARBO_ISOTOPE_RECHECK",
+          "CARBO_ISOTOPE_TREND_MISSING",
+          "CARBO_ESTIMATE_UNRELIABLE"
         ],
         "hepatic": [
-          "5FU_HEPATIC",
-          "5FU_AST"
+          "BASELINE_BILIRUBIN_ULN_MULTIPLE",
+          "FU_HEPATIC_SEVERE",
+          "FU_HEPATIC_RENAL"
         ]
       },
       "mismatches": []
     },
     {
       "code": "00591",
-      "protocol_id": "nccp-00591-v3",
+      "protocol_id": "nccp-00591-v4",
       "path": "protocols/head-neck/00591-carboplatin-auc-4-and-5-fluorouracil-600-mg-m-with-radiotherapy.json",
       "title": "Carboplatin AUC 4 and 5-Fluorouracil 600 mg/m² with Radiotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9928,22 +10147,42 @@
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "crcl_ml_min",
+          "creatinine_umol_l",
+          "renal_impairment_present",
+          "renal_impairment_severity",
+          "gfr_measurement_method",
+          "creatinine_sample_age_hours",
+          "creatinine_percent_isotope_baseline",
+          "gfr_estimate_unreliable"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_impairment_severity",
+          "renal_impairment_present"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20"
+          "CARBO_LE20",
+          "CARBO_LT60",
+          "DPD_RENAL_PHENOTYPE",
+          "FU_HEPATIC_RENAL",
+          "CARBO_METHOD",
+          "CARBO_ESTIMATED_CREATININE",
+          "CARBO_ISOTOPE_RECHECK",
+          "CARBO_ISOTOPE_TREND_MISSING",
+          "CARBO_ESTIMATE_UNRELIABLE",
+          "CARBO_GFR_CAP"
         ],
         "hepatic": [
-          "5FU_HEPATIC",
-          "5FU_AST"
+          "BASELINE_BILIRUBIN_ULN_MULTIPLE",
+          "FU_HEPATIC_SEVERE",
+          "FU_HEPATIC_RENAL"
         ]
       },
       "mismatches": []
@@ -11429,7 +11668,7 @@
       "protocol_id": "nccp-00696-v2",
       "path": "protocols/head-neck/00696-paclitaxel-days-1-8-and-15-with-cetuximab-days-1-and-15-28-day.json",
       "title": "Paclitaxel Days 1, 8 and 15 with Cetuximab Days 1 and 15 – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -11442,12 +11681,23 @@
         "renal": [],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "alt_ratio_uln",
+          "severe_hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [],
-        "hepatic": []
+        "hepatic": [
+          "HN47_BASELINE_HEPATIC",
+          "PAC_HEPATIC_CONTRA",
+          "PAC_HEPATIC_60",
+          "PAC_HEPATIC_40",
+          "PAC_HEPATIC_FRACTION_GAP",
+          "PAC_HEPATIC_ALT_MISSING",
+          "PAC_HEPATIC_CURRENT_DOSE_60",
+          "PAC_HEPATIC_CURRENT_DOSE_40"
+        ]
       },
       "mismatches": []
     },
@@ -11536,33 +11786,71 @@
       "protocol_id": "nccp-00705-v2d",
       "path": "protocols/head-neck/00705-pembrolizumab-carboplatin-auc-5-and-5-fluorouracil.json",
       "title": "Pembrolizumab, Carboplatin AUC 5 and 5-Fluorouracil",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "gfr_or_crcl_ml_min"
+          "gfr_or_crcl_ml_min",
+          "cytotoxic_creatinine_grade",
+          "creatinine_uln_multiple",
+          "renal_toxicity_attribution",
+          "renal_impairment",
+          "carbo_renal_method",
+          "creatinine_sample_age_hours",
+          "creatinine_ratio_to_isotope_baseline"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_increase_percent",
+          "hepatic_increase_days",
+          "baseline_grade2_liver_metastases",
+          "hepatic_toxicity_attribution",
+          "hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [
-          "CARBO_GFR_LE20"
+          "CYTOTOXIC_CREATININE",
+          "CARBO_GFR_LE20",
+          "CARBO_GFR_20_30",
+          "CARBO_GFR_LT60",
+          "5FU_SEVERE_RENAL",
+          "PEMBRO_ORGAN_UNSTUDIED",
+          "CARBO_ESTIMATE_FRESHNESS",
+          "CARBO_ISOTOPE_REASSESS",
+          "ICI_RENAL_G2",
+          "ICI_RENAL_G3",
+          "ICI_RENAL_GRADE_ONLY_REVIEW",
+          "RENAL_ATTRIBUTION_REVIEW",
+          "ICI_RENAL_DISCORDANT_REVIEW",
+          "RENAL_ATTRIBUTION_CONFLICT",
+          "TREATMENT_PHASE_REQUIRED",
+          "HN47_DPD_RENAL_PHENOTYPE"
         ],
         "hepatic": [
           "5FU_HEPATIC",
-          "5FU_AST"
+          "5FU_AST",
+          "5FU_HEPATIC_BOUNDARY",
+          "5FU_HEPATIC_CATEGORY",
+          "PEMBRO_ORGAN_UNSTUDIED",
+          "ICI_HEP_G2",
+          "ICI_HEP_G3",
+          "ICI_HEP_GRADE_ONLY_REVIEW",
+          "ICI_HEP_LIVER_METASTASIS_STOP",
+          "HEPATIC_ATTRIBUTION_REVIEW",
+          "ICI_HEP_DISCORDANT_REVIEW",
+          "HEPATIC_ATTRIBUTION_CONFLICT",
+          "TREATMENT_PHASE_REQUIRED"
         ]
       },
       "mismatches": []
@@ -11572,35 +11860,64 @@
       "protocol_id": "nccp-00706-v3",
       "path": "protocols/head-neck/00706-pembrolizumab-cisplatin-and-5-fluorouracil.json",
       "title": "Pembrolizumab, Cisplatin and 5-Fluorouracil",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": false,
-        "hepatic": false
+        "renal": true,
+        "hepatic": true
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "cisplatin_crcl_band",
+          "cytotoxic_creatinine_grade",
+          "creatinine_uln_multiple",
+          "renal_toxicity_attribution",
+          "renal_impairment",
+          "crcl_ml_min"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
           "bilirubin_uln_multiple",
           "bilirubin_umol_l",
-          "ast_u_l"
+          "ast_u_l",
+          "hepatic_increase_percent",
+          "hepatic_increase_days",
+          "baseline_grade2_liver_metastases",
+          "hepatic_toxicity_attribution",
+          "hepatic_impairment"
         ]
       },
       "rules": {
         "renal": [
+          "CYTOTOXIC_CREATININE",
           "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "CIS_RENAL_LOW",
+          "ICI_RENAL_G2",
+          "ICI_RENAL_G3",
+          "ICI_RENAL_GRADE_ONLY_REVIEW",
+          "RENAL_ATTRIBUTION_REVIEW",
+          "ICI_RENAL_DISCORDANT_REVIEW",
+          "RENAL_ATTRIBUTION_CONFLICT",
+          "TREATMENT_PHASE_REQUIRED",
+          "CIS_RENAL_CONFLICT",
+          "HN47_CIS_RENAL_FRACTIONAL_GAP"
         ],
         "hepatic": [
           "5FU_HEPATIC",
-          "5FU_AST"
+          "5FU_AST",
+          "5FU_HEPATIC_BOUNDARY",
+          "5FU_HEPATIC_CATEGORY",
+          "ICI_HEP_G2",
+          "ICI_HEP_G3",
+          "ICI_HEP_GRADE_ONLY_REVIEW",
+          "ICI_HEP_LIVER_METASTASIS_STOP",
+          "HEPATIC_ATTRIBUTION_REVIEW",
+          "ICI_HEP_DISCORDANT_REVIEW",
+          "HEPATIC_ATTRIBUTION_CONFLICT",
+          "TREATMENT_PHASE_REQUIRED"
         ]
       },
       "mismatches": []
@@ -12138,7 +12455,8 @@
           "hepatic_impairment",
           "fluorouracil_bilirubin_umol_l",
           "fluorouracil_ast_u_l",
-          "adequate_renal_hepatic_function"
+          "adequate_renal_hepatic_function",
+          "fluorouracil_transaminase_source_uncertain"
         ]
       },
       "rules": {
@@ -12148,6 +12466,7 @@
           "(unnamed)"
         ],
         "hepatic": [
+          "(unnamed)",
           "(unnamed)",
           "(unnamed)",
           "(unnamed)",
@@ -15011,7 +15330,7 @@
       "protocol_id": "nccp-00903-v1",
       "path": "protocols/head-neck/00903-gemcitabine-1000-mg-m-and-cisplatin-80-mg-m-induction.json",
       "title": "Gemcitabine 1000 mg/m² and Cisplatin 80 mg/m² Induction",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -15022,22 +15341,29 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band",
-          "gemcitabine_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
           "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_uln_multiple",
+          "bilirubin_umol_l"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW",
-          "GEM_RENAL_LT30"
+          "BASELINE_RENAL",
+          "RENAL_PHASE_UNKNOWN",
+          "CIS_RENAL_40",
+          "CIS_RENAL_GAP_49",
+          "CIS_RENAL_50",
+          "CIS_RENAL_GAP_59",
+          "CIS_RENAL_BELOW",
+          "CIS_DIALYSIS"
         ],
-        "hepatic": []
+        "hepatic": [
+          "GEM_BILIRUBIN"
+        ]
       },
       "mismatches": []
     },
