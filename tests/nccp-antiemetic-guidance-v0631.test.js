@@ -98,6 +98,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00830":"oral_minimal_low", // v52: minimal-risk oral relugolix, with the oral support pathway.
     "00103":"oral_minimal_low", "00577":"oral_minimal_low", "00233":"oral_minimal_low", "00574":"oral_minimal_low", "00693":"oral_minimal_low", // v51: source-validated oral services; exact protocol/evidence hashes checked below.
     "00295":"oral_moderate_high", // v50: NCCP00295v6: >12 mg moderate/high; <=12 mg minimal/low, separate workflow plans tested.
     "00893":"low", // v50: NCCP00893v1 supportive-care table.
@@ -154,6 +155,13 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
+  if(md.nccp_regimen_code==='00830'){
+    const evidence=readJson('validation/adt-v08452/clinical/clinical-migration.json').protocols['00830'];
+    assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),evidence.after);
+    assert.equal(md.source_pdf_sha256,'7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7');
+    assert.equal(sc.script_id,'nccp-oral-minimal-low');
+    assert.equal(sc.emetogenic_risk,'oral_minimal_low');
+  }
   if(['00103','00577','00233','00574','00693'].includes(md.nccp_regimen_code)){require('./helpers/prostate-inputs-v08451.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'oral_minimal_low');continue;}
   if(['00294','00242','00295','00615','00893'].includes(md.nccp_regimen_code)){require('./helpers/head-neck-inputs-v08450.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,({'00294':'oral_minimal_low','00242':'oral_minimal_low','00295':'oral_moderate_high','00615':'high','00893':'low'})[md.nccp_regimen_code]);continue;}
   if(['00514','00589'].includes(md.nccp_regimen_code)){require('./helpers/head-neck-inputs-v08449.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,md.nccp_regimen_code==='00514'?'low':'moderate');}
@@ -187,6 +195,7 @@ for (const record of index.protocols || []) {
   if(sc.phase_specific_plan&&!sc.emetogenic_risk){assert(fs.existsSync(path.join(root,sc.phase_specific_plan)),relative+' lacks authored phase selector');assert(sc.source_url,relative+' lacks source');}
   else if (baseline) {
     const correctionByPath = {
+      "genitourinary/00830-relugolix.json":"oral_minimal_low",
       "head-neck/00514-gemcitabine-1250-mg-m-monotherapy-21-day.json":"low",
       "head-neck/00589-carboplatin-70-mg-m-and-5-fluorouracil-600-mg-m-with-radiotherapy.json":"moderate",
       "head-neck/00696-paclitaxel-days-1-8-and-15-with-cetuximab-days-1-and-15-28-day.json":"low",

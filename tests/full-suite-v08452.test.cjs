@@ -1,0 +1,29 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),cp=require('node:child_process');
+const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const scope=json('validation/adt-v08452/scope.json'),index=json('protocols/index.json').protocols,A=require('../js/patient-asset-registry-v0810.js'),K=json('data/regimen-knowledge-base-v08452-addendum.json'),W=require('../js/regimen-workflow-engine-v0750.js'),workflow=json('data/regimen-workflow-v0750.json');
+assert.equal(json('package.json').version,'0.84.52');assert.equal(A.release,'0.84.52');assert.equal(index.length,377);assert.equal(A.codes.length,233);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,260);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,269);assert.equal(scope.new_routes.length,5);assert.equal(scope.retrospective_codes.length,5);
+const norm=s=>s.replace(/&#(?:039|39);/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim();let documents=0;
+for(const code of scope.new_routes){
+ const d=json('data/patient-knowledge/'+code+'.json'),p=json(index.find(x=>x.path.includes('/'+code+'-')).path),route='patient/'+code+'/';
+ if(code!=='00830')assert(!JSON.stringify(d.monitoring_test_details).includes('relugolix'),'No unrelated relugolix test instructions');assert.equal(d.protocol_id,p.protocol_id);assert.equal(String(d.protocol_version),p.metadata.nccp_version);assert.equal(d.visual_release,'0.84.52');assert(d.anatomy.length>=8);assert(A.bundleRoutes(code).includes(code));
+ assert(!/\bundefined\b/.test(require('node:util').stripVTControlCharacters(read(route+'knowledge.html').toString())));
+ const guide=read(route+'guide.html').toString(),card=read(route+'sactcard.html').toString(),consent=norm(read(route+'consent-form.html').toString());
+ assert.equal((guide.match(/class="pt-page /g)||[]).length,3);assert(guide.includes('Full-body anatomical illustration'));require('./helpers/patient-overview-v08445.cjs').validate(read(route+'index.html').toString(),code);
+ for(const text of ['85.6 × 54 mm','Do not cut the centre line','EXAMPLE','oncowiki-qr.png','Add to Home Screen'])assert(card.includes(text),code+' '+text);
+ for(const a of d.agents)for(const risk of a.risks)assert(consent.includes(norm(risk)),code+' consent '+risk);assert(consent.includes(norm(d.consent_support)));
+ const phase=code==='00830'?'continuous':'depot';
+ for(const n of ['guide','sactcard','knowledge','handbook','passport','consent-form','supportive-care','treatment-journey','logistics','support-'+phase]){const b=read(route+n+'.pdf');assert.equal(b.subarray(0,4).toString(),'%PDF');assert(b.equals(read('docs/'+route+n+'.pdf')));documents++;}
+ assert(require('../js/regimen-knowledge-base.js').prostatePathwayMarkup(p,{prostate_treatment_explainer:json('data/prostate-treatment-explainer-v08451.json')}).includes('id="prostate-pathway-title"'));
+ const kb=K.regimen_profiles.find(x=>x.protocol_id===p.protocol_id);assert(kb);assert.deepEqual(kb.monitoring_and_toxicity.longitudinal_schedule,d.monitoring_schedule);
+ for(const ph of workflow.supportive_phase_selectors[code].phases){const m=W.buildManifest(p,workflow,{},ph.id);assert.equal(m.supportPhase.id,ph.id);assert.deepEqual(m.components,ph.active_medicines);assert.equal(workflow.antiemetic_plans[ph.plan_id].risk_level,code==='00830'?'oral_minimal_low':'minimal');}
+ if(['00477','00479','00480'].includes(code)){const h=read(route+'knowledge.html').toString();assert(h.includes('data-axis-unit="week"'));assert(h.includes('84'));assert.equal(d.cycle_days,84);}
+ assert.equal(d.patient_summary.card_cycle_count,null);assert(!card.includes('Planned cycles:'));assert(card.includes(code==='00830'?'My review record':'My injection record'));
+}
+const migration=json('validation/adt-v08452/clinical/clinical-migration.json');for(const [c,v]of Object.entries(migration.protocols)){assert.equal(sha(read(v.path)),v.after,c);assert.equal(sha(read('validation/adt-v08452/clinical/sources/'+c+'.pdf')),v.source.sha256);}
+const lung=json('validation/adt-v08452/clinical/lung-message-migration.json'),p=json(lung.path),old=JSON.parse(cp.execFileSync('git',['show',scope.base_commit+':'+lung.path],{cwd:R}));assert.equal(sha(read(lung.path)),lung.after_sha256);assert.equal(p.rule_engine.rules.length,82);
+for(const rule of p.rule_engine.rules){const prior=old.rule_engine.rules.find(x=>x.id===rule.id),r=structuredClone(rule),o=structuredClone(prior);if(lung.changes.some(x=>x.id===r.id)){assert(r.id.endsWith('_MAINTENANCE'));assert.deepEqual(r.action.components,['pemetrexed']);assert(!/pemetrexed\/carboplatin|both drugs|carboplatin (?:50|100)%/.test(r.action.message));for(const x of [r,o]){delete x.action.message;delete x.action.recommendation;delete x.explanation;}}assert.deepEqual(r,o,rule.id+' only reviewed maintenance display text may change');}
+const retro=json('validation/adt-v08452/clinical/retrospective-audit.json');for(const f of retro.unchanged_patient_files)assert.equal(sha(read(f.path)),f.sha256);for(const c of retro.checks)assert.equal(c.total,c.passed);
+for(const n of ['pack-verification','handbook-verification','companion-published-verification']){const r=json('validation/adt-v08452/pdf/'+n+'.json');assert(!r.failed_routes);assert(!r.failures?.length);assert(!/fail/.test(r.status));}
+assert.equal(require('../js/library-scope-v08441.js').haematologyEnabled,false);
+console.log(JSON.stringify({release:'0.84.52',status:'passed',new_services:5,retrospective_services:5,pitch_review:'00568',documents,maintenance_message_rules:lung.changes.length,independent_clinical_approval:false}));

@@ -1,7 +1,7 @@
 'use strict';
 // Patch only the existing UI fragments. Do not regenerate protected patient content.
 const fs=require('node:fs'),path=require('node:path');
-const Chronology=require('./cycle-chronology.cjs');
+const Chronology=require('./adt-chronology-v08452.cjs');
 const SUPPORT_LABEL='Supportive medicines: medicine, dose and timing';
 const SUPPORT_HINT='<p class="support-table-hint no-print">Scroll the table sideways to read all medicine, dose and timing columns.</p>';
 const SUPPORT_WRAPPER=`<div class="support-table-scroll" role="region" tabindex="0" aria-label="${SUPPORT_LABEL}">`;

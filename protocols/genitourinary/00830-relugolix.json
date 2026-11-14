@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 4,
     "source_url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.52",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -28,8 +28,8 @@
     ],
     "treatment_class": [
       "endocrine_therapy",
-      "androgen_receptor_pathway_inhibitor",
-      "oral_targeted_therapy"
+      "androgen_deprivation_therapy",
+      "gnrh_antagonist"
     ],
     "administration_route": [
       "oral"
@@ -45,7 +45,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -59,18 +59,18 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-14",
     "regimen_card": {
       "contexts": [
         {
-          "id": "00830-gu",
-          "indication_id": "00830-gu",
+          "id": "00830a",
+          "indication_id": "00830a",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": null,
           "unresolved": [
-            "duration"
+            "individual_treatment_duration"
           ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "provenance": "NCCP source 2026-11-14"
         }
       ],
       "provenance": {
@@ -92,17 +92,19 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source reconciled; independent clinical/pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.52",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP and product-specific review; no clinical authorisation implied."
     },
-    "canonical_protocol_id": "nccp-00830-v3"
+    "canonical_protocol_id": "nccp-00830-v3",
+    "source_pdf_sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7",
+    "source_document_checked": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
@@ -110,6 +112,154 @@
     "disclaimer": "Decision-support encoding includes NCCP 00830 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "input_definitions": {
+    "hypersensitivity": {
+      "label": "Hypersensitivity to this medicine or its excipients",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "qt_risk": {
+      "label": "QT prolongation history/risk or concomitant QT-prolonging medicine",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "uncontrolled_glucose_or_diabetes": {
+      "label": "Diabetes or glucose control requiring review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bone_health_not_addressed": {
+      "label": "Bone health and fracture risk have not been addressed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cardiovascular_risk_not_addressed": {
+      "label": "Cardiovascular risk requires review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Previous permanent stop or contraindication remains in force",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suboptimal_response": {
+      "label": "Clinical/PSA response is suboptimal or testosterone suppression is uncertain",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "renal_band": {
+      "label": "Verified renal function category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild or moderate impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe impairment"
+        },
+        {
+          "value": "dialysis",
+          "label": "Dialysis"
+        }
+      ],
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "protocol_specific_band",
+        "exact_value_required": false
+      },
+      "demo_value": "normal"
+    },
+    "hepatic_band": {
+      "label": "Verified hepatic function category",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "mild_moderate",
+          "label": "Mild or moderate impairment"
+        },
+        {
+          "value": "severe",
+          "label": "Severe impairment"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "normal"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "missed_dose_hours": {
+      "label": "Hours since the missed dose was due",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "hours",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "interruption_days": {
+      "label": "Consecutive days treatment has been interrupted",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 0
+    },
     "interruption_over_7_days": {
       "label": "Treatment interrupted for more than 7 days",
       "type": "boolean",
@@ -118,7 +268,7 @@
       "input_role": "decision"
     },
     "oral_pgp_inhibitor_unavoidable": {
-      "label": "Oral P-gp inhibitor co-administration is unavoidable",
+      "label": "Oral P-gp inhibitor is unavoidable after pharmacy review",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -131,52 +281,15 @@
       "demo_value": false,
       "input_role": "decision"
     },
-    "renal_band": {
-      "label": "Renal function category",
-      "type": "select",
+    "interacting_medicine_stopped": {
+      "label": "An interacting P-gp inhibitor or combined inducer was stopped",
+      "type": "boolean",
       "required": false,
-      "options": [
-        {
-          "value": "mild_moderate",
-          "label": "Mild/moderate impairment — no adjustment"
-        },
-        {
-          "value": "severe",
-          "label": "Severe impairment — caution"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis — limited evidence; specialist review"
-        }
-      ],
-      "demo_value": "mild_moderate",
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "source": "Official NCCP protocol-specific renal categories",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal category matching the verified CrCl/eGFR. Exact numerical entry is not required because the NCCP decision is categorical.",
+      "demo_value": false,
       "input_role": "decision"
     },
-    "hepatic_band": {
-      "label": "Hepatic impairment",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "mild_moderate",
-          "label": "Mild/moderate — no adjustment"
-        },
-        {
-          "value": "severe",
-          "label": "Severe — limited evidence; specialist review"
-        }
-      ],
-      "demo_value": "mild_moderate",
-      "input_role": "decision"
-    },
-    "qt_risk": {
-      "label": "QT prolongation risk / QT-prolonging medicines",
+    "ongoing_gnrh_depot": {
+      "label": "A previous GnRH depot is still active or another medical ADT is prescribed",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -186,10 +299,13 @@
   "required_inputs": [],
   "output_templates": {
     "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
-    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
-    "consultant_review": "The entered value requires protocol-specific clinical review.",
-    "withhold": "Withhold and reassess according to the official NCCP pathway.",
-    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+    "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
+    "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and repeat assessment according to the official NCCP pathway.",
+    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
+    "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
+    "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
@@ -213,71 +329,170 @@
     ],
     "rules": [
       {
-        "id": "RELOAD",
-        "priority": 9,
+        "id": "HYPERSENSITIVITY",
+        "priority": 10,
         "when": {
-          "field": "interruption_over_7_days",
+          "field": "hypersensitivity",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "consultant_review",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "relugolix"
           ],
-          "message": "Restart with a 360 mg loading dose on day 1, followed by 120 mg once daily."
+          "message": "Hypersensitivity is an exclusion. Confirm the reaction and exact formulation."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00830 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
         },
-        "explanation": "Restart with a 360 mg loading dose on day 1, followed by 120 mg once daily."
+        "explanation": "Hypersensitivity is an exclusion. Confirm the reaction and exact formulation."
       },
       {
-        "id": "PGP",
-        "priority": 9,
+        "id": "QT_RISK",
+        "priority": 10,
         "when": {
-          "field": "oral_pgp_inhibitor_unavoidable",
+          "field": "qt_risk",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "relugolix"
           ],
-          "message": "Administer relugolix first and separate the P-gp inhibitor by at least 6 hours; short interruption up to 2 weeks may be considered."
+          "message": "Assess QT-prolongation and torsades risk, interacting medicines and need for ECG/electrolyte review. This is a benefit-risk review, not an invented automatic QT stop threshold."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "orgovyx SmPC",
+          "page": "4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8"
         },
-        "explanation": "Administer relugolix first and separate the P-gp inhibitor by at least 6 hours; short interruption up to 2 weeks may be considered."
+        "explanation": "Assess QT-prolongation and torsades risk, interacting medicines and need for ECG/electrolyte review. This is a benefit-risk review, not an invented automatic QT stop threshold."
       },
       {
-        "id": "INDUCER",
-        "priority": 12,
+        "id": "GLUCOSE",
+        "priority": 10,
         "when": {
-          "field": "pgp_strong_cyp3a_inducer_unavoidable",
+          "field": "uncontrolled_glucose_or_diabetes",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "relugolix"
           ],
-          "message": "If unavoidable, the NCCP pathway increases relugolix to 240 mg once daily during the combined P-gp/strong CYP3A inducer, then returns to 120 mg once daily after discontinuation; confirm the plan with the treating consultant/pharmacist."
+          "message": "Review glucose control and monitoring during androgen deprivation. No universal glucose dose-reduction threshold is supplied by this regimen."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "orgovyx SmPC",
+          "page": "4.8",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8"
         },
-        "explanation": "If unavoidable, the NCCP pathway increases relugolix to 240 mg once daily during the combined P-gp/strong CYP3A inducer, then returns to 120 mg once daily after discontinuation; confirm the plan with the treating consultant/pharmacist."
+        "explanation": "Review glucose control and monitoring during androgen deprivation. No universal glucose dose-reduction threshold is supplied by this regimen."
+      },
+      {
+        "id": "BONE_HEALTH",
+        "priority": 10,
+        "when": {
+          "field": "bone_health_not_addressed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Address fracture risk, bone-health assessment, exercise, calcium and vitamin D according to individual need and local policy. Do not assume every patient needs a bone-metastasis-dose agent."
+        },
+        "source": {
+          "document": "orgovyx SmPC",
+          "page": "4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8"
+        },
+        "explanation": "Address fracture risk, bone-health assessment, exercise, calcium and vitamin D according to individual need and local policy. Do not assume every patient needs a bone-metastasis-dose agent."
+      },
+      {
+        "id": "CV_RISK",
+        "priority": 10,
+        "when": {
+          "field": "cardiovascular_risk_not_addressed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Review pre-existing cardiovascular disease and modifiable risk factors before and during ADT."
+        },
+        "source": {
+          "document": "orgovyx SmPC",
+          "page": "4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8"
+        },
+        "explanation": "Review pre-existing cardiovascular disease and modifiable risk factors before and during ADT."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "relugolix"
+          ],
+          "message": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "Exclusions / clinical history",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7",
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold."
+        },
+        "explanation": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
+      },
+      {
+        "id": "RESPONSE",
+        "priority": 10,
+        "when": {
+          "field": "suboptimal_response",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Review symptoms, PSA, testosterone suppression, adherence/administration and the overall disease plan. Do not assume isolated PSA change mandates stopping ADT."
+        },
+        "source": {
+          "document": "orgovyx SmPC",
+          "page": "4.2 / 5.1",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8"
+        },
+        "explanation": "Review symptoms, PSA, testosterone suppression, adherence/administration and the overall disease plan. Do not assume isolated PSA change mandates stopping ADT."
       },
       {
         "id": "RENAL_SEVERE",
-        "priority": 13,
+        "priority": 10,
         "when": {
           "field": "renal_band",
           "operator": "in",
@@ -287,21 +502,23 @@
           ]
         },
         "action": {
-          "type": "proceed_with_caution",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "relugolix"
           ],
-          "message": "Use caution in severe renal impairment or dialysis."
+          "message": "Severe renal impairment/dialysis: limited evidence; specialist review. No numeric reduction is specified and no CrCl threshold is invented."
         },
         "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00830 v3",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
         },
-        "explanation": "Use caution in severe renal impairment or dialysis."
+        "explanation": "Severe renal impairment/dialysis: limited evidence; specialist review. No numeric reduction is specified and no CrCl threshold is invented."
       },
       {
         "id": "HEPATIC_SEVERE",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "hepatic_band",
           "operator": "==",
@@ -310,36 +527,211 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "relugolix"
           ],
-          "message": "Severe hepatic impairment requires specialist review because the source only confirms no adjustment for mild/moderate impairment."
+          "message": "Severe hepatic impairment has not been adequately studied; specialist review. No evidence-based automatic dose adjustment is specified."
         },
         "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
+          "document": "orgovyx SmPC",
+          "page": "4.2 / 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8"
         },
-        "explanation": "Severe hepatic impairment requires specialist review because the source only confirms no adjustment for mild/moderate impairment."
+        "explanation": "Severe hepatic impairment has not been adequately studied; specialist review. No evidence-based automatic dose adjustment is specified."
       },
       {
-        "id": "QT",
-        "priority": 9,
+        "id": "ECOG",
+        "priority": 10,
         "when": {
-          "field": "qt_risk",
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "NCCP eligibility is ECOG 0–2."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
+        },
+        "explanation": "NCCP eligibility is ECOG 0–2."
+      },
+      {
+        "id": "MISSED_WITHIN12",
+        "priority": 10,
+        "when": {
+          "field": "missed_dose_hours",
+          "operator": "<=",
+          "value": 12
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Take the missed dose when remembered if no more than 12 hours late; do not double doses. Check the full interruption history."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
+        },
+        "explanation": "Take the missed dose when remembered if no more than 12 hours late; do not double doses. Check the full interruption history."
+      },
+      {
+        "id": "MISSED_OVER12",
+        "priority": 10,
+        "when": {
+          "field": "missed_dose_hours",
+          "operator": ">",
+          "value": 12
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Omit this missed dose only; resume the usual schedule the next day. This does not mean permanently stopping treatment."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
+        },
+        "explanation": "Omit this missed dose only; resume the usual schedule the next day. This does not mean permanently stopping treatment."
+      },
+      {
+        "id": "RELOAD",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "interruption_days",
+              "operator": ">",
+              "value": 7
+            },
+            {
+              "field": "interruption_over_7_days",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "After an interruption greater than 7 days, NCCP specifies a 360 mg loading dose on restart, then 120 mg once daily. Confirm the reason for interruption and any ongoing interacting inducer with pharmacy before prescribing the restart."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "1–2",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
+        },
+        "explanation": "After an interruption greater than 7 days, NCCP specifies a 360 mg loading dose on restart, then 120 mg once daily. Confirm the reason for interruption and any ongoing interacting inducer with pharmacy before prescribing the restart."
+      },
+      {
+        "id": "PGP_INHIBITOR",
+        "priority": 10,
+        "when": {
+          "field": "oral_pgp_inhibitor_unavoidable",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "relugolix"
           ],
-          "message": "Assess the QT-prolongation benefit-risk before treatment."
+          "message": "Avoid oral P-gp inhibitors if possible. If unavoidable, take relugolix first, then the inhibitor at least 6 hours later; monitor more closely. A short-course interruption up to 2 weeks may be considered; apply the >7-day restart rule."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00830 v3",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
         },
-        "explanation": "Assess the QT-prolongation benefit-risk before treatment."
+        "explanation": "Avoid oral P-gp inhibitors if possible. If unavoidable, take relugolix first, then the inhibitor at least 6 hours later; monitor more closely. A short-course interruption up to 2 weeks may be considered; apply the >7-day restart rule."
+      },
+      {
+        "id": "PGP_CYP3A_INDUCER",
+        "priority": 10,
+        "when": {
+          "field": "pgp_strong_cyp3a_inducer_unavoidable",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Avoid combined P-gp and strong CYP3A inducers. If unavoidable, NCCP specifies relugolix 240 mg once daily during co-administration, returning to 120 mg once daily after the inducer is discontinued. Pharmacy must reconcile initiation or restart dosing."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
+        },
+        "explanation": "Avoid combined P-gp and strong CYP3A inducers. If unavoidable, NCCP specifies relugolix 240 mg once daily during co-administration, returning to 120 mg once daily after the inducer is discontinued. Pharmacy must reconcile initiation or restart dosing."
+      },
+      {
+        "id": "INTERACTION_STOPPED",
+        "priority": 10,
+        "when": {
+          "field": "interacting_medicine_stopped",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Recheck the dose, timing and interruption history when an interacting medicine is stopped. After a combined inducer, return to the recommended 120 mg daily under the prescribing plan."
+        },
+        "source": {
+          "document": "NCCP 00830 v3",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+          "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7"
+        },
+        "explanation": "Recheck the dose, timing and interruption history when an interacting medicine is stopped. After a combined inducer, return to the recommended 120 mg daily under the prescribing plan."
+      },
+      {
+        "id": "ADT_OVERLAP",
+        "priority": 10,
+        "when": {
+          "field": "ongoing_gnrh_depot",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "relugolix"
+          ],
+          "message": "Relugolix itself supplies medical androgen deprivation. Confirm switching timing and avoid unintended duplicate GnRH treatment; do not automatically add it to an existing depot."
+        },
+        "source": {
+          "document": "orgovyx SmPC",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+          "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8",
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold."
+        },
+        "explanation": "Relugolix itself supplies medical androgen deprivation. Confirm switching timing and avoid unintended duplicate GnRH treatment; do not automatically add it to an existing depot."
       }
     ]
   },
@@ -353,7 +745,12 @@
         "instructions": "May be taken with or without food; swallow whole. If a dose is >12 hours late, omit it."
       }
     ],
-    "additional_requirement": "Continue medical castration unless surgically castrated where specified in the NCCP source."
+    "cycle_length_days": null,
+    "drugs": [
+      "relugolix"
+    ],
+    "schedule_summary": "Relugolix 360 mg on the first day, then 120 mg once daily without planned breaks. Your specialist sets the duration and any prescribed changes.",
+    "duration_text": "Individual duration according to disease setting and treatment plan"
   },
   "eligibility": [
     "Histologically/cytologically confirmed prostate adenocarcinoma",
@@ -373,7 +770,7 @@
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "minimal",
+    "emetogenic_risk": "oral_minimal_low",
     "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
@@ -386,9 +783,9 @@
   },
   "indications": [
     {
-      "indication_id": "00830-gu",
-      "code": "00830g",
-      "description": "Androgen-deprivation therapy for advanced prostate cancer."
+      "indication_id": "00830a",
+      "code": "00830a",
+      "description": "Treatment of adult patients with advanced hormone-sensitive prostate cancer."
     }
   ]
 }

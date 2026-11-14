@@ -45575,6 +45575,581 @@ const definitions={
         "checked": "2026-11-11"
       }
     ]
+  },
+  "00830": {
+    "code": "00830",
+    "title": "Relugolix: daily hormone treatment: treatment and checks",
+    "release": "0.84.52",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults with advanced hormone-sensitive prostate cancer, following specialist assessment.",
+    "summary": "Relugolix 360 mg on the first day, then 120 mg once daily without planned breaks. Your specialist sets the duration and any prescribed changes.",
+    "stages": [
+      "Before starting",
+      "First treatment",
+      "Between appointments",
+      "Next review",
+      "Longer-term care"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, blood glucose and a bone blood profile. Review heart disease, blood pressure, diabetes, mood, falls and fracture risk, sexual health, medicines and the treatment goal. An ECG (heart tracing) is also a baseline NCCP test.",
+          "Confirm baseline results and the starting plan.",
+          "Repeat blood count, kidney and liver tests and blood glucose as arranged. Bone blood tests and ECG are repeated when clinically indicated. PSA, testosterone and scans follow the individual cancer plan.",
+          "Confirm results and symptoms before the next prescription or injection.",
+          "Review bone, metabolic and heart health."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Agree treatment aim, formulation, duration and medicines list.",
+          "Swallow tablets whole, with or without food, at about the same time daily. If no more than 12 hours late, take the missed dose when remembered; if more than 12 hours late, skip it and resume the next day. Never double the dose.",
+          "Keep an accurate medicine / injection record.",
+          "If treatment is interrupted for more than 7 days, contact the team before restarting: a new loading dose is normally needed. Some interacting medicines require a different dose or separation by at least 6 hours. Do not change the dose yourself; ask pharmacy to check every new medicine.",
+          "Continue until the team changes the plan."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Cancer response",
+        "kind": "support",
+        "cells": [
+          "Prostate-specific antigen (PSA) helps assess cancer activity. Testosterone checks the effect of hormone suppression, especially if response is uncertain. Your team interprets these with symptoms and scans.",
+          "Document the baseline PSA and clinical picture.",
+          "Ask when the next PSA and any testosterone test are due.",
+          "Review symptoms and results together.",
+          "Scans follow the individual plan; there is no universal interval."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "Loading dose, then once daily",
+        "why": "This is androgen deprivation therapy (ADT): it lowers testosterone to help control prostate cancer. With radiotherapy, the aim may be cure; in advanced disease, it is part of ongoing cancer control.",
+        "clinical": "Relugolix 360 mg on the first day, then 120 mg once daily without planned breaks. Your specialist sets the duration and any prescribed changes.",
+        "action": "Repeat blood count, kidney and liver tests and blood glucose as arranged. Bone blood tests and ECG are repeated when clinically indicated. PSA, testosterone and scans follow the individual cancer plan.",
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00830 v3: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6431/830_v3_Relugolix.pdf",
+        "sha256": "7898396cdf881311ea9a425eea9e1cbfea086ac8329c795a70d172fb9894f9a7",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "smPC",
+        "title": "Orgovyx: product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/orgovyx-epar-product-information_en.pdf",
+        "sha256": "83d5275c068e4da33497bf48ce37dfa4eca293d7cd335add5247289a5323daa8",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "adt",
+        "title": "NCI: hormone therapy for prostate cancer",
+        "url": "https://www.cancer.gov/types/prostate/prostate-hormone-therapy-fact-sheet",
+        "checked": "2026-11-14"
+      }
+    ]
+  },
+  "00481": {
+    "code": "00481",
+    "title": "Degarelix: hormone injections every 28 days: treatment and checks",
+    "release": "0.84.52",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adult men with advanced hormone-dependent prostate cancer, as covered by NCCP 00481.",
+    "summary": "The first dose is 240 mg as two 120 mg injections under the skin. The first 80 mg maintenance injection is 28 days later, then 80 mg every 28 days. The team sets the total duration.",
+    "stages": [
+      "Before starting",
+      "First treatment",
+      "Between appointments",
+      "Next review",
+      "Longer-term care"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, blood glucose and a bone blood profile. Review heart disease, blood pressure, diabetes, mood, falls and fracture risk, sexual health, medicines and the treatment goal.",
+          "Confirm baseline results and the starting plan.",
+          "Repeat blood count, kidney and liver tests, blood glucose and bone blood profile when clinically indicated. Review symptoms and the injection sites. PSA, testosterone and scans follow the individual cancer plan.",
+          "Confirm results and symptoms before the next prescription or injection.",
+          "Review bone, metabolic and heart health."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Agree treatment aim, formulation, duration and medicines list.",
+          "A trained healthcare professional gives the injections under the skin of the abdomen. Injection sites are changed and kept away from pressure from belts or waistbands. This formulation is not given into a vein or muscle.",
+          "Keep an accurate medicine / injection record.",
+          "Book the next injection before leaving. If an appointment is missed, contact the team promptly for a new date; do not arrange an extra loading dose yourself. Degarelix does not produce an initial testosterone surge, so anti-androgen treatment solely for flare prevention is not normally needed.",
+          "Continue until the team changes the plan."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Cancer response",
+        "kind": "support",
+        "cells": [
+          "Prostate-specific antigen (PSA) helps assess cancer activity. Testosterone checks the effect of hormone suppression, especially if response is uncertain. Your team interprets these with symptoms and scans.",
+          "Document the baseline PSA and clinical picture.",
+          "Ask when the next PSA and any testosterone test are due.",
+          "Review symptoms and results together.",
+          "Scans follow the individual plan; there is no universal interval."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "Two starting injections; then every 28 days",
+        "why": "This is androgen deprivation therapy (ADT): it lowers testosterone to help control prostate cancer. With radiotherapy, the aim may be cure; in advanced disease, it is part of ongoing cancer control.",
+        "clinical": "The first dose is 240 mg as two 120 mg injections under the skin. The first 80 mg maintenance injection is 28 days later, then 80 mg every 28 days. The team sets the total duration.",
+        "action": "Repeat blood count, kidney and liver tests, blood glucose and bone blood profile when clinically indicated. Review symptoms and the injection sites. PSA, testosterone and scans follow the individual cancer plan.",
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00481 v3: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6496/481_v3_Degarelix_Therapy.pdf",
+        "sha256": "ec3a14dc4a8db4ac26ab5872f5a354111eb39f90880ca0a52e5b78df9aa67ed7",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "smPC",
+        "title": "Firmagon: product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/firmagon-epar-product-information_en.pdf",
+        "sha256": "30eb95905f2a85834a14ebb60e9d230d12617fcceb70d78d157d98caee89b918",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "adt",
+        "title": "NCI: hormone therapy for prostate cancer",
+        "url": "https://www.cancer.gov/types/prostate/prostate-hormone-therapy-fact-sheet",
+        "checked": "2026-11-14"
+      }
+    ]
+  },
+  "00477": {
+    "code": "00477",
+    "title": "Goserelin 10.8 mg: hormone implant every 12 weeks: treatment and checks",
+    "release": "0.84.52",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced or metastatic hormone-sensitive prostate cancer under NCCP 00477.",
+    "summary": "Goserelin 10.8 mg is placed under the skin of the front of the abdomen every 12 weeks (84 days). Your team writes the next date and the intended treatment duration.",
+    "stages": [
+      "Before starting",
+      "First treatment",
+      "Between appointments",
+      "Next review",
+      "Longer-term care"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, blood glucose and a bone blood profile. Review heart disease, blood pressure, diabetes, mood, falls and fracture risk, sexual health, medicines and the treatment goal.",
+          "Confirm baseline results and the starting plan.",
+          "Regular blood count, kidney and liver tests, blood glucose and bone blood profile. NCCP does not specify one interval for these tests. Review symptoms, PSA and testosterone, with scans according to the individual plan.",
+          "Confirm results and symptoms before the next prescription or injection.",
+          "Review bone, metabolic and heart health."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Agree treatment aim, formulation, duration and medicines list.",
+          "A trained healthcare professional places the implant under the skin of the front of the abdomen. This 10.8 mg implant has a different schedule from the 3.6 mg formulation; do not swap strengths or appointment intervals.",
+          "Keep an accurate medicine / injection record.",
+          "Tell the team if you take blood-thinning medicines or are very thin. These can increase bleeding risk at implantation. Severe abdominal pain, marked swelling, dizziness or collapse afterwards needs urgent help. Do not stop blood thinners yourself.",
+          "Continue until the team changes the plan."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Cancer response",
+        "kind": "support",
+        "cells": [
+          "Prostate-specific antigen (PSA) helps assess cancer activity. Testosterone checks the effect of hormone suppression, especially if response is uncertain. Your team interprets these with symptoms and scans.",
+          "Document the baseline PSA and clinical picture.",
+          "Ask when the next PSA and any testosterone test are due.",
+          "Review symptoms and results together.",
+          "Scans follow the individual plan; there is no universal interval."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "One implant every 12 weeks",
+        "why": "This is androgen deprivation therapy (ADT): it lowers testosterone to help control prostate cancer. With radiotherapy, the aim may be cure; in advanced disease, it is part of ongoing cancer control.",
+        "clinical": "Goserelin 10.8 mg is placed under the skin of the front of the abdomen every 12 weeks (84 days). Your team writes the next date and the intended treatment duration.",
+        "action": "Regular blood count, kidney and liver tests, blood glucose and bone blood profile. NCCP does not specify one interval for these tests. Review symptoms, PSA and testosterone, with scans according to the individual plan.",
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00477 v3: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6978/477_v3_Goserelin_10.8mg.pdf",
+        "sha256": "f9952b81b925cb550e26e53e91fc0823e4f5a1d8ae99683d901cebee3c1c8e41",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "smPC",
+        "title": "Zoladex LA: product information",
+        "url": "https://assets.hpra.ie/products/Human/23462/Licence_PA1019-027-002_30062026120416.pdf",
+        "sha256": "66b37e40e320135da5f272986d2fbfeb41c812dc5a6f91a172b0dd5039386513",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "adt",
+        "title": "NCI: hormone therapy for prostate cancer",
+        "url": "https://www.cancer.gov/types/prostate/prostate-hormone-therapy-fact-sheet",
+        "checked": "2026-11-14"
+      }
+    ]
+  },
+  "00479": {
+    "code": "00479",
+    "title": "Leuprorelin 22.5 mg: hormone injection every 12 weeks: treatment and checks",
+    "release": "0.84.52",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Hormone-dependent advanced prostate cancer, or high-risk localised/locally advanced hormone-dependent disease in combination with radiotherapy.",
+    "summary": "Leuprorelin 22.5 mg is injected under the skin every 12 weeks (84 days) in this NCCP regimen. The prescribed duration depends on whether it supports radiotherapy or treats advanced disease.",
+    "stages": [
+      "Before starting",
+      "First treatment",
+      "Between appointments",
+      "Next review",
+      "Longer-term care"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, blood glucose and a bone blood profile. Review heart disease, blood pressure, diabetes, mood, falls and fracture risk, sexual health, medicines and the treatment goal.",
+          "Confirm baseline results and the starting plan.",
+          "Repeat blood count, kidney and liver tests, glucose and bone blood profile when clinically indicated. PSA and testosterone assess response. A suspected preparation or administration problem needs review and a testosterone check.",
+          "Confirm results and symptoms before the next prescription or injection.",
+          "Review bone, metabolic and heart health."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Agree treatment aim, formulation, duration and medicines list.",
+          "A trained healthcare professional prepares and gives this specific formulation under the skin. Correct mixing and administration matter for hormone suppression. Different leuprorelin products and strengths have different instructions; they must not be substituted by matching the number of milligrams alone.",
+          "Keep an accurate medicine / injection record.",
+          "Confirm the exact next injection date. With radiotherapy, ask when hormone treatment starts and ends and how the radiotherapy dates fit. A low PSA does not mean you should stop injections. Tell the team about worsening pain, trouble passing urine or severe headache with vision changes.",
+          "Continue until the team changes the plan."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Cancer response",
+        "kind": "support",
+        "cells": [
+          "Prostate-specific antigen (PSA) helps assess cancer activity. Testosterone checks the effect of hormone suppression, especially if response is uncertain. Your team interprets these with symptoms and scans.",
+          "Document the baseline PSA and clinical picture.",
+          "Ask when the next PSA and any testosterone test are due.",
+          "Review symptoms and results together.",
+          "Scans follow the individual plan; there is no universal interval."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "One injection every 12 weeks",
+        "why": "This is androgen deprivation therapy (ADT): it lowers testosterone to help control prostate cancer. With radiotherapy, the aim may be cure; in advanced disease, it is part of ongoing cancer control.",
+        "clinical": "Leuprorelin 22.5 mg is injected under the skin every 12 weeks (84 days) in this NCCP regimen. The prescribed duration depends on whether it supports radiotherapy or treats advanced disease.",
+        "action": "Repeat blood count, kidney and liver tests, glucose and bone blood profile when clinically indicated. PSA and testosterone assess response. A suspected preparation or administration problem needs review and a testosterone check.",
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00479 v3: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6494/479_v3_Leuprorelin_22.5mg.pdf",
+        "sha256": "33b57082d5c6c0b2724219fce7570be6857c20c6ccb857f550a28456a45ade14",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "smPC",
+        "title": "Eligard: product information",
+        "url": "https://assets.hpra.ie/products/Human/25689/Licence_PA0812-005-002_18102024115227.pdf",
+        "sha256": "17df5ea1512d2709bae6dad8eed1ae6778feb14fc4adb451505cf06778795e6c",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "adt",
+        "title": "NCI: hormone therapy for prostate cancer",
+        "url": "https://www.cancer.gov/types/prostate/prostate-hormone-therapy-fact-sheet",
+        "checked": "2026-11-14"
+      }
+    ]
+  },
+  "00480": {
+    "code": "00480",
+    "title": "Triptorelin 11.25 mg: hormone injection every 12 weeks: treatment and checks",
+    "release": "0.84.52",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced or metastatic hormone-dependent prostate cancer under NCCP 00480.",
+    "summary": "Triptorelin 11.25 mg is given every 12 weeks (84 days). The usual NCCP route is into a muscle; the source also permits injection under the skin for this formulation.",
+    "stages": [
+      "Before starting",
+      "First treatment",
+      "Between appointments",
+      "Next review",
+      "Longer-term care"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, blood glucose and a bone blood profile. Review heart disease, blood pressure, diabetes, mood, falls and fracture risk, sexual health, medicines and the treatment goal.",
+          "Confirm baseline results and the starting plan.",
+          "Repeat blood count, kidney and liver tests, glucose and bone blood profile when clinically indicated. Review symptoms, PSA and testosterone; scans and the frequency of tests follow the individual plan.",
+          "Confirm results and symptoms before the next prescription or injection.",
+          "Review bone, metabolic and heart health."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Treatment and appointments",
+        "kind": "treatment",
+        "cells": [
+          "Agree treatment aim, formulation, duration and medicines list.",
+          "A trained healthcare professional prepares and gives the injection using the product-specific instructions. Confirm the 11.25 mg formulation, agreed route and next appointment. Other triptorelin strengths have different schedules.",
+          "Keep an accurate medicine / injection record.",
+          "The team assesses temporary anti-androgen protection against the initial hormone flare. Report worsening pain or trouble passing urine promptly. New weakness or changes in bladder/bowel control require emergency assessment. Keep the written injection dates even if you feel well.",
+          "Continue until the team changes the plan."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      },
+      {
+        "label": "Cancer response",
+        "kind": "support",
+        "cells": [
+          "Prostate-specific antigen (PSA) helps assess cancer activity. Testosterone checks the effect of hormone suppression, especially if response is uncertain. Your team interprets these with symptoms and scans.",
+          "Document the baseline PSA and clinical picture.",
+          "Ask when the next PSA and any testosterone test are due.",
+          "Review symptoms and results together.",
+          "Scans follow the individual plan; there is no universal interval."
+        ],
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ],
+        "note": "Use your individual prescription and exact dates."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "One injection every 12 weeks",
+        "why": "This is androgen deprivation therapy (ADT): it lowers testosterone to help control prostate cancer. With radiotherapy, the aim may be cure; in advanced disease, it is part of ongoing cancer control.",
+        "clinical": "Triptorelin 11.25 mg is given every 12 weeks (84 days). The usual NCCP route is into a muscle; the source also permits injection under the skin for this formulation.",
+        "action": "Repeat blood count, kidney and liver tests, glucose and bone blood profile when clinically indicated. Review symptoms, PSA and testosterone; scans and the frequency of tests follow the individual plan.",
+        "source_ids": [
+          "nccp",
+          "smPC"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00480 v3: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6495/480_v3_Triptorelin_11.25mg.pdf",
+        "sha256": "7203aaba95341f282a0e2003eaada335477bf3ce97321e9b1a08cec8039df1a9",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "smPC",
+        "title": "Decapeptyl 3-month: product information",
+        "url": "https://assets.hpra.ie/products/Human/22465/Licence_PA0869-003-002_07022025123038.pdf",
+        "sha256": "a21691cf48cf3e41b991585a297341f20cd6dcb88da2ef93d902c752e15d284c",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      },
+      {
+        "id": "adt",
+        "title": "NCI: hormone therapy for prostate cancer",
+        "url": "https://www.cancer.gov/types/prostate/prostate-hormone-therapy-fact-sheet",
+        "checked": "2026-11-14"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

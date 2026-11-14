@@ -168,9 +168,13 @@ assert(!akeegaAliases.includes('Zejula'), 'Akeega must not be mislabeled as sing
 assert(!akeegaAliases.includes('Zytiga'), 'Akeega must not be mislabeled as single-agent Zytiga.');
 
 const relugolix = byCode('00830');
-const inducerRule = relugolix.rule_engine.rules.find(rule => rule.id === 'INDUCER');
+// v0.84.52 reconciles the interaction name and input to NCCP 00830 v3, page 2.
+const inducerRule = relugolix.rule_engine.rules.find(rule => rule.id === 'PGP_CYP3A_INDUCER');
+assert(inducerRule, 'Relugolix combined P-gp/strong CYP3A inducer rule is missing.');
+assert.deepStrictEqual(inducerRule.when, { field: 'pgp_strong_cyp3a_inducer_unavoidable', operator: '==', value: true });
 assert.strictEqual(inducerRule.action.type, 'consultant_review', 'Relugolix dose escalation must not be mislabeled as a dose reduction.');
 assert(/240 mg/.test(inducerRule.explanation), 'Relugolix combined-inducer pathway lacks the encoded 240 mg instruction.');
+assert(/120 mg.*after the inducer is discontinued/.test(inducerRule.explanation), 'Relugolix inducer withdrawal must restore the recommended dose.');
 
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert(html.includes('v0.56.1 · What changed?'), 'v0.38.0 release badge is missing.');
