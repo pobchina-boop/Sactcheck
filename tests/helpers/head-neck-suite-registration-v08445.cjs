@@ -1,5 +1,5 @@
 'use strict';
 const assert=require('node:assert/strict');
-const added=['00294','00242','00295','00615','00893','00385','00387','00705','00706','00314','00552','00417','00418','00696','00315','00323','00324','00332','00419','00514','00517','00903','00589','00591'];
+const added=['00103','00577','00233','00574','00693','00294','00242','00295','00615','00893','00385','00387','00705','00706','00314','00552','00417','00418','00696','00315','00323','00324','00332','00419','00514','00517','00903','00589','00591'];
 function registry(codes,prior){assert.equal(prior.length,199);assert(added.every(x=>!prior.includes(x)));assert.deepEqual([...codes].sort(),[...prior,...added].sort(),'Exact registry codes: 199 prior plus four v45, five v47 five v48 five v49 and five v50 entries; 00419 and 00294 have context-only profiles');}
 module.exports={registry,added};

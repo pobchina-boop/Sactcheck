@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 5,
     "source_url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.51",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -44,13 +44,12 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": true,
+      "official_catalogue_and_source_link_checked": true,
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "clinical_use_authorised": false
     },
     "file_name": "00103-abiraterone-prednisolone-mcrpc.json",
     "tumour_groups": [
@@ -59,7 +58,7 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-14",
     "regimen_card": {
       "contexts": [
         {
@@ -92,24 +91,46 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.51",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP and EMA source reconciliation; source discrepancies require specialist resolution. Tests and independent approval pending."
     },
-    "canonical_protocol_id": "nccp-00103-v9"
+    "canonical_protocol_id": "nccp-00103-v9",
+    "clinical_audit_release": "0.84.51"
   },
   "clinical_governance": {
-    "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
-    "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00103 Version 9. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
+    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "disclaimer": "Source-reconciled feasibility encoding; independent clinical and pharmacy approval pending."
   },
   "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Before first dose"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "toxicity_review",
+          "label": "Recovery / restart review"
+        }
+      ],
+      "demo_value": "pre_treatment",
+      "input_role": "context"
+    },
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
@@ -139,159 +160,247 @@
       "demo_value": 0,
       "input_role": "decision"
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (actual value entered in UI; ×ULN calculated automatically)",
+    "child_pugh": {
+      "label": "Child–Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A"
+        },
+        {
+          "value": "B",
+          "label": "B"
+        },
+        {
+          "value": "C",
+          "label": "C"
+        }
+      ],
+      "demo_value": "A",
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
     },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST result (actual value entered in UI; highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "alp_u_l": {
-      "label": "Alkaline phosphatase (CUH ULN 120 U/L)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 100,
-      "unit": "U/L",
-      "input_role": "decision"
-    },
-    "creatinine_below_1_5_uln": {
-      "label": "Creatinine is <1.5 × the reporting laboratory ULN",
+    "hypersensitivity": {
+      "label": "Hypersensitivity",
       "type": "boolean",
       "required": false,
-      "demo_value": true,
-      "help_text": "The male creatinine ULN is laboratory-specific; use the report flag/reference range.",
+      "demo_value": false,
       "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Prior permanent stop",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "medical_or_surgical_castration_confirmed": {
+      "label": "Medical or surgical castration confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_toxicity_interruption": {
+      "label": "Prior toxicity interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "intolerable_toxicity": {
+      "label": "Intolerable toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "toxicity_grade": {
+      "label": "Current treatment-related toxicity grade (identify specific event)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00103 v9 grading; edition not specified"
+    },
+    "alt_ast_uln_multiple": {
+      "label": "Highest ALT or AST / local ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "×ULN"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / local ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "×ULN"
     },
     "potassium_mmol_l": {
       "label": "Serum potassium",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 0.1,
-      "demo_value": 4.2,
-      "unit": "mmol/L",
-      "input_role": "decision"
+      "step": 0.01,
+      "demo_value": 4,
+      "input_role": "decision",
+      "unit": "mmol/L"
     },
-    "child_pugh": {
-      "label": "Hepatic impairment",
-      "type": "select",
+    "lvef_percent": {
+      "label": "LVEF",
+      "type": "number",
       "required": false,
-      "options": [
-        {
-          "value": "none",
-          "label": "No hepatic impairment"
-        },
-        {
-          "value": "A",
-          "label": "Child-Pugh A"
-        },
-        {
-          "value": "B",
-          "label": "Child-Pugh B"
-        },
-        {
-          "value": "C",
-          "label": "Child-Pugh C"
-        }
-      ],
-      "demo_value": "none",
-      "input_role": "decision"
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 60,
+      "input_role": "decision",
+      "unit": "%"
     },
-    "toxicity_grade": {
-      "label": "Worst current abiraterone-related non-haematological toxicity",
-      "type": "select",
+    "current_daily_dose_mg": {
+      "label": "Current total daily abiraterone dose",
+      "type": "number",
       "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "description": "No clinical or laboratory evidence of this adverse event.",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "description": "Mild or asymptomatic; observation or diagnostic review only; intervention generally not indicated.",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "description": "Moderate; minimal, local or non-invasive intervention may be indicated; limits instrumental activities of daily living.",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "description": "Severe or medically significant but not immediately life-threatening; hospitalisation may be indicated; limits self-care activities of daily living.",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "description": "Life-threatening consequences requiring urgent intervention.",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1000,
+      "input_role": "decision",
+      "unit": "mg"
     },
     "concurrent_radium223": {
-      "label": "Concurrent radium-223",
+      "label": "Concurrent radium223",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "uncontrolled_hypertension": {
-      "label": "Hypertension not adequately controlled",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "significant_cardiac_disease": {
-      "label": "Clinically significant cardiac disease / baseline LVEF <50%",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "active_hepatitis_or_chronic_liver_disease": {
-      "label": "Active/symptomatic viral hepatitis or relevant chronic liver disease",
+      "label": "Uncontrolled hypertension",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "adrenal_dysfunction": {
-      "label": "History of adrenal dysfunction",
+      "label": "Adrenal dysfunction",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
+    "active_viral_hepatitis": {
+      "label": "Active viral hepatitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hypokalaemia_symptomatic": {
+      "label": "Hypokalaemia symptomatic",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_abiraterone_hepatotoxicity": {
+      "label": "Prior abiraterone hepatotoxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recurrent_hepatotoxicity_at_500mg": {
+      "label": "Recurrent hepatotoxicity at 500mg",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "liver_tests_back_to_patient_baseline": {
+      "label": "Liver tests back to patient baseline",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "alp_uln_multiple": {
+      "label": "ALP / laboratory ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "×ULN"
+    },
+    "creatinine_uln_multiple": {
+      "label": "Creatinine / laboratory ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "×ULN",
+      "actual_result_adapter": "creatinine_uln"
+    },
     "visceral_metastases": {
-      "label": "Visceral metastases present (NCCP mCRPC exclusion)",
+      "label": "Visceral metastases",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -301,10 +410,13 @@
   "required_inputs": [],
   "output_templates": {
     "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
-    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
-    "consultant_review": "The entered value requires protocol-specific clinical review.",
-    "withhold": "Withhold and reassess according to the official NCCP pathway.",
-    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+    "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
+    "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and repeat assessment according to the official NCCP pathway.",
+    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
+    "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
+    "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
@@ -328,8 +440,98 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_SOURCE",
-        "priority": 9,
+        "id": "HYPERSENSITIVITY",
+        "priority": 10,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Relevant hypersensitivity is an exclusion."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "A permanent stop remains in force despite recovered measurements; do not restart automatically."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "A permanent stop remains in force despite recovered measurements; do not restart automatically."
+      },
+      {
+        "id": "ADT_NOT_CONFIRMED",
+        "priority": 10,
+        "when": {
+          "field": "medical_or_surgical_castration_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Confirm and continue medical ADT unless surgically castrated. This oral regimen does not replace the ADT backbone.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Treatment",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Confirm and continue medical ADT unless surgically castrated. This oral regimen does not replace the ADT backbone."
+      },
+      {
+        "id": "RESTART_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_toxicity_interruption",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Confirm the cause, highest severity, recovery and previous dose. Recovery alone does not authorise a restart. Resume only after grade 1 or baseline; liver injury has separate restart rules.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Confirm the cause, highest severity, recovery and previous dose. Recovery alone does not authorise a restart. Resume only after grade 1 or baseline; liver injury has separate restart rules."
+      },
+      {
+        "id": "ECOG_OUTSIDE",
+        "priority": 10,
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -338,187 +540,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "abiraterone"
           ],
-          "message": "ECOG is outside the NCCP eligibility range 0–2."
+          "message": "Outside the indication-specific NCCP ECOG range.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00103 v9",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
         },
-        "explanation": "ECOG is outside the NCCP eligibility range 0–2."
-      },
-      {
-        "id": "BILIRUBIN_ELIGIBILITY",
-        "priority": 9,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">=",
-          "value": 1.5
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Bilirubin does not meet the encoded NCCP eligibility criterion <1.5 ×ULN."
-        },
-        "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Bilirubin does not meet the encoded NCCP eligibility criterion <1.5 ×ULN."
-      },
-      {
-        "id": "TRANSAMINASE_ELIGIBILITY",
-        "priority": 9,
-        "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">=",
-          "value": 2.5
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ALT/AST do not meet the encoded NCCP eligibility criterion <2.5 ×ULN."
-        },
-        "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "ALT/AST do not meet the encoded NCCP eligibility criterion <2.5 ×ULN."
-      },
-      {
-        "id": "ALP_ELIGIBILITY",
-        "priority": 9,
-        "when": {
-          "field": "alp_u_l",
-          "operator": ">=",
-          "value": 720
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ALP is ≥6 × the configured CUH ULN (120 U/L); NCCP eligibility requires <6 ×ULN."
-        },
-        "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "ALP is ≥6 × the configured CUH ULN (120 U/L); NCCP eligibility requires <6 ×ULN."
-      },
-      {
-        "id": "CREATININE_ELIGIBILITY",
-        "priority": 9,
-        "when": {
-          "field": "creatinine_below_1_5_uln",
-          "operator": "==",
-          "value": false
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Creatinine does not meet the NCCP eligibility criterion <1.5 × local ULN."
-        },
-        "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Creatinine does not meet the NCCP eligibility criterion <1.5 × local ULN."
-      },
-      {
-        "id": "POTASSIUM_LOW",
-        "priority": 6,
-        "when": {
-          "field": "potassium_mmol_l",
-          "operator": "<=",
-          "value": 3.5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Correct hypokalaemia before treatment; NCCP requires potassium >3.5 mmol/L and recommends maintaining >4.0 where possible."
-        },
-        "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Correct hypokalaemia before treatment; NCCP requires potassium >3.5 mmol/L and recommends maintaining >4.0 where possible."
-      },
-      {
-        "id": "CHILD_PUGH_B",
-        "priority": 12,
-        "when": {
-          "field": "child_pugh",
-          "operator": "==",
-          "value": "B"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Use 25% of the original abiraterone dose for Child-Pugh B according to the NCCP source."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Use 25% of the original abiraterone dose for Child-Pugh B according to the NCCP source."
-      },
-      {
-        "id": "CHILD_PUGH_C",
-        "priority": 1,
-        "when": {
-          "field": "child_pugh",
-          "operator": "==",
-          "value": "C"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Avoid abiraterone in Child-Pugh C severe hepatic impairment."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Avoid abiraterone in Child-Pugh C severe hepatic impairment."
-      },
-      {
-        "id": "GRADE3_TOXICITY",
-        "priority": 6,
-        "when": {
-          "field": "toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold for Grade ≥3 toxicity and treat medically; do not restart until Grade 1 or baseline."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Withhold for Grade ≥3 toxicity and treat medically; do not restart until Grade 1 or baseline."
+        "explanation": "Outside the indication-specific NCCP ECOG range."
       },
       {
         "id": "RADIUM223_COMBINATION",
-        "priority": 1,
+        "priority": 10,
         "when": {
           "field": "concurrent_radium223",
           "operator": "==",
@@ -527,82 +563,20 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "abiraterone"
           ],
-          "message": "Abiraterone with predniSONE/prednisoLONE is contraindicated in combination with radium-223."
+          "message": "Abiraterone plus prednisone/prednisolone is contraindicated with radium-223."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00103 v9",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
         },
-        "explanation": "Abiraterone with predniSONE/prednisoLONE is contraindicated in combination with radium-223."
+        "explanation": "Abiraterone plus prednisone/prednisolone is contraindicated with radium-223."
       },
       {
-        "id": "UNCONTROLLED_BP",
-        "priority": 6,
-        "when": {
-          "field": "uncontrolled_hypertension",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Control hypertension before commencing/continuing abiraterone."
-        },
-        "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Control hypertension before commencing/continuing abiraterone."
-      },
-      {
-        "id": "CARDIAC_CAUTION",
-        "priority": 9,
-        "when": {
-          "field": "significant_cardiac_disease",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Clinically significant cardiac disease requires consultant review before treatment."
-        },
-        "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Clinically significant cardiac disease requires consultant review before treatment."
-      },
-      {
-        "id": "HEPATITIS_EXCLUSION",
-        "priority": 1,
-        "when": {
-          "field": "active_hepatitis_or_chronic_liver_disease",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "The entered hepatic history meets an NCCP exclusion."
-        },
-        "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "The entered hepatic history meets an NCCP exclusion."
-      },
-      {
-        "id": "ADRENAL_EXCLUSION",
-        "priority": 1,
+        "id": "ADRENAL_DYSFUNCTION",
+        "priority": 10,
         "when": {
           "field": "adrenal_dysfunction",
           "operator": "==",
@@ -611,55 +585,687 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "abiraterone"
           ],
-          "message": "History of adrenal dysfunction is an NCCP exclusion."
+          "message": "This history meets an NCCP exclusion; consultant review."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00103 v9",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
         },
-        "explanation": "History of adrenal dysfunction is an NCCP exclusion."
+        "explanation": "This history meets an NCCP exclusion; consultant review."
       },
       {
-        "id": "VISCERAL_METS",
-        "priority": 1,
+        "id": "ACTIVE_VIRAL_HEPATITIS",
+        "priority": 10,
         "when": {
-          "field": "visceral_metastases",
+          "field": "active_viral_hepatitis",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "abiraterone"
           ],
-          "message": "Visceral metastases are listed as an exclusion in the NCCP mCRPC regimen."
+          "message": "This history meets an NCCP exclusion; consultant review."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00103 v9",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
         },
-        "explanation": "Visceral metastases are listed as an exclusion in the NCCP mCRPC regimen."
+        "explanation": "This history meets an NCCP exclusion; consultant review."
+      },
+      {
+        "id": "BP_UNCONTROLLED",
+        "priority": 10,
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Control hypertension and review before starting or continuing."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Cautions; adverse events",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Control hypertension and review before starting or continuing."
+      },
+      {
+        "id": "LOW_LVEF",
+        "priority": 10,
+        "when": {
+          "field": "lvef_percent",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Baseline LVEF <50% is a source cardiac caution; assess individual risk.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Cautions",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Baseline LVEF <50% is a source cardiac caution; assess individual risk."
+      },
+      {
+        "id": "CHILD_B",
+        "priority": 10,
+        "when": {
+          "field": "child_pugh",
+          "operator": "==",
+          "value": "B"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "NCCP Table 1 states 25% of the original dose. EMA SmPC states no dose adjustment can be predicted in Child–Pugh B: consultant/pharmacy must reconcile this discrepancy before prescribing.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Table 1; EMA SmPC 4.2",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "NCCP Table 1 states 25% of the original dose. EMA SmPC states no dose adjustment can be predicted in Child–Pugh B: consultant/pharmacy must reconcile this discrepancy before prescribing."
+      },
+      {
+        "id": "CHILD_C",
+        "priority": 10,
+        "when": {
+          "field": "child_pugh",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Avoid abiraterone in severe hepatic impairment."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Avoid abiraterone in severe hepatic impairment."
+      },
+      {
+        "id": "GRADE3",
+        "priority": 10,
+        "when": {
+          "field": "toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Withhold and manage medically. Restart only after grade 1 or baseline, following consultant review."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Withhold and manage medically. Restart only after grade 1 or baseline, following consultant review."
+      },
+      {
+        "id": "INTOLERABLE",
+        "priority": 10,
+        "when": {
+          "field": "intolerable_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Assess the specific toxicity, need to hold and supportive treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Adverse effects",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Assess the specific toxicity, need to hold and supportive treatment."
+      },
+      {
+        "id": "ABI_LIVER_HOLD",
+        "priority": 10,
+        "when": {
+          "field": "alt_ast_uln_multiple",
+          "operator": ">",
+          "value": 5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "ALT or AST >5 × ULN: withhold immediately and investigate."
+        },
+        "source": {
+          "document": "EMA zytiga SmPC",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zytiga-epar-product-information_en.pdf"
+        },
+        "explanation": "ALT or AST >5 × ULN: withhold immediately and investigate."
+      },
+      {
+        "id": "ABI_LIVER_STOP",
+        "priority": 10,
+        "when": {
+          "field": "alt_ast_uln_multiple",
+          "operator": ">=",
+          "value": 20
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "ALT or AST reaches 20 × ULN: discontinue; do not re-treat."
+        },
+        "source": {
+          "document": "EMA zytiga SmPC",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zytiga-epar-product-information_en.pdf"
+        },
+        "explanation": "ALT or AST reaches 20 × ULN: discontinue; do not re-treat."
+      },
+      {
+        "id": "ABI_LIVER_RECURRENCE",
+        "priority": 10,
+        "when": {
+          "field": "recurrent_hepatotoxicity_at_500mg",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Recurrent hepatotoxicity at reduced 500 mg/day: discontinue."
+        },
+        "source": {
+          "document": "EMA zytiga SmPC",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zytiga-epar-product-information_en.pdf"
+        },
+        "explanation": "Recurrent hepatotoxicity at reduced 500 mg/day: discontinue."
+      },
+      {
+        "id": "ABI_LIVER_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_abiraterone_hepatotoxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "After return to the patient’s own liver-test baseline, consider 500 mg/day only if authorised. Check transaminases at least fortnightly for 3 months, then monthly. A prior permanent-stop criterion excludes rechallenge.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA zytiga SmPC",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zytiga-epar-product-information_en.pdf"
+        },
+        "explanation": "After return to the patient’s own liver-test baseline, consider 500 mg/day only if authorised. Check transaminases at least fortnightly for 3 months, then monthly. A prior permanent-stop criterion excludes rechallenge."
+      },
+      {
+        "id": "ABI_LIVER_NOT_RECOVERED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_abiraterone_hepatotoxicity",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "liver_tests_back_to_patient_baseline",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "liver_tests_back_to_patient_baseline",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Recovery to the patient’s baseline is not established; do not restart."
+        },
+        "source": {
+          "document": "EMA zytiga SmPC",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/zytiga-epar-product-information_en.pdf"
+        },
+        "explanation": "Recovery to the patient’s baseline is not established; do not restart."
+      },
+      {
+        "id": "BILI_ELIGIBILITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">=",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Initiation requires bilirubin uln multiple <1.5. Establish assessment phase; this is not an on-treatment stop threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Initiation requires bilirubin uln multiple <1.5. Establish assessment phase; this is not an on-treatment stop threshold."
+      },
+      {
+        "id": "TRANSAMINASE_ELIGIBILITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">=",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Initiation requires alt ast uln multiple <2.5. Establish assessment phase; this is not an on-treatment stop threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Initiation requires alt ast uln multiple <2.5. Establish assessment phase; this is not an on-treatment stop threshold."
+      },
+      {
+        "id": "ALP_ELIGIBILITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">=",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Initiation requires alp uln multiple <6. Establish assessment phase; this is not an on-treatment stop threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Initiation requires alp uln multiple <6. Establish assessment phase; this is not an on-treatment stop threshold."
+      },
+      {
+        "id": "CREATININE_ELIGIBILITY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "field": "creatinine_uln_multiple",
+              "operator": ">=",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Initiation requires creatinine uln multiple <1.5. Establish assessment phase; this is not an on-treatment stop threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Initiation requires creatinine uln multiple <1.5. Establish assessment phase; this is not an on-treatment stop threshold."
+      },
+      {
+        "id": "VISCERAL_METS",
+        "priority": 10,
+        "when": {
+          "field": "visceral_metastases",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "NCCP 00103 lists visceral metastases as an exclusion. This differs from broader mCRPC evidence/licensing; do not automatically clear eligibility. Reconcile with consultant/pharmacy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "NCCP 00103 lists visceral metastases as an exclusion. This differs from broader mCRPC evidence/licensing; do not automatically clear eligibility. Reconcile with consultant/pharmacy."
+      },
+      {
+        "id": "K_START",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "field": "potassium_mmol_l",
+              "operator": "<=",
+              "value": 3.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Initiation requires potassium >3.5 mmol/L. Correct and confirm the treatment phase."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Initiation requires potassium >3.5 mmol/L. Correct and confirm the treatment phase."
+      },
+      {
+        "id": "K_MILD",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "potassium_mmol_l",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "potassium_mmol_l",
+              "operator": "<",
+              "value": 3.5
+            },
+            {
+              "field": "hypokalaemia_symptomatic",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Source grade 1: replace potassium, assess magnesium and monitor closely. Source maintenance >3.5 and <5.0 mmol/L, with >4.0 recommended.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Source grade 1: replace potassium, assess magnesium and monitor closely. Source maintenance >3.5 and <5.0 mmol/L, with >4.0 recommended."
+      },
+      {
+        "id": "K_SYMPTOM_STATUS",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "potassium_mmol_l",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "potassium_mmol_l",
+              "operator": "<",
+              "value": 3.5
+            },
+            {
+              "field": "hypokalaemia_symptomatic",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Record symptoms: at this potassium level the source distinguishes asymptomatic replacement from symptomatic withholding.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Record symptoms: at this potassium level the source distinguishes asymptomatic replacement from symptomatic withholding."
+      },
+      {
+        "id": "K_HOLD",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "potassium_mmol_l",
+              "operator": "<",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "potassium_mmol_l",
+                  "operator": "<",
+                  "value": 3.5
+                },
+                {
+                  "field": "hypokalaemia_symptomatic",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Withhold for severe or symptomatic hypokalaemia and arrange correction; consider magnesium and cardiac monitoring as indicated."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "00103 Table 3; 00577 adverse-event table; SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Withhold for severe or symptomatic hypokalaemia and arrange correction; consider magnesium and cardiac monitoring as indicated."
+      },
+      {
+        "id": "K_URGENT",
+        "priority": 10,
+        "when": {
+          "field": "potassium_mmol_l",
+          "operator": "<",
+          "value": 2.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "abiraterone"
+          ],
+          "message": "Severe hypokalaemia: urgent correction and assessment for cardiac monitoring."
+        },
+        "source": {
+          "document": "NCCP 00103 v9",
+          "page": "00103 Table 3; SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
+        },
+        "explanation": "Severe hypokalaemia: urgent correction and assessment for cardiac monitoring."
       }
     ]
   },
   "indications": [
     {
-      "indication_id": "metastatic",
-      "description": "Abiraterone with prednisone/prednisolone for metastatic castration-resistant prostate cancer after docetaxel or when chemotherapy is not yet clinically indicated.",
+      "indication_id": "00103a",
+      "code": "00103a",
+      "description": "Metastatic castration-resistant prostate cancer progressing on or after docetaxel.",
       "icd10": [
         "C61"
       ],
-      "reimbursement_codes": [
-        "00103a",
-        "00103b"
-      ]
+      "source_url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
     },
     {
-      "indication_id": "00103-gu",
-      "code": "00103g",
-      "description": "Advanced prostate cancer in an NCCP-listed abiraterone indication."
+      "indication_id": "00103b",
+      "code": "00103b",
+      "description": "Asymptomatic or mildly symptomatic metastatic castration-resistant prostate cancer after failure of ADT when chemotherapy is not yet clinically indicated.",
+      "icd10": [
+        "C61"
+      ],
+      "source_url": "https://healthservice.hse.ie/documents/6537/103_v9_Abiraterone_and_prednisoLONE_Therapy.pdf"
     }
   ],
   "treatment": {
@@ -679,7 +1285,14 @@
         "instructions": "Take with food."
       }
     ],
-    "additional_requirement": "Maintain medical androgen-deprivation therapy unless surgically castrated."
+    "additional_requirement": "Maintain medical androgen-deprivation therapy unless surgically castrated.",
+    "drugs": [
+      "abiraterone",
+      "prednisolone"
+    ],
+    "schedule_summary": "Abiraterone 1000 mg once daily plus prednisolone 10 mg daily (or 5 mg twice daily), continuously while helping and tolerated. Continue your ADT.",
+    "cycle_length_days": null,
+    "duration_text": "Continuous until progression or unacceptable toxicity"
   },
   "eligibility": [
     "Indication as specified",
@@ -713,7 +1326,7 @@
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "minimal",
+    "emetogenic_risk": "oral_minimal_low",
     "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",

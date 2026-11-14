@@ -173,7 +173,7 @@
     if (definition?.actual_result_adapter === "creatinine_uln") {
       return { target: id, title: "Creatinine result", decisionUnit: "×ULN",
         exactRatio: true,
-        referenceNote: "NCCP 00568 uses laboratory ULN, not the patient's baseline. Default 90 µmol/L is the supplied CUH female ULN; check the lab report and edit the local profile if different.",
+        referenceNote: "This criterion uses the laboratory ULN, not the patient's baseline. Default 90 µmol/L is the supplied CUH female ULN; check the lab report and edit the local profile if different.",
         analytes: [{ id: "creatinine", label: "Creatinine", unit: "µmol/L", setting: "creatinineUln" }] };
     }
 

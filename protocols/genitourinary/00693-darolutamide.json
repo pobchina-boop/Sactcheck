@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.51",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -42,13 +42,12 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": true,
+      "official_catalogue_and_source_link_checked": true,
+      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false,
-      "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "clinical_use_authorised": false
     },
     "file_name": "00693-darolutamide.json",
     "tumour_groups": [
@@ -57,7 +56,7 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-14",
     "regimen_card": {
       "contexts": [
         {
@@ -90,144 +89,291 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.51",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP and EMA source reconciliation; source discrepancies require specialist resolution. Tests and independent approval pending."
     },
-    "canonical_protocol_id": "nccp-00693-v2"
+    "canonical_protocol_id": "nccp-00693-v2",
+    "clinical_audit_release": "0.84.51"
   },
   "clinical_governance": {
-    "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
-    "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00693 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
+    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "disclaimer": "Source-reconciled feasibility encoding; independent clinical and pharmacy approval pending."
   },
   "input_definitions": {
-    "toxicity_grade": {
-      "label": "Worst current darolutamide-related toxicity",
+    "assessment_phase": {
+      "label": "Assessment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Before first dose"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "toxicity_review",
+          "label": "Recovery / restart review"
+        }
+      ],
+      "demo_value": "pre_treatment",
+      "input_role": "context"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "description": "No clinical or laboratory evidence of this adverse event.",
-          "ctcae_grade": 0
+          "label": "0"
         },
         {
           "value": 1,
-          "label": "Grade 1 — Mild",
-          "description": "Mild or asymptomatic; observation or diagnostic review only; intervention generally not indicated.",
-          "ctcae_grade": 1
+          "label": "1"
         },
         {
           "value": 2,
-          "label": "Grade 2 — Moderate",
-          "description": "Moderate; minimal, local or non-invasive intervention may be indicated; limits instrumental activities of daily living.",
-          "ctcae_grade": 2
+          "label": "2"
         },
         {
           "value": 3,
-          "label": "Grade 3 — Severe",
-          "description": "Severe or medically significant but not immediately life-threatening; hospitalisation may be indicated; limits self-care activities of daily living.",
-          "ctcae_grade": 3
+          "label": "3"
         },
         {
           "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "description": "Life-threatening consequences requiring urgent intervention.",
-          "ctcae_grade": 4
+          "label": "4"
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "renal_band": {
-      "label": "Renal function category",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge30",
-          "label": "CrCl ≥30 mL/min — no adjustment"
-        },
-        {
-          "value": "lt30",
-          "label": "CrCl <30 mL/min — use 50% dose"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis — use 50% dose / specialist review"
-        }
-      ],
-      "demo_value": "ge30",
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "source": "Official NCCP protocol-specific renal categories",
-        "exact_value_required": false
-      },
-      "assessment_guidance": "Select the protocol-specific renal category matching the verified CrCl/eGFR. Exact numerical entry is not required because the NCCP decision is categorical.",
       "input_role": "decision"
     },
     "child_pugh": {
-      "label": "Hepatic impairment",
+      "label": "Child–Pugh class",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "none",
-          "label": "No hepatic impairment"
-        },
-        {
           "value": "A",
-          "label": "Child-Pugh A"
+          "label": "A"
         },
         {
           "value": "B",
-          "label": "Child-Pugh B"
+          "label": "B"
         },
         {
           "value": "C",
-          "label": "Child-Pugh C"
+          "label": "C"
         }
       ],
-      "demo_value": "none",
+      "demo_value": "A",
       "input_role": "decision"
     },
-    "dose_mg_bd": {
-      "label": "Current darolutamide dose",
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Prior permanent stop",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "medical_or_surgical_castration_confirmed": {
+      "label": "Medical or surgical castration confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_toxicity_interruption": {
+      "label": "Prior toxicity interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "intolerable_toxicity": {
+      "label": "Intolerable toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "toxicity_grade": {
+      "label": "Current treatment-related toxicity grade (identify specific event)",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 600,
-          "label": "600 mg twice daily"
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
         },
         {
-          "value": 300,
-          "label": "300 mg twice daily"
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
-      "demo_value": 600,
-      "input_role": "context"
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00693 v2 grading; edition not specified"
+    },
+    "psa_ng_ml": {
+      "label": "PSA",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 3,
+      "input_role": "decision",
+      "unit": "ng/mL"
+    },
+    "psa_doubling_months": {
+      "label": "PSA doubling time",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 6,
+      "input_role": "decision",
+      "unit": "months"
+    },
+    "testosterone_nmol_l": {
+      "label": "Testosterone",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0.5,
+      "input_role": "decision",
+      "unit": "nmol/L"
+    },
+    "metastases_or_prior_metastatic_disease": {
+      "label": "Metastases or prior metastatic disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_second_generation_arpi": {
+      "label": "Prior second generation arpi",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_cyp17_inhibitor": {
+      "label": "Prior cyp17 inhibitor",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_non_adjuvant_chemo_or_immunotherapy": {
+      "label": "Prior non adjuvant chemo or immunotherapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "gi_absorption_disorder": {
+      "label": "Gi absorption disorder",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recent_significant_cv_disease": {
+      "label": "Recent significant cv disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suspected_idiosyncratic_liver_injury": {
+      "label": "Suspected idiosyncratic liver injury",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "rosuvastatin_or_relevant_transporter_substrate": {
+      "label": "Rosuvastatin or relevant transporter substrate",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "strong_or_moderate_enzyme_inducer": {
+      "label": "Strong or moderate enzyme inducer",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
   "output_templates": {
     "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
-    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
-    "consultant_review": "The entered value requires protocol-specific clinical review.",
-    "withhold": "Withhold and reassess according to the official NCCP pathway.",
-    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+    "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
+    "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and repeat assessment according to the official NCCP pathway.",
+    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
+    "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
+    "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
@@ -251,53 +397,376 @@
     ],
     "rules": [
       {
-        "id": "GRADE3",
-        "priority": 5,
+        "id": "HYPERSENSITIVITY",
+        "priority": 10,
         "when": {
-          "field": "toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "darolutamide"
           ],
-          "message": "Withhold for intolerable or Grade ≥3 toxicity; resume at 300 mg twice daily if needed and return to 600 mg twice daily if tolerated."
+          "message": "Relevant hypersensitivity is an exclusion."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00693 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
         },
-        "explanation": "Withhold for intolerable or Grade ≥3 toxicity; resume at 300 mg twice daily if needed and return to 600 mg twice daily if tolerated."
+        "explanation": "Relevant hypersensitivity is an exclusion."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "A permanent stop remains in force despite recovered measurements; do not restart automatically."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "A permanent stop remains in force despite recovered measurements; do not restart automatically."
+      },
+      {
+        "id": "ADT_NOT_CONFIRMED",
+        "priority": 10,
+        "when": {
+          "field": "medical_or_surgical_castration_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Confirm and continue medical ADT unless surgically castrated. This oral regimen does not replace the ADT backbone.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Treatment",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Confirm and continue medical ADT unless surgically castrated. This oral regimen does not replace the ADT backbone."
+      },
+      {
+        "id": "RESTART_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_toxicity_interruption",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Confirm the cause, highest severity, recovery and previous dose. Recovery alone does not authorise a restart. After improvement, clinician may return to 600 mg twice daily if tolerated; do not reduce below 300 mg twice daily.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Confirm the cause, highest severity, recovery and previous dose. Recovery alone does not authorise a restart. After improvement, clinician may return to 600 mg twice daily if tolerated; do not reduce below 300 mg twice daily."
+      },
+      {
+        "id": "ECOG_OUTSIDE",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Outside the indication-specific NCCP ECOG range.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Outside the indication-specific NCCP ECOG range."
+      },
+      {
+        "id": "INTOLERABLE_OR_G3",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "intolerable_toxicity",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Interrupt and obtain consultant dose review. NCCP permits withholding OR reduction to 300 mg twice daily until symptoms improve. Do not reduce below 300 mg twice daily."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Interrupt and obtain consultant dose review. NCCP permits withholding OR reduction to 300 mg twice daily until symptoms improve. Do not reduce below 300 mg twice daily."
+      },
+      {
+        "id": "PSA_NG_ML",
+        "priority": 10,
+        "when": {
+          "field": "psa_ng_ml",
+          "operator": "<",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "NCCP nmCRPC eligibility: PSA ≥2 ng/mL, doubling time ≤10 months and testosterone <1.7 nmol/L.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "NCCP nmCRPC eligibility: PSA ≥2 ng/mL, doubling time ≤10 months and testosterone <1.7 nmol/L."
+      },
+      {
+        "id": "PSA_DOUBLING_MONTHS",
+        "priority": 10,
+        "when": {
+          "field": "psa_doubling_months",
+          "operator": ">",
+          "value": 10
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "NCCP nmCRPC eligibility: PSA ≥2 ng/mL, doubling time ≤10 months and testosterone <1.7 nmol/L.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "NCCP nmCRPC eligibility: PSA ≥2 ng/mL, doubling time ≤10 months and testosterone <1.7 nmol/L."
+      },
+      {
+        "id": "TESTOSTERONE_NMOL_L",
+        "priority": 10,
+        "when": {
+          "field": "testosterone_nmol_l",
+          "operator": ">=",
+          "value": 1.7
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "NCCP nmCRPC eligibility: PSA ≥2 ng/mL, doubling time ≤10 months and testosterone <1.7 nmol/L.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "NCCP nmCRPC eligibility: PSA ≥2 ng/mL, doubling time ≤10 months and testosterone <1.7 nmol/L."
+      },
+      {
+        "id": "METASTASES_OR_PRIOR_METASTATIC_DISEASE",
+        "priority": 10,
+        "when": {
+          "field": "metastases_or_prior_metastatic_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+      },
+      {
+        "id": "PRIOR_SECOND_GENERATION_ARPI",
+        "priority": 10,
+        "when": {
+          "field": "prior_second_generation_arpi",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+      },
+      {
+        "id": "PRIOR_CYP17_INHIBITOR",
+        "priority": 10,
+        "when": {
+          "field": "prior_cyp17_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+      },
+      {
+        "id": "PRIOR_NON_ADJUVANT_CHEMO_OR_IMMUNOTHERAPY",
+        "priority": 10,
+        "when": {
+          "field": "prior_non_adjuvant_chemo_or_immunotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+      },
+      {
+        "id": "GI_ABSORPTION_DISORDER",
+        "priority": 10,
+        "when": {
+          "field": "gi_absorption_disorder",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "This is an exclusion for NCCP 00693 nmCRPC. Broader EMA metastatic uses require a separate regimen/indication review."
       },
       {
         "id": "RENAL_LT30",
-        "priority": 12,
+        "priority": 10,
         "when": {
-          "field": "renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
-          ]
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
         },
         "action": {
           "type": "dose_reduce",
           "components": [
-            "whole_regimen"
+            "darolutamide"
           ],
-          "message": "Use 300 mg twice daily (50% dose) for CrCl <30 mL/min/dialysis according to the NCCP source."
+          "message": "NCCP CrCl <30 mL/min: 300 mg twice daily. EMA uses eGFR 15–29 mL/min/1.73 m² in non-dialysis patients; these are different measures. Verify with pharmacy."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00693 v2",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
         },
-        "explanation": "Use 300 mg twice daily (50% dose) for CrCl <30 mL/min/dialysis according to the NCCP source."
+        "explanation": "NCCP CrCl <30 mL/min: 300 mg twice daily. EMA uses eGFR 15–29 mL/min/1.73 m² in non-dialysis patients; these are different measures. Verify with pharmacy."
+      },
+      {
+        "id": "DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "NCCP suggests 50% original dose in haemodialysis; EMA has not studied end-stage renal disease on dialysis. Specialist decision required.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Table 1; EMA SmPC 5.2",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "NCCP suggests 50% original dose in haemodialysis; EMA has not studied end-stage renal disease on dialysis. Specialist decision required."
       },
       {
         "id": "CHILD_BC",
-        "priority": 12,
+        "priority": 10,
         "when": {
           "field": "child_pugh",
           "operator": "in",
@@ -309,15 +778,107 @@
         "action": {
           "type": "dose_reduce",
           "components": [
-            "whole_regimen"
+            "darolutamide"
           ],
-          "message": "Use 300 mg twice daily (50% dose) in Child-Pugh B/C according to the NCCP source."
+          "message": "Child–Pugh B/C: 300 mg twice daily; limited data, especially severe hepatic impairment."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00693 v2",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
         },
-        "explanation": "Use 300 mg twice daily (50% dose) in Child-Pugh B/C according to the NCCP source."
+        "explanation": "Child–Pugh B/C: 300 mg twice daily; limited data, especially severe hepatic impairment."
+      },
+      {
+        "id": "LIVER_INJURY",
+        "priority": 10,
+        "when": {
+          "field": "suspected_idiosyncratic_liver_injury",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Liver abnormalities suggestive of idiosyncratic drug-induced injury: permanently discontinue darolutamide."
+        },
+        "source": {
+          "document": "EMA nubeqa SmPC",
+          "page": "4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nubeqa-epar-product-information_en.pdf"
+        },
+        "explanation": "Liver abnormalities suggestive of idiosyncratic drug-induced injury: permanently discontinue darolutamide."
+      },
+      {
+        "id": "RECENT_SIGNIFICANT_CV_DISEASE",
+        "priority": 10,
+        "when": {
+          "field": "recent_significant_cv_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Review cardiovascular risk and the full interaction list. Avoid rosuvastatin or potent inducers where possible; pharmacy confirms alternatives and monitoring.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Cautions / interactions; EMA 4.4–4.5",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Review cardiovascular risk and the full interaction list. Avoid rosuvastatin or potent inducers where possible; pharmacy confirms alternatives and monitoring."
+      },
+      {
+        "id": "ROSUVASTATIN_OR_RELEVANT_TRANSPORTER_SUBSTRATE",
+        "priority": 10,
+        "when": {
+          "field": "rosuvastatin_or_relevant_transporter_substrate",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Review cardiovascular risk and the full interaction list. Avoid rosuvastatin or potent inducers where possible; pharmacy confirms alternatives and monitoring.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Cautions / interactions; EMA 4.4–4.5",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Review cardiovascular risk and the full interaction list. Avoid rosuvastatin or potent inducers where possible; pharmacy confirms alternatives and monitoring."
+      },
+      {
+        "id": "STRONG_OR_MODERATE_ENZYME_INDUCER",
+        "priority": 10,
+        "when": {
+          "field": "strong_or_moderate_enzyme_inducer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "darolutamide"
+          ],
+          "message": "Review cardiovascular risk and the full interaction list. Avoid rosuvastatin or potent inducers where possible; pharmacy confirms alternatives and monitoring.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00693 v2",
+          "page": "Cautions / interactions; EMA 4.4–4.5",
+          "url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
+        },
+        "explanation": "Review cardiovascular risk and the full interaction list. Avoid rosuvastatin or potent inducers where possible; pharmacy confirms alternatives and monitoring."
       }
     ]
   },
@@ -331,15 +892,29 @@
       }
     ],
     "additional_requirement": "Continue medical castration unless surgically castrated where specified in the NCCP source.",
-    "minimum_dose": "Do not reduce below 300 mg twice daily."
+    "minimum_dose": "Do not reduce below 300 mg twice daily.",
+    "drugs": [
+      "darolutamide"
+    ],
+    "schedule_summary": "Darolutamide 600 mg twice daily with food, continuously while helping and tolerated. Continue ADT unless surgically castrated. The team may prescribe 300 mg twice daily for selected organ impairment or toxicity.",
+    "cycle_length_days": null,
+    "duration_text": "Continuous until progression or unacceptable toxicity"
   },
   "eligibility": [
-    "nmCRPC at high risk of metastasis",
-    "Castrate testosterone",
+    "Adult >18 years with prostate adenocarcinoma without neuroendocrine/small-cell features",
+    "High-risk nmCRPC",
+    "Testosterone <1.7 nmol/L",
+    "PSA ≥2 ng/mL",
+    "PSADT ≤10 months",
     "ECOG 0–1"
   ],
   "exclusions": [
-    "Hypersensitivity"
+    "Hypersensitivity",
+    "Detectable metastases or history of metastatic disease",
+    "Prior second-generation AR antagonists",
+    "Prior CYP17 inhibitors",
+    "Prior chemotherapy/immunotherapy for prostate cancer except adjuvant/neoadjuvant",
+    "Gastrointestinal disorder affecting absorption"
   ],
   "monitoring": {
     "baseline": [
@@ -352,7 +927,7 @@
     ]
   },
   "supportive_care": {
-    "emetogenic_risk": "minimal",
+    "emetogenic_risk": "oral_minimal_low",
     "script_id": "nccp-oral-minimal-low",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
@@ -365,9 +940,13 @@
   },
   "indications": [
     {
-      "indication_id": "00693-gu",
-      "code": "00693g",
-      "description": "Advanced prostate cancer in an NCCP-listed darolutamide indication."
+      "indication_id": "00693a",
+      "code": "00693a",
+      "description": "High-risk nonmetastatic castration-resistant prostate cancer.",
+      "icd10": [
+        "C61"
+      ],
+      "source_url": "https://healthservice.hse.ie/documents/6533/693_v2_Darolutamide_Therapy.pdf"
     }
   ]
 }

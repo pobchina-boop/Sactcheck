@@ -6,7 +6,7 @@ const protocol=c=>json(index.find(p=>p.path.includes('/'+c+'-')).path);
 const fetch=async u=>({ok:fs.existsSync(path.join(root,u)),json:async()=>json(u)});
 (async()=>{
  let change,context='all';
- const picker={addEventListener(type,fn){assert.equal(type,'change');change=fn}},target={innerHTML:'',querySelector:()=>picker},cl={add(){},remove(){},toggle(){}};
+ const picker={addEventListener(type,fn){assert.equal(type,'change');change=fn}},target={innerHTML:'',querySelector:selector=>selector==='[data-regimen-info-context]'?picker:null},cl={add(){},remove(){},toggle(){}};
  const overlay={classList:cl,querySelector:s=>s==='[data-regimen-info-content]'?target:null};
  const ctx={console,fetch,SACTCheckProtocolContext:{activeTumourGroup:()=>context},SACTCheckTreatmentJourney:{renderForCode:c=>`<p data-test-journey="${c}"></p>`},document:{readyState:'loading',addEventListener(){},getElementById:()=>overlay,body:{classList:cl}}};
  vm.createContext(ctx);for(const p of ['js/treatment-evidence-v08413.js','js/regimen-knowledge-base.js'])vm.runInContext(read(p),ctx);

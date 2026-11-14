@@ -51,7 +51,7 @@
         return response.json();
       })
       .then(async payload => {
-        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json", "data/regimen-knowledge-base-v08425-addendum.json", "data/regimen-knowledge-base-v08426-addendum.json", "data/regimen-knowledge-base-v08427-addendum.json", "data/regimen-knowledge-base-v08428-addendum.json", "data/regimen-knowledge-base-v08429-addendum.json", "data/regimen-knowledge-base-v08430-addendum.json", "data/regimen-knowledge-base-v08432-addendum.json", "data/regimen-knowledge-base-v08433-addendum.json", "data/regimen-knowledge-base-v08434-addendum.json", "data/regimen-knowledge-base-v08435-addendum.json", "data/regimen-knowledge-base-v08436-addendum.json", "data/regimen-knowledge-base-v08437-addendum.json", "data/regimen-knowledge-base-v08438-addendum.json", "data/regimen-knowledge-base-v08439-addendum.json", "data/regimen-knowledge-base-v08440-addendum.json", "data/regimen-knowledge-base-v08441-addendum.json", "data/regimen-knowledge-base-v08442-addendum.json", "data/regimen-knowledge-base-v08445-addendum.json", "data/regimen-knowledge-base-v08446-addendum.json", "data/regimen-knowledge-base-v08447-addendum.json", "data/regimen-knowledge-base-v08448-addendum.json", "data/regimen-knowledge-base-v08449-addendum.json", "data/regimen-knowledge-base-v08450-addendum.json"]) {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json", "data/regimen-knowledge-base-v08425-addendum.json", "data/regimen-knowledge-base-v08426-addendum.json", "data/regimen-knowledge-base-v08427-addendum.json", "data/regimen-knowledge-base-v08428-addendum.json", "data/regimen-knowledge-base-v08429-addendum.json", "data/regimen-knowledge-base-v08430-addendum.json", "data/regimen-knowledge-base-v08432-addendum.json", "data/regimen-knowledge-base-v08433-addendum.json", "data/regimen-knowledge-base-v08434-addendum.json", "data/regimen-knowledge-base-v08435-addendum.json", "data/regimen-knowledge-base-v08436-addendum.json", "data/regimen-knowledge-base-v08437-addendum.json", "data/regimen-knowledge-base-v08438-addendum.json", "data/regimen-knowledge-base-v08439-addendum.json", "data/regimen-knowledge-base-v08440-addendum.json", "data/regimen-knowledge-base-v08441-addendum.json", "data/regimen-knowledge-base-v08442-addendum.json", "data/regimen-knowledge-base-v08445-addendum.json", "data/regimen-knowledge-base-v08446-addendum.json", "data/regimen-knowledge-base-v08447-addendum.json", "data/regimen-knowledge-base-v08448-addendum.json", "data/regimen-knowledge-base-v08449-addendum.json", "data/regimen-knowledge-base-v08450-addendum.json", "data/regimen-knowledge-base-v08451-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
@@ -62,6 +62,9 @@
           }
         }
         }
+        const prostateResponse = await fetch('data/prostate-treatment-explainer-v08451.json', { cache: 'no-store' });
+        if (!prostateResponse.ok) throw new Error(`Could not load the prostate treatment explainer (${prostateResponse.status}).`);
+        payload.prostate_treatment_explainer = await prostateResponse.json();
         data = payload;
         return data;
       })
@@ -322,6 +325,19 @@
     </section>`;
   }
 
+  function prostatePathwayMarkup(protocol, payload) {
+    const topic = payload?.prostate_treatment_explainer;
+    if (!topic?.codes?.includes(protocolCode(protocol))) return '';
+    const source = item => `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.label)}</a>`;
+    const sourceMap = new Map(topic.sources.map(item => [item.id, item]));
+    const sections = topic.sections.map(section => {
+      const rows = section.rows || [];
+      const table = rows.length ? `<div class="prostate-pathway-table" tabindex="0" role="region" aria-label="${escapeHtml(section.title)}"><table><caption>${escapeHtml(section.title)}</caption><thead><tr>${section.columns.map(column => `<th scope="col">${escapeHtml(column)}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${row.map((cell, i) => i === 0 ? `<th scope="row">${escapeHtml(cell)}</th>` : `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '';
+      return `<details><summary>${escapeHtml(section.title)}</summary>${section.paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('')}${table}<p class="regimen-info-note">Sources: ${section.source_ids.map(id => sourceMap.get(id)).filter(Boolean).map(source).join(' · ')}</p></details>`;
+    }).join('');
+    return `<section class="regimen-information-section prostate-pathway" aria-labelledby="prostate-pathway-title"><h3 id="prostate-pathway-title">${escapeHtml(topic.title)}</h3><p>${escapeHtml(topic.intro)}</p><p class="regimen-info-note">${escapeHtml(topic.boundary)}</p><button type="button" class="btn" data-prostate-expand>Expand all topics</button>${sections}<p class="regimen-info-note">Sources checked ${escapeHtml(topic.source_checked_date)}. ${escapeHtml(topic.review_status)}.</p></section>`;
+  }
+
   function render(protocol, payload, selectedContext) {
     const overlay = ensurePanel();
     const target = overlay?.querySelector("[data-regimen-info-content]");
@@ -358,6 +374,7 @@
       </section>
 
       ${contextPicker}
+      ${prostatePathwayMarkup(protocol, payload)}
       ${root.SACTCheckTreatmentEvidence?.render(regimenProfile)||""}
       ${overview}
       ${regimenProfile?.reference_links?.length ? `<section class="regimen-information-section"><h3>Regimen sources and patient resources</h3><div class="regimen-information-actions">${regimenProfile.reference_links.map(item => publicationLink(item, item.label)).join("")}</div></section>` : ""}
@@ -385,6 +402,12 @@
         <p>This page provides source-linked context on treatment intent, patient selection, supportive care, monitoring, administration, drug mechanisms and selected publications. It does not independently determine eligibility, diagnose toxicity, prescribe treatment or alter the deterministic SACTCheck result. The current NCCP protocol and local clinical governance remain authoritative.</p>
       </aside>`;
     target.querySelector?.('[data-regimen-info-context]')?.addEventListener('change',event=>render(protocol,payload,event.target.value));
+    target.querySelector?.('[data-prostate-expand]')?.addEventListener('click', event => {
+      const section = event.target.closest('.prostate-pathway');
+      const expand = [...section.querySelectorAll('details')].some(item => !item.open);
+      section.querySelectorAll('details').forEach(item => { item.open = expand; });
+      event.target.textContent = expand ? 'Collapse all topics' : 'Expand all topics';
+    });
   }
 
   function resolveProtocol(protocolOrId) {
@@ -453,6 +476,7 @@
     profilesForProtocol,
     evidenceForProtocol,
     regimenProfileForProtocol,
+    prostatePathwayMarkup,
     get activeProtocol() { return activeProtocol; }
   });
 });

@@ -113,7 +113,7 @@ These are not automated release failures, because older NCCP documents do not us
 
 - Missing stored publication date: **246** (00202, 00230, 00254, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00414, 00432, 00433, 00485, 00525, 00526, 00545, 00659 … plus 226 more)
 - Missing stored review or last-reviewed date: **205** (00202, 00230, 00258, 00260, 00265, 00269, 00278, 00316, 00377, 00378, 00381, 00432, 00433, 00485, 00545, 00659, 00720, 00736, 00743, 00745 … plus 185 more)
-- Source document not explicitly marked as manually checked: **108** (00212, 00205, 00256, 00897, 00926, 00104, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00583, 00602, 00622, 00628, 00759, 00807 … plus 88 more)
+- Source document not explicitly marked as manually checked: **114** (00212, 00205, 00256, 00897, 00926, 00294, 00103, 00104, 00233, 00282, 00326, 00333, 00337, 00338, 00453, 00518, 00564, 00574, 00577, 00583 … plus 94 more)
 
 ## Clinical boundary
 

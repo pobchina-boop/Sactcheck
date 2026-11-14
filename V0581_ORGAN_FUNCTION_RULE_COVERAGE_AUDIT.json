@@ -233,7 +233,7 @@
       "protocol_id": "nccp-00103-v9",
       "path": "protocols/genitourinary/00103-abiraterone-prednisolone-mcrpc.json",
       "title": "Abiraterone and prednisolone Therapy (mCRPC)",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -244,14 +244,16 @@
       },
       "inputs": {
         "renal": [
-          "creatinine_below_1_5_uln"
+          "crcl_ml_min",
+          "haemodialysis",
+          "creatinine_uln_multiple"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple",
-          "alt_ast_uln_multiple",
-          "alp_u_l",
           "child_pugh",
-          "active_hepatitis_or_chronic_liver_disease"
+          "alt_ast_uln_multiple",
+          "bilirubin_uln_multiple",
+          "liver_tests_back_to_patient_baseline",
+          "alp_uln_multiple"
         ]
       },
       "rules": {
@@ -259,12 +261,14 @@
           "CREATININE_ELIGIBILITY"
         ],
         "hepatic": [
-          "BILIRUBIN_ELIGIBILITY",
+          "CHILD_B",
+          "CHILD_C",
+          "ABI_LIVER_HOLD",
+          "ABI_LIVER_STOP",
+          "ABI_LIVER_NOT_RECOVERED",
+          "BILI_ELIGIBILITY",
           "TRANSAMINASE_ELIGIBILITY",
-          "ALP_ELIGIBILITY",
-          "CHILD_PUGH_B",
-          "CHILD_PUGH_C",
-          "HEPATITIS_EXCLUSION"
+          "ALP_ELIGIBILITY"
         ]
       },
       "mismatches": []
@@ -1405,7 +1409,7 @@
       "protocol_id": "nccp-00233-v7",
       "path": "protocols/genitourinary/00233-enzalutamide.json",
       "title": "Enzalutamide Monotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1416,10 +1420,11 @@
       },
       "inputs": {
         "renal": [
-          "renal_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "severe_hepatic_impairment"
+          "child_pugh"
         ]
       },
       "rules": {
@@ -1427,7 +1432,7 @@
           "RENAL_LIMITED"
         ],
         "hepatic": [
-          "SEVERE_HEPATIC"
+          "CHILD_C"
         ]
       },
       "mismatches": []
@@ -1689,7 +1694,7 @@
       "protocol_id": "nccp-00242-v6",
       "path": "protocols/head-neck/00242-vandetanib-monotherapy.json",
       "title": "Vandetanib Monotherapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -1700,10 +1705,11 @@
       },
       "inputs": {
         "renal": [
+          "crcl_ml_min",
+          "haemodialysis",
           "vandetanib_renal_band"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
           "bilirubin_uln_multiple"
         ]
       },
@@ -3239,34 +3245,33 @@
       "protocol_id": "nccp-00294-v4",
       "path": "protocols/gastrointestinal/00294-sorafenib-therapy.json",
       "title": "Sorafenib Therapy",
-      "encoding_maturity": "source_reconciled_rule_encoding",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
       },
       "monitoring_mentions": {
-        "renal": true,
-        "hepatic": true
+        "renal": false,
+        "hepatic": false
       },
       "inputs": {
         "renal": [
-          "sorafenib_renal_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple",
           "child_pugh_class"
         ]
       },
       "rules": {
         "renal": [
-          "OF590_00294_SORA_20_39",
-          "OF590_00294_SORA_LT20"
+          "SORA_RENAL_20_39",
+          "SORA_RENAL_LT20",
+          "SORA_RENAL_GAP"
         ],
         "hepatic": [
-          "ORAL_TARGETED_LFT_REVIEW",
-          "ORAL_TARGETED_BILIRUBIN_REVIEW",
-          "OF590_00294_SORA_CHILD_C"
+          "SORA_CHILD_C",
+          "SORA_CHILD_B"
         ]
       },
       "mismatches": []
@@ -3276,7 +3281,7 @@
       "protocol_id": "nccp-00295-v6",
       "path": "protocols/head-neck/00295-lenvatinib-dtc-therapy.json",
       "title": "Lenvatinib DTC Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -3286,15 +3291,27 @@
         "hepatic": false
       },
       "inputs": {
-        "renal": [],
+        "renal": [
+          "crcl_ml_min",
+          "haemodialysis",
+          "renal_toxicity_grade"
+        ],
         "hepatic": [
-          "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "child_pugh_class"
         ]
       },
       "rules": {
-        "renal": [],
-        "hepatic": []
+        "renal": [
+          "LEN_RENAL",
+          "LEN_DIALYSIS",
+          "LEN_RENAL_TOXICITY_G3",
+          "LEN_RENAL_TOXICITY_G4",
+          "LEN_RENAL_TOXICITY_G4_LAB",
+          "LEN_RENAL_TOXICITY_G4_UNCLEAR"
+        ],
+        "hepatic": [
+          "LEN_CHILD_C"
+        ]
       },
       "mismatches": []
     },
@@ -9684,10 +9701,10 @@
     },
     {
       "code": "00574",
-      "protocol_id": "nccp-00574-v4",
+      "protocol_id": "nccp-00574-v5",
       "path": "protocols/genitourinary/00574-apalutamide.json",
       "title": "Apalutamide Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9698,7 +9715,8 @@
       },
       "inputs": {
         "renal": [
-          "renal_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
           "child_pugh"
@@ -9706,7 +9724,7 @@
       },
       "rules": {
         "renal": [
-          "RENAL_SEVERE"
+          "RENAL_LIMITED"
         ],
         "hepatic": [
           "CHILD_C"
@@ -9774,7 +9792,7 @@
       "protocol_id": "nccp-00577-v3",
       "path": "protocols/genitourinary/00577-abiraterone-prednisolone-mhspc.json",
       "title": "Abiraterone and prednisolone Therapy (mHSPC)",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -9785,27 +9803,26 @@
       },
       "inputs": {
         "renal": [
-          "creatinine_below_1_5_uln"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "bilirubin_uln_multiple",
-          "alt_ast_uln_multiple",
-          "alp_u_l",
           "child_pugh",
-          "active_hepatitis_or_chronic_liver_disease"
+          "alt_ast_uln_multiple",
+          "bilirubin_uln_multiple",
+          "liver_tests_back_to_patient_baseline",
+          "chronic_liver_disease"
         ]
       },
       "rules": {
-        "renal": [
-          "CREATININE_ELIGIBILITY"
-        ],
+        "renal": [],
         "hepatic": [
-          "BILIRUBIN_ELIGIBILITY",
-          "TRANSAMINASE_ELIGIBILITY",
-          "ALP_ELIGIBILITY",
-          "CHILD_PUGH_B",
-          "CHILD_PUGH_C",
-          "HEPATITIS_EXCLUSION"
+          "CHILD_B",
+          "CHILD_C",
+          "ABI_LIVER_HOLD",
+          "ABI_LIVER_STOP",
+          "ABI_LIVER_NOT_RECOVERED",
+          "CHRONIC_LIVER_DISEASE"
         ]
       },
       "mismatches": []
@@ -10587,7 +10604,7 @@
       "protocol_id": "nccp-00615-v2",
       "path": "protocols/head-neck/00615-cyclophosphamide-doxorubicin-and-cisplatin-21-day.json",
       "title": "Cyclophosphamide, Doxorubicin and Cisplatin – 21 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -10598,20 +10615,35 @@
       },
       "inputs": {
         "renal": [
-          "cisplatin_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple"
+          "bilirubin_umol_l",
+          "severe_hepatic_impairment",
+          "ast_uln_multiple"
         ]
       },
       "rules": {
         "renal": [
-          "CIS_RENAL_50_59",
-          "CIS_RENAL_40_49",
-          "CIS_RENAL_LOW"
+          "CAP_BASELINE_RENAL",
+          "CAP_RENAL_PHASE",
+          "CIS_RENAL_45",
+          "CIS_RENAL_LOW",
+          "CIS_RENAL_GAP",
+          "CAP_DIALYSIS",
+          "CYCLO_RENAL_10_20",
+          "CYCLO_RENAL_LT10"
         ],
-        "hepatic": []
+        "hepatic": [
+          "DOXO_BILI_20_51",
+          "DOXO_BILI_51",
+          "DOXO_BILI_51_85",
+          "DOXO_BILI_GT85",
+          "DOXO_AST_2_3",
+          "DOXO_AST_GT3",
+          "CYCLO_HEPATIC"
+        ]
       },
       "mismatches": []
     },
@@ -11601,7 +11633,7 @@
       "protocol_id": "nccp-00693-v2",
       "path": "protocols/genitourinary/00693-darolutamide.json",
       "title": "Darolutamide Therapy",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -11612,18 +11644,22 @@
       },
       "inputs": {
         "renal": [
-          "renal_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "child_pugh"
+          "child_pugh",
+          "suspected_idiosyncratic_liver_injury"
         ]
       },
       "rules": {
         "renal": [
-          "RENAL_LT30"
+          "RENAL_LT30",
+          "DIALYSIS"
         ],
         "hepatic": [
-          "CHILD_BC"
+          "CHILD_BC",
+          "LIVER_INJURY"
         ]
       },
       "mismatches": []
@@ -15145,7 +15181,7 @@
       "protocol_id": "nccp-00893-v1",
       "path": "protocols/head-neck/00893-methotrexate-40-mg-m-monotherapy-28-day.json",
       "title": "Methotrexate 40 mg/m² Monotherapy – 28 day",
-      "encoding_maturity": "legacy_encoded_pending_source_fidelity_review",
+      "encoding_maturity": "source_reconciled_pending_independent_validation",
       "claims": {
         "renal": false,
         "hepatic": false
@@ -15156,18 +15192,19 @@
       },
       "inputs": {
         "renal": [
-          "methotrexate_crcl_band"
+          "crcl_ml_min",
+          "haemodialysis"
         ],
         "hepatic": [
-          "alt_ast_uln_multiple",
-          "bilirubin_uln_multiple",
           "bilirubin_umol_l"
         ]
       },
       "rules": {
         "renal": [
-          "MTX_RENAL_20_49",
-          "MTX_RENAL_LT20"
+          "MTX_RENAL_20_50",
+          "MTX_RENAL_50",
+          "MTX_RENAL_LOW",
+          "MTX_DIALYSIS"
         ],
         "hepatic": [
           "MTX_BILI"

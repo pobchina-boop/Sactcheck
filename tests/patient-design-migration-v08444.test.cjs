@@ -4,7 +4,8 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const m=require('./helpers/retrospective-v08444.cjs');
 const latest=require('./helpers/retrospective-v08445.cjs');
 const successor=require('./helpers/retrospective-v08446.cjs');
-const recent=require('./helpers/retrospective-v08450.cjs');
+const recent=require('./helpers/retrospective-v08451.cjs');
+const previous50=require('./helpers/retrospective-v08450.cjs');
 const previous49=require('./helpers/retrospective-v08449.cjs');
 const preceding=require('./helpers/retrospective-v08448.cjs');
 const batch=require('./helpers/retrospective-v08447.cjs');
@@ -34,7 +35,8 @@ test('v44 exact current bytes follow the pinned v43 package; every protected ass
  const successorRecord=JSON.parse(fs.readFileSync(successor.RECORD,'utf8'));successor.createMigration(successorRecord);
  const batchRecord=JSON.parse(fs.readFileSync(batch.RECORD,'utf8'));batch.createMigration(batchRecord);batch.verifyCurrent(batchRecord);
   const previous49Record=JSON.parse(fs.readFileSync(previous49.RECORD,'utf8'));previous49.createMigration(previous49Record);
-  const recentRecord=JSON.parse(fs.readFileSync(recent.RECORD,'utf8'));recent.createMigration(recentRecord);
+  const previous50Record=JSON.parse(fs.readFileSync(previous50.RECORD,'utf8'));previous50.createMigration(previous50Record);
+ const recentRecord=JSON.parse(fs.readFileSync(recent.RECORD,'utf8'));recent.createMigration(recentRecord);
  const precedingRecord=JSON.parse(fs.readFileSync(preceding.RECORD,'utf8'));preceding.createMigration(precedingRecord);
  assert.equal(cp.execFileSync('git',['rev-parse',m.BASE_COMMIT+'^{tree}'],{cwd:m.ROOT,encoding:'utf8'}).trim(),m.BASE_TREE);
  const historical=JSON.parse(fs.readFileSync(path.join(m.ROOT,'validation/patient-design-v08443/asset-migrations.json'),'utf8'));
@@ -64,7 +66,7 @@ test('v44 exact current bytes follow the pinned v43 package; every protected ass
    if(entry.isDirectory())checkMembership(f);
    else{
     assert(entry.isFile(),f+' must be a regular protected asset');
-    assert(m.BASE_FILES.has(f)||Object.hasOwn(record.files,f)||Object.hasOwn(latestRecord.files,f)||Object.hasOwn(successorRecord.files,f)||Object.hasOwn(batchRecord.files,f)||Object.hasOwn(previous49Record.files,f)||Object.hasOwn(recentRecord.files,f)||Object.hasOwn(precedingRecord.files,f),f+' is an unrecorded addition to a protected directory');
+    assert(m.BASE_FILES.has(f)||Object.hasOwn(record.files,f)||Object.hasOwn(latestRecord.files,f)||Object.hasOwn(successorRecord.files,f)||Object.hasOwn(batchRecord.files,f)||Object.hasOwn(previous49Record.files,f)||Object.hasOwn(previous50Record.files,f)||Object.hasOwn(recentRecord.files,f)||Object.hasOwn(precedingRecord.files,f),f+' is an unrecorded addition to a protected directory');
    }
   }
  }

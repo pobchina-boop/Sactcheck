@@ -1,7 +1,7 @@
 /* Explicit source-version compatibility; never infer a new version from a code. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.SACTCheckProtocolIds=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
   'use strict';
-  const migrations=Object.freeze({'nccp-00589-v4':'nccp-00589-v5','nccp-00591-v3':'nccp-00591-v4','nccp-00455-v15b':'nccp-00455-v16','nccp-00558-v12b':'nccp-00558-v13','nccp-00207-v5':'nccp-00207-v6','nccp-00419-v4':'nccp-00419-v6'});
+  const migrations=Object.freeze({'nccp-00574-v4':'nccp-00574-v5','nccp-00589-v4':'nccp-00589-v5','nccp-00591-v3':'nccp-00591-v4','nccp-00455-v15b':'nccp-00455-v16','nccp-00558-v12b':'nccp-00558-v13','nccp-00207-v5':'nccp-00207-v6','nccp-00419-v4':'nccp-00419-v6'});
   const normaliseCode=value=>/^\d{1,5}$/.test(String(value||''))?String(value).padStart(5,'0'):'';
   const codeInId=id=>/^nccp-(\d{5})-v[\w.]+$/.exec(String(id||''))?.[1]||'';
   const canonicalId=id=>migrations[String(id)]||String(id||'');
