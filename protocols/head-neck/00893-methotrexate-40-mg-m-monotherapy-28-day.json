@@ -14,9 +14,9 @@
     "short_title": "Methotrexate 40 mg/m² Monotherapy – 28 day",
     "indication": "Recurrent, advanced or metastatic head and neck squamous cell carcinoma in patients unsuitable for combination chemotherapy.",
     "source_url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 4,
+    "sactcheck_encoding_version": "0.84.50",
+    "source_checked_date": "2026-11-14",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -60,11 +60,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_specific_v08450_263_scenarios_passed",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.50"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -80,22 +81,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.50",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP source reconciliation and 263 source-boundary scenarios passed; independent clinical and pharmacy approval pending."
     },
-    "canonical_protocol_id": "nccp-00893-v1"
+    "canonical_protocol_id": "nccp-00893-v1",
+    "clinical_audit_release": "0.84.50",
+    "source_pdf_sha256": "b0c6f356dabfad4bed3caa8596f12ab1acc7276bcb6c23ddb9b5477940e14035"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00893 Version 1. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding of NCCP 00893 v1; independent clinical and pharmacy approval pending."
   },
   "indications": [
     {
@@ -109,11 +112,12 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Methotrexate on days 1, 8 and 15 every 28 days until progression or unacceptable toxicity.",
+    "schedule_summary": "Methotrexate 40 mg/m² by intravenous bolus on Days 1, 8 and 15 of each 28-day cycle, until progression or unacceptable toxicity. There is no scheduled Day-22 dose. The clinician may increase to 50 mg/m² only if there has been no mucositis.",
     "drugs": [
       "methotrexate"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "duration_text": "Continuous until progression or unacceptable toxicity"
   },
   "input_definitions": {
     "assessment_phase": {
@@ -123,15 +127,15 @@
       "options": [
         {
           "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "label": "Before first treatment"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "During treatment"
         },
         {
           "value": "toxicity_review",
-          "label": "Toxicity review"
+          "label": "Recovery / toxicity review"
         }
       ],
       "demo_value": "pre_treatment",
@@ -163,7 +167,52 @@
           "label": "4"
         }
       ],
-      "demo_value": 1,
+      "demo_value": 0,
+      "input_role": "decision"
+    },
+    "hypersensitivity": {
+      "label": "Relevant medicine hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant or pregnancy suspected",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Previously permanently discontinued a component",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     },
     "anc": {
@@ -173,192 +222,142 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "unit": "×10⁹/L"
     },
     "platelets": {
       "label": "Platelets",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
+      "step": 0.01,
       "demo_value": 180,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "haemoglobin": {
-      "label": "Haemoglobin",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
-      "unit": "g/dL",
-      "input_role": "monitoring"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
-    },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia or neutropenic sepsis",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "pregnancy": {
-      "label": "Pregnant",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "context"
-    },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "context"
-    },
-    "methotrexate_crcl_band": {
-      "label": "Renal function for methotrexate",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge50",
-          "label": "CrCl ≥50 mL/min"
-        },
-        {
-          "value": "20_49",
-          "label": "CrCl 20–49 mL/min"
-        },
-        {
-          "value": "lt20",
-          "label": "CrCl <20 mL/min"
-        }
-      ],
-      "demo_value": "ge50",
-      "input_role": "decision"
-    },
-    "mucositis_grade": {
-      "label": "Mucositis/stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "unit": "×10⁹/L"
     },
     "bilirubin_umol_l": {
       "label": "Bilirubin",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
-      "demo_value": 12,
-      "unit": "µmol/L",
+      "step": 0.01,
+      "demo_value": 10,
+      "input_role": "decision",
+      "unit": "µmol/L"
+    },
+    "mucositis_grade": {
+      "label": "Current mucositis / stomatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00893 v1 source grading; CTCAE edition unspecified"
+    },
+    "prior_mucositis_grade": {
+      "label": "Highest mucositis grade for episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00893 v1 source grading; CTCAE edition unspecified"
+    },
+    "mucositis_occurrence": {
+      "label": "Occurrence number at that severity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "episodes"
+    },
+    "myelosuppression_delay_days": {
+      "label": "Myelosuppression recovery delay",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0,
+      "input_role": "decision",
+      "unit": "days"
+    },
+    "myelosuppression_delay_count": {
+      "label": "Number of myelosuppression delays",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0,
+      "input_role": "decision",
+      "unit": "episodes"
+    },
+    "significant_third_space_fluid": {
+      "label": "Significant pleural effusion / ascites or other third-space accumulation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     }
   },
@@ -403,81 +402,85 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "methotrexate"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "ECOG_3",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "FN",
+        "id": "PREGNANCY",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
+          "field": "pregnancy",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "methotrexate"
           ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "MTX_ANC_LT1",
+        "id": "BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+      },
+      {
+        "id": "COUNT_ANC_LOW",
         "priority": 10,
         "when": {
           "field": "anc",
@@ -485,68 +488,44 @@
           "value": 1
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "delay",
           "components": [
             "methotrexate"
           ],
-          "message": "ANC <1.0 ×10⁹/L: delay; consider a 25% reduction when recovered."
+          "message": "Delay until recovery; consider 25% methotrexate reduction with clinician review."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Haematological table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "ANC <1.0 ×10⁹/L: delay; consider a 25% reduction when recovered."
+        "explanation": "Delay until recovery; consider 25% methotrexate reduction with clinician review."
       },
       {
-        "id": "MTX_PLT_75_100",
-        "priority": 8,
+        "id": "MTX_ANC_EQUAL",
+        "priority": 10,
         "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            75,
-            100
-          ]
+          "field": "anc",
+          "operator": "==",
+          "value": 1
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "methotrexate"
           ],
-          "message": "Platelets 75–100 ×10⁹/L: treatment is at Consultant discretion."
+          "message": "Source gives >1.0 and <1.0; exact 1.0 is unassigned. Confirm rather than assume full dose.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "Platelets 75–100 ×10⁹/L: treatment is at Consultant discretion."
+        "explanation": "Source gives >1.0 and <1.0; exact 1.0 is unassigned. Confirm rather than assume full dose."
       },
       {
-        "id": "MTX_PLT_50_74",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            50,
-            74.999
-          ]
-        },
-        "action": {
-          "type": "delay",
-          "components": [
-            "methotrexate"
-          ],
-          "message": "Platelets 50–74 ×10⁹/L: delay."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Platelets 50–74 ×10⁹/L: delay."
-      },
-      {
-        "id": "MTX_PLT_LT50",
+        "id": "COUNT_PLATELETS_LOW",
         "priority": 10,
         "when": {
           "field": "platelets",
@@ -554,59 +533,470 @@
           "value": 50
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "delay",
           "components": [
             "methotrexate"
           ],
-          "message": "Platelets <50 ×10⁹/L: delay and consider a 25% reduction."
+          "message": "Delay until recovery and consider 25% reduction of methotrexate."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Haematological table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "Platelets <50 ×10⁹/L: delay and consider a 25% reduction."
+        "explanation": "Delay until recovery and consider 25% reduction of methotrexate."
       },
       {
-        "id": "MTX_RENAL_20_49",
-        "priority": 9,
+        "id": "MTX_PLT_DELAY",
+        "priority": 10,
         "when": {
-          "field": "methotrexate_crcl_band",
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Delay until counts return to normal."
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Delay until counts return to normal."
+      },
+      {
+        "id": "MTX_PLT_EQUAL",
+        "priority": 10,
+        "when": {
+          "field": "platelets",
           "operator": "==",
-          "value": "20_49"
+          "value": 75
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "75 overlaps the 50–75 delay band and 75–100 discretionary band. Confirm the source boundary with the clinician.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "75 overlaps the 50–75 delay band and 75–100 discretionary band. Confirm the source boundary with the clinician."
+      },
+      {
+        "id": "MTX_PLT_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">",
+              "value": 75
+            },
+            {
+              "field": "platelets",
+              "operator": "<=",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Clinician discretion: continue or delay until recovery.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Clinician discretion: continue or delay until recovery."
+      },
+      {
+        "id": "MUCOSITIS_ACTIVE",
+        "priority": 10,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Delay until mucositis improves to grade ≤1. Review prior grade and recurrence before selecting subsequent doses."
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Delay until mucositis improves to grade ≤1. Review prior grade and recurrence before selecting subsequent doses."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 0% of methotrexate. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 0% of methotrexate. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 25% of methotrexate. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 25% of methotrexate. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of methotrexate. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of methotrexate. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Omit methotrexate treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Omit methotrexate treatment."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G3_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of methotrexate. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of methotrexate. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G3_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Omit methotrexate treatment.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Omit methotrexate treatment."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Record recurrence number before choosing subsequent dose; recovery alone does not reset the toxicity history.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Record recurrence number before choosing subsequent dose; recovery alone does not reset the toxicity history."
+      },
+      {
+        "id": "MTX_MUCOSITIS_G4",
+        "priority": 10,
+        "when": {
+          "field": "prior_mucositis_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "NCCP table provides grade 2 and 3 recurrence pathways, not a grade 4 dose ladder. Urgent specialist review; do not infer one.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "NCCP table provides grade 2 and 3 recurrence pathways, not a grade 4 dose ladder. Urgent specialist review; do not infer one."
+      },
+      {
+        "id": "MTX_RENAL_20_50",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "dose_reduce",
           "components": [
             "methotrexate"
           ],
-          "message": "CrCl 20–49 mL/min: administer 50% methotrexate."
+          "message": "Methotrexate 50% of original dose; check dialysis separately."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "CrCl 20–49 mL/min: administer 50% methotrexate."
+        "explanation": "Methotrexate 50% of original dose; check dialysis separately."
       },
       {
-        "id": "MTX_RENAL_LT20",
+        "id": "MTX_RENAL_50",
         "priority": 10,
         "when": {
-          "field": "methotrexate_crcl_band",
+          "field": "crcl_ml_min",
           "operator": "==",
-          "value": "lt20"
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Exact 50 mL/min overlaps source ≥50 full dose and 20–50 half dose. Confirm with consultant/pharmacy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Exact 50 mL/min overlaps source ≥50 full dose and 20–50 half dose. Confirm with consultant/pharmacy."
+      },
+      {
+        "id": "MTX_RENAL_LOW",
+        "priority": 10,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 20
         },
         "action": {
           "type": "contraindicated",
           "components": [
             "methotrexate"
           ],
-          "message": "CrCl <20 mL/min: methotrexate is not recommended."
+          "message": "Methotrexate is not recommended; if unavoidable consider haemodialysis in specialist care."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "CrCl <20 mL/min: methotrexate is not recommended."
+        "explanation": "Methotrexate is not recommended; if unavoidable consider haemodialysis in specialist care."
+      },
+      {
+        "id": "MTX_DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Not recommended. If unavoidable, source states 50% original dose with daily high-flux dialysis; specialist-only decision."
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Not recommended. If unavoidable, source states 50% original dose with daily high-flux dialysis; specialist-only decision."
       },
       {
         "id": "MTX_BILI",
@@ -624,31 +1014,66 @@
           "message": "Bilirubin >86 µmol/L: avoid methotrexate."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
         "explanation": "Bilirubin >86 µmol/L: avoid methotrexate."
       },
       {
-        "id": "MTX_MUC_G2",
-        "priority": 9,
+        "id": "MTX_DELAY_HISTORY",
+        "priority": 10,
         "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
+          "any": [
+            {
+              "field": "myelosuppression_delay_days",
+              "operator": ">",
+              "value": 14
+            },
+            {
+              "field": "myelosuppression_delay_count",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
             "methotrexate"
           ],
-          "message": "Grade 2 or worse mucositis requires interruption and source-directed re-challenge/reduction."
+          "message": "Delay until recovery; consider 50% reduction for subsequent cycles or discontinue. Do not clear this history when counts normalise.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00893 v1",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
         },
-        "explanation": "Grade 2 or worse mucositis requires interruption and source-directed re-challenge/reduction."
+        "explanation": "Delay until recovery; consider 50% reduction for subsequent cycles or discontinue. Do not clear this history when counts normalise."
+      },
+      {
+        "id": "MTX_THIRD_SPACE",
+        "priority": 10,
+        "when": {
+          "field": "significant_third_space_fluid",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Manage and monitor significant third-space accumulation before and during methotrexate.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00893 v1",
+          "page": "3",
+          "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf"
+        },
+        "explanation": "Manage and monitor significant third-space accumulation before and during methotrexate."
       }
     ]
   },
@@ -663,7 +1088,7 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
+    "emetogenic_risk": "low",
     "script_id": "nccp-parenteral-moderate",
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",

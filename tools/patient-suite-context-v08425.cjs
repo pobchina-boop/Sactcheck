@@ -16,7 +16,7 @@ if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
 if(context && context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
-if(hn45Contexts.includes(context)&&codes.some(c=>context==='nasopharyngeal'?c!=='00385':!['00419','00385','00207','00261','00483','00484','00455','00558'].includes(c)))throw Error('Unsupported head/neck regimen context');
+if(hn45Contexts.includes(context)&&codes.some(c=>context==='nasopharyngeal'?c!=='00385':!['00294','00419','00385','00207','00261','00483','00484','00455','00558'].includes(c)))throw Error('Unsupported head/neck regimen context');
 if(melanomaContexts.includes(context)&&codes.some(c=>!['00455','00558','00483','00484'].includes(c)||(context==='melanoma_perioperative'&&c!=='00455')))throw new Error('Unsupported melanoma regimen/context');
 if(context==='melanoma'&&codes.some(c=>c!=='00551'))throw new Error('Melanoma combination context escaped00551');
 if(context==='merkel_cell'&&codes.some(c=>c!=='00535'))throw new Error('Merkel-cell context escaped00535');
@@ -31,6 +31,7 @@ function readPath(p){const m=p.match(/^data\/patient-knowledge\/(\d{5})\.json$/)
 function output(file,html){
  const relative=path.isAbsolute(file)?path.relative(root,file):file;
  const patient=relative.match(/^patient\/(\d{5})\/(.+)$/);
+ if(patient&&['00294','00242','00295'].includes(patient[1]))html=require('./patient-pack-v08450.cjs').continuous(profile(patient[1]),html);
  if(patient&&!html.includes('class="ps-body')&&['0.84.25','0.84.26','0.84.27','0.84.28','0.84.29','0.84.30','0.84.32','0.84.33','0.84.34','0.84.35'].includes(profile(patient[1]).suite_release)){
   html=html.replace('</head>','<link rel="stylesheet" href="../../assets/patient/lung-suite-v08425.css"></head>');
   html=html.replace('<body class="','<body class="suite-v08425 ').replace('<body>','<body class="suite-v08425">');
@@ -79,6 +80,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(hn47.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const hn48=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08448.json'),'utf8'));
  for(const [c,plans]of Object.entries(hn48.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const hn50=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08450.json'),'utf8'));
+ for(const [c,plans]of Object.entries(hn50.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

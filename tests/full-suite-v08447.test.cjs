@@ -5,7 +5,7 @@ const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),jso
 const scope=json('validation/head-neck-v08447/scope.json'),index=json('protocols/index.json').protocols,registry=require('../js/patient-asset-registry-v0810.js');
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),normal=s=>s.replace(/&#(?:039|39);/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim();
 const KB=json('data/regimen-knowledge-base-v08447-addendum.json'),journeys=json('data/breast-treatment-journeys-v0837.json'),runtime=require('../js/treatment-journey-v0837.js');
-assert(['0.84.47','0.84.48','0.84.49'].includes(json('package.json').version));assert.equal(registry.release,json('package.json').version);assert.equal(index.length,377);assert.equal(scope.new_routes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(scope.new_codes.length,0);assert.equal(scope.clinical_routes.length,12);
+assert(['0.84.47','0.84.48','0.84.49','0.84.50'].includes(json('package.json').version));assert.equal(registry.release,json('package.json').version);assert.equal(index.length,377);assert.equal(scope.new_routes.length,5);assert.equal(scope.retrospective_codes.length,5);assert.equal(scope.new_codes.length,0);assert.equal(scope.clinical_routes.length,12);
 let checks=0;
 for(const route of scope.clinical_routes){
  const [code,context]=route.split('/'),d=json((context?'data/patient-knowledge-contexts/':'data/patient-knowledge/')+route+'.json'),p=json(index.find(x=>x.path.includes('/'+code+'-')).path);

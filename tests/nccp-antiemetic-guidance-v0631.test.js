@@ -98,6 +98,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {
   const allowedCorrections = {
+    "00295":"oral_moderate_high", // v50: NCCP00295v6: >12 mg moderate/high; <=12 mg minimal/low, separate workflow plans tested.
+    "00893":"low", // v50: NCCP00893v1 supportive-care table.
     "00514":"low", "00589":"moderate", // v49: retained NCCP00514v3 /00589v5 supportive-care tables.
     "00696":"low", // v47: NCCP00696v2 supportive-care section, retained source hash and integrated day8/combination checks.
     "00105":"low", "00551":"low", // v42: current NCCP ipilimumab-containing phase; nivolumab-only maintenance remains minimal.
@@ -151,6 +153,7 @@ for (const record of index.protocols || []) {
   const sc = protocol.supportive_care || {};
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
+  if(['00294','00242','00295','00615','00893'].includes(md.nccp_regimen_code)){require('./helpers/head-neck-inputs-v08450.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,({'00294':'oral_minimal_low','00242':'oral_minimal_low','00295':'oral_moderate_high','00615':'high','00893':'low'})[md.nccp_regimen_code]);continue;}
   if(['00514','00589'].includes(md.nccp_regimen_code)){require('./helpers/head-neck-inputs-v08449.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,md.nccp_regimen_code==='00514'?'low':'moderate');}
   if(md.nccp_regimen_code==='00419'){require('./helpers/head-neck-inputs-v08448.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'moderate');assert.deepStrictEqual(sc.phase_profiles||{},{});assert(readJson('data/phase-support-contexts-v08448.json').regimens['00419'].head_neck.every(p=>p.emetogenic_risk==='moderate'));}
   if(md.nccp_regimen_code==='00696'){require('./helpers/head-neck-inputs-v08447.cjs').validate(protocol);assert.equal(sc.emetogenic_risk,'low');assert(readJson('data/phase-support-v0838.json').regimens['00696'].every(p=>p.emetogenic_risk==='low'));}

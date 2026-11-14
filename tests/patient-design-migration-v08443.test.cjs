@@ -10,7 +10,8 @@ const m = require('./helpers/retrospective-v08443.cjs');
 const next = require('./helpers/retrospective-v08444.cjs');
 const latest = require('./helpers/retrospective-v08445.cjs');
 const successor = require('./helpers/retrospective-v08446.cjs');
-const recent=require('./helpers/retrospective-v08449.cjs');
+const recent=require('./helpers/retrospective-v08450.cjs');
+const previous49=require('./helpers/retrospective-v08449.cjs');
 const preceding=require('./helpers/retrospective-v08448.cjs');
 const batch = require('./helpers/retrospective-v08447.cjs');
 const root = path.resolve(__dirname, '..');
@@ -176,7 +177,7 @@ test('v43 recorded migration proves every before hash against the pinned v42 Git
   }
 });
 
-test('v43–v49 explicit reviewed migrations cover the complete current asset diff', () => {
+test('v43–v50 explicit reviewed migrations cover the complete current asset diff', () => {
   const record = readRecord();
   const migrate = m.createMigration(record);
   requireBaseline();
@@ -185,20 +186,21 @@ test('v43–v49 explicit reviewed migrations cover the complete current asset di
   const latestRecord=JSON.parse(fs.readFileSync(latest.RECORD,'utf8'));latest.createMigration(latestRecord);
   const successorRecord=JSON.parse(fs.readFileSync(successor.RECORD,'utf8'));successor.createMigration(successorRecord);
   const batchRecord=JSON.parse(fs.readFileSync(batch.RECORD,'utf8'));batch.createMigration(batchRecord);batch.verifyCurrent(batchRecord);
+  const previous49Record=JSON.parse(fs.readFileSync(previous49.RECORD,'utf8'));previous49.createMigration(previous49Record);
   const recentRecord=JSON.parse(fs.readFileSync(recent.RECORD,'utf8'));recent.createMigration(recentRecord);
  const precedingRecord=JSON.parse(fs.readFileSync(preceding.RECORD,'utf8'));preceding.createMigration(precedingRecord);
   const domains = ['patient', 'docs/patient', 'data/patient-knowledge', 'data/patient-knowledge-contexts', 'protocols', 'assets/patient', 'js/patient-anatomy-v08431.js', ...m.SHARED_PATHS, ...next.SHARED_PATHS];
   const latestFiles=Object.keys(latestRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
   const successorFiles=Object.keys(successorRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
   const precedingFiles=Object.keys(precedingRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
-  const recentFiles=Object.keys(recentRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
+  const recentFiles=Object.keys({...previous49Record.files,...recentRecord.files}).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
   const batchFiles=Object.keys(batchRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
   const lines = args => cp.execFileSync('git', args, {cwd: root, maxBuffer: 32 * 1024 * 1024}).toString().split('\0').filter(Boolean);
   const changed = lines(['diff', '--name-only', '-z', m.BASE_COMMIT, '--', ...domains]);
   const added = lines(['ls-files', '--others', '--exclude-standard', '-z', '--', ...domains]);
   const actual = [...new Set([...changed, ...added])].sort();
-  for (const name of actual) assert(m.approvedPath(name)||next.approvedPath(name)||latest.approvedPath(name)||successor.approvedPath(name)||(Object.hasOwn(batchRecord.files,name)&&batch.approvedPath(name))||(Object.hasOwn(recentRecord.files,name)&&recent.approvedPath(name))||(Object.hasOwn(precedingRecord.files,name)&&preceding.approvedPath(name)), 'Unapproved clinical, anatomy, wallet, QR or presentation change: ' + name);
-  assert.deepEqual([...new Set([...Object.keys(record.files),...Object.keys(nextRecord.files),...latestFiles,...successorFiles,...batchFiles,...precedingFiles,...recentFiles])].sort(), actual, 'The immutable historical records plus the explicit v47/v48/v49 records must cover every changed/new asset');
+  for (const name of actual) assert(m.approvedPath(name)||next.approvedPath(name)||latest.approvedPath(name)||successor.approvedPath(name)||(Object.hasOwn(batchRecord.files,name)&&batch.approvedPath(name))||(Object.hasOwn(previous49Record.files,name)&&previous49.approvedPath(name))||(Object.hasOwn(recentRecord.files,name)&&recent.approvedPath(name))||(Object.hasOwn(precedingRecord.files,name)&&preceding.approvedPath(name)), 'Unapproved clinical, anatomy, wallet, QR or presentation change: ' + name);
+  assert.deepEqual([...new Set([...Object.keys(record.files),...Object.keys(nextRecord.files),...latestFiles,...successorFiles,...batchFiles,...precedingFiles,...recentFiles])].sort(), actual, 'The immutable historical records plus the explicit v47/v48/v49/v50 records must cover every changed/new asset');
   for (const [name, entry] of Object.entries(record.files)) {
     const bytes = fs.readFileSync(path.join(root, name));
     assert.equal(sha(bytes), next.expectedHash(name,migrate(name, entry.before)), name + ' exact candidate bytes');

@@ -14,9 +14,9 @@
     "short_title": "Cyclophosphamide, Doxorubicin and Cisplatin – 21 day",
     "indication": "Treatment of advanced salivary gland cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.84.50",
+    "source_checked_date": "2026-11-14",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -66,11 +66,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_specific_v08450_263_scenarios_passed",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.50"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -86,22 +87,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.50",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP source reconciliation and 263 source-boundary scenarios passed; independent clinical and pharmacy approval pending."
     },
-    "canonical_protocol_id": "nccp-00615-v2"
+    "canonical_protocol_id": "nccp-00615-v2",
+    "clinical_audit_release": "0.84.50",
+    "source_pdf_sha256": "4bc7421f48c9bf397ee5cc32e6dffb260c356b244b13740d167d04f6523eb7a8"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00615 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding of NCCP 00615 v2; independent clinical and pharmacy approval pending."
   },
   "indications": [
     {
@@ -115,14 +118,14 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Cyclophosphamide, doxorubicin and cisplatin on day 1 every 21 days for up to 6 cycles or until progression/toxicity.",
+    "schedule_summary": "Doxorubicin 50 mg/m², cisplatin 50 mg/m² and cyclophosphamide 500 mg/m² on Day 1, repeated every 21 days for up to 6 cycles, stopping earlier for progression or unacceptable side effects.",
     "drugs": [
       "cyclophosphamide",
       "doxorubicin",
       "cisplatin"
     ],
-    "planned_cycles": 6,
-    "duration_text": "Up to 6 cycles or until progression/toxicity"
+    "duration_text": "Up to 6 cycles",
+    "planned_cycles": 6
   },
   "input_definitions": {
     "assessment_phase": {
@@ -132,15 +135,15 @@
       "options": [
         {
           "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "label": "Before first treatment"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "During treatment"
         },
         {
           "value": "toxicity_review",
-          "label": "Toxicity review"
+          "label": "Recovery / toxicity review"
         }
       ],
       "demo_value": "pre_treatment",
@@ -172,7 +175,52 @@
           "label": "4"
         }
       ],
-      "demo_value": 1,
+      "demo_value": 0,
+      "input_role": "decision"
+    },
+    "hypersensitivity": {
+      "label": "Relevant medicine hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnant or pregnancy suspected",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Previously permanently discontinued a component",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     },
     "anc": {
@@ -182,223 +230,322 @@
       "min": 0,
       "step": 0.01,
       "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "unit": "×10⁹/L"
     },
     "platelets": {
       "label": "Platelets",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
+      "step": 0.01,
       "demo_value": 180,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
+      "input_role": "decision",
+      "unit": "×10⁹/L"
     },
-    "haemoglobin": {
-      "label": "Haemoglobin",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
-      "unit": "g/dL",
-      "input_role": "monitoring"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
+    "bilirubin_umol_l": {
+      "label": "Bilirubin",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
+      "demo_value": 10,
+      "input_role": "decision",
+      "unit": "µmol/L"
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
+    "mucositis_grade": {
+      "label": "Current mucositis / stomatitis grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
+          "description": "No recorded toxicity of this type."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00615 v2 source grading; CTCAE edition unspecified"
+    },
+    "prior_mucositis_grade": {
+      "label": "Highest mucositis grade for episode",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00615 v2 source grading; CTCAE edition unspecified"
+    },
+    "mucositis_occurrence": {
+      "label": "Occurrence number at that severity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "episodes"
     },
     "febrile_neutropenia": {
-      "label": "Febrile neutropenia or neutropenic sepsis",
+      "label": "Febrile neutropenia",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
-    "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+    "prior_severe_myelosuppression": {
+      "label": "Prior severe myelosuppression",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "decision"
-    },
-    "pregnancy": {
-      "label": "Pregnant",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "context"
-    },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "context"
-    },
-    "cisplatin_crcl_band": {
-      "label": "Renal function for cisplatin",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge60",
-          "label": "CrCl ≥60 mL/min"
-        },
-        {
-          "value": "50_59",
-          "label": "50–59 mL/min"
-        },
-        {
-          "value": "45_59",
-          "label": "45–59 mL/min where specified"
-        },
-        {
-          "value": "40_49",
-          "label": "40–49 mL/min"
-        },
-        {
-          "value": "lt45",
-          "label": "<45 mL/min"
-        },
-        {
-          "value": "lt40",
-          "label": "<40 mL/min"
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis"
-        }
-      ],
-      "demo_value": "ge60",
-      "input_role": "decision"
-    },
-    "cisplatin_neuro_hearing_grade": {
-      "label": "Cisplatin-related neuropathy, tinnitus or hearing toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
     },
     "electrolytes_hydration_not_corrected": {
-      "label": "Required hydration/electrolyte correction incomplete",
+      "label": "Electrolytes hydration not corrected",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "significant_hearing_impairment": {
+      "label": "Significant hearing impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "significant_cardiac_disease": {
+      "label": "Significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "anthracycline_lifetime_dose_limit_reached": {
+      "label": "Anthracycline lifetime dose limit reached",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "lvef_percent": {
-      "label": "Left ventricular ejection fraction",
+      "label": "LVEF",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
+      "step": 0.01,
       "demo_value": 60,
-      "unit": "%",
-      "input_role": "decision"
+      "input_role": "decision",
+      "unit": "%"
     },
-    "anthracycline_lifetime_dose_limit_reached": {
-      "label": "Anthracycline lifetime dose limit reached or significant cardiac contraindication",
-      "type": "boolean",
+    "ast_uln_multiple": {
+      "label": "AST / local ULN",
+      "type": "number",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "×ULN"
+    },
+    "lifetime_doxorubicin_mg_m2": {
+      "label": "Lifetime doxorubicin dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0,
+      "input_role": "decision",
+      "unit": "mg/m²"
+    },
+    "neuropathy_grade": {
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00615 v2 source grading; CTCAE edition unspecified"
+    },
+    "diarrhoea_grade": {
+      "label": "Current diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00615 v2 source grading; CTCAE edition unspecified"
+    },
+    "prior_diarrhoea_grade": {
+      "label": "Prior diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00615 v2 source grading; CTCAE edition unspecified"
+    },
+    "diarrhoea_occurrence": {
+      "label": "Diarrhoea occurrence",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "episodes"
     }
   },
   "required_inputs": [],
@@ -442,217 +589,118 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "ECOG_3",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "FN",
+        "id": "PREGNANCY",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
+          "field": "pregnancy",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+          "message": "Pregnancy or suspected pregnancy requires an individual consultant oncology and obstetric assessment before prescribing. This safeguard is not an absolute pregnancy exclusion stated by NCCP 00615."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "SACTCheck conservative review safeguard; NCCP 00615 v2 does not list pregnancy as an exclusion",
+          "page": "Review safeguard; verify current product information and individual circumstances",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Febrile neutropenia requires acute management, treatment delay and source-directed dose/G-CSF review."
+        "explanation": "Pregnancy or suspected pregnancy requires an individual consultant oncology and obstetric assessment before prescribing. This safeguard is not an absolute pregnancy exclusion stated by NCCP 00615."
       },
       {
-        "id": "CIS_RENAL_50_59",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "50_59",
-            "45_59"
-          ]
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Reduced renal function requires the source-specific cisplatin reduction or substitution pathway."
-      },
-      {
-        "id": "CIS_RENAL_40_49",
+        "id": "BREASTFEEDING",
         "priority": 10,
         "when": {
-          "field": "cisplatin_crcl_band",
+          "field": "breastfeeding",
           "operator": "==",
-          "value": "40_49"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "CrCl 40–49 mL/min requires major cisplatin reduction or alternative treatment according to the source."
-      },
-      {
-        "id": "CIS_RENAL_LOW",
-        "priority": 10,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "in",
-          "value": [
-            "lt45",
-            "lt40",
-            "dialysis"
-          ]
+          "value": true
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "cisplatin"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Severe renal impairment triggers the source pathway in which cisplatin is not recommended without specialist direction."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "CIS_NEURO_G2",
-        "priority": 9,
+        "id": "PRIOR_STOP",
+        "priority": 10,
         "when": {
-          "field": "cisplatin_neuro_hearing_grade",
-          "operator": ">=",
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+      },
+      {
+        "id": "ECOG_OUTSIDE",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
           "value": 2
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "cisplatin"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+          "message": "Outside source ECOG 0–2 eligibility; consultant review.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Grade 2 or worse neuro/hearing toxicity requires cisplatin dose, omission or substitution review."
+        "explanation": "Outside source ECOG 0–2 eligibility; consultant review."
       },
       {
-        "id": "CIS_HYDRATION",
-        "priority": 9,
-        "when": {
-          "field": "electrolytes_hydration_not_corrected",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Correct hydration and electrolytes before cisplatin."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Correct hydration and electrolytes before cisplatin."
-      },
-      {
-        "id": "ANC_05_099",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "between",
-          "value": [
-            0.5,
-            0.999
-          ]
-        },
-        "action": {
-          "type": "delay",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC 0.5–0.99 ×10⁹/L: delay."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ANC 0.5–0.99 ×10⁹/L: delay."
-      },
-      {
-        "id": "ANC_LT05",
+        "id": "COUNT_ANC_LOW",
         "priority": 10,
         "when": {
           "field": "anc",
@@ -660,44 +708,56 @@
           "value": 0.5
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "delay",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "ANC <0.5 ×10⁹/L or febrile neutropenia: delay and reduce all drugs by 25%."
+          "message": "Delay until recovery; consider 25% reduction of all three medicines for subsequent cycles."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "Haematological table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "ANC <0.5 ×10⁹/L or febrile neutropenia: delay and reduce all drugs by 25%."
+        "explanation": "Delay until recovery; consider 25% reduction of all three medicines for subsequent cycles."
       },
       {
-        "id": "PLT_50_99",
-        "priority": 9,
+        "id": "COUNT_ANC_DELAY",
+        "priority": 10,
         "when": {
-          "field": "platelets",
-          "operator": "between",
-          "value": [
-            50,
-            99.999
+          "all": [
+            {
+              "field": "anc",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            }
           ]
         },
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Platelets 50–99 ×10⁹/L: delay."
+          "message": "Delay all treatment until recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Platelets 50–99 ×10⁹/L: delay."
+        "explanation": "Delay all treatment until recovery."
       },
       {
-        "id": "PLT_LT50",
+        "id": "COUNT_PLATELETS_LOW",
         "priority": 10,
         "when": {
           "field": "platelets",
@@ -705,17 +765,829 @@
           "value": 50
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "delay",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Platelets <50 ×10⁹/L: delay and reduce all drugs by 25%."
+          "message": "Delay until recovery and consider 25% reduction of all three components."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "Haematological table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Platelets <50 ×10⁹/L: delay and reduce all drugs by 25%."
+        "explanation": "Delay until recovery and consider 25% reduction of all three components."
+      },
+      {
+        "id": "COUNT_PLATELETS_DELAY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "platelets",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Delay treatment until recovery."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Delay treatment until recovery."
+      },
+      {
+        "id": "MUCOSITIS_ACTIVE",
+        "priority": 10,
+        "when": {
+          "field": "mucositis_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Delay until mucositis improves to grade ≤1. Review prior grade and recurrence before selecting subsequent doses."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Delay until mucositis improves to grade ≤1. Review prior grade and recurrence before selecting subsequent doses."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 0% of all three medicines. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 0% of all three medicines. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 25% of all three medicines. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 25% of all three medicines. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of all three medicines. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of all three medicines. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G2_4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Withhold chemotherapy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Withhold chemotherapy."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G3_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of all three medicines. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of all three medicines. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G3_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Withhold chemotherapy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Withhold chemotherapy."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G4_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of all three medicines. Retain the history even if current symptoms have improved.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, source subsequent-dose reduction is 50% of all three medicines. Retain the history even if current symptoms have improved."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_G4_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Withhold chemotherapy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Withhold chemotherapy."
+      },
+      {
+        "id": "MUCOSITIS_HISTORY_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_mucositis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "mucositis_occurrence",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Record recurrence number before choosing subsequent dose; recovery alone does not reset the toxicity history.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Adverse-event table",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Record recurrence number before choosing subsequent dose; recovery alone does not reset the toxicity history."
+      },
+      {
+        "id": "CAP_BASELINE_RENAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Baseline CrCl <60 mL/min is excluded. On-treatment reduction bands do not override baseline eligibility."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Baseline CrCl <60 mL/min is excluded. On-treatment reduction bands do not override baseline eligibility."
+      },
+      {
+        "id": "CAP_RENAL_PHASE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Establish initiation versus on-treatment phase before using cisplatin renal-dose bands.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "2–3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Establish initiation versus on-treatment phase before using cisplatin renal-dose bands."
+      },
+      {
+        "id": "CIS_RENAL_45",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 45
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 59
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Cisplatin 75% of dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Cisplatin 75% of dose."
+      },
+      {
+        "id": "CIS_RENAL_LOW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 45
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Clinical decision; consider carboplatin, not an automatic substitution.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Clinical decision; consider carboplatin, not an automatic substitution."
+      },
+      {
+        "id": "CIS_RENAL_GAP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 59
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Source lists 45–59 and ≥60; fractional interval requires clinician review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Source lists 45–59 and ≥60; fractional interval requires clinician review."
+      },
+      {
+        "id": "CAP_DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Individual renal/pharmacy review of all components; no source dialysis schedule is encoded.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Individual renal/pharmacy review of all components; no source dialysis schedule is encoded."
+      },
+      {
+        "id": "CYCLO_RENAL_10_20",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 10
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "message": "Cyclophosphamide 75% of dose."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Cyclophosphamide 75% of dose."
+      },
+      {
+        "id": "CYCLO_RENAL_LT10",
+        "priority": 10,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 10
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "message": "Cyclophosphamide: clinical decision in CrCl <10.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Cyclophosphamide: clinical decision in CrCl <10."
+      },
+      {
+        "id": "DOXO_BILI_20_51",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Doxorubicin 50% of dose."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Doxorubicin 50% of dose."
+      },
+      {
+        "id": "DOXO_BILI_51",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": "==",
+          "value": 51
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "51 µmol/L overlaps source 50% and 25% bands. Confirm dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "51 µmol/L overlaps source 50% and 25% bands. Confirm dose."
+      },
+      {
+        "id": "DOXO_BILI_51_85",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Doxorubicin 25% of dose."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Doxorubicin 25% of dose."
+      },
+      {
+        "id": "DOXO_BILI_GT85",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Omit doxorubicin."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Omit doxorubicin."
+      },
+      {
+        "id": "DOXO_AST_2_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Doxorubicin 75% of dose; use AST specifically, not combined AST/ALT."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Doxorubicin 75% of dose; use AST specifically, not combined AST/ALT."
+      },
+      {
+        "id": "DOXO_AST_GT3",
+        "priority": 10,
+        "when": {
+          "field": "ast_uln_multiple",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Doxorubicin 50% of dose. Consider all applicable bilirubin criteria."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Doxorubicin 50% of dose. Consider all applicable bilirubin criteria."
+      },
+      {
+        "id": "CYCLO_HEPATIC",
+        "priority": 10,
+        "when": {
+          "field": "severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "message": "Severe hepatic impairment: cyclophosphamide dose is a clinical decision.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Severe hepatic impairment: cyclophosphamide dose is a clinical decision."
       },
       {
         "id": "CAP_LVEF",
@@ -730,34 +1602,507 @@
           "components": [
             "doxorubicin"
           ],
-          "message": "Reduced LVEF requires withholding doxorubicin and cardiac/Consultant review."
+          "message": "LVEF <50% is excluded; do not administer doxorubicin pending cardiac/oncology review."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Reduced LVEF requires withholding doxorubicin and cardiac/Consultant review."
+        "explanation": "LVEF <50% is excluded; do not administer doxorubicin pending cardiac/oncology review."
+      },
+      {
+        "id": "CAP_LVEF50",
+        "priority": 10,
+        "when": {
+          "field": "lvef_percent",
+          "operator": "==",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Exclusion says <50%, but baseline testing requires >50% for doxorubicin. Exact 50% requires review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Exclusion says <50%, but baseline testing requires >50% for doxorubicin. Exact 50% requires review."
       },
       {
         "id": "CAP_ANTH_LIMIT",
         "priority": 10,
         "when": {
-          "field": "anthracycline_lifetime_dose_limit_reached",
+          "any": [
+            {
+              "field": "anthracycline_lifetime_dose_limit_reached",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "lifetime_doxorubicin_mg_m2",
+              "operator": ">=",
+              "value": 450
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Lifetime doxorubicin limit 450 mg/m²; consider age, risk factors and other anthracycline exposure before another dose."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Lifetime doxorubicin limit 450 mg/m²; consider age, risk factors and other anthracycline exposure before another dose."
+      },
+      {
+        "id": "CAP_NEURO",
+        "priority": 10,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Omit cisplatin and consider an alternative therapy."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Omit cisplatin and consider an alternative therapy."
+      },
+      {
+        "id": "CAP_ELECTROLYTES_HYDRATION_NOT_CORRECTED",
+        "priority": 10,
+        "when": {
+          "field": "electrolytes_hydration_not_corrected",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "contraindicated",
+          "type": "withhold",
           "components": [
-            "doxorubicin"
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
           ],
-          "message": "Do not administer further doxorubicin without specialist review when the lifetime exposure/cardiac limit is reached."
+          "message": "Review and manage electrolytes hydration not corrected before treatment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00615 v2",
+          "page": "1–2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
         },
-        "explanation": "Do not administer further doxorubicin without specialist review when the lifetime exposure/cardiac limit is reached."
+        "explanation": "Review and manage electrolytes hydration not corrected before treatment."
+      },
+      {
+        "id": "CAP_SIGNIFICANT_HEARING_IMPAIRMENT",
+        "priority": 10,
+        "when": {
+          "field": "significant_hearing_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Review and manage significant hearing impairment before treatment."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "1–2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Review and manage significant hearing impairment before treatment."
+      },
+      {
+        "id": "CAP_SIGNIFICANT_CARDIAC_DISEASE",
+        "priority": 10,
+        "when": {
+          "field": "significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Review and manage significant cardiac disease before treatment."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "1–2",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Review and manage significant cardiac disease before treatment."
+      },
+      {
+        "id": "CAP_FN",
+        "priority": 10,
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Urgent infection treatment; delay chemotherapy until recovery and reduce all three medicines by 25% in subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Urgent infection treatment; delay chemotherapy until recovery and reduce all three medicines by 25% in subsequent cycles."
+      },
+      {
+        "id": "CAP_COUNT_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_severe_myelosuppression",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Prior ANC <0.5, platelets <50 or febrile neutropenia requires 25% reduction of all three medicines for subsequent cycles after recovery.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Prior ANC <0.5, platelets <50 or febrile neutropenia requires 25% reduction of all three medicines for subsequent cycles after recovery."
+      },
+      {
+        "id": "CAP_DIARRHOEA_ACTIVE",
+        "priority": 10,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Delay until diarrhoea resolves to grade ≤1; retain grade/recurrence history before subsequent dosing."
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Delay until diarrhoea resolves to grade ≤1; retain grade/recurrence history before subsequent dosing."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G2_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, reduce all three medicines by 0% for subsequent cycles.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, reduce all three medicines by 0% for subsequent cycles."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G2_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, reduce all three medicines by 25% for subsequent cycles.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, reduce all three medicines by 25% for subsequent cycles."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G2_3",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, reduce all three medicines by 50% for subsequent cycles.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, reduce all three medicines by 50% for subsequent cycles."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G2_4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Withhold chemotherapy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Withhold chemotherapy."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G3_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, reduce all three medicines by 50% for subsequent cycles.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, reduce all three medicines by 50% for subsequent cycles."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G3_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Withhold chemotherapy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Withhold chemotherapy."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G4_1",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery to grade ≤1, reduce all three medicines by 50% for subsequent cycles.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "After recovery to grade ≤1, reduce all three medicines by 50% for subsequent cycles."
+      },
+      {
+        "id": "CAP_DIARRHOEA_HISTORY_G4_2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_diarrhoea_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_occurrence",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "cisplatin",
+            "cyclophosphamide"
+          ],
+          "message": "Withhold chemotherapy.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00615 v2",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf"
+        },
+        "explanation": "Withhold chemotherapy."
       }
     ]
   },

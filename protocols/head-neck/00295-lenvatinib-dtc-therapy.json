@@ -14,9 +14,9 @@
     "short_title": "Lenvatinib DTC Therapy",
     "indication": "Progressive, locally advanced or metastatic differentiated thyroid carcinoma refractory to radioactive iodine.",
     "source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 8,
+    "sactcheck_encoding_version": "0.84.50",
+    "source_checked_date": "2026-11-14",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -62,11 +62,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_specific_v08450_263_scenarios_passed",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.50"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -82,22 +83,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.50",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP source reconciliation and 263 source-boundary scenarios passed; independent clinical and pharmacy approval pending."
     },
-    "canonical_protocol_id": "nccp-00295-v6"
+    "canonical_protocol_id": "nccp-00295-v6",
+    "clinical_audit_release": "0.84.50",
+    "source_pdf_sha256": "3d4be5bde137c1a97e9d12ab26b189d1a65573b44c0137d1e492c353e05ee9b0"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00295 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding of NCCP 00295 v6; independent clinical and pharmacy approval pending."
   },
   "indications": [
     {
@@ -110,12 +113,13 @@
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Lenvatinib orally once daily continuously; use a 28-day assessment-cycle convention until progression or unacceptable toxicity.",
+    "cycle_length_days": null,
+    "schedule_summary": "Lenvatinib 24 mg once daily, continuously, until progression or unacceptable side effects. The clinician may prescribe a lower starting dose or later reductions.",
     "drugs": [
       "lenvatinib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "duration_text": "Continuous until progression or unacceptable toxicity"
   },
   "input_definitions": {
     "assessment_phase": {
@@ -125,15 +129,15 @@
       "options": [
         {
           "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "label": "Before first treatment"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "During treatment"
         },
         {
           "value": "toxicity_review",
-          "label": "Toxicity review"
+          "label": "Recovery / toxicity review"
         }
       ],
       "demo_value": "pre_treatment",
@@ -165,212 +169,477 @@
           "label": "4"
         }
       ],
-      "demo_value": 1,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Relevant medicine hypersensitivity",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "pregnancy": {
-      "label": "Pregnant",
+      "label": "Pregnant or pregnancy suspected",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
-    "systolic_bp": {
+    "prior_permanent_stop": {
+      "label": "Previously permanently discontinued a component",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "child_pugh_class": {
+      "label": "Child–Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A"
+        },
+        {
+          "value": "B",
+          "label": "B"
+        },
+        {
+          "value": "C",
+          "label": "C"
+        }
+      ],
+      "demo_value": "A",
+      "input_role": "decision"
+    },
+    "uncontrolled_hypertension": {
+      "label": "Clinically uncontrolled hypertension",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "proteinuria_g_24h": {
+      "label": "Urine protein",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0,
+      "input_role": "decision",
+      "unit": "g/24 hours"
+    },
+    "systolic_bp_mmhg": {
       "label": "Systolic blood pressure",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
-      "demo_value": 130,
-      "unit": "mmHg",
-      "input_role": "decision"
+      "step": 0.01,
+      "demo_value": 120,
+      "input_role": "decision",
+      "unit": "mmHg"
     },
-    "diastolic_bp": {
+    "diastolic_bp_mmhg": {
       "label": "Diastolic blood pressure",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
+      "step": 0.01,
       "demo_value": 80,
-      "unit": "mmHg",
+      "input_role": "decision",
+      "unit": "mmHg"
+    },
+    "antihypertensive_stable_hours": {
+      "label": "Time on stable antihypertensive dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 48,
+      "input_role": "decision",
+      "unit": "hours"
+    },
+    "qtc_ms": {
+      "label": "QTc",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 430,
+      "input_role": "decision",
+      "unit": "ms"
+    },
+    "current_daily_dose_mg": {
+      "label": "Current lenvatinib daily dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 24,
+      "input_role": "decision",
+      "unit": "mg"
+    },
+    "optimal_antihypertensive_therapy": {
+      "label": "Optimal antihypertensive therapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     },
-    "proteinuria_grade": {
-      "label": "Proteinuria grade",
+    "prior_hypertension_interruption": {
+      "label": "Prior hypertension interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hypertensive_crisis": {
+      "label": "Hypertensive crisis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "nephrotic_syndrome": {
+      "label": "Nephrotic syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "arterial_thromboembolism": {
+      "label": "Arterial thromboembolism",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pres": {
+      "label": "Pres",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "grade4_lab_non_life_threatening": {
+      "label": "Grade4 lab non life threatening",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "diarrhoea_despite_medical_management": {
+      "label": "Diarrhoea despite medical management",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_dose_interruption": {
+      "label": "Prior dose interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "renal_toxicity_grade": {
+      "label": "Renal toxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
+          "description": "No recorded toxicity of this type."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "proteinuria",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
     },
-    "oral_toxicity_grade": {
-      "label": "Worst treatment-related oral targeted-therapy toxicity",
+    "hepatotoxicity_grade": {
+      "label": "Hepatotoxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
+          "description": "No recorded toxicity of this type."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
     },
-    "major_bleeding_or_thrombosis": {
-      "label": "Major bleeding or recent clinically significant thrombosis",
-      "type": "boolean",
+    "cardiac_dysfunction_grade": {
+      "label": "Cardiac dysfunction grade",
+      "type": "select",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
     },
-    "recent_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
-      "type": "boolean",
+    "haemorrhage_grade": {
+      "label": "Haemorrhage grade",
+      "type": "select",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
+    },
+    "gi_perforation_fistula_grade": {
+      "label": "Gi perforation fistula grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
+    },
+    "non_gi_fistula_grade": {
+      "label": "Non gi fistula grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00295 v6 source grading; CTCAE edition unspecified"
     }
   },
   "required_inputs": [],
@@ -414,168 +683,111 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
-          ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
-      },
-      {
-        "id": "ECOG_3",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "TKI_BP_SYS",
-        "priority": 9,
-        "when": {
-          "field": "systolic_bp",
-          "operator": ">=",
-          "value": 160
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
             "lenvatinib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00295 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
         },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "TKI_BP_DIA",
-        "priority": 9,
-        "when": {
-          "field": "diastolic_bp",
-          "operator": ">=",
-          "value": 100
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "lenvatinib"
-          ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
-      },
-      {
-        "id": "TKI_PROTEIN_G3",
-        "priority": 9,
-        "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "lenvatinib"
-          ],
-          "message": "Severe proteinuria requires interruption and quantified renal assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Severe proteinuria requires interruption and quantified renal assessment."
-      },
-      {
-        "id": "TKI_TOX_G3",
-        "priority": 9,
-        "when": {
-          "field": "oral_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "lenvatinib"
-          ],
-          "message": "Grade 3 or worse toxicity requires interruption and source-directed dose reduction."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse toxicity requires interruption and source-directed dose reduction."
-      },
-      {
-        "id": "TKI_BLEED",
+        "id": "PREGNANCY",
         "priority": 10,
         "when": {
-          "field": "major_bleeding_or_thrombosis",
+          "field": "pregnancy",
           "operator": "==",
           "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
+      },
+      {
+        "id": "BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+      },
+      {
+        "id": "ECOG_OUTSIDE",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "lenvatinib"
           ],
-          "message": "Major bleeding or recent clinically significant thrombosis requires urgent treatment-specific review."
+          "message": "Outside source ECOG 0–2 eligibility; consultant review.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00295 v6",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
         },
-        "explanation": "Major bleeding or recent clinically significant thrombosis requires urgent treatment-specific review."
+        "explanation": "Outside source ECOG 0–2 eligibility; consultant review."
       },
       {
-        "id": "TKI_SURGERY",
-        "priority": 9,
+        "id": "BP_UNCONTROLLED",
+        "priority": 10,
         "when": {
-          "field": "recent_surgery_or_unhealed_wound",
+          "field": "uncontrolled_hypertension",
           "operator": "==",
           "value": true
         },
@@ -584,13 +796,1003 @@
           "components": [
             "lenvatinib"
           ],
-          "message": "Withhold around major surgery and until adequate wound healing according to the source."
+          "message": "Control blood pressure and obtain consultant review before treatment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00295 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
         },
-        "explanation": "Withhold around major surgery and until adequate wound healing according to the source."
+        "explanation": "Control blood pressure and obtain consultant review before treatment."
+      },
+      {
+        "id": "LEN_BASELINE_PROTEIN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "proteinuria_g_24h",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Baseline proteinuria ≥1 g/24 hours is an exclusion; review before initiating."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Baseline proteinuria ≥1 g/24 hours is an exclusion; review before initiating."
+      },
+      {
+        "id": "LEN_PROTEIN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "proteinuria_g_24h",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until urine protein is <2 g/24 hours; consultant determines restart/dose reduction."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until urine protein is <2 g/24 hours; consultant determines restart/dose reduction."
+      },
+      {
+        "id": "LEN_PROTEIN_PHASE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            },
+            {
+              "field": "proteinuria_g_24h",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Establish initiation versus on-treatment phase. Baseline ≥1 g/24h excludes; on-treatment ≥2 g/24h interrupts.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "2;Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Establish initiation versus on-treatment phase. Baseline ≥1 g/24h excludes; on-treatment ≥2 g/24h interrupts."
+      },
+      {
+        "id": "LEN_RENAL",
+        "priority": 10,
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Severe renal impairment: source starting dose 14 mg once daily; consider current dose and dialysis separately."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Severe renal impairment: source starting dose 14 mg once daily; consider current dose and dialysis separately."
+      },
+      {
+        "id": "LEN_DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Haemodialysis: 50% of the original dose may be considered. Specialist pharmacy selects dose; do not automatically combine with the <30 mL/min starting dose.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Haemodialysis: 50% of the original dose may be considered. Specialist pharmacy selects dose; do not automatically combine with the <30 mL/min starting dose."
+      },
+      {
+        "id": "LEN_CHILD_C",
+        "priority": 10,
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Child–Pugh C: source starting dose 14 mg once daily."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Child–Pugh C: source starting dose 14 mg once daily."
+      },
+      {
+        "id": "LEN_BP_HOLD",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": ">=",
+                  "value": 160
+                },
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "field": "optimal_antihypertensive_therapy",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Withhold despite optimal BP therapy. Restart at reduced dose only when systolic ≤150 AND diastolic ≤95 mmHg AND stable antihypertensive dose for ≥48 hours, with consultant authorisation."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Withhold despite optimal BP therapy. Restart at reduced dose only when systolic ≤150 AND diastolic ≤95 mmHg AND stable antihypertensive dose for ≥48 hours, with consultant authorisation."
+      },
+      {
+        "id": "LEN_BP_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": ">=",
+                  "value": 160
+                },
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": ">=",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "optimal_antihypertensive_therapy",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "optimal_antihypertensive_therapy",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Urgent BP management review. Establish optimal therapy and need for interruption; uncontrolled hypertension is an exclusion.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Urgent BP management review. Establish optimal therapy and need for interruption; uncontrolled hypertension is an exclusion."
+      },
+      {
+        "id": "LEN_BP_TREAT",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": ">=",
+                  "value": 140
+                },
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": "<",
+                  "value": 160
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": ">=",
+                  "value": 90
+                },
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Initiate or intensify antihypertensive therapy. Review any higher companion BP reading before continuing.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Initiate or intensify antihypertensive therapy. Review any higher companion BP reading before continuing."
+      },
+      {
+        "id": "LEN_BP_RESTART_UNMET",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "prior_hypertension_interruption",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": ">",
+                  "value": 150
+                },
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": ">",
+                  "value": 95
+                },
+                {
+                  "field": "antihypertensive_stable_hours",
+                  "operator": "<",
+                  "value": 48
+                },
+                {
+                  "field": "systolic_bp_mmhg",
+                  "operator": "missing"
+                },
+                {
+                  "field": "diastolic_bp_mmhg",
+                  "operator": "missing"
+                },
+                {
+                  "field": "antihypertensive_stable_hours",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Restart criteria are not all established: systolic ≤150, diastolic ≤95 mmHg and stable antihypertensive dose for ≥48 hours."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Restart criteria are not all established: systolic ≤150, diastolic ≤95 mmHg and stable antihypertensive dose for ≥48 hours."
+      },
+      {
+        "id": "LEN_BP_RESTART_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "prior_hypertension_interruption",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "After a hypertension interruption, consultant must confirm all recovery criteria and reduced dose; normal BP alone does not authorise restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "After a hypertension interruption, consultant must confirm all recovery criteria and reduced dose; normal BP alone does not authorise restart."
+      },
+      {
+        "id": "LEN_HYPERTENSIVE_CRISIS",
+        "priority": 10,
+        "when": {
+          "field": "hypertensive_crisis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Discontinue lenvatinib and arrange urgent specialist management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Tables 3–4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Discontinue lenvatinib and arrange urgent specialist management."
+      },
+      {
+        "id": "LEN_NEPHROTIC_SYNDROME",
+        "priority": 10,
+        "when": {
+          "field": "nephrotic_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Discontinue lenvatinib and arrange urgent specialist management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Tables 3–4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Discontinue lenvatinib and arrange urgent specialist management."
+      },
+      {
+        "id": "LEN_ARTERIAL_THROMBOEMBOLISM",
+        "priority": 10,
+        "when": {
+          "field": "arterial_thromboembolism",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Discontinue lenvatinib and arrange urgent specialist management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Tables 3–4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Discontinue lenvatinib and arrange urgent specialist management."
+      },
+      {
+        "id": "LEN_PRES",
+        "priority": 10,
+        "when": {
+          "field": "pres",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt for suspected/confirmed PRES. Consider resuming at reduced dose only if resolved to grade 0–1 after specialist review."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt for suspected/confirmed PRES. Consider resuming at reduced dose only if resolved to grade 0–1 after specialist review."
+      },
+      {
+        "id": "LEN_QTC",
+        "priority": 10,
+        "when": {
+          "field": "qtc_ms",
+          "operator": ">",
+          "value": 500
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt for QT >500 ms until <480 ms or baseline; specialist confirms restart. Exact 500 ms is not the >500 threshold."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt for QT >500 ms until <480 ms or baseline; specialist confirms restart. Exact 500 ms is not the >500 threshold."
+      },
+      {
+        "id": "LEN_RENAL_TOXICITY_G3",
+        "priority": 10,
+        "when": {
+          "field": "renal_toxicity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+      },
+      {
+        "id": "LEN_RENAL_TOXICITY_G4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "grade4_lab_non_life_threatening",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4 toxicity: discontinue; the non-life-threatening laboratory-only exception must be explicitly assessed."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4 toxicity: discontinue; the non-life-threatening laboratory-only exception must be explicitly assessed."
+      },
+      {
+        "id": "LEN_RENAL_TOXICITY_G4_LAB",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "grade4_lab_non_life_threatening",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Non-life-threatening grade 4 laboratory abnormality may be managed as grade 3 following specialist review; interrupt until recovery."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4 footnote",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Non-life-threatening grade 4 laboratory abnormality may be managed as grade 3 following specialist review; interrupt until recovery."
+      },
+      {
+        "id": "LEN_RENAL_TOXICITY_G4_UNCLEAR",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "renal_toxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "grade4_lab_non_life_threatening",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Urgent review: grade 4 normally requires discontinuation; establish whether the specific non-life-threatening laboratory-only exception applies."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4 footnote",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Urgent review: grade 4 normally requires discontinuation; establish whether the specific non-life-threatening laboratory-only exception applies."
+      },
+      {
+        "id": "LEN_HEPATOTOXICITY_G3",
+        "priority": 10,
+        "when": {
+          "field": "hepatotoxicity_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+      },
+      {
+        "id": "LEN_HEPATOTOXICITY_G4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatotoxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "grade4_lab_non_life_threatening",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4 toxicity: discontinue; the non-life-threatening laboratory-only exception must be explicitly assessed."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4 toxicity: discontinue; the non-life-threatening laboratory-only exception must be explicitly assessed."
+      },
+      {
+        "id": "LEN_HEPATOTOXICITY_G4_LAB",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatotoxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "grade4_lab_non_life_threatening",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Non-life-threatening grade 4 laboratory abnormality may be managed as grade 3 following specialist review; interrupt until recovery."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4 footnote",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Non-life-threatening grade 4 laboratory abnormality may be managed as grade 3 following specialist review; interrupt until recovery."
+      },
+      {
+        "id": "LEN_HEPATOTOXICITY_G4_UNCLEAR",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "hepatotoxicity_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "grade4_lab_non_life_threatening",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Urgent review: grade 4 normally requires discontinuation; establish whether the specific non-life-threatening laboratory-only exception applies."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4 footnote",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Urgent review: grade 4 normally requires discontinuation; establish whether the specific non-life-threatening laboratory-only exception applies."
+      },
+      {
+        "id": "LEN_CARDIAC_DYSFUNCTION_G3",
+        "priority": 10,
+        "when": {
+          "field": "cardiac_dysfunction_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+      },
+      {
+        "id": "LEN_CARDIAC_DYSFUNCTION_G4",
+        "priority": 10,
+        "when": {
+          "field": "cardiac_dysfunction_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4: discontinue lenvatinib and arrange urgent management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4: discontinue lenvatinib and arrange urgent management."
+      },
+      {
+        "id": "LEN_HAEMORRHAGE_G3",
+        "priority": 10,
+        "when": {
+          "field": "haemorrhage_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+      },
+      {
+        "id": "LEN_HAEMORRHAGE_G4",
+        "priority": 10,
+        "when": {
+          "field": "haemorrhage_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4: discontinue lenvatinib and arrange urgent management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4: discontinue lenvatinib and arrange urgent management."
+      },
+      {
+        "id": "LEN_GI_PERFORATION_FISTULA_G3",
+        "priority": 10,
+        "when": {
+          "field": "gi_perforation_fistula_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+      },
+      {
+        "id": "LEN_GI_PERFORATION_FISTULA_G4",
+        "priority": 10,
+        "when": {
+          "field": "gi_perforation_fistula_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4: discontinue lenvatinib and arrange urgent management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4: discontinue lenvatinib and arrange urgent management."
+      },
+      {
+        "id": "LEN_NON_GI_FISTULA_G4",
+        "priority": 10,
+        "when": {
+          "field": "non_gi_fistula_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4: discontinue lenvatinib and arrange urgent management."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4: discontinue lenvatinib and arrange urgent management."
+      },
+      {
+        "id": "LEN_DIARRHOEA_G3",
+        "priority": 10,
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Interrupt until grade 0–1 or source-permitted baseline; confirm the specific toxicity and reduced-dose restart with the consultant."
+      },
+      {
+        "id": "LEN_DIARRHOEA_G4",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "field": "diarrhoea_despite_medical_management",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Grade 4 diarrhoea despite medical management: discontinue."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Grade 4 diarrhoea despite medical management: discontinue."
+      },
+      {
+        "id": "LEN_DIARRHOEA_G4_REVIEW",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "any": [
+                {
+                  "field": "diarrhoea_despite_medical_management",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "diarrhoea_despite_medical_management",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Urgent management of severe diarrhoea/dehydration; establish response to treatment and permanent-stop criterion."
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Table 4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Urgent management of severe diarrhoea/dehydration; establish response to treatment and permanent-stop criterion."
+      },
+      {
+        "id": "LEN_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_dose_interruption",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "lenvatinib"
+          ],
+          "message": "Confirm toxicity-specific recovery and dose history. Standard reduction levels are 24 →20 →14 →10 mg/day; below 10 mg requires an individual decision. No automatic restart.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00295 v6",
+          "page": "Tables 1,3,4",
+          "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf"
+        },
+        "explanation": "Confirm toxicity-specific recovery and dose history. Standard reduction levels are 24 →20 →14 →10 mg/day; below 10 mg requires an individual decision. No automatic restart."
       }
     ]
   },
@@ -605,7 +1807,7 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "oral_minimal_low",
+    "emetogenic_risk": "oral_moderate_high",
     "script_id": "nccp-oral-minimal-low",
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",

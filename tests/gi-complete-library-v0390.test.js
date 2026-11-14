@@ -137,7 +137,7 @@ for (const { file, data } of gi) {
   if(folfox4V36)require('./helpers/folfox4-grading-v08436.cjs').metadata(data);
   const capecitabineV36=code==='00216';
   if(capecitabineV36)require('./helpers/capecitabine-grading-v08436.cjs').metadata(data);
-  assert(require("./helpers/head-neck-inputs-v08445.cjs").validate(data) || skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(require("./helpers/head-neck-inputs-v08450.cjs").validate(data) || require("./helpers/head-neck-inputs-v08445.cjs").validate(data) || skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/(?:healthservice\.hse\.ie\/documents\/|assets\.hse\.ie\/media\/documents\/)/.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -166,7 +166,7 @@ for (const { file, data } of gi) {
   for (const [field, definition] of Object.entries(definitions)) {
     assert.notStrictEqual(definition.required, true, `${code}/${field} is still a blocking required field.`);
     const text = `${field} ${definition.label || ''}`.toLowerCase();
-    const sourceGrade = SKIN40Inputs.grade(data, field, definition) || NET37Inputs.sourceGrade(data, field, definition);
+    const sourceGrade = require("./helpers/head-neck-inputs-v08450.cjs").grade(data,field,definition) || SKIN40Inputs.grade(data, field, definition) || NET37Inputs.sourceGrade(data, field, definition);
     if (!sourceGrade && trueGradeField(field, definition)) {
       ctcaeFields += 1;
       assert.strictEqual(definition.type, 'select', `${code}/${field} CTCAE input must be a selector.`);
@@ -217,7 +217,7 @@ for (const { file, data } of gi) {
       assert(guide?.grades?.length >= expectedGrades.length, `${code}/${field} has no beside-control grade guide.`);
       guide.grades.slice(0, 5).forEach(item => assert(item.description, `${code}/${field}/Grade ${item.grade} lacks an explanation.`));
     }
-    const net37Renal = NET37Inputs.numericRenal(data, field, definition);
+    const net37Renal = require("./helpers/head-neck-inputs-v08450.cjs").numericRenal(data,field,definition) || NET37Inputs.numericRenal(data, field, definition);
     if (!net37Renal && /crcl|creatinine clearance|\begfr\b|renal function/.test(text)) {
       if (definition.type === 'select') {
         renalBands += 1;

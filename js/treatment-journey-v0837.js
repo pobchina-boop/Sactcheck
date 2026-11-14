@@ -44419,6 +44419,577 @@ const definitions={
         "checked": "2026-11-11"
       }
     ]
+  },
+  "00294:head_neck": {
+    "code": "00294",
+    "title": "Sorafenib: differentiated thyroid cancer: treatment and checks",
+    "release": "0.84.50",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Progressive, locally advanced or metastatic differentiated thyroid cancer that no longer responds to radioactive iodine.",
+    "summary": "Sorafenib 400 mg twice daily, every day, until progression or unacceptable side effects.",
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing checks",
+      "Dose hold / restart",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, blood pressure, thyroid tests and assessment of heart function.",
+          "Consider blood count, kidney and liver tests at Day 14 of the first month. Repeat these bloods and thyroid tests every 28 days. Check blood pressure weekly in month 1, then every 28 days; check INR as indicated if taking warfarin.",
+          "Extra tests may be needed for symptoms, dehydration or abnormal results.",
+          "Review results, recovery and previous toxicity before any restart or next dose.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Appointments and medicines",
+        "kind": "treatment",
+        "cells": [
+          "Agree the treatment aim, dose and complete medicines list.",
+          "Take with water, without food or with a low- or moderate-fat meal. For a high-fat meal, take sorafenib at least 1 hour before or 2 hours afterwards. Follow the prescribed morning and evening doses; never change the dose yourself.",
+          "Keep a current dose and symptom record.",
+          "Tell the team before surgery or dental procedures. Report painful palms or soles early; skin care and early dose review can help prevent severe hand-foot reactions.",
+          "Keep follow-up and recovery checks even after the last dose."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Cancer-specific and specialist tests",
+        "kind": "support",
+        "cells": [
+          "Thyroid tests monitor hormone balance. Thyroglobulin and other response tests depend on the cancer subtype and specialist plan; they are not substitutes for scans.",
+          "Confirm the booked test dates with your team.",
+          "Safety tests and response tests have different purposes.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval.",
+          "Agree the named follow-up team and remaining checks."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "Twice daily, continuously",
+        "why": "This treatment aims to slow cancer growth and help control symptoms. Your team explains the expected benefit, uncertainty and alternatives for your situation.",
+        "clinical": "Sorafenib 400 mg twice daily, every day, until progression or unacceptable side effects.",
+        "action": "Consider blood count, kidney and liver tests at Day 14 of the first month. Repeat these bloods and thyroid tests every 28 days. Check blood pressure weekly in month 1, then every 28 days; check INR as indicated if taking warfarin.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00294 v4: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf",
+        "sha256": "d599f49b1d0b06c4029191c613b756758ead6969558776c18c1e61e7d575327e",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "ema",
+        "title": "Nexavar: EMA product information, including trial evidence",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf",
+        "sha256": "4561f7f7d54908430c2d44ab3a6a7808fbf136793e601e405c6fd3f8791d1b27",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00242": {
+    "code": "00242",
+    "title": "Vandetanib: RET-positive medullary thyroid cancer: treatment and checks",
+    "release": "0.84.50",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "RET mutation positive, unresectable locally advanced or metastatic medullary thyroid cancer.",
+    "summary": "Vandetanib 300 mg once daily, continuously, until progression or unacceptable side effects.",
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing checks",
+      "Dose hold / restart",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Validated RET mutation test; full blood count, kidney and liver tests, potassium, calcium, magnesium, thyroid-stimulating hormone, ECG and blood pressure. Baseline calcitonin is additionally advised.",
+          "Blood count, kidney and liver tests at weeks 1, 3, 6 and 12. ECG, potassium, calcium, magnesium and thyroid-stimulating hormone at weeks 1, 3, 6 and 12, then every 3 months for at least a year. Repeat this schedule after a QT-related reduction or interruption longer than 2 weeks. Continue checks after stopping when clinically indicated; monitor blood pressure.",
+          "Extra tests may be needed for symptoms, dehydration or abnormal results.",
+          "Review results, recovery and previous toxicity before any restart or next dose.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Appointments and medicines",
+        "kind": "treatment",
+        "cells": [
+          "Agree the treatment aim, dose and complete medicines list.",
+          "Take at the same time daily, with or without food. If a dose is missed, take it when remembered unless less than 12 hours remain before the next dose; then skip it. Never double a dose. If swallowing is difficult, disperse the whole tablet without crushing in half a glass of still drinking water, stir for about 10 minutes and drink immediately; rinse the glass with another half-glass and drink. Use no other liquid. Pharmacy must teach feeding-tube administration if needed.",
+          "Keep a current dose and symptom record.",
+          "Carry the manufacturer’s patient alert card and receive one with every prescription. Report fainting or palpitations urgently. Check every new medicine for heart-rhythm interactions. Diarrhoea can disturb blood salts and increase rhythm risk. Protect skin from sunlight.",
+          "Keep follow-up and recovery checks even after the last dose."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Cancer-specific and specialist tests",
+        "kind": "support",
+        "cells": [
+          "RET is the treatment-selection test. Calcitonin is measured at baseline and later when clinically indicated to help assess medullary thyroid cancer. Thyroid-stimulating hormone measures hormone replacement needs.",
+          "Confirm the booked test dates with your team.",
+          "Safety tests and response tests have different purposes.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval.",
+          "Agree the named follow-up team and remaining checks."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "Once daily, continuously",
+        "why": "This treatment aims to slow cancer growth and help control symptoms. Your team explains the expected benefit, uncertainty and alternatives for your situation.",
+        "clinical": "Vandetanib 300 mg once daily, continuously, until progression or unacceptable side effects.",
+        "action": "Blood count, kidney and liver tests at weeks 1, 3, 6 and 12. ECG, potassium, calcium, magnesium and thyroid-stimulating hormone at weeks 1, 3, 6 and 12, then every 3 months for at least a year. Repeat this schedule after a QT-related reduction or interruption longer than 2 weeks. Continue checks after stopping when clinically indicated; monitor blood pressure.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00242 v6: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf",
+        "sha256": "be7f936fd94ee0c4f4941c31868ebecacf8ea3705d232f56c5a1d5a3654dddf0",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "ema",
+        "title": "Caprelsa: EMA product information, including trial evidence",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/caprelsa-epar-product-information_en.pdf",
+        "sha256": "3f27bc24a1943fa5f76bd59ff83c28ca654f11247a7ea0a041a3453ee4778bae",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00295": {
+    "code": "00295",
+    "title": "Lenvatinib: differentiated thyroid cancer: treatment and checks",
+    "release": "0.84.50",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Progressive, locally advanced or metastatic differentiated thyroid cancer that is refractory to radioactive iodine.",
+    "summary": "Lenvatinib 24 mg once daily, continuously, until progression or unacceptable side effects. The clinician may prescribe a lower starting dose or later reductions.",
+    "stages": [
+      "Before starting",
+      "Early treatment",
+      "Ongoing checks",
+      "Dose hold / restart",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, coagulation, urine protein, thyroid-stimulating hormone, ECG and blood pressure. Urine protein must be below 1 g/24 hours at initiation; blood pressure must be controlled.",
+          "Every 28 days: blood count, kidney tests, coagulation, urine protein and thyroid-stimulating hormone. Liver tests every 2 weeks for the first 2 months, then monthly; calcium monthly. Blood pressure after week 1, every 2 weeks in the first 2 months, then monthly. ECG when clinically indicated.",
+          "Extra tests may be needed for symptoms, dehydration or abnormal results.",
+          "Review results, recovery and previous toxicity before any restart or next dose.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Appointments and medicines",
+        "kind": "treatment",
+        "cells": [
+          "Agree the treatment aim, dose and complete medicines list.",
+          "Take at about the same time each day, with or without food. Swallow capsules whole with water; do not crush or break them. A pharmacist can teach suspension preparation: place up to 5 whole capsules in a small container or 20 mL oral syringe, add 3 mL water, apple juice or milk, wait 10 minutes, then stir or shake for 3 minutes. Take all the mixture, add another 2 mL liquid and take the rinse. For a feeding tube use water only. If a missed dose cannot be taken within 12 hours, skip it and take the next dose at the usual time.",
+          "Keep a current dose and symptom record.",
+          "Treat diarrhoea and vomiting promptly using the agreed plan because dehydration can damage the kidneys. Check blood pressure as taught. Report sudden severe headache, vision changes, bleeding, chest pain, severe abdominal pain or fluid leakage from an abnormal opening urgently.",
+          "Keep follow-up and recovery checks even after the last dose."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Cancer-specific and specialist tests",
+        "kind": "support",
+        "cells": [
+          "Thyroid-stimulating hormone checks the hormone-suppression plan. Urine protein and blood calcium are safety checks. Thyroglobulin and response imaging follow the individual thyroid cancer plan.",
+          "Confirm the booked test dates with your team.",
+          "Safety tests and response tests have different purposes.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval.",
+          "Agree the named follow-up team and remaining checks."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "Once daily, continuously",
+        "why": "This treatment aims to slow cancer growth and help control symptoms. Your team explains the expected benefit, uncertainty and alternatives for your situation.",
+        "clinical": "Lenvatinib 24 mg once daily, continuously, until progression or unacceptable side effects. The clinician may prescribe a lower starting dose or later reductions.",
+        "action": "Every 28 days: blood count, kidney tests, coagulation, urine protein and thyroid-stimulating hormone. Liver tests every 2 weeks for the first 2 months, then monthly; calcium monthly. Blood pressure after week 1, every 2 weeks in the first 2 months, then monthly. ECG when clinically indicated.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00295 v6: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6951/295_V6_lenvatinib-DTC_therapy.pdf",
+        "sha256": "3d4be5bde137c1a97e9d12ab26b189d1a65573b44c0137d1e492c353e05ee9b0",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "ema",
+        "title": "Lenvima: EMA product information, including trial evidence",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lenvima-epar-product-information_en.pdf",
+        "sha256": "1c91045dd7ec722373bf25329286d58d4e0b526fe9f67d03a2c83676cb980a84",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00615": {
+    "code": "00615",
+    "title": "CAP: advanced salivary gland cancer: treatment and checks",
+    "release": "0.84.50",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced salivary gland cancer, after specialist review of histology, treatment choices and goals.",
+    "summary": "Doxorubicin 50 mg/m², cisplatin 50 mg/m² and cyclophosphamide 500 mg/m² on Day 1, repeated every 21 days for up to 6 cycles, stopping earlier for progression or unacceptable side effects.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests and ECG. Heart-pumping assessment with an echo or MUGA scan if over 65 or clinically indicated; doxorubicin requires LVEF above 50%. Hearing assessment and measured kidney clearance when indicated.",
+          "Full blood count, kidney and liver tests during treatment. Review hydration, blood salts, hearing, tingling or numbness, heart symptoms, mouth care and prior toxicities before further doses. Record lifetime anthracycline exposure; the source doxorubicin limit is 450 mg/m².",
+          "Extra tests may be needed for symptoms, dehydration or abnormal results.",
+          "Review results, recovery and previous toxicity before any restart or next dose.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Appointments and medicines",
+        "kind": "treatment",
+        "cells": [
+          "Agree the treatment aim, dose and complete medicines list.",
+          "Doxorubicin is given slowly into a vein over about 15 minutes, cisplatin over 2 hours, then cyclophosphamide over 30 minutes. Cisplatin requires prescribed intravenous fluids before and after treatment, so the visit takes longer than the drug infusion times. Tell the nurse immediately about burning, pain, swelling or leakage around the line.",
+          "Keep a current dose and symptom record.",
+          "Follow the unit’s cisplatin hydration plan and individual fluid target. The source advises 2–3 litres on Day 1 to reduce bladder irritation from cyclophosphamide; the team must adapt this if heart or kidney problems restrict fluids. Report blood in urine or painful urination promptly.",
+          "Keep follow-up and recovery checks even after the last dose."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Cancer-specific and specialist tests",
+        "kind": "support",
+        "cells": [
+          "There is no universal serum tumour-marker panel for this regimen. Histology, molecular testing and scans are chosen by the salivary gland multidisciplinary team.",
+          "Confirm the booked test dates with your team.",
+          "Safety tests and response tests have different purposes.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval.",
+          "Agree the named follow-up team and remaining checks."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "Day 1 every 21 days; up to 6 cycles",
+        "why": "This treatment aims to slow cancer growth and help control symptoms. Your team explains the expected benefit, uncertainty and alternatives for your situation.",
+        "clinical": "Doxorubicin 50 mg/m², cisplatin 50 mg/m² and cyclophosphamide 500 mg/m² on Day 1, repeated every 21 days for up to 6 cycles, stopping earlier for progression or unacceptable side effects.",
+        "action": "Full blood count, kidney and liver tests during treatment. Review hydration, blood salts, hearing, tingling or numbness, heart symptoms, mouth care and prior toxicities before further doses. Record lifetime anthracycline exposure; the source doxorubicin limit is 450 mg/m².",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00615 v2: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6994/615_V2_Cyclodoxcis.pdf",
+        "sha256": "4bc7421f48c9bf397ee5cc32e6dffb260c356b244b13740d167d04f6523eb7a8",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
+  },
+  "00893": {
+    "code": "00893",
+    "title": "Methotrexate: head and neck cancer: treatment and checks",
+    "release": "0.84.50",
+    "checked": "2026-11-14",
+    "status": "Source reconciled draft; independent clinical, pharmacy and patient/PPI review pending",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Recurrent, advanced or metastatic head and neck squamous cell cancer in people with comorbidities or unsuitable for combination chemotherapy.",
+    "summary": "Methotrexate 40 mg/m² by intravenous bolus on Days 1, 8 and 15 of each 28-day cycle, until progression or unacceptable toxicity. There is no scheduled Day-22 dose. The clinician may increase to 50 mg/m² only if there has been no mucositis.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Between visits",
+      "Next cycle",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Blood and organ safety",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests, and chest X-ray. Review mouth symptoms, medicines, hydration and any substantial fluid collection around the lungs or abdomen.",
+          "Repeat blood count, kidney and liver tests and urinalysis; examine the mouth and throat for mucosal changes during treatment. The team confirms the test timing before each planned dose and reviews recovery and previous dose delays.",
+          "Extra tests may be needed for symptoms, dehydration or abnormal results.",
+          "Review results, recovery and previous toxicity before any restart or next dose.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Appointments and medicines",
+        "kind": "treatment",
+        "cells": [
+          "Agree the treatment aim, dose and complete medicines list.",
+          "Methotrexate is given into a vein by the treatment team. This is an intermittent intravenous cancer regimen, not a daily tablet schedule. Check the written appointment calendar before each visit. Never take extra methotrexate yourself.",
+          "Keep a current dose and symptom record.",
+          "Tell the pharmacist about all painkillers, antibiotics, supplements and other medicines because interactions can increase methotrexate toxicity. Report new cough or breathlessness, mouth ulcers, unusual bleeding, jaundice, reduced urine or severe rash promptly.",
+          "Keep follow-up and recovery checks even after the last dose."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      },
+      {
+        "label": "Cancer-specific and specialist tests",
+        "kind": "support",
+        "cells": [
+          "Blood tests and urinalysis assess treatment safety. Scans and cancer-specific tests follow the consultant’s plan; no routine universal tumour-marker panel is specified.",
+          "Confirm the booked test dates with your team.",
+          "Safety tests and response tests have different purposes.",
+          "The team reviews the cancer, side effects and your preferences. Scans follow your individual treatment plan; this regimen does not set one universal scan interval.",
+          "Agree the named follow-up team and remaining checks."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Use your individual prescription and calendar."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment and review",
+        "when": "IV on Days 1, 8 and 15 every 28 days",
+        "why": "This treatment aims to slow cancer growth and help control symptoms. Your team explains the expected benefit, uncertainty and alternatives for your situation.",
+        "clinical": "Methotrexate 40 mg/m² by intravenous bolus on Days 1, 8 and 15 of each 28-day cycle, until progression or unacceptable toxicity. There is no scheduled Day-22 dose. The clinician may increase to 50 mg/m² only if there has been no mucositis.",
+        "action": "Repeat blood count, kidney and liver tests and urinalysis; examine the mouth and throat for mucosal changes during treatment. The team confirms the test timing before each planned dose and reviews recovery and previous dose delays.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00893 v1: official regimen",
+        "url": "https://healthservice.hse.ie/documents/6862/893_V1_Methotrexate_40_HNSCC.pdf",
+        "sha256": "b0c6f356dabfad4bed3caa8596f12ab1acc7276bcb6c23ddb9b5477940e14035",
+        "checked": "2026-11-14"
+      },
+      {
+        "id": "oral",
+        "title": "NCI: oral complications of cancer therapies, patient version",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/mouth-throat/oral-complications-pdq",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "nutrition",
+        "title": "NCI: nutrition during cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/nutrition",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "hse",
+        "title": "HSE: cancer treatment side effects",
+        "url": "https://www.hse.ie/conditions/cancer/if-you-have-side-effects/",
+        "checked": "2026-11-07"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP supportive-care antiemetics for NCIS",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
+        "checked": "2026-11-11"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

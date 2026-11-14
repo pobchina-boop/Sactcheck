@@ -11,8 +11,8 @@
     "short_title": "Sorafenib Therapy",
     "indication": "Hepatocellular carcinoma.",
     "source_url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 4,
+    "sactcheck_encoding_version": "0.84.50",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "hepatobiliary",
@@ -43,13 +43,13 @@
       "mode": "live_json"
     },
     "validation": {
-      "source_document_checked": true,
+      "official_catalogue_and_source_link_checked": true,
+      "rule_level_source_reconciliation_status": "source_specific_v08450_263_scenarios_passed",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590"
+      "audit_release": "0.84.50"
     },
     "tumour_groups": [
       "Gastrointestinal",
@@ -59,7 +59,7 @@
     "genitourinary_subgroups": [
       "renal"
     ],
-    "source_checked_date": "2026-07-26",
+    "source_checked_date": "2026-11-14",
     "regimen_card": {
       "contexts": [
         {
@@ -101,12 +101,15 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.50",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP source reconciliation and 263 source-boundary scenarios passed; independent clinical and pharmacy approval pending."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -124,13 +127,14 @@
       "clinical_use_authorised": false,
       "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     },
-    "canonical_protocol_id": "nccp-00294-v4"
+    "canonical_protocol_id": "nccp-00294-v4",
+    "clinical_audit_release": "0.84.50",
+    "source_pdf_sha256": "d599f49b1d0b06c4029191c613b756758ead6969558776c18c1e61e7d575327e"
   },
   "clinical_governance": {
-    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding includes NCCP 00294 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
+    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "disclaimer": "Source-reconciled feasibility encoding of NCCP 00294 v4; independent clinical and pharmacy approval pending."
   },
   "indications": [
     {
@@ -158,13 +162,35 @@
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Sorafenib Therapy",
+    "cycle_length_days": null,
+    "schedule_summary": "Sorafenib 400 mg twice daily, every day, until progression or unacceptable side effects.",
     "drugs": [
       "sorafenib"
-    ]
+    ],
+    "duration_text": "Continuous until progression or unacceptable toxicity"
   },
   "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "pre_treatment",
+          "label": "Before first treatment"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "toxicity_review",
+          "label": "Recovery / toxicity review"
+        }
+      ],
+      "demo_value": "pre_treatment",
+      "input_role": "context"
+    },
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
@@ -195,14 +221,14 @@
       "input_role": "decision"
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Relevant medicine hypersensitivity",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "pregnancy": {
-      "label": "Pregnant",
+      "label": "Pregnant or pregnancy suspected",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -215,186 +241,28 @@
       "demo_value": false,
       "input_role": "decision"
     },
-    "systolic_bp_mmhg": {
-      "label": "Systolic blood pressure",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 125,
-      "unit": "mmHg",
-      "input_role": "decision"
-    },
-    "diastolic_bp_mmhg": {
-      "label": "Diastolic blood pressure",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 75,
-      "unit": "mmHg",
-      "input_role": "decision"
-    },
-    "proteinuria_grade": {
-      "label": "Proteinuria grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No proteinuria."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Dipstick 1+ or protein below 1.0 g per 24 hours."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Dipstick 2+ or 3+, or protein 1.0 to under 3.5 g per 24 hours."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Protein 3.5 g or more per 24 hours or dipstick 4+; quantify according to the protocol."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 is not defined under the CTCAE proteinuria term; use the appropriate renal-disorder term for life-threatening renal consequences."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Use urine protein quantification and clinical consequences; dipstick alone may require confirmatory UPCR or 24-hour urine assessment.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "proteinuria",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "major_bleeding_or_recent_thrombosis": {
-      "label": "Major bleeding, recent arterial thrombosis or clinically unstable venous thrombosis",
+    "prior_permanent_stop": {
+      "label": "Previously permanently discontinued a component",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
-    "recent_or_planned_major_surgery": {
-      "label": "Recent or planned major surgery / unhealed wound",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "gi_perforation_or_fistula": {
-      "label": "Gastrointestinal perforation or fistula",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST result (actual values entered; highest ×ULN calculated automatically)",
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (actual value entered; ×ULN calculated automatically)",
-      "type": "number",
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "oral_toxicity_grade": {
-      "label": "Worst treatment-related oral targeted-therapy toxicity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0 — No toxicity",
-          "ctcae_grade": 0,
-          "description": "No other non-haematological adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1 — Mild",
-          "ctcae_grade": 1,
-          "description": "Grade 1 under the named CTCAE term: generally mild or asymptomatic, with observation only and no intervention indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2 — Moderate",
-          "ctcae_grade": 2,
-          "description": "Grade 2 under the named CTCAE term: generally moderate; local/non-invasive intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3 — Severe",
-          "ctcae_grade": 3,
-          "description": "Grade 3 under the named CTCAE term: severe or medically significant; hospital care may be indicated and self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4 — Life-threatening",
-          "ctcae_grade": 4,
-          "description": "Grade 4 under the named CTCAE term: life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify and grade the specific toxicity using its CTCAE definition; assess symptoms, intervention and functional impact.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
-    },
-    "sorafenib_renal_band": {
-      "label": "Renal function for sorafenib",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge40",
-          "label": "CrCl ≥40 mL/min",
-          "decision_value": "ge40"
-        },
-        {
-          "value": "20_39",
-          "label": "CrCl 20–39 mL/min",
-          "decision_value": "20_39"
-        },
-        {
-          "value": "lt20",
-          "label": "CrCl <20 mL/min",
-          "decision_value": "lt20"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis",
-          "decision_value": "dialysis"
-        }
-      ],
-      "demo_value": "ge40",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
+      "demo_value": false,
       "input_role": "decision"
     },
     "child_pugh_class": {
@@ -403,25 +271,113 @@
       "required": false,
       "options": [
         {
-          "value": "none",
-          "label": "No hepatic impairment"
-        },
-        {
           "value": "A",
-          "label": "Child–Pugh A"
+          "label": "A"
         },
         {
           "value": "B",
-          "label": "Child–Pugh B"
+          "label": "B"
         },
         {
           "value": "C",
-          "label": "Child–Pugh C"
+          "label": "C"
         }
       ],
-      "demo_value": "none",
-      "ui_section": "labs",
-      "always_show": true,
+      "demo_value": "A",
+      "input_role": "decision"
+    },
+    "uncontrolled_hypertension": {
+      "label": "Clinically uncontrolled hypertension",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "sorafenib_indication": {
+      "label": "Selected sorafenib indication",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "dtc",
+          "label": "Differentiated thyroid cancer"
+        },
+        {
+          "value": "hcc",
+          "label": "Hepatocellular carcinoma"
+        },
+        {
+          "value": "rcc",
+          "label": "Renal cell carcinoma"
+        }
+      ],
+      "demo_value": "dtc",
+      "input_role": "context"
+    },
+    "dose_reduction_required": {
+      "label": "Toxicity requires dose reduction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "current_daily_dose_mg": {
+      "label": "Current total daily sorafenib dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 800,
+      "input_role": "decision",
+      "unit": "mg"
+    },
+    "severe_or_persistent_skin_toxicity": {
+      "label": "Severe or persistent skin / hand-foot toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "symptomatic_hypoglycaemia": {
+      "label": "Symptomatic hypoglycaemia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "gi_perforation": {
+      "label": "Gastrointestinal perforation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "major_bleeding": {
+      "label": "Major bleeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cardiac_ischaemia": {
+      "label": "Cardiac ischaemia or infarction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "major_surgery_or_unhealed_wound": {
+      "label": "Major surgery planned or unhealed wound",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "qt_risk": {
+      "label": "QT prolongation risk / electrolyte disturbance",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     }
   },
@@ -431,7 +387,8 @@
     "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
     "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
     "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
-    "omit": "Omit the relevant scheduled dose and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and repeat assessment according to the official NCCP pathway.",
+    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
     "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
     "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
@@ -457,28 +414,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
-      },
-      {
-        "id": "HYPERSENSITIVITY_EXCLUSION",
+        "id": "HYPERSENSITIVITY",
         "priority": 10,
         "when": {
           "field": "hypersensitivity",
@@ -488,254 +424,179 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "sorafenib"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
+          "document": "NCCP 00294 v4",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
         },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "PREGNANCY_OR_BREASTFEEDING",
+        "id": "PREGNANCY",
         "priority": 10,
         "when": {
-          "any": [
-            {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "breastfeeding",
-              "operator": "==",
-              "value": true
-            }
-          ]
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "sorafenib"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
+          "document": "NCCP 00294 v4",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
         },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "UNCONTROLLED_HYPERTENSION",
-        "priority": 9,
+        "id": "BREASTFEEDING",
+        "priority": 10,
         "when": {
-          "any": [
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+      },
+      {
+        "id": "ECOG_OUTSIDE",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Outside source ECOG 0–2 eligibility; consultant review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Outside source ECOG 0–2 eligibility; consultant review."
+      },
+      {
+        "id": "BP_UNCONTROLLED",
+        "priority": 10,
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Control blood pressure and obtain consultant review before treatment."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Control blood pressure and obtain consultant review before treatment."
+      },
+      {
+        "id": "SORA_CONTEXT_MISSING",
+        "priority": 10,
+        "when": {
+          "all": [
             {
-              "field": "systolic_bp_mmhg",
-              "operator": ">=",
-              "value": 160
+              "field": "dose_reduction_required",
+              "operator": "==",
+              "value": true
             },
             {
-              "field": "diastolic_bp_mmhg",
-              "operator": ">=",
-              "value": 100
+              "field": "sorafenib_indication",
+              "operator": "missing"
             }
           ]
         },
         "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold anti-angiogenic therapy for uncontrolled hypertension and optimise blood pressure."
-        },
-        "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
-        },
-        "explanation": "Withhold anti-angiogenic therapy for uncontrolled hypertension and optimise blood pressure."
-      },
-      {
-        "id": "PROTEINURIA_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Clinically significant proteinuria requires withholding and quantified reassessment."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Clinically significant proteinuria requires withholding and quantified reassessment."
-      },
-      {
-        "id": "MAJOR_BLEEDING_OR_THROMBOSIS",
-        "priority": 10,
-        "when": {
-          "field": "major_bleeding_or_recent_thrombosis",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Major bleeding or unstable recent thrombosis requires withholding and Consultant review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Major bleeding or unstable recent thrombosis requires withholding and Consultant review."
-      },
-      {
-        "id": "SURGERY_OR_UNHEALED_WOUND",
-        "priority": 9,
-        "when": {
-          "field": "recent_or_planned_major_surgery",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Anti-angiogenic therapy must be managed around major surgery and wound healing."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Anti-angiogenic therapy must be managed around major surgery and wound healing."
-      },
-      {
-        "id": "GI_PERFORATION_OR_FISTULA",
-        "priority": 10,
-        "when": {
-          "field": "gi_perforation_or_fistula",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Gastrointestinal perforation or fistula triggers permanent discontinuation of anti-VEGF therapy."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Gastrointestinal perforation or fistula triggers permanent discontinuation of anti-VEGF therapy."
-      },
-      {
-        "id": "ORAL_TARGETED_G3_TOXICITY",
-        "priority": 8,
-        "when": {
-          "field": "oral_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related toxicity requires interruption and drug-specific dose modification."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse treatment-related toxicity requires interruption and drug-specific dose modification."
-      },
-      {
-        "id": "ORAL_TARGETED_LFT_REVIEW",
-        "priority": 9,
-        "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ALT/AST >5 ×ULN requires interruption and drug-specific hepatic toxicity review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ALT/AST >5 ×ULN requires interruption and drug-specific hepatic toxicity review."
-      },
-      {
-        "id": "ORAL_TARGETED_BILIRUBIN_REVIEW",
-        "priority": 9,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Bilirubin >3 ×ULN requires interruption and hepatic toxicity review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Bilirubin >3 ×ULN requires interruption and hepatic toxicity review."
-      },
-      {
-        "id": "OF590_00294_SORA_20_39",
-        "priority": 20,
-        "when": {
-          "field": "sorafenib_renal_band",
-          "operator": "==",
-          "value": "20_39"
-        },
-        "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "sorafenib"
           ],
-          "message": "CrCl 20–39 mL/min: start sorafenib at 200 mg twice daily and escalate if tolerated.",
-          "recommendation": "CrCl 20–39 mL/min: start sorafenib at 200 mg twice daily and escalate if tolerated."
+          "message": "Select DTC, HCC or RCC before dose-reduction advice. Their reduction schedules differ.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00294 v4",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
         },
-        "explanation": "CrCl 20–39 mL/min: start sorafenib at 200 mg twice daily and escalate if tolerated."
+        "explanation": "Select DTC, HCC or RCC before dose-reduction advice. Their reduction schedules differ."
       },
       {
-        "id": "OF590_00294_SORA_LT20",
-        "priority": 20,
+        "id": "SORA_DTC_800",
+        "priority": 10,
         "when": {
-          "field": "sorafenib_renal_band",
-          "operator": "in",
-          "value": [
-            "lt20",
-            "dialysis"
+          "all": [
+            {
+              "field": "dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "sorafenib_indication",
+              "operator": "==",
+              "value": "dtc"
+            },
+            {
+              "field": "current_daily_dose_mg",
+              "operator": "==",
+              "value": 800
+            }
           ]
         },
         "action": {
@@ -743,18 +604,268 @@
           "components": [
             "sorafenib"
           ],
-          "message": "CrCl <20 mL/min or dialysis: start sorafenib at 200 mg once daily and escalate only if tolerated.",
-          "recommendation": "CrCl <20 mL/min or dialysis: start sorafenib at 200 mg once daily and escalate only if tolerated."
+          "message": "DTC: after consultant review, next reduction is 600 mg/day (400 mg in the morning and 200 mg twelve hours later). Consider interruption for active toxicity; do not restart automatically."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00294 v4",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
         },
-        "explanation": "CrCl <20 mL/min or dialysis: start sorafenib at 200 mg once daily and escalate only if tolerated."
+        "explanation": "DTC: after consultant review, next reduction is 600 mg/day (400 mg in the morning and 200 mg twelve hours later). Consider interruption for active toxicity; do not restart automatically."
       },
       {
-        "id": "OF590_00294_SORA_CHILD_C",
-        "priority": 20,
+        "id": "SORA_DTC_600",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "sorafenib_indication",
+              "operator": "==",
+              "value": "dtc"
+            },
+            {
+              "field": "current_daily_dose_mg",
+              "operator": "==",
+              "value": 600
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "DTC: after consultant review, next reduction is 400 mg/day (200 mg twice daily). Consider interruption for active toxicity; do not restart automatically."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "DTC: after consultant review, next reduction is 400 mg/day (200 mg twice daily). Consider interruption for active toxicity; do not restart automatically."
+      },
+      {
+        "id": "SORA_DTC_400",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "sorafenib_indication",
+              "operator": "==",
+              "value": "dtc"
+            },
+            {
+              "field": "current_daily_dose_mg",
+              "operator": "==",
+              "value": 400
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "DTC: after consultant review, next reduction is 200 mg/day (200 mg once daily). Consider interruption for active toxicity; do not restart automatically."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "DTC: after consultant review, next reduction is 200 mg/day (200 mg once daily). Consider interruption for active toxicity; do not restart automatically."
+      },
+      {
+        "id": "SORA_HCC_RCC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "sorafenib_indication",
+              "operator": "in",
+              "value": [
+                "hcc",
+                "rcc"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "HCC/RCC: source reduction is 400 mg once daily. Confirm current dose and toxicity; do not apply the DTC ladder.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "HCC/RCC: source reduction is 400 mg once daily. Confirm current dose and toxicity; do not apply the DTC ladder."
+      },
+      {
+        "id": "SORA_DOSE_UNKNOWN",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "dose_reduction_required",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "sorafenib_indication",
+              "operator": "==",
+              "value": "dtc"
+            },
+            {
+              "any": [
+                {
+                  "field": "current_daily_dose_mg",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_daily_dose_mg",
+                  "operator": "not_in",
+                  "value": [
+                    800,
+                    600,
+                    400
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Current DTC dose is missing or outside the encoded reduction ladder; consultant/pharmacy review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Current DTC dose is missing or outside the encoded reduction ladder; consultant/pharmacy review."
+      },
+      {
+        "id": "SORA_RENAL_20_39",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 39
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Renal source dose 200 mg twice daily; escalate only on tolerability and specialist review."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Renal source dose 200 mg twice daily; escalate only on tolerability and specialist review."
+      },
+      {
+        "id": "SORA_RENAL_LT20",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 20
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Source starting dose 200 mg once daily, with specialist titration according to tolerability."
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Source starting dose 200 mg once daily, with specialist titration according to tolerability."
+      },
+      {
+        "id": "SORA_RENAL_GAP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": ">",
+              "value": 39
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<=",
+              "value": 40
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Source lists >40 and 20–39 mL/min; this boundary is not assigned. Confirm the dose; do not assume normal dosing.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Source lists >40 and 20–39 mL/min; this boundary is not assigned. Confirm the dose; do not assume normal dosing."
+      },
+      {
+        "id": "SORA_CHILD_C",
+        "priority": 10,
         "when": {
           "field": "child_pugh_class",
           "operator": "==",
@@ -765,14 +876,196 @@
           "components": [
             "sorafenib"
           ],
-          "message": "Child–Pugh C: start sorafenib at 200 mg once daily and escalate only after specialist review.",
-          "recommendation": "Child–Pugh C: start sorafenib at 200 mg once daily and escalate only after specialist review."
+          "message": "Child–Pugh C: source starting dose 200 mg once daily; escalate according to tolerability after specialist review."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00294 v4",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
         },
-        "explanation": "Child–Pugh C: start sorafenib at 200 mg once daily and escalate only after specialist review."
+        "explanation": "Child–Pugh C: source starting dose 200 mg once daily; escalate according to tolerability after specialist review."
+      },
+      {
+        "id": "SORA_CHILD_B",
+        "priority": 10,
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "B"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Child–Pugh B is a source caution, although Table 2 specifies no dose adjustment. Individual review is required.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00294 v4",
+          "page": "1; Table 2",
+          "url": "https://healthservice.hse.ie/documents/6704/294_v4_SORAfenib.pdf"
+        },
+        "explanation": "Child–Pugh B is a source caution, although Table 2 specifies no dose adjustment. Individual review is required."
+      },
+      {
+        "id": "SORA_SEVERE_OR_PERSISTENT_SKIN_TOXICITY",
+        "priority": 10,
+        "when": {
+          "field": "severe_or_persistent_skin_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Urgent source-specific review of severe or persistent skin / hand-foot toxicity. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Urgent source-specific review of severe or persistent skin / hand-foot toxicity. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule."
+      },
+      {
+        "id": "SORA_SYMPTOMATIC_HYPOGLYCAEMIA",
+        "priority": 10,
+        "when": {
+          "field": "symptomatic_hypoglycaemia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Temporarily interrupt sorafenib for symptomatic hypoglycaemia. Urgently assess glucose and treatment; review diabetes medicines."
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Temporarily interrupt sorafenib for symptomatic hypoglycaemia. Urgently assess glucose and treatment; review diabetes medicines."
+      },
+      {
+        "id": "SORA_MAJOR_BLEEDING",
+        "priority": 10,
+        "when": {
+          "field": "major_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Urgent source-specific review of major bleeding. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Urgent source-specific review of major bleeding. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule."
+      },
+      {
+        "id": "SORA_CARDIAC_ISCHAEMIA",
+        "priority": 10,
+        "when": {
+          "field": "cardiac_ischaemia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Urgent source-specific review of cardiac ischaemia or infarction. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Urgent source-specific review of cardiac ischaemia or infarction. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule."
+      },
+      {
+        "id": "SORA_MAJOR_SURGERY_OR_UNHEALED_WOUND",
+        "priority": 10,
+        "when": {
+          "field": "major_surgery_or_unhealed_wound",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Urgent source-specific review of major surgery planned or unhealed wound. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Urgent source-specific review of major surgery planned or unhealed wound. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule."
+      },
+      {
+        "id": "SORA_QT_RISK",
+        "priority": 10,
+        "when": {
+          "field": "qt_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Urgent source-specific review of qt prolongation risk / electrolyte disturbance. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Urgent source-specific review of qt prolongation risk / electrolyte disturbance. Confirm whether to interrupt or discontinue and use the indication-specific dose schedule."
+      },
+      {
+        "id": "SORA_PERFORATION",
+        "priority": 10,
+        "when": {
+          "field": "gi_perforation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sorafenib"
+          ],
+          "message": "Gastrointestinal perforation: discontinue sorafenib and arrange urgent specialist care."
+        },
+        "source": {
+          "document": "EMA Nexavar product information",
+          "page": "4.2–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/nexavar-epar-product-information_en.pdf"
+        },
+        "explanation": "Gastrointestinal perforation: discontinue sorafenib and arrange urgent specialist care."
       }
     ]
   },
@@ -783,13 +1076,6 @@
   "exclusions": [
     "Known hypersensitivity to a regimen component",
     "Pregnancy or breastfeeding where prohibited by the current source"
-  ],
-  "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific toxicity monitoring before each administration/cycle"
-  ],
-  "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
   ],
   "supportive_care": {
     "emetogenic_risk": "oral_minimal_low",

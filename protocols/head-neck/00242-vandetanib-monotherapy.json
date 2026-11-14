@@ -12,11 +12,11 @@
     ],
     "title": "Vandetanib Monotherapy",
     "short_title": "Vandetanib Monotherapy",
-    "indication": "Aggressive and symptomatic medullary thyroid cancer with unresectable locally advanced or metastatic disease.",
+    "indication": "RET mutation positive, unresectable locally advanced or metastatic medullary thyroid cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.46.0",
-    "source_checked_date": "2026-07-26",
+    "source_document_pages": 6,
+    "sactcheck_encoding_version": "0.84.50",
+    "source_checked_date": "2026-11-14",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "head_neck_subgroups": [
@@ -62,11 +62,12 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_specific_v08450_263_scenarios_passed",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.50"
     },
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
@@ -82,22 +83,24 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "Source reconciled draft; independent validation pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.50",
+      "audit_date": "2026-11-14",
+      "scope_note": "Current NCCP source reconciliation and 263 source-boundary scenarios passed; independent clinical and pharmacy approval pending."
     },
-    "canonical_protocol_id": "nccp-00242-v6"
+    "canonical_protocol_id": "nccp-00242-v6",
+    "clinical_audit_release": "0.84.50",
+    "source_pdf_sha256": "be7f936fd94ee0c4f4941c31868ebecacf8ea3705d232f56c5a1d5a3654dddf0"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00242 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding of NCCP 00242 v6; independent clinical and pharmacy approval pending."
   },
   "indications": [
     {
@@ -110,12 +113,13 @@
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Vandetanib 300 mg orally once daily continuously; use a 28-day assessment-cycle convention until progression or unacceptable toxicity.",
+    "cycle_length_days": null,
+    "schedule_summary": "Vandetanib 300 mg once daily, continuously, until progression or unacceptable side effects.",
     "drugs": [
       "vandetanib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "duration_text": "Continuous until progression or unacceptable toxicity"
   },
   "input_definitions": {
     "assessment_phase": {
@@ -125,15 +129,15 @@
       "options": [
         {
           "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "label": "Before first treatment"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "During treatment"
         },
         {
           "value": "toxicity_review",
-          "label": "Toxicity review"
+          "label": "Recovery / toxicity review"
         }
       ],
       "demo_value": "pre_treatment",
@@ -165,259 +169,195 @@
           "label": "4"
         }
       ],
-      "demo_value": 1,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
       "input_role": "decision"
     },
     "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
+      "label": "Relevant medicine hypersensitivity",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "pregnancy": {
-      "label": "Pregnant",
+      "label": "Pregnant or pregnancy suspected",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
     "breastfeeding": {
       "label": "Breastfeeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
-    },
-    "systolic_bp": {
-      "label": "Systolic blood pressure",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 130,
-      "unit": "mmHg",
       "input_role": "decision"
     },
-    "diastolic_bp": {
-      "label": "Diastolic blood pressure",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 80,
-      "unit": "mmHg",
-      "input_role": "decision"
-    },
-    "proteinuria_grade": {
-      "label": "Proteinuria grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "proteinuria",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
-    },
-    "oral_toxicity_grade": {
-      "label": "Worst treatment-related oral targeted-therapy toxicity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No toxicity."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; self-care activities may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named toxicity using symptoms, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
-    },
-    "major_bleeding_or_thrombosis": {
-      "label": "Major bleeding or recent clinically significant thrombosis",
+    "prior_permanent_stop": {
+      "label": "Previously permanently discontinued a component",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
-    "recent_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision",
+      "unit": "mL/min"
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "ret_mutation_positive": {
+      "label": "RET mutation confirmed by validated test",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "qtc_ms": {
-      "label": "QTc interval",
+      "label": "QTc",
       "type": "number",
       "required": false,
       "min": 0,
-      "step": 1,
+      "step": 0.01,
       "demo_value": 430,
-      "unit": "ms",
+      "input_role": "decision",
+      "unit": "ms"
+    },
+    "congenital_long_qt": {
+      "label": "Congenital long QT syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     },
     "correctable_qt_risk_not_corrected": {
-      "label": "Electrolyte/QT-prolonging medicine risk not corrected",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "interstitial_lung_disease": {
-      "label": "Suspected interstitial lung disease",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "severe_cutaneous_reaction": {
-      "label": "Suspected Stevens–Johnson syndrome or severe cutaneous reaction",
+      "label": "Electrolytes / modifiable QT risk not corrected",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "vandetanib_renal_band": {
-      "label": "Renal function",
+      "label": "Clinician-confirmed renal impairment severity",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": "mild",
-          "label": "Mild/no renal impairment"
+          "value": "normal",
+          "label": "Normal"
         },
         {
-          "value": "moderate_severe",
-          "label": "Moderate or severe renal impairment"
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
         }
       ],
-      "demo_value": "mild",
+      "demo_value": "normal",
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / local ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision",
+      "unit": "×ULN"
+    },
+    "non_haematological_toxicity_grade": {
+      "label": "Current adverse reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No recorded toxicity of this type."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 for this named toxicity; verify against the locally adopted grading standard."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 for this named toxicity; verify against the locally adopted grading standard."
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Confirm the clinician-assigned grade for the named toxicity, current versus prior grade, recovery and previous reductions.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf",
+      "source_grading_note": "This NCCP document does not specify a CTCAE edition; confirm the source grading with the clinical team.",
+      "grading_system": "NCCP source grade; edition unspecified",
+      "grading_source_label": "NCCP 00242 v6 source grading; CTCAE edition unspecified"
+    },
+    "prior_grade3_toxicity_occurrences": {
+      "label": "Number of grade ≥3 adverse-reaction episodes",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 0,
+      "input_role": "decision",
+      "unit": "episodes"
+    },
+    "prior_qtc_interruption": {
+      "label": "Prior interruption due to QTc prolongation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suspected_ild": {
+      "label": "Suspected ild",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "confirmed_ild": {
+      "label": "Confirmed ild",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "stevens_johnson_syndrome": {
+      "label": "Stevens johnson syndrome",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     }
   },
@@ -462,207 +402,265 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
-          ],
-          "message": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Known clinically significant hypersensitivity to a regimen component triggers the source contraindication."
-      },
-      {
-        "id": "ECOG_3",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, expected benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse treatment-related non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "TKI_BP_SYS",
-        "priority": 9,
-        "when": {
-          "field": "systolic_bp",
-          "operator": ">=",
-          "value": 160
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
             "vandetanib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
       },
       {
-        "id": "TKI_BP_DIA",
-        "priority": 9,
-        "when": {
-          "field": "diastolic_bp",
-          "operator": ">=",
-          "value": 100
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "vandetanib"
-          ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
-      },
-      {
-        "id": "TKI_PROTEIN_G3",
-        "priority": 9,
-        "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "vandetanib"
-          ],
-          "message": "Severe proteinuria requires interruption and quantified renal assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Severe proteinuria requires interruption and quantified renal assessment."
-      },
-      {
-        "id": "TKI_TOX_G3",
-        "priority": 9,
-        "when": {
-          "field": "oral_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "vandetanib"
-          ],
-          "message": "Grade 3 or worse toxicity requires interruption and source-directed dose reduction."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
-        },
-        "explanation": "Grade 3 or worse toxicity requires interruption and source-directed dose reduction."
-      },
-      {
-        "id": "TKI_BLEED",
+        "id": "PREGNANCY",
         "priority": 10,
         "when": {
-          "field": "major_bleeding_or_thrombosis",
+          "field": "pregnancy",
           "operator": "==",
           "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
+      },
+      {
+        "id": "BREASTFEEDING",
+        "priority": 10,
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Do not administer pending consultant review of this exclusion and the current product information."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Exclusions",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Do not administer pending consultant review of this exclusion and the current product information."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "A previous permanent stop remains in force. Recovery of the current measurements does not authorise restarting. Confirm the affected medicine."
+      },
+      {
+        "id": "ECOG_OUTSIDE",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "vandetanib"
           ],
-          "message": "Major bleeding or recent clinically significant thrombosis requires urgent treatment-specific review."
+          "message": "Outside source ECOG 0–2 eligibility; consultant review.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "Eligibility",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Major bleeding or recent clinically significant thrombosis requires urgent treatment-specific review."
+        "explanation": "Outside source ECOG 0–2 eligibility; consultant review."
       },
       {
-        "id": "TKI_SURGERY",
-        "priority": 9,
+        "id": "RET_NOT_CONFIRMED",
+        "priority": 10,
         "when": {
-          "field": "recent_surgery_or_unhealed_wound",
-          "operator": "==",
-          "value": true
+          "any": [
+            {
+              "field": "ret_mutation_positive",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "all": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "pre_treatment"
+                },
+                {
+                  "field": "ret_mutation_positive",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "vandetanib"
           ],
-          "message": "Withhold around major surgery and until adequate wound healing according to the source."
+          "message": "Confirm RET mutation positive medullary thyroid cancer with a validated test before initiating vandetanib."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "1–2",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Withhold around major surgery and until adequate wound healing according to the source."
+        "explanation": "Confirm RET mutation positive medullary thyroid cancer with a validated test before initiating vandetanib."
+      },
+      {
+        "id": "VAN_BASELINE_QTC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Do not start vandetanib when baseline QTc is greater than 480 ms."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "2,4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Do not start vandetanib when baseline QTc is greater than 480 ms."
       },
       {
         "id": "VAN_QTC",
         "priority": 10,
         "when": {
-          "field": "qtc_ms",
-          "operator": ">=",
-          "value": 450
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "field": "qtc_ms",
+              "operator": ">=",
+              "value": 500
+            }
+          ]
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
             "vandetanib"
           ],
-          "message": "QTc prolongation requires interruption until recovery and dose reduction according to the source."
+          "message": "A single QTc ≥500 ms requires stopping vandetanib. Correct electrolytes; restart only after specialist confirmation and dose reduction."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "QTc prolongation requires interruption until recovery and dose reduction according to the source."
+        "explanation": "A single QTc ≥500 ms requires stopping vandetanib. Correct electrolytes; restart only after specialist confirmation and dose reduction."
       },
       {
-        "id": "VAN_QT_RISK",
+        "id": "VAN_QTC_PHASE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            },
+            {
+              "field": "qtc_ms",
+              "operator": ">",
+              "value": 480
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Establish baseline versus on-treatment phase: initiation threshold >480 ms differs from the on-treatment ≥500 ms stop threshold.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "2–4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Establish baseline versus on-treatment phase: initiation threshold >480 ms differs from the on-treatment ≥500 ms stop threshold."
+      },
+      {
+        "id": "VAN_CONGENITAL_LONG_QT",
+        "priority": 10,
+        "when": {
+          "field": "congenital_long_qt",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Do not administer until specialist QT-risk review; congenital long QT is an exclusion."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "2,4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Do not administer until specialist QT-risk review; congenital long QT is an exclusion."
+      },
+      {
+        "id": "VAN_CORRECTABLE_QT_RISK_NOT_CORRECTED",
         "priority": 10,
         "when": {
           "field": "correctable_qt_risk_not_corrected",
@@ -674,34 +672,48 @@
           "components": [
             "vandetanib"
           ],
-          "message": "Correct electrolytes and avoid interacting QT-prolonging medicines before treatment."
+          "message": "Do not administer until specialist QT-risk review; congenital long QT is an exclusion."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "2,4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Correct electrolytes and avoid interacting QT-prolonging medicines before treatment."
+        "explanation": "Do not administer until specialist QT-risk review; congenital long QT is an exclusion."
       },
       {
         "id": "VAN_RENAL",
         "priority": 10,
         "when": {
-          "field": "vandetanib_renal_band",
-          "operator": "==",
-          "value": "moderate_severe"
+          "any": [
+            {
+              "field": "vandetanib_renal_band",
+              "operator": "in",
+              "value": [
+                "moderate",
+                "severe"
+              ]
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
             "vandetanib"
           ],
-          "message": "Moderate or severe renal impairment: vandetanib is not recommended in the encoded source pathway."
+          "message": "Vandetanib is not recommended in moderate/severe renal impairment. The NCCP table does not assign numeric CrCl bands; do not infer one."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Moderate or severe renal impairment: vandetanib is not recommended in the encoded source pathway."
+        "explanation": "Vandetanib is not recommended in moderate/severe renal impairment. The NCCP table does not assign numeric CrCl bands; do not infer one."
       },
       {
         "id": "VAN_BILI",
@@ -716,55 +728,148 @@
           "components": [
             "vandetanib"
           ],
-          "message": "Bilirubin >1.5 ×ULN: vandetanib is not recommended."
+          "message": "Not recommended with serum bilirubin >1.5 × ULN because safety and efficacy are not established."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "Table 1",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Bilirubin >1.5 ×ULN: vandetanib is not recommended."
+        "explanation": "Not recommended with serum bilirubin >1.5 × ULN because safety and efficacy are not established."
       },
       {
-        "id": "VAN_ILD",
+        "id": "VAN_GRADE3",
         "priority": 10,
         "when": {
-          "field": "interstitial_lung_disease",
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Temporarily stop. Once resolved or improved to grade 1, consultant confirms reduced dose: first occurrence 200 mg/day; second 100 mg/day. Adverse reactions may persist because of the long half-life."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Temporarily stop. Once resolved or improved to grade 1, consultant confirms reduced dose: first occurrence 200 mg/day; second 100 mg/day. Adverse reactions may persist because of the long half-life."
+      },
+      {
+        "id": "VAN_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_grade3_toxicity_occurrences",
+          "operator": ">=",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Retain toxicity history after apparent recovery: first grade ≥3 episode leads to 200 mg/day, second to 100 mg/day after recovery to ≤grade 1; further episodes require individual review.",
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Retain toxicity history after apparent recovery: first grade ≥3 episode leads to 200 mg/day, second to 100 mg/day after recovery to ≤grade 1; further episodes require individual review."
+      },
+      {
+        "id": "VAN_QTC_RECOVERY",
+        "priority": 10,
+        "when": {
+          "field": "prior_qtc_interruption",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
             "vandetanib"
           ],
-          "message": "Interstitial lung disease requires permanent discontinuation."
+          "message": "No automatic restart. Table 2 states QTc <450 ms or confirmed pretreatment QTc with electrolyte correction; paragraph on p4 requires return to pretreatment status. Reconcile these source statements and current SmPC with cardiology/oncology; resume only at a reduced dose if authorised.",
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "Table 2;4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Interstitial lung disease requires permanent discontinuation."
+        "explanation": "No automatic restart. Table 2 states QTc <450 ms or confirmed pretreatment QTc with electrolyte correction; paragraph on p4 requires return to pretreatment status. Reconcile these source statements and current SmPC with cardiology/oncology; resume only at a reduced dose if authorised."
       },
       {
-        "id": "VAN_SCAR",
+        "id": "VAN_SUSPECTED_ILD",
         "priority": 10,
         "when": {
-          "field": "severe_cutaneous_reaction",
+          "field": "suspected_ild",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
             "vandetanib"
           ],
-          "message": "Severe cutaneous reaction requires permanent discontinuation."
+          "message": "Interrupt pending urgent evaluation of new unexplained pulmonary symptoms."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications / assessment"
+          "document": "NCCP 00242 v6",
+          "page": "4",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
         },
-        "explanation": "Severe cutaneous reaction requires permanent discontinuation."
+        "explanation": "Interrupt pending urgent evaluation of new unexplained pulmonary symptoms."
+      },
+      {
+        "id": "VAN_CONFIRMED_ILD",
+        "priority": 10,
+        "when": {
+          "field": "confirmed_ild",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Permanently discontinue vandetanib and arrange appropriate urgent treatment."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Permanently discontinue vandetanib and arrange appropriate urgent treatment."
+      },
+      {
+        "id": "VAN_STEVENS_JOHNSON_SYNDROME",
+        "priority": 10,
+        "when": {
+          "field": "stevens_johnson_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "vandetanib"
+          ],
+          "message": "Permanently discontinue vandetanib and arrange appropriate urgent treatment."
+        },
+        "source": {
+          "document": "NCCP 00242 v6",
+          "page": "Table 2",
+          "url": "https://healthservice.hse.ie/documents/6947/242_Vandetanib_monotherapy.pdf"
+        },
+        "explanation": "Permanently discontinue vandetanib and arrange appropriate urgent treatment."
       }
     ]
   },
