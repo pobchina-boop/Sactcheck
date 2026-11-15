@@ -9,11 +9,11 @@
     "tumour_group": "Genitourinary",
     "title": "Bicalutamide Therapy",
     "short_title": "Bicalutamide",
-    "indication": "Bicalutamide with an LHRH analogue or surgical castration for advanced prostate cancer.",
+    "indication": "Advanced prostate cancer with LHRH analogue therapy or surgical castration.",
     "icd10": "C61",
     "source_document_pages": 3,
     "source_url": "https://healthservice.hse.ie/documents/6497/482_v3_Bicalutamide.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.54",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -28,7 +28,7 @@
     ],
     "treatment_class": [
       "endocrine_therapy",
-      "androgen_receptor_pathway_inhibitor",
+      "first_generation_antiandrogen",
       "oral_targeted_therapy"
     ],
     "administration_route": [
@@ -45,7 +45,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -59,18 +59,18 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-15",
     "regimen_card": {
       "contexts": [
         {
-          "id": "00482-gu",
-          "indication_id": "00482-gu",
+          "id": "00482a",
+          "indication_id": "00482a",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": null,
           "unresolved": [
-            "duration"
+            "individual_treatment_duration"
           ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "provenance": "NCCP source checked 2026-11-15"
         }
       ],
       "provenance": {
@@ -92,22 +92,29 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-reconciled draft; independent approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.54",
+      "audit_date": "2026-11-15",
+      "scope_note": "Current NCCP and product information reconciled for this release; declared discrepancies and independent review remain outstanding."
     },
-    "canonical_protocol_id": "nccp-00482-v3"
+    "canonical_protocol_id": "nccp-00482-v3",
+    "source_discrepancies": [
+      "NCCP does not specify hepatic dose reduction; SmPC additionally cautions about accumulation in moderate/severe impairment and requires discontinuation for severe hepatic changes."
+    ],
+    "clinical_audit_release": "0.84.54",
+    "source_pdf_sha256": "80f4b88c44a0fae873d6137b7a3a8fbb66a6c1fc8cc0ea3326d4173e3152b891",
+    "source_document_checked": true,
+    "review_date": "2030-08-08"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00482 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding for NCCP 00482 v3; current source and independent clinical/pharmacy review remain required."
   },
   "input_definitions": {
     "hypersensitivity": {
@@ -137,15 +144,54 @@
       "required": false,
       "options": [
         {
-          "value": "none_mild_moderate",
-          "label": "None, mild or moderate"
+          "value": "none_mild",
+          "label": "None or mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
         },
         {
           "value": "severe",
-          "label": "Severe — careful monitoring"
+          "label": "Severe"
         }
       ],
-      "demo_value": "none_mild_moderate",
+      "input_role": "decision",
+      "demo_value": "none_mild"
+    },
+    "severe_hepatic_changes": {
+      "label": "Severe hepatic changes require discontinuation. Investigate liver injury; no invented numeric bicalutamide threshold.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "coumarin_anticoagulant": {
+      "label": "Bicalutamide can increase warfarin/coumarin effect. Closely monitor PT/INR and review anticoagulant dose.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "other_significant_interaction": {
+      "label": "Review CYP3A4 substrates, ciclosporin, calcium-channel blockers and other interactions with pharmacy.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "A previous permanent stop remains effective despite recovered tests.",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "medical_or_surgical_castration_confirmed": {
+      "label": "Concurrent LHRH analogue or surgical castration confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
       "input_role": "decision"
     }
   },
@@ -189,36 +235,17 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "bicalutamide"
           ],
-          "message": "Hypersensitivity is a contraindication."
+          "message": "Relevant hypersensitivity excludes bicalutamide."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00482",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6497/482_v3_Bicalutamide.pdf",
+          "sha256": "80f4b88c44a0fae873d6137b7a3a8fbb66a6c1fc8cc0ea3326d4173e3152b891"
         },
-        "explanation": "Hypersensitivity is a contraindication."
-      },
-      {
-        "id": "QT",
-        "priority": 9,
-        "when": {
-          "field": "qt_risk",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Assess QT-prolongation benefit-risk before treatment."
-        },
-        "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Assess QT-prolongation benefit-risk before treatment."
+        "explanation": "Relevant hypersensitivity excludes bicalutamide."
       },
       {
         "id": "PROHIBITED_INTERACTION",
@@ -231,36 +258,183 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "bicalutamide"
           ],
-          "message": "Concurrent terfenadine, astemizole or cisapride is contraindicated."
+          "message": "Do not combine with terfenadine, astemizole or cisapride."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00482",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6497/482_v3_Bicalutamide.pdf",
+          "sha256": "80f4b88c44a0fae873d6137b7a3a8fbb66a6c1fc8cc0ea3326d4173e3152b891"
         },
-        "explanation": "Concurrent terfenadine, astemizole or cisapride is contraindicated."
+        "explanation": "Do not combine with terfenadine, astemizole or cisapride."
       },
       {
-        "id": "SEVERE_HEPATIC",
-        "priority": 13,
+        "id": "QT",
+        "priority": 10,
+        "when": {
+          "field": "qt_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bicalutamide"
+          ],
+          "message": "Review QT/torsades risk and interacting medicines; individual ECG/electrolyte assessment."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00482",
+          "page": "4.4-4.5",
+          "url": "https://assets.hpra.ie/products/Human/23890/Licence_PA23154-002-001_27082021153800.pdf",
+          "sha256": "2cd53f002a539ac66354d630caffc26956a4e08f98d44fe35fa12f2011ac76df"
+        },
+        "explanation": "Review QT/torsades risk and interacting medicines; individual ECG/electrolyte assessment."
+      },
+      {
+        "id": "SEVERE_HEPATIC_CHANGE",
+        "priority": 0,
+        "when": {
+          "field": "severe_hepatic_changes",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bicalutamide"
+          ],
+          "message": "Severe hepatic changes require discontinuation. Investigate liver injury; no invented numeric bicalutamide threshold."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00482",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/23890/Licence_PA23154-002-001_27082021153800.pdf",
+          "sha256": "2cd53f002a539ac66354d630caffc26956a4e08f98d44fe35fa12f2011ac76df"
+        },
+        "explanation": "Severe hepatic changes require discontinuation. Investigate liver injury; no invented numeric bicalutamide threshold."
+      },
+      {
+        "id": "COUMARIN",
+        "priority": 10,
+        "when": {
+          "field": "coumarin_anticoagulant",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bicalutamide"
+          ],
+          "message": "Bicalutamide can increase warfarin/coumarin effect. Closely monitor PT/INR and review anticoagulant dose."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00482",
+          "page": "4.4-4.5",
+          "url": "https://assets.hpra.ie/products/Human/23890/Licence_PA23154-002-001_27082021153800.pdf",
+          "sha256": "2cd53f002a539ac66354d630caffc26956a4e08f98d44fe35fa12f2011ac76df"
+        },
+        "explanation": "Bicalutamide can increase warfarin/coumarin effect. Closely monitor PT/INR and review anticoagulant dose."
+      },
+      {
+        "id": "INTERACTION_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "other_significant_interaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bicalutamide"
+          ],
+          "message": "Review CYP3A4 substrates, ciclosporin, calcium-channel blockers and other interactions with pharmacy."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00482",
+          "page": "4.5",
+          "url": "https://assets.hpra.ie/products/Human/23890/Licence_PA23154-002-001_27082021153800.pdf",
+          "sha256": "2cd53f002a539ac66354d630caffc26956a4e08f98d44fe35fa12f2011ac76df"
+        },
+        "explanation": "Review CYP3A4 substrates, ciclosporin, calcium-channel blockers and other interactions with pharmacy."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 0,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bicalutamide"
+          ],
+          "message": "A previous permanent stop remains effective despite recovered tests."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00482",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/23890/Licence_PA23154-002-001_27082021153800.pdf",
+          "sha256": "2cd53f002a539ac66354d630caffc26956a4e08f98d44fe35fa12f2011ac76df",
+          "local_safety_guard": true,
+          "scope_note": "Implementation history/confirmation guard derived from source warning; not a new source numeric threshold."
+        },
+        "explanation": "A previous permanent stop remains effective despite recovered tests."
+      },
+      {
+        "id": "HEPATIC_CAUTION",
+        "priority": 10,
         "when": {
           "field": "hepatic_impairment",
-          "operator": "==",
-          "value": "severe"
+          "operator": "in",
+          "value": [
+            "moderate",
+            "severe"
+          ]
         },
         "action": {
           "type": "proceed_with_caution",
           "components": [
-            "whole_regimen"
+            "bicalutamide"
           ],
-          "message": "No protocol dose adjustment is specified, but severe hepatic impairment requires careful monitoring."
+          "message": "The NCCP does not require a dose adjustment, but SmPC warns of accumulation in moderate/severe impairment. Monitor carefully; consider periodic liver testing, especially in the first six months."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "Product-specific SmPC 00482",
+          "page": "4.2 / 4.4",
+          "url": "https://assets.hpra.ie/products/Human/23890/Licence_PA23154-002-001_27082021153800.pdf",
+          "sha256": "2cd53f002a539ac66354d630caffc26956a4e08f98d44fe35fa12f2011ac76df"
         },
-        "explanation": "No protocol dose adjustment is specified, but severe hepatic impairment requires careful monitoring."
+        "explanation": "The NCCP does not require a dose adjustment, but SmPC warns of accumulation in moderate/severe impairment. Monitor carefully; consider periodic liver testing, especially in the first six months."
+      },
+      {
+        "id": "ADT_NOT_CONFIRMED",
+        "priority": 10,
+        "when": {
+          "field": "medical_or_surgical_castration_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bicalutamide"
+          ],
+          "message": "NCCP 00482 is bicalutamide 50 mg with LHRH analogue or surgical castration; it is not a 150 mg monotherapy service."
+        },
+        "source": {
+          "document": "NCCP 00482",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6497/482_v3_Bicalutamide.pdf",
+          "sha256": "80f4b88c44a0fae873d6137b7a3a8fbb66a6c1fc8cc0ea3326d4173e3152b891"
+        },
+        "explanation": "NCCP 00482 is bicalutamide 50 mg with LHRH analogue or surgical castration; it is not a 150 mg monotherapy service."
       }
     ]
   },
@@ -270,10 +444,17 @@
       {
         "drug": "Bicalutamide",
         "dose": "50 mg once daily",
-        "route": "PO"
+        "route": "PO",
+        "instructions": "Take at the same time daily with or without food; swallow whole. If missed or vomited, take only the next scheduled dose; do not replace or double."
       }
     ],
-    "additional_requirement": "Use with LHRH analogue therapy or surgical castration."
+    "additional_requirement": "Use with LHRH analogue therapy or surgical castration.",
+    "cycle_length_days": null,
+    "drugs": [
+      "bicalutamide"
+    ],
+    "schedule_summary": "Bicalutamide 50 mg orally once daily continuously with LHRH analogue or surgical castration.",
+    "duration_text": "Until progression or unacceptable toxicity; follow individual plan"
   },
   "eligibility": [
     "Approved indication"
@@ -284,12 +465,13 @@
   ],
   "monitoring": {
     "baseline": [
-      "FBC",
-      "renal and liver profile",
-      "blood pressure/glucose/bone profile as regimen-specific"
+      "FBC, renal and liver profile",
+      "Blood glucose"
     ],
     "regular": [
-      "Disease and safety monitoring according to treatment plan and NCCP source."
+      "FBC, renal and liver profile and glucose as clinically indicated",
+      "Consider periodic liver testing, particularly during the first six months",
+      "Close PT/INR monitoring with coumarin anticoagulants"
     ]
   },
   "supportive_care": {
@@ -306,9 +488,10 @@
   },
   "indications": [
     {
-      "indication_id": "00482-gu",
-      "code": "00482g",
-      "description": "Androgen-receptor blockade for prostate cancer."
+      "indication_id": "00482a",
+      "code": "00482a",
+      "description": "Advanced prostate cancer with LHRH analogue therapy or surgical castration.",
+      "source_url": "https://healthservice.hse.ie/documents/6497/482_v3_Bicalutamide.pdf"
     }
   ]
 }

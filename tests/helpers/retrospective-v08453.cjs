@@ -21,23 +21,10 @@ function beforeHash(f){const b=baselineFiles().get(f);if(!b)return null;return b
 function createMigration(r){assert.equal(r.schema_version,1);assert.equal(r.release,'0.84.53');assert.equal(r.base_release,'0.84.52');assert.equal(r.base_commit,BASE_COMMIT);assert.equal(r.previous_migration_sha256,sha(previousRecordBytes));assert.equal(r.status,'recorded');assert.deepEqual(r.routes,ROUTES);assert.deepEqual(r.clinical_routes,CLINICAL_ROUTES);for(const[f,c]of Object.entries(r.files)){assert(approvedPath(f),'Unapproved v53 transition '+f);assert.equal(c.before,beforeHash(f),f+' Git52 before hash');assert.equal(c.before_bytes,baselineFiles().get(f)?.bytes??null);assert(/^[a-f0-9]{64}$/.test(c.after)&&c.after!==c.before);assert(Number.isSafeInteger(c.after_bytes)&&c.after_bytes>0);}return(f,h)=>{assert(safeRelative(f));const c=r.files[f];if(!c)return h;assert(h===c.before||h===c.after,'Unexpected v53 original '+f);return c.after;};}
 let record,migrate;
 function load(){if(!record){record=JSON.parse(fs.readFileSync(RECORD));migrate=createMigration(record);}return record;}
-function expectedHash(f,h){load();return migrate(f,h);}
-function expectedBytes(f,n,h){const r=load();migrate(f,h);const c=r.files[f];if(!c)return n;assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return c.after_bytes;}
+function expectedHash(f,h){load();return require('./retrospective-v08454.cjs').expectedHash(f,migrate(f,h));}
+function expectedBytes(f,n,h){const r=load();migrate(f,h);const c=r.files[f];if(!c)return require('./retrospective-v08454.cjs').expectedBytes(f,n,h);assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return require('./retrospective-v08454.cjs').expectedBytes(f,c.after_bytes,c.after);}
 function expectedBuilderHash(f,h){return expectedHash(f,h);}
 function assertMember(f,r=load()){assert(safeRelative(f));assert(baselineFiles().has(f)||Object.hasOwn(r.files,f),f+' unrecorded new protected file');}
-function verifyCurrent(r=load()){
- createMigration(r);let protectedCount=0,historicalCount=0,currentCount=0;
- for(const[f,b]of baselineFiles()){
-  const historical=f.startsWith('validation/')&&/(?:asset-migrations|clinical-migration|scope|baseline-[^/]*manifest|retrospective-hashes|shared-builder-revisions)\.json$/.test(f);
-  if(!protectedPath(f)&&!historical&&!SHARED_PATHS.includes(f))continue;
-  const bytes=fs.readFileSync(path.join(ROOT,f)),c=r.files[f];
-  if(c){assert.equal(sha(bytes),c.after,f+' v53 endpoint');assert.equal(bytes.length,c.after_bytes);}
-  else{assert.equal(b.sha256?sha(bytes):blobHash(bytes),b.sha256||b.blob,f+' unchanged Git52 baseline');assert.equal(bytes.length,b.bytes);}
-  if(historical)historicalCount++;else protectedCount++;
- }
- for(const[f,c]of Object.entries(r.files)){const st=fs.lstatSync(path.join(ROOT,f));assert(st.isFile()&&!st.isSymbolicLink());const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),c.after,f);assert.equal(bytes.length,c.after_bytes);}
- function walk(d){for(const e of fs.readdirSync(path.join(ROOT,d),{withFileTypes:true})){const f=d+'/'+e.name;if(e.isDirectory())walk(f);else{assert(e.isFile());assertMember(f,r);currentCount++;}}}for(const d of PROTECTED_DOMAINS)walk(d);
- return{protectedCount,historicalCount,currentCount,changedFiles:Object.keys(r.files).length};
-}
+function verifyCurrent(r=load()){createMigration(r);assert.equal(sha(fs.readFileSync(RECORD)),'e393c965db8b851f32db7e7186f9778c29b256a91b45e0d7396e4c1d2c5a345d');return require('./retrospective-v08454.cjs').verifyCurrent();}
 async function verifyBeforeHashes(r=load()){createMigration(r);await require('./retrospective-v08452.cjs').verifyBeforeHashes(JSON.parse(previousRecordBytes));return Object.values(r.files).filter(x=>x.before!==null).length;}
 module.exports={ROOT,BASE_COMMIT,BASE_TREE,RECORD,CODES,NEW_ROUTES,AFFECTED_ROUTES,CLINICAL_ROUTES,ROUTES,PROTOCOLS,SHARED_PATHS,PROTECTED_DOMAINS,sha,blobHash,safeRelative,approvedPath,protectedPath,baselineFiles,beforeHash,createMigration,expectedHash,expectedBytes,expectedBuilderHash,assertMember,verifyCurrent,verifyBeforeHashes,previousMigrationSha256:sha(previousRecordBytes)};

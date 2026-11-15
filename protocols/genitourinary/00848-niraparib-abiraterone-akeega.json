@@ -9,11 +9,11 @@
     "tumour_group": "Genitourinary",
     "title": "Niraparib and Abiraterone acetate (Akeega®) and Prednisolone Therapy",
     "short_title": "Niraparib/abiraterone (Akeega)",
-    "indication": "Niraparib/abiraterone with prednisolone for BRCA1/2-mutated mCRPC when chemotherapy is not clinically indicated.",
+    "indication": "BRCA1/2-mutated metastatic castration-resistant prostate cancer when chemotherapy is not clinically indicated.",
     "icd10": "C61",
     "source_document_pages": 8,
     "source_url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.54",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -45,7 +45,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -62,18 +62,18 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-15",
     "regimen_card": {
       "contexts": [
         {
-          "id": "00848-gu",
-          "indication_id": "00848-gu",
+          "id": "00848a",
+          "indication_id": "00848a",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": null,
           "unresolved": [
-            "duration"
+            "individual_treatment_duration"
           ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "provenance": "NCCP source checked 2026-11-15"
         }
       ],
       "provenance": {
@@ -95,26 +95,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-reconciled draft; independent approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.54",
+      "audit_date": "2026-11-15",
+      "scope_note": "Current NCCP and product information reconciled for this release; declared discrepancies and independent review remain outstanding."
     },
-    "canonical_protocol_id": "nccp-00848-v2"
+    "canonical_protocol_id": "nccp-00848-v2",
+    "source_discrepancies": [
+      "Current EMA indication also includes BRCA-mutated mHSPC with prednisolone 5 mg/day. NCCP 00848 v2 remains mCRPC with 10 mg/day; no automatic indication or reimbursement expansion.",
+      "NCCP/SmPC severe hepatotoxicity includes ALT or AST 20 ×ULN; the encoded stop includes equality.",
+      "The SmPC adds a permanent stop when haematological toxicity fails to recover within 28 days; this supplements NCCP recurrence tables."
+    ],
+    "clinical_audit_release": "0.84.54",
+    "source_pdf_sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384",
+    "source_document_checked": true,
+    "review_date": "2030-03-05"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00848 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding for NCCP 00848 v2; current source and independent clinical/pharmacy review remain required."
   },
   "input_definitions": {
     "haematologic_toxicity_grade": {
-      "label": "Worst current haematological toxicity",
+      "label": "Current neutropenia or thrombocytopenia grade (anaemia assessed separately)",
       "type": "select",
       "required": false,
       "options": [
@@ -281,7 +290,7 @@
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "renal_band": {
       "label": "Renal function category",
@@ -350,7 +359,7 @@
       "input_role": "decision"
     },
     "hys_law_pattern": {
-      "label": "ALT/AST >3 ×ULN with bilirubin >2 ×ULN without another cause",
+      "label": "Clinician-confirmed ALT >3 ×ULN with bilirubin >2 ×ULN, other causes excluded",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -364,7 +373,7 @@
       "input_role": "decision"
     },
     "mds_or_aml": {
-      "label": "Current or suspected MDS/AML",
+      "label": "History or current diagnosis of MDS/AML (baseline exclusion)",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -376,6 +385,317 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "hypersensitivity": {
+      "label": "Hypersensitivity to any regimen component",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Documented previous permanent Akeega stop",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "brca_mutation_confirmed": {
+      "label": "Validated BRCA1/2 mutation confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "medical_or_surgical_castration_confirmed": {
+      "label": "Medical ADT or bilateral orchiectomy confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "symptomatic_brain_metastases": {
+      "label": "Symptomatic brain metastases",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "active_viral_hepatitis": {
+      "label": "Active or symptomatic viral hepatitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "adrenal_dysfunction": {
+      "label": "History of adrenal dysfunction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "uncontrolled_hypertension": {
+      "label": "Hypertension inadequately controlled",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "clinically_significant_cardiac_disease": {
+      "label": "Clinically significant cardiac disease or deterioration",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hypokalaemia_or_fluid_retention_uncontrolled": {
+      "label": "Hypokalaemia or fluid retention requires correction/control",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "history_of_hypokalaemia": {
+      "label": "Pre-existing or treatment-emergent hypokalaemia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "mds_aml_suspected": {
+      "label": "Suspected MDS/AML or prolonged unexplained cytopenia",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "mds_aml_confirmed": {
+      "label": "MDS/AML confirmed during treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pres_confirmed": {
+      "label": "Posterior reversible encephalopathy syndrome confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_toxicity_interruption": {
+      "label": "Previous toxicity interruption / proposed restart",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recurrent_hepatotoxicity_reduced_dose": {
+      "label": "Hepatotoxicity recurred at one 100/500 mg tablet daily",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "liver_tests_returned_to_baseline": {
+      "label": "Liver tests returned to own pretreatment baseline",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_hepatotoxicity": {
+      "label": "Previous Akeega hepatotoxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "alternative_liver_cause_excluded": {
+      "label": "Biliary obstruction and other causes excluded for concurrent ALT/bilirubin elevation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "already_lower_haematologic_dose": {
+      "label": "Already taking two 50/500 mg tablets daily",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "haematologic_recovery_acceptable": {
+      "label": "Blood counts recovered to the event-specific acceptable grade/baseline",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "intolerable_haematologic_toxicity": {
+      "label": "Intolerable haematological toxicity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "steroid_omission_or_stress": {
+      "label": "Steroid omitted/withdrawn or acute illness requiring steroid review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "significant_interaction": {
+      "label": "Relevant interaction requiring pharmacy review (including spironolactone)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "baseline_haematology_inadequate": {
+      "label": "Haematology inadequate to start treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "input_role": "decision",
+      "max": 4,
+      "demo_value": 0
+    },
+    "testosterone_ng_dl": {
+      "label": "Testosterone for source eligibility",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "input_role": "decision",
+      "unit": "ng/dL",
+      "demo_value": 20
+    },
+    "lvef_percent": {
+      "label": "Left ventricular ejection fraction",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "input_role": "decision",
+      "unit": "%",
+      "max": 100,
+      "demo_value": 60
+    },
+    "days_haematologic_interruption": {
+      "label": "Days since interruption for haematological toxicity",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "input_role": "decision",
+      "unit": "days",
+      "demo_value": 0
+    },
+    "baseline_anaemia_grade": {
+      "label": "Baseline anaemia grade before starting treatment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0 — No anaemia",
+          "description": "Haemoglobin within the relevant normal range and no anaemia.",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1 — Grade 1",
+          "description": "Haemoglobin below lower limit of normal to 10 g/dL.",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2 — Grade 2",
+          "description": "Haemoglobin <10 to 8 g/dL.",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3 — Grade 3",
+          "description": "Haemoglobin <8 g/dL; transfusion may be indicated.",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4 — Grade 4",
+          "description": "Life-threatening consequences requiring urgent intervention.",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
+      "ctcae_version": "5.0",
+      "ctcae_category": "anaemia",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "input_role": "decision"
+    },
+    "anaemia_recurrence": {
+      "label": "Occurrence of grade 3+ anaemia",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "first",
+          "label": "First"
+        },
+        {
+          "value": "second",
+          "label": "Second"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "first"
+    },
+    "treatment_setting": {
+      "label": "Treatment setting",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "mcrpc",
+          "label": "Metastatic castration-resistant"
+        },
+        {
+          "value": "mhspc",
+          "label": "Metastatic hormone-sensitive"
+        },
+        {
+          "value": "other",
+          "label": "Other / uncertain"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "mcrpc"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT result (actual value entered in UI; ×ULN calculated automatically)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "input_role": "decision",
+      "unit": "×ULN",
+      "demo_value": 1
     }
   },
   "required_inputs": [],
@@ -408,6 +728,498 @@
     ],
     "rules": [
       {
+        "id": "HYPERSENSITIVITY",
+        "priority": 1,
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: Hypersensitivity to any regimen component. Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: Hypersensitivity to any regimen component. Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "PRIOR_PARP",
+        "priority": 1,
+        "when": {
+          "field": "prior_parp_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: Prior PARP inhibitor treatment. Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: Prior PARP inhibitor treatment. Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "MDS_AML",
+        "priority": 1,
+        "when": {
+          "field": "mds_or_aml",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: History or current diagnosis of MDS/AML (baseline exclusion). Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: History or current diagnosis of MDS/AML (baseline exclusion). Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "RADIUM",
+        "priority": 1,
+        "when": {
+          "field": "concurrent_radium223",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: Concurrent radium-223. Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: Concurrent radium-223. Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "BRAIN_METASTASES",
+        "priority": 1,
+        "when": {
+          "field": "symptomatic_brain_metastases",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: Symptomatic brain metastases. Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: Symptomatic brain metastases. Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "VIRAL_HEPATITIS",
+        "priority": 1,
+        "when": {
+          "field": "active_viral_hepatitis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: Active or symptomatic viral hepatitis. Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: Active or symptomatic viral hepatitis. Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "ADRENAL_DYSFUNCTION",
+        "priority": 1,
+        "when": {
+          "field": "adrenal_dysfunction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "NCCP exclusion: History of adrenal dysfunction. Confirm the individual plan; steroid management is separate."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "NCCP exclusion: History of adrenal dysfunction. Confirm the individual plan; steroid management is separate."
+      },
+      {
+        "id": "BRCA_REQUIRED",
+        "priority": 10,
+        "when": {
+          "field": "brca_mutation_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Validated BRCA1/2 status is required."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "1-2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Validated BRCA1/2 status is required."
+      },
+      {
+        "id": "ADT_REQUIRED",
+        "priority": 10,
+        "when": {
+          "field": "medical_or_surgical_castration_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Continue medical ADT unless surgically castrated."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "1-2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Continue medical ADT unless surgically castrated."
+      },
+      {
+        "id": "SETTING_SCOPE",
+        "priority": 10,
+        "when": {
+          "field": "treatment_setting",
+          "operator": "in",
+          "value": [
+            "mhspc",
+            "other"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "This NCCP 00848 v2 service is mCRPC with prednisolone 10 mg/day. The newer EMA mHSPC indication has a different steroid dose and is not automatically an NCCP/reimbursement extension."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "This NCCP 00848 v2 service is mCRPC with prednisolone 10 mg/day. The newer EMA mHSPC indication has a different steroid dose and is not automatically an NCCP/reimbursement extension."
+      },
+      {
+        "id": "ECOG",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Outside NCCP ECOG 0-2 eligibility."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2 / SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Outside NCCP ECOG 0-2 eligibility."
+      },
+      {
+        "id": "TESTOSTERONE",
+        "priority": 10,
+        "when": {
+          "field": "testosterone_ng_dl",
+          "operator": ">",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Above the NCCP castrate eligibility threshold of 50 ng/dL; check ADT and clinical setting."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2 / SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Above the NCCP castrate eligibility threshold of 50 ng/dL; check ADT and clinical setting."
+      },
+      {
+        "id": "HAEM_BASELINE",
+        "priority": 10,
+        "when": {
+          "field": "baseline_haematology_inadequate",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Adequate baseline haematology is required; NCCP supplies no universal numeric start counts."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2 / SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Adequate baseline haematology is required; NCCP supplies no universal numeric start counts."
+      },
+      {
+        "id": "CARDIAC_LVEF",
+        "priority": 10,
+        "when": {
+          "field": "lvef_percent",
+          "operator": "<",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Baseline LVEF below 50% is a source caution; specialist cardiac review."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2 / SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Baseline LVEF below 50% is a source caution; specialist cardiac review."
+      },
+      {
+        "id": "CARDIAC",
+        "priority": 10,
+        "when": {
+          "field": "clinically_significant_cardiac_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Optimise cardiac status and review benefit-risk; consider stopping if cardiac function falls significantly."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2 / SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Optimise cardiac status and review benefit-risk; consider stopping if cardiac function falls significantly."
+      },
+      {
+        "id": "BP_CONTROL",
+        "priority": 6,
+        "when": {
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Control blood pressure before starting; reassess uncontrolled hypertension during treatment."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "2 / SmPC 4.4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Control blood pressure before starting; reassess uncontrolled hypertension during treatment."
+      },
+      {
+        "id": "MINERALOCORTICOID_CONTROL",
+        "priority": 6,
+        "when": {
+          "field": "hypokalaemia_or_fluid_retention_uncontrolled",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Correct/control hypokalaemia and fluid retention and assess cardiac risk. Do not abruptly stop the separate steroid."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Correct/control hypokalaemia and fluid retention and assess cardiac risk. Do not abruptly stop the separate steroid."
+      },
+      {
+        "id": "K_TARGET",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "history_of_hypokalaemia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "potassium_mmol_l",
+              "operator": "<",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "For pre-existing or treatment-emergent hypokalaemia, consider maintaining potassium at least 4 mmol/L. This is a contextual target, not an automatic threshold for every patient."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "6",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "For pre-existing or treatment-emergent hypokalaemia, consider maintaining potassium at least 4 mmol/L. This is a contextual target, not an automatic threshold for every patient."
+      },
+      {
+        "id": "HEME_G1",
+        "priority": 10,
+        "when": {
+          "field": "haematologic_toxicity_grade",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Grade 1: no dose change; consider weekly counts."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "4 table 2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Grade 1: no dose change; consider weekly counts."
+      },
+      {
+        "id": "HEME_G2",
+        "priority": 10,
+        "when": {
+          "field": "haematologic_toxicity_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Grade 2 neutropenia/thrombocytopenia: at least weekly counts; consider holding until grade 1/baseline, then weekly counts for 28 days."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "4 table 2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Grade 2 neutropenia/thrombocytopenia: at least weekly counts; consider holding until grade 1/baseline, then weekly counts for 28 days."
+      },
+      {
         "id": "HEME_G3",
         "priority": 6,
         "when": {
@@ -418,19 +1230,22 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Withhold and monitor at least weekly until Grade 1/baseline; then resume according to occurrence and dose-level table."
+          "message": "Hold Akeega; at least weekly counts until grade 1/baseline. First event may resume the same dose or two 50/500 mg tablets if warranted. Confirm history and authorisation."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "4 table 2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Withhold and monitor at least weekly until Grade 1/baseline; then resume according to occurrence and dose-level table."
+        "explanation": "Hold Akeega; at least weekly counts until grade 1/baseline. First event may resume the same dose or two 50/500 mg tablets if warranted. Confirm history and authorisation."
       },
       {
         "id": "HEME_SECOND",
-        "priority": 5,
+        "priority": 6,
         "when": {
           "all": [
             {
@@ -448,15 +1263,18 @@
         "action": {
           "type": "withhold_then_reduce",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Second Grade ≥3 haematological occurrence: withhold to recovery then reduce one dose level."
+          "message": "Second grade 3+ neutropenia/thrombocytopenia: hold until grade 1, then two 50/500 mg tablets daily if authorised; if already at that dose consider discontinuation."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "4 table 2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Second Grade ≥3 haematological occurrence: withhold to recovery then reduce one dose level."
+        "explanation": "Second grade 3+ neutropenia/thrombocytopenia: hold until grade 1, then two 50/500 mg tablets daily if authorised; if already at that dose consider discontinuation."
       },
       {
         "id": "HEME_THIRD",
@@ -478,15 +1296,132 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Third Grade ≥3 haematological occurrence: permanently discontinue."
+          "message": "Third grade 3+ neutropenia/thrombocytopenia: permanently discontinue Akeega."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "4 table 2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Third Grade ≥3 haematological occurrence: permanently discontinue."
+        "explanation": "Third grade 3+ neutropenia/thrombocytopenia: permanently discontinue Akeega."
+      },
+      {
+        "id": "HEME_INTOLERABLE",
+        "priority": 6,
+        "when": {
+          "field": "intolerable_haematologic_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Interrupt Akeega and provide supportive management for intolerable haematological toxicity."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Interrupt Akeega and provide supportive management for intolerable haematological toxicity."
+      },
+      {
+        "id": "HEME_28D_STOP",
+        "priority": 0,
+        "when": {
+          "all": [
+            {
+              "field": "days_haematologic_interruption",
+              "operator": ">=",
+              "value": 28
+            },
+            {
+              "field": "haematologic_recovery_acceptable",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Haematological toxicity has not recovered to acceptable levels within 28 days of interruption: permanently discontinue Akeega."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Haematological toxicity has not recovered to acceptable levels within 28 days of interruption: permanently discontinue Akeega."
+      },
+      {
+        "id": "ANAEMIA_G1",
+        "priority": 10,
+        "when": {
+          "field": "anaemia_grade",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Grade 1 anaemia: no dose change; consider weekly monitoring."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "4 table 3",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Grade 1 anaemia: no dose change; consider weekly monitoring."
+      },
+      {
+        "id": "ANAEMIA_G2",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "baseline_anaemia_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Grade 2 anaemia from baseline grade 0-1: at least weekly counts for 28 days."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "4 table 3",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Grade 2 anaemia from baseline grade 0-1: at least weekly counts for 28 days."
       },
       {
         "id": "ANAEMIA_G3",
@@ -499,15 +1434,108 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Withhold, provide supportive management and monitor at least weekly until recovered to Grade ≤2; reduce for recurrence/persistence as specified."
+          "message": "Hold Akeega, provide support and check counts at least weekly until anaemia grade 2 or better; persistent anaemia may need dose reduction."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "4 table 3",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Withhold, provide supportive management and monitor at least weekly until recovered to Grade ≤2; reduce for recurrence/persistence as specified."
+        "explanation": "Hold Akeega, provide support and check counts at least weekly until anaemia grade 2 or better; persistent anaemia may need dose reduction."
+      },
+      {
+        "id": "ANAEMIA_SECOND",
+        "priority": 6,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "anaemia_recurrence",
+              "operator": "==",
+              "value": "second"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold_then_reduce",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Second grade 3+ anaemia: hold until grade 2 or better, then two 50/500 mg tablets if authorised. If already reduced, consider discontinuation."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "4-5 table 3",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Second grade 3+ anaemia: hold until grade 2 or better, then two 50/500 mg tablets if authorised. If already reduced, consider discontinuation."
+      },
+      {
+        "id": "ANAEMIA_THIRD",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "anaemia_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "anaemia_recurrence",
+              "operator": "==",
+              "value": "third"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Third grade 3+ anaemia: consider discontinuation using clinical judgement; this is not the automatic third-event stop used for neutropenia/thrombocytopenia."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "5 table 3",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Third grade 3+ anaemia: consider discontinuation using clinical judgement; this is not the automatic third-event stop used for neutropenia/thrombocytopenia."
+      },
+      {
+        "id": "ALREADY_REDUCED",
+        "priority": 10,
+        "when": {
+          "field": "already_lower_haematologic_dose",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Confirm current strength and recurrence. Do not reduce both agents as if all dose reductions were identical; a further haematological reduction requires consideration of stopping."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "3-5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Confirm current strength and recurrence. Do not reduce both agents as if all dose reductions were identical; a further haematological reduction requires consideration of stopping."
       },
       {
         "id": "NONHAEM_G3",
@@ -520,19 +1548,22 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Interrupt for Grade ≥3 non-haematological toxicity until Grade 1/baseline; resume with dose review."
+          "message": "Interrupt Akeega and treat the event; do not restart before grade 1/baseline and authorised review."
         },
         "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "6 table 5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Interrupt for Grade ≥3 non-haematological toxicity until Grade 1/baseline; resume with dose review."
+        "explanation": "Interrupt Akeega and treat the event; do not restart before grade 1/baseline and authorised review."
       },
       {
         "id": "HEPATIC_GT5",
-        "priority": 5,
+        "priority": 6,
         "when": {
           "field": "alt_ast_uln_multiple",
           "operator": ">",
@@ -541,61 +1572,357 @@
         "action": {
           "type": "withhold_then_reduce",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "ALT/AST >5 ×ULN: interrupt; after recovery to baseline, re-treat at one dose reduction. Discontinue if it recurs."
+          "message": "ALT or AST above 5 ×ULN: hold and investigate. Only after return to own baseline may one 100/500 mg tablet daily be considered; monitor every two weeks for three months then monthly."
         },
         "source": {
-          "page": 6,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "6 table 5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "ALT/AST >5 ×ULN: interrupt; after recovery to baseline, re-treat at one dose reduction. Discontinue if it recurs."
+        "explanation": "ALT or AST above 5 ×ULN: hold and investigate. Only after return to own baseline may one 100/500 mg tablet daily be considered; monitor every two weeks for three months then monthly."
       },
       {
-        "id": "HEPATIC_GT20",
+        "id": "HEPATIC_GE20",
         "priority": 0,
         "when": {
           "field": "alt_ast_uln_multiple",
-          "operator": ">",
+          "operator": ">=",
           "value": 20
         },
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "ALT/AST >20 ×ULN requires permanent discontinuation."
+          "message": "ALT or AST reaches 20 ×ULN: permanently discontinue. NCCP and SmPC include exactly 20 ×ULN; later SmPC wording also uses >20, so the explicit 20-times criterion is retained."
         },
         "source": {
-          "page": 6,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "6 table 5 / SmPC 4.2",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "ALT/AST >20 ×ULN requires permanent discontinuation."
+        "explanation": "ALT or AST reaches 20 ×ULN: permanently discontinue. NCCP and SmPC include exactly 20 ×ULN; later SmPC wording also uses >20, so the explicit 20-times criterion is retained."
       },
       {
         "id": "HYS_LAW",
         "priority": 0,
         "when": {
-          "field": "hys_law_pattern",
+          "any": [
+            {
+              "field": "hys_law_pattern",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "alternative_liver_cause_excluded",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Concurrent ALT >3 ×ULN and bilirubin >2 ×ULN without another cause: permanently discontinue. AST alone must not substitute for ALT in this rule."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "6 table 5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Concurrent ALT >3 ×ULN and bilirubin >2 ×ULN without another cause: permanently discontinue. AST alone must not substitute for ALT in this rule."
+      },
+      {
+        "id": "LIVER_PATTERN_REVIEW",
+        "priority": 6,
+        "when": {
+          "all": [
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Concurrent ALT/bilirubin elevation: hold and urgently investigate alternative causes. Permanent-stop attribution requires exclusion of other causes."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "6 table 5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384",
+          "local_safety_guard": true,
+          "scope_note": "Implementation history/confirmation guard derived from source warning; not a new source numeric threshold."
+        },
+        "explanation": "Concurrent ALT/bilirubin elevation: hold and urgently investigate alternative causes. Permanent-stop attribution requires exclusion of other causes."
+      },
+      {
+        "id": "LIVER_RECURRENT",
+        "priority": 0,
+        "when": {
+          "field": "recurrent_hepatotoxicity_reduced_dose",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Recurrent hepatotoxicity at one 100/500 mg tablet: discontinue Akeega."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "6 table 5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Recurrent hepatotoxicity at one 100/500 mg tablet: discontinue Akeega."
+      },
+      {
+        "id": "LIVER_NOT_RECOVERED",
+        "priority": 6,
+        "when": {
+          "all": [
+            {
+              "field": "prior_hepatotoxicity",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "liver_tests_returned_to_baseline",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Do not restart before return to the patient’s own liver-test baseline."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "6 table 5",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "Do not restart before return to the patient’s own liver-test baseline."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 0,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "A previous permanent stop remains in force despite recovery."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459",
+          "local_safety_guard": true,
+          "scope_note": "Implementation history/confirmation guard derived from source warning; not a new source numeric threshold."
+        },
+        "explanation": "A previous permanent stop remains in force despite recovery."
+      },
+      {
+        "id": "RESTART_HISTORY",
+        "priority": 10,
+        "when": {
+          "field": "prior_toxicity_interruption",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Recovery alone does not authorise restart. Confirm event type, worst grade, occurrence, held days, recovery and exact tablet strength. Separate abiraterone plus steroid during a hold is a physician decision, not automatic."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459",
+          "local_safety_guard": true,
+          "scope_note": "Implementation history/confirmation guard derived from source warning; not a new source numeric threshold."
+        },
+        "explanation": "Recovery alone does not authorise restart. Confirm event type, worst grade, occurrence, held days, recovery and exact tablet strength. Separate abiraterone plus steroid during a hold is a physician decision, not automatic."
+      },
+      {
+        "id": "MDS_SUSPECTED",
+        "priority": 6,
+        "when": {
+          "field": "mds_aml_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Refer to haematology for suspected MDS/AML or prolonged unexplained cytopenia."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Refer to haematology for suspected MDS/AML or prolonged unexplained cytopenia."
+      },
+      {
+        "id": "MDS_CONFIRMED",
+        "priority": 0,
+        "when": {
+          "field": "mds_aml_confirmed",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Permanently discontinue for ALT/AST >3 ×ULN with bilirubin >2 ×ULN without another cause."
+          "message": "Confirmed MDS/AML: permanently discontinue Akeega and treat appropriately."
         },
         "source": {
-          "page": 6,
-          "document": "Official NCCP regimen"
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
         },
-        "explanation": "Permanently discontinue for ALT/AST >3 ×ULN with bilirubin >2 ×ULN without another cause."
+        "explanation": "Confirmed MDS/AML: permanently discontinue Akeega and treat appropriately."
+      },
+      {
+        "id": "PRES",
+        "priority": 0,
+        "when": {
+          "field": "pres_confirmed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Confirmed PRES: permanently discontinue Akeega and institute appropriate care."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Confirmed PRES: permanently discontinue Akeega and institute appropriate care."
+      },
+      {
+        "id": "STEROID_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "steroid_omission_or_stress",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Do not abruptly stop prednisolone because Akeega is held. Review adrenal insufficiency, mineralocorticoid effects and stress-dose needs."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Do not abruptly stop prednisolone because Akeega is held. Review adrenal insufficiency, mineralocorticoid effects and stress-dose needs."
+      },
+      {
+        "id": "INTERACTIONS",
+        "priority": 10,
+        "when": {
+          "field": "significant_interaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "Review strong CYP3A4 inducers, CYP2D6/CYP2C8 substrates, QT risk and spironolactone; pharmacy advice required."
+        },
+        "source": {
+          "document": "Product-specific SmPC 00848",
+          "page": "4.2-4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/akeega-epar-product-information_en.pdf",
+          "sha256": "1bec7f3e5f18e4fe578c0f49b6a9128776963f703a1a9503180dea643f434459"
+        },
+        "explanation": "Review strong CYP3A4 inducers, CYP2D6/CYP2C8 substrates, QT risk and spironolactone; pharmacy advice required."
       },
       {
         "id": "RENAL_SEVERE",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "renal_band",
           "operator": "in",
@@ -607,162 +1934,96 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Severe renal impairment/ESRD: use only if benefit outweighs risk with close monitoring."
+          "message": "Severe renal impairment/dialysis: limited data; benefit-risk decision with close monitoring."
         },
         "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "5 table 4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Severe renal impairment/ESRD: use only if benefit outweighs risk with close monitoring."
+        "explanation": "Severe renal impairment/dialysis: limited data; benefit-risk decision with close monitoring."
+      },
+      {
+        "id": "RENAL_MODERATE",
+        "priority": 10,
+        "when": {
+          "field": "renal_band",
+          "operator": "in",
+          "value": [
+            "moderate"
+          ]
+        },
+        "action": {
+          "type": "proceed_with_caution",
+          "components": [
+            "niraparib",
+            "abiraterone"
+          ],
+          "message": "No renal dose adjustment for moderate impairment; monitor closely for increased niraparib exposure."
+        },
+        "source": {
+          "document": "NCCP 00848",
+          "page": "5 table 4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
+        },
+        "explanation": "No renal dose adjustment for moderate impairment; monitor closely for increased niraparib exposure."
       },
       {
         "id": "CHILD_B",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "child_pugh",
-          "operator": "==",
-          "value": "B"
+          "operator": "in",
+          "value": [
+            "B"
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Child-Pugh B requires cautious individual benefit-risk assessment."
+          "message": "Moderate hepatic impairment: no reliable dose prediction; benefit must clearly outweigh risk."
         },
         "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "5 table 4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Child-Pugh B requires cautious individual benefit-risk assessment."
+        "explanation": "Moderate hepatic impairment: no reliable dose prediction; benefit must clearly outweigh risk."
       },
       {
         "id": "CHILD_C",
         "priority": 1,
         "when": {
           "field": "child_pugh",
-          "operator": "==",
-          "value": "C"
+          "operator": "in",
+          "value": [
+            "C"
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "niraparib",
+            "abiraterone"
           ],
-          "message": "Akeega is contraindicated in severe hepatic impairment (Child-Pugh C)."
+          "message": "Severe hepatic impairment is contraindicated."
         },
         "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00848",
+          "page": "5 table 4",
+          "url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf",
+          "sha256": "a87abd3eec64dd19dbb6dffbf5be86caa631bf27082677d84e295039c41cc384"
         },
-        "explanation": "Akeega is contraindicated in severe hepatic impairment (Child-Pugh C)."
-      },
-      {
-        "id": "POTASSIUM_LT35",
-        "priority": 6,
-        "when": {
-          "field": "potassium_mmol_l",
-          "operator": "<",
-          "value": 3.5
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Correct potassium before treatment; maintain ≥4 mmol/L where possible."
-        },
-        "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Correct potassium before treatment; maintain ≥4 mmol/L where possible."
-      },
-      {
-        "id": "POTASSIUM_LT4",
-        "priority": 13,
-        "when": {
-          "field": "potassium_mmol_l",
-          "operator": "<",
-          "value": 4
-        },
-        "action": {
-          "type": "proceed_with_caution",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Optimise potassium to ≥4 mmol/L and monitor closely."
-        },
-        "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Optimise potassium to ≥4 mmol/L and monitor closely."
-      },
-      {
-        "id": "PRIOR_PARP",
-        "priority": 1,
-        "when": {
-          "field": "prior_parp_inhibitor",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Prior PARP inhibitor treatment is an NCCP exclusion."
-        },
-        "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Prior PARP inhibitor treatment is an NCCP exclusion."
-      },
-      {
-        "id": "MDS_AML",
-        "priority": 1,
-        "when": {
-          "field": "mds_or_aml",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Current or suspected MDS/AML is an NCCP exclusion."
-        },
-        "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Current or suspected MDS/AML is an NCCP exclusion."
-      },
-      {
-        "id": "RADIUM",
-        "priority": 1,
-        "when": {
-          "field": "concurrent_radium223",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Concurrent radium-223 is contraindicated."
-        },
-        "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Concurrent radium-223 is contraindicated."
+        "explanation": "Severe hepatic impairment is contraindicated."
       }
     ]
   },
@@ -773,7 +2034,7 @@
         "drug": "niraparib/abiraterone (Akeega®)",
         "dose": "200 mg/1000 mg once daily (two 100 mg/500 mg tablets)",
         "route": "PO",
-        "instructions": "Take as a single daily dose on an empty stomach as specified in the NCCP source."
+        "instructions": "Swallow whole with water at least two hours after food; do not eat for at least one hour afterwards. If missed, take as soon as possible on the same day; no extra dose. Do not interchange the two strengths."
       },
       {
         "drug": "predniSONE/prednisoLONE",
@@ -786,7 +2047,15 @@
       "haematological": "Two 50 mg/500 mg tablets once daily; second reduction consider discontinuation.",
       "hepatotoxicity": "One 100 mg/500 mg tablet once daily; second reduction discontinue."
     },
-    "additional_requirement": "Continue GnRH analogue unless surgically castrated."
+    "additional_requirement": "Continue GnRH analogue unless surgically castrated.",
+    "cycle_length_days": null,
+    "drugs": [
+      "niraparib",
+      "abiraterone",
+      "prednisolone"
+    ],
+    "duration_text": "Continuous until progression or unacceptable toxicity",
+    "schedule_summary": "Akeega two 100/500 mg tablets once daily fasting plus prednisolone 10 mg daily with food; continue ADT unless surgically castrated."
   },
   "eligibility": [
     "mCRPC with germline and/or somatic BRCA1/2 mutation",
@@ -811,8 +2080,13 @@
       "ECG/echo if clinically indicated"
     ],
     "regular": [
-      "FBC weekly for first month then monthly as specified",
-      "Liver profile and blood pressure at protocol intervals"
+      "FBC weekly in month 1, every two weeks in months 2-3, monthly for the remainder of year 1, then every two months",
+      "ALT/AST and bilirubin every two weeks in months 1-3, monthly for the remainder of year 1, then every two months",
+      "After starting two 50/500 mg tablets following interruption: liver tests every two weeks for six weeks",
+      "Blood pressure weekly for first two months, then monthly for year 1, then every two months",
+      "Potassium monthly for year 1, then every two months; renal profile and glucose as clinically indicated",
+      "Monitor oedema/weight and heart failure symptoms every two weeks for three months, then monthly in those at cardiac risk",
+      "After restarting/reducing for cytopenia: weekly counts for 28 days; specific hepatic rechallenge schedule is separate"
     ]
   },
   "supportive_care": {
@@ -831,9 +2105,10 @@
   },
   "indications": [
     {
-      "indication_id": "00848-gu",
-      "code": "00848g",
-      "description": "BRCA-mutated metastatic castration-resistant prostate cancer in an NCCP-listed niraparib/abiraterone indication."
+      "indication_id": "00848a",
+      "code": "00848a",
+      "description": "BRCA1/2-mutated metastatic castration-resistant prostate cancer when chemotherapy is not clinically indicated.",
+      "source_url": "https://healthservice.hse.ie/documents/6448/848_v2_Niraparib_abiraterone.pdf"
     }
   ]
 }

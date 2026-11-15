@@ -39,6 +39,15 @@ for(const {entry,data} of gu){
   assert.strictEqual(data.treatment.cycle_length_days,null);
   assert(card.contexts.every(c=>c.cycle_length_days===null),`${code} continuous card interval`);
   assert(/120 mg once daily without planned breaks/.test(data.treatment.schedule_summary));
+ }else if(['00482','00848'].includes(code)){
+  // NCCP 00482/00848 are continuous daily treatment; the patient display is a review window.
+  assert.strictEqual(m.clinical_audit_release,'0.84.54');
+  assert.strictEqual(data.treatment.continuous,true);
+  assert.strictEqual(data.treatment.cycle_length_days,null);
+  assert(card.contexts.every(c=>c.cycle_length_days===null),`${code} continuous card interval`);
+  assert(/daily/.test(data.treatment.schedule_summary));
+  const patient=read('data/patient-knowledge/'+code+'.json');
+  assert.strictEqual(patient.schedule_kind,'continuous');assert.strictEqual(patient.patient_summary.card_cycle_count,null);
  }else assert(card.contexts.some(c=>c.cycle_length_days>0),`${code} cycle interval`);
  const side=cardSidecar.protocols.find(x=>x.id===data.protocol_id);assert(side,`${code} sidecar`);
  if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);if(code==='00535'){assert(require('./helpers/skin-inputs-v08442.cjs').validate(data));assert.equal(m.sactcheck_encoding_version,'0.84.42');}else assert(['0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
