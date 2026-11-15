@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 3,
     "source_url": "https://healthservice.hse.ie/documents/6494/479_v3_Leuprorelin_22.5mg.pdf",
-    "sactcheck_encoding_version": "0.84.52",
+    "sactcheck_encoding_version": "0.84.53",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -71,7 +71,7 @@
           "unresolved": [
             "individual_treatment_duration"
           ],
-          "provenance": "NCCP source 2026-11-14"
+          "provenance": "NCCP source checked 2026-11-14"
         },
         {
           "id": "00479b",
@@ -81,7 +81,7 @@
           "unresolved": [
             "individual_treatment_duration"
           ],
-          "provenance": "NCCP source 2026-11-14"
+          "provenance": "NCCP source checked 2026-11-14"
         }
       ],
       "provenance": {
@@ -109,7 +109,7 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.84.52",
+      "audit_release": "0.84.53",
       "audit_date": "2026-11-14",
       "scope_note": "Current NCCP and product-specific review; no clinical authorisation implied."
     },
@@ -206,6 +206,34 @@
     },
     "suspected_handling_error": {
       "label": "Suspected preparation, reconstitution or administration error",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "previous_orchiectomy": {
+      "label": "Previous bilateral orchiectomy / surgical castration",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "incorrectly_prepared_dose": {
+      "label": "The prepared dose does not meet product preparation instructions",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_blistering_or_mucosal_rash": {
+      "label": "Severe blistering, peeling skin or mucosal rash suggesting a serious skin reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_headache_or_visual_change": {
+      "label": "Severe or recurrent headache with visual change, vomiting or other concerning neurological symptoms",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -375,11 +403,12 @@
           "message": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
         },
         "source": {
-          "document": "NCCP 00479 v3",
-          "page": "Exclusions / clinical history",
+          "document": "Local documented-history safety guard",
+          "page": "Local guard, not a new NCCP dose threshold",
           "url": "https://healthservice.hse.ie/documents/6494/479_v3_Leuprorelin_22.5mg.pdf",
           "sha256": "33b57082d5c6c0b2724219fce7570be6857c20c6ccb857f550a28456a45ade14",
-          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold."
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold.",
+          "local_safety_guard": true
         },
         "explanation": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
       },
@@ -521,6 +550,98 @@
           "sha256": "17df5ea1512d2709bae6dad8eed1ae6778feb14fc4adb451505cf06778795e6c"
         },
         "explanation": "A handling error can cause lack of efficacy. Review device-specific instructions and measure testosterone to check suppression; clinician/pharmacy decide further treatment."
+      },
+      {
+        "id": "ORCHIECTOMY",
+        "priority": 10,
+        "when": {
+          "field": "previous_orchiectomy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "The product SmPC contraindicates this leuprorelin product after orchiectomy; it cannot further lower testosterone after surgical castration. Confirm the history and treatment plan."
+        },
+        "explanation": "The product SmPC contraindicates this leuprorelin product after orchiectomy; it cannot further lower testosterone after surgical castration. Confirm the history and treatment plan.",
+        "source": {
+          "document": "eligard SmPC",
+          "page": "4.3",
+          "url": "https://assets.hpra.ie/products/Human/25689/Licence_PA0812-005-002_18102024115227.pdf",
+          "sha256": "17df5ea1512d2709bae6dad8eed1ae6778feb14fc4adb451505cf06778795e6c"
+        }
+      },
+      {
+        "id": "INCORRECT_PREPARATION",
+        "priority": 10,
+        "when": {
+          "field": "incorrectly_prepared_dose",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Do not administer an incorrectly prepared dose. Ask pharmacy to resolve the preparation problem using the exact product instructions. A suspected error after administration requires response and testosterone review."
+        },
+        "explanation": "Do not administer an incorrectly prepared dose. Ask pharmacy to resolve the preparation problem using the exact product instructions. A suspected error after administration requires response and testosterone review.",
+        "source": {
+          "document": "eligard SmPC",
+          "page": "4.2",
+          "url": "https://assets.hpra.ie/products/Human/25689/Licence_PA0812-005-002_18102024115227.pdf",
+          "sha256": "17df5ea1512d2709bae6dad8eed1ae6778feb14fc4adb451505cf06778795e6c"
+        }
+      },
+      {
+        "id": "SEVERE_SKIN",
+        "priority": 10,
+        "when": {
+          "field": "severe_blistering_or_mucosal_rash",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Stop further leuprorelin and obtain urgent assessment for a severe cutaneous reaction such as Stevens-Johnson syndrome or toxic epidermal necrolysis. The treating specialist decides the alternative hormone strategy."
+        },
+        "explanation": "Stop further leuprorelin and obtain urgent assessment for a severe cutaneous reaction such as Stevens-Johnson syndrome or toxic epidermal necrolysis. The treating specialist decides the alternative hormone strategy.",
+        "source": {
+          "document": "eligard SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25689/Licence_PA0812-005-002_18102024115227.pdf",
+          "sha256": "17df5ea1512d2709bae6dad8eed1ae6778feb14fc4adb451505cf06778795e6c"
+        }
+      },
+      {
+        "id": "NEURO_URGENT",
+        "priority": 10,
+        "when": {
+          "field": "severe_headache_or_visual_change",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Arrange urgent assessment for pituitary apoplexy, intracranial hypertension or another acute cause. Do not give the next dose before clinical review; a depot already given continues releasing medicine."
+        },
+        "explanation": "Arrange urgent assessment for pituitary apoplexy, intracranial hypertension or another acute cause. Do not give the next dose before clinical review; a depot already given continues releasing medicine.",
+        "source": {
+          "document": "eligard SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25689/Licence_PA0812-005-002_18102024115227.pdf",
+          "sha256": "17df5ea1512d2709bae6dad8eed1ae6778feb14fc4adb451505cf06778795e6c"
+        }
       }
     ]
   },

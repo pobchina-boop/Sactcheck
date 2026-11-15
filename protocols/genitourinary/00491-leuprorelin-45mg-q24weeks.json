@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00491-v3",
-  "file_name": "00491-leuprorelin-45mg-q24weeks.json",
+  "file_name": "00479-leuprorelin-22-5mg-q12weeks.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00491",
@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 3,
     "source_url": "https://healthservice.hse.ie/documents/6504/491_v3_Leuprorelin_45mg.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.53",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -44,7 +44,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -60,18 +60,28 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-14",
     "regimen_card": {
       "contexts": [
         {
-          "id": "00491-gu",
-          "indication_id": "00491-gu",
+          "id": "00491a",
+          "indication_id": "00491a",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": 168,
           "unresolved": [
-            "duration"
+            "individual_treatment_duration"
           ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "provenance": "NCCP source checked 2026-11-14"
+        },
+        {
+          "id": "00491b",
+          "indication_id": "00491b",
+          "intent": "radiotherapy_combination",
+          "cycle_length_days": 168,
+          "unresolved": [
+            "individual_treatment_duration"
+          ],
+          "provenance": "NCCP source checked 2026-11-14"
         }
       ],
       "provenance": {
@@ -93,47 +103,81 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
+      "level": "source_reconciled_pending_independent_review",
       "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
+      "audit_release": "0.84.53",
+      "audit_date": "2026-11-14",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00491-v3"
+    "canonical_protocol_id": "nccp-00491-v3",
+    "source_discrepancies": [
+      "NCCP specifies 168 days; the product information uses six calendar months. Use the exact prescribed NCCP interval; calendar months and fixed weeks/days are not interchangeable.",
+      "NCCP specifies no renal/hepatic dose modification; the SmPC notes that these populations have not been studied. This is not proof of safety in every organ-failure scenario."
+    ],
+    "source_pdf_sha256": "338c73cfef0d5216efdbda9724cbb5cdc22117427526609a9be225c37d565599",
+    "source_document_checked": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00491 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding includes NCCP 00479 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "input_definitions": {
     "hypersensitivity": {
-      "label": "Hypersensitivity to leuprorelin or excipients",
+      "label": "Hypersensitivity to this medicine or its excipients",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "qt_risk": {
-      "label": "History/risk factors for QT prolongation or concomitant QT-prolonging medicine",
+      "label": "QT prolongation history/risk or concomitant QT-prolonging medicine",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "uncontrolled_glucose_or_diabetes": {
-      "label": "Poorly controlled diabetes / significant hyperglycaemia requiring review",
+      "label": "Diabetes or glucose control requiring review",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "bone_health_not_addressed": {
-      "label": "Long-term ADT bone-health assessment/supplementation not addressed",
+      "label": "Bone health and fracture risk have not been addressed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cardiovascular_risk_not_addressed": {
+      "label": "Cardiovascular risk requires review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Previous permanent stop or contraindication remains in force",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suboptimal_response": {
+      "label": "Clinical/PSA response is suboptimal or testosterone suppression is uncertain",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "flare_protection_not_reviewed": {
+      "label": "Initial testosterone flare and need for anti-androgen protection have not been reviewed",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -145,15 +189,84 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "acute_neurological_or_obstructive_symptoms": {
+      "label": "New leg weakness, bladder/bowel dysfunction or urinary obstruction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "depression_or_severe_mood_change": {
+      "label": "Depression or severe mood change requiring assessment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suspected_handling_error": {
+      "label": "Suspected preparation, reconstitution or administration error",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "formulation_or_route_mismatch": {
+      "label": "Strength, product or administration route does not match the prescription",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "planned_interval_days": {
+      "label": "Planned interval between depot administrations",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "unit": "days",
+      "demo_value": 168,
+      "input_role": "decision"
+    },
+    "previous_orchiectomy": {
+      "label": "Previous bilateral orchiectomy / surgical castration",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "incorrectly_prepared_dose": {
+      "label": "The prepared dose does not meet product preparation instructions",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_blistering_or_mucosal_rash": {
+      "label": "Severe blistering, peeling skin or mucosal rash suggesting a serious skin reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_headache_or_visual_change": {
+      "label": "Severe or recurrent headache with visual change, vomiting or other concerning neurological symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
   "output_templates": {
     "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
-    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
-    "consultant_review": "The entered value requires protocol-specific clinical review.",
-    "withhold": "Withhold and reassess according to the official NCCP pathway.",
-    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+    "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
+    "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and repeat assessment according to the official NCCP pathway.",
+    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
+    "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
+    "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
@@ -178,7 +291,7 @@
     "rules": [
       {
         "id": "HYPERSENSITIVITY",
-        "priority": 1,
+        "priority": 10,
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -187,19 +300,21 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "leuprorelin"
           ],
-          "message": "Hypersensitivity to leuprorelin or excipients is a contraindication."
+          "message": "Hypersensitivity is an exclusion. Confirm the reaction and exact formulation."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00491 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6504/491_v3_Leuprorelin_45mg.pdf",
+          "sha256": "338c73cfef0d5216efdbda9724cbb5cdc22117427526609a9be225c37d565599"
         },
-        "explanation": "Hypersensitivity to leuprorelin or excipients is a contraindication."
+        "explanation": "Hypersensitivity is an exclusion. Confirm the reaction and exact formulation."
       },
       {
         "id": "QT_RISK",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "qt_risk",
           "operator": "==",
@@ -208,19 +323,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "leuprorelin"
           ],
-          "message": "Assess the benefit-risk including torsades risk before starting androgen deprivation therapy."
+          "message": "Assess QT-prolongation and torsades risk, interacting medicines and need for ECG/electrolyte review. This is a benefit-risk review, not an invented automatic QT stop threshold."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
         },
-        "explanation": "Assess the benefit-risk including torsades risk before starting androgen deprivation therapy."
+        "explanation": "Assess QT-prolongation and torsades risk, interacting medicines and need for ECG/electrolyte review. This is a benefit-risk review, not an invented automatic QT stop threshold."
       },
       {
         "id": "GLUCOSE",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "uncontrolled_glucose_or_diabetes",
           "operator": "==",
@@ -229,19 +346,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "leuprorelin"
           ],
-          "message": "Optimise and monitor glucose/diabetes during ADT."
+          "message": "Review glucose control and monitoring during androgen deprivation. No universal glucose dose-reduction threshold is supplied by this regimen."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
         },
-        "explanation": "Optimise and monitor glucose/diabetes during ADT."
+        "explanation": "Review glucose control and monitoring during androgen deprivation. No universal glucose dose-reduction threshold is supplied by this regimen."
       },
       {
         "id": "BONE_HEALTH",
-        "priority": 13,
+        "priority": 10,
         "when": {
           "field": "bone_health_not_addressed",
           "operator": "==",
@@ -250,36 +369,342 @@
         "action": {
           "type": "proceed_with_caution",
           "components": [
-            "whole_regimen"
+            "leuprorelin"
           ],
-          "message": "Complete bone-health assessment and apply calcium/vitamin D or other bone protection according to local policy."
+          "message": "Address fracture risk, bone-health assessment, exercise, calcium and vitamin D according to individual need and local policy. Do not assume every patient needs a bone-metastasis-dose agent."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
         },
-        "explanation": "Complete bone-health assessment and apply calcium/vitamin D or other bone protection according to local policy."
+        "explanation": "Address fracture risk, bone-health assessment, exercise, calcium and vitamin D according to individual need and local policy. Do not assume every patient needs a bone-metastasis-dose agent."
       },
       {
-        "id": "CORD_COMPRESSION",
-        "priority": 9,
+        "id": "CV_RISK",
+        "priority": 10,
         "when": {
-          "field": "spinal_cord_compression_or_spinal_mets",
+          "field": "cardiovascular_risk_not_addressed",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "leuprorelin"
           ],
-          "message": "Do not rely on this agonist as sole treatment where cord compression/spinal metastases create tumour-flare risk; urgent consultant plan required."
+          "message": "Review pre-existing cardiovascular disease and modifiable risk factors before and during ADT."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
         },
-        "explanation": "Do not rely on this agonist as sole treatment where cord compression/spinal metastases create tumour-flare risk; urgent consultant plan required."
+        "explanation": "Review pre-existing cardiovascular disease and modifiable risk factors before and during ADT."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
+        },
+        "source": {
+          "document": "Local documented-history safety guard",
+          "page": "Local guard, not a new NCCP dose threshold",
+          "url": "https://healthservice.hse.ie/documents/6504/491_v3_Leuprorelin_45mg.pdf",
+          "sha256": "338c73cfef0d5216efdbda9724cbb5cdc22117427526609a9be225c37d565599",
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold.",
+          "local_safety_guard": true
+        },
+        "explanation": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
+      },
+      {
+        "id": "RESPONSE",
+        "priority": 10,
+        "when": {
+          "field": "suboptimal_response",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Review symptoms, PSA, testosterone suppression, adherence/administration and the overall disease plan. Do not assume isolated PSA change mandates stopping ADT."
+        },
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.2 / 5.1",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        },
+        "explanation": "Review symptoms, PSA, testosterone suppression, adherence/administration and the overall disease plan. Do not assume isolated PSA change mandates stopping ADT."
+      },
+      {
+        "id": "FLARE_PLAN",
+        "priority": 10,
+        "when": {
+          "field": "flare_protection_not_reviewed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "GnRH agonists can initially raise testosterone. Review flare risk, monitoring and need for a prescribed short anti-androgen course; do not apply a universal bicalutamide duration."
+        },
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        },
+        "explanation": "GnRH agonists can initially raise testosterone. Review flare risk, monitoring and need for a prescribed short anti-androgen course; do not apply a universal bicalutamide duration."
+      },
+      {
+        "id": "SPINAL_SOLE",
+        "priority": 10,
+        "when": {
+          "field": "spinal_cord_compression_or_spinal_mets",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "NCCP excludes leuprorelin as sole treatment with spinal cord compression or spinal metastases."
+        },
+        "source": {
+          "document": "NCCP 00491 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6504/491_v3_Leuprorelin_45mg.pdf",
+          "sha256": "338c73cfef0d5216efdbda9724cbb5cdc22117427526609a9be225c37d565599"
+        },
+        "explanation": "NCCP excludes leuprorelin as sole treatment with spinal cord compression or spinal metastases."
+      },
+      {
+        "id": "URGENT_COMPRESSIVE",
+        "priority": 10,
+        "when": {
+          "field": "acute_neurological_or_obstructive_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Urgent assessment for cord compression or obstruction. Do not delay emergency management for routine ADT administration; the treating team decides the hormone strategy."
+        },
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9",
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold."
+        },
+        "explanation": "Urgent assessment for cord compression or obstruction. Do not delay emergency management for routine ADT administration; the treating team decides the hormone strategy."
+      },
+      {
+        "id": "MOOD",
+        "priority": 10,
+        "when": {
+          "field": "depression_or_severe_mood_change",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Assess and treat mood symptoms promptly; severe depression may occur with hormone suppression."
+        },
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.4 / 4.8",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        },
+        "explanation": "Assess and treat mood symptoms promptly; severe depression may occur with hormone suppression."
+      },
+      {
+        "id": "HANDLING_ERROR",
+        "priority": 10,
+        "when": {
+          "field": "suspected_handling_error",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "A handling error can cause lack of efficacy. Review device-specific instructions and measure testosterone to check suppression; clinician/pharmacy decide further treatment."
+        },
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.2 / 4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        },
+        "explanation": "A handling error can cause lack of efficacy. Review device-specific instructions and measure testosterone to check suppression; clinician/pharmacy decide further treatment."
+      },
+      {
+        "id": "FORMULATION_ROUTE",
+        "priority": 10,
+        "when": {
+          "field": "formulation_or_route_mismatch",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Confirm the exact 45 mg formulation, route and prescribed interval before administration. This regimen uses subcutaneous injection. Depot strengths are not dose-equivalent substitutes."
+        },
+        "explanation": "Confirm the exact 45 mg formulation, route and prescribed interval before administration. This regimen uses subcutaneous injection. Depot strengths are not dose-equivalent substitutes.",
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.2",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        }
+      },
+      {
+        "id": "INTERVAL_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "planned_interval_days",
+          "operator": "!=",
+          "value": 168
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "NCCP specifies 168 days between administrations. Confirm any different interval with the prescriber and pharmacy; do not automatically reschedule or give an extra dose."
+        },
+        "explanation": "NCCP specifies 168 days between administrations. Confirm any different interval with the prescriber and pharmacy; do not automatically reschedule or give an extra dose.",
+        "source": {
+          "document": "NCCP 00491 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6504/491_v3_Leuprorelin_45mg.pdf",
+          "sha256": "338c73cfef0d5216efdbda9724cbb5cdc22117427526609a9be225c37d565599"
+        }
+      },
+      {
+        "id": "ORCHIECTOMY",
+        "priority": 10,
+        "when": {
+          "field": "previous_orchiectomy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "The product SmPC contraindicates this leuprorelin product after orchiectomy; it cannot further lower testosterone after surgical castration. Confirm the history and treatment plan."
+        },
+        "explanation": "The product SmPC contraindicates this leuprorelin product after orchiectomy; it cannot further lower testosterone after surgical castration. Confirm the history and treatment plan.",
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.3",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        }
+      },
+      {
+        "id": "INCORRECT_PREPARATION",
+        "priority": 10,
+        "when": {
+          "field": "incorrectly_prepared_dose",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Do not administer an incorrectly prepared dose. Ask pharmacy to resolve the preparation problem using the exact product instructions. A suspected error after administration requires response and testosterone review."
+        },
+        "explanation": "Do not administer an incorrectly prepared dose. Ask pharmacy to resolve the preparation problem using the exact product instructions. A suspected error after administration requires response and testosterone review.",
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.2",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        }
+      },
+      {
+        "id": "SEVERE_SKIN",
+        "priority": 10,
+        "when": {
+          "field": "severe_blistering_or_mucosal_rash",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Stop further leuprorelin and obtain urgent assessment for a severe cutaneous reaction such as Stevens-Johnson syndrome or toxic epidermal necrolysis. The treating specialist decides the alternative hormone strategy."
+        },
+        "explanation": "Stop further leuprorelin and obtain urgent assessment for a severe cutaneous reaction such as Stevens-Johnson syndrome or toxic epidermal necrolysis. The treating specialist decides the alternative hormone strategy.",
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        }
+      },
+      {
+        "id": "NEURO_URGENT",
+        "priority": 10,
+        "when": {
+          "field": "severe_headache_or_visual_change",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "leuprorelin"
+          ],
+          "message": "Arrange urgent assessment for pituitary apoplexy, intracranial hypertension or another acute cause. Do not give the next dose before clinical review; a depot already given continues releasing medicine."
+        },
+        "explanation": "Arrange urgent assessment for pituitary apoplexy, intracranial hypertension or another acute cause. Do not give the next dose before clinical review; a depot already given continues releasing medicine.",
+        "source": {
+          "document": "eligard45 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/25690/Licence_PA0812-005-003_18102024115228.pdf",
+          "sha256": "2670c44a8bf5c58335b6dabe3a981e109f21d65499726e07da525ee4f3d4f7f9"
+        }
       }
     ]
   },
@@ -292,7 +717,13 @@
         "schedule": "Every 24 weeks"
       }
     ],
-    "duration": "Until disease progression or unacceptable toxicity."
+    "duration": "Until disease progression or unacceptable toxicity.",
+    "cycle_length_days": 168,
+    "drugs": [
+      "leuprorelin"
+    ],
+    "duration_text": "Individual duration according to disease setting and treatment plan",
+    "schedule_summary": "Leuprorelin 45 mg every 24 weeks (168 days); subcutaneous injection of this specific formulation."
   },
   "eligibility": [
     "Approved prostate-cancer indication"
@@ -332,9 +763,14 @@
   },
   "indications": [
     {
-      "indication_id": "00491-gu",
-      "code": "00491g",
-      "description": "Androgen-deprivation therapy for prostate cancer."
+      "indication_id": "00491a",
+      "code": "00491a",
+      "description": "Treatment of hormone-dependent advanced prostate cancer."
+    },
+    {
+      "indication_id": "00491b",
+      "code": "00491b",
+      "description": "High-risk localised and locally advanced hormone-dependent prostate cancer with radiotherapy."
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
   "protocol_id": "nccp-00489-v3",
-  "file_name": "00489-triptorelin-3mg-q28days.json",
+  "file_name": "00480-triptorelin-11-25mg-q12weeks.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00489",
@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 2,
     "source_url": "https://healthservice.hse.ie/documents/6503/489_v3_Triptorelin_3mg.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.53",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -44,7 +44,7 @@
     },
     "validation": {
       "source_document_checked": true,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
@@ -60,18 +60,18 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-14",
     "regimen_card": {
       "contexts": [
         {
-          "id": "00489-gu",
-          "indication_id": "00489-gu",
+          "id": "00489a",
+          "indication_id": "00489a",
           "intent": "advanced_disease",
           "cycle_length_days": 28,
           "unresolved": [
-            "duration"
+            "individual_treatment_duration"
           ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "provenance": "NCCP source checked 2026-11-14"
         }
       ],
       "provenance": {
@@ -93,47 +93,80 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
+      "level": "source_reconciled_pending_independent_review",
       "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
+      "audit_release": "0.84.53",
+      "audit_date": "2026-11-14",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00489-v3"
+    "canonical_protocol_id": "nccp-00489-v3",
+    "source_discrepancies": [
+      "The NCCP reference links a different triptorelin depot product. The 3 mg service uses the current HPRA Decapeptyl SR 3 mg SmPC, PA0869/003/001, for product-specific instructions."
+    ],
+    "source_pdf_sha256": "b41179d8624cabe7120eb395fed296fdabce5db14e434d0d8a9c1bda46fe32db",
+    "source_document_checked": true
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00489 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding includes NCCP 00480 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "input_definitions": {
     "hypersensitivity": {
-      "label": "Hypersensitivity to triptorelin or excipients",
+      "label": "Hypersensitivity to this medicine or its excipients",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "qt_risk": {
-      "label": "History/risk factors for QT prolongation or concomitant QT-prolonging medicine",
+      "label": "QT prolongation history/risk or concomitant QT-prolonging medicine",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "uncontrolled_glucose_or_diabetes": {
-      "label": "Poorly controlled diabetes / significant hyperglycaemia requiring review",
+      "label": "Diabetes or glucose control requiring review",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
     "bone_health_not_addressed": {
-      "label": "Long-term ADT bone-health assessment/supplementation not addressed",
+      "label": "Bone health and fracture risk have not been addressed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cardiovascular_risk_not_addressed": {
+      "label": "Cardiovascular risk requires review",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Previous permanent stop or contraindication remains in force",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suboptimal_response": {
+      "label": "Clinical/PSA response is suboptimal or testosterone suppression is uncertain",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "flare_protection_not_reviewed": {
+      "label": "Initial testosterone flare and need for anti-androgen protection have not been reviewed",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -145,15 +178,49 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "acute_neurological_or_obstructive_symptoms": {
+      "label": "New leg weakness, bladder/bowel dysfunction or urinary obstruction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "depression_or_severe_mood_change": {
+      "label": "Depression or severe mood change requiring assessment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "formulation_or_route_mismatch": {
+      "label": "Strength, product or administration route does not match the prescription",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "planned_interval_days": {
+      "label": "Planned interval between depot administrations",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 1,
+      "unit": "days",
+      "demo_value": 28,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
   "output_templates": {
     "proceed": "No encoded restriction was triggered in the entered domain(s). This is not an overall treatment clearance.",
-    "coverage_gap": "Only entered values were assessed; all omitted clinically relevant domains remain unassessed.",
-    "consultant_review": "The entered value requires protocol-specific clinical review.",
-    "withhold": "Withhold and reassess according to the official NCCP pathway.",
-    "delay": "Delay treatment and reassess according to the official NCCP pathway."
+    "coverage_gap": "Only entered values were assessed; omitted clinically relevant domains remain unassessed.",
+    "consultant_review": "The entered value requires protocol-specific Consultant/pharmacy review.",
+    "withhold": "Withhold treatment and reassess according to the official NCCP pathway.",
+    "delay": "Delay treatment and repeat assessment according to the official NCCP pathway.",
+    "dose_reduce": "Apply the encoded dose-reduction pathway and confirm against the official source.",
+    "contraindicated": "The entered value triggers an encoded contraindication/exclusion.",
+    "permanently_discontinue": "The entered value triggers permanent discontinuation in the encoded pathway."
   },
   "rule_engine": {
     "conflict_policy": "most_restrictive_action_wins",
@@ -178,7 +245,7 @@
     "rules": [
       {
         "id": "HYPERSENSITIVITY",
-        "priority": 1,
+        "priority": 10,
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -187,19 +254,21 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "triptorelin"
           ],
-          "message": "Hypersensitivity to triptorelin or excipients is a contraindication."
+          "message": "Hypersensitivity is an exclusion. Confirm the reaction and exact formulation."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00489 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6503/489_v3_Triptorelin_3mg.pdf",
+          "sha256": "b41179d8624cabe7120eb395fed296fdabce5db14e434d0d8a9c1bda46fe32db"
         },
-        "explanation": "Hypersensitivity to triptorelin or excipients is a contraindication."
+        "explanation": "Hypersensitivity is an exclusion. Confirm the reaction and exact formulation."
       },
       {
         "id": "QT_RISK",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "qt_risk",
           "operator": "==",
@@ -208,19 +277,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "triptorelin"
           ],
-          "message": "Assess the benefit-risk including torsades risk before starting androgen deprivation therapy."
+          "message": "Assess QT-prolongation and torsades risk, interacting medicines and need for ECG/electrolyte review. This is a benefit-risk review, not an invented automatic QT stop threshold."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
         },
-        "explanation": "Assess the benefit-risk including torsades risk before starting androgen deprivation therapy."
+        "explanation": "Assess QT-prolongation and torsades risk, interacting medicines and need for ECG/electrolyte review. This is a benefit-risk review, not an invented automatic QT stop threshold."
       },
       {
         "id": "GLUCOSE",
-        "priority": 9,
+        "priority": 10,
         "when": {
           "field": "uncontrolled_glucose_or_diabetes",
           "operator": "==",
@@ -229,19 +300,21 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "triptorelin"
           ],
-          "message": "Optimise and monitor glucose/diabetes during ADT."
+          "message": "Review glucose control and monitoring during androgen deprivation. No universal glucose dose-reduction threshold is supplied by this regimen."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
         },
-        "explanation": "Optimise and monitor glucose/diabetes during ADT."
+        "explanation": "Review glucose control and monitoring during androgen deprivation. No universal glucose dose-reduction threshold is supplied by this regimen."
       },
       {
         "id": "BONE_HEALTH",
-        "priority": 13,
+        "priority": 10,
         "when": {
           "field": "bone_health_not_addressed",
           "operator": "==",
@@ -250,19 +323,115 @@
         "action": {
           "type": "proceed_with_caution",
           "components": [
-            "whole_regimen"
+            "triptorelin"
           ],
-          "message": "Complete bone-health assessment and apply calcium/vitamin D or other bone protection according to local policy."
+          "message": "Address fracture risk, bone-health assessment, exercise, calcium and vitamin D according to individual need and local policy. Do not assume every patient needs a bone-metastasis-dose agent."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
         },
-        "explanation": "Complete bone-health assessment and apply calcium/vitamin D or other bone protection according to local policy."
+        "explanation": "Address fracture risk, bone-health assessment, exercise, calcium and vitamin D according to individual need and local policy. Do not assume every patient needs a bone-metastasis-dose agent."
       },
       {
-        "id": "CORD_COMPRESSION",
-        "priority": 9,
+        "id": "CV_RISK",
+        "priority": 10,
+        "when": {
+          "field": "cardiovascular_risk_not_addressed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "Review pre-existing cardiovascular disease and modifiable risk factors before and during ADT."
+        },
+        "source": {
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
+        },
+        "explanation": "Review pre-existing cardiovascular disease and modifiable risk factors before and during ADT."
+      },
+      {
+        "id": "PRIOR_STOP",
+        "priority": 10,
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
+        },
+        "source": {
+          "document": "Local documented-history safety guard",
+          "page": "Local guard, not a new NCCP dose threshold",
+          "url": "https://healthservice.hse.ie/documents/6503/489_v3_Triptorelin_3mg.pdf",
+          "sha256": "b41179d8624cabe7120eb395fed296fdabce5db14e434d0d8a9c1bda46fe32db",
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold.",
+          "local_safety_guard": true
+        },
+        "explanation": "A previously documented permanent stop remains in force; recovered measurements do not authorise re-exposure."
+      },
+      {
+        "id": "RESPONSE",
+        "priority": 10,
+        "when": {
+          "field": "suboptimal_response",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "Review symptoms, PSA, testosterone suppression, adherence/administration and the overall disease plan. Do not assume isolated PSA change mandates stopping ADT."
+        },
+        "source": {
+          "document": "decapeptyl3 SmPC",
+          "page": "4.2 / 5.1",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
+        },
+        "explanation": "Review symptoms, PSA, testosterone suppression, adherence/administration and the overall disease plan. Do not assume isolated PSA change mandates stopping ADT."
+      },
+      {
+        "id": "FLARE_PLAN",
+        "priority": 10,
+        "when": {
+          "field": "flare_protection_not_reviewed",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "GnRH agonists can initially raise testosterone. Review flare risk, monitoring and need for a prescribed short anti-androgen course; do not apply a universal bicalutamide duration."
+        },
+        "source": {
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
+        },
+        "explanation": "GnRH agonists can initially raise testosterone. Review flare risk, monitoring and need for a prescribed short anti-androgen course; do not apply a universal bicalutamide duration."
+      },
+      {
+        "id": "SPINAL_SOLE",
+        "priority": 10,
         "when": {
           "field": "spinal_cord_compression_or_spinal_mets",
           "operator": "==",
@@ -271,15 +440,110 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "triptorelin"
           ],
-          "message": "Do not rely on this agonist as sole treatment where cord compression/spinal metastases create tumour-flare risk; urgent consultant plan required."
+          "message": "This is a source caution, not a blanket contraindication. Review flare risk and the need for other urgent/local treatment; ADT alone is inadequate for an acute compressive emergency."
         },
         "source": {
-          "page": 1,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00489 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6503/489_v3_Triptorelin_3mg.pdf",
+          "sha256": "b41179d8624cabe7120eb395fed296fdabce5db14e434d0d8a9c1bda46fe32db"
         },
-        "explanation": "Do not rely on this agonist as sole treatment where cord compression/spinal metastases create tumour-flare risk; urgent consultant plan required."
+        "explanation": "This is a source caution, not a blanket contraindication. Review flare risk and the need for other urgent/local treatment; ADT alone is inadequate for an acute compressive emergency."
+      },
+      {
+        "id": "URGENT_COMPRESSIVE",
+        "priority": 10,
+        "when": {
+          "field": "acute_neurological_or_obstructive_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "Urgent assessment for cord compression or obstruction. Do not delay emergency management for routine ADT administration; the treating team decides the hormone strategy."
+        },
+        "source": {
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd",
+          "scope_note": "Implementation safety guard based on the cited exclusion, dosing or warning; not a verbatim NCCP numeric threshold."
+        },
+        "explanation": "Urgent assessment for cord compression or obstruction. Do not delay emergency management for routine ADT administration; the treating team decides the hormone strategy."
+      },
+      {
+        "id": "MOOD",
+        "priority": 10,
+        "when": {
+          "field": "depression_or_severe_mood_change",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "Assess and treat mood symptoms promptly; severe depression may occur with hormone suppression."
+        },
+        "source": {
+          "document": "decapeptyl3 SmPC",
+          "page": "4.4 / 4.8",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
+        },
+        "explanation": "Assess and treat mood symptoms promptly; severe depression may occur with hormone suppression."
+      },
+      {
+        "id": "FORMULATION_ROUTE",
+        "priority": 10,
+        "when": {
+          "field": "formulation_or_route_mismatch",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "Confirm the exact 3 mg formulation, route and prescribed interval before administration. This regimen uses intramuscular injection only; do not import the subcutaneous option from triptorelin 11.25 mg. Depot strengths are not dose-equivalent substitutes."
+        },
+        "explanation": "Confirm the exact 3 mg formulation, route and prescribed interval before administration. This regimen uses intramuscular injection only; do not import the subcutaneous option from triptorelin 11.25 mg. Depot strengths are not dose-equivalent substitutes.",
+        "source": {
+          "document": "decapeptyl3 SmPC",
+          "page": "4.2",
+          "url": "https://assets.hpra.ie/products/Human/22464/Licence_PA0869-003-001_07022025123038.pdf",
+          "sha256": "12b56646ada9919ac46ab05de37e9cb269c00da9b9d643a85029c2969f4124cd"
+        }
+      },
+      {
+        "id": "INTERVAL_REVIEW",
+        "priority": 10,
+        "when": {
+          "field": "planned_interval_days",
+          "operator": "!=",
+          "value": 28
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "triptorelin"
+          ],
+          "message": "NCCP specifies 28 days between administrations. Confirm any different interval with the prescriber and pharmacy; do not automatically reschedule or give an extra dose."
+        },
+        "explanation": "NCCP specifies 28 days between administrations. Confirm any different interval with the prescriber and pharmacy; do not automatically reschedule or give an extra dose.",
+        "source": {
+          "document": "NCCP 00489 v3",
+          "page": "1",
+          "url": "https://healthservice.hse.ie/documents/6503/489_v3_Triptorelin_3mg.pdf",
+          "sha256": "b41179d8624cabe7120eb395fed296fdabce5db14e434d0d8a9c1bda46fe32db"
+        }
       }
     ]
   },
@@ -292,7 +556,13 @@
         "schedule": "Every 28 days"
       }
     ],
-    "duration": "Until disease progression or unacceptable toxicity."
+    "duration": "Until disease progression or unacceptable toxicity.",
+    "cycle_length_days": 28,
+    "drugs": [
+      "triptorelin"
+    ],
+    "duration_text": "Individual duration according to disease setting and treatment plan",
+    "schedule_summary": "Triptorelin 3 mg every 28 days; intramuscular injection of this specific formulation."
   },
   "eligibility": [
     "Approved prostate-cancer indication"
@@ -332,9 +602,9 @@
   },
   "indications": [
     {
-      "indication_id": "00489-gu",
-      "code": "00489g",
-      "description": "Androgen-deprivation therapy for prostate cancer."
+      "indication_id": "00489a",
+      "code": "00489a",
+      "description": "Treatment of locally advanced or metastatic hormone-dependent advanced prostate cancer."
     }
   ]
 }
