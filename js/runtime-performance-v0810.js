@@ -13,7 +13,8 @@
   const RELEASE=root.SACTCHECK_RELEASE||'0.81.0';
   const CACHE_NAME=`sactcheck-runtime-${RELEASE}`;
   const INDEX_PATH='protocols/index.json';
-  const PREFETCH_CONCURRENCY=16;
+  const PREFETCH_CONCURRENCY=16; // explicit legacy prewarm only; never on startup
+  let cachePromise;
   const NETWORK_TIMEOUT_MS=6500;
   const nativeFetch=root.fetch.bind(root);
   const inFlight=new Map();
@@ -29,7 +30,7 @@
   function isCacheable(url){
     if(!url||!isSameOrigin(url)) return false;
     const p=url.pathname.replace(/^\/+/, '');
-    return (/^protocols\/.*\.json$/i.test(p)||/^data\/.*\.json$/i.test(p));
+    return (/^protocols\/.*\.json(?:\.gz)?$/i.test(p)||/^data\/.*\.json$/i.test(p));
   }
   function canonical(url){
     const copy=new URL(url.href);
@@ -43,7 +44,8 @@
   function cacheApi(){return root.caches&&typeof root.caches.open==='function'?root.caches:null;}
   async function openCache(){
     const api=cacheApi(); if(!api) return null;
-    try{return await api.open(CACHE_NAME);}catch(_){return null;}
+    if(!cachePromise) cachePromise=api.open(CACHE_NAME).catch(()=>null);
+    return cachePromise;
   }
   function dispatch(name,detail){
     try{root.dispatchEvent?.(new CustomEvent(name,{detail}));}catch(_){}
@@ -68,31 +70,22 @@
     const method=String(init?.method||input?.method||'GET').toUpperCase();
     if(method!=='GET'||!isCacheable(url)) return nativeFetch(input,init);
     const key=canonical(url).href;
-    const cache=await openCache();
-    if(cache){
-      try{
-        const hit=await cache.match(key,{ignoreSearch:false});
-        if(hit){stats.cacheHits++;dispatch('sactcheck:runtime-fetch',{kind:'cache',url:key,stats:{...stats}});return hit.clone();}
-      }catch(_){}
-    }
-    if(inFlight.has(key)){
-      stats.deduped++;
-      const response=await inFlight.get(key);
-      return response.clone();
-    }
+    // Register the whole operation before the first await, so parallel cache
+    // misses are coalesced too. Cache writes must not block catalogue readiness.
+    if(inFlight.has(key)) { stats.deduped++; return (await inFlight.get(key)).clone(); }
     const promise=(async()=>{
+      const cache=await openCache();
+      if(cache){try{const hit=await cache.match(key,{ignoreSearch:false});if(hit){stats.cacheHits++;return hit;}}catch(_){}}
       try{
         const response=await withTimeout(key,init);
         stats.networkHits++;
-        if(response.ok&&cache){try{await cache.put(key,response.clone());}catch(_){}}
+        if(response.ok&&cache) void cache.put(key,response.clone()).catch(()=>{});
         dispatch('sactcheck:runtime-fetch',{kind:'network',url:key,stats:{...stats}});
         return response;
-      }catch(error){stats.networkFailures++;dispatch('sactcheck:runtime-fetch',{kind:'failure',url:key,error:String(error?.message||error),stats:{...stats}});throw error;}
-      finally{inFlight.delete(key);}
+      }catch(error){stats.networkFailures++;throw error;}
     })();
     inFlight.set(key,promise);
-    const response=await promise;
-    return response.clone();
+    try{return (await promise).clone();}finally{if(inFlight.get(key)===promise)inFlight.delete(key);}
   }
 
   // Install before protocol-loader.js executes. Its existing fetch calls now gain
@@ -134,16 +127,15 @@
     el.textContent='Loading regimen library…';root.document.body.appendChild(el);
     const first=root.setTimeout?.(()=>{el.style.display='block';},1400);
     const slow=root.setTimeout?.(()=>{el.textContent='Regimen library is taking longer than usual. SACTCheck is retrying slow files; previously cached data is reused automatically.';el.style.display='block';},9000);
+    root.addEventListener?.('sactcheck:protocols-load-failed',()=>{if(first)root.clearTimeout?.(first);if(slow)root.clearTimeout?.(slow);el.remove();},{once:true});
     root.addEventListener?.('sactcheck:protocols-loaded',()=>{if(first)root.clearTimeout?.(first);if(slow)root.clearTimeout?.(slow);el.textContent='Regimen library ready';root.setTimeout?.(()=>el.remove(),700);},{once:true});
   }
 
   function boot(){
     pruneOldCaches();
     installLoadStatus();
-    // Start prewarming at DOM ready. This listener is registered in <head>, so it
-    // runs before protocol-loader's DOMContentLoaded listener. Identical requests
-    // are coalesced by cachedFetch rather than duplicated.
-    warmProtocolCache();
+    // The loader owns startup. Eagerly warming 377 separate files competes
+    // with the single bundled catalogue and the interface resources.
   }
   if(root.document){if(root.document.readyState==='loading')root.document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();}
   else{pruneOldCaches();}

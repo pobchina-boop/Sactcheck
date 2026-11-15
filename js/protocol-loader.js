@@ -651,6 +651,9 @@
   }
 
   function showFatalLoadError(error) {
+    window.SACTCHECK_CATALOGUE_STATE = "failed";
+    window.filterRegimens?.();
+    window.dispatchEvent(new CustomEvent("sactcheck:protocols-load-failed"));
     console.error("Protocol loader failed:", error);
     removeLoaderNotice();
     const warning = document.createElement("div");
@@ -676,6 +679,7 @@
   }
 
   function publishProtocolState(protocols, failures, totalCount) {
+    window.SACTCHECK_CATALOGUE_STATE = "ready";
     loadedProtocolRecords = protocols;
     failedProtocolEntries = failures.map(item => item.entry);
     window.SACTCHECK_PROTOCOLS = loadedProtocolRecords;
@@ -723,15 +727,47 @@
     publishProtocolState(combined, result.failures, total);
   }
 
+  async function loadBundledProtocols(index, enabledEntries) {
+    const descriptor = index.bundle;
+    if (!descriptor || descriptor.encoding !== "gzip" || descriptor.schema_version !== 1 ||
+        descriptor.path !== "protocols/catalogue-bundle.json.gz" ||
+        !/^[a-f0-9]{64}$/.test(descriptor.sha256) ||
+        typeof DecompressionStream !== "function" || !globalThis.crypto?.subtle) return null;
+    const controller = typeof AbortController === "function" ? new AbortController() : null;
+    const timeout = controller ? window.setTimeout(()=>controller.abort(),15000) : null;
+    try {
+      const response = await fetch(descriptor.path, {cache:"no-store", ...(controller?{signal:controller.signal}:{})});
+      if (!response.ok) throw new Error(`Catalogue bundle HTTP ${response.status}`);
+      const decoded = await new Response(response.body.pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+      if (decoded.byteLength !== descriptor.bytes) throw new Error("Catalogue bundle size mismatch");
+      const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", decoded)), x=>x.toString(16).padStart(2,"0")).join("");
+      if (digest !== descriptor.sha256) throw new Error("Catalogue bundle checksum mismatch");
+      const bundle = JSON.parse(new TextDecoder().decode(decoded));
+      if (bundle.schema_version !== 1 || !Array.isArray(bundle.records) || bundle.records.length !== descriptor.protocol_count) throw new Error("Catalogue bundle schema mismatch");
+      const records = new Map(bundle.records.map(record => [record.entry?.id, record]));
+      if (records.size !== bundle.records.length) throw new Error("Duplicate bundled protocol");
+      const protocols = enabledEntries.map(entry => {
+        const record = records.get(entry.id);
+        if (!record || record.entry.path !== entry.path || record.protocol?.protocol_id !== entry.id) throw new Error("Catalogue bundle entry mismatch");
+        return {entry, protocol:record.protocol};
+      });
+      return {protocols, failures:[]};
+    } catch (error) {
+      console.warn("Fast catalogue unavailable; loading the verified individual protocol files.", error);
+      return null;
+    } finally { if(timeout) window.clearTimeout(timeout); }
+  }
+
   async function loadProtocols() {
     removeLoaderNotice();
+    window.SACTCHECK_CATALOGUE_STATE = "loading";
+    window.filterRegimens?.();
     try {
-      await window.SACTCheckEmetogenicRisk?.load();
-      const index = await fetchJson(INDEX_PATH);
+      const [index] = await Promise.all([fetchJson(INDEX_PATH), window.SACTCheckEmetogenicRisk?.load()]);
       if (!Array.isArray(index.protocols)) throw new Error("protocols/index.json does not contain a protocols array.");
 
       const enabledEntries = index.protocols.filter(item => item && item.enabled !== false);
-      const result = await loadProtocolEntries(enabledEntries);
+      const result = await loadBundledProtocols(index, enabledEntries) || await loadProtocolEntries(enabledEntries);
       if (!result.protocols.length) {
         const firstFailure = result.failures[0]?.error || new Error("No protocol files could be loaded.");
         throw firstFailure;
@@ -772,7 +808,8 @@
   }
 
   window.SACTCheckProtocolLoader = Object.freeze({
-    version: "0.51.0",
+    version: "0.84.55",
+    loadBundledProtocols,
     loadProtocols,
     addLocalProtocol,
     validateProtocol: protocolValidation,
