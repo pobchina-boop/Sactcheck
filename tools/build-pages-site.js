@@ -80,6 +80,7 @@ for (const directory of publicDirectories) {
   if (fs.existsSync(source)) copyDirectory(source, path.join(out, directory));
 }
 
+copyFile(path.join(root,"protocols/catalogue-bundle.json.gz"),path.join(out,"protocols/catalogue-bundle.json.gz"));
 const protocolCount = copyProtocolJson(path.join(root, "protocols"), path.join(out, "protocols"));
 if (!fs.existsSync(path.join(out, "protocols", "index.json"))) {
   throw new Error("Deployable site is missing protocols/index.json");

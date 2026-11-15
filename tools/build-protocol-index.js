@@ -3,6 +3,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const crypto = require("node:crypto"), zlib = require("node:zlib");
 const Validator = require("../js/protocol-validator.js");
 
 const ROOT = path.resolve(__dirname, "..");
@@ -39,6 +40,7 @@ if (!files.length) {
 }
 
 const entries = [];
+const records = [];
 let failed = false;
 
 for (const file of files) {
@@ -60,7 +62,8 @@ for (const file of files) {
     continue;
   }
 
-  entries.push(Validator.buildIndexEntry(protocol, displayPath));
+  const entry = Validator.buildIndexEntry(protocol, displayPath);
+  entries.push(entry); records.push({entry, protocol});
   console.log(`✓ ${displayPath}: ${validation.summary.inputCount} inputs, ${validation.summary.ruleCount} rules, ${validation.warnings.length} warnings`);
 }
 
@@ -82,5 +85,13 @@ const index = {
   protocols: entries
 };
 
+// One compressed, source-complete catalogue avoids hundreds of startup requests.
+// It contains the exact parsed protocol records, including all clinical rules.
+const bundle = Buffer.from(JSON.stringify({schema_version:1,records}));
+const compressed = zlib.gzipSync(bundle, {level:9});
+index.bundle = {path:"protocols/catalogue-bundle.json.gz", encoding:"gzip", schema_version:1,
+  sha256:crypto.createHash("sha256").update(bundle).digest("hex"),
+  bytes:bundle.length, compressed_bytes:compressed.length, protocol_count:records.length};
+fs.writeFileSync(path.join(PROTOCOLS_DIR,"catalogue-bundle.json.gz"),compressed);
 fs.writeFileSync(INDEX_FILE, `${JSON.stringify(index, null, 2)}\n`, "utf8");
 console.log(`\nGenerated protocols/index.json with ${entries.length} protocol${entries.length === 1 ? "" : "s"}.`);

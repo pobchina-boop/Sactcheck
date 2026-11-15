@@ -32,7 +32,8 @@ assert(loader.includes("retryFailedProtocols"));
 assert(loader.includes("temporarily unavailable"));
 assert(loader.includes("The available library remains usable"));
 assert(!loader.includes("await Promise.all(enabledEntries.map"), "All protocol files must not be fetched simultaneously");
-assert(loader.includes('version: "0.51.0"'));
+assert(loader.includes('version: "0.84.55"'));
+assert(loader.includes('loadBundledProtocols,'));
 assert(exists("RELEASE_NOTES_v0.48.4.md"));
 assert(exists("GITHUB_COMMIT_v0.48.4.txt"));
 
