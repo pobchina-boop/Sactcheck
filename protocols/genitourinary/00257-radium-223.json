@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.56",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -49,7 +49,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08456_independent_review_pending"
     },
     "file_name": "00257-radium-223.json",
     "tumour_groups": [
@@ -58,7 +58,7 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-15",
     "regimen_card": {
       "contexts": [
         {
@@ -89,40 +89,35 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-reconciled draft; independent approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.56",
+      "audit_date": "2026-11-15",
+      "scope_note": "Current official sources reconciled with recorded ambiguities; independent clinical and pharmacy approval outstanding."
     },
-    "canonical_protocol_id": "nccp-00257-v8"
+    "canonical_protocol_id": "nccp-00257-v8",
+    "clinical_audit_release": "0.84.56",
+    "source_pdf_sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Radiation Oncologist with expertise in prostate cancer and radio-isotope prescribing; administration must occur in an authorised radiopharmaceutical setting.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00257 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding for NCCP 00257 v8. Current official sources, consultant prescribing decisions and pharmacy verification remain required."
   },
   "input_definitions": {
     "injection_number": {
-      "label": "Injection number",
-      "type": "select",
+      "label": "Planned injection number in this course (1–6)",
+      "type": "number",
       "required": false,
-      "options": [
-        {
-          "value": 1,
-          "label": "First injection"
-        },
-        {
-          "value": 2,
-          "label": "Injection 2–6"
-        }
-      ],
-      "demo_value": 1,
-      "input_role": "decision"
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
     },
     "anc_x10e9_l": {
       "label": "ANC",
@@ -190,7 +185,7 @@
       "input_role": "decision"
     },
     "prior_radium223": {
-      "label": "Prior radium-223 treatment",
+      "label": "A previous completed or discontinued radium-223 course (not earlier injections in the current course)",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -205,6 +200,115 @@
     },
     "high_fracture_risk_without_bone_plan": {
       "label": "High fracture risk without documented bone-health assessment/preventive plan",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "age_years": {
+      "label": "Age",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "prior_mcrpc_systemic_lines": {
+      "label": "Previous mCRPC systemic lines, excluding LHRH therapy",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "days_since_abiraterone_pred_stopped": {
+      "label": "Days since last abiraterone plus prednisone/prednisolone",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "days_since_last_radium": {
+      "label": "Days since last radium injection",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "planned_days_after_last_radium_to_systemic": {
+      "label": "Planned days after final radium before new systemic treatment",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "ineligible_other_available_treatments": {
+      "label": "Ineligible for available licensed systemic mCRPC treatments",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "symptomatic_bone_metastases_confirmed": {
+      "label": "Symptomatic bone metastases confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "low_osteoblastic_burden": {
+      "label": "Low osteoblastic metastatic burden",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "haematology_not_recovered_despite_support": {
+      "label": "Counts have not recovered despite standard care",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "concurrent_adt_confirmed": {
+      "label": "Medical ADT continued or surgical castration confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "dehydration_or_significant_fluid_loss": {
+      "label": "Dehydration or substantial fluid loss",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "mild_symptoms_require_benefit_risk_review": {
+      "label": "Only mildly symptomatic bone metastases",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -251,13 +355,15 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "ANC <1.0 ×10⁹/L does not meet criteria for any radium-223 injection."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "ANC <1.0 ×10⁹/L does not meet criteria for any radium-223 injection."
       },
@@ -281,13 +387,15 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Before the first injection, ANC must be ≥1.5 ×10⁹/L."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Before the first injection, ANC must be ≥1.5 ×10⁹/L."
       },
@@ -302,13 +410,15 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Platelets <50 ×10⁹/L do not meet criteria for any radium-223 injection."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Platelets <50 ×10⁹/L do not meet criteria for any radium-223 injection."
       },
@@ -332,13 +442,15 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Before the first injection, platelets must be ≥100 ×10⁹/L."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Before the first injection, platelets must be ≥100 ×10⁹/L."
       },
@@ -353,13 +465,15 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Haemoglobin <8 g/dL does not meet criteria for subsequent radium-223 injections."
         },
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Haemoglobin <8 g/dL does not meet criteria for subsequent radium-223 injections."
       },
@@ -383,13 +497,15 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Before the first injection, haemoglobin must be ≥10 g/dL."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Before the first injection, haemoglobin must be ≥10 g/dL."
       },
@@ -404,13 +520,15 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Radium-223 is contraindicated with abiraterone plus prednisone/prednisolone."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Radium-223 is contraindicated with abiraterone plus prednisone/prednisolone."
       },
@@ -423,15 +541,17 @@
           "value": true
         },
         "action": {
-          "type": "contraindicated",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
-          "message": "Combination with systemic cancer therapies other than LHRH analogues is not recommended."
+          "message": "Other systemic anticancer therapy (except LHRH analogues) with radium is not recommended; specialist reconciliation required."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Combination with systemic cancer therapies other than LHRH analogues is not recommended."
       },
@@ -446,13 +566,15 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Visceral metastases or extensive malignant lymphadenopathy are exclusions."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Visceral metastases or extensive malignant lymphadenopathy are exclusions."
       },
@@ -467,13 +589,15 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Complete standard treatment for active/impending cord compression before starting or resuming radium-223."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Complete standard treatment for active/impending cord compression before starting or resuming radium-223."
       },
@@ -488,13 +612,15 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Orthopaedically stabilise the fracture before starting/resuming treatment."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Orthopaedically stabilise the fracture before starting/resuming treatment."
       },
@@ -509,13 +635,15 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
-          "message": "Prior radium-223 is an NCCP exclusion."
+          "message": "A previous radium-223 course is an NCCP exclusion; earlier injections within the current six-injection course are not a previous course."
         },
         "source": {
-          "page": 2,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Prior radium-223 is an NCCP exclusion."
       },
@@ -530,13 +658,15 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Active inflammatory bowel disease requires careful benefit-risk review because radium is faecally excreted."
         },
         "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Active inflammatory bowel disease requires careful benefit-risk review because radium is faecally excreted."
       },
@@ -551,30 +681,424 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "radium223"
           ],
           "message": "Document fracture-risk assessment and consider bisphosphonate/denosumab before treatment."
         },
         "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00257 v8",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": "2-4"
         },
         "explanation": "Document fracture-risk assessment and consider bisphosphonate/denosumab before treatment."
+      },
+      {
+        "rule_id": "COURSE_MAX",
+        "when": {
+          "field": "injection_number",
+          "operator": ">",
+          "value": 6
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "A course is limited to six injections. Efficacy/safety beyond six has not been established; do not extend automatically."
+        },
+        "explanation": "A course is limited to six injections. Efficacy/safety beyond six has not been established; do not extend automatically.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "AGE",
+        "when": {
+          "field": "age_years",
+          "operator": "<",
+          "value": 18
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Outside adult source eligibility.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside adult source eligibility.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Outside source ECOG 0–2 eligibility.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside source ECOG 0–2 eligibility.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "LINES",
+        "when": {
+          "all": [
+            {
+              "field": "prior_mcrpc_systemic_lines",
+              "operator": "<",
+              "value": 2
+            },
+            {
+              "field": "ineligible_other_available_treatments",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Requires at least two prior mCRPC systemic lines excluding LHRH, OR ineligibility for other available licensed systemic treatments.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Requires at least two prior mCRPC systemic lines excluding LHRH, OR ineligibility for other available licensed systemic treatments.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "SYMPTOMS",
+        "when": {
+          "field": "symptomatic_bone_metastases_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Radium requires symptomatic bone metastases in the source setting. Asymptomatic disease is not recommended.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Radium requires symptomatic bone metastases in the source setting. Asymptomatic disease is not recommended.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "LOW_BURDEN",
+        "when": {
+          "field": "low_osteoblastic_burden",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Low osteoblastic burden: radium is not recommended; review benefit-risk.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Low osteoblastic burden: radium is not recommended; review benefit-risk.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "MILD_SYMPTOMS",
+        "when": {
+          "field": "mild_symptoms_require_benefit_risk_review",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "For mildly symptomatic disease, assess likely benefit against fracture and other risks before treatment.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "For mildly symptomatic disease, assess likely benefit against fracture and other risks before treatment.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "ABI_WASHOUT",
+        "when": {
+          "field": "days_since_abiraterone_pred_stopped",
+          "operator": "<",
+          "value": 5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Do not start radium until at least five days after the last abiraterone plus prednisone/prednisolone administration."
+        },
+        "explanation": "Do not start radium until at least five days after the last abiraterone plus prednisone/prednisolone administration.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "NEXT_SYSTEMIC",
+        "when": {
+          "field": "planned_days_after_last_radium_to_systemic",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "New systemic anticancer treatment should not start for at least 30 days after the final radium injection. This warning concerns the next treatment plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "New systemic anticancer treatment should not start for at least 30 days after the final radium injection. This warning concerns the next treatment plan.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "RECOVERY_SIX_WEEKS",
+        "when": {
+          "all": [
+            {
+              "field": "days_since_last_radium",
+              "operator": ">=",
+              "value": 42
+            },
+            {
+              "field": "haematology_not_recovered_despite_support",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "If blood counts have not recovered within six weeks after the last injection despite standard care, continuation requires careful benefit-risk evaluation. Do not substitute a dose reduction.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "If blood counts have not recovered within six weeks after the last injection despite standard care, continuation requires careful benefit-risk evaluation. Do not substitute a dose reduction.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "ADT",
+        "when": {
+          "field": "concurrent_adt_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Maintain medical ADT unless surgically castrated.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Maintain medical ADT unless surgically castrated.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "FLUID_LOSS",
+        "when": {
+          "field": "dehydration_or_significant_fluid_loss",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "Assess and treat dehydration/fluid loss; vomiting and diarrhoea can contribute.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Assess and treat dehydration/fluid loss; vomiting and diarrhoea can contribute.",
+        "source": {
+          "document": "NCCP 00257",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+          "page": 5
+        }
+      },
+      {
+        "rule_id": "INJECTION_STAGE_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "injection_number",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<",
+                      "value": 1.5
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "platelets_x10e9_l",
+                      "operator": "<",
+                      "value": 100
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "hb_g_dl",
+                      "operator": ">=",
+                      "value": 8
+                    },
+                    {
+                      "field": "hb_g_dl",
+                      "operator": "<",
+                      "value": 10
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "radium223"
+          ],
+          "recommendation": "This count may meet a subsequent-dose threshold but not the first-dose threshold. Confirm the planned injection number before deciding eligibility.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00257 v8; conservative missing-stage guard",
+          "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+          "page": 2,
+          "local_safety_guard": true
+        },
+        "explanation": "This count may meet a subsequent-dose threshold but not the first-dose threshold. Confirm the planned injection number before deciding eligibility."
       }
     ]
   },
   "treatment": {
+    "cycle_days": 28,
+    "cycle_length_days": 28,
+    "drugs": [
+      "radium223"
+    ],
     "administration": [
       {
-        "drug": "radium-223",
+        "drug": "radium223",
         "dose": "55 kBq/kg",
         "route": "IV",
-        "rate": "Slow injection up to 1 minute",
-        "schedule": "Every 28 days for 6 injections"
+        "schedule": "Every 28 days for six injections",
+        "instructions": "Slow IV injection up to one minute in an authorised radiation service; specialist activity calibration required."
       }
     ],
-    "maximum_cycles": 6,
-    "radiation_safety": "Authorised personnel and local radiation governance required."
+    "duration_text": "Maximum six injections",
+    "dose_reductions": [
+      "No dose reduction: dose delay only, subject to haematological recovery and benefit-risk review."
+    ]
   },
   "eligibility": [
     "Age ≥18",
@@ -594,14 +1118,14 @@
   ],
   "monitoring": {
     "baseline": [
-      "FBC, renal/liver profile",
-      "bone scan and CT",
-      "PSA and testosterone",
-      "fracture-risk assessment"
+      "FBC, renal and liver profile",
+      "Bone scan and CT assessment; PSA and testosterone",
+      "Bone health/fracture risk and bone-protective agent assessment"
     ],
     "regular": [
-      "FBC before each injection",
-      "FBC 4 weeks after completion"
+      "FBC before each injection and four weeks after completion",
+      "Review symptoms, fracture risk, hydration and bowel function",
+      "Monitor bone health for at least 24 months; imaging and response review according to the individual plan"
     ]
   },
   "supportive_care": {
@@ -623,6 +1147,25 @@
       "indication_id": "00257-gu",
       "code": "00257g",
       "description": "Symptomatic bone-predominant metastatic castration-resistant prostate cancer without known visceral metastases in an NCCP-listed radium-223 indication."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "Injection every 28 days",
+      "cycle_length_days": 28,
+      "administration": [
+        {
+          "drug": "radium223",
+          "dose": {
+            "value": 55,
+            "unit": "kBq/kg"
+          },
+          "day": 1,
+          "route": "IV injection",
+          "notes": "Specialist calibrated activity; maximum six injections."
+        }
+      ]
     }
   ]
 }

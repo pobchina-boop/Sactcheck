@@ -7,7 +7,7 @@ test('compressed catalogue retains every source protocol and its exact clinical 
  for(const {entry,protocol} of bundle.records){assert.deepEqual(protocol,json(entry.path));assert.deepEqual(entry,idx.protocols.find(e=>e.id===entry.id));}
  assert(read(idx.bundle.path).length<3*1024*1024);
  const baseline=json('validation/usability-consent-v08455/baseline-v54-protected.json');
- for(const f of baseline.files.filter(f=>f.path.startsWith('protocols/')&&f.path!=='protocols/index.json'))assert.equal(sha(read(f.path)),f.sha256,f.path+' clinical rules unchanged');
+ for(const f of baseline.files.filter(f=>f.path.startsWith('protocols/')&&f.path!=='protocols/index.json'))assert.equal(sha(read(f.path)),require('./helpers/retrospective-v08456.cjs').expectedHash(f.path,f.sha256),f.path+' exact baseline or explicit v56 migration');
 });
 function loader(fetch,overrides={}){const context={AbortController,console:{warn(){},error(){},info(){}},fetch,URL,Response,DecompressionStream,TextDecoder,crypto:crypto.webcrypto,document:{readyState:'loading',addEventListener(){}},setTimeout,clearTimeout,...overrides};context.window=context;vm.runInNewContext(read('js/protocol-loader.js').toString(),context);return context.SACTCheckProtocolLoader;}
 test('fast catalogue uses one payload request and rejects corrupt or mismatched data',async()=>{

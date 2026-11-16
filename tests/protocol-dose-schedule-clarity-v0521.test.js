@@ -60,8 +60,10 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.45 adds cisplatin RT (weekly/3-weekly) and two pembrolizumab/platinum/5-FU schedules.
 // v0.84.47 adds exactly five audited H&N schedules. 00696 also exposes
 // its explicit source dose-level table; assessment retains recovery/history guards.
-assert.strictEqual(usefulCoverage, 233);
-assert.strictEqual(scheduleCoverage, 233);
+// v0.84.56 supplies usable source schedules for cabazitaxel and radium-223;
+// the three docetaxel schedules are reconciled in place.
+assert.strictEqual(usefulCoverage, 235);
+assert.strictEqual(scheduleCoverage, 235);
 assert.strictEqual(doseLevelCoverage, 65);
 for(const code of ['00314','00552','00417','00418','00696']){
  const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));

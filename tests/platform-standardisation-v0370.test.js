@@ -188,7 +188,7 @@ for (const { file, data } of protocols) {
   const definitions = data.input_definitions || {};
   const rules = data.rule_engine?.rules || [];
   for (const [field, def] of Object.entries(definitions)) {
-    const sourceGrade = require('./helpers/prostate-inputs-v08451.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').grade(data,field,def) || SKIN42Inputs.grade(data, field, def) || SKIN40Inputs.grade(data, field, def) || NEURO39Inputs.grade(data, field, def) || NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
+    const sourceGrade = require('./helpers/prostate-inputs-v08456.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').grade(data,field,def) || SKIN42Inputs.grade(data, field, def) || SKIN40Inputs.grade(data, field, def) || NEURO39Inputs.grade(data, field, def) || NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
     if (!sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);

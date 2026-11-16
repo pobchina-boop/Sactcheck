@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.55';
+  const RELEASE='0.84.56';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00101':{"title": "Cabazitaxel + prednisolone", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00257':{"title": "Radium-223 (Xofigo)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00313':{"title": "Docetaxel + prednisolone every 14 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00546':{"title": "Docetaxel + prednisolone every 21 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+
     '00482':{"title": "Bicalutamide: daily anti-androgen tablets", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00492':{"title": "Leuprorelin 11.25 mg: hormone injection every 12 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00493':{"title": "Leuprorelin 30 mg: hormone injection every 24 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -277,6 +282,7 @@
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(code==='00203'&&['prostate','genitourinary','genitourinary_prostate'].includes(selected))return 'prostate';
     if(HEAD_NECK46_CODES.includes(code)&&['head_neck','head and neck','head/neck'].includes(selected))return 'head_neck';
     if(code==='00261')return selected==='breast'?'breast':'';
     if(['00419','00294'].includes(code))return ['head_neck','head and neck','head/neck','head_neck_squamous_cell'].includes(selected)?'head_neck':'';
@@ -311,6 +317,7 @@
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
     if(d.code==='00261')return [d.code,d.code+'/head_neck'];
+    if(d.code==='00203')return ['00203','00203/lung','00203/prostate'];
     if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[])];
     if(['00419','00294'].includes(d.code))return [d.code+'/head_neck'];
     if(d.code==='00385')return ['00385/head_neck','00385/nasopharyngeal'];
@@ -330,6 +337,7 @@
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
       if(HEAD_NECK46_CODES.includes(def.code)&&selected==='head_neck')return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
+      if(def.code==='00203'&&selected==='prostate')return `patient/00203/prostate/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00261')return `patient/${def.code}/${CONTEXT_ASSETS[asset]}`;
       if(['00419','00294'].includes(def.code))return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00385')return `patient/${def.code}/${selected}/${CONTEXT_ASSETS[asset]}`;

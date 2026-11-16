@@ -20,7 +20,7 @@ const FILES = {
 
 function patched(code) {
   // Retain the pre-v33 fixture to verify the historical overlay; v33 tests prove current records are preserved.
-  const original = read(code==='00783'?'validation/colorectal-v08433/triplet-source-audit/00783-existing.json':FILES[code]);
+  const original = read(code==='00101'?'validation/prostate-v08456/clinical/00101-before-v55.json':code==='00783'?'validation/colorectal-v08433/triplet-source-audit/00783-existing.json':FILES[code]);
   const protocol = clone(original);
   const originalStatus = protocol.status;
   const originalEncodingVersion = protocol.metadata.sactcheck_encoding_version;

@@ -14,7 +14,7 @@ if(v30Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').
 const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
 if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
 if(hn45Contexts.includes(context)&&codes.some(c=>context==='nasopharyngeal'?c!=='00385':!['00294','00419','00385','00207','00261','00483','00484','00455','00558'].includes(c)))throw Error('Unsupported head/neck regimen context');
 if(melanomaContexts.includes(context)&&codes.some(c=>!['00455','00558','00483','00484'].includes(c)||(context==='melanoma_perioperative'&&c!=='00455')))throw new Error('Unsupported melanoma regimen/context');
@@ -24,6 +24,7 @@ if(context==='adjuvant'&&codes.some(c=>c!=='00415'))throw new Error('Adjuvant co
 if(context==='neuroendocrine'&&codes.some(c=>c!=='00320'))throw new Error('NET context escaped shared everolimus00320');
 if(v27Contexts.includes(context)&&codes.some(c=>c!=='00849'))throw new Error('Neoadjuvant backbone context escaped00849');
 if(context==='colorectal'&&codes.some(c=>!['00212','00214','00215','00455','00558'].includes(c)))throw new Error('Colorectal context escaped selected bevacizumab protocols');
+if(context==='prostate'&&codes.some(c=>c!=='00203'))throw Error('Prostate context escaped00203');
 if(context&&!codes.length)throw new Error('A context build requires an explicit SACT_SUITE_CODES scope');
 function profilePath(code){return context?`data/patient-knowledge-contexts/${code}/${context}.json`:`data/patient-knowledge/${code}.json`;}
 function profile(code){return JSON.parse(fs.readFileSync(path.join(root,profilePath(code)),'utf8'));}
@@ -82,6 +83,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(hn48.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const hn50=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08450.json'),'utf8'));
  for(const [c,plans]of Object.entries(hn50.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const prostate56=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08456.json'),'utf8'));
+ for(const [c,plans]of Object.entries(prostate56.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

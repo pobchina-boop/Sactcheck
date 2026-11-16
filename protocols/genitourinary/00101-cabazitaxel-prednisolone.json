@@ -13,7 +13,7 @@
     "icd10": "C61",
     "source_document_pages": 7,
     "source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "sactcheck_encoding_version": "0.84.56",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -50,7 +50,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08456_independent_review_pending"
     },
     "file_name": "00101-cabazitaxel-prednisolone.json",
     "source_title_exact": "Cabazitaxel and prednisoLONE Therapy",
@@ -62,7 +62,7 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-15",
     "regimen_card": {
       "contexts": [
         {
@@ -95,22 +95,32 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-reconciled draft; independent approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.56",
+      "audit_date": "2026-11-15",
+      "scope_note": "Current official sources reconciled with recorded ambiguities; independent clinical and pharmacy approval outstanding."
     },
-    "canonical_protocol_id": "nccp-00101-v8"
+    "canonical_protocol_id": "nccp-00101-v8",
+    "source_discrepancies": [
+      "NCCP Table 3 prints an AND conjunction for low ANC and platelets; an isolated low platelet count triggers consultant review rather than an independently invented delay.",
+      "ANC recovery >1.5 versus ≥1.5 elsewhere: exact boundary requires review.",
+      "NCCP neuropathy grade ≥2 differs from current EMA grade >2; NCCP branch retained explicitly."
+    ],
+    "clinical_audit_release": "0.84.56",
+    "source_pdf_sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+    "source_reconciliation_supersedes": [
+      "0.70.0"
+    ]
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00101 Version 8. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding for NCCP 00101 v8. Current official sources, consultant prescribing decisions and pharmacy verification remain required."
   },
   "input_definitions": {
     "anc_x10e9_l": {
@@ -134,35 +144,10 @@
       "input_role": "decision"
     },
     "febrile_neutropenia_or_prolonged_grade3": {
-      "label": "Febrile neutropenia, neutropenic infection, or prolonged Grade ≥3 neutropenia",
+      "label": "Febrile neutropenia / neutropenic infection OR grade 3+ neutropenia >1 week despite appropriate treatment including G-CSF",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "decision"
-    },
-    "hepatic_band": {
-      "label": "Hepatic function category",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "standard",
-          "label": "Bilirubin ≤ULN and AST ≤1.5 ×ULN"
-        },
-        {
-          "value": "mild",
-          "label": "Bilirubin >1 to ≤1.5 ×ULN or AST >1.5 ×ULN — 20 mg/m²"
-        },
-        {
-          "value": "moderate",
-          "label": "Bilirubin >1.5 to ≤3 ×ULN — maximum 15 mg/m²"
-        },
-        {
-          "value": "severe",
-          "label": "Bilirubin >3 ×ULN — contraindicated"
-        }
-      ],
-      "demo_value": "standard",
       "input_role": "decision"
     },
     "renal_band": {
@@ -199,41 +184,44 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No diarrhoea",
-          "description": "No increase over baseline stool frequency.",
+          "label": "Grade 0",
+          "description": "No named adverse event reported.",
           "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Increase of <4 stools/day over baseline; mild increase in ostomy output.",
+          "label": "Grade 1",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 1 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "Increase of 4–6 stools/day over baseline; moderate ostomy-output increase; limits instrumental activities of daily living.",
+          "label": "Grade 2",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 2 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": "Increase of ≥7 stools/day over baseline; incontinence, hospitalisation or severe ostomy-output increase; limits self-care activities of daily living.",
+          "label": "Grade 3",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 3 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening consequences requiring urgent intervention.",
+          "label": "Grade 4",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 4 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
+      "assessment_guidance": "Use the clinician-confirmed CTCAE v4.0 grade for the named toxicity, as specified in NCCP Table 5. Do not apply a generic v5.0 descriptor or calculate a grade from one finding.",
+      "ctcae_version": "4.0",
       "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "grading_source_label": "NCCP 00101 v8, Table 5: CTCAE v4.0",
+      "source_grading_note": "NCCP Table 5 explicitly specifies CTCAE v4.0. Select the clinician-confirmed grade for the named adverse event; the treatment-modification table is not a complete grading instrument."
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
@@ -242,41 +230,44 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No neuropathy",
-          "description": "No sensory or motor neuropathy.",
+          "label": "Grade 0",
+          "description": "No named adverse event reported.",
           "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Asymptomatic or mild symptoms; loss of deep tendon reflexes or paraesthesia without functional limitation.",
+          "label": "Grade 1",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 1 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "Moderate symptoms limiting instrumental activities of daily living.",
+          "label": "Grade 2",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 2 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": "Severe symptoms limiting self-care activities of daily living.",
+          "label": "Grade 3",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 3 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening consequences requiring urgent intervention.",
+          "label": "Grade 4",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 4 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
+      "assessment_guidance": "Use the clinician-confirmed CTCAE v4.0 grade for the named toxicity, as specified in NCCP Table 5. Do not apply a generic v5.0 descriptor or calculate a grade from one finding.",
+      "ctcae_version": "4.0",
       "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "grading_source_label": "NCCP 00101 v8, Table 5: CTCAE v4.0",
+      "source_grading_note": "NCCP Table 5 explicitly specifies CTCAE v4.0. Select the clinician-confirmed grade for the named adverse event; the treatment-modification table is not a complete grading instrument."
     },
     "stomatitis_grade": {
       "label": "Stomatitis grade",
@@ -285,44 +276,250 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No mucositis",
-          "description": "No oral mucositis.",
+          "label": "Grade 0",
+          "description": "No named adverse event reported.",
           "ctcae_grade": 0
         },
         {
           "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Asymptomatic or mild symptoms; intervention not indicated.",
+          "label": "Grade 1",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 1 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 1
         },
         {
           "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "Moderate pain or ulceration not interfering with oral intake; modified diet indicated.",
+          "label": "Grade 2",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 2 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 2
         },
         {
           "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": "Severe pain interfering with oral intake.",
+          "label": "Grade 3",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 3 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 3
         },
         {
           "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening consequences requiring urgent intervention.",
+          "label": "Grade 4",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 4 for this named event; refer to the complete event-specific grading criteria.",
           "ctcae_grade": 4
         }
       ],
       "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
+      "assessment_guidance": "Use the clinician-confirmed CTCAE v4.0 grade for the named toxicity, as specified in NCCP Table 5. Do not apply a generic v5.0 descriptor or calculate a grade from one finding.",
+      "ctcae_version": "4.0",
       "ctcae_category": "stomatitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "grading_source_label": "NCCP 00101 v8, Table 5: CTCAE v4.0",
+      "source_grading_note": "NCCP Table 5 explicitly specifies CTCAE v4.0. Select the clinician-confirmed grade for the named adverse event; the treatment-modification table is not a complete grading instrument."
     },
     "hypersensitivity_reaction": {
       "label": "Severe hypersensitivity reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "ast_uln_multiple": {
+      "label": "AST / ULN",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "current_cabazitaxel_mg_m2": {
+      "label": "Actual current cabazitaxel dose",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²"
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "unit": ""
+    },
+    "indication_eligible": {
+      "label": "Post-docetaxel mCRPC indication confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_permanent_stop": {
+      "label": "Previous permanent cabazitaxel stop",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "persistent_diarrhoea_despite_support": {
+      "label": "Persistent diarrhoea despite appropriate fluid/electrolyte and antidiarrhoeal treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "toxicity_recurrent_at_reduced_dose": {
+      "label": "Qualifying toxicity persists or recurs at reduced dose",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_extensive_marrow_radiotherapy": {
+      "label": "Prior radiotherapy to more than 40% of marrow",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recent_samarium_or_phosphorus": {
+      "label": "Samarium-153 or phosphorus-32 in preceding 8 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recent_strontium_or_radium": {
+      "label": "Strontium-89 or radium-223 in preceding 12 weeks",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "premedication_completed": {
+      "label": "Prescribed cabazitaxel premedication completed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_nausea_vomiting_despite_ondansetron": {
+      "label": "Grade 3+ nausea/vomiting despite ondansetron substitution",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "recurrent_severe_nausea_vomiting_at_reduced_dose": {
+      "label": "Severe nausea/vomiting recurs despite reduction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "suspected_serious_bowel_toxicity": {
+      "label": "Suspected serious bowel toxicity / bleeding / perforation",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "new_or_worsening_pulmonary_symptoms": {
+      "label": "New or worsening pulmonary symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "assessment_phase": {
+      "label": "Assessment phase",
+      "type": "select",
+      "required": false,
+      "demo_value": "treatment_day",
+      "input_role": "context",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before starting treatment"
+        },
+        {
+          "value": "treatment_day",
+          "label": "During treatment"
+        }
+      ]
+    },
+    "renal_failure_grade": {
+      "label": "Renal failure grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No named adverse event reported.",
+          "ctcae_grade": 0
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 1 for this named event; refer to the complete event-specific grading criteria.",
+          "ctcae_grade": 1
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 2 for this named event; refer to the complete event-specific grading criteria.",
+          "ctcae_grade": 2
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 3 for this named event; refer to the complete event-specific grading criteria.",
+          "ctcae_grade": 3
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed CTCAE v4.0 grade 4 for this named event; refer to the complete event-specific grading criteria.",
+          "ctcae_grade": 4
+        }
+      ],
+      "demo_value": 0,
+      "assessment_guidance": "Use the clinician-confirmed CTCAE v4.0 grade for the named toxicity, as specified in NCCP Table 5. Do not apply a generic v5.0 descriptor or calculate a grade from one finding.",
+      "ctcae_version": "4.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+      "grading_source_label": "NCCP 00101 v8, Table 5: CTCAE v4.0",
+      "source_grading_note": "NCCP Table 5 explicitly specifies CTCAE v4.0. Select the clinician-confirmed grade for the named adverse event; the treatment-modification table is not a complete grading instrument."
+    },
+    "strong_cyp3a_inhibitor_required": {
+      "label": "Strong CYP3A inhibitor cannot be avoided",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "strong_cyp3a_inducer_present": {
+      "label": "Strong CYP3A inducer present",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -359,8 +556,7 @@
     ],
     "rules": [
       {
-        "id": "ANC",
-        "priority": 8,
+        "rule_id": "ANC_LOW",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
@@ -369,124 +565,475 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Delay one week until ANC >1.5 ×10⁹/L."
+          "recommendation": "Do not give cabazitaxel with ANC below 1.5 ×10⁹/L. Confirm recovery and previous toxicity before restarting."
         },
+        "explanation": "Do not give cabazitaxel with ANC below 1.5 ×10⁹/L. Confirm recovery and previous toxicity before restarting.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay one week until ANC >1.5 ×10⁹/L."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
       },
       {
-        "id": "PLT",
-        "priority": 8,
+        "rule_id": "ANC_BOUNDARY",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "==",
+          "value": 1.5
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "At exactly 1.5, reconcile the source: eligibility uses ≥1.5 but recovery tables use >1.5. Do not assume an automatic restart.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "At exactly 1.5, reconcile the source: eligibility uses ≥1.5 but recovery tables use >1.5. Do not assume an automatic restart.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3,
+          "local_safety_guard": true
+        }
+      },
+      {
+        "rule_id": "PLATELETS_REVIEW",
         "when": {
           "field": "platelets_x10e9_l",
           "operator": "<",
           "value": 100
         },
         "action": {
-          "type": "delay",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Delay until platelets >100 ×10⁹/L."
+          "recommendation": "Review an isolated platelet count below 100 with the consultant before dosing. The NCCP Table 3 delay criterion combines ANC below 1.5 AND platelets below 100; an isolated platelet result is not represented as that combined criterion.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Review an isolated platelet count below 100 with the consultant before dosing. The NCCP Table 3 delay criterion combines ANC below 1.5 AND platelets below 100; an isolated platelet result is not represented as that combined criterion.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay until platelets >100 ×10⁹/L."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3,
+          "local_safety_guard": true
+        }
       },
       {
-        "id": "FN",
-        "priority": 7,
+        "rule_id": "PRIOR_STOP",
+        "when": {
+          "field": "prior_permanent_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Do not automatically restart after a documented permanent stop."
+        },
+        "explanation": "Do not automatically restart after a documented permanent stop.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "MARROW_RT",
+        "when": {
+          "field": "prior_extensive_marrow_radiotherapy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Source exclusion: prior radiotherapy to more than 40% of marrow."
+        },
+        "explanation": "Source exclusion: prior radiotherapy to more than 40% of marrow.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "SAMARIUM",
+        "when": {
+          "field": "recent_samarium_or_phosphorus",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Source exclusion: samarium-153 or phosphorus-32 within eight weeks."
+        },
+        "explanation": "Source exclusion: samarium-153 or phosphorus-32 within eight weeks.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "RADIUM",
+        "when": {
+          "field": "recent_strontium_or_radium",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Source exclusion: strontium-89 or radium-223 within twelve weeks."
+        },
+        "explanation": "Source exclusion: strontium-89 or radium-223 within twelve weeks.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Confirm metastatic castration-resistant prostate cancer previously treated with docetaxel; maintain prescribed ADT.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm metastatic castration-resistant prostate cancer previously treated with docetaxel; maintain prescribed ADT.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Outside source ECOG 0–2; consultant review.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside source ECOG 0–2; consultant review.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "FN",
         "when": {
           "field": "febrile_neutropenia_or_prolonged_grade3",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "delay_then_dose_reduce",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Delay until ANC >1.5 then reduce 25→20 mg/m²; for recurrence consider 15 mg/m² or discontinue."
+          "recommendation": "Hold until improvement and ANC >1.5. Source ladder is 25 to 20 mg/m²; recurrence at 20 requires consideration of 15 or stopping. Confirm the actual dose."
         },
+        "explanation": "Hold until improvement and ANC >1.5. Source ladder is 25 to 20 mg/m²; recurrence at 20 requires consideration of 15 or stopping. Confirm the actual dose.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay until ANC >1.5 then reduce 25→20 mg/m²; for recurrence consider 15 mg/m² or discontinue."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
       },
       {
-        "id": "HEP_MILD",
-        "priority": 12,
+        "rule_id": "DIARRHOEA",
         "when": {
-          "field": "hepatic_band",
-          "operator": "==",
-          "value": "mild"
+          "any": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "persistent_diarrhoea_despite_support",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Use cabazitaxel 20 mg/m²."
+          "recommendation": "Hold until diarrhoea improves/resolves, correct fluids/electrolytes, then review source 25 to 20 mg/m² reduction. Persistent lower-grade diarrhoea also qualifies."
         },
+        "explanation": "Hold until diarrhoea improves/resolves, correct fluids/electrolytes, then review source 25 to 20 mg/m² reduction. Persistent lower-grade diarrhoea also qualifies.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Use cabazitaxel 20 mg/m²."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
       },
       {
-        "id": "HEP_MOD",
-        "priority": 12,
+        "rule_id": "NEUROPATHY",
         "when": {
-          "field": "hepatic_band",
-          "operator": "==",
-          "value": "moderate"
+          "field": "neuropathy_grade",
+          "operator": ">=",
+          "value": 2
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Use a maximum cabazitaxel dose of 15 mg/m²."
+          "recommendation": "Hold until improvement and review dose. NCCP uses grade ≥2; the current EMA table uses grade >2. Apply the stated NCCP criterion pending specialist reconciliation."
         },
+        "explanation": "Hold until improvement and review dose. NCCP uses grade ≥2; the current EMA table uses grade >2. Apply the stated NCCP criterion pending specialist reconciliation.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Use a maximum cabazitaxel dose of 15 mg/m²."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
       },
       {
-        "id": "HEP_SEVERE",
-        "priority": 1,
+        "rule_id": "STOMATITIS3",
         "when": {
-          "field": "hepatic_band",
+          "field": "stomatitis_grade",
           "operator": "==",
-          "value": "severe"
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Hold until stomatitis is grade 1, then review 25 to 20 mg/m² reduction; check the actual dose and prior events."
+        },
+        "explanation": "Hold until stomatitis is grade 1, then review 25 to 20 mg/m² reduction; check the actual dose and prior events.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "STOMATITIS4",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Grade 4 stomatitis: discontinue cabazitaxel."
+        },
+        "explanation": "Grade 4 stomatitis: discontinue cabazitaxel.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "HSR",
+        "when": {
+          "field": "hypersensitivity_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Hypersensitivity reaction: discontinue and treat immediately; no automatic rechallenge."
+        },
+        "explanation": "Hypersensitivity reaction: discontinue and treat immediately; no automatic rechallenge.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "RECURRENCE",
+        "when": {
+          "field": "toxicity_recurrent_at_reduced_dose",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Persistent/recurrent qualifying toxicity at 20 mg/m²: consider 15 mg/m² or discontinuation. Evidence below 20 is limited. Do not increase an already reduced dose.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Persistent/recurrent qualifying toxicity at 20 mg/m²: consider 15 mg/m² or discontinuation. Evidence below 20 is limited. Do not increase an already reduced dose.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HEP_MILD",
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 1.5
+                }
+              ]
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Mild hepatic criteria: source dose 20 mg/m², with caution. Bilirubin >1.5 changes the category; reconcile all supplied results and current dose, never re-escalate automatically.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Mild hepatic criteria: source dose 20 mg/m², with caution. Bilirubin >1.5 changes the category; reconcile all supplied results and current dose, never re-escalate automatically.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HEP_MOD",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Moderate hepatic impairment: maximum tolerated dose 15 mg/m²; limited efficacy data. Specialist decision required.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Moderate hepatic impairment: maximum tolerated dose 15 mg/m²; limited efficacy data. Specialist decision required.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "HEP_SEVERE",
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 3
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Cabazitaxel is contraindicated when bilirubin >3 ×ULN."
+          "recommendation": "Bilirubin >3 ×ULN: cabazitaxel contraindicated."
         },
+        "explanation": "Bilirubin >3 ×ULN: cabazitaxel contraindicated.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Cabazitaxel is contraindicated when bilirubin >3 ×ULN."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
       },
       {
-        "id": "RENAL",
-        "priority": 13,
+        "rule_id": "RENAL",
         "when": {
           "field": "renal_band",
           "operator": "in",
@@ -496,122 +1043,270 @@
           ]
         },
         "action": {
-          "type": "proceed_with_caution",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "CrCl <15 mL/min or dialysis requires caution and specialist review."
+          "recommendation": "CrCl <15: caution and close monitoring; haemodialysis needs specialist review. No dose adjustment is specified for renal impairment not requiring dialysis.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "CrCl <15: caution and close monitoring; haemodialysis needs specialist review. No dose adjustment is specified for renal impairment not requiring dialysis.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "CrCl <15 mL/min or dialysis requires caution and specialist review."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
       },
       {
-        "id": "DIARRHOEA",
-        "priority": 7,
+        "rule_id": "PREMED",
         "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Delay Grade ≥3/persistent diarrhoea until improvement, then reduce 25→20 mg/m²."
-        },
-        "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay Grade ≥3/persistent diarrhoea until improvement, then reduce 25→20 mg/m²."
-      },
-      {
-        "id": "NEUROPATHY",
-        "priority": 7,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Delay Grade ≥2 neuropathy until improvement, then reduce dose."
-        },
-        "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay Grade ≥2 neuropathy until improvement, then reduce dose."
-      },
-      {
-        "id": "STOMATITIS3",
-        "priority": 5,
-        "when": {
-          "field": "stomatitis_grade",
+          "field": "premedication_completed",
           "operator": "==",
-          "value": 3
+          "value": false
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Withhold Grade 3 stomatitis until Grade ≤1, then resume at 20 mg/m²."
+          "recommendation": "Confirm IV chlorphenamine 10 mg, dexamethasone 8 mg and famotidine 20 mg at least 30 minutes before infusion."
         },
+        "explanation": "Confirm IV chlorphenamine 10 mg, dexamethasone 8 mg and famotidine 20 mg at least 30 minutes before infusion.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Withhold Grade 3 stomatitis until Grade ≤1, then resume at 20 mg/m²."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
       },
       {
-        "id": "STOMATITIS4",
-        "priority": 2,
+        "rule_id": "NAUSEA",
         "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 4
+          "field": "severe_nausea_vomiting_despite_ondansetron",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Discontinue for Grade 4 stomatitis."
+          "recommendation": "Grade 3+ nausea/vomiting despite ondansetron substitution: source reduces cabazitaxel to 20 mg/m²; review actual dose and recovery.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Grade 3+ nausea/vomiting despite ondansetron substitution: source reduces cabazitaxel to 20 mg/m²; review actual dose and recovery.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Discontinue for Grade 4 stomatitis."
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
       },
       {
-        "id": "HSR",
-        "priority": 2,
+        "rule_id": "NAUSEA_RECURRENT",
         "when": {
-          "field": "hypersensitivity_reaction",
+          "field": "recurrent_severe_nausea_vomiting_at_reduced_dose",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "cabazitaxel"
           ],
-          "message": "Discontinue for severe hypersensitivity."
+          "recommendation": "Severe nausea/vomiting persists after dose reduction: withdraw cabazitaxel."
         },
+        "explanation": "Severe nausea/vomiting persists after dose reduction: withdraw cabazitaxel.",
         "source": {
-          "page": 5,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "BOWEL",
+        "when": {
+          "field": "suspected_serious_bowel_toxicity",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "Discontinue for severe hypersensitivity."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Urgent assessment for serious bowel toxicity, bleeding or perforation before further treatment. This hold is a conservative safety guard."
+        },
+        "explanation": "Urgent assessment for serious bowel toxicity, bleeding or perforation before further treatment. This hold is a conservative safety guard.",
+        "source": {
+          "document": "NCCP 00101",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 5,
+          "local_safety_guard": true
+        }
+      },
+      {
+        "rule_id": "LUNG",
+        "when": {
+          "field": "new_or_worsening_pulmonary_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Interrupt cabazitaxel pending prompt investigation of new/worsening pulmonary symptoms and benefit-risk review."
+        },
+        "explanation": "Interrupt cabazitaxel pending prompt investigation of new/worsening pulmonary symptoms and benefit-risk review.",
+        "source": {
+          "document": "EMA jevtana-ema",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/jevtana-epar-product-information_en.pdf",
+          "sha256": "4c1eff0507207d5beb179217fec464186ac3bc1330fa052cff48922b617d3c37",
+          "page": "4.4"
+        }
+      },
+      {
+        "rule_id": "CAB_BASELINE_ANC",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "ANC below 1.5 is an NCCP baseline exclusion; do not initiate cabazitaxel."
+        },
+        "explanation": "ANC below 1.5 is an NCCP baseline exclusion; do not initiate cabazitaxel.",
+        "source": {
+          "document": "NCCP 00101 v8",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CAB_COUNTS_COMBINED",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Combined NCCP Table 3 criterion: delay one week and reassess count recovery; contact the clinician if recovery criteria are not met."
+        },
+        "explanation": "Combined NCCP Table 3 criterion: delay one week and reassess count recovery; contact the clinician if recovery criteria are not met.",
+        "source": {
+          "document": "NCCP 00101 v8",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CAB_RENAL_FAILURE_G3",
+        "when": {
+          "field": "renal_failure_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Discontinue cabazitaxel for grade 3 or greater renal failure and assess urgently."
+        },
+        "explanation": "Discontinue cabazitaxel for grade 3 or greater renal failure and assess urgently.",
+        "source": {
+          "document": "NCCP 00101 v8",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CAB_CYP3A_INHIBITOR",
+        "when": {
+          "field": "strong_cyp3a_inhibitor_required",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Avoid strong CYP3A inhibitors. If co-administration cannot be avoided, NCCP advises considering a 25% cabazitaxel reduction with close monitoring; consultant/pharmacy review is required.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Avoid strong CYP3A inhibitors. If co-administration cannot be avoided, NCCP advises considering a 25% cabazitaxel reduction with close monitoring; consultant/pharmacy review is required.",
+        "source": {
+          "document": "NCCP 00101 v8",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 6
+        }
+      },
+      {
+        "rule_id": "CAB_CYP3A_INDUCER",
+        "when": {
+          "field": "strong_cyp3a_inducer_present",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabazitaxel"
+          ],
+          "recommendation": "Avoid strong CYP3A inducers; reconcile the medicine list with oncology pharmacy before treatment.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Avoid strong CYP3A inducers; reconcile the medicine list with oncology pharmacy before treatment.",
+        "source": {
+          "document": "NCCP 00101 v8",
+          "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+          "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+          "page": 6
+        }
       }
     ]
   },
@@ -646,11 +1341,12 @@
   ],
   "monitoring": {
     "baseline": [
-      "FBC, renal and liver profile"
+      "FBC, renal and liver profile",
+      "ECOG, prior docetaxel, marrow radiotherapy/radionuclide history, neuropathy and medicines"
     ],
     "regular": [
-      "FBC and liver profile before each cycle",
-      "GI toxicity and neuropathy"
+      "FBC weekly during cycle 1 and before each later cycle",
+      "Renal and liver profile before each cycle; assess hydration, diarrhoea, neuropathy and infection"
     ]
   },
   "supportive_care": {
@@ -673,6 +1369,35 @@
       "indication_id": "00101-gu",
       "code": "00101g",
       "description": "Metastatic castration-resistant prostate cancer in an NCCP-listed cabazitaxel indication."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "Treatment every 21 days",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "cabazitaxel",
+          "dose": {
+            "value": 25,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Infuse over 60 minutes; confirm the prescribed dose and any source-supported reduction."
+        },
+        {
+          "drug": "prednisolone",
+          "dose": {
+            "value": 10,
+            "unit": "mg"
+          },
+          "day": "Every day",
+          "route": "PO",
+          "notes": "Continuous daily steroid; follow the prescription and do not stop abruptly."
+        }
+      ]
     }
   ]
 }

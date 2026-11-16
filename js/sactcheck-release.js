@@ -1,7 +1,7 @@
 /** SACTCheck canonical public release. */
 (function(root){
   "use strict";
-  const RELEASE="0.84.55";
+  const RELEASE="0.84.56";
   root.SACTCHECK_RELEASE=RELEASE;
   root.SACTCheckRelease=Object.freeze({release:RELEASE});
 })(typeof globalThis!=="undefined"?globalThis:this);

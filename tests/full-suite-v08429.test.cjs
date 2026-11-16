@@ -8,7 +8,7 @@ assert.equal(scope.new_codes.length,5);assert.equal(scope.retrospective_codes.le
 const routes=[];
 for(const c of idx.codes){
  const p=protocol(c),x=author[c],k=kb.regimen_profiles.find(x=>x.protocol_id===p.protocol_id);
- assert.equal(p.metadata.full_suite_release,'0.84.29');assert.equal(p.metadata.source_checked_date,'2026-11-02');
+ assert.equal(p.metadata.full_suite_release,'0.84.29');assert.equal(p.metadata.source_checked_date,c==='00203'?'2026-11-15':'2026-11-02');if(c==='00203')assert(require('./helpers/prostate-inputs-v08456.cjs').validate(p));
  for(const flag of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[flag],false);
  assert.equal(Engine.assess(p,{}).complete,false);assert(!['proceed','proceed_with_caution'].includes(Engine.assess(p,{}).actionType));
  assert.equal(new Set(p.rule_engine.rules.map(x=>x.rule_id||x.id)).size,p.rule_engine.rules.length,c+' duplicate rule IDs');

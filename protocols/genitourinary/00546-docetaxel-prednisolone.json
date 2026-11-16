@@ -1,19 +1,19 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00546-v3",
+  "protocol_id": "nccp-00546-v4",
   "file_name": "00546-docetaxel-prednisolone.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00546",
-    "nccp_version": "3",
+    "nccp_version": "4",
     "tumour_group": "Genitourinary",
     "title": "Docetaxel 75 mg/m² – Prednisolone Combination Therapy",
     "short_title": "Docetaxel + prednisolone",
     "indication": "Docetaxel with prednisone/prednisolone for hormone-refractory metastatic prostate cancer.",
     "icd10": "C61",
-    "source_document_pages": 4,
-    "source_url": "https://healthservice.hse.ie/documents/6382/546_v3_Docetaxel_75-prednisolone_combination_therapy.pdf",
-    "sactcheck_encoding_version": "0.44.0",
+    "source_document_pages": 5,
+    "source_url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+    "sactcheck_encoding_version": "0.84.56",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain explicitly unassessed and never block a partial result.",
     "treatment_setting": [
@@ -50,7 +50,7 @@
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation"
+      "rule_level_source_reconciliation_status": "source_reconciled_v08456_independent_review_pending"
     },
     "file_name": "00546-docetaxel-prednisolone.json",
     "source_title_exact": "DOCEtaxel 75 mg/m² – Prednisolone Combination Therapy",
@@ -62,14 +62,14 @@
     "genitourinary_subgroups": [
       "prostate"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-15",
     "regimen_card": {
       "contexts": [
         {
           "id": "00546-gu",
           "indication_id": "00546-gu",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": 21,
           "unresolved": [
             "duration"
           ],
@@ -95,211 +95,414 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-reconciled draft; independent approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.56",
+      "audit_date": "2026-11-15",
+      "scope_note": "Current official sources reconciled with recorded ambiguities; independent clinical and pharmacy approval outstanding."
     },
-    "canonical_protocol_id": "nccp-00546-v3"
+    "canonical_protocol_id": "nccp-00546-v4",
+    "source_discrepancies": [
+      "The printed 50% hepatic-dose row has ambiguous boundaries. No automatic hepatic percentage is calculated; specialist reconciliation is required.",
+      "No universal platelet 100 ×10⁹/L treatment threshold is specified in this source; the old generic platelet hold has been removed."
+    ],
+    "clinical_audit_release": "0.84.56",
+    "source_pdf_sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by the appropriately qualified Consultant specified in the NCCP source.",
     "dose_modification_note": "Any dose modification or non-standard continuation should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00546 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Source-reconciled feasibility encoding for NCCP 00546 v4. Current official sources, consultant prescribing decisions and pharmacy verification remain required."
   },
   "input_definitions": {
     "anc_x10e9_l": {
       "label": "ANC",
       "type": "number",
+      "demo_value": "",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 2,
       "unit": "×10⁹/L",
+      "always_show": true,
       "input_role": "decision"
     },
     "platelets_x10e9_l": {
       "label": "Platelets",
       "type": "number",
+      "demo_value": "",
       "required": false,
       "min": 0,
-      "step": 1,
-      "demo_value": 200,
+      "step": 0.01,
       "unit": "×10⁹/L",
-      "input_role": "decision"
+      "always_show": true,
+      "input_role": "monitoring",
+      "assessment_guidance": "NCCP 00546 does not specify a platelet dose threshold. Review the full blood count clinically; no platelet-based dose is calculated here."
     },
-    "febrile_neutropenia_or_prolonged_grade4": {
-      "label": "Febrile neutropenia or ANC <0.5 ×10⁹/L for >1 week",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "hepatic_band": {
-      "label": "Hepatic function category",
+    "assessment_stage": {
+      "label": "Assessment stage",
       "type": "select",
+      "demo_value": "",
       "required": false,
+      "always_show": true,
+      "input_role": "context",
       "options": [
         {
-          "value": "standard",
-          "label": "Bilirubin normal and enzymes below adjustment bands"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
-          "value": "dose75",
-          "label": "Bilirubin normal; AST/ALT >1.5–5 ×ULN with ALP >2.5–5 ×ULN — 75% dose"
-        },
-        {
-          "value": "dose50",
-          "label": "Bilirubin 1–1.5 ×ULN and/or AST/ALT >5–10 ×ULN with ALP <6 ×ULN — 50% dose"
-        },
-        {
-          "value": "not_recommended",
-          "label": "Bilirubin >1.5 ×ULN or AST/ALT >10 ×ULN or ALP >6 ×ULN — not recommended"
+          "value": "ongoing",
+          "label": "During treatment"
         }
-      ],
-      "demo_value": "standard",
+      ]
+    },
+    "ecog": {
+      "label": "ECOG performance status",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "",
+      "always_show": true,
+      "input_role": "decision",
+      "max": 4
+    },
+    "hypersensitivity": {
+      "label": "Relevant drug/excipient hypersensitivity",
+      "type": "boolean",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT / ULN",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "ast_uln_multiple": {
+      "label": "AST / ULN",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "alp_uln_multiple": {
+      "label": "ALP / ULN",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin / ULN",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (not indexed eGFR)",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "always_show": true,
+      "input_role": "monitoring",
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf",
+        "reason": "The NCCP source expects no renal dose adjustment, including haemodialysis. This optional value records renal monitoring and is not a Calvert calculation."
+      }
+    },
+    "anc_below_0_5_days": {
+      "label": "Duration of ANC below 0.5",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "febrile_neutropenia": {
+      "label": "Febrile neutropenia",
+      "type": "boolean",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "haemodialysis": {
+      "label": "Haemodialysis",
+      "type": "boolean",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "severe_hepatic_impairment": {
+      "label": "Severe hepatic impairment",
+      "type": "boolean",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "indication_eligible": {
+      "label": "Full NCCP indication / prior-treatment criteria confirmed",
+      "type": "boolean",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
       "input_role": "decision"
     },
     "neuropathy_grade": {
       "label": "Peripheral neuropathy grade",
       "type": "select",
+      "demo_value": "",
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No neuropathy",
-          "description": "No sensory or motor neuropathy.",
-          "ctcae_grade": 0
+          "label": "Grade 0",
+          "description": "No toxicity reported for the named event."
         },
         {
           "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Asymptomatic or mild symptoms; loss of deep tendon reflexes or paraesthesia without functional limitation.",
-          "ctcae_grade": 1
+          "label": "Grade 1",
+          "description": "Mild event: confirm the exact symptom and local grading criteria."
         },
         {
           "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "Moderate symptoms limiting instrumental activities of daily living.",
-          "ctcae_grade": 2
+          "label": "Grade 2",
+          "description": "Moderate event: assess interference with usual activities and the named event criteria."
         },
         {
           "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": "Severe symptoms limiting self-care activities of daily living.",
-          "ctcae_grade": 3
+          "label": "Grade 3",
+          "description": "Severe event: assess self-care limitation, need for admission and the named event criteria."
         },
         {
           "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening consequences requiring urgent intervention.",
-          "ctcae_grade": 4
+          "label": "Grade 4",
+          "description": "Potentially life-threatening event: urgent clinical assessment and named event criteria."
         }
       ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "unit": "Source toxicity grade",
+      "assessment_guidance": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software.",
+      "grading_source_label": "NCCP 00546 v4, toxicity grade table; edition unspecified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+      "source_grading_note": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software."
     },
-    "skin_toxicity_grade": {
-      "label": "Skin toxicity grade",
+    "other_nonhaem_toxicity_grade": {
+      "label": "Other non-haematological toxicity",
       "type": "select",
+      "demo_value": "",
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No rash",
-          "description": "No rash.",
-          "ctcae_grade": 0
+          "label": "Grade 0",
+          "description": "No toxicity reported for the named event."
         },
         {
           "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Macules/papules covering <10% body-surface area, with or without symptoms.",
-          "ctcae_grade": 1
+          "label": "Grade 1",
+          "description": "Mild event: confirm the exact symptom and local grading criteria."
         },
         {
           "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "10–30% body-surface area, or limiting instrumental activities of daily living.",
-          "ctcae_grade": 2
+          "label": "Grade 2",
+          "description": "Moderate event: assess interference with usual activities and the named event criteria."
         },
         {
           "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": ">30% body-surface area, limiting self-care activities of daily living, or requiring systemic treatment.",
-          "ctcae_grade": 3
+          "label": "Grade 3",
+          "description": "Severe event: assess self-care limitation, need for admission and the named event criteria."
         },
         {
           "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening skin reaction requiring urgent intervention.",
-          "ctcae_grade": 4
+          "label": "Grade 4",
+          "description": "Potentially life-threatening event: urgent clinical assessment and named event criteria."
         }
       ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "input_role": "decision"
+      "unit": "Source toxicity grade",
+      "assessment_guidance": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software.",
+      "grading_source_label": "NCCP 00546 v4, toxicity grade table; edition unspecified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+      "source_grading_note": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software."
     },
     "stomatitis_grade": {
-      "label": "Stomatitis / oral mucositis grade",
+      "label": "Stomatitis",
       "type": "select",
+      "demo_value": "",
       "required": false,
+      "always_show": true,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0 — No mucositis",
-          "description": "No oral mucositis.",
-          "ctcae_grade": 0
+          "label": "Grade 0",
+          "description": "No toxicity reported for the named event."
         },
         {
           "value": 1,
-          "label": "Grade 1 — Grade 1",
-          "description": "Asymptomatic or mild symptoms; intervention not indicated.",
-          "ctcae_grade": 1
+          "label": "Grade 1",
+          "description": "Mild event: confirm the exact symptom and local grading criteria."
         },
         {
           "value": 2,
-          "label": "Grade 2 — Grade 2",
-          "description": "Moderate pain or ulceration not interfering with oral intake; modified diet indicated.",
-          "ctcae_grade": 2
+          "label": "Grade 2",
+          "description": "Moderate event: assess interference with usual activities and the named event criteria."
         },
         {
           "value": 3,
-          "label": "Grade 3 — Grade 3",
-          "description": "Severe pain interfering with oral intake.",
-          "ctcae_grade": 3
+          "label": "Grade 3",
+          "description": "Severe event: assess self-care limitation, need for admission and the named event criteria."
         },
         {
           "value": 4,
-          "label": "Grade 4 — Grade 4",
-          "description": "Life-threatening consequences requiring urgent intervention.",
-          "ctcae_grade": 4
+          "label": "Grade 4",
+          "description": "Potentially life-threatening event: urgent clinical assessment and named event criteria."
         }
       ],
-      "demo_value": 0,
-      "assessment_guidance": "Identify the exact adverse event, assess symptoms and functional impact, and apply the toxicity-specific CTCAE v5.0 definition. Do not grade solely from a generic severity impression.",
-      "ctcae_version": "5.0",
-      "ctcae_category": "stomatitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "unit": "Source toxicity grade",
+      "assessment_guidance": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software.",
+      "grading_source_label": "NCCP 00546 v4, toxicity grade table; edition unspecified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+      "source_grading_note": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software."
+    },
+    "skin_grade": {
+      "label": "Skin toxicity",
+      "type": "select",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No toxicity reported for the named event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Mild event: confirm the exact symptom and local grading criteria."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Moderate event: assess interference with usual activities and the named event criteria."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Severe event: assess self-care limitation, need for admission and the named event criteria."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Potentially life-threatening event: urgent clinical assessment and named event criteria."
+        }
+      ],
+      "unit": "Source toxicity grade",
+      "assessment_guidance": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software.",
+      "grading_source_label": "NCCP 00546 v4, toxicity grade table; edition unspecified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+      "source_grading_note": "The NCCP table does not identify a grading edition. Confirm the named adverse event and the locally adopted grading criteria; do not infer a CTCAE edition from this software."
+    },
+    "current_docetaxel_mg_m2": {
+      "label": "Actual current docetaxel dose",
+      "type": "number",
+      "demo_value": "",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "always_show": true,
       "input_role": "decision"
     },
-    "hypersensitivity_reaction": {
-      "label": "Severe hypersensitivity reaction",
+    "toxicity_persists_at_reduced_dose": {
+      "label": "This toxicity persists / recurs at the reduced dose",
+      "type": "boolean",
+      "demo_value": "",
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
+    },
+    "premedication_completed": {
+      "label": "Prescribed dexamethasone premedication completed / approved alternative confirmed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
+      "demo_value": "",
       "input_role": "decision"
+    },
+    "acute_severe_hypersensitivity": {
+      "label": "Severe acute infusion hypersensitivity",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision"
+    },
+    "new_or_worsening_pulmonary_symptoms": {
+      "label": "New or worsening pulmonary symptoms",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "always_show": true,
+      "assessment_guidance": "Assess new cough, breathlessness or hypoxia. This flags symptoms for diagnosis; it does not establish docetaxel-induced lung disease."
+    },
+    "suspected_serious_bowel_toxicity": {
+      "label": "Suspected serious bowel toxicity / enterocolitis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "always_show": true,
+      "assessment_guidance": "Clinically assess significant abdominal pain, fever, diarrhoea or other concerning gastrointestinal symptoms. Neutropenic enterocolitis can occur at any cycle; no automatic diagnosis is made."
+    },
+    "suspected_severe_cutaneous_reaction": {
+      "label": "Suspected SJS / TEN / AGEP or other severe cutaneous reaction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "always_show": true,
+      "assessment_guidance": "Record clinical suspicion of a serious skin reaction, distinct from the ordinary graded skin-toxicity dose table. Confirm diagnosis and specialist plan."
     }
   },
   "required_inputs": [],
@@ -332,8 +535,406 @@
     ],
     "rules": [
       {
-        "id": "ANC_DELAY",
-        "priority": 8,
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug."
+        },
+        "explanation": "Relevant drug / excipient allergy: do not administer; identify the responsible drug.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "INDICATION",
+        "when": {
+          "field": "indication_eligible",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Full NCCP indication or prior-treatment criteria are not confirmed. Review regimen selection.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "ECOG",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Outside the source performance-status population; consultant review required.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Outside the source performance-status population; consultant review required.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "BASELINE_ANC",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate."
+        },
+        "explanation": "Below the source baseline ANC inclusion / exclusion threshold. Ongoing count rules are separate.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_HEP_STOP",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 10
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 6
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold."
+        },
+        "explanation": "Source hepatic threshold: docetaxel not recommended. No other liver value is needed to recognise this independent severe threshold.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_HEP_AMBIGUITY",
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "SOURCE AMBIGUITY: normal bilirubin with AST/ALT >1.5–5 and ALP >2.5–5 suggests considering 75% of ORIGINAL dose; the printed 50% row overlaps / leaves gaps. Consultant/pharmacy must resolve the pattern, including ALP exactly 6. No automatic 50% / 75% dose is calculated.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO",
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": ">",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Neuropathy >2: reduce to 60 mg/m²; if persistent at 60, discontinue docetaxel.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO_75",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_NEURO_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 60
+            },
+            {
+              "field": "toxicity_persists_at_reduced_dose",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "This toxicity persists at 60 mg/m²: discontinue docetaxel."
+        },
+        "explanation": "This toxicity persists at 60 mg/m²: discontinue docetaxel.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_MOUTH",
+        "when": {
+          "field": "stomatitis_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Stomatitis ≥3: reduce to 60 mg/m²; check the exact source before a further reduction.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Stomatitis ≥3: reduce to 60 mg/m²; check the exact source before a further reduction.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_MOUTH_75",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity.",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Reduce docetaxel to 60 mg/m² after assessment of this toxicity.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_MOUTH_PERSISTENT",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 60
+            },
+            {
+              "field": "toxicity_persists_at_reduced_dose",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "This toxicity persists at 60 mg/m²: discontinue docetaxel."
+        },
+        "explanation": "This toxicity persists at 60 mg/m²: discontinue docetaxel.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_SKIN",
+        "when": {
+          "field": "skin_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Severe skin toxicity requires source-specific review. Grade-3 source rows and current dose determine reduction; do not extrapolate an unqualified grade-4 percentage.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_ANC_LOW",
         "when": {
           "field": "anc_x10e9_l",
           "operator": "<",
@@ -342,242 +943,503 @@
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "docetaxel"
           ],
-          "message": "Delay docetaxel until ANC ≥1.5 ×10⁹/L."
+          "recommendation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction."
         },
+        "explanation": "Delay docetaxel for ANC below 1.5. Very low ANC requires immediate review; duration determines the subsequent reduction.",
         "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay docetaxel until ANC ≥1.5 ×10⁹/L."
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
       },
       {
-        "id": "PLATELET_REVIEW",
-        "priority": 8,
+        "rule_id": "DOC_FN_REDUCTION",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 100
+          "any": [
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "anc_below_0_5_days",
+                  "operator": ">",
+                  "value": 7
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "delay",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "docetaxel"
           ],
-          "message": "Delay and review thrombocytopenia according to the official NCCP protocol."
+          "recommendation": "Treat the acute event and confirm recovery. Subsequent source ladder is 75 →60 mg/m²; discontinue if recurrence at the lower dose."
         },
+        "explanation": "Treat the acute event and confirm recovery. Subsequent source ladder is 75 →60 mg/m²; discontinue if recurrence at the lower dose.",
         "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay and review thrombocytopenia according to the official NCCP protocol."
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
       },
       {
-        "id": "FN_REDUCE",
-        "priority": 7,
+        "rule_id": "DOC_FN_RECURRENCE",
         "when": {
-          "field": "febrile_neutropenia_or_prolonged_grade4",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "delay_then_dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Delay until recovery, then reduce docetaxel to 60 mg/m²."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Delay until recovery, then reduce docetaxel to 60 mg/m²."
-      },
-      {
-        "id": "HEPATIC_75",
-        "priority": 12,
-        "when": {
-          "field": "hepatic_band",
-          "operator": "==",
-          "value": "dose75"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Administer 75% of the original docetaxel dose."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Administer 75% of the original docetaxel dose."
-      },
-      {
-        "id": "HEPATIC_50",
-        "priority": 12,
-        "when": {
-          "field": "hepatic_band",
-          "operator": "==",
-          "value": "dose50"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Administer 50% of the original docetaxel dose."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Administer 50% of the original docetaxel dose."
-      },
-      {
-        "id": "HEPATIC_STOP",
-        "priority": 1,
-        "when": {
-          "field": "hepatic_band",
-          "operator": "==",
-          "value": "not_recommended"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Docetaxel is not recommended in this hepatic-function band."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Docetaxel is not recommended in this hepatic-function band."
-      },
-      {
-        "id": "NEUROPATHY",
-        "priority": 12,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">",
-          "value": 2
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "For neuropathy >Grade 2, reduce to the next dose level; discontinue if persistent at the lower dose."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "For neuropathy >Grade 2, reduce to the next dose level; discontinue if persistent at the lower dose."
-      },
-      {
-        "id": "SKIN",
-        "priority": 12,
-        "when": {
-          "field": "skin_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 skin toxicity triggers reduction to the next dose level; discontinue if persistent."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Grade 3 skin toxicity triggers reduction to the next dose level; discontinue if persistent."
-      },
-      {
-        "id": "STOMATITIS",
-        "priority": 12,
-        "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3/4 stomatitis triggers reduction to the next dose level; discontinue if persistent."
-        },
-        "source": {
-          "page": 3,
-          "document": "Official NCCP regimen"
-        },
-        "explanation": "Grade 3/4 stomatitis triggers reduction to the next dose level; discontinue if persistent."
-      },
-      {
-        "id": "HSR",
-        "priority": 2,
-        "when": {
-          "field": "hypersensitivity_reaction",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "all": [
+                    {
+                      "field": "anc_x10e9_l",
+                      "operator": "<",
+                      "value": 0.5
+                    },
+                    {
+                      "field": "anc_below_0_5_days",
+                      "operator": ">",
+                      "value": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 60
+            },
+            {
+              "field": "toxicity_persists_at_reduced_dose",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "docetaxel"
           ],
-          "message": "Stop docetaxel for a severe hypersensitivity reaction and manage urgently."
+          "recommendation": "Recurrent qualifying event at 60 mg/m²: discontinue docetaxel."
         },
+        "explanation": "Recurrent qualifying event at 60 mg/m²: discontinue docetaxel.",
         "source": {
-          "page": 4,
-          "document": "Official NCCP regimen"
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "SEVERE_HEPATIC_EXCLUSION",
+        "when": {
+          "field": "severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "Stop docetaxel for a severe hypersensitivity reaction and manage urgently."
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review docetaxel and the separate steroid plan."
+        },
+        "explanation": "Severe hepatic impairment / significant hepatic dysfunction is a source chemotherapy exclusion. Do not administer affected chemotherapy; review docetaxel and the separate steroid plan.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_SKIN_AT60",
+        "when": {
+          "all": [
+            {
+              "field": "skin_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 60
+            },
+            {
+              "field": "toxicity_persists_at_reduced_dose",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Persistent grade 3 skin toxicity at 60 mg/m²: discontinue docetaxel."
+        },
+        "explanation": "Persistent grade 3 skin toxicity at 60 mg/m²: discontinue docetaxel.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_PROLONGED_HISTORY",
+        "when": {
+          "field": "anc_below_0_5_days",
+          "operator": ">",
+          "value": 7
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 75 →60 mg/m²; recurrence at the lower dose requires discontinuation. Confirm recovery and actual dose before restarting.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A documented ANC <0.5 episode lasting more than one week affects the subsequent dose even after counts recover: source ladder 75 →60 mg/m²; recurrence at the lower dose requires discontinuation. Confirm recovery and actual dose before restarting.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_CURRENT_DOSE_RECONCILE",
+        "when": {
+          "all": [
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "<",
+              "value": 60
+            },
+            {
+              "any": [
+                {
+                  "field": "stomatitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "skin_grade",
+                  "operator": ">=",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The actual current docetaxel dose is already below the source reference dose. Do not re-escalate automatically; reconcile previous reductions and the next action with oncology / pharmacy.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_SKIN_75",
+        "when": {
+          "all": [
+            {
+              "field": "skin_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "current_docetaxel_mg_m2",
+              "operator": "==",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Grade 3 skin toxicity at 75 mg/m²: after clinical assessment, reduce docetaxel to 60 mg/m².",
+          "dose": {
+            "value": 60,
+            "unit": "mg/m2"
+          }
+        },
+        "explanation": "Grade 3 skin toxicity at 75 mg/m²: after clinical assessment, reduce docetaxel to 60 mg/m².",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_PREMED_REVIEW",
+        "when": {
+          "field": "premedication_completed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Do not begin infusion until the team has reconciled missed/contraindicated dexamethasone premedication. The 20 mg IV alternative is a consultant choice, not an automatic substitute."
+        },
+        "explanation": "Do not begin infusion until the team has reconciled missed/contraindicated dexamethasone premedication. The 20 mg IV alternative is a consultant choice, not an automatic substitute.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "DOC_ACUTE_HSR",
+        "when": {
+          "field": "acute_severe_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Stop docetaxel immediately and treat the severe reaction. The NCCP source advises no rechallenge after a severe hypersensitivity reaction."
+        },
+        "explanation": "Stop docetaxel immediately and treat the severe reaction. The NCCP source advises no rechallenge after a severe hypersensitivity reaction.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "CONCURRENT_SOURCE_AMBIGUITY_HOLD",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "stomatitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "skin_grade",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "A source-table ambiguity coexists with a separate dose-reduction trigger. Withhold dose selection until consultant/pharmacy reconciliation; do not present a definitive combined or multiplied dose. This is a conservative software safety guard, not an additional NCCP numeric dose row."
+        },
+        "explanation": "A source-table ambiguity coexists with a separate dose-reduction trigger. Withhold dose selection until consultant/pharmacy reconciliation; do not present a definitive combined or multiplied dose. This is a conservative software safety guard, not an additional NCCP numeric dose row.",
+        "source": {
+          "document": "NCCP 00546 v4",
+          "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+          "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "DOC_PULMONARY_HOLD",
+        "when": {
+          "field": "new_or_worsening_pulmonary_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Interrupt docetaxel pending prompt investigation of new or worsening pulmonary symptoms. Consider infection, progression, embolism and treatment-related lung disease; review the benefit of resuming after a diagnosis is available.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt docetaxel pending prompt investigation of new or worsening pulmonary symptoms. Consider infection, progression, embolism and treatment-related lung disease; review the benefit of resuming after a diagnosis is available.",
+        "source": {
+          "document": "EMA TAXOTERE product information; supplemental safety assessment",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.4 Respiratory disorders",
+          "sha256": "518a48b73ebbaf067647805c9944cdf9fe7e9826b63e3719c8c44fa589fb5cce"
+        }
+      },
+      {
+        "rule_id": "DOC_BOWEL_URGENT_REVIEW",
+        "when": {
+          "field": "suspected_serious_bowel_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Withhold further docetaxel pending urgent clinical assessment of suspected serious bowel toxicity. Enterocolitis can progress rapidly. This is a safety reconciliation action, not a source numeric dose-reduction rule.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Withhold further docetaxel pending urgent clinical assessment of suspected serious bowel toxicity. Enterocolitis can progress rapidly. This is a safety reconciliation action, not a source numeric dose-reduction rule.",
+        "source": {
+          "document": "EMA TAXOTERE product information; supplemental safety assessment",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "4.4 Gastrointestinal reactions; safety synthesis also supported by NCCP00203 p4",
+          "sha256": "518a48b73ebbaf067647805c9944cdf9fe7e9826b63e3719c8c44fa589fb5cce"
+        }
+      },
+      {
+        "rule_id": "DOC_SCAR_URGENT_REVIEW",
+        "when": {
+          "field": "suspected_severe_cutaneous_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "recommendation": "Hold further treatment for urgent specialist assessment. If signs suggest SJS, TEN or AGEP, the product information says to consider discontinuation; do not automatically resume at 60 mg/m² using the ordinary grade-3 skin row.",
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Hold further treatment for urgent specialist assessment. If signs suggest SJS, TEN or AGEP, the product information says to consider discontinuation; do not automatically resume at 60 mg/m² using the ordinary grade-3 skin row.",
+        "source": {
+          "document": "EMA TAXOTERE product information; supplemental safety assessment",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+          "page": 8,
+          "section": "4.4 Cutaneous reactions; hold is a safety reconciliation pending the product-information discontinuation decision",
+          "sha256": "518a48b73ebbaf067647805c9944cdf9fe7e9826b63e3719c8c44fa589fb5cce"
+        }
       }
     ]
   },
   "treatment": {
-    "cycle": "Every 21 days",
+    "cycle_days": 21,
+    "cycle_length_days": 21,
+    "drugs": [
+      "docetaxel",
+      "prednisolone"
+    ],
     "administration": [
       {
         "drug": "docetaxel",
         "dose": "75 mg/m²",
         "route": "IV",
-        "day": 1
+        "schedule": "Day 1 every 21 days",
+        "infusion_duration": "60 minutes"
       },
       {
-        "drug": "predniSONE/prednisoLONE",
-        "dose": "5 mg twice daily or 10 mg once daily",
+        "drug": "prednisolone",
+        "dose": "10 mg once daily OR 5 mg twice daily",
         "route": "PO",
-        "cycle": "continuous"
+        "schedule": "Continuous from day 1"
       }
     ],
     "dose_reductions": [
-      "60 mg/m²"
-    ]
+      "75 → 60 mg/m²; persistent qualifying toxicity at the lower dose: discontinue"
+    ],
+    "duration_text": "Until disease progression or unacceptable toxicity; individual plan."
   },
   "eligibility": [
-    "Approved indication",
-    "Adequate marrow and organ function"
+    "Metastatic castration-resistant (hormone-refractory) prostate cancer",
+    "ECOG 0–2",
+    "ANC at least 1.5 ×10⁹/L at baseline"
   ],
   "exclusions": [
-    "Hypersensitivity to docetaxel/polysorbate 80",
-    "Hepatic impairment in not-recommended band"
+    "Hypersensitivity to docetaxel or excipients",
+    "Severe hepatic impairment",
+    "Baseline ANC below 1.5 ×10⁹/L"
   ],
   "monitoring": {
     "baseline": [
-      "FBC, renal and liver profile"
+      "Full blood count, renal and liver profile"
     ],
     "regular": [
-      "FBC and liver profile before each cycle",
-      "Neuropathy, skin and mucosal toxicity"
+      "Full blood count, renal and liver profile before treatment; review symptoms, neuropathy, skin/mouth toxicity and fluid retention."
     ]
   },
   "supportive_care": {
@@ -589,7 +1451,7 @@
     "mapping_confidence": "high",
     "validation_status": "pending_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "premedications": "Docetaxel dexamethasone schedule exactly as stated in the NCCP source; if missed, follow the NCCP/local rescue pathway.",
+    "premedications": "Dexamethasone 8 mg orally at 12 hours, 3 hours and 1 hour before docetaxel. If omitted, consultant may consider dexamethasone 20 mg IV immediately before; this is not an automatic substitution.",
     "growth_factor": "G-CSF may be used according to patient/regimen risk and NCCP guidance.",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
@@ -599,6 +1461,35 @@
       "indication_id": "00546-gu",
       "code": "00546g",
       "description": "Metastatic castration-resistant prostate cancer treated with docetaxel and prednisolone."
+    }
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "Treatment every 21 days",
+      "cycle_length_days": 21,
+      "administration": [
+        {
+          "drug": "docetaxel",
+          "dose": {
+            "value": 75,
+            "unit": "mg/m2"
+          },
+          "day": 1,
+          "route": "IV infusion",
+          "notes": "Infuse over 60 minutes; confirm the prescribed dose and any source-supported reduction."
+        },
+        {
+          "drug": "prednisolone",
+          "dose": {
+            "value": 10,
+            "unit": "mg"
+          },
+          "day": "Every day",
+          "route": "PO",
+          "notes": "Continuous daily steroid; the source also permits 5 mg twice daily. Follow the prescription and do not stop abruptly."
+        }
+      ]
     }
   ]
 }

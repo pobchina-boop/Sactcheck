@@ -15,5 +15,5 @@ function walk(d){for(const e of fs.readdirSync(path.join(R,d),{withFileTypes:tru
 walk('patient');
 if(report.missing_profiles.length)throw Error(JSON.stringify(report.missing_profiles));
 if(check&&report.changed.length)throw Error('Consent core missing or stale: '+report.changed.join(', '));
-if(!check)fs.writeFileSync(path.join(R,'validation/usability-consent-v08455/consent-inventory.json'),JSON.stringify(report,null,2)+'\n');
+if(!check){const arg=process.argv.find(x=>x.startsWith('--report='));const destination=arg?arg.slice(9):'validation/usability-consent-v08455/consent-inventory.json';fs.mkdirSync(path.dirname(path.join(R,destination)),{recursive:true});fs.writeFileSync(path.join(R,destination),JSON.stringify(report,null,2)+'\n');}
 console.log(JSON.stringify({routes:report.routes.length,changed:report.changed.length,check}));

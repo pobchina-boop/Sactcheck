@@ -47362,6 +47362,469 @@ const definitions={
         "checked": "2026-11-14"
       }
     ]
+  },
+  "00101": {
+    "code": "00101",
+    "title": "Cabazitaxel + prednisolone: treatment and checks",
+    "release": "0.84.56",
+    "checked": "2026-11-15",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic castration-resistant prostate cancer after docetaxel",
+    "summary": "Cabazitaxel is given by drip over one hour on Day 1 every 21 days, with prednisolone 10 mg daily. Treatment continues while helpful and tolerable; six cycles is not a fixed maximum.",
+    "stages": [
+      "Before starting",
+      "Before each dose",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety bloods",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review performance status, current medicines, infection, neuropathy and the treatment goal.",
+          "Full blood count weekly during the first cycle, then before every cycle. Kidney and liver tests before each cycle; review infection, diarrhoea, hydration and numbness.",
+          "Report symptoms promptly; extra tests if unwell.",
+          "Follow recovery and abnormal results until resolved or a follow-up plan is agreed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Collect the prescribed diarrhoea medicine before the first cycle. The team considers white-cell growth-factor support (G-CSF), particularly with higher infection risk. Contact the team early for diarrhoea, fever, abdominal pain or reduced urine.",
+          "The unit gives chlorphenamine 10 mg IV, dexamethasone 8 mg IV and famotidine 20 mg IV at least 30 minutes before the infusion.",
+          "Take prednisolone continuously as prescribed, with food. Do not stop suddenly when chemotherapy is delayed. Ask for a steroid alert card, an illness plan and advice if vomiting prevents you keeping tablets down.",
+          "Review lasting effects and support needs."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Response and bone health",
+        "kind": "monitoring",
+        "cells": [
+          "Continue prescribed androgen deprivation therapy (ADT), unless both testes have been surgically removed. ADT lowers testosterone; chemotherapy or a bone-targeted radiopharmaceutical has a different action. Additional androgen-pathway agents and radiotherapy need their own disease-specific plan.",
+          "Prostate-specific antigen (PSA), symptoms and scans are assessed together. Testosterone can confirm ongoing hormone suppression. The consultant sets scan timing; this source does not establish a universal three-month scan interval.",
+          "Review new pain or neurological symptoms promptly.",
+          "Agree ongoing ADT, bone health and next disease reviews."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Day 1 every 21 days",
+        "why": "Help control advanced prostate cancer after docetaxel and relieve symptoms.",
+        "clinical": "Cabazitaxel is given by drip over one hour on Day 1 every 21 days, with prednisolone 10 mg daily. Treatment continues while helpful and tolerable; six cycles is not a fixed maximum.",
+        "action": "Call your oncology team immediately for fever, shaking chills, feeling suddenly unwell, unusual bleeding or persistent vomiting/diarrhoea. Follow your own temperature and contact plan. Severe breathing difficulty, chest pain, collapse or new leg weakness with bladder/bowel changes: call 112/999.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00101 v8",
+        "url": "https://healthservice.hse.ie/documents/6536/108_cabazitaxel_and_prednisoLONE.pdf",
+        "sha256": "c85d1da5dc1a46715695409c78620c975aa12a76b1b25ec490d827e8fe05cd41",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "smpc",
+        "title": "Jevtana: EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/jevtana-epar-product-information_en.pdf",
+        "sha256": "4c1eff0507207d5beb179217fec464186ac3bc1330fa052cff48922b617d3c37",
+        "checked": "2026-11-15"
+      }
+    ]
+  },
+  "00313": {
+    "code": "00313",
+    "title": "Docetaxel + prednisolone every 14 days: treatment and checks",
+    "release": "0.84.56",
+    "checked": "2026-11-15",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic castration-resistant prostate cancer",
+    "summary": "Docetaxel 50 mg/m² is infused over one hour on Day 1 every 14 days, with prednisolone 10 mg once daily or 5 mg twice daily continuously. Treatment duration depends on benefit and side effects.",
+    "stages": [
+      "Before starting",
+      "Before each dose",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety bloods",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review performance status, current medicines, infection, neuropathy and the treatment goal.",
+          "Full blood count, kidney and liver tests before starting and regularly during treatment, with results reviewed before each infusion. Report neuropathy, skin/mouth problems, infection and swelling.",
+          "Report symptoms promptly; extra tests if unwell.",
+          "Follow recovery and abnormal results until resolved or a follow-up plan is agreed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "This two-week schedule uses a lower dose per visit than the three-week regimen. Do not transfer the dose or steroid timing from another docetaxel schedule.",
+          "Dexamethasone 8 mg by mouth at 12 hours, 3 hours and 1 hour before docetaxel. Tell the team if a dose is missed; an IV alternative is a consultant decision.",
+          "Take prednisolone continuously as prescribed, with food. Do not stop suddenly when chemotherapy is delayed. Ask for a steroid alert card, an illness plan and advice if vomiting prevents you keeping tablets down.",
+          "Review lasting effects and support needs."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Response and bone health",
+        "kind": "monitoring",
+        "cells": [
+          "Continue prescribed androgen deprivation therapy (ADT), unless both testes have been surgically removed. ADT lowers testosterone; chemotherapy or a bone-targeted radiopharmaceutical has a different action. Additional androgen-pathway agents and radiotherapy need their own disease-specific plan.",
+          "Prostate-specific antigen (PSA), symptoms and scans are assessed together. Testosterone can confirm ongoing hormone suppression. The consultant sets scan timing; this source does not establish a universal three-month scan interval.",
+          "Review new pain or neurological symptoms promptly.",
+          "Agree ongoing ADT, bone health and next disease reviews."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Day 1 every 14 days",
+        "why": "Help control advanced prostate cancer and relieve symptoms.",
+        "clinical": "Docetaxel 50 mg/m² is infused over one hour on Day 1 every 14 days, with prednisolone 10 mg once daily or 5 mg twice daily continuously. Treatment duration depends on benefit and side effects.",
+        "action": "Call your oncology team immediately for fever, shaking chills, feeling suddenly unwell, unusual bleeding or persistent vomiting/diarrhoea. Follow your own temperature and contact plan. Severe breathing difficulty, chest pain, collapse or new leg weakness with bladder/bowel changes: call 112/999.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00313 v5",
+        "url": "https://healthservice.hse.ie/documents/6716/313_v5_Docetaxel_50-14day.pdf",
+        "sha256": "a90e4ff2cf77b5e7816ef37777a77868c8c4132430746124fbe4fefe72adcaeb",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "smpc",
+        "title": "Taxotere: EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+        "sha256": "518a48b73ebbaf067647805c9944cdf9fe7e9826b63e3719c8c44fa589fb5cce",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "trial23294853",
+        "title": "Randomised two-week versus three-week docetaxel trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23294853/",
+        "checked": "2026-11-15"
+      }
+    ]
+  },
+  "00546": {
+    "code": "00546",
+    "title": "Docetaxel + prednisolone every 21 days: treatment and checks",
+    "release": "0.84.56",
+    "checked": "2026-11-15",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic castration-resistant prostate cancer",
+    "summary": "Docetaxel 75 mg/m² is infused over one hour on Day 1 every 21 days, with prednisolone 10 mg daily or 5 mg twice daily continuously. Continue while helpful and tolerable; there is no fixed course maximum in this source.",
+    "stages": [
+      "Before starting",
+      "Before each dose",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety bloods",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review performance status, current medicines, infection, neuropathy and the treatment goal.",
+          "Full blood count, kidney and liver tests at baseline and before every cycle. Review infection, numbness, mouth/skin problems and fluid retention before each treatment.",
+          "Report symptoms promptly; extra tests if unwell.",
+          "Follow recovery and abnormal results until resolved or a follow-up plan is agreed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Keep the exact prescribed steroid schedule. This castration-resistant regimen includes continuous prednisolone, unlike the separate 00203 hormone-sensitive service.",
+          "Dexamethasone 8 mg by mouth at 12 hours, 3 hours and 1 hour before docetaxel. Tell the team if a dose is missed; an IV alternative is a consultant decision.",
+          "Take prednisolone continuously as prescribed, with food. Do not stop suddenly when chemotherapy is delayed. Ask for a steroid alert card, an illness plan and advice if vomiting prevents you keeping tablets down.",
+          "Review lasting effects and support needs."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Response and bone health",
+        "kind": "monitoring",
+        "cells": [
+          "Continue prescribed androgen deprivation therapy (ADT), unless both testes have been surgically removed. ADT lowers testosterone; chemotherapy or a bone-targeted radiopharmaceutical has a different action. Additional androgen-pathway agents and radiotherapy need their own disease-specific plan.",
+          "Prostate-specific antigen (PSA), symptoms and scans are assessed together. Testosterone can confirm ongoing hormone suppression. The consultant sets scan timing; this source does not establish a universal three-month scan interval.",
+          "Review new pain or neurological symptoms promptly.",
+          "Agree ongoing ADT, bone health and next disease reviews."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Day 1 every 21 days",
+        "why": "Help control advanced prostate cancer and relieve symptoms.",
+        "clinical": "Docetaxel 75 mg/m² is infused over one hour on Day 1 every 21 days, with prednisolone 10 mg daily or 5 mg twice daily continuously. Continue while helpful and tolerable; there is no fixed course maximum in this source.",
+        "action": "Call your oncology team immediately for fever, shaking chills, feeling suddenly unwell, unusual bleeding or persistent vomiting/diarrhoea. Follow your own temperature and contact plan. Severe breathing difficulty, chest pain, collapse or new leg weakness with bladder/bowel changes: call 112/999.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00546 v4",
+        "url": "https://healthservice.hse.ie/documents/6382/546_DOCEtaxel75-prednisoLONE_combination_therapy.pdf",
+        "sha256": "ea52be162f606a359c197bdc3248636a085442a4e85ec6838e29ea12a9fe1cdc",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "smpc",
+        "title": "Taxotere: EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+        "sha256": "518a48b73ebbaf067647805c9944cdf9fe7e9826b63e3719c8c44fa589fb5cce",
+        "checked": "2026-11-15"
+      }
+    ]
+  },
+  "00203:prostate": {
+    "code": "00203",
+    "title": "Docetaxel for hormone-sensitive prostate cancer: treatment and checks",
+    "release": "0.84.56",
+    "checked": "2026-11-15",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Castration-sensitive prostate cancer: metastatic or selected high-risk nonmetastatic source indications",
+    "summary": "Docetaxel 75 mg/m² is infused over one hour on Day 1 every 21 days. The team writes the planned course: NCCP 00203 does not set a six-cycle prostate cap, while CHAARTED used six cycles. Continuous prednisolone is not specified in this source.",
+    "stages": [
+      "Before starting",
+      "Before each dose",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety bloods",
+        "kind": "monitoring",
+        "cells": [
+          "Full blood count, kidney and liver tests; review performance status, current medicines, infection, neuropathy and the treatment goal.",
+          "Full blood count, kidney and liver tests at baseline and before each cycle. Review infection, neuropathy, fluid retention and skin/mouth toxicity before treatment.",
+          "Report symptoms promptly; extra tests if unwell.",
+          "Follow recovery and abnormal results until resolved or a follow-up plan is agreed."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm whether your cancer is metastatic or nonmetastatic, the intended number of cycles, continued ADT and any separately prescribed androgen-pathway medicine or radiotherapy. Do not copy the continuous prednisolone plan from 00546.",
+          "Dexamethasone 8 mg twice daily for three days, starting the day before docetaxel; take at least three doses before the infusion. Tell the team if any dose is missed.",
+          "Follow the written medicines and symptom plan.",
+          "Review lasting effects and support needs."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Response and bone health",
+        "kind": "monitoring",
+        "cells": [
+          "Continue prescribed androgen deprivation therapy (ADT), unless both testes have been surgically removed. ADT lowers testosterone; chemotherapy or a bone-targeted radiopharmaceutical has a different action. Additional androgen-pathway agents and radiotherapy need their own disease-specific plan.",
+          "Prostate-specific antigen (PSA), symptoms and scans are assessed together. Testosterone can confirm ongoing hormone suppression. The consultant sets scan timing; this source does not establish a universal three-month scan interval.",
+          "Review new pain or neurological symptoms promptly.",
+          "Agree ongoing ADT, bone health and next disease reviews."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Day 1 every 21 days",
+        "why": "Add chemotherapy to the overall prostate treatment plan. Expected benefit depends on whether the disease has spread.",
+        "clinical": "Docetaxel 75 mg/m² is infused over one hour on Day 1 every 21 days. The team writes the planned course: NCCP 00203 does not set a six-cycle prostate cap, while CHAARTED used six cycles. Continuous prednisolone is not specified in this source.",
+        "action": "Call your oncology team immediately for fever, shaking chills, feeling suddenly unwell, unusual bleeding or persistent vomiting/diarrhoea. Follow your own temperature and contact plan. Severe breathing difficulty, chest pain, collapse or new leg weakness with bladder/bowel changes: call 112/999.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00203 v7",
+        "url": "https://healthservice.hse.ie/documents/6543/203_DOCEtaxel_75-21day.pdf",
+        "sha256": "421aa0604e15c5b837831ffd1008eff80a2ef8d897edb2914c8c2dbf331cbdaf",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "smpc",
+        "title": "Taxotere: EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf",
+        "sha256": "518a48b73ebbaf067647805c9944cdf9fe7e9826b63e3719c8c44fa589fb5cce",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "trial26244877",
+        "title": "CHAARTED original analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26244877/",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "trial35877084",
+        "title": "STAMPEDE nonmetastatic long-term analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35877084/",
+        "checked": "2026-11-15"
+      }
+    ]
+  },
+  "00257": {
+    "code": "00257",
+    "title": "Radium-223 (Xofigo): treatment and checks",
+    "release": "0.84.56",
+    "checked": "2026-11-15",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Symptomatic bone-metastatic castration-resistant prostate cancer without known visceral metastases",
+    "summary": "Radium-223 is given as a slow injection into a vein every 28 days, for a maximum of six injections. It is administered by a specialist service authorised to use radioactive medicines.",
+    "stages": [
+      "Before starting",
+      "Before each dose",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety bloods",
+        "kind": "monitoring",
+        "cells": [
+          "Confirm symptoms, bone-metastatic disease without visceral metastases, previous treatments, blood count, kidney/liver tests, bone scan/CT and bone health.",
+          "Blood count before every injection and four weeks after completion. Baseline kidney/liver tests, bone scan and CT assessment, PSA and testosterone. Assess fracture risk before treatment and monitor bone health for at least 24 months.",
+          "Report symptoms promptly; extra tests if unwell.",
+          "Blood count four weeks after completion."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Symptoms and medicines",
+        "kind": "monitoring",
+        "cells": [
+          "Do not combine with abiraterone plus prednisone/prednisolone. Bone-protective treatment is assessed before starting. Obtain the nuclear-medicine team’s written toilet, body-fluid, laundry and travel instructions; your treating service will explain which precautions to follow at home and for how long.",
+          "No routine premedication is usually required. The team prescribes sickness or other symptom medicines if needed.",
+          "Follow the written medicines and symptom plan.",
+          "Review lasting effects and support needs."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      },
+      {
+        "label": "Response and bone health",
+        "kind": "monitoring",
+        "cells": [
+          "Continue prescribed androgen deprivation therapy (ADT), unless both testes have been surgically removed. ADT lowers testosterone; chemotherapy or a bone-targeted radiopharmaceutical has a different action. Additional androgen-pathway agents and radiotherapy need their own disease-specific plan.",
+          "Prostate-specific antigen (PSA), symptoms and scans are assessed together. Testosterone can confirm ongoing hormone suppression. The consultant sets scan timing; this source does not establish a universal three-month scan interval.",
+          "Review new pain or neurological symptoms promptly.",
+          "Monitor bone health for at least 24 months."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety tests and disease-response assessments have different purposes. Dates may change after illness or a dose delay."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Injection every 28 days; maximum six",
+        "why": "Treat prostate cancer in affected bones, help control symptoms and delay complications in the appropriate disease setting.",
+        "clinical": "Radium-223 is given as a slow injection into a vein every 28 days, for a maximum of six injections. It is administered by a specialist service authorised to use radioactive medicines.",
+        "action": "Call your oncology team immediately for fever, shaking chills, feeling suddenly unwell, unusual bleeding or persistent vomiting/diarrhoea. Follow your own temperature and contact plan. Severe breathing difficulty, chest pain, collapse or new leg weakness with bladder/bowel changes: call 112/999.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00257 v8",
+        "url": "https://healthservice.hse.ie/documents/6361/257_v8_Radium_223.pdf",
+        "sha256": "4ee629e0d82f1fb46845476b1ce66c540fad76216f35d674de7633ced9d7b57f",
+        "checked": "2026-11-15"
+      },
+      {
+        "id": "smpc",
+        "title": "Xofigo: EMA product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/xofigo-epar-product-information_en.pdf",
+        "sha256": "2bc8e88ff62751c132e9d1a925ea99cae9b2a2bdea846ae42676e4b50d70bb74",
+        "checked": "2026-11-15"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
