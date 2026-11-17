@@ -1,0 +1,482 @@
+/**
+ * SACTCheck regimen information and evidence base.
+ *
+ * Educational, source-linked content only. This module does not alter the
+ * deterministic protocol assessment, dose actions or treatment status.
+ */
+(function (root, factory) {
+  const api = factory(root);
+  if (typeof module === "object" && module.exports) module.exports = api;
+  root.SACTCheckRegimenKnowledgeBase = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
+  "use strict";
+
+  const VERSION = "0.68.0";
+  const DATA_URL = "data/regimen-knowledge-base-v0680.json";
+  let data = null;
+  let loadingPromise = null;
+  let activeProtocol = null;
+
+  function asArray(value) {
+    if (value === undefined || value === null || value === "") return [];
+    return Array.isArray(value) ? value : [value];
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function normalise(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[®™]/g, "")
+      .replace(/[–—]/g, "-")
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function load() {
+    if (data) return Promise.resolve(data);
+    if (loadingPromise) return loadingPromise;
+    if (typeof fetch !== "function") return Promise.reject(new Error("Knowledge base loading is unavailable."));
+    loadingPromise = fetch(DATA_URL, { cache: "no-store" })
+      .then(response => {
+        if (!response.ok) throw new Error(`Could not load regimen information (${response.status}).`);
+        return response.json();
+      })
+      .then(async payload => {
+        for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json", "data/regimen-knowledge-base-v08425-addendum.json", "data/regimen-knowledge-base-v08426-addendum.json", "data/regimen-knowledge-base-v08427-addendum.json", "data/regimen-knowledge-base-v08428-addendum.json", "data/regimen-knowledge-base-v08429-addendum.json", "data/regimen-knowledge-base-v08430-addendum.json", "data/regimen-knowledge-base-v08432-addendum.json", "data/regimen-knowledge-base-v08433-addendum.json", "data/regimen-knowledge-base-v08434-addendum.json", "data/regimen-knowledge-base-v08435-addendum.json", "data/regimen-knowledge-base-v08436-addendum.json", "data/regimen-knowledge-base-v08437-addendum.json", "data/regimen-knowledge-base-v08438-addendum.json", "data/regimen-knowledge-base-v08439-addendum.json", "data/regimen-knowledge-base-v08440-addendum.json", "data/regimen-knowledge-base-v08441-addendum.json", "data/regimen-knowledge-base-v08442-addendum.json", "data/regimen-knowledge-base-v08445-addendum.json", "data/regimen-knowledge-base-v08446-addendum.json", "data/regimen-knowledge-base-v08447-addendum.json", "data/regimen-knowledge-base-v08448-addendum.json", "data/regimen-knowledge-base-v08449-addendum.json", "data/regimen-knowledge-base-v08450-addendum.json", "data/regimen-knowledge-base-v08451-addendum.json", "data/regimen-knowledge-base-v08452-addendum.json", "data/regimen-knowledge-base-v08453-addendum.json","data/regimen-knowledge-base-v08454-addendum.json","data/regimen-knowledge-base-v08456-addendum.json", "data/regimen-knowledge-base-v08457-addendum.json", "data/regimen-knowledge-base-v08458-addendum.json", "data/regimen-knowledge-base-v08459-addendum.json"]) {
+        const response = await fetch(extraUrl, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
+        const extra = await response.json();
+        for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["evidence_records", "evidence_id"], ["drug_profiles", "id"]]) {
+          for (const item of extra[collection] || []) {
+            const i = payload[collection].findIndex(existing => existing[key] === item[key]);
+            if (i < 0) payload[collection].push(item); else payload[collection][i] = item;
+          }
+        }
+        }
+        const prostateResponse = await fetch('data/prostate-treatment-explainer-v08451.json', { cache: 'no-store' });
+        if (!prostateResponse.ok) throw new Error(`Could not load the prostate treatment explainer (${prostateResponse.status}).`);
+        payload.prostate_treatment_explainer = await prostateResponse.json();
+        data = payload;
+        return data;
+      })
+      .finally(() => { loadingPromise = null; });
+    return loadingPromise;
+  }
+
+  function protocolTitle(protocol) {
+    return root.SACTCheckRegimenDisplayTitle?.forProtocol?.(protocol) ||
+      protocol?.metadata?.short_title || protocol?.metadata?.title || protocol?.protocol_id || "Regimen";
+  }
+
+  function protocolCode(protocol) {
+    return protocol?.metadata?.nccp_regimen_code || protocol?.protocol_id || "";
+  }
+
+  function protocolVersion(protocol) {
+    return protocol?.metadata?.nccp_version || "";
+  }
+
+  function componentNames(protocol) {
+    const fromShared = root.SACTCheckRegimenComponents?.forProtocol?.(protocol) || [];
+    if (fromShared.length) return fromShared;
+    return asArray(protocol?.metadata?.drugs).map(String).filter(Boolean);
+  }
+
+  function profileForComponent(component, profiles = []) {
+    const value = normalise(component);
+    if (!value) return null;
+    // A linked antibody-drug conjugate must not resolve to the parent antibody
+    // simply because its shorter name appears earlier in the data bank.
+    const aliases = profiles.flatMap(profile => asArray(profile.aliases)
+      .map(alias => ({ profile, candidate: normalise(alias) }))
+      .filter(item => item.candidate));
+    const exact = aliases.find(item => item.candidate === value);
+    if (exact) return exact.profile;
+    const related = aliases.filter(item => value.includes(item.candidate) || item.candidate.includes(value));
+    related.sort((a, b) => b.candidate.length - a.candidate.length);
+    return related[0]?.profile || null;
+  }
+
+  function profilesForProtocol(protocol, payload = data) {
+    const profiles = payload?.drug_profiles || [];
+    const matched = [];
+    componentNames(protocol).forEach(component => {
+      const profile = profileForComponent(component, profiles);
+      if (profile && !matched.some(item => item.id === profile.id)) matched.push(profile);
+    });
+    return matched;
+  }
+
+  function evidenceForProtocol(protocol, payload = data) {
+    const id = String(protocol?.protocol_id || "");
+    const code = String(protocolCode(protocol)).replace(/^0+/, "");
+    return (payload?.evidence_records || []).filter(record => {
+      if (String(record.protocol_id || "") === id) return true;
+      const recordCode = String(record.nccp_regimen_code || "").replace(/^0+/, "");
+      return recordCode && code && recordCode === code;
+    });
+  }
+
+  function regimenProfileForProtocol(protocol, payload = data) {
+    const id = String(protocol?.protocol_id || "");
+    const keys = root.SACTCheckProtocolIds?.compatibleKeys(protocol) || [id];
+    for (const key of keys) {
+      const profile = (payload?.regimen_profiles || []).find(item => String(item.protocol_id || "") === key);
+      if (profile) return profile;
+    }
+    return null;
+  }
+
+  function ensurePanel() {
+    if (typeof document === "undefined") return null;
+    let overlay = document.getElementById("regimenInformationOverlay");
+    if (overlay) return overlay;
+    overlay = document.createElement("div");
+    overlay.id = "regimenInformationOverlay";
+    overlay.className = "regimen-information-overlay hidden";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-labelledby", "regimenInformationTitle");
+    overlay.innerHTML = `
+      <div class="regimen-information-shell">
+        <div class="regimen-information-toolbar">
+          <div><span class="regimen-information-eyebrow">Regimen information and evidence</span><h2 id="regimenInformationTitle">Regimen information</h2></div>
+          <button type="button" class="btn secondary" data-regimen-info-close>Close</button>
+        </div>
+        <div class="regimen-information-content" data-regimen-info-content aria-live="polite"><p>Loading regimen information…</p></div>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener("click", event => {
+      if (event.target === overlay || event.target.closest("[data-regimen-info-close]")) close();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && !overlay.classList.contains("hidden")) close();
+    });
+    return overlay;
+  }
+
+  function reviewMarkup(status, reviewedDate, sourceCheckedDate) {
+    const parts = [
+      status,
+      reviewedDate ? `Last reviewed ${reviewedDate}` : "",
+      sourceCheckedDate ? `Sources checked ${sourceCheckedDate}` : ""
+    ].filter(Boolean);
+    return parts.length ? `<span class="regimen-review-state">${escapeHtml(parts.join(" · "))}</span>` : "";
+  }
+
+  function drugMarkup(profile) {
+    const source = profile.source_url ? `<a class="regimen-source-link" href="${escapeHtml(profile.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(profile.source_label || "Open medicine source")}</a>` : "";
+    return `<article class="regimen-drug-card">
+      <div class="regimen-drug-head"><h4>${escapeHtml(profile.name)}</h4><span>${escapeHtml(profile.drug_type || "Drug component")}</span></div>
+      ${profile.drug_class ? `<p><strong>Class:</strong> ${escapeHtml(profile.drug_class)}</p>` : ""}
+      ${profile.mechanism ? `<p><strong>Mechanism:</strong> ${escapeHtml(profile.mechanism)}</p>` : ""}
+      <div class="regimen-card-foot">${source}${reviewMarkup(profile.review_status, profile.last_reviewed)}</div>
+    </article>`;
+  }
+
+  function publicationLink(item, label) {
+    if (!item?.url) return "";
+    return `<a class="btn secondary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label || item.label || "Open publication")}</a>`;
+  }
+
+  function evidenceMarkup(record) {
+    const primary = publicationLink({ url: record.publication_url }, "Open primary publication");
+    const doi = record.doi_url ? `<a class="btn secondary" href="${escapeHtml(record.doi_url)}" target="_blank" rel="noopener noreferrer">Open DOI</a>` : "";
+    const followUps = asArray(record.supporting_publications);
+    return `<article class="regimen-evidence-card">
+      <div class="regimen-evidence-head">
+        <div><span class="regimen-evidence-acronym">${escapeHtml(record.trial_acronym || "Supporting evidence")}</span>${record.evidence_relationship ? `<span class="regimen-evidence-relationship">${escapeHtml(record.evidence_relationship)}</span>` : ""}<h4>${escapeHtml(record.publication_title || "Publication")}</h4></div>
+        <span>${escapeHtml([record.journal, record.year].filter(Boolean).join(" · "))}</span>
+      </div>
+      <dl class="regimen-evidence-grid">
+        ${record.evidence_context ? `<div><dt>Clinical context</dt><dd>${escapeHtml(record.evidence_context)}</dd></div>` : ""}
+        ${record.study_design ? `<div><dt>Study design</dt><dd>${escapeHtml(record.study_design)}</dd></div>` : ""}
+        ${record.trial_population ? `<div><dt>Population</dt><dd>${escapeHtml(record.trial_population)}</dd></div>` : ""}
+        ${record.intervention ? `<div><dt>Intervention</dt><dd>${escapeHtml(record.intervention)}</dd></div>` : ""}
+        ${record.comparator ? `<div><dt>Comparator</dt><dd>${escapeHtml(record.comparator)}</dd></div>` : ""}
+        ${record.primary_endpoint ? `<div><dt>Primary endpoint</dt><dd>${escapeHtml(record.primary_endpoint)}</dd></div>` : ""}
+        ${record.relevance_summary ? `<div><dt>Relevance</dt><dd>${escapeHtml(record.relevance_summary)}</dd></div>` : ""}
+        ${record.match_type ? `<div><dt>Evidence mapping</dt><dd>${escapeHtml(record.match_type)}</dd></div>` : ""}
+      </dl>
+      ${asArray(record.key_findings).length ? `<div class="regimen-key-findings"><h5>Key findings</h5><ul>${asArray(record.key_findings).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>` : ""}
+      ${record.limitations ? `<div class="regimen-evidence-limitation"><strong>Important limitations</strong><p>${escapeHtml(record.limitations)}</p></div>` : ""}
+      <div class="regimen-evidence-actions">${primary}${doi}${reviewMarkup(record.review_status, record.last_reviewed, record.source_checked_date)}</div>
+      ${followUps.length ? `<div class="regimen-follow-up-publications"><h5>Additional trial publications</h5>${followUps.map(item => `<div><div><strong>${escapeHtml(item.label || "Follow-up")}</strong><span>${escapeHtml([item.journal, item.year].filter(Boolean).join(" · "))}</span><p>${escapeHtml(item.title || "")}</p></div><div class="regimen-follow-up-actions">${publicationLink(item, "Open PubMed")}${item.doi_url ? `<a class="btn secondary" href="${escapeHtml(item.doi_url)}" target="_blank" rel="noopener noreferrer">Open DOI</a>` : ""}</div></div>`).join("")}</div>` : ""}
+    </article>`;
+  }
+
+  function sectionHeadMarkup(number, title, description) {
+    return `<div class="regimen-information-section-head"><div><span>${escapeHtml(number)}</span><h3>${escapeHtml(title)}</h3></div><p>${escapeHtml(description || "")}</p></div>`;
+  }
+
+  function listCardMarkup(title, items, tone) {
+    const values = asArray(items).filter(Boolean);
+    if (!values.length) return "";
+    return `<article class="regimen-module-card${tone ? ` ${escapeHtml(tone)}` : ""}"><h4>${escapeHtml(title)}</h4><ul>${values.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></article>`;
+  }
+
+  function textCardMarkup(title, text, tone) {
+    if (!text) return "";
+    return `<article class="regimen-module-card${tone ? ` ${escapeHtml(tone)}` : ""}"><h4>${escapeHtml(title)}</h4><p>${escapeHtml(text)}</p></article>`;
+  }
+
+  function overviewMarkup(profile, number) {
+    if (!profile) return "";
+    return `<section class="regimen-information-section regimen-overview-section">
+      ${sectionHeadMarkup(number, "Regimen at a glance", "Concise context for the exact protocol opened.")}
+      <div class="regimen-overview-grid">
+        <article><h4>Role</h4><p>${escapeHtml(profile.regimen_role || "")}</p></article>
+        <article><h4>Treatment setting</h4><p>${escapeHtml(profile.treatment_setting || "")}</p></article>
+        <article class="wide"><h4>Overview</h4><p>${escapeHtml(profile.clinical_summary || "")}</p></article>
+        <article class="wide"><h4>How the components work together</h4><p>${escapeHtml(profile.component_rationale || "")}</p></article>
+        <article class="wide"><h4>Schedule context</h4><p>${escapeHtml(profile.schedule_context || "")}</p></article>
+      </div>
+      ${root.SACTCheckTreatmentRelationship?.renderForCode(profile.treatment_relationship_code)||""}
+      ${asArray(profile.key_points).length ? `<div class="regimen-key-point-tags">${asArray(profile.key_points).map(item => `<span>${escapeHtml(item)}</span>`).join("")}</div>` : ""}
+      <div class="regimen-overview-review">${reviewMarkup(profile.review_status, profile.last_reviewed, profile.source_checked_date)}</div>
+    </section>`;
+  }
+
+  function patientSelectionMarkup(profile, number) {
+    const module = profile?.patient_selection;
+    if (!module) return "";
+    return `<section class="regimen-information-section regimen-module-section">
+      ${sectionHeadMarkup(number, "Treatment intent and patient selection", "Orientation for the encoded indication; not an independent eligibility decision.")}
+      <div class="regimen-module-grid">
+        ${textCardMarkup("Treatment intent", module.treatment_intent, "regimen-module-primary")}
+        ${listCardMarkup("Disease and biomarker context", module.disease_and_biomarker_context)}
+        ${listCardMarkup("Eligibility orientation", module.eligibility_orientation)}
+        ${listCardMarkup("Important cautions", module.important_cautions, "regimen-module-caution")}
+      </div>
+    </section>`;
+  }
+
+  function supportiveCareMarkup(profile, number) {
+    const module = profile?.supportive_care;
+    if (!module) return "";
+    return `<section class="regimen-information-section regimen-module-section">
+      ${sectionHeadMarkup(number, "Supportive care", "Protocol-linked prevention, counselling and symptom-support considerations.")}
+      <div class="regimen-module-grid">
+        ${textCardMarkup("Emetogenic risk", module.emetogenic_risk, "regimen-module-primary")}
+        ${listCardMarkup("Premedication and prophylaxis", module.premedication_and_prophylaxis)}
+        ${listCardMarkup("Patient education", module.patient_education)}
+        ${listCardMarkup("Special support", module.special_support)}
+      </div>
+    </section>`;
+  }
+
+  function longitudinalMonitoringMarkup(profile) {
+    const schedule=profile?.monitoring_and_toxicity?.longitudinal_schedule;
+    if(!schedule?.rows?.length)return '';
+    return `<div class="regimen-monitoring-map"><h4>${escapeHtml(schedule.title||'Expected monitoring')}</h4><p>${escapeHtml(schedule.note||'')}</p><div class="regimen-monitoring-scroll" tabindex="0" role="region" aria-label="Longitudinal monitoring schedule"><table><thead><tr><th scope="col">Check</th>${schedule.columns.map(x=>`<th scope="col">${escapeHtml(x)}</th>`).join('')}</tr></thead><tbody>${schedule.rows.map(row=>`<tr><th scope="row">${escapeHtml(row.label)}</th>${row.cells.map(x=>`<td>${escapeHtml(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  }
+
+  function monitoringMarkup(profile, number) {
+    const module = profile?.monitoring_and_toxicity;
+    if (!module) return "";
+    return `<section class="regimen-information-section regimen-module-section">
+      ${sectionHeadMarkup(number, "Monitoring and toxicity", "What should be actively reviewed around treatment; exact actions remain protocol-driven.")}
+      <div class="regimen-module-grid">
+        ${listCardMarkup("Baseline", module.baseline)}
+        ${listCardMarkup(profile.schedule_kind === "continuous_oral" ? "During continuous treatment" : profile.schedule_kind === "loading_then_q28" ? "At injection reviews" : "Before each cycle", module.before_each_cycle)}
+        ${listCardMarkup("Ongoing monitoring", module.ongoing)}
+        ${listCardMarkup("Priority toxicities", module.priority_toxicities, "regimen-module-primary")}
+        ${listCardMarkup("Urgent review signals", module.urgent_review_signals, "regimen-module-alert")}
+      </div>
+      ${longitudinalMonitoringMarkup(profile)}
+    </section>`;
+  }
+
+  function administrationMarkup(profile, number) {
+    const module = profile?.administration;
+    if (!module) return "";
+    return `<section class="regimen-information-section regimen-module-section">
+      ${sectionHeadMarkup(number, "Administration and practical workflow", "High-level delivery context; use the official protocol and local policies for execution.")}
+      <div class="regimen-module-grid">
+        ${textCardMarkup(profile.schedule_kind ? "Treatment schedule and sequence" : "Cycle and sequence", module.cycle_and_sequence, "regimen-module-primary")}
+        ${listCardMarkup("Route and duration", module.route_and_duration)}
+        ${listCardMarkup("Practical workflow", module.practical_workflow)}
+        ${listCardMarkup("Observation and access", module.observation_and_access)}
+      </div>
+    </section>`;
+  }
+
+  function evidenceAuditMarkup(profile, number) {
+    const audit = profile?.evidence_audit;
+    if (!audit) return "";
+    return `<section class="regimen-information-section regimen-evidence-audit-section">
+      ${sectionHeadMarkup(number, "Evidence completeness audit", "A structured indication-by-indication check; not a systematic review.")}
+      <div class="regimen-evidence-audit-status"><strong>${escapeHtml(audit.status || "Audited")}</strong><span>Sources checked ${escapeHtml(profile.source_checked_date || "")}</span></div>
+      <div class="regimen-module-grid">
+        ${listCardMarkup("Encoded indications reviewed", audit.indications_reviewed, "regimen-module-primary")}
+        ${textCardMarkup("Coverage summary", audit.coverage_summary)}
+        ${textCardMarkup("Later, add-on and sequencing search", audit.later_or_add_on_search)}
+        ${listCardMarkup("Remaining limitations or uncertainties", audit.remaining_uncertainties, "regimen-module-caution")}
+      </div>
+    </section>`;
+  }
+
+  function prostatePathwayMarkup(protocol, payload) {
+    const topic = payload?.prostate_treatment_explainer;
+    if (!topic?.codes?.includes(protocolCode(protocol))) return '';
+    const source = item => `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.label)}</a>`;
+    const sourceMap = new Map(topic.sources.map(item => [item.id, item]));
+    const sections = topic.sections.map(section => {
+      const rows = section.rows || [];
+      const table = rows.length ? `<div class="prostate-pathway-table" tabindex="0" role="region" aria-label="${escapeHtml(section.title)}"><table><caption>${escapeHtml(section.title)}</caption><thead><tr>${section.columns.map(column => `<th scope="col">${escapeHtml(column)}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${row.map((cell, i) => i === 0 ? `<th scope="row">${escapeHtml(cell)}</th>` : `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '';
+      return `<details><summary>${escapeHtml(section.title)}</summary>${section.paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('')}${table}<p class="regimen-info-note">Sources: ${section.source_ids.map(id => sourceMap.get(id)).filter(Boolean).map(source).join(' · ')}</p></details>`;
+    }).join('');
+    return `<section class="regimen-information-section prostate-pathway" aria-labelledby="prostate-pathway-title"><h3 id="prostate-pathway-title">${escapeHtml(topic.title)}</h3><p>${escapeHtml(topic.intro)}</p><p class="regimen-info-note">${escapeHtml(topic.boundary)}</p><button type="button" class="btn" data-prostate-expand>Expand all topics</button>${sections}<p class="regimen-info-note">Sources checked ${escapeHtml(topic.source_checked_date)}. ${escapeHtml(topic.review_status)}.</p></section>`;
+  }
+
+  function render(protocol, payload, selectedContext) {
+    const overlay = ensurePanel();
+    const target = overlay?.querySelector("[data-regimen-info-content]");
+    if (!target || !protocol) return;
+    const metadata = protocol.metadata || {};
+    const components = componentNames(protocol);
+    const profiles = profilesForProtocol(protocol, payload);
+    const evidence = evidenceForProtocol(protocol, payload);
+    const baseProfile = regimenProfileForProtocol(protocol, payload);
+    const contextProfiles = baseProfile?.context_profiles || [];
+    const contextId = String(selectedContext ?? root.SACTCheckProtocolContext?.activeTumourGroup?.() ?? '').toLowerCase();
+    const regimenProfile = contextProfiles.length ? contextProfiles.find(p=>p.context_id===contextId) : baseProfile;
+    const contextPicker = contextProfiles.length ? `<section class="regimen-information-section"><label for="regimen-info-context"><strong>Select the treatment context</strong></label><p>Evidence, treatment aims and patient resources are specific to the selected indication.</p><select id="regimen-info-context" data-regimen-info-context><option value="">Choose an indication context…</option>${contextProfiles.map(p=>`<option value="${escapeHtml(p.context_id)}"${p.context_id===contextId?' selected':''}>${escapeHtml(p.context_label)}</option>`).join('')}</select>${regimenProfile?'':'<p>For other tumour sites, use the official protocol. A dedicated patient suite has not been established here.</p>'}</section>` : '';
+    const official = metadata.source_url ? `<a class="btn" href="${escapeHtml(metadata.source_url)}" target="_blank" rel="noopener noreferrer">Open official NCCP protocol</a>` : "";
+    const missingComponents = components.filter(component => !profileForComponent(component, payload?.drug_profiles || []));
+    let sectionIndex = 1;
+    const nextSection = () => String(sectionIndex++).padStart(2, "0");
+
+    const overview = regimenProfile ? overviewMarkup(regimenProfile, nextSection()) : "";
+    const patientSelection = regimenProfile?.patient_selection ? patientSelectionMarkup(regimenProfile, nextSection()) : "";
+    const supportiveCare = regimenProfile?.supportive_care ? supportiveCareMarkup(regimenProfile, nextSection()) : "";
+    const monitoring = regimenProfile?.monitoring_and_toxicity ? monitoringMarkup(regimenProfile, nextSection()) : "";
+    const administration = regimenProfile?.administration ? administrationMarkup(regimenProfile, nextSection()) : "";
+    const evidenceAudit = regimenProfile?.evidence_audit ? evidenceAuditMarkup(regimenProfile, nextSection()) : "";
+    const componentSectionNumber = nextSection();
+    const evidenceSectionNumber = nextSection();
+
+    target.innerHTML = `
+      <section class="regimen-information-hero">
+        <span class="regimen-information-code">NCCP ${escapeHtml(protocolCode(protocol))}${protocolVersion(protocol) ? ` · v${escapeHtml(protocolVersion(protocol))}` : ""}</span>
+        <h3>${escapeHtml(protocolTitle(protocol))}</h3>
+        <p>${escapeHtml(regimenProfile?.treatment_setting || metadata.indication || "Review the official NCCP protocol for the complete authorised indication and treatment context.")}</p>
+        <div class="regimen-information-actions">${official}</div>
+      </section>
+
+      ${contextPicker}
+      ${prostatePathwayMarkup(protocol, payload)}
+      ${root.SACTCheckTreatmentEvidence?.render(regimenProfile)||""}
+      ${overview}
+      ${regimenProfile?.reference_links?.length ? `<section class="regimen-information-section"><h3>Regimen sources and patient resources</h3><div class="regimen-information-actions">${regimenProfile.reference_links.map(item => publicationLink(item, item.label)).join("")}</div></section>` : ""}
+      ${patientSelection}
+      ${supportiveCare}
+      ${monitoring}
+      ${regimenProfile ? (root.SACTCheckTreatmentJourney?.renderForCode(regimenProfile.journey_key||protocolCode(protocol),"clinician")||"") : ""}
+      ${administration}
+      ${evidenceAudit}
+
+      <section class="regimen-information-section">
+        ${sectionHeadMarkup(componentSectionNumber, "Regimen components", "Drug class and mechanism summaries are educational and do not alter the encoded assessment.")}
+        ${components.length ? `<div class="regimen-component-tags">${components.map(item => `<span>${escapeHtml(item)}</span>`).join("")}</div>` : '<p class="regimen-info-empty">No structured component list is available for this regimen.</p>'}
+        ${profiles.length ? `<div class="regimen-drug-grid">${profiles.map(drugMarkup).join("")}</div>` : '<p class="regimen-info-empty">Drug class and mechanism summaries have not yet been mapped for this regimen.</p>'}
+        ${missingComponents.length ? `<p class="regimen-info-note"><strong>Not yet mapped:</strong> ${escapeHtml(missingComponents.join(" · "))}</p>` : ""}
+      </section>
+
+      ${contextProfiles.length || regimenProfile?.evidence_at_a_glance ? "" : `<section class="regimen-information-section">
+        ${sectionHeadMarkup(evidenceSectionNumber, "Evidence supporting this regimen and indication", "Primary publications provide context. The current NCCP protocol remains the operational source.")}
+        ${evidence.length ? `<div class="regimen-evidence-list">${evidence.map(evidenceMarkup).join("")}</div>` : '<div class="regimen-info-empty"><strong>No evidence mapping is available yet.</strong><p>The official NCCP protocol remains available above. Evidence records are being added in controlled batches.</p></div>'}
+      </section>`}
+
+      <aside class="regimen-information-boundary">
+        <strong>Decision support and educational boundary</strong>
+        <p>This page provides source-linked context on treatment intent, patient selection, supportive care, monitoring, administration, drug mechanisms and selected publications. It does not independently determine eligibility, diagnose toxicity, prescribe treatment or alter the deterministic SACTCheck result. The current NCCP protocol and local clinical governance remain authoritative.</p>
+      </aside>`;
+    target.querySelector?.('[data-regimen-info-context]')?.addEventListener('change',event=>render(protocol,payload,event.target.value));
+    target.querySelector?.('[data-prostate-expand]')?.addEventListener('click', event => {
+      const section = event.target.closest('.prostate-pathway');
+      const expand = [...section.querySelectorAll('details')].some(item => !item.open);
+      section.querySelectorAll('details').forEach(item => { item.open = expand; });
+      event.target.textContent = expand ? 'Collapse all topics' : 'Expand all topics';
+    });
+  }
+
+  function resolveProtocol(protocolOrId) {
+    if (protocolOrId && typeof protocolOrId === "object") return protocolOrId;
+    return root.SACTCheckProtocolLoader?.getProtocolById?.(protocolOrId) ||
+      (root.SACTCheckProtocolLoader?.getLoadedProtocols?.() || []).map(item => item.protocol || item).find(item => String(item?.protocol_id) === String(protocolOrId)) || null;
+  }
+
+  function open(protocolOrId) {
+    const protocol = resolveProtocol(protocolOrId);
+    if (!protocol) return false;
+    activeProtocol = protocol;
+    const overlay = ensurePanel();
+    overlay?.classList.remove("hidden");
+    document?.body?.classList.add("regimen-information-open");
+    const target = overlay?.querySelector("[data-regimen-info-content]");
+    if (target) target.innerHTML = "<p>Loading regimen information…</p>";
+    load().then(payload => render(protocol, payload)).catch(error => {
+      if (target) target.innerHTML = `<div class="regimen-info-empty"><strong>Regimen information could not be loaded.</strong><p>${escapeHtml(error?.message || "Reload the page and try again.")}</p></div>`;
+    });
+    overlay?.querySelector("[data-regimen-info-close]")?.focus?.();
+    return true;
+  }
+
+  function close() {
+    const overlay = ensurePanel();
+    overlay?.classList.add("hidden");
+    document?.body?.classList.remove("regimen-information-open");
+  }
+
+  function prepare(protocol) {
+    activeProtocol = protocol || null;
+    const button = typeof document !== "undefined" ? document.getElementById("jsonRegimenInfoButton") : null;
+    button?.classList.toggle("hidden", !activeProtocol);
+    return Boolean(activeProtocol);
+  }
+
+  function bindCardLinks() {
+    if (typeof document === "undefined" || document.documentElement.dataset.regimenInfoBound === "true") return;
+    document.documentElement.dataset.regimenInfoBound = "true";
+    document.addEventListener("click", event => {
+      const button = event.target.closest("[data-regimen-info-protocol]");
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      open(button.dataset.regimenInfoProtocol);
+    });
+  }
+
+  function init() {
+    bindCardLinks();
+    load().catch(() => {});
+  }
+
+  if (typeof document !== "undefined") {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  }
+
+  return Object.freeze({
+    version: VERSION,
+    load,
+    open,
+    close,
+    prepare,
+    profilesForProtocol,
+    evidenceForProtocol,
+    regimenProfileForProtocol,
+    prostatePathwayMarkup,
+    get activeProtocol() { return activeProtocol; }
+  });
+});

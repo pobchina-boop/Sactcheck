@@ -1,0 +1,69 @@
+{
+  "recorded_at": "2026-11-17",
+  "baseline_main_sha": "0eba2249a65dce9bcdf6be1b2115869b9563cd38",
+  "baseline_main_release": "0.84.57",
+  "prior_review_package": "SACTCheck_v0.84.57_GU_5_PLUS_5_REVIEW.zip",
+  "issues": [
+    {
+      "id": "browser-socket-denied",
+      "status": "unresolved_in_authoring_environment",
+      "evidence": "v0.84.57 validation summary records Chromium socket() failed: Operation not permitted; raw browser log was not present in the recovered ZIP",
+      "next_action": "After the workflow is installed, run the manual browser job for the intended SHA; inspect actual test results and screenshots",
+      "do_not_repeat": "Repeated identical Chromium launches or requests to override the environment restriction"
+    },
+    {
+      "id": "full-ci-session-lost",
+      "status": "incomplete_unverified",
+      "evidence": "v0.84.57 ci-run-interruption.json records Unknown process id 47498, 47 of 71 resumed commands completed, exit_code unknown, prior exit file stale and process stop not independently confirmed",
+      "next_action": "Run complete current test:ci on the intended checkout using the bounded external regression job, and preserve its result",
+      "do_not_repeat": "Infer a pass from completed subchecks or a stale exit file; poll the lost session indefinitely"
+    },
+    {
+      "id": "slow-global-checks-and-stale-expectations",
+      "status": "carry_forward_previous_fixes_and_measure",
+      "evidence": "Prior work recorded repeated whole-catalogue generation and historical test expectations as contributors to long runs",
+      "next_action": "Retain v0.84.57 scoped generation/provenance corrections; measure remaining slow checks without reducing source-boundary coverage",
+      "do_not_repeat": "Launch a fresh whole-catalogue cycle after every focused edit or weaken assertions to get a pass"
+    },
+    {
+      "id": "ignored-logs-missing-from-zip",
+      "status": "packaging_rule_added_requires_each_batch_verification",
+      "evidence": "Raw .log evidence referenced by prior reports was absent from the recovered review ZIP",
+      "next_action": "Include evidence directories explicitly in each review ZIP and inspect its member list; retain status JSON, raw logs and changed files",
+      "do_not_repeat": "Rely solely on Git untracked-file enumeration that excludes ignored .log files"
+    },
+    {
+      "id": "historical-git-blobs-missing-v58",
+      "status": "blocked_partial_clone",
+      "evidence": "validation/gu-v08458/software/platform-git-diagnostic.log; historical-tree-no-fetch-summary.json; test-ci-no-fetch-02/stdout.log. Git ls-tree -rlz triggers lazy fetch of absent historical PDFs; with GIT_NO_LAZY_FETCH=1,2921 BAD-sized historical entries identified at v44 tree.",
+      "next_action": "Run full regression on a full checkout retaining historical objects; preserve logs. Current v57 baseline and all protected current files can be checked locally.",
+      "do_not_repeat": "Unbounded historical lazy-fetch traversal in this partial checkout. Do not replace missing historical evidence with current-file hashes or skip its assertions."
+    },
+    {
+      "id": "mvac-card-sidecar-schema-v58",
+      "status": "fixed_focused_check_passed",
+      "evidence": "Finalizer previously copied raw card contexts over normalized sidecar records. It now invokes the canonical metadata generator; 377-protocol card-coverage gate passes.",
+      "next_action": "Keep normalization after authoring; full historical CI pending."
+    },
+    {
+      "id": "historical-preflight-v58",
+      "status": "implemented_availability_guard_verified",
+      "evidence": "tools/check-historical-git.cjs; tests/historical-git-preflight.test.cjs; validation/gu-v08458/software/history-preflight-01",
+      "next_action": "On a complete checkout, availability guard should pass and unchanged full CI continues. Missing historical objects remain a blocker, not a waived check."
+    },
+    {
+      "id": "gu58-chronology-note-shape",
+      "status": "fixed_v59",
+      "evidence": "Ten v58 source profiles used string notes where the renderer expects title/text objects; all ten restored and covered by tests/gu-v08459.test.cjs.",
+      "next_action": "Keep the object schema and output text-retention check in future authors."
+    },
+    {
+      "id": "gu59-transplant-relative-day-labels",
+      "status": "fixed_v59",
+      "evidence": "PDF visual review caught ordinal days beside transplant-relative days. Explicit day-origin support added; 304 other routes compare unchanged.",
+      "next_action": "Use explicit origin whenever a schedule includes negative days; inspect the final rendered chart."
+    }
+  ],
+  "clinical_acceptance": "No clinical criteria or release acceptance checks are removed by this workflow repair.",
+  "current_review_release": "0.84.59"
+}
