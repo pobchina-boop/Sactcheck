@@ -62,9 +62,19 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // its explicit source dose-level table; assessment retains recovery/history guards.
 // v0.84.56 supplies usable source schedules for cabazitaxel and radium-223;
 // the three docetaxel schedules are reconciled in place.
-assert.strictEqual(usefulCoverage, 235);
-assert.strictEqual(scheduleCoverage, 235);
+// v0.84.57 adds four renal monotherapy schedules, with no invented generic dose ladders.
+assert.strictEqual(usefulCoverage, 239);
+assert.strictEqual(scheduleCoverage, 239);
 assert.strictEqual(doseLevelCoverage, 65);
+for(const code of ['00104','00326','00518','00564']){
+ const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
+ const p=require(path.join(root,entry.path));require('./helpers/prostate-inputs-v08457.cjs').validate(p);
+ const before=JSON.parse(require('node:child_process').execFileSync('git',['show','90ae67a0a3f565cb57f73072137c52c4851fec5b:'+entry.path],{cwd:root}));
+ assert.equal(DoseSchedule.hasData(before),false,code+' exact Git56 schedule baseline');
+ assert.equal(DoseSchedule.hasData(p),true);assert(DoseSchedule.buildModel(p).phases.length>0);
+ assert.equal(DoseSchedule.buildModel(p).doseLevels.length,0,code+' dose-history safeguards remain in assessment');
+}
+
 for(const code of ['00314','00552','00417','00418','00696']){
  const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
  const p=require(path.join(root,entry.path));require('./helpers/head-neck-inputs-v08447.cjs').validate(p);

@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process'),crypto=require('crypto');
@@ -35,5 +36,5 @@ const p736=json('data/patient-knowledge/00736.json');assert(p736.timeline.some(r
 const p205=json('data/patient-knowledge/00205.json');assert(JSON.stringify(p205.monitoring_schedule).includes('450 mg/m²'));assert(JSON.stringify(p205.monitoring_schedule).includes('Baseline ECG and echo/MUGA'));assert(!/every (3 months|12 weeks)/.test(JSON.stringify(p205.monitoring_schedule)));
 for(const c of ['00228','00743'])assert(JSON.stringify(json(`data/patient-knowledge/${c}.json`).monitoring_schedule).includes('before every dose'));
 const protectedFiles=json('validation/advanced-breast-v0841/protected-patient-baseline.json');for(const [p,h] of Object.entries(protectedFiles))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/contact-migration-v0844.cjs').expectedHash(p,h),'Prior patient asset changed outside the approved contact migration: '+p);
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log('Five suites: exact schedules, monitoring, consent, KB, support, source links, QR routes, PDF copies, deterministic builds and '+Object.keys(protectedFiles).length+' protected patient files passed.');

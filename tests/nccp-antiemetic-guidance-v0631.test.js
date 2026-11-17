@@ -14,6 +14,17 @@ const riskMap = readJson("data/emetogenic-risk-map.json");
 const index = readJson("protocols/index.json");
 const classificationBaseline = readJson("V0630_EMETOGENIC_CLASSIFICATION_SNAPSHOT.json");
 const clinicalCoreBaseline = readJson("V0630_CLINICAL_CORE_HASHES.json");
+// Current NCCP supportive-care sections: axitinib v6, cabozantinib v3, tivozanib v3 and temsirolimus v4.
+const renalV57Risks={'00104':'oral_minimal_low','00326':'low','00518':'oral_minimal_low','00564':'oral_minimal_low'};
+for(const [code,level] of Object.entries(renalV57Risks)){
+ const entry=index.protocols.find(p=>p.path.includes('/'+code+'-'));const protocol=readJson(entry.path);
+ require('./helpers/prostate-inputs-v08457.cjs').validate(protocol);
+ assert.equal(protocol.supportive_care.emetogenic_risk,level);
+ assert.equal(protocol.supportive_care.script_id,level==='low'?'nccp-parenteral-low':'nccp-oral-minimal-low');
+ assert.equal(riskMap.protocols[code].level,level);assert.equal(riskMap.protocols[code].script_id,protocol.supportive_care.script_id);
+ assert.equal(riskMap.protocols[code].mapping_confidence,'source_reconciled_pending_pharmacy_validation');
+}
+
 // Fresh NCCP source evidence corrects the historical whole-combination minimal-risk mapping.
 // Nivolumab alone remains minimal; the ipilimumab-containing combination is low.
 const dualImmuneV35 = {
@@ -137,7 +148,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
     const migratedMap = ['00691','00486','00279','00456','00561','00372','00281','00310','00339','00343','00712','00792','00849','00689','00908','00569','00579','00713','00714','00568','00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
-    const expected = migratedMap ? 'phase_dependent' : allowedCorrections[code] || baseline.level;
+    const expected = migratedMap ? 'phase_dependent' : renalV57Risks[code] || allowedCorrections[code] || baseline.level;
     if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
   }
@@ -230,9 +241,9 @@ for (const record of index.protocols || []) {
       "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low",
       "lung/00340-ceritinib-monotherapy.json": "oral_moderate_high"
     };
-    const expectedRisk = immune35 ? 'low' : pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
+    const expectedRisk = renalV57Risks[md.nccp_regimen_code] || (immune35 ? 'low' : pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
       ? correctionByPath[relative]
-      : (baseline.emetogenic_risk ?? null);
+      : (baseline.emetogenic_risk ?? null));
     const auditedPhases = md.nccp_regimen_code==='00486'?{oxaliplatin_days:'moderate',fluorouracil:'low'}:familyPhases[md.nccp_regimen_code];
     assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));

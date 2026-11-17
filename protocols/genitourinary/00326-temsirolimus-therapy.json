@@ -14,9 +14,9 @@
     "short_title": "Temsirolimus Therapy",
     "indication": "Advanced renal-cell carcinoma treated with weekly temsirolimus.",
     "source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.44.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 4,
+    "sactcheck_encoding_version": "0.84.57",
+    "source_checked_date": "2026-11-16",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "genitourinary_subgroups": [
@@ -61,8 +61,8 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
@@ -81,22 +81,27 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.57",
+      "audit_date": "2026-11-16",
+      "scope_note": "NCCP rules reconciled with current EMA product information. Explicit source differences require specialist reconciliation; no independent approval."
     },
-    "canonical_protocol_id": "nccp-00326-v4"
+    "canonical_protocol_id": "nccp-00326-v4",
+    "full_suite_context_releases": {
+      "renal": "0.84.57"
+    },
+    "full_suite_release": "0.84.57",
+    "source_pdf_sha256": "50faa8c8b7d0a7857aea5fdb034d9b4268bf084d61c436f85a59dd19b3b4b6f9"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00326 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00326 Version 4. Current source, prescribing review, pharmacy verification and independent clinical judgement remain required."
   },
   "indications": [
     {
@@ -107,11 +112,12 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Temsirolimus weekly; four administrations per 28-day assessment cycle.",
+    "schedule_summary": "25 mg IV every week: days 1, 8, 15 and 22 of a 28-day cycle",
     "drugs": [
       "temsirolimus"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "continuous": false
   },
   "input_definitions": {
     "assessment_phase": {
@@ -120,20 +126,20 @@
       "required": false,
       "options": [
         {
-          "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "On treatment"
         },
         {
-          "value": "toxicity_review",
-          "label": "Toxicity review"
+          "value": "restart",
+          "label": "Restart after interruption"
         }
       ],
-      "demo_value": "pre_treatment",
-      "input_role": "context"
+      "input_role": "decision",
+      "demo_value": "baseline"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -185,47 +191,42 @@
       "input_role": "context"
     },
     "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
+      "label": "Non haematological toxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00326 v4: clinician-confirmed toxicity grade"
     },
     "hypersensitivity_grade": {
       "label": "Infusion or hypersensitivity reaction grade",
@@ -233,42 +234,37 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00326 v4: clinician-confirmed toxicity grade"
     },
     "active_serious_infection": {
       "label": "Active serious infection",
@@ -303,6 +299,293 @@
       "demo_value": 1.5,
       "unit": "mmol/L",
       "input_role": "context"
+    },
+    "current_dose": {
+      "label": "Current prescribed temsirolimus dose per administration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "child_pugh_class": {
+      "label": "Hepatic impairment: clinician-assessed Child-Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A — mild"
+        },
+        {
+          "value": "B",
+          "label": "B — moderate"
+        },
+        {
+          "value": "C",
+          "label": "C — severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "A"
+    },
+    "known_drug_hypersensitivity": {
+      "label": "Known hypersensitivity to temsirolimus or its excipients",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncontrolled_hypertension": {
+      "label": "Blood pressure clinically uncontrolled despite management",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_hypertension": {
+      "label": "Severe hypertension requiring interruption / urgent treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bleeding_requires_intervention": {
+      "label": "Bleeding requiring medical intervention",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_pres": {
+      "label": "Possible posterior reversible encephalopathy syndrome (PRES)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "major_surgery_or_unhealed_wound": {
+      "label": "Major surgery planned, or wound not adequately healed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inhibitor": {
+      "label": "Strong CYP3A inhibitor present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inducer": {
+      "label": "Strong CYP3A inducer present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "persistent_intolerable_grade2": {
+      "label": "Grade 2 toxicity is persistent and intolerable despite support",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "diarrhoea_grade": {
+      "label": "Diarrhoea grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
+        },
+        {
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00326 v4: clinician-confirmed toxicity grade"
+    },
+    "hand_foot_skin_reaction_grade": {
+      "label": "Hand foot skin reaction grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
+        },
+        {
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00326 v4: clinician-confirmed toxicity grade"
+    },
+    "proteinuria_grade": {
+      "label": "Proteinuria grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
+        },
+        {
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00326 v4: clinician-confirmed toxicity grade"
+    },
+    "anc_x10e9_l": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "three_of_six_source_risk_factors": {
+      "label": "At least three of the six source prognostic risk factors confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recovery_days": {
+      "label": "Days to recovery after this interruption",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "days",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "recovered_to_grade2_or_less": {
+      "label": "Toxicity has recovered to grade 2 or less",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "infusion_premed_given": {
+      "label": "IV antihistamine premedication given before this infusion",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ace_inhibitor_or_calcium_channel_blocker": {
+      "label": "ACE inhibitor or calcium-channel blocker present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "concomitant_sunitinib": {
+      "label": "Concomitant sunitinib",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -336,8 +619,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "rule_id": "ECOG_REVIEW",
         "when": {
           "field": "ecog",
           "operator": ">=",
@@ -346,19 +628,274 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "temsirolimus"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "rule_id": "ALLERGY",
+        "when": {
+          "field": "known_drug_hypersensitivity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Known hypersensitivity is an exclusion; do not administer.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Known hypersensitivity is an exclusion; do not administer.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Pregnancy requires exclusion from this pathway and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Pregnancy requires exclusion from this pathway and specialist review.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SEVERE_REACTION",
+        "when": {
+          "field": "hypersensitivity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
+        "source": {
+          "document": "EMA temsirolimus SmPC sections 4.3–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "Hypersensitivity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_LOW_anc_x10e9_l",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Hold temsirolimus until the affected count recovers (ANC ≥1 and platelets ≥75 ×10⁹/L); reduce the subsequent weekly dose by 5 mg, with a usual minimum of 15 mg/week.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Hold temsirolimus until the affected count recovers (ANC ≥1 and platelets ≥75 ×10⁹/L); reduce the subsequent weekly dose by 5 mg, with a usual minimum of 15 mg/week.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 2,
+          "section": "Haematological toxicity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_LOW_platelets_x10e9_l",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Hold temsirolimus until the affected count recovers (ANC ≥1 and platelets ≥75 ×10⁹/L); reduce the subsequent weekly dose by 5 mg, with a usual minimum of 15 mg/week.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Hold temsirolimus until the affected count recovers (ANC ≥1 and platelets ≥75 ×10⁹/L); reduce the subsequent weekly dose by 5 mg, with a usual minimum of 15 mg/week.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 2,
+          "section": "Haematological toxicity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_MEET",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "The entered counts meet this on-treatment table. Other domains, baseline eligibility and existing dose reductions still require assessment.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The entered counts meet this on-treatment table. Other domains, baseline eligibility and existing dose reductions still require assessment.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 2,
+          "section": "Haematological toxicity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "RCC_RISK_ELIGIBILITY",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "three_of_six_source_risk_factors",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "This NCCP first-line RCC indication requires at least three of six source prognostic factors. Confirm the specific source definition; do not substitute another risk score automatically.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "This NCCP first-line RCC indication requires at least three of six source prognostic factors. Confirm the specific source definition; do not substitute another risk score automatically.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 1,
+          "section": "Indication",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "INTOLERABLE_G2",
+        "when": {
+          "field": "persistent_intolerable_grade2",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Persistent, intolerable grade 2 toxicity can require delay or reduction to the next level. Agree the treatment plan with the Consultant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Persistent, intolerable grade 2 toxicity can require delay or reduction to the next level. Agree the treatment plan with the Consultant.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "G3_G4_HOLD",
         "when": {
           "field": "non_haematological_toxicity_grade",
           "operator": ">=",
@@ -367,40 +904,85 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "temsirolimus"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "message": "Hold grade 3–4 toxicity until recovery to grade 0–2. If recovery occurs within three weeks, reduce by one level for subsequent treatment (25→20→15 mg weekly); a longer recovery requires specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Hold grade 3–4 toxicity until recovery to grade 0–2. If recovery occurs within three weeks, reduce by one level for subsequent treatment (25→20→15 mg weekly); a longer recovery requires specialist review.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
+        "rule_id": "PROLONGED_RECOVERY",
         "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "recovery_days",
+              "operator": ">",
+              "value": 21
+            },
+            {
+              "field": "recovered_to_grade2_or_less",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "temsirolimus"
           ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "message": "Recovery took longer than the three-week pathway specified by NCCP. Do not automatically apply its within-three-week restart instruction.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Recovery took longer than the three-week pathway specified by NCCP. Do not automatically apply its within-three-week restart instruction.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TEM_INF",
-        "priority": 10,
+        "rule_id": "HEPATIC_C",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "NCCP recommends 40% of the original dose for severe hepatic impairment. EMA specifies 10 mg IV weekly for RCC only when baseline platelets are ≥100 ×10⁹/L. Confirm baseline counts and the individual prescription; do not import the mantle-cell lymphoma contraindication or dosing schedule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP recommends 40% of the original dose for severe hepatic impairment. EMA specifies 10 mg IV weekly for RCC only when baseline platelets are ≥100 ×10⁹/L. Confirm baseline counts and the individual prescription; do not import the mantle-cell lymphoma contraindication or dosing schedule.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 2,
+          "section": "Table 2 / EMA 4.2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SERIOUS_INFECTION",
         "when": {
           "field": "active_serious_infection",
           "operator": "==",
@@ -411,17 +993,22 @@
           "components": [
             "temsirolimus"
           ],
-          "message": "Active serious infection requires withholding temsirolimus and treatment of infection."
+          "message": "Hold and treat active serious infection. Consider opportunistic infection, including Pneumocystis; prophylaxis is considered with concomitant corticosteroids or other immunosuppression.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Hold and treat active serious infection. Consider opportunistic infection, including Pneumocystis; prophylaxis is considered with concomitant corticosteroids or other immunosuppression.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Active serious infection requires withholding temsirolimus and treatment of infection."
+          "document": "EMA Torisel SmPC section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "Warnings",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TEM_LUNG",
-        "priority": 9,
+        "rule_id": "LUNG_SYMPTOMS",
         "when": {
           "field": "pneumonitis_or_new_respiratory_symptoms",
           "operator": "==",
@@ -432,20 +1019,182 @@
           "components": [
             "temsirolimus"
           ],
-          "message": "New respiratory symptoms require interruption and assessment for infection or non-infectious pneumonitis."
+          "message": "Hold for clinically significant new respiratory symptoms and investigate infection or non-infectious pneumonitis. Check symptoms and imaging before deciding restart.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Hold for clinically significant new respiratory symptoms and investigate infection or non-infectious pneumonitis. Check symptoms and imaging before deciding restart.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
+          "document": "EMA Torisel SmPC section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 6,
+          "section": "Warnings",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PREMED",
+        "when": {
+          "field": "infusion_premed_given",
+          "operator": "==",
+          "value": false
         },
-        "explanation": "New respiratory symptoms require interruption and assessment for infection or non-infectious pneumonitis."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Give the prescribed IV antihistamine approximately 30 minutes before each temsirolimus dose (NCCP diphenhydramine 25–50 mg or similar). Confirm the local equivalent and resuscitation arrangements before infusion.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Give the prescribed IV antihistamine approximately 30 minutes before each temsirolimus dose (NCCP diphenhydramine 25–50 mg or similar). Confirm the local equivalent and resuscitation arrangements before infusion.",
+        "source": {
+          "document": "NCCP 00326 v4",
+          "url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+          "page": 3,
+          "section": "Premedication",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "ANGIOEDEMA_INTERACTION",
+        "when": {
+          "field": "ace_inhibitor_or_calcium_channel_blocker",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "ACE inhibitors and/or calcium-channel blockers can increase angioedema risk with temsirolimus. Review the combination and counsel on urgent facial/tongue swelling or breathing difficulty.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "ACE inhibitors and/or calcium-channel blockers can increase angioedema risk with temsirolimus. Review the combination and counsel on urgent facial/tongue swelling or breathing difficulty.",
+        "source": {
+          "document": "EMA Torisel SmPC section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SUNITINIB_COMBINATION",
+        "when": {
+          "field": "concomitant_sunitinib",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "The temsirolimus/sunitinib combination caused dose-limiting toxicity. This suite is NCCP RCC temsirolimus monotherapy; obtain specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The temsirolimus/sunitinib combination caused dose-limiting toxicity. This suite is NCCP RCC temsirolimus monotherapy; obtain specialist review.",
+        "source": {
+          "document": "EMA Torisel SmPC section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "INTERACTION_strong_cyp3a_inhibitor",
+        "when": {
+          "field": "strong_cyp3a_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Review strong CYP3A interactions and alternatives with pharmacy; avoid unvalidated automatic dose changes.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Review strong CYP3A interactions and alternatives with pharmacy; avoid unvalidated automatic dose changes.",
+        "source": {
+          "document": "EMA Torisel SmPC sections 4.4–4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "INTERACTION_strong_cyp3a_inducer",
+        "when": {
+          "field": "strong_cyp3a_inducer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Review strong CYP3A interactions and alternatives with pharmacy; avoid unvalidated automatic dose changes.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Review strong CYP3A interactions and alternatives with pharmacy; avoid unvalidated automatic dose changes.",
+        "source": {
+          "document": "EMA Torisel SmPC sections 4.4–4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SURGERY",
+        "when": {
+          "field": "major_surgery_or_unhealed_wound",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "temsirolimus"
+          ],
+          "message": "Temsirolimus can impair wound healing. Agree perioperative interruption and restart with the treating team; no universal withholding interval is specified here.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Temsirolimus can impair wound healing. Agree perioperative interruption and restart with the treating team; no universal withholding interval is specified here.",
+        "source": {
+          "document": "EMA Torisel SmPC section 4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/torisel-epar-product-information_en.pdf",
+          "page": 7,
+          "section": "Wound healing",
+          "checked_date": "2026-11-16"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "First-line advanced renal cell carcinoma with at least three of six source prognostic risk factors",
+    "ECOG 0–2",
+    "Adequate organ and haematological function; source exclusions and prior-treatment criteria must be checked."
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
@@ -453,13 +1202,56 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "emetogenic_risk": "low",
+    "script_id": "nccp-parenteral-low",
+    "mapping_basis": "Current source-specific support plan; verify local prescription.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk",
+    "premedication": [
+      "NCCP specifies diphenhydramine 25–50 mg IV, or a similar antihistamine, about 30 minutes before each dose. Your unit confirms its prescribed equivalent."
+    ],
+    "other_support": [
+      "Use gentle mouth care and report ulcers early. Review infection prevention, diabetes and lipid management. Preventive medicine against Pneumocystis pneumonia may be considered if you also take corticosteroids or other immune-suppressing medicines; it is not automatically required for everyone."
+    ],
+    "source_url": "https://healthservice.hse.ie/documents/6772/326_v4_Temsirolimus.pdf",
+    "phase_specific_plan": "patient/00326/supportive-care.html"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "Weekly infusion",
+      "cycle_length_days": 28,
+      "administration": [
+        {
+          "drug": "temsirolimus",
+          "dose": {
+            "value": 25,
+            "unit": "mg"
+          },
+          "day": [
+            1,
+            8,
+            15,
+            22
+          ],
+          "route": "IV infusion",
+          "notes": "Infuse over 30 minutes using the prescribed antihistamine premedication; four weekly doses form a 28-day cycle."
+        }
+      ],
+      "label": "25 mg IV every week: days 1, 8, 15 and 22 of a 28-day cycle",
+      "summary": "Continue until progression or unacceptable toxicity, with individual prescribing review."
+    }
+  ],
+  "monitoring": {
+    "baseline": [
+      "Full blood count, kidney and liver tests, total cholesterol, triglycerides, fasting glucose and chest X-ray. Review infection, breathing symptoms, medicines, recent surgery and the source prognostic factors."
+    ],
+    "regular": [
+      "Full blood count weekly. Kidney and liver tests every four weeks; fasting glucose, cholesterol and triglycerides as clinically indicated. Review infection, mouth soreness, breathing and infusion reactions at each visit."
+    ],
+    "disease_monitoring": "Symptoms and scans are interpreted together. Your consultant sets imaging timing according to the treatment plan; this regimen does not mandate a universal three-month scan interval."
   }
 }

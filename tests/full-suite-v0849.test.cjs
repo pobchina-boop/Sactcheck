@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),vm=require('node:vm'),cp=require('node:child_process');
@@ -7,7 +8,7 @@ assert.deepEqual(idx.codes,codes);assert.equal(kb.regimen_profiles.length,5);ass
 let rules=0;
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),dir=code==='00588'?'shared':'breast',pf=fs.readdirSync(path.join(root,'protocols',dir)).find(n=>n.startsWith(code+'-')),p=json('protocols/'+dir+'/'+pf);
- assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.9'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(idx.regimens[code].rule_count,p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
+ assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.9'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(idx.regimens[code].rule_count,code==='00588'?require('./helpers/prostate-inputs-v08457.cjs').retainedBreastRuleCount(p):p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(d.service_kind,'targeted');assert(d.anatomy.length>=4&&d.anatomy.length<=6);
  for(const ch of d.chapters)for(const item of ch.items)for(const id of item.source_ids)assert(d.sources.some(s=>s.id===id),`${code}: source ${id}`);
  const j=J.definitions[code];assert.equal(j.has_patient_dates,false);assert.equal(j.schedule_type,'relative-educational');
@@ -43,12 +44,12 @@ const support=json('data/phase-support-v0838.json').regimens;assert(!support['00
 // Old patient documents are byte-preserved, including the accepted gold-standard reference.
 const baseline=json('validation/targeted-breast-v0849/protected-patient-baseline.json').files;
 for(const [p,h] of Object.entries(baseline))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/retrospective-v08413.cjs').expectedHash(p,h),'Unexpected prior-patient change '+p);
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log(`Targeted breast full suite: ${rules} source-linked rules, five complete suites, indication routing, relative timelines, day-specific support and ${Object.keys(baseline).length} preserved patient files passed.`);
 // Exercise the actual knowledge-base loader and renderer, including every addendum.
 (async()=>{
  const target={innerHTML:''},classes={add(){},remove(){},toggle(){}},overlay={classList:classes,querySelector:s=>s==='[data-regimen-info-content]'?target:null};
- const context={console,fetch:async url=>({ok:fs.existsSync(path.join(root,url)),json:async()=>json(url)}),document:{readyState:'loading',addEventListener(){},getElementById:id=>id==='regimenInformationOverlay'?overlay:null,body:{classList:classes}}};
+ const context={SACTCheckProtocolContext:{activeTumourGroup:()=> 'breast'},console,fetch:async url=>({ok:fs.existsSync(path.join(root,url)),json:async()=>json(url)}),document:{readyState:'loading',addEventListener(){},getElementById:id=>id==='regimenInformationOverlay'?overlay:null,body:{classList:classes}}};
  vm.createContext(context);vm.runInContext(read('js/regimen-knowledge-base.js'),context);
  const api=context.SACTCheckRegimenKnowledgeBase;await api.load();
  for(const code of codes){
@@ -56,7 +57,7 @@ console.log(`Targeted breast full suite: ${rules} source-linked rules, five comp
   assert(api.open(protocol));await new Promise(resolve=>setImmediate(resolve));
   assert(target.innerHTML.includes('Longitudinal monitoring schedule'),`${code}: clinician monitoring table was not rendered`);
   assert(!/undefined|\[object Object\]|could not be loaded/.test(target.innerHTML),`${code}: clinician rendering error`);
-  const profile=api.regimenProfileForProtocol(protocol);assert.equal(profile.protocol_id,protocol.protocol_id);
+  const baseProfile=api.regimenProfileForProtocol(protocol);assert.equal(baseProfile.protocol_id,protocol.protocol_id);const profile=code==='00588'?baseProfile.context_profiles.find(p=>p.context_id==='breast'):baseProfile;assert(profile);
   assert.equal((target.innerHTML.match(/scope="row"/g)||[]).length,profile.monitoring_and_toxicity.longitudinal_schedule.rows.length);
   if(code==='00588')assert(/adjuvant|00588h/i.test(target.innerHTML));
  }

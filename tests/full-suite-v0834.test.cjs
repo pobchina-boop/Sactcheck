@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
@@ -28,5 +29,5 @@ for(const c of ['00216','00586','00623']){
  if(c==='00623'){assert.equal(d.evidence.metrics.length,0);const html=fs.readFileSync(path.join(root,`patient/${c}/knowledge.html`),'utf8');assert(!/75.83333333333333%|9.1 months/.test(html));assert(JSON.stringify(json('data/regimen-knowledge-base-v08421-addendum.json')).includes('AVEX'));}
  const kb=json('data/regimen-knowledge-base-v0834-addendum.json');assert(kb.regimen_profiles.some(x=>x.protocol_id===d.protocol_id));assert(kb.evidence_records.some(x=>x.protocol_id===d.protocol_id));
 }
-for(const f of ['tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-capecitabine-support-v0834.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'inherit'});
+for(const f of ['tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-capecitabine-support-v0834.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:'00216,00586,00623'},stdio:'inherit'});
 console.log('Three capecitabine full-suite contracts passed.');

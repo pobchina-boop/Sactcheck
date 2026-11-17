@@ -1,11 +1,11 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00518-v2",
+  "protocol_id": "nccp-00518-v3",
   "file_name": "00518-cabozantinib-monotherapy.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00518",
-    "nccp_version": "2",
+    "nccp_version": "3",
     "tumour_group": "Genitourinary",
     "tumour_groups": [
       "Genitourinary"
@@ -13,10 +13,10 @@
     "title": "Cabozantinib Monotherapy",
     "short_title": "Cabozantinib Monotherapy",
     "indication": "Advanced renal-cell carcinoma in an NCCP-listed cabozantinib indication.",
-    "source_url": "https://healthservice.hse.ie/documents/6517/518_v2a_Cabozantinib_.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.44.0",
-    "source_checked_date": "2026-07-25",
+    "source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+    "source_document_pages": 6,
+    "sactcheck_encoding_version": "0.84.57",
+    "source_checked_date": "2026-11-16",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "genitourinary_subgroups": [
@@ -46,7 +46,7 @@
         {
           "id": "00518-gu",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": null,
           "duration_type": "until_progression_or_toxicity",
           "provenance": "official_nccp_source_reconciled"
         }
@@ -61,8 +61,8 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
@@ -81,22 +81,27 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.57",
+      "audit_date": "2026-11-16",
+      "scope_note": "NCCP rules reconciled with current EMA product information. Explicit source differences require specialist reconciliation; no independent approval."
     },
-    "canonical_protocol_id": "nccp-00518-v2"
+    "canonical_protocol_id": "nccp-00518-v3",
+    "full_suite_context_releases": {
+      "renal": "0.84.57"
+    },
+    "full_suite_release": "0.84.57",
+    "source_pdf_sha256": "ea819aa619660d867f9963539ed4ee1b529f853b7b11f875d43f75797a50fdf7"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00518 Version 2. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00518 Version 3. Current source, prescribing review, pharmacy verification and independent clinical judgement remain required."
   },
   "indications": [
     {
@@ -106,12 +111,13 @@
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Continuous oral cabozantinib; 28-day assessment cycle convention.",
+    "cycle_length_days": null,
+    "schedule_summary": "60 mg once daily continuously; no planned rest week",
     "drugs": [
       "cabozantinib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "continuous": true
   },
   "input_definitions": {
     "assessment_phase": {
@@ -120,20 +126,20 @@
       "required": false,
       "options": [
         {
-          "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "On treatment"
         },
         {
-          "value": "toxicity_review",
-          "label": "Toxicity review"
+          "value": "restart",
+          "label": "Restart after interruption"
         }
       ],
-      "demo_value": "pre_treatment",
-      "input_role": "context"
+      "input_role": "decision",
+      "demo_value": "baseline"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -185,47 +191,42 @@
       "input_role": "context"
     },
     "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
+      "label": "Non haematological toxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00518 v3: clinician-confirmed toxicity grade"
     },
     "hypersensitivity_grade": {
       "label": "Infusion or hypersensitivity reaction grade",
@@ -233,42 +234,37 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00518 v3: clinician-confirmed toxicity grade"
     },
     "systolic_bp": {
       "label": "Systolic blood pressure",
@@ -296,85 +292,75 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Grade 1."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Grade 2."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Grade 3."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Grade 4."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00518 v3: clinician-confirmed toxicity grade"
     },
     "hand_foot_skin_reaction_grade": {
-      "label": "Hand-foot skin reaction grade",
+      "label": "Hand foot skin reaction grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No rash."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild/localised eruption."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate or more extensive eruption limiting instrumental activities."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe/generalised eruption limiting self-care; urgent assessment."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening skin reaction."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00518 v3: clinician-confirmed toxicity grade"
     },
     "clinically_significant_bleeding_or_thrombosis": {
       "label": "Clinically significant bleeding or thromboembolism",
@@ -384,11 +370,257 @@
       "input_role": "decision"
     },
     "major_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
+      "label": "Major surgery planned, or wound not adequately healed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_dose": {
+      "label": "Current prescribed cabozantinib dose per administration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "child_pugh_class": {
+      "label": "Hepatic impairment: clinician-assessed Child-Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A — mild"
+        },
+        {
+          "value": "B",
+          "label": "B — moderate"
+        },
+        {
+          "value": "C",
+          "label": "C — severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "A"
+    },
+    "known_drug_hypersensitivity": {
+      "label": "Known hypersensitivity to cabozantinib or its excipients",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncontrolled_hypertension": {
+      "label": "Blood pressure clinically uncontrolled despite management",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_hypertension": {
+      "label": "Severe hypertension requiring interruption / urgent treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bleeding_requires_intervention": {
+      "label": "Bleeding requiring medical intervention",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_pres": {
+      "label": "Possible posterior reversible encephalopathy syndrome (PRES)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inhibitor": {
+      "label": "Strong CYP3A inhibitor present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inducer": {
+      "label": "Strong CYP3A inducer present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "persistent_intolerable_grade2": {
+      "label": "Grade 2 toxicity is persistent and intolerable despite support",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "proteinuria_grade": {
+      "label": "Proteinuria grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
+        },
+        {
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00518 v3: clinician-confirmed toxicity grade"
+    },
+    "clinically_relevant_toxicity": {
+      "label": "The grade 3–4 event is clinically relevant, not an isolated non-relevant laboratory abnormality",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "grade4_unresolved": {
+      "label": "Grade 4 event has not resolved despite management",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypertensive_crisis": {
+      "label": "Hypertensive crisis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_persistent_bp_despite_reduction": {
+      "label": "Severe persistent bp despite reduction",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "gi_perforation": {
+      "label": "Gi perforation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "unmanageable_fistula": {
+      "label": "Unmanageable fistula",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "acute_mi_or_significant_arterial_thrombosis": {
+      "label": "Acute mi or significant arterial thrombosis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "nephrotic_syndrome": {
+      "label": "Nephrotic syndrome",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "wound_complication_needing_intervention": {
+      "label": "Wound complication needing intervention",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "confirmed_pres": {
+      "label": "Confirmed pres",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "osteonecrosis_jaw": {
+      "label": "Osteonecrosis jaw",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_haemorrhage_or_high_risk": {
+      "label": "Severe haemorrhage, or clinically high risk of severe haemorrhage",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 0,
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+        "reason": "Numeric entry preserves the exact CrCl 30 mL/min boundary where NCCP and EMA recommendations diverge."
+      }
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -422,8 +654,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "rule_id": "ECOG_REVIEW",
         "when": {
           "field": "ecog",
           "operator": ">=",
@@ -432,145 +663,258 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "rule_id": "ALLERGY",
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "known_drug_hypersensitivity",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "message": "Known hypersensitivity is an exclusion; do not administer.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Known hypersensitivity is an exclusion; do not administer.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Pregnancy requires exclusion from this pathway and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Pregnancy requires exclusion from this pathway and specialist review.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SEVERE_REACTION",
         "when": {
           "field": "hypersensitivity_grade",
           "operator": ">=",
           "value": 3
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "message": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "document": "EMA cabozantinib SmPC sections 4.3–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/cabometyx-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "Hypersensitivity",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BP_SYS",
-        "priority": 9,
+        "rule_id": "BP_REVIEW_systolic_bp",
         "when": {
           "field": "systolic_bp",
           "operator": ">=",
           "value": 160
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 160 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 160 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Hypertension review",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BP_DIA",
-        "priority": 9,
+        "rule_id": "BP_REVIEW_diastolic_bp",
         "when": {
           "field": "diastolic_bp",
           "operator": ">=",
           "value": 100
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 100 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 100 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Hypertension review",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_DIARR",
-        "priority": 9,
+        "rule_id": "BP_UNCONTROLLED",
         "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Grade 3–4 diarrhoea requires interruption, supportive care and source-specific dose modification."
+          "message": "Control blood pressure before starting or resuming treatment. Persistent on-treatment hypertension requires source-specific dose modification and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Control blood pressure before starting or resuming treatment. Persistent on-treatment hypertension requires source-specific dose modification and specialist review.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 diarrhoea requires interruption, supportive care and source-specific dose modification."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_HFS",
-        "priority": 9,
+        "rule_id": "BP_SEVERE",
         "when": {
-          "field": "hand_foot_skin_reaction_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "severe_hypertension",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Grade 3 hand-foot skin reaction requires interruption and dose modification."
+          "message": "Interrupt treatment and urgently manage severe hypertension. Agree any restart after control, at the appropriate lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Interrupt treatment and urgently manage severe hypertension. Agree any restart after control, at the appropriate lower dose.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 hand-foot skin reaction requires interruption and dose modification."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BLEED",
-        "priority": 10,
+        "rule_id": "BLEEDING",
+        "when": {
+          "field": "bleeding_requires_intervention",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Interrupt treatment for bleeding requiring medical intervention and assess urgently; consider the drug-specific permanent-stop criteria where relevant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt treatment for bleeding requiring medical intervention and assess urgently; consider the drug-specific permanent-stop criteria where relevant.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Haemorrhage",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COMBINED_BLEED_CLOT_REVIEW",
         "when": {
           "field": "clinically_significant_bleeding_or_thrombosis",
           "operator": "==",
@@ -579,19 +923,24 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Clinically significant bleeding or thrombosis requires interruption and urgent risk review."
+          "message": "Urgently distinguish active bleeding from venous or arterial thrombosis and apply the specific pathway. This combined legacy field alone does not establish a permanent-stop indication.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Urgently distinguish active bleeding from venous or arterial thrombosis and apply the specific pathway. This combined legacy field alone does not establish a permanent-stop indication.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Clinically significant bleeding or thrombosis requires interruption and urgent risk review."
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Vascular complications",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_SURG",
-        "priority": 9,
+        "rule_id": "SURGERY",
         "when": {
           "field": "major_surgery_or_unhealed_wound",
           "operator": "==",
@@ -600,22 +949,621 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cabozantinib"
           ],
-          "message": "Withhold around major surgery and until wound healing is adequate."
+          "message": "NCCP and EMA specify withholding cabozantinib at least 28 days before planned surgery, including dental surgery, if possible. Restart depends on adequate healing; wound complications requiring medical intervention require discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "NCCP and EMA specify withholding cabozantinib at least 28 days before planned surgery, including dental surgery, if possible. Restart depends on adequate healing; wound complications requiring medical intervention require discontinuation.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 5,
+          "section": "Wound healing",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "GRADED_TOX_REVIEW",
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
         },
-        "explanation": "Withhold around major surgery and until wound healing is adequate."
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Grade 3–4 toxicity requires the interruption/restart pathway except clinically non-relevant laboratory abnormalities. Confirm clinical relevance, recovery and previous dose before selecting a numeric restart dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Grade 3–4 toxicity requires the interruption/restart pathway except clinically non-relevant laboratory abnormalities. Confirm clinical relevance, recovery and previous dose before selecting a numeric restart dose.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "GRADED_TOX_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "clinically_relevant_toxicity",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Interrupt clinically relevant grade 3–4 toxicity; treat symptoms. Restart at a lower dose only after recovery to grade ≤1. Unresolved grade 4 toxicity requires permanent discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt clinically relevant grade 3–4 toxicity; treat symptoms. Restart at a lower dose only after recovery to grade ≤1. Unresolved grade 4 toxicity requires permanent discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SYMPTOM_HOLD_diarrhoea_grade",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Interrupt severe toxicity and provide supportive care. Restart only after recovery to grade ≤1, normally at a lower dose: 60→40→20 mg daily; a third reduction requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt severe toxicity and provide supportive care. Restart only after recovery to grade ≤1, normally at a lower dose: 60→40→20 mg daily; a third reduction requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SYMPTOM_HOLD_hand_foot_skin_reaction_grade",
+        "when": {
+          "field": "hand_foot_skin_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Interrupt severe toxicity and provide supportive care. Restart only after recovery to grade ≤1, normally at a lower dose: 60→40→20 mg daily; a third reduction requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt severe toxicity and provide supportive care. Restart only after recovery to grade ≤1, normally at a lower dose: 60→40→20 mg daily; a third reduction requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "INTOLERABLE_G2",
+        "when": {
+          "field": "persistent_intolerable_grade2",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Interrupt intolerable grade 2 toxicity not manageable with reduction/support; consider restarting at a lower dose after recovery to grade ≤1.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt intolerable grade 2 toxicity not manageable with reduction/support; consider restarting at a lower dose after recovery to grade ≤1.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "UNRESOLVED_G4",
+        "when": {
+          "field": "grade4_unresolved",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Permanently discontinue cabozantinib if grade 4 toxicity does not resolve.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Permanently discontinue cabozantinib if grade 4 toxicity does not resolve.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HTN_CRISIS",
+        "when": {
+          "field": "hypertensive_crisis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Hypertensive crisis requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Hypertensive crisis requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "REFRACTORY_HTN",
+        "when": {
+          "field": "severe_persistent_bp_despite_reduction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Severe persistent hypertension despite antihypertensives and cabozantinib reduction requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Severe persistent hypertension despite antihypertensives and cabozantinib reduction requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "GI_PERFORATION",
+        "when": {
+          "field": "gi_perforation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Gastrointestinal perforation requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Gastrointestinal perforation requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "FISTULA",
+        "when": {
+          "field": "unmanageable_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "A fistula that cannot be adequately managed requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "A fistula that cannot be adequately managed requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "ARTERIAL_EVENT",
+        "when": {
+          "field": "acute_mi_or_significant_arterial_thrombosis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Acute myocardial infarction or another clinically significant arterial thromboembolic complication requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Acute myocardial infarction or another clinically significant arterial thromboembolic complication requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "NEPHROTIC",
+        "when": {
+          "field": "nephrotic_syndrome",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Nephrotic syndrome requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Nephrotic syndrome requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 5,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "WOUND_COMPLICATION",
+        "when": {
+          "field": "wound_complication_needing_intervention",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Wound-healing complications requiring medical intervention require discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Wound-healing complications requiring medical intervention require discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 5,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PRES_CONFIRMED",
+        "when": {
+          "field": "confirmed_pres",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Confirmed PRES/RPLS requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Confirmed PRES/RPLS requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 5,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "ONJ",
+        "when": {
+          "field": "osteonecrosis_jaw",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Osteonecrosis of the jaw requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Osteonecrosis of the jaw requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 5,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PRES_SUSPECTED",
+        "when": {
+          "field": "suspected_pres",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Interrupt and urgently investigate possible PRES; confirmed PRES requires discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt and urgently investigate possible PRES; confirmed PRES requires discontinuation.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 5,
+          "section": "PRES",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SEVERE_HAEMORRHAGE",
+        "when": {
+          "field": "severe_haemorrhage_or_high_risk",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Do not administer cabozantinib in severe haemorrhage or when at risk for severe haemorrhage; assess urgently and decide the continuing treatment plan.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Do not administer cabozantinib in severe haemorrhage or when at risk for severe haemorrhage; assess urgently and decide the continuing treatment plan.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 4,
+          "section": "Haemorrhage",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_AB",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "in",
+          "value": [
+            "A",
+            "B"
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "NCCP suggests considering 66% of the original dose for mild/moderate hepatic impairment. EMA requires no adjustment for mild impairment and supplies no fixed recommendation for Child-Pugh B. Reconcile explicitly with Consultant/pharmacy; do not automatically calculate a dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP suggests considering 66% of the original dose for mild/moderate hepatic impairment. EMA requires no adjustment for mild impairment and supplies no fixed recommendation for Child-Pugh B. Reconcile explicitly with Consultant/pharmacy; do not automatically calculate a dose.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 2 / EMA 4.2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_C",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Cabozantinib is not recommended in Child-Pugh C/severe hepatic impairment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Cabozantinib is not recommended in Child-Pugh C/severe hepatic impairment.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "RENAL_SEVERE_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "NCCP expects no renal adjustment below CrCl 30 or on haemodialysis; EMA does not recommend use in severe renal impairment because safety/efficacy are unestablished. Specialist reconciliation is required; no automatic renal dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP expects no renal adjustment below CrCl 30 or on haemodialysis; EMA does not recommend use in severe renal impairment because safety/efficacy are unestablished. Specialist reconciliation is required; no automatic renal dose.",
+        "source": {
+          "document": "NCCP 00518 v3",
+          "url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+          "page": 3,
+          "section": "Table 2 / EMA 4.2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "INTERACTION_strong_cyp3a_inhibitor",
+        "when": {
+          "field": "strong_cyp3a_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Review CYP3A interaction risk and alternatives against the current SmPC. Any temporary dose change and return to the previous dose require an explicit pharmacy plan.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Review CYP3A interaction risk and alternatives against the current SmPC. Any temporary dose change and return to the previous dose require an explicit pharmacy plan.",
+        "source": {
+          "document": "EMA Cabometyx SmPC sections 4.2 and 4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/cabometyx-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "INTERACTION_strong_cyp3a_inducer",
+        "when": {
+          "field": "strong_cyp3a_inducer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cabozantinib"
+          ],
+          "message": "Review CYP3A interaction risk and alternatives against the current SmPC. Any temporary dose change and return to the previous dose require an explicit pharmacy plan.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Review CYP3A interaction risk and alternatives against the current SmPC. Any temporary dose change and return to the previous dose require an explicit pharmacy plan.",
+        "source": {
+          "document": "EMA Cabometyx SmPC sections 4.2 and 4.5",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/cabometyx-epar-product-information_en.pdf",
+          "page": 5,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Advanced clear-cell renal cell carcinoma after prior VEGF-targeted therapy",
+    "ECOG 0–2",
+    "Adequate organ and haematological function; source exclusions and prior-treatment criteria must be checked."
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
@@ -623,13 +1571,51 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "emetogenic_risk": "oral_minimal_low",
+    "script_id": "nccp-oral-minimal-low",
+    "mapping_basis": "Current source-specific support plan; verify local prescription.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "premedication": [
+      "Arrange the baseline dental assessment and tell your dentist about treatment. No routine infusion premedication is required."
+    ],
+    "other_support": [
+      "Report diarrhoea and painful palms/soles early. Confirm your prescribed symptom medicines and blood-pressure plan. Tell the team before surgery or dental procedures: treatment usually needs withholding at least 28 days beforehand, with restart only after review of healing."
+    ],
+    "source_url": "https://healthservice.hse.ie/documents/6517/518_Cabozantinib.pdf",
+    "phase_specific_plan": "patient/00518/supportive-care.html"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "Continuous oral treatment",
+      "cycle_length_days": null,
+      "administration": [
+        {
+          "drug": "cabozantinib",
+          "dose": {
+            "value": 60,
+            "unit": "mg"
+          },
+          "day": "Every day",
+          "route": "PO",
+          "notes": "No food for two hours before and one hour after; tablets are not interchangeable with capsules."
+        }
+      ],
+      "label": "60 mg once daily continuously; no planned rest week",
+      "summary": "Continue until progression or unacceptable toxicity, with individual prescribing review."
+    }
+  ],
+  "monitoring": {
+    "baseline": [
+      "Full blood count, kidney, liver and bone profile, blood glucose, urine protein, thyroid tests, blood pressure, heart tracing (ECG) and dental examination."
+    ],
+    "regular": [
+      "Full blood count, kidney, liver and bone profile monthly; magnesium, urine protein, thyroid tests and blood pressure monthly. Repeat heart tracing and dental examination as clinically indicated."
+    ],
+    "disease_monitoring": "Symptoms and scans are interpreted together. Your consultant sets imaging timing according to the treatment plan; this regimen does not mandate a universal three-month scan interval."
   }
 }

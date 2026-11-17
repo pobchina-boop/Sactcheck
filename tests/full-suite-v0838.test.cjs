@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),vm=require('node:vm'),cp=require('node:child_process');
@@ -27,7 +28,7 @@ for(const c of ['00722','00619','00525','00892'])for(const n of ['index','knowle
 const tchp=json('data/patient-knowledge/00722.json').monitoring_schedule;assert(tchp.columns.some(x=>/cycle 5/i.test(x)));assert(tchp.rows[0].cells[0].includes('Baseline'));assert(/clock/.test(JSON.stringify(tchp.rows.find(r=>r.label.startsWith('Echo')))),'Phase changes must preserve the cardiac monitoring clock');
 const abema=json('data/patient-knowledge/00619.json').monitoring_schedule;assert(abema.rows.find(r=>r.label.startsWith('ECG')).cells[0].includes('clinically indicated'));assert(/clinically indicated/.test(JSON.stringify(abema)));
 const nav=json('data/breast-library-contexts-v0837.json').regimens;assert(Object.values(nav).filter(x=>x.longitudinal).length>=10);assert(B.matchesReceptor(nav['00892'],'hrpos-her2neg'));assert(!B.matchesReceptor(nav['00892'],'her2pos'));assert(nav['00936'].settings.includes('advanced'));assert(!nav['00936'].settings.includes('adjuvant'));
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log('Five new full suites, phase switching, source links, sparse body maps, cycle monitoring and generated parity passed.');
 
 // Every new component resolves to its own clinician profile, including ADC identity.

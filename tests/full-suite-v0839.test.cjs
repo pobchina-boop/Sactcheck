@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),vm=require('node:vm'),cp=require('node:child_process');
@@ -22,7 +23,7 @@ const nav=json('data/breast-library-contexts-v0837.json').regimens;assert.equal(
 const reuse=json('data/regimen-reuse-map-v0839.json');assert.equal(reuse.regimens.length,Object.values(reuse.counts).reduce((a,b)=>a+b,0));assert.equal(new Set(reuse.regimens.map(x=>x.protocol_path)).size,reuse.regimens.length);assert(reuse.boundary.includes('Same agents do not imply equivalent'));for(const c of codes)assert.equal(reuse.regimens.find(x=>x.code===c).category,'authored_suite');
 // Guard against the copied source / route metadata found during this batch.
 for(const c of ['00485','00815','00659','00892','00936']){const d=json(`data/patient-knowledge/${c}.json`),m=json('data/sustainability-regimen-metadata-v0691.json').profiles[d.protocol_id];for(const v of Object.values(m))if(v.source)assert(v.source.includes(`NCCP ${c} `));if(['00485','00659'].includes(c))assert.equal(m.route_classification.value,'parenteral_only');}
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log('Five HER2 suites: all routes, date-free charts, monitoring, PDFs, indication filters and reuse metadata passed.');
 
 for(const c of ['00200','00201','00272','00285'])assert(!read(`patient/${c}/consent-form.html`).includes('Bone-marrow suppression / infection risk'));

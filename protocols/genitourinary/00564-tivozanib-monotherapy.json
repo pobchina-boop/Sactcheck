@@ -14,9 +14,9 @@
     "short_title": "Tivozanib Monotherapy",
     "indication": "Advanced renal-cell carcinoma in an NCCP-listed tivozanib indication.",
     "source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.44.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.57",
+    "source_checked_date": "2026-11-16",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "genitourinary_subgroups": [
@@ -61,8 +61,8 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
@@ -81,22 +81,27 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.57",
+      "audit_date": "2026-11-16",
+      "scope_note": "NCCP rules reconciled with current EMA product information. Explicit source differences require specialist reconciliation; no independent approval."
     },
-    "canonical_protocol_id": "nccp-00564-v3"
+    "canonical_protocol_id": "nccp-00564-v3",
+    "full_suite_context_releases": {
+      "renal": "0.84.57"
+    },
+    "full_suite_release": "0.84.57",
+    "source_pdf_sha256": "c9beba9a9251d739b86db93ecbe072d41929a6db03940aa29c1bcafaf95f4ec7"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00564 Version 3. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00564 Version 3. Current source, prescribing review, pharmacy verification and independent clinical judgement remain required."
   },
   "indications": [
     {
@@ -107,11 +112,12 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Tivozanib once daily on days 1–21 of each 28-day cycle.",
+    "schedule_summary": "1340 microgram daily on days 1–21, then 7 days off",
     "drugs": [
       "tivozanib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "continuous": false
   },
   "input_definitions": {
     "assessment_phase": {
@@ -120,20 +126,20 @@
       "required": false,
       "options": [
         {
-          "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "On treatment"
         },
         {
-          "value": "toxicity_review",
-          "label": "Toxicity review"
+          "value": "restart",
+          "label": "Restart after interruption"
         }
       ],
-      "demo_value": "pre_treatment",
-      "input_role": "context"
+      "input_role": "decision",
+      "demo_value": "baseline"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -185,47 +191,42 @@
       "input_role": "context"
     },
     "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
+      "label": "Non haematological toxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00564 v3: clinician-confirmed toxicity grade"
     },
     "hypersensitivity_grade": {
       "label": "Infusion or hypersensitivity reaction grade",
@@ -233,42 +234,37 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00564 v3: clinician-confirmed toxicity grade"
     },
     "systolic_bp": {
       "label": "Systolic blood pressure",
@@ -296,85 +292,75 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Grade 1."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Grade 2."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Grade 3."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Grade 4."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00564 v3: clinician-confirmed toxicity grade"
     },
     "hand_foot_skin_reaction_grade": {
-      "label": "Hand-foot skin reaction grade",
+      "label": "Hand foot skin reaction grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No rash."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild/localised eruption."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate or more extensive eruption limiting instrumental activities."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe/generalised eruption limiting self-care; urgent assessment."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening skin reaction."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00564 v3: clinician-confirmed toxicity grade"
     },
     "clinically_significant_bleeding_or_thrombosis": {
       "label": "Clinically significant bleeding or thromboembolism",
@@ -384,11 +370,201 @@
       "input_role": "decision"
     },
     "major_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
+      "label": "Major surgery planned, or wound not adequately healed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_dose": {
+      "label": "Current prescribed tivozanib dose per administration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "microgram",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "child_pugh_class": {
+      "label": "Hepatic impairment: clinician-assessed Child-Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A — mild"
+        },
+        {
+          "value": "B",
+          "label": "B — moderate"
+        },
+        {
+          "value": "C",
+          "label": "C — severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "A"
+    },
+    "known_drug_hypersensitivity": {
+      "label": "Known hypersensitivity to tivozanib or its excipients",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncontrolled_hypertension": {
+      "label": "Blood pressure clinically uncontrolled despite management",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_hypertension": {
+      "label": "Severe hypertension requiring interruption / urgent treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bleeding_requires_intervention": {
+      "label": "Bleeding requiring medical intervention",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_pres": {
+      "label": "Possible posterior reversible encephalopathy syndrome (PRES)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inhibitor": {
+      "label": "Strong CYP3A inhibitor present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inducer": {
+      "label": "Strong CYP3A inducer present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "persistent_intolerable_grade2": {
+      "label": "Grade 2 toxicity is persistent and intolerable despite support",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "proteinuria_grade": {
+      "label": "Proteinuria grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
+        },
+        {
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00564 v3: clinician-confirmed toxicity grade"
+    },
+    "anc_x10e9_l": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "grade3_occurrence_number": {
+      "label": "Occurrence number of this grade 3 adverse event",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "step": 0.01,
+      "unit": "",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "severe_renal_impairment_or_dialysis": {
+      "label": "Severe renal impairment or haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "st_johns_wort": {
+      "label": "Taking St John’s wort",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bcrp_substrate": {
+      "label": "Taking a clinically relevant BCRP substrate",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -422,155 +598,267 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "rule_id": "ECOG_REVIEW",
         "when": {
           "field": "ecog",
           "operator": ">=",
-          "value": "3"
+          "value": "2"
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "rule_id": "ALLERGY",
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "known_drug_hypersensitivity",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "message": "Known hypersensitivity is an exclusion; do not administer.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Known hypersensitivity is an exclusion; do not administer.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Pregnancy requires exclusion from this pathway and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Pregnancy requires exclusion from this pathway and specialist review.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SEVERE_REACTION",
         "when": {
           "field": "hypersensitivity_grade",
           "operator": ">=",
           "value": 3
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "message": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "document": "EMA tivozanib SmPC sections 4.3–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/fotivda-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "Hypersensitivity",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BP_SYS",
-        "priority": 9,
+        "rule_id": "BP_REVIEW_systolic_bp",
         "when": {
           "field": "systolic_bp",
           "operator": ">=",
           "value": 160
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 160 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 160 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Hypertension review",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BP_DIA",
-        "priority": 9,
+        "rule_id": "BP_REVIEW_diastolic_bp",
         "when": {
           "field": "diastolic_bp",
           "operator": ">=",
           "value": 100
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 100 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 100 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Hypertension review",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_DIARR",
-        "priority": 9,
+        "rule_id": "BP_UNCONTROLLED",
         "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Grade 3–4 diarrhoea requires interruption, supportive care and source-specific dose modification."
+          "message": "Control blood pressure before starting or resuming treatment. Persistent on-treatment hypertension requires source-specific dose modification and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Control blood pressure before starting or resuming treatment. Persistent on-treatment hypertension requires source-specific dose modification and specialist review.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 diarrhoea requires interruption, supportive care and source-specific dose modification."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_HFS",
-        "priority": 9,
+        "rule_id": "BP_SEVERE",
         "when": {
-          "field": "hand_foot_skin_reaction_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "severe_hypertension",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Grade 3 hand-foot skin reaction requires interruption and dose modification."
+          "message": "Interrupt treatment and urgently manage severe hypertension. Agree any restart after control, at the appropriate lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Interrupt treatment and urgently manage severe hypertension. Agree any restart after control, at the appropriate lower dose.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 hand-foot skin reaction requires interruption and dose modification."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BLEED",
-        "priority": 10,
+        "rule_id": "BLEEDING",
+        "when": {
+          "field": "bleeding_requires_intervention",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Interrupt treatment for bleeding requiring medical intervention and assess urgently; consider the drug-specific permanent-stop criteria where relevant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt treatment for bleeding requiring medical intervention and assess urgently; consider the drug-specific permanent-stop criteria where relevant.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Haemorrhage",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COMBINED_BLEED_CLOT_REVIEW",
         "when": {
           "field": "clinically_significant_bleeding_or_thrombosis",
           "operator": "==",
@@ -579,19 +867,24 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Clinically significant bleeding or thrombosis requires interruption and urgent risk review."
+          "message": "Urgently distinguish active bleeding from venous or arterial thrombosis and apply the specific pathway. This combined legacy field alone does not establish a permanent-stop indication.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Urgently distinguish active bleeding from venous or arterial thrombosis and apply the specific pathway. This combined legacy field alone does not establish a permanent-stop indication.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Clinically significant bleeding or thrombosis requires interruption and urgent risk review."
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Vascular complications",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_SURG",
-        "priority": 9,
+        "rule_id": "SURGERY",
         "when": {
           "field": "major_surgery_or_unhealed_wound",
           "operator": "==",
@@ -600,22 +893,859 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "tivozanib"
           ],
-          "message": "Withhold around major surgery and until wound healing is adequate."
+          "message": "Temporarily interrupt tivozanib for major surgery; restart depends on adequate wound healing. This NCCP source does not specify a universal number of pre-operative days.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Temporarily interrupt tivozanib for major surgery; restart depends on adequate wound healing. This NCCP source does not specify a universal number of pre-operative days.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Wound healing",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_SEVERE_anc_x10e9_l",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 0.5
         },
-        "explanation": "Withhold around major surgery and until wound healing is adequate."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Interrupt for severe cytopenia. The printed NCCP recovery wording says “Grade ≥2”, which is ambiguous; obtain Consultant/pharmacy confirmation before restarting at a lower dose. Do not silently reverse the inequality.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt for severe cytopenia. The printed NCCP recovery wording says “Grade ≥2”, which is ambiguous; obtain Consultant/pharmacy confirmation before restarting at a lower dose. Do not silently reverse the inequality.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2: source clarification",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_REDUCE_anc_x10e9_l",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_dose",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "current_dose",
+                  "operator": "!=",
+                  "value": 1340
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "NCCP specifies one dose-level reduction for this count band. Standard reduction is 1340→890 microgram daily on days 1–21 of 28; if already at 890, seek a specialist plan rather than inventing another level.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP specifies one dose-level reduction for this count band. Standard reduction is 1340→890 microgram daily on days 1–21 of 28; if already at 890, seek a specialist plan rather than inventing another level.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_BOUNDARY_anc_x10e9_l",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "==",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "The printed full-dose and reduction bands overlap at this exact boundary. Confirm the intended action with Consultant/pharmacy; do not silently select either row.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The printed full-dose and reduction bands overlap at this exact boundary. Confirm the intended action with Consultant/pharmacy; do not silently select either row.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2: overlapping endpoint",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_SEVERE_platelets_x10e9_l",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 25
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Interrupt for severe cytopenia. The printed NCCP recovery wording says “Grade ≥2”, which is ambiguous; obtain Consultant/pharmacy confirmation before restarting at a lower dose. Do not silently reverse the inequality.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt for severe cytopenia. The printed NCCP recovery wording says “Grade ≥2”, which is ambiguous; obtain Consultant/pharmacy confirmation before restarting at a lower dose. Do not silently reverse the inequality.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2: source clarification",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_REDUCE_platelets_x10e9_l",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 25
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_dose",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "current_dose",
+                  "operator": "!=",
+                  "value": 1340
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "NCCP specifies one dose-level reduction for this count band. Standard reduction is 1340→890 microgram daily on days 1–21 of 28; if already at 890, seek a specialist plan rather than inventing another level.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP specifies one dose-level reduction for this count band. Standard reduction is 1340→890 microgram daily on days 1–21 of 28; if already at 890, seek a specialist plan rather than inventing another level.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_BOUNDARY_platelets_x10e9_l",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "==",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "The printed full-dose and reduction bands overlap at this exact boundary. Confirm the intended action with Consultant/pharmacy; do not silently select either row.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The printed full-dose and reduction bands overlap at this exact boundary. Confirm the intended action with Consultant/pharmacy; do not silently select either row.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2: overlapping endpoint",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_ABOVE",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "These counts are above the ambiguous table endpoints. Preserve any existing reduction and assess all other domains.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "These counts are above the ambiguous table endpoints. Preserve any existing reduction and assess all other domains.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "G3_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "grade3_occurrence_number",
+              "operator": "missing",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Confirm the number of grade 3 occurrences: first occurrence calls for reduction; the second calls for interruption until resolution and a reduced restart. Do not assume an omitted history is the first event.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Confirm the number of grade 3 occurrences: first occurrence calls for reduction; the second calls for interruption until resolution and a reduced restart. Do not assume an omitted history is the first event.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "G3_FIRST",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "grade3_occurrence_number",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "current_dose",
+                  "operator": "missing",
+                  "value": true
+                },
+                {
+                  "field": "current_dose",
+                  "operator": "!=",
+                  "value": 1340
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "For the first grade 3 event, reduce the dose after clinical assessment; the available standard level is 890 microgram daily on days 1–21 of 28.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "For the first grade 3 event, reduce the dose after clinical assessment; the available standard level is 890 microgram daily on days 1–21 of 28.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "G3_REPEAT",
+        "when": {
+          "all": [
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "grade3_occurrence_number",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Interrupt recurrent grade 3 toxicity until it resolves; provide support, then consider a reduced restart with the Consultant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt recurrent grade 3 toxicity until it resolves; provide support, then consider a reduced restart with the Consultant.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "G4_HOLD",
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Interrupt grade 4 toxicity and provide appropriate care. If it resolves to grade ≤2, consider a reduced restart; do not invent a lower dose below the available level.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt grade 4 toxicity and provide appropriate care. If it resolves to grade ≤2, consider a reduced restart; do not invent a lower dose below the available level.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SYMPTOM_REVIEW_diarrhoea_grade",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Assess severe symptoms, hydration and the occurrence history promptly. Apply the specific reduction/interruption pathway; persistent severe hand-foot reaction may require discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Assess severe symptoms, hydration and the occurrence history promptly. Apply the specific reduction/interruption pathway; persistent severe hand-foot reaction may require discontinuation.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Adverse effects",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SYMPTOM_REVIEW_hand_foot_skin_reaction_grade",
+        "when": {
+          "field": "hand_foot_skin_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Assess severe symptoms, hydration and the occurrence history promptly. Apply the specific reduction/interruption pathway; persistent severe hand-foot reaction may require discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Assess severe symptoms, hydration and the occurrence history promptly. Apply the specific reduction/interruption pathway; persistent severe hand-foot reaction may require discontinuation.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 4,
+          "section": "Adverse effects",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROTEINURIA23",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "For grade 2–3 proteinuria, reduce or interrupt tivozanib and assess renal status. The source does not give a single mandatory restart dose for all cases.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "For grade 2–3 proteinuria, reduce or interrupt tivozanib and assess renal status. The source does not give a single mandatory restart dose for all cases.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROTEINURIA4",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": ">=",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Grade 4 proteinuria/nephrotic syndrome requires permanent discontinuation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Grade 4 proteinuria/nephrotic syndrome requires permanent discontinuation.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PRES",
+        "when": {
+          "field": "suspected_pres",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Urgently investigate suspected PRES; consider discontinuation for PRES or severe persistent hypertension rather than an automatic restart.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Urgently investigate suspected PRES; consider discontinuation for PRES or severe persistent hypertension rather than an automatic restart.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Hypertension/PRES",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_B",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "B"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "For moderate hepatic impairment, use 1340 microgram on alternate dosing days within the normal 21-days-on/7-days-off schedule. The treating team must supply the dated calendar; this is not 890 microgram every day.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "For moderate hepatic impairment, use 1340 microgram on alternate dosing days within the normal 21-days-on/7-days-off schedule. The treating team must supply the dated calendar; this is not 890 microgram every day.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_C",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Tivozanib is not recommended/should not be used in severe hepatic impairment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Tivozanib is not recommended/should not be used in severe hepatic impairment.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "RENAL_REVIEW",
+        "when": {
+          "field": "severe_renal_impairment_or_dialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Use caution in severe renal impairment; haemodialysis data are absent. Obtain an individual specialist plan.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Use caution in severe renal impairment; haemodialysis data are absent. Obtain an individual specialist plan.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "ST_JOHNS_WORT",
+        "when": {
+          "field": "st_johns_wort",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Concomitant St John’s wort is contraindicated. Resolve the interaction before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Concomitant St John’s wort is contraindicated. Resolve the interaction before treatment.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 5,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "CYP_INDUCER",
+        "when": {
+          "field": "strong_cyp3a_inducer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Strong CYP3A4 inducers can reduce tivozanib exposure; review alternatives and do not compensate with an unvalidated higher dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Strong CYP3A4 inducers can reduce tivozanib exposure; review alternatives and do not compensate with an unvalidated higher dose.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 5,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "BCRP",
+        "when": {
+          "field": "bcrp_substrate",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "Review the specific BCRP substrate with pharmacy; NCCP advises an appropriate separation window, for example two hours, for clinically relevant intestinal interactions.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Review the specific BCRP substrate with pharmacy; NCCP advises an appropriate separation window, for example two hours, for clinically relevant intestinal interactions.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 5,
+          "section": "Interactions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_REDUCE_anc_x10e9_l_FROM_1340",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "current_dose",
+              "operator": "==",
+              "value": 1340
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "With the current prescribed dose confirmed as 1340 microgram daily, NCCP specifies reduction to 890 microgram daily on days 1–21 of 28. Confirm recovery requirements and all other domains before prescribing; do not apply this daily calendar to hepatic alternate-day dosing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": false,
+          "dose_calculation": "source_confirmed",
+          "dose": {
+            "value": 890,
+            "unit": "microgram",
+            "basis": "per dose",
+            "route": "PO"
+          }
+        },
+        "explanation": "With the current prescribed dose confirmed as 1340 microgram daily, NCCP specifies reduction to 890 microgram daily on days 1–21 of 28. Confirm recovery requirements and all other domains before prescribing; do not apply this daily calendar to hepatic alternate-day dosing.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_REDUCE_platelets_x10e9_l_FROM_1340",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": ">=",
+                  "value": 25
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            },
+            {
+              "field": "current_dose",
+              "operator": "==",
+              "value": 1340
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "With the current prescribed dose confirmed as 1340 microgram daily, NCCP specifies reduction to 890 microgram daily on days 1–21 of 28. Confirm recovery requirements and all other domains before prescribing; do not apply this daily calendar to hepatic alternate-day dosing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": false,
+          "dose_calculation": "source_confirmed",
+          "dose": {
+            "value": 890,
+            "unit": "microgram",
+            "basis": "per dose",
+            "route": "PO"
+          }
+        },
+        "explanation": "With the current prescribed dose confirmed as 1340 microgram daily, NCCP specifies reduction to 890 microgram daily on days 1–21 of 28. Confirm recovery requirements and all other domains before prescribing; do not apply this daily calendar to hepatic alternate-day dosing.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 2,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "G3_FIRST_FROM_1340",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "non_haematological_toxicity_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "grade3_occurrence_number",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "field": "current_dose",
+              "operator": "==",
+              "value": 1340
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "tivozanib"
+          ],
+          "message": "With the current prescribed dose confirmed as 1340 microgram daily, NCCP specifies reduction to 890 microgram daily on days 1–21 of 28. Confirm recovery requirements and all other domains before prescribing; do not apply this daily calendar to hepatic alternate-day dosing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": false,
+          "dose_calculation": "source_confirmed",
+          "dose": {
+            "value": 890,
+            "unit": "microgram",
+            "basis": "per dose",
+            "route": "PO"
+          }
+        },
+        "explanation": "With the current prescribed dose confirmed as 1340 microgram daily, NCCP specifies reduction to 890 microgram daily on days 1–21 of 28. Confirm recovery requirements and all other domains before prescribing; do not apply this daily calendar to hepatic alternate-day dosing.",
+        "source": {
+          "document": "NCCP 00564 v3",
+          "url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Advanced clear-cell renal cell carcinoma: first line or after one cytokine, without previous VEGF/mTOR-targeted treatment",
+    "ECOG 0–1",
+    "Adequate organ and haematological function; source exclusions and prior-treatment criteria must be checked."
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
@@ -623,13 +1753,51 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "emetogenic_risk": "oral_minimal_low",
+    "script_id": "nccp-oral-minimal-low",
+    "mapping_basis": "Current source-specific support plan; verify local prescription.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "premedication": [
+      "No routine premedication is required. Confirm that you understand the seven-day break and have the correct capsule strength."
+    ],
+    "other_support": [
+      "Keep a dated dosing calendar and blood-pressure record if requested. Contact the team for persistent diarrhoea, reduced intake, severe tiredness or painful palms/soles. Tell the team before surgery; restart after a break for surgery requires a healing review."
+    ],
+    "source_url": "https://healthservice.hse.ie/documents/6391/564_v3_Tivozanib.pdf",
+    "phase_specific_plan": "patient/00564/supportive-care.html"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "21 days on / 7 days off",
+      "cycle_length_days": 28,
+      "administration": [
+        {
+          "drug": "tivozanib",
+          "dose": {
+            "value": 1340,
+            "unit": "microgram"
+          },
+          "day": "Days 1–21; no doses days 22–28",
+          "route": "PO",
+          "notes": "Swallow whole; one capsule daily for 21 days followed by seven days off."
+        }
+      ],
+      "label": "1340 microgram daily on days 1–21, then 7 days off",
+      "summary": "Continue until progression or unacceptable toxicity, with individual prescribing review."
+    }
+  ],
+  "monitoring": {
+    "baseline": [
+      "Confirm the clear-cell diagnosis and previous treatments. Full blood count, kidney and liver tests, calcium, magnesium, potassium, thyroid tests, blood pressure, urine protein and a heart tracing (ECG)."
+    ],
+    "regular": [
+      "Full blood count, kidney and liver tests, thyroid tests, blood pressure and urine protein regularly. Repeat heart tracing and electrolytes periodically and when symptoms or interacting medicines warrant it."
+    ],
+    "disease_monitoring": "Symptoms and scans are interpreted together. Your consultant sets imaging timing according to the treatment plan; this regimen does not mandate a universal three-month scan interval."
   }
 }

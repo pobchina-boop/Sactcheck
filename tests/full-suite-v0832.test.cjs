@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
@@ -47,5 +48,5 @@ for(const code of ['00227','00449','00446']){
  for(const m of d.evidence.metrics)for(const key of ['combination','comparison'])assert(m[key]>=0&&m[key]<=100);
  console.log(`${code}: clinical profile, evidence, consent, assessment, patient resources and local links passed`);
 }
-cp.execFileSync(process.execPath,['tools/build-complete-pathways.cjs','--check'],{cwd:root,stdio:'inherit'});
+cp.execFileSync(process.execPath,['tools/build-complete-pathways.cjs','--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:'00227,00449,00446'},stdio:'inherit'});
 console.log('Colorectal full-suite contract passed.');

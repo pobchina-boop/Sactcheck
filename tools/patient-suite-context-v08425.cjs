@@ -24,7 +24,7 @@ if(context==='adjuvant'&&codes.some(c=>c!=='00415'))throw new Error('Adjuvant co
 if(context==='neuroendocrine'&&codes.some(c=>c!=='00320'))throw new Error('NET context escaped shared everolimus00320');
 if(v27Contexts.includes(context)&&codes.some(c=>c!=='00849'))throw new Error('Neoadjuvant backbone context escaped00849');
 if(context==='colorectal'&&codes.some(c=>!['00212','00214','00215','00455','00558'].includes(c)))throw new Error('Colorectal context escaped selected bevacizumab protocols');
-if(context==='prostate'&&codes.some(c=>c!=='00203'))throw Error('Prostate context escaped00203');
+if(context==='prostate'&&codes.some(c=>!['00203','00588'].includes(c)))throw Error('Unsupported prostate context');
 if(context&&!codes.length)throw new Error('A context build requires an explicit SACT_SUITE_CODES scope');
 function profilePath(code){return context?`data/patient-knowledge-contexts/${code}/${context}.json`:`data/patient-knowledge/${code}.json`;}
 function profile(code){return JSON.parse(fs.readFileSync(path.join(root,profilePath(code)),'utf8'));}
@@ -85,6 +85,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(hn50.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const prostate56=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08456.json'),'utf8'));
  for(const [c,plans]of Object.entries(prostate56.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const gu57=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08457.json'),'utf8'));
+ for(const [c,plans]of Object.entries(gu57.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

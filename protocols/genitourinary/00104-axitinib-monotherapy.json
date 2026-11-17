@@ -14,9 +14,9 @@
     "short_title": "Axitinib Monotherapy",
     "indication": "Advanced renal-cell carcinoma in an NCCP-listed axitinib indication.",
     "source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.44.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 6,
+    "sactcheck_encoding_version": "0.84.57",
+    "source_checked_date": "2026-11-16",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "genitourinary_subgroups": [
@@ -46,7 +46,7 @@
         {
           "id": "00104-gu",
           "intent": "advanced_disease",
-          "cycle_length_days": 28,
+          "cycle_length_days": null,
           "duration_type": "until_progression_or_toxicity",
           "provenance": "official_nccp_source_reconciled"
         }
@@ -61,8 +61,8 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false
@@ -81,22 +81,27 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical approval pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.57",
+      "audit_date": "2026-11-16",
+      "scope_note": "NCCP rules reconciled with current EMA product information. Explicit source differences require specialist reconciliation; no independent approval."
     },
-    "canonical_protocol_id": "nccp-00104-v6"
+    "canonical_protocol_id": "nccp-00104-v6",
+    "full_suite_context_releases": {
+      "renal": "0.84.57"
+    },
+    "full_suite_release": "0.84.57",
+    "source_pdf_sha256": "b1e1d6523555aa7e2c6347f06d324f37e263615e7a5809bebbb9cfd0987f5f06"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00104 Version 6. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding derived from NCCP 00104 Version 6. Current source, prescribing review, pharmacy verification and independent clinical judgement remain required."
   },
   "indications": [
     {
@@ -106,12 +111,13 @@
     }
   ],
   "treatment": {
-    "cycle_length_days": 28,
-    "schedule_summary": "Continuous oral axitinib; 28-day assessment cycle convention.",
+    "cycle_length_days": null,
+    "schedule_summary": "5 mg twice daily continuously; no planned rest week",
     "drugs": [
       "axitinib"
     ],
-    "duration_type": "until_progression_or_toxicity"
+    "duration_type": "until_progression_or_toxicity",
+    "continuous": true
   },
   "input_definitions": {
     "assessment_phase": {
@@ -120,20 +126,20 @@
       "required": false,
       "options": [
         {
-          "value": "pre_treatment",
-          "label": "Pre-treatment"
+          "value": "baseline",
+          "label": "Before starting"
         },
         {
           "value": "on_treatment",
-          "label": "On-treatment"
+          "label": "On treatment"
         },
         {
-          "value": "toxicity_review",
-          "label": "Toxicity review"
+          "value": "restart",
+          "label": "Restart after interruption"
         }
       ],
-      "demo_value": "pre_treatment",
-      "input_role": "context"
+      "input_role": "decision",
+      "demo_value": "baseline"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -185,47 +191,42 @@
       "input_role": "context"
     },
     "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
+      "label": "Non haematological toxicity grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00104 v6: clinician-confirmed toxicity grade"
     },
     "hypersensitivity_grade": {
       "label": "Infusion or hypersensitivity reaction grade",
@@ -233,42 +234,37 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00104 v6: clinician-confirmed toxicity grade"
     },
     "systolic_bp": {
       "label": "Systolic blood pressure",
@@ -296,85 +292,75 @@
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Grade 1."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Grade 2."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Grade 3."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Grade 4."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00104 v6: clinician-confirmed toxicity grade"
     },
     "hand_foot_skin_reaction_grade": {
-      "label": "Hand-foot skin reaction grade",
+      "label": "Hand foot skin reaction grade",
       "type": "select",
       "required": false,
       "options": [
         {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No rash."
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
         },
         {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild/localised eruption."
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate or more extensive eruption limiting instrumental activities."
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe/generalised eruption limiting self-care; urgent assessment."
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         },
         {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening skin reaction."
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade using the applicable CTCAE term, objective findings, intervention required and functional impact.",
-      "input_role": "decision"
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00104 v6: clinician-confirmed toxicity grade"
     },
     "clinically_significant_bleeding_or_thrombosis": {
       "label": "Clinically significant bleeding or thromboembolism",
@@ -384,11 +370,226 @@
       "input_role": "decision"
     },
     "major_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
+      "label": "Major surgery planned, or wound not adequately healed",
       "type": "boolean",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_dose": {
+      "label": "Current prescribed axitinib dose per administration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "child_pugh_class": {
+      "label": "Hepatic impairment: clinician-assessed Child-Pugh class",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "A",
+          "label": "A — mild"
+        },
+        {
+          "value": "B",
+          "label": "B — moderate"
+        },
+        {
+          "value": "C",
+          "label": "C — severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "A"
+    },
+    "known_drug_hypersensitivity": {
+      "label": "Known hypersensitivity to axitinib or its excipients",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "label": "Pregnant",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncontrolled_hypertension": {
+      "label": "Blood pressure clinically uncontrolled despite management",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_hypertension": {
+      "label": "Severe hypertension requiring interruption / urgent treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bleeding_requires_intervention": {
+      "label": "Bleeding requiring medical intervention",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_pres": {
+      "label": "Possible posterior reversible encephalopathy syndrome (PRES)",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inhibitor": {
+      "label": "Strong CYP3A inhibitor present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "strong_cyp3a_inducer": {
+      "label": "Strong CYP3A inducer present",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "persistent_intolerable_grade2": {
+      "label": "Grade 2 toxicity is persistent and intolerable despite support",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "proteinuria_grade": {
+      "label": "Proteinuria grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "0",
+          "label": "Grade 0 — clinician confirmed",
+          "description": "No named event reported."
+        },
+        {
+          "value": "1",
+          "label": "Grade 1 — clinician confirmed",
+          "description": "Clinician-confirmed grade 1 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "2",
+          "label": "Grade 2 — clinician confirmed",
+          "description": "Clinician-confirmed grade 2 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "3",
+          "label": "Grade 3 — clinician confirmed",
+          "description": "Clinician-confirmed grade 3 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        },
+        {
+          "value": "4",
+          "label": "Grade 4 — clinician confirmed",
+          "description": "Clinician-confirmed grade 4 for this named adverse event. Use the applicable event-specific criteria; this treatment-modification table does not calculate the grade."
+        }
+      ],
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+      "source_grading_note": "Use the grade assigned by the treating clinician against the source and applicable toxicity criteria. The NCCP table does not identify a CTCAE edition.",
+      "assessment_guidance": "Confirm the event, severity, clinical relevance and previous occurrences. This field does not calculate a grade from isolated laboratory results.",
+      "demo_value": "0",
+      "grading_source_label": "NCCP 00104 v6: clinician-confirmed toxicity grade"
+    },
+    "anc_x10e9_l": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "platelets_x10e9_l": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "pres_confirmed": {
+      "label": "PRES confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "cardiac_failure_symptoms": {
+      "label": "New or worsening cardiac failure symptoms",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "recent_active_gi_bleeding": {
+      "label": "Recent active gastrointestinal bleeding",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "untreated_brain_metastases": {
+      "label": "Untreated brain metastases",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "dose_escalation_considered": {
+      "label": "Considering axitinib escalation",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "two_weeks_without_grade_over2": {
+      "label": "Two consecutive weeks without adverse reaction above grade 2",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "antihypertensive_treatment": {
+      "label": "Taking antihypertensive treatment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -422,8 +623,7 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "rule_id": "ECOG_REVIEW",
         "when": {
           "field": "ecog",
           "operator": ">=",
@@ -432,145 +632,258 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Performance status is outside the listed NCCP eligibility range; review treatment suitability. This is not an automatic dose percentage.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
+        "rule_id": "ALLERGY",
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "known_drug_hypersensitivity",
+          "operator": "==",
+          "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "message": "Known hypersensitivity is an exclusion; do not administer.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Known hypersensitivity is an exclusion; do not administer.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires interruption and source-specific review."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
+        "rule_id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Pregnancy requires exclusion from this pathway and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Pregnancy requires exclusion from this pathway and specialist review.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Do not breastfeed during treatment; confirm the product-specific interval after treatment.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "SEVERE_REACTION",
         "when": {
           "field": "hypersensitivity_grade",
           "operator": ">=",
           "value": 3
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "message": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Stop administration and urgently manage a severe reaction. Confirm true drug hypersensitivity and the product-specific re-exposure decision; a generic grade alone must not generate an unsupported permanent-discontinuation rule.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 hypersensitivity requires the severe reaction pathway and usually permanent discontinuation."
+          "document": "EMA axitinib SmPC sections 4.3–4.4",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/inlyta-epar-product-information_en.pdf",
+          "page": 4,
+          "section": "Hypersensitivity",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BP_SYS",
-        "priority": 9,
+        "rule_id": "BP_REVIEW_systolic_bp",
         "when": {
           "field": "systolic_bp",
           "operator": ">=",
           "value": 160
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 160 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 160 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Hypertension review",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BP_DIA",
-        "priority": 9,
+        "rule_id": "BP_REVIEW_diastolic_bp",
         "when": {
           "field": "diastolic_bp",
           "operator": ">=",
           "value": 100
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "message": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 100 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "This elevated blood-pressure reading requires clinical assessment of control, symptoms, treatment and repeat measurements. NCCP does not specify a universal numeric 100 mmHg interruption threshold for this drug. Use the confirmed severe/uncontrolled hypertension pathway when applicable.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Uncontrolled hypertension requires treatment interruption and blood-pressure management."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Hypertension review",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_DIARR",
-        "priority": 9,
+        "rule_id": "BP_UNCONTROLLED",
         "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "uncontrolled_hypertension",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Grade 3–4 diarrhoea requires interruption, supportive care and source-specific dose modification."
+          "message": "Control blood pressure before starting or resuming treatment. Persistent on-treatment hypertension requires source-specific dose modification and specialist review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Control blood pressure before starting or resuming treatment. Persistent on-treatment hypertension requires source-specific dose modification and specialist review.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3–4 diarrhoea requires interruption, supportive care and source-specific dose modification."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_HFS",
-        "priority": 9,
+        "rule_id": "BP_SEVERE",
         "when": {
-          "field": "hand_foot_skin_reaction_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "severe_hypertension",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Grade 3 hand-foot skin reaction requires interruption and dose modification."
+          "message": "Interrupt treatment and urgently manage severe hypertension. Agree any restart after control, at the appropriate lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Interrupt treatment and urgently manage severe hypertension. Agree any restart after control, at the appropriate lower dose.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Grade 3 hand-foot skin reaction requires interruption and dose modification."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_BLEED",
-        "priority": 10,
+        "rule_id": "BLEEDING",
+        "when": {
+          "field": "bleeding_requires_intervention",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Interrupt treatment for bleeding requiring medical intervention and assess urgently; consider the drug-specific permanent-stop criteria where relevant.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Interrupt treatment for bleeding requiring medical intervention and assess urgently; consider the drug-specific permanent-stop criteria where relevant.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Haemorrhage",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COMBINED_BLEED_CLOT_REVIEW",
         "when": {
           "field": "clinically_significant_bleeding_or_thrombosis",
           "operator": "==",
@@ -579,19 +892,24 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Clinically significant bleeding or thrombosis requires interruption and urgent risk review."
+          "message": "Urgently distinguish active bleeding from venous or arterial thrombosis and apply the specific pathway. This combined legacy field alone does not establish a permanent-stop indication.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Urgently distinguish active bleeding from venous or arterial thrombosis and apply the specific pathway. This combined legacy field alone does not establish a permanent-stop indication.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
-        },
-        "explanation": "Clinically significant bleeding or thrombosis requires interruption and urgent risk review."
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Vascular complications",
+          "checked_date": "2026-11-16"
+        }
       },
       {
-        "id": "TKI_SURG",
-        "priority": 9,
+        "rule_id": "SURGERY",
         "when": {
           "field": "major_surgery_or_unhealed_wound",
           "operator": "==",
@@ -600,22 +918,510 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "axitinib"
           ],
-          "message": "Withhold around major surgery and until wound healing is adequate."
+          "message": "Stop axitinib at least 24 hours before planned surgery; restart only after clinical confirmation of adequate healing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Stop axitinib at least 24 hours before planned surgery; restart only after clinical confirmation of adequate healing.",
         "source": {
-          "document": "Current official NCCP regimen PDF",
-          "page": "Dose modifications / treatment assessment"
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 5,
+          "section": "Wound healing",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_LOW_anc_x10e9_l",
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1
         },
-        "explanation": "Withhold around major surgery and until wound healing is adequate."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Delay axitinib until blood counts recover; confirm ANC ≥1 and platelets ≥75 ×10⁹/L before restarting.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Delay axitinib until blood counts recover; confirm ANC ≥1 and platelets ≥75 ×10⁹/L before restarting.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Haematological toxicity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_LOW_platelets_x10e9_l",
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Delay axitinib until blood counts recover; confirm ANC ≥1 and platelets ≥75 ×10⁹/L before restarting.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Delay axitinib until blood counts recover; confirm ANC ≥1 and platelets ≥75 ×10⁹/L before restarting.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Haematological toxicity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "COUNTS_MEET",
+        "when": {
+          "all": [
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 1
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "proceed",
+          "components": [
+            "axitinib"
+          ],
+          "message": "The entered counts meet this on-treatment table. Other domains, baseline eligibility and existing dose reductions still require assessment.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The entered counts meet this on-treatment table. Other domains, baseline eligibility and existing dose reductions still require assessment.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Haematological toxicity",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "RECENT_GI_BLEED",
+        "when": {
+          "field": "recent_active_gi_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "axitinib"
+          ],
+          "message": "NCCP advises not using axitinib in this situation; obtain specialist assessment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP advises not using axitinib in this situation; obtain specialist assessment.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 5,
+          "section": "Haemorrhage",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "UNTREATED_BRAIN_METS",
+        "when": {
+          "field": "untreated_brain_metastases",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "axitinib"
+          ],
+          "message": "NCCP advises not using axitinib in this situation; obtain specialist assessment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP advises not using axitinib in this situation; obtain specialist assessment.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 5,
+          "section": "Haemorrhage",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "TOX_HOLD_non_haematological_toxicity_grade",
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Delay axitinib for grade 3–4 non-haematological toxicity until recovery to grade ≤1. Restart one dose level lower after review: 10→7→5→3→2 mg twice daily; do not invent a lower dose below 2 mg.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Delay axitinib for grade 3–4 non-haematological toxicity until recovery to grade ≤1. Restart one dose level lower after review: 10→7→5→3→2 mg twice daily; do not invent a lower dose below 2 mg.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "TOX_HOLD_diarrhoea_grade",
+        "when": {
+          "field": "diarrhoea_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Delay axitinib for grade 3–4 non-haematological toxicity until recovery to grade ≤1. Restart one dose level lower after review: 10→7→5→3→2 mg twice daily; do not invent a lower dose below 2 mg.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Delay axitinib for grade 3–4 non-haematological toxicity until recovery to grade ≤1. Restart one dose level lower after review: 10→7→5→3→2 mg twice daily; do not invent a lower dose below 2 mg.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "TOX_HOLD_hand_foot_skin_reaction_grade",
+        "when": {
+          "field": "hand_foot_skin_reaction_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Delay axitinib for grade 3–4 non-haematological toxicity until recovery to grade ≤1. Restart one dose level lower after review: 10→7→5→3→2 mg twice daily; do not invent a lower dose below 2 mg.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Delay axitinib for grade 3–4 non-haematological toxicity until recovery to grade ≤1. Restart one dose level lower after review: 10→7→5→3→2 mg twice daily; do not invent a lower dose below 2 mg.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PRES",
+        "when": {
+          "any": [
+            {
+              "field": "suspected_pres",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "pres_confirmed",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Urgently investigate suspected/confirmed PRES. NCCP permits temporary interruption or permanent discontinuation; the safety of reinitiating after PRES is unknown. No automatic restart.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Urgently investigate suspected/confirmed PRES. NCCP permits temporary interruption or permanent discontinuation; the safety of reinitiating after PRES is unknown. No automatic restart.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 5,
+          "section": "PRES",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROTEINURIA",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Moderate or severe proteinuria requires dose reduction or temporary interruption and renal assessment; the source does not supply a universal quantitative restart algorithm.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Moderate or severe proteinuria requires dose reduction or temporary interruption and renal assessment; the source does not supply a universal quantitative restart algorithm.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 5,
+          "section": "Proteinuria",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "CARDIAC_FAILURE",
+        "when": {
+          "field": "cardiac_failure_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Assess possible cardiac failure urgently; interruption, reduction or discontinuation depends on the confirmed event and clinical review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Assess possible cardiac failure urgently; interruption, reduction or discontinuation depends on the confirmed event and clinical review.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 4,
+          "section": "Cardiac failure",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_B",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "B"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "axitinib"
+          ],
+          "message": "NCCP recommends 50% of the original axitinib dose in Child-Pugh B; EMA gives 5 mg twice daily to 2 mg twice daily as an example. Reconcile the prescribed tablet dose with pharmacy; do not automatically prescribe 2.5 mg twice daily.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP recommends 50% of the original axitinib dose in Child-Pugh B; EMA gives 5 mg twice daily to 2 mg twice daily as an example. Reconcile the prescribed tablet dose with pharmacy; do not automatically prescribe 2.5 mg twice daily.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 3 / EMA 4.2",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_C",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Axitinib is not recommended/should not be used in severe hepatic impairment (Child-Pugh C).",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Axitinib is not recommended/should not be used in severe hepatic impairment (Child-Pugh C).",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_A",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "A"
+        },
+        "action": {
+          "type": "proceed",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Child-Pugh A requires no hepatic dose adjustment; preserve existing dose reductions and review new liver injury separately.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Child-Pugh A requires no hepatic dose adjustment; preserve existing dose reductions and review new liver injury separately.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "DIALYSIS_REVIEW",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "axitinib"
+          ],
+          "message": "NCCP expects no dose adjustment during haemodialysis; clinical experience is limited. Confirm the individual plan with pharmacy without deriving a dialysis schedule.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP expects no dose adjustment during haemodialysis; clinical experience is limited. Confirm the individual plan with pharmacy without deriving a dialysis schedule.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "CYP_INHIBITOR",
+        "when": {
+          "field": "strong_cyp3a_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Avoid strong CYP3A4/5 inhibitors where possible. If unavoidable, NCCP recommends approximately halving the dose (example 5→2 mg twice daily). Confirm interaction and reversal plans; do not stack reductions automatically.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Avoid strong CYP3A4/5 inhibitors where possible. If unavoidable, NCCP recommends approximately halving the dose (example 5→2 mg twice daily). Confirm interaction and reversal plans; do not stack reductions automatically.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "CYP_INDUCER",
+        "when": {
+          "field": "strong_cyp3a_inducer",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Avoid strong CYP3A4/5 inducers where possible. Any gradual dose increase needs specialist monitoring; if the inducer stops, return promptly to the pre-inducer dose according to the source.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Avoid strong CYP3A4/5 inducers where possible. Any gradual dose increase needs specialist monitoring; if the inducer stops, return promptly to the pre-inducer dose according to the source.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "ESCALATION_REVIEW",
+        "when": {
+          "field": "dose_escalation_considered",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "axitinib"
+          ],
+          "message": "Escalation is a prescribing decision: source criteria require two consecutive weeks without toxicity above grade 2, BP no higher than 150/90 and no antihypertensive treatment. Steps are 5→7→10 mg twice daily; an isolated acceptable BP or absent input does not establish eligibility.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Escalation is a prescribing decision: source criteria require two consecutive weeks without toxicity above grade 2, BP no higher than 150/90 and no antihypertensive treatment. Steps are 5→7→10 mg twice daily; an isolated acceptable BP or absent input does not establish eligibility.",
+        "source": {
+          "document": "NCCP 00104 v6",
+          "url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+          "page": 2,
+          "section": "Dose increase",
+          "checked_date": "2026-11-16"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Advanced clear-cell renal cell carcinoma after prior sunitinib or a cytokine",
+    "ECOG 0–2",
+    "Adequate organ and haematological function; source exclusions and prior-treatment criteria must be checked."
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
@@ -623,13 +1429,51 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "emetogenic_risk": "oral_minimal_low",
+    "script_id": "nccp-oral-minimal-low",
+    "mapping_basis": "Current source-specific support plan; verify local prescription.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
+    "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
+    "premedication": [
+      "No routine infusion premedication is required. The team prescribes any sickness medicine under local policy."
+    ],
+    "other_support": [
+      "Collect a prescription for diarrhoea medicine, usually loperamide, before starting. Follow the supplied instructions and contact the team for persistent diarrhoea, dizziness, poor intake or reduced urine."
+    ],
+    "source_url": "https://healthservice.hse.ie/documents/6538/104_Axitinib_Monotherapy.pdf",
+    "phase_specific_plan": "patient/00104/supportive-care.html"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "treatment",
+      "name": "Continuous oral treatment",
+      "cycle_length_days": null,
+      "administration": [
+        {
+          "drug": "axitinib",
+          "dose": {
+            "value": 5,
+            "unit": "mg"
+          },
+          "day": "Every day, twice daily",
+          "route": "PO",
+          "notes": "Approximately 12 hours apart, with or without food; no fixed course length."
+        }
+      ],
+      "label": "5 mg twice daily continuously; no planned rest week",
+      "summary": "Continue until progression or unacceptable toxicity, with individual prescribing review."
+    }
+  ],
+  "monitoring": {
+    "baseline": [
+      "Full blood count, kidney and liver tests, thyroid tests, urine protein and blood-pressure assessment. Review heart and vascular history, current medicines and recent surgery."
+    ],
+    "regular": [
+      "Full blood count, kidney and liver tests regularly; thyroid tests every four weeks. Blood pressure weekly during the first cycle, then every four weeks; urine protein every three months."
+    ],
+    "disease_monitoring": "Symptoms and scans are interpreted together. Your consultant sets imaging timing according to the treatment plan; this regimen does not mandate a universal three-month scan interval."
   }
 }

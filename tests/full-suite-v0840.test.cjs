@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),cp=require('child_process');
@@ -37,5 +38,5 @@ const p316=json('data/patient-knowledge/00316.json');assert(p316.phase_cycles[1]
 for(const c of ['00745','00507']){const d=json(`data/patient-knowledge/${c}.json`),cy=d.phase_cycles.find(c=>c.timeline.some(r=>r.id==='chemo15'));assert.equal(cy.cycle_days,21);assert(cy.timeline.some(r=>r.id==='her21'));assert(!cy.timeline.some(r=>r.id==='her28'));}
 for(const c of ['00203','00621']){const d=json(`data/patient-knowledge/${c}.json`);assert(!d.chapters.some(ch=>JSON.stringify(ch).includes('Oncotype')));assert(d.context_label.includes('Source-defined'));}
 const reuse=json('data/regimen-reuse-map-v0840.json');for(const c of codes)assert.equal(reuse.regimens.find(r=>r.code===c).category,'authored_suite');for(const c of ['00278','00316','00433']){const row=reuse.regimens.find(r=>r.code===c);assert(row.components.some(x=>/doxorubicin/i.test(x)));assert(row.components.some(x=>/cyclophosphamide/i.test(x)));}
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log('Sixteen suites: source identities, clinical/patient routes, phase graphs, monitoring, support, PDFs and reuse safeguards passed.');

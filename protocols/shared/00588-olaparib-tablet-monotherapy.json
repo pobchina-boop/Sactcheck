@@ -43,13 +43,13 @@
     "validation": {
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "software_tests_completed": true,
+      "software_tests_completed": false,
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_v0849_pending_independent_clinical_and_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_oncology_pharmacy_validation",
       "source_document_checked": true
     },
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.57",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "migration": {
@@ -76,7 +76,7 @@
     ],
     "tumour_group": "Gynaecology",
     "gynaecology_subgroup": "ovarian_parp",
-    "source_checked_date": "2026-10-25",
+    "source_checked_date": "2026-11-16",
     "treatment_context": [
       "gynaecology",
       "ovarian_parp",
@@ -116,17 +116,15 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_pending_clinical_validation",
-      "label": "Source reconciled · independent clinical/pharmacy validation pending",
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Current source reconciled; independent clinical approval pending",
       "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.84.9",
-      "audit_date": "2026-10-20",
-      "scope_note": "NCCP v5b and EMA SmPC checked. Shared indications retained; new detailed eligibility rules are breast-specific. Source conflicts are explicit and do not generate automatic doses.",
-      "reconciled_release": "0.84.21",
-      "reconciled_date": "2026-10-25"
+      "audit_release": "0.84.57",
+      "audit_date": "2026-11-16",
+      "scope_note": "NCCP rules reconciled with current EMA product information. Explicit source differences require specialist reconciliation; no independent approval."
     },
     "canonical_protocol_id": "nccp-00588-v5b",
     "source_alternative_url": "https://assets.hse.ie/media/documents/olaparib_tablet_monotherapy_588.pdf",
@@ -137,12 +135,17 @@
       "requires_indication_gated_patient_routing": true
     },
     "full_suite_release": "0.84.21",
-    "schedule_summary": "Take olaparib tablets morning and evening every day. There is no planned week off. Blood-review appointments are usually every four weeks during this one-year breast course."
+    "schedule_summary": "Take olaparib tablets morning and evening every day. There is no planned week off. Blood-review appointments are usually every four weeks during this one-year breast course.",
+    "full_suite_context_releases": {
+      "prostate": "0.84.57"
+    },
+    "source_pdf_sha256": "de66f9a3d6d802aee6d32261407a7048d2eae2441a730005e1380bda6807d489"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
-    "disclaimer": "Decision-support encoding includes NCCP 00588 Version 5b. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision-support encoding includes NCCP 00588 Version 5b. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "prostate_scope": "00588g monotherapy only; continue castration; no one-year breast or two-year ovarian course cap."
   },
   "indications": [
     {
@@ -2174,6 +2177,184 @@
           "section": "Methods / Eligibility",
           "checked_date": "2026-10-20"
         }
+      },
+      {
+        "rule_id": "PROSTATE_BRCA",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "mcrpc_brca_monotherapy"
+            },
+            {
+              "field": "prostate_brca_status",
+              "operator": "in",
+              "value": [
+                "negative",
+                "unknown"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "NCCP 00588g requires a pathogenic germline or somatic BRCA1/2 mutation confirmed with a validated test. A variant of uncertain significance or another repair-gene change does not establish this NCCP indication.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "NCCP 00588g requires a pathogenic germline or somatic BRCA1/2 mutation confirmed with a validated test. A variant of uncertain significance or another repair-gene change does not establish this NCCP indication.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 2,
+          "section": "Prostate indication / treatment",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROSTATE_PRIOR_NHA",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "mcrpc_brca_monotherapy"
+            },
+            {
+              "field": "prostate_prior_new_hormonal_agent",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Confirm progression following prior treatment that included a new hormonal agent. Do not import eligibility from olaparib/abiraterone combination regimens.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Confirm progression following prior treatment that included a new hormonal agent. Do not import eligibility from olaparib/abiraterone combination regimens.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 2,
+          "section": "Prostate indication / treatment",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROSTATE_DISEASE_SETTING",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "mcrpc_brca_monotherapy"
+            },
+            {
+              "field": "prostate_mcrpc_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "The prostate monotherapy indication is metastatic castration-resistant disease. Reconcile disease setting before using this pathway.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The prostate monotherapy indication is metastatic castration-resistant disease. Reconcile disease setting before using this pathway.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 2,
+          "section": "Prostate indication / treatment",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROSTATE_CASTRATION",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "mcrpc_brca_monotherapy"
+            },
+            {
+              "field": "prostate_castration_maintained",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Continue medical castration with an LHRH analogue unless the patient is surgically castrated. Olaparib does not replace androgen deprivation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Continue medical castration with an LHRH analogue unless the patient is surgically castrated. Olaparib does not replace androgen deprivation.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 2,
+          "section": "Prostate indication / treatment",
+          "checked_date": "2026-11-16"
+        }
+      },
+      {
+        "rule_id": "PROSTATE_FORMULATION",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "mcrpc_brca_monotherapy"
+            },
+            {
+              "field": "prostate_formulation_tablets",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "olaparib"
+          ],
+          "message": "Olaparib tablets and capsules are not interchangeable on a milligram-for-milligram basis. Confirm the tablet product and prescription before dispensing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Olaparib tablets and capsules are not interchangeable on a milligram-for-milligram basis. Confirm the tablet product and prescription before dispensing.",
+        "source": {
+          "document": "NCCP 00588 v5b",
+          "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
+          "page": 2,
+          "section": "Prostate indication / treatment",
+          "checked_date": "2026-11-16"
+        }
       }
     ]
   },
@@ -2906,6 +3087,59 @@
       },
       "help": "Use only if radiotherapy was given. Trial sequencing used at least two weeks after local therapy; review the individual plan.",
       "demo_value": 3
+    },
+    "prostate_brca_status": {
+      "label": "Prostate BRCA1/2 pathogenic mutation confirmed",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "germline",
+          "label": "Pathogenic germline BRCA1/2"
+        },
+        {
+          "value": "somatic",
+          "label": "Pathogenic somatic BRCA1/2"
+        },
+        {
+          "value": "negative",
+          "label": "Neither identified"
+        },
+        {
+          "value": "unknown",
+          "label": "Unknown / awaiting result"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": "germline"
+    },
+    "prostate_prior_new_hormonal_agent": {
+      "label": "Prostate: progression after treatment including a new hormonal agent",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prostate_mcrpc_confirmed": {
+      "label": "Metastatic castration-resistant prostate cancer confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prostate_castration_maintained": {
+      "label": "Medical castration continues, or surgical castration confirmed",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prostate_formulation_tablets": {
+      "label": "Prescription is for olaparib tablets, not capsules",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "assessment_profiles": [

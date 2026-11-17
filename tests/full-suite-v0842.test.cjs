@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),crypto=require('crypto'),cp=require('child_process'),vm=require('vm');
@@ -50,5 +51,5 @@ const form={querySelectorAll:()=>fields,addEventListener:(n,f)=>handlers[n]=f,re
 vm.runInNewContext(read('assets/patient/consent-discussion.js'),{document:{getElementById:id=>id==='consent-discussion'?form:outputs[id]||(buttons[id]={addEventListener:(n,f)=>handlers[id]=f})},window:{addEventListener:(n,f)=>handlers[n]=f,print:()=>printed++}});
 fields[0].value='<img src=x onerror=alert(1)>';handlers.input();assert.equal(outputs['discussion-benefit-print'].textContent,fields[0].value);handlers['consent-print']();assert.equal(printed,1);handlers['consent-clear']();assert(fields.every(f=>!f.value));assert(!/localStorage|sessionStorage|fetch\(|sendBeacon/.test(read('assets/patient/consent-discussion.js')));
 const protectedFiles=json('validation/endocrine-v0842/protected-patient-baseline.json').files;for(const [p,h] of Object.entries(protectedFiles))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex'),require('./helpers/contact-migration-v0844.cjs').expectedHash(p,h),'Prior patient asset changed outside the approved contact migration: '+p);
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-phase-support-v0838.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log(`Five migrated endocrine suites: 141 source-linked rules, continuous / loading schedules, setting-specific monitoring, evidence, consent interaction, full assets and ${Object.keys(protectedFiles).length} preserved patient files passed.`);

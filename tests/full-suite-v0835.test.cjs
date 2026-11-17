@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current35=new Set(['00447', '00448']);
 const current34=new Set(["00225"]);
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
@@ -29,5 +30,5 @@ for(const c of ['00586','00655']){const html=relationship.renderForCode(c);asser
 assert(read('patient/00586/index.html').includes('knowledge.html'));for(const name of ['knowledge','consent','treatment-timeline'])assert(read(`patient/00586/${name}.html`).includes(relationship.renderForCode('00586')));
 assert(fs.existsSync(path.join(root,'assets/patient/durvalumab-00655-qr.png')));
 assert(read('js/patient-support-v0750.js').includes('SACTCheckTreatmentRelationship?.renderForCode'));assert(read('js/regimen-knowledge-base.js').includes('v0835-addendum'));assert(read('index.html').includes('js/treatment-relationship-v0835.js'));
-for(const f of ['tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-panitumumab-support-v0835.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-panitumumab-support-v0835.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:'00225,00447,00448,00586,00655'},stdio:'pipe'});
 (async()=>{const previousFetch=global.fetch;global.fetch=async url=>({ok:true,json:async()=>json(url)});try{const K=require('../js/regimen-knowledge-base'),payload=await K.load();for(const code of ['00225','00447','00448']){const p=json('protocols/gastrointestinal/'+fs.readdirSync(path.join(root,'protocols/gastrointestinal')).find(f=>f.startsWith(code)));assert(K.profilesForProtocol(p,payload).some(x=>x.id==='panitumumab'&&x.mechanism.includes('EGFR')));assert.equal(K.profilesForProtocol(p,payload).length,code==='00225'?1:4);}console.log('Panitumumab full-suite, loaded medicine knowledge and retrospective treatment-course contracts passed.');}finally{global.fetch=previousFetch;}})().catch(e=>{console.error(e);process.exitCode=1;});

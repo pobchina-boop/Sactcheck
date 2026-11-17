@@ -1,3 +1,4 @@
+// Repeat generators for this suite only; full-catalogue checks remain in the CI patient-knowledge and full-suite gates.
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),cp=require('node:child_process'),root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p)),R=require('../js/patient-asset-registry-v0810'),J=require('../js/treatment-journey-v0837'),codes=['00722','00857','00619','00726','00525'];
@@ -14,7 +15,7 @@ for(const code of codes){const d=json(`data/patient-knowledge/${code}.json`),j=J
 const nav=json('data/breast-library-contexts-v0837.json').regimens;assert(codes.every(c=>nav[c].longitudinal));assert(nav['00726'].settings.includes('advanced')&&nav['00726'].settings.includes('maintenance'));assert(!nav['00726'].settings.includes('adjuvant'));assert(nav['00619'].receptors.includes('hrpos-her2neg'));assert(nav['00857'].receptors.includes('tnbc'));assert(nav['00720'].receptors.includes('hrpos-her2pos'));assert.deepEqual(nav['00588'].settings,['adjuvant'],'Shared olaparib must not inherit ovarian maintenance in the breast filter');
 assert(J.renderForCode('00726','clinician').includes('6-monthly'));assert(J.renderForCode('00726').includes('every 12 weeks'));assert(!J.renderForCode('00525').includes('every 12 weeks'));
 const pembro=json('data/patient-knowledge/00857.json');assert.equal(pembro.passport_groups.length,4);assert(pembro.passport_groups.every(g=>g.agents.length<=3));assert(pembro.phases[1].detail.includes('every 21 days'));
-for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-breast-supportive-care-v0837.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,stdio:'pipe'});
+for(const f of ['tools/build-breast-journeys.cjs','tools/build-patient-knowledge.cjs','tools/build-complete-pathways.cjs','tools/build-breast-supportive-care-v0837.cjs'])cp.execFileSync(process.execPath,[f,'--check'],{cwd:root,env:{...process.env,SACT_SUITE_CODES:codes.join(',')},stdio:'pipe'});
 console.log('Five breast full suites, shared journeys, filters and generated-page parity passed.');
 
 const B=require('../js/breast-library-v0837');assert(B.matchesReceptor(nav['00722'],'hrpos-her2pos'));assert(B.matchesReceptor(nav['00726'],'hrpos-her2pos'));assert(!B.matchesReceptor(nav['00525'],'hrpos-her2pos'));
