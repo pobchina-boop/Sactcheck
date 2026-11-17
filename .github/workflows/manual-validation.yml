@@ -1,0 +1,80 @@
+name: Manual validation with saved evidence
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# No automatic reruns or deployment. Existing release workflows remain authoritative.
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run complete current regression command with a deadline
+        run: >-
+          python3 tools/run-bounded-check.py --seconds 4500
+          --output "$RUNNER_TEMP/sact-evidence/regression" -- npm run test:ci
+      - name: Retain results even when a test fails or times out
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sact-evidence/
+          retention-days: 14
+          if-no-files-found: warn
+
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      SACT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/sact-browser/node_modules/playwright
+      SACT_SITE_DIR: ${{ github.workspace }}/_site
+      SACT_VISUAL_DIR: ${{ runner.temp }}/sact-evidence/screenshots/navigation
+      SACT_WORKFLOW_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/workflow
+      SACT_CONTRAST_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/contrast
+      SACT_CLINICAL_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/clinical
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install a pinned Node 20 compatible browser tool outside the repository
+        run: >-
+          python3 tools/run-bounded-check.py --seconds 300
+          --output "$RUNNER_TEMP/sact-evidence/install-module" --
+          npm install --prefix "$RUNNER_TEMP/sact-browser" --no-save --package-lock=false playwright@1.56.1
+      - name: Install Chromium and system dependencies
+        run: >-
+          python3 tools/run-bounded-check.py --seconds 600
+          --output "$RUNNER_TEMP/sact-evidence/install-browser" --
+          node "$RUNNER_TEMP/sact-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Check browser environment once
+        run: >-
+          python3 tools/run-bounded-check.py --seconds 30 --browser
+          --output "$RUNNER_TEMP/sact-evidence/preflight" -- node tools/browser-preflight.cjs
+      - name: Build the exact checked out site
+        run: >-
+          python3 tools/run-bounded-check.py --seconds 300
+          --output "$RUNNER_TEMP/sact-evidence/build" -- npm run build:pages
+      - name: Exercise existing desktop and mobile browser tests
+        run: >-
+          python3 tools/run-bounded-check.py --seconds 900 --browser
+          --output "$RUNNER_TEMP/sact-evidence/browser-tests" -- npm run test:patient-browser
+      - name: Retain logs and available screenshots even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sact-evidence/
+          retention-days: 14
+          if-no-files-found: warn

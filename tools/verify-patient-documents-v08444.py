@@ -188,7 +188,7 @@ def verify_companions(route, row, reference, book):
         targets = []
         if status == 'excluded_ui_or_metadata':
             value = unit['source_text']
-            metadata = value.startswith('National Cancer Control Programme') or re.match(r'^NCCP \d{5} · (?:Draft|Source reconciled)',value)
+            metadata = value.startswith('National Cancer Control Programme') or re.match(r'^NCCP \d{5} · (?:Draft|Source[- ]reconciled)',value)
             navigation = value.startswith(('On a small screen, swipe the map sideways.','Open practical treatment guide','Back to your treatment portal'))
             require(bool(metadata or navigation), 'Non-navigation clinical statement excluded from companion review')
             require(not unit['missing_clauses'] and not unit['destination_texts'], 'Excluded metadata has contradictory clinical decisions')
