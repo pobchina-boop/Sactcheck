@@ -112,6 +112,7 @@ function profileModel(profile,route,root=ROOT,guideOverride){
     label:authoredString(p.label,p.phase_label,p.name,p.title,schedules.length>1?'Authored phase '+(i+1):''),
     days:Number.isInteger(p.cycle_days)&&p.cycle_days>0?p.cycle_days:null,
     reference:continuous||/reference/.test(d.cycle_display||''),
+    ...(p.relative_day_origin===undefined?{}:{dayOrigin:p.relative_day_origin}),
     rows:validTreatmentRows(p),
     note:authoredString(p.timeline_note,d.timeline_note)
   }));
@@ -152,15 +153,20 @@ function renderCourseRibbon(course){
   const steps=course.milestones;
   return '<div class="scv-course-ribbon"><ol style="--scv-count:'+steps.length+'">'+steps.map((m,i)=>'<li><span>'+text(m.marker||i+1)+'</span><strong>'+text(m.label)+'</strong><b>'+text(m.time)+'</b></li>').join('')+'</ol><p>Illustrative spacing. Each administration needs specialist clearance; dates can change.</p></div>';
 }
+function calendarDay(calendar,day){
+  if(calendar.dayOrigin===undefined)return String(day);
+  if(calendar.dayOrigin!==-5)throw new Error('Unreviewed relative-day calendar origin');
+  const value=day+calendar.dayOrigin-1;return value>0?'+'+value:String(value);
+}
 function renderCalendar(calendar){
   if(!calendar.days||!calendar.rows.length)return '';
   const days=calendar.days,ticks=[...new Set([1,...Array.from({length:Math.ceil(days/7)-1},(_,i)=>8+i*7),days])].filter(n=>n<=days);
   const pos=day=>100*(day-.5)/days;
-  return '<div class="scv-calendar"><div class="scv-calendar-heading"><strong>'+text(calendar.label||'Treatment within the displayed window')+'</strong><span>'+days+'-day view</span></div><div class="scv-calendar-axis"><span>Day</span><div>'+ticks.map(day=>'<i style="left:'+pos(day).toFixed(3)+'%">'+day+'</i>').join('')+'</div></div>'+calendar.rows.map(row=>{
+  return '<div class="scv-calendar"><div class="scv-calendar-heading"><strong>'+text(calendar.label||'Treatment within the displayed window')+'</strong><span>'+days+'-day view</span></div><div class="scv-calendar-axis"><span>Day</span><div>'+ticks.map(day=>'<i style="left:'+pos(day).toFixed(3)+'%">'+calendarDay(calendar,day)+'</i>').join('')+'</div></div>'+calendar.rows.map(row=>{
     const point=row.start===row.end;
     const sx=12+576*(row.start-1)/days,ex=12+576*row.end/days;
     const shape=point?'<circle cx="'+(12+576*(row.start-.5)/days).toFixed(3)+'" cy="10" r="5.5" fill="#123f60" stroke="#ffffff" stroke-width="1"/>':'<rect x="'+sx.toFixed(3)+'" y="5" width="'+(ex-sx).toFixed(3)+'" height="10" rx="4" fill="#82cdc7" stroke="#087e80" stroke-width="1"/>';
-    return '<div class="scv-calendar-row"><div><strong>'+text(row.label)+'</strong><span>Day '+row.start+(point?'':'–'+row.end)+'</span></div><svg viewBox="0 0 600 20" preserveAspectRatio="none" aria-hidden="true"><line x1="12" y1="10" x2="588" y2="10" stroke="#cbdedd" stroke-width="1.5"/>'+shape+'</svg></div>';
+    return '<div class="scv-calendar-row"><div><strong>'+text(row.label)+'</strong><span>Day '+calendarDay(calendar,row.start)+(point?'':'–'+calendarDay(calendar,row.end))+'</span></div><svg viewBox="0 0 600 20" preserveAspectRatio="none" aria-hidden="true"><line x1="12" y1="10" x2="588" y2="10" stroke="#cbdedd" stroke-width="1.5"/>'+shape+'</svg></div>';
   }).join('')+'</div>';
 }
 function renderCompactCalendar(model){
@@ -174,7 +180,7 @@ function renderCompactCalendar(model){
         if(last&&row.start<=last.end+1)last.end=Math.max(last.end,row.end);
         else spans.push({start:row.start,end:row.end});
       }
-      const label=spans.map(row=>String(row.start)+(row.start===row.end?'':'–'+row.end)).join(', ');
+      const label=spans.map(row=>calendarDay(calendar,row.start)+(row.start===row.end?'':'–'+calendarDay(calendar,row.end))).join(', ');
       const shapes=spans.map(row=>row.start===row.end?'<circle cx="'+(12+576*(row.start-.5)/calendar.days).toFixed(3)+'" cy="7" r="4.5" fill="#123f60" stroke="#ffffff" stroke-width=".7"/>':'<rect x="'+(12+576*(row.start-1)/calendar.days).toFixed(3)+'" y="3.5" width="'+(576*(row.end-row.start+1)/calendar.days).toFixed(3)+'" height="7" rx="3" fill="#77c5be" stroke="#087e80" stroke-width=".8"/>').join('');
       return '<div class="scv-mini-window"><div class="scv-window-badge"><strong>'+calendar.days+'</strong><span>day view</span></div><div class="scv-mini-content"><p class="scv-mini-caption">Treatment across this window · medicine timings are listed below</p><div class="scv-mini-row"><div><strong>Scheduled treatment</strong><span>Days '+text(label)+'</span></div><svg viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true"><line x1="12" y1="7" x2="588" y2="7" stroke="#c4dad8" stroke-width="1.2"/>'+shapes+'</svg></div></div></div>';
     }
@@ -187,9 +193,9 @@ function renderCompactCalendar(model){
       group.rows.push(row);
     }
     const hasPhaseLabel=model.calendars.length>1;
-    const label=hasPhaseLabel?calendar.label:(model.continuous?'Reference window · ongoing treatment':'Treatment timing in this window');
+    const label=hasPhaseLabel?calendar.label:(calendar.dayOrigin!==undefined?'Days relative to stem-cell infusion (day 0)':model.continuous?'Reference window · ongoing treatment':'Treatment timing in this window');
     const rows=groups.map(group=>{
-      const days=group.rows.map(row=>String(row.start)+(row.start===row.end?'':'–'+row.end)).join(', ');
+      const days=group.rows.map(row=>calendarDay(calendar,row.start)+(row.start===row.end?'':'–'+calendarDay(calendar,row.end))).join(', ');
       const hours=group.detail.length<45&&/hours?\b/.test(group.detail)?' · '+group.detail:'';
       const shapes=group.rows.map(row=>{
         const start=12+576*(row.start-1)/calendar.days,end=12+576*row.end/calendar.days;
