@@ -10,8 +10,8 @@
     "short_title": "Doxorubicin 60 mg/m² and Ifosfamide Therapy",
     "indication": "Locally advanced unresectable or metastatic soft tissue sarcoma.",
     "source_url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.41.0",
+    "source_document_pages": 6,
+    "sactcheck_encoding_version": "0.84.60",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "soft_tissue_sarcoma",
@@ -42,7 +42,7 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "pending_independent_clinical_and_oncology_pharmacy_validation",
+      "rule_level_source_reconciliation_status": "source_content_reconciled_pending_independent_clinical_and_oncology_pharmacy_review",
       "software_tests_completed": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
@@ -66,24 +66,42 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Source-content reconciliation draft; independent review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.60",
+      "source_checked_date": "2026-11-18",
+      "scope_note": "Complete current catalogue-linked NCCP PDF extracted text checked. Visual table-layout inspection is unverified: screenshot requests returned text markers without inspectable pixels. Original PDF binary retrieval returned HTTP403; extracted-text hashes are not PDF hashes. Source ambiguities remain explicit review boundaries."
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00391-v5"
+    "canonical_protocol_id": "nccp-00391-v5",
+    "source_checked_date": "2026-11-18",
+    "clinical_audit_release": "0.84.60",
+    "source_boundary_notes": [
+      "Doxorubicin hepatic decisions use absolute bilirubin in µmol/L, not an assumed ULN of 20.",
+      "Bilirubin > 50 to < 51 µmol/L and CrCl exactly 10 mL/min are unallocated printed boundaries and require review.",
+      "CrCl exactly 50 mL/min is not assigned an ifosfamide dose by the printed table.",
+      "Current treatment-day counts and previous-cycle nadir with neutropenic fever are assessed separately.",
+      "Mucositis affects both cytotoxic components; grade ≥ 3 neurotoxicity stops ifosfamide only.",
+      "Source full-dose count thresholds differ between 00391 (> 1.5/> 100) and 00392 (≥ 1.5/≥ 100); do not copy one table to the other."
+    ],
+    "source_evidence": {
+      "manifest": "validation/sarcoma-v08460/clinical/source-manifest.json",
+      "original_pdf_sha256": null,
+      "binary_retrieval_status": "blocked_http_403",
+      "extracted_text": "validation/sarcoma-v08460/clinical/sources/00391-web.txt",
+      "visual_table_layout_inspection": "unverified_screenshot_text_marker_only_no_inspectable_pixels"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding derived from NCCP 00391 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "dose_modification_note": "Use the most restrictive applicable component action. Source percentages and dose levels are review instructions, not automatic prescriptions. Confirm dose history, recovery, organ function and the current official source.",
+    "disclaimer": "Decision-support encoding derived from NCCP 00391 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
+    "organ_function_rule_status": "Current source content reconciled in v 0.84.60; source ambiguities and independent clinical/pharmacy approval remain unresolved."
   },
   "indications": [
     {
@@ -93,18 +111,253 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Doxorubicin 60 mg/m² and Ifosfamide Therapy",
+    "schedule_summary": "Doxorubicin 20 mg/m²/day IV bolus and ifosfamide 3000 mg/m²/day IV over 3 hours on Days 1–3, every 21 days for up to 6 cycles; mesna and hydration are integral.",
     "drugs": [
       "doxorubicin",
       "ifosfamide",
       "mesna"
-    ]
+    ],
+    "maximum_cycles": 6
   },
   "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first treatment"
+        },
+        {
+          "value": "day1",
+          "label": "New cycle / Day 1"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "recovery",
+          "label": "Recovery / next-dose review"
+        }
+      ],
+      "demo_value": "baseline"
+    },
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "anc": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 3,
+      "input_role": "decision"
+    },
+    "platelets": {
+      "label": "Platelet count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 200,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "label": "Creatinine clearance (do not substitute eGFR automatically)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mL/min",
+      "demo_value": 80,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "exact_continuous",
+        "exact_value_required": true
+      }
+    },
+    "haemodialysis": {
+      "label": "Receiving haemodialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "label": "Total bilirubin — absolute concentration",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "µmol/L",
+      "demo_value": 12,
+      "input_role": "decision"
+    },
+    "hepatic_impairment_severity": {
+      "label": "Clinically assessed hepatic impairment",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mild",
+          "label": "Mild"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to a regimen medicine or excipient",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "active_infection": {
+      "label": "Current infection requiring clinical assessment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "child_pugh_c": {
+      "label": "Child–Pugh C hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "lvef_percent": {
+      "label": "Left ventricular ejection fraction",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "%",
+      "demo_value": 60,
+      "input_role": "decision"
+    },
+    "significant_cardiac_disease": {
+      "label": "Congestive heart failure or other significant cardiac disease",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "symptomatic_cardiac_dysfunction": {
+      "label": "New symptoms/signs of cardiac dysfunction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "planned_lifetime_doxorubicin_mg_m2": {
+      "label": "Lifetime doxorubicin exposure INCLUDING the planned cycle (review other anthracyclines separately)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "demo_value": 75,
+      "input_role": "decision"
+    },
+    "other_anthracycline_or_cardiac_risk": {
+      "label": "Other anthracycline exposure, prior chest radiation or additional cardiac risk requiring individual limit",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_anc_nadir": {
+      "label": "Lowest neutrophil count during the previous cycle",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 2,
+      "input_role": "decision"
+    },
+    "prior_neutropenic_fever": {
+      "label": "Neutropenic fever occurred during that previous-cycle nadir",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "ast_u_l": {
+      "label": "AST — absolute result",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "U/L",
+      "demo_value": 20,
+      "input_role": "decision"
+    },
+    "mucositis_grade": {
+      "label": "Mucositis (clinician-assessed CTCAE grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -128,269 +381,102 @@
         }
       ],
       "demo_value": 0,
-      "input_role": "decision"
-    },
-    "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "pregnancy": {
-      "label": "Pregnant",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "platelets_x10e9_l": {
-      "label": "Platelet count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 150,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "active_infection": {
-      "label": "Active infection requiring treatment",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "context"
-    },
-    "mucositis_grade": {
-      "label": "Mucositis/stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
       "ctcae_version": "5.0",
       "ctcae_category": "mucositis",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess pain, ulceration and the effect on oral intake; distinguish altered diet from inability to eat or drink.",
-      "input_role": "decision"
+      "assessment_guidance": "Grade the named adverse event using its own CTCAE criteria; a generic symptom score is not a CTCAE grade."
     },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
+    "neurotoxicity_grade": {
+      "label": "Ifosfamide-associated neurotoxicity (clinician-assessed CTCAE grade)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "4"
         }
       ],
       "demo_value": 0,
       "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
+      "ctcae_category": "neurological",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the exact adverse event and grade it using its own CTCAE criteria, objective findings, intervention required and functional impact.",
-      "input_role": "context"
+      "assessment_guidance": "Grade the named adverse event using its own CTCAE criteria; a generic symptom score is not a CTCAE grade."
     },
-    "lvef_percent": {
-      "label": "LVEF",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 60,
-      "unit": "%",
-      "input_role": "context"
-    },
-    "symptomatic_cardiac_dysfunction": {
-      "label": "Symptoms or signs of cardiac dysfunction",
+    "suspected_ifosfamide_encephalopathy": {
+      "label": "Suspected ifosfamide encephalopathy or new cognitive change",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
-    "cumulative_anthracycline_mg_m2": {
-      "label": "Lifetime cumulative anthracycline exposure",
-      "type": "number",
+    "haematuria": {
+      "label": "Haematuria or suspected urotoxicity",
+      "type": "boolean",
       "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "mg/m²",
-      "input_role": "context"
+      "demo_value": false,
+      "input_role": "decision"
     },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (enter actual result; ×ULN calculated automatically)",
+    "mesna_plan_confirmed": {
+      "label": "Mesna prescription, timing and post-ifosfamide coverage confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hydration_plan_confirmed": {
+      "label": "Hydration and fluid-balance prescription confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "gcsf_prophylaxis_planned": {
+      "label": "Required G-CSF prophylaxis arranged",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "ppi_prophylaxis_planned": {
+      "label": "Proton-pump inhibitor prophylaxis arranged",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "urine_output_ml_hour": {
+      "label": "Urine output",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
+      "unit": "mL/hour",
+      "demo_value": 100,
       "input_role": "decision"
     },
-    "ifosfamide_renal_band": {
-      "label": "Renal function for ifosfamide",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge50",
-          "label": "CrCl ≥50 mL/min"
-        },
-        {
-          "value": "lt50",
-          "label": "CrCl <50 mL/min"
-        },
-        {
-          "value": "dialysis",
-          "label": "Dialysis"
-        }
-      ],
-      "demo_value": "ge50",
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
-    },
-    "encephalopathy_grade": {
-      "label": "Ifosfamide-associated encephalopathy/neurotoxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neurological_toxicity",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess confusion, somnolence, agitation, hallucinations, seizures, consciousness and effect on self-care; exclude metabolic, infectious and drug causes.",
-      "input_role": "decision"
-    },
-    "haematuria": {
-      "label": "Haematuria before or during ifosfamide",
+    "aprepitant_planned": {
+      "label": "Aprepitant included in the antiemetic plan",
       "type": "boolean",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
-    },
-    "urine_output_below_target": {
-      "label": "Urine output below protocol/local hydration target",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "fluid_balance_positive_over_1l_or_weight_gain_1kg": {
-      "label": "Positive fluid balance >1 L or weight gain >1 kg",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "lvef_reduction_from_baseline_percent": {
-      "label": "Absolute LVEF reduction from baseline",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 0,
-      "unit": "percentage points",
-      "input_role": "context"
     }
   },
   "required_inputs": [],
@@ -425,8 +511,35 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "STAGE_REQUIRED",
+        "when": {
+          "field": "assessment_phase",
+          "operator": "missing"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Eligibility / monitoring / dose modifications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative review safeguard; this is not a verbatim source dose or an invented numerical threshold."
+        }
+      },
+      {
+        "rule_id": "ECOG_REVIEW",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -435,19 +548,26 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "ifosfamide"
           ],
-          "message": "ECOG above 1 is outside the usual source eligibility range; verify the indication and current NCCP regimen."
+          "message": "ECOG above 1 is outside the source eligibility range; reassess suitability.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "ECOG above 1 is outside the source eligibility range; reassess suitability.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility section"
-        },
-        "explanation": "ECOG above 1 is outside the usual source eligibility range; verify the indication and current NCCP regimen."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Eligibility",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY_EXCLUSION",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -456,286 +576,749 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "ifosfamide"
           ],
-          "message": "Known hypersensitivity to a regimen component triggers the source exclusion pathway."
+          "message": "Known hypersensitivity to a regimen medicine or excipient: source exclusion; specialist review before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Known hypersensitivity to a regimen medicine or excipient: source exclusion; specialist review before treatment.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component triggers the source exclusion pathway."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "PREGNANCY_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREGNANCY_EXCLUSION",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "Pregnancy: source exclusion; specialist review before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Pregnancy: source exclusion; specialist review before treatment.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING_EXCLUSION",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "Breastfeeding: source exclusion; specialist review before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Breastfeeding: source exclusion; specialist review before treatment.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "CURRENT_INFECTION_REVIEW",
+        "when": {
+          "field": "active_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Monitoring / serious adverse effects",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative review safeguard; this is not a verbatim source dose or an invented numerical threshold."
+        }
+      },
+      {
+        "rule_id": "DOX_BILI_20_50",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Bilirubin 20–50 µmol/L: source specifies 50% of the original doxorubicin dose; review the original/current dose and all other restrictions.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Bilirubin 20–50 µmol/L: source specifies 50% of the original doxorubicin dose; review the original/current dose and all other restrictions.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Renal and hepatic impairment table",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOX_BILI_51_86",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 86
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Bilirubin 51–86 µmol/L: source specifies 25% of the original doxorubicin dose; review the original/current dose and all other restrictions.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Bilirubin 51–86 µmol/L: source specifies 25% of the original doxorubicin dose; review the original/current dose and all other restrictions.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Renal and hepatic impairment table",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOX_BILI_DECIMAL_GAP",
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 50
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "The printed bilirubin rows end at 50 and restart at 51 µmol/L. This decimal interval is not allocated; do not round or substitute a multiple of ULN.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The printed bilirubin rows end at 50 and restart at 51 µmol/L. This decimal interval is not allocated; do not round or substitute a multiple of ULN.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Renal and hepatic impairment table",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOX_CRCL_EXACT10",
+        "when": {
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": 10
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "The doxorubicin renal table prints > 10 and < 10 mL/min, leaving exactly 10 unallocated; confirm with oncology pharmacy.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The doxorubicin renal table prints > 10 and < 10 mL/min, leaving exactly 10 unallocated; confirm with oncology pharmacy.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Renal and hepatic impairment table",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOX_HAEMODIALYSIS",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Renal and hepatic impairment table",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOX_HEPATIC_NOT_RECOMMENDED",
         "when": {
           "any": [
             {
-              "field": "pregnancy",
-              "operator": "==",
-              "value": true
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 86
             },
             {
-              "field": "breastfeeding",
+              "field": "child_pugh_c",
               "operator": "==",
               "value": true
             }
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "doxorubicin"
           ],
-          "message": "Pregnancy or breastfeeding is outside the routine source pathway."
+          "message": "Doxorubicin is not recommended when bilirubin is > 86 µmol/L or Child–Pugh C; specialist review of alternatives.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Doxorubicin is not recommended when bilirubin is > 86 µmol/L or Child–Pugh C; specialist review of alternatives.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility/exclusions section"
-        },
-        "explanation": "Pregnancy or breastfeeding is outside the routine source pathway."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Renal and hepatic impairment table",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "ANC_LT1",
-        "priority": 10,
+        "rule_id": "BASELINE_LVEF",
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Before treatment, the source requires LVEF >50%; obtain cardiac and treatment-suitability review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Before treatment, the source requires LVEF >50%; obtain cardiac and treatment-suitability review.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Baseline monitoring / exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "CARDIAC_DISEASE_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "significant_cardiac_disease",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "symptomatic_cardiac_dysfunction",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Significant or symptomatic cardiac disease requires assessment before further doxorubicin. Review ECG, cardiac imaging and lifetime exposure.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Significant or symptomatic cardiac disease requires assessment before further doxorubicin. Review ECG, cardiac imaging and lifetime exposure.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Cardiac safety / monitoring",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative review safeguard; this is not a verbatim source dose or an invented numerical threshold."
+        }
+      },
+      {
+        "rule_id": "DOX_CUMULATIVE_LIMIT",
+        "when": {
+          "field": "planned_lifetime_doxorubicin_mg_m2",
+          "operator": ">",
+          "value": 450
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "The planned dose would exceed the source lifetime cumulative doxorubicin limit of 450 mg/m². Review previous anthracyclines, cardiac risk and the treatment plan before prescribing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The planned dose would exceed the source lifetime cumulative doxorubicin limit of 450 mg/m². Review previous anthracyclines, cardiac risk and the treatment plan before prescribing.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 1,
+          "section": "Treatment schedule footnote",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOX_CUMULATIVE_RISK_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "planned_lifetime_doxorubicin_mg_m2",
+              "operator": "==",
+              "value": 450
+            },
+            {
+              "field": "other_anthracycline_or_cardiac_risk",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin"
+          ],
+          "message": "Confirm cumulative anthracycline exposure and the individual cardiac-risk limit. Reaching 450 mg/m² is not permission for a further cycle.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Confirm cumulative anthracycline exposure and the individual cardiac-risk limit. Reaching 450 mg/m² is not permission for a further cycle.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 1,
+          "section": "Cumulative exposure",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative review safeguard; this is not a verbatim source dose or an invented numerical threshold."
+        }
+      },
+      {
+        "rule_id": "COUNTS_DELAY",
+        "when": {
+          "any": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 70
+            }
+          ]
         },
         "action": {
           "type": "delay",
           "components": [
-            "whole_regimen"
+            "doxorubicin",
+            "ifosfamide"
           ],
-          "message": "ANC <1.0 ×10⁹/L: delay treatment."
+          "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC <1.0 ×10⁹/L: delay treatment."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "PLT_LT70",
-        "priority": 10,
+        "rule_id": "COUNTS_80_REVIEW",
         "when": {
-          "field": "platelets_x10e9_l",
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 1
+                },
+                {
+                  "field": "anc",
+                  "operator": "<=",
+                  "value": 1.5
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 70
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–1.5 or platelets 70–100 are inclusive; full-dose boundaries are strictly > 1.5 and > 100. Confirm both counts and dose history; any delay criterion takes precedence.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–1.5 or platelets 70–100 are inclusive; full-dose boundaries are strictly > 1.5 and > 100. Confirm both counts and dose history; any delay criterion takes precedence.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PRIOR_FN_80_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "prior_anc_nadir",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "prior_neutropenic_fever",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "Previous ANC nadir < 0.5 ×10⁹/L WITH neutropenic fever: source specifies 80% doxorubicin and ifosfamide. Confirm current recovery and dose history; this history is distinct from current ANC or active infection.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Previous ANC nadir < 0.5 ×10⁹/L WITH neutropenic fever: source specifies 80% doxorubicin and ifosfamide. Confirm current recovery and dose history; this history is distinct from current ANC or active infection.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "IFO_RENAL_LT50",
+        "when": {
+          "field": "crcl_ml_min",
           "operator": "<",
-          "value": 70
+          "value": 50
         },
         "action": {
-          "type": "delay",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets <70 ×10⁹/L: delay treatment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets <70 ×10⁹/L: delay treatment."
-      },
-      {
-        "id": "ANC_1_1_5",
-        "priority": 8,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<=",
-          "value": 1.5
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "doxorubicin",
             "ifosfamide"
           ],
-          "message": "ANC 1.0–1.5 ×10⁹/L: administer 80% of doxorubicin and ifosfamide."
+          "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC 1.0–1.5 ×10⁹/L: administer 80% of doxorubicin and ifosfamide."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "PLT_70_100",
-        "priority": 8,
+        "rule_id": "IFO_RENAL_EXACT50",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<=",
-          "value": 100
+          "field": "crcl_ml_min",
+          "operator": "==",
+          "value": 50
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "doxorubicin",
             "ifosfamide"
           ],
-          "message": "Platelets 70–100 ×10⁹/L: administer 80% of doxorubicin and ifosfamide."
+          "message": "The ifosfamide renal table prints > 50 and < 50 mL/min; exactly 50 is unallocated. Do not round into automatic dosing.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "The ifosfamide renal table prints > 50 and < 50 mL/min; exactly 50 is unallocated. Do not round into automatic dosing.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets 70–100 ×10⁹/L: administer 80% of doxorubicin and ifosfamide."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "FN_REDUCE",
-        "priority": 9,
+        "rule_id": "IFO_HAEMODIALYSIS",
         "when": {
-          "field": "febrile_neutropenia",
+          "field": "haemodialysis",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "doxorubicin",
             "ifosfamide"
           ],
-          "message": "ANC nadir <0.5 ×10⁹/L with neutropenic fever: reduce both drugs to 80%."
+          "message": "Ifosfamide is not recommended on haemodialysis. Doxorubicin has a separate dialysis review branch.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Ifosfamide is not recommended on haemodialysis. Doxorubicin has a separate dialysis review branch.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC nadir <0.5 ×10⁹/L with neutropenic fever: reduce both drugs to 80%."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "DOX_BILI_GT4_3",
-        "priority": 10,
+        "rule_id": "IFO_SEVERE_HEPATIC",
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 4.3
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "doxorubicin"
-          ],
-          "message": "Bilirubin >86 µmol/L / Child-Pugh C: doxorubicin not recommended."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin >86 µmol/L / Child-Pugh C: doxorubicin not recommended."
-      },
-      {
-        "id": "DOX_BILI_GT2_5",
-        "priority": 9,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 2.5
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "doxorubicin"
-          ],
-          "message": "Bilirubin 51–86 µmol/L: administer 25% doxorubicin."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin 51–86 µmol/L: administer 25% doxorubicin."
-      },
-      {
-        "id": "DOX_BILI_GT1",
-        "priority": 8,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "doxorubicin"
-          ],
-          "message": "Bilirubin 20–50 µmol/L: administer 50% doxorubicin."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin 20–50 µmol/L: administer 50% doxorubicin."
-      },
-      {
-        "id": "IFO_RENAL_LT50",
-        "priority": 10,
-        "when": {
-          "field": "ifosfamide_renal_band",
+          "field": "hepatic_impairment_severity",
           "operator": "==",
-          "value": "lt50"
+          "value": "severe"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Ifosfamide is not recommended in severe hepatic impairment because efficacy may be reduced.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Ifosfamide is not recommended in severe hepatic impairment because efficacy may be reduced.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "IFO_AST_BILI_CLINICAL_CHOICE",
+        "when": {
+          "any": [
+            {
+              "field": "ast_u_l",
+              "operator": ">",
+              "value": 300
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 51.3
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "ifosfamide"
           ],
-          "message": "CrCl <50 mL/min: ifosfamide is not routinely recommended; consultant/pharmacy decision required."
+          "message": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "CrCl <50 mL/min: ifosfamide is not routinely recommended; consultant/pharmacy decision required."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "IFO_DIALYSIS",
-        "priority": 10,
-        "when": {
-          "field": "ifosfamide_renal_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "ifosfamide"
-          ],
-          "message": "Dialysis: ifosfamide is not routinely recommended."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Dialysis: ifosfamide is not routinely recommended."
-      },
-      {
-        "id": "MUCOSITIS_G3",
-        "priority": 9,
+        "rule_id": "MUCOSITIS_80_REVIEW",
         "when": {
           "field": "mucositis_grade",
           "operator": ">=",
           "value": 3
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "doxorubicin",
             "ifosfamide"
           ],
-          "message": "Grade ≥3 mucositis: reduce doxorubicin and ifosfamide to 80% after recovery."
+          "message": "Grade ≥ 3 mucositis: reduce doxorubicin and ifosfamide to 80% according to the source. Confirm current toxicity, recovery and prescription; the source does not supply a numerical recovery grade for this row.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Grade ≥ 3 mucositis: reduce doxorubicin and ifosfamide to 80% according to the source. Confirm current toxicity, recovery and prescription; the source does not supply a numerical recovery grade for this row.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥3 mucositis: reduce doxorubicin and ifosfamide to 80% after recovery."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "IFO_NEURO_G3",
-        "priority": 10,
+        "rule_id": "IFO_NEUROTOXICITY_STOP",
         "when": {
-          "field": "encephalopathy_grade",
+          "field": "neurotoxicity_grade",
           "operator": ">=",
           "value": 3
         },
@@ -744,17 +1327,51 @@
           "components": [
             "ifosfamide"
           ],
-          "message": "Grade ≥3 ifosfamide neurotoxicity: discontinue ifosfamide."
+          "message": "Grade ≥ 3 neurotoxicity: discontinue ifosfamide. This does not automatically discontinue doxorubicin.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Grade ≥ 3 neurotoxicity: discontinue ifosfamide. This does not automatically discontinue doxorubicin.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade ≥3 ifosfamide neurotoxicity: discontinue ifosfamide."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "IFO_HAEMATURIA",
-        "priority": 10,
+        "rule_id": "IFO_ENCEPHALOPATHY_REVIEW",
+        "when": {
+          "field": "suspected_ifosfamide_encephalopathy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Withhold further ifosfamide and assess urgently for encephalopathy; grade the event and review contributing medicines/organ function.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Withhold further ifosfamide and assess urgently for encephalopathy; grade the event and review contributing medicines/organ function.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 4,
+          "section": "Ifosfamide encephalopathy",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative review safeguard; this is not a verbatim source dose or an invented numerical threshold."
+        }
+      },
+      {
+        "rule_id": "IFO_HAEMATURIA",
         "when": {
           "field": "haematuria",
           "operator": "==",
@@ -765,74 +1382,210 @@
           "components": [
             "ifosfamide"
           ],
-          "message": "Haematuria requires withholding ifosfamide and evaluation of urothelial toxicity."
+          "message": "Haematuria requires urotoxicity assessment before further ifosfamide and review of mesna, hydration and urine monitoring.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Haematuria requires urotoxicity assessment before further ifosfamide and review of mesna, hydration and urine monitoring.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Haematuria requires withholding ifosfamide and evaluation of urothelial toxicity."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 5,
+          "section": "Renal and urotoxicity",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative review safeguard; this is not a verbatim source dose or an invented numerical threshold."
+        }
       },
       {
-        "id": "IFO_URINE",
-        "priority": 9,
+        "rule_id": "MESNA_PLAN_CONFIRMED_REVIEW",
         "when": {
-          "field": "urine_output_below_target",
+          "field": "mesna_plan_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The source includes mesna support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source includes mesna support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 1,
+          "section": "Treatment / supportive care",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "HYDRATION_PLAN_CONFIRMED_REVIEW",
+        "when": {
+          "field": "hydration_plan_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The source includes hydration support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source includes hydration support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 1,
+          "section": "Treatment / supportive care",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "GCSF_PROPHYLAXIS_PLANNED_REVIEW",
+        "when": {
+          "field": "gcsf_prophylaxis_planned",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "The source includes G-CSF support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source includes G-CSF support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 4,
+          "section": "Treatment / supportive care",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PPI_PROPHYLAXIS_PLANNED_REVIEW",
+        "when": {
+          "field": "ppi_prophylaxis_planned",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "doxorubicin",
+            "ifosfamide"
+          ],
+          "message": "The source includes proton-pump inhibitor support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The source includes proton-pump inhibitor support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 4,
+          "section": "Treatment / supportive care",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "IFO_URINE_OUTPUT",
+        "when": {
+          "field": "urine_output_ml_hour",
+          "operator": "<",
+          "value": 100
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Source target urine output is at least 100 mL/hour. Assess fluid balance, renal function and the prescribed hydration plan; do not give an automatic fluid or diuretic dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Source target urine output is at least 100 mL/hour. Assess fluid balance, renal function and the prescribed hydration plan; do not give an automatic fluid or diuretic dose.",
+        "source": {
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 1,
+          "section": "Hydration footnote",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "APREPITANT_INTERACTION",
+        "when": {
+          "field": "aprepitant_planned",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
             "ifosfamide"
           ],
-          "message": "Inadequate urine output requires correction before continuing ifosfamide."
+          "message": "Aprepitant may increase ifosfamide neurotoxicity/encephalopathy risk; review the antiemetic prescription and monitoring with oncology pharmacy.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
+        "explanation": "Aprepitant may increase ifosfamide neurotoxicity/encephalopathy risk; review the antiemetic prescription and monitoring with oncology pharmacy.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Inadequate urine output requires correction before continuing ifosfamide."
-      },
-      {
-        "id": "IFO_FLUID",
-        "priority": 9,
-        "when": {
-          "field": "fluid_balance_positive_over_1l_or_weight_gain_1kg",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "ifosfamide"
-          ],
-          "message": "Positive fluid balance >1 L or weight gain >1 kg requires hydration review before continuing."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Positive fluid balance >1 L or weight gain >1 kg requires hydration review before continuing."
+          "document": "NCCP 00391 v5",
+          "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+          "page": 4,
+          "section": "Antiemetics / drug interactions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and age/treatment-setting eligibility appropriate to the selected indication",
-    "Adequate organ and bone-marrow function for the selected regimen"
+    "Advanced unresectable or metastatic soft-tissue sarcoma.",
+    "ECOG 0–1; adequate hepatic, renal and bone-marrow function."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the interactive assessment"
+    "Hypersensitivity to regimen medicines/excipients.",
+    "Pregnancy or breastfeeding."
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Regimen-specific cardiac, neurological, urine, methotrexate-level, CK, blood-pressure and toxicity monitoring as applicable"
+    "Baseline full blood count, renal/liver profile and ECG; ECHO/MUGA if age > 65 or clinically indicated; source baseline LVEF > 50%.",
+    "Full blood count and renal/liver profile before each cycle.",
+    "Neurological assessment before each ifosfamide dose. Check for haematuria before each dose and every 8 hours on treatment days.",
+    "Monitor urine output, fluid balance and weight; target urine output ≥ 100 mL/hour. Review cardiac function/lifetime anthracycline exposure as indicated."
   ],
   "dose_modifications": [
-    "Component-specific haematological, renal, hepatic and non-haematological pathways are encoded as independently actionable rules."
+    "Source-specific count, renal, hepatic, toxicity and dose-history branches are encoded as component review actions.",
+    "Doxorubicin hepatic decisions use absolute bilirubin in µmol/L, not an assumed ULN of 20.",
+    "Bilirubin > 50 to < 51 µmol/L and CrCl exactly 10 mL/min are unallocated printed boundaries and require review.",
+    "CrCl exactly 50 mL/min is not assigned an ifosfamide dose by the printed table.",
+    "Current treatment-day counts and previous-cycle nadir with neutropenic fever are assessed separately.",
+    "Mucositis affects both cytotoxic components; grade ≥ 3 neurotoxicity stops ifosfamide only.",
+    "Source full-dose count thresholds differ between 00391 (> 1.5/> 100) and 00392 (≥ 1.5/≥ 100); do not copy one table to the other."
   ],
   "supportive_care": {
     "emetogenic_risk": "high",
@@ -846,11 +1599,13 @@
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
     "additional_supportive_care": [
-      "Mesna uroprotection",
-      "Protocol-specific IV hydration",
-      "Strict fluid balance and urine monitoring",
-      "Neurological assessment before each ifosfamide dose",
-      "G-CSF where specified by the source regimen"
-    ]
+      "G-CSF is required; prescribe the product, dose and timing using local policy.",
+      "Proton-pump inhibitor prophylaxis is specified; confirm the local prescription.",
+      "Mesna: 900 mg/m² IV before the first ifosfamide dose on Day 1, then 3000 mg/m² by continuous 24-hour infusion on Days 1–3. Confirm coverage continuing for 24 hours after ifosfamide is completed, as stated in source prose.",
+      "Hydration source example: 1000 mL sodium chloride 0.9% every 6 hours from before first ifosfamide until 24 hours after completion. Individualise for fluid status and renal/cardiac function.",
+      "Ifosfamide high and doxorubicin moderate emetogenic risk; review antiemetics and the aprepitant–ifosfamide encephalopathy interaction. No usual separate premedication."
+    ],
+    "regimen_source_url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+    "regimen_source_checked_date": "2026-11-18"
   }
 }

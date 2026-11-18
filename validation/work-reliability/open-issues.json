@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-11-17",
+  "recorded_at": "2026-11-18",
   "baseline_main_sha": "0eba2249a65dce9bcdf6be1b2115869b9563cd38",
   "baseline_main_release": "0.84.57",
   "prior_review_package": "SACTCheck_v0.84.57_GU_5_PLUS_5_REVIEW.zip",
@@ -9,7 +9,12 @@
       "status": "unresolved_in_authoring_environment",
       "evidence": "v0.84.57 validation summary records Chromium socket() failed: Operation not permitted; raw browser log was not present in the recovered ZIP",
       "next_action": "After the workflow is installed, run the manual browser job for the intended SHA; inspect actual test results and screenshots",
-      "do_not_repeat": "Repeated identical Chromium launches or requests to override the environment restriction"
+      "do_not_repeat": "Repeated identical Chromium launches or requests to override the environment restriction",
+      "current_evidence": [
+        "../sarcoma60-evidence/browser-restored-environment/",
+        "../sarcoma60-evidence/browser-system-chromium/"
+      ],
+      "current_status": "still_blocked_socket_restrictions_v60"
     },
     {
       "id": "full-ci-session-lost",
@@ -62,8 +67,99 @@
       "status": "fixed_v59",
       "evidence": "PDF visual review caught ordinal days beside transplant-relative days. Explicit day-origin support added; 304 other routes compare unchanged.",
       "next_action": "Use explicit origin whenever a schedule includes negative days; inspect the final rendered chart."
+    },
+    {
+      "id": "sarcoma60-pack-dispatch-fallback",
+      "status": "fixed_v60_scoped_document_verification",
+      "evidence": [
+        "tools/patient-pack-v08460.cjs",
+        "tools/patient-presentation-v08431.cjs",
+        "validation/sarcoma-v08460/pdf/pack-verification.json",
+        "validation/sarcoma-v08460/pdf/wallet-margin-repair.json"
+      ],
+      "finding": "The v59 pack applied only to its own route set; new sarcoma profiles fell through to older layout/date defaults. The v60 wrapper handles exactly five new routes, preserves non-scope delegation and includes the anatomical knowledge section. Rendered anatomy/wallet overflow was repaired without dropping source wording.",
+      "next_action": "For each future release, verify the pack applies predicate and generate/render one scoped candidate before the batch. Keep final all-route PDF/content and mirror checks separate."
+    },
+    {
+      "id": "sarcoma60-support-exact-duplication",
+      "status": "fixed_v60",
+      "evidence": [
+        "validation/sarcoma-v08460/documents/support-deduplication.json"
+      ],
+      "finding": "Six supportive phases contained one exact repeated additional-support instruction each. Exact duplicates were removed; every distinct medicine and safety instruction remains.",
+      "next_action": "Deduplicate exact additional-support strings in the authoring path and retain explicit distinct-content equality checks; never deduplicate by approximate wording."
+    },
+    {
+      "id": "sarcoma60-renal-quantity-test-classification",
+      "status": "fixed_focused_checks_passed_general_gate_blocked",
+      "evidence": [
+        "tests/helpers/renal-field-semantics-v08460.cjs",
+        "tests/renal-field-semantics-v08460.test.cjs",
+        "validation/sarcoma-v08460/logs/renal-quantity-classification-02/",
+        "validation/sarcoma-v08460/logs/sarcoma-legacy-compatibility-03/",
+        "validation/sarcoma-v08460/clinical-compatibility.json"
+      ],
+      "finding": "An unchanged 00453 creatinine percentage referenced measured GFR and was falsely classified as a filtration measurement. Positive/negative quantity fixtures now distinguish percentages/ratios/sample age from absolute CrCl/GFR. The five v60 sarcoma protocols have explicit pinned replacement contracts; historical branches remain.",
+      "next_action": "Retain the semantic regression and source-specific contracts. Do not alter clinical protocol quantities to satisfy a test that classifies them incorrectly."
+    },
+    {
+      "id": "sarcoma60-historical-objects-general-regression",
+      "status": "blocked_partial_clone",
+      "evidence": [
+        "../sarcoma60-evidence/history-preflight-01/",
+        "validation/sarcoma-v08460/logs/platform-semantic-regression-01/",
+        "validation/sarcoma-v08460/logs/platform-semantic-regression-02/",
+        "validation/sarcoma-v08460/logs/site-final/"
+      ],
+      "finding": "Availability preflight found 5,507 missing entries at c19bef57ca5ae49816ad851f2b551b76af32fa5d. The platform test reached missing a4575d67a985c97a1dfa545813a8c1a25b2ed5a2:package.json through retained v45 historical provenance. Initial bounded platform attempt timed out; the no-lazy-fetch retry exposed the exact object failure. The final security:site validation also depends on the same unavailable historical package.json; local build and34HTTPchecks pass separately.",
+      "next_action": "Use a full checkout with all historical objects before rerunning the complete gate. Current baseline preservation remains a separate check.",
+      "do_not_repeat": "Repeated broad regressions, historical lazy fetch or treating focused passing cases as a complete CI pass. Keep GIT_NO_LAZY_FETCH=1 and GIT_TERMINAL_PROMPT=0."
+    },
+    {
+      "id": "sarcoma60-exec-transport-outage",
+      "status": "recovered",
+      "evidence": [
+        "validation/sarcoma-v08460/clinical/transport-interruption.json"
+      ],
+      "finding": "A transient exec-server transport disconnect rejected process creation. A later bounded health check succeeded; authoring checkpoints were retained and clinical cases subsequently ran successfully.",
+      "next_action": "Persist completed files and attempt a bounded health check. If a process was never created, do not poll a nonexistent session or claim its check passed."
+    },
+    {
+      "id": "sarcoma60-source-image-evidence-boundary",
+      "status": "claims_corrected_visual_source_check_still_unverified",
+      "evidence": [
+        "validation/sarcoma-v08460/clinical/source-manifest.json",
+        "validation/sarcoma-v08460/clinical/REVIEW.md",
+        "validation/sarcoma-v08460/documents/provenance-metadata-correction.json"
+      ],
+      "finding": "The source screenshot tool returned text markers/references without inspectable image pixels. Unsupported visual-table-review wording was removed. Complete current extracted-text reconciliation is retained; original PDF bytes remain unavailable (HTTP 403).",
+      "next_action": "Require actual visible source-table pixels before marking visual layout reviewed. Do not confuse actual rendered patient-PDF images with unavailable NCCP source-table images."
+    },
+    {
+      "id": "sarcoma60-bilirubin-derived-ui-contract",
+      "status": "fixed_source_ui_contract_case_passed",
+      "evidence": [
+        "validation/sarcoma-v08460/clinical/source-case-results.json",
+        "validation/sarcoma-v08460/clinical/handoff-hashes.json"
+      ],
+      "finding": "00501 absolute bilirubin was derived from the shared raw laboratory value but lacked the supported hidden/derived UI metadata, allowing a duplicate visible input. The UI derivation contract is now explicit and covered by the 225-case suite.",
+      "next_action": "Check clinical calculations and rendered input contracts together whenever adding a derived absolute or ULN-based value."
+    },
+    {
+      "id": "sarcoma60-independent-stage-recovery-interactions",
+      "status": "fixed_author_and_independent_replay_passed",
+      "evidence": [
+        "validation/sarcoma-v08460/independent-review/frozen-independent-results.json",
+        "validation/sarcoma-v08460/independent-review/current-independent-results.json",
+        "validation/sarcoma-v08460/logs/independent-replay-portability-01/",
+        "validation/sarcoma-v08460/clinical-compatibility.json"
+      ],
+      "finding": "Independent software review found three genuine 00501 gaps after the author suite passed: recovery-stage low counts, contradictory neuropathy/recovery messages, and incompatible planned Day 8/cycle-day combinations. The unchanged 112-case independent script reproduces 11 failures in frozen protocols and passes 112/112 on corrected protocols. Author cases now pass 265/265.",
+      "next_action": "Require independent cross-stage and mixed-toxicity probes before clinical freeze. Preserve failing snapshots and replay the same expectations after correction; author-case success alone is insufficient. This software review does not confer independent clinical approval."
     }
   ],
   "clinical_acceptance": "No clinical criteria or release acceptance checks are removed by this workflow repair.",
-  "current_review_release": "0.84.59"
+  "current_review_release": "0.84.60",
+  "current_baseline_main_sha": "c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c",
+  "current_baseline_main_release": "0.84.59"
 }

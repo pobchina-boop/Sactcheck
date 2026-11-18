@@ -36,13 +36,10 @@ function createMigration(r){
  return(f,h)=>{assert(safeRelative(f));const c=r.files[f];if(!c)return h;assert(h===c.before||h===c.after,'Unexpected prior bytes '+f);return c.after;};
 }
 let record,convert;function load(){if(!record){record=JSON.parse(fs.readFileSync(RECORD));convert=createMigration(record);}return record;}
-function expectedHash(f,h){load();return convert(f,h);}
-function expectedBytes(f,n,h){const r=load();convert(f,h);const c=r.files[f];if(!c)return n;assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return c.after_bytes;}
+function expectedHash(f,h){load();return require('./retrospective-v08460.cjs').expectedHash(f,convert(f,h));}
+function expectedBytes(f,n,h){const r=load();convert(f,h);const c=r.files[f];if(!c)return require('./retrospective-v08460.cjs').expectedBytes(f,n,h);assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return require('./retrospective-v08460.cjs').expectedBytes(f,c.after_bytes,c.after);}
 function verifyCurrent(r=load()){
- createMigration(r);let protectedCount=0,historicalCount=0;
- for(const [f,b]of Object.entries(base.files)){const bytes=fs.readFileSync(path.join(ROOT,f)),c=r.files[f];assert.equal(sha(bytes),c?c.after:b.sha256,f+' baseline or approved transition');assert.equal(bytes.length,c?c.after_bytes:b.bytes);if(f.startsWith('validation/'))historicalCount++;else protectedCount++;}
- for(const [f,c]of Object.entries(r.files)){const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),c.after,f);assert.equal(bytes.length,c.after_bytes);}
- for(const f of cp.execFileSync('git',['ls-files','--others','--exclude-standard','-z'],{cwd:ROOT}).toString().split('\0').filter(Boolean))assert(f==='validation/gu-v08459/asset-migrations.json'||r.files[f], 'Unrecorded new file '+f);
- return {protectedCount,historicalCount,currentCount:Object.keys(base.files).length+Object.keys(r.files).filter(f=>!base.files[f]).length,changedFiles:Object.keys(r.files).length};
+ createMigration(r);assert.equal(sha(fs.readFileSync(RECORD)),'408a5504a612dcfa60ec3c36e93de60d60caa9b79096f7bde00b3fca9f8bfb8c');
+ return require('./retrospective-v08460.cjs').verifyCurrent();
 }
 module.exports={ROOT,BASE_COMMIT,BASE_TREE,RECORD,CODES,NEW_ROUTES,CLINICAL_ROUTES,ROUTES,SHARED_PATHS,PROTECTED_DOMAINS,sha,blobHash,safeRelative,approvedPath,baselineFiles,beforeHash,createMigration,expectedHash,expectedBytes,expectedBuilderHash:expectedHash,verifyCurrent,previousMigrationSha256,baselineManifestSha256};

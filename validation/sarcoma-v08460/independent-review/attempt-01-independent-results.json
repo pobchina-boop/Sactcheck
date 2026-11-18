@@ -1,0 +1,4744 @@
+{
+  "started_utc": "2026-11-18T08:26:25.640Z",
+  "finished_utc": "2026-11-18T08:26:25.781Z",
+  "mode": "frozen",
+  "scope": [
+    "00500",
+    "00391",
+    "00392",
+    "00501",
+    "00511"
+  ],
+  "independent_from_author_cases": true,
+  "protocols": [
+    {
+      "code": "00500",
+      "path": "protocols/sarcoma/00500-doxorubicin-75-mg-m2-monotherapy.json",
+      "sha256": "ccac567d3132e7fe659e82af21fb6860b56280911c2bdb734eb237d8e3f26366"
+    },
+    {
+      "code": "00391",
+      "path": "protocols/sarcoma/00391-doxorubicin-60-mg-m2-and-ifosfamide-therapy.json",
+      "sha256": "9997a3299ad25578d324403009a81e05d14881b17f0a37eda6f6e372ce368c49"
+    },
+    {
+      "code": "00392",
+      "path": "protocols/sarcoma/00392-doxorubicin-75-mg-m2-and-ifosfamide-therapy.json",
+      "sha256": "6adc00e14d2b5852b03bada2400cc3f2d5bf32258917a24950dc210d71f266c1"
+    },
+    {
+      "code": "00501",
+      "path": "protocols/sarcoma/00501-gemcitabine-and-docetaxel-therapy-21-day.json",
+      "sha256": "0b6b6ac931ccab6610b3739586a7e512e182b35d58642650f243e5a189d22fda"
+    },
+    {
+      "code": "00511",
+      "path": "protocols/sarcoma/00511-dacarbazine-1-2-g-m2-therapy-21-day.json",
+      "sha256": "4b67f7aacf30ceba568e1c4f2c66f909fd5f924cb537f5a9de8145ea155f7f70"
+    }
+  ],
+  "engine_sha256": "cdc0b3fffed4064030da8fd71327b356db49a84f402132b248c1f4839a096a58",
+  "dose_model_sha256": "233cb5c4e35f8bc0e63f5b9781911f0ae06c626d4cedfa35f32136a7084696ef",
+  "lab_adapter_sha256": "6bb13201c682677d20c4c34e3edba9bf85aacc51ec0dc334fcfa93d35617ab33",
+  "script_sha256": "da5198380c8c2365842d7c2aacb1e1908fe1981cdc0e3f043d617aa22d2af541",
+  "total": 112,
+  "passed": 91,
+  "failed": 21,
+  "results": [
+    {
+      "code": "00500",
+      "name": "Severe entered infection survives missing routine fields",
+      "input": {
+        "active_infection": true
+      },
+      "expected": "Withhold all regimen components; missing fields do not cancel entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Pregnancy overrides historical/organ review",
+      "input": {
+        "pregnancy": true,
+        "haemodialysis": true,
+        "crcl_ml_min": 45
+      },
+      "expected": "Pregnancy exclusion outranks organ-dose review.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PREGNANCY_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Pregnancy: source exclusion; specialist review before treatment."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          },
+          {
+            "id": "DOX_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Normal partial count is never complete",
+      "input": {
+        "anc": 2
+      },
+      "expected": "Partial normal input cannot establish regimen clearance.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Missing dialysis differs from explicit false",
+      "input": {
+        "crcl_ml_min": 20
+      },
+      "expected": "Unentered dialysis is not a false answer.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Invalid unrelated number preserves active infection hold",
+      "input": {
+        "active_infection": true,
+        "anc": -1
+      },
+      "expected": "Validation failure must not conceal separately valid entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [
+          {
+            "id": "anc",
+            "label": "Absolute neutrophil count",
+            "reason": "must be at least 0"
+          }
+        ],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Severe entered infection survives missing routine fields",
+      "input": {
+        "active_infection": true
+      },
+      "expected": "Withhold all regimen components; missing fields do not cancel entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Pregnancy overrides historical/organ review",
+      "input": {
+        "pregnancy": true,
+        "haemodialysis": true,
+        "crcl_ml_min": 45
+      },
+      "expected": "Pregnancy exclusion outranks organ-dose review.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PREGNANCY_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Pregnancy: source exclusion; specialist review before treatment."
+          },
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "IFO_HAEMODIALYSIS",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended on haemodialysis. Doxorubicin has a separate dialysis review branch."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          },
+          {
+            "id": "DOX_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Normal partial count is never complete",
+      "input": {
+        "anc": 2
+      },
+      "expected": "Partial normal input cannot establish regimen clearance.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Missing dialysis differs from explicit false",
+      "input": {
+        "crcl_ml_min": 20
+      },
+      "expected": "Unentered dialysis is not a false answer.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "IFO_RENAL_LT50"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Invalid unrelated number preserves active infection hold",
+      "input": {
+        "active_infection": true,
+        "anc": -1
+      },
+      "expected": "Validation failure must not conceal separately valid entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [
+          {
+            "id": "anc",
+            "label": "Absolute neutrophil count",
+            "reason": "must be at least 0"
+          }
+        ],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Severe entered infection survives missing routine fields",
+      "input": {
+        "active_infection": true
+      },
+      "expected": "Withhold all regimen components; missing fields do not cancel entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Pregnancy overrides historical/organ review",
+      "input": {
+        "pregnancy": true,
+        "haemodialysis": true,
+        "crcl_ml_min": 45
+      },
+      "expected": "Pregnancy exclusion outranks organ-dose review.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PREGNANCY_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Pregnancy: source exclusion; specialist review before treatment."
+          },
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "IFO_HAEMODIALYSIS",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended on haemodialysis. Doxorubicin has a separate dialysis review branch."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          },
+          {
+            "id": "DOX_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Normal partial count is never complete",
+      "input": {
+        "anc": 2
+      },
+      "expected": "Partial normal input cannot establish regimen clearance.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Missing dialysis differs from explicit false",
+      "input": {
+        "crcl_ml_min": 20
+      },
+      "expected": "Unentered dialysis is not a false answer.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "IFO_RENAL_LT50"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Invalid unrelated number preserves active infection hold",
+      "input": {
+        "active_infection": true,
+        "anc": -1
+      },
+      "expected": "Validation failure must not conceal separately valid entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [
+          {
+            "id": "anc",
+            "label": "Absolute neutrophil count",
+            "reason": "must be at least 0"
+          }
+        ],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Severe entered infection survives missing routine fields",
+      "input": {
+        "active_infection": true
+      },
+      "expected": "Withhold all regimen components; missing fields do not cancel entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Pregnancy overrides historical/organ review",
+      "input": {
+        "pregnancy": true,
+        "haemodialysis": true,
+        "crcl_ml_min": 45
+      },
+      "expected": "Pregnancy exclusion outranks organ-dose review.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PREGNANCY_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Pregnancy: source exclusion; specialist review before treatment."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          },
+          {
+            "id": "GEM_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine"
+            ],
+            "message": "No gemcitabine dose adjustment is expected in the source haemodialysis row, with dialysis 6–12 hours after administration. Confirm the individual renal prescription and timing."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Normal partial count is never complete",
+      "input": {
+        "anc": 2
+      },
+      "expected": "Partial normal input cannot establish regimen clearance.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Missing dialysis differs from explicit false",
+      "input": {
+        "crcl_ml_min": 20
+      },
+      "expected": "Unentered dialysis is not a false answer.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Invalid unrelated number preserves active infection hold",
+      "input": {
+        "active_infection": true,
+        "anc": -1
+      },
+      "expected": "Validation failure must not conceal separately valid entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [
+          {
+            "id": "anc",
+            "label": "Absolute neutrophil count",
+            "reason": "must be at least 0"
+          }
+        ],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Severe entered infection survives missing routine fields",
+      "input": {
+        "active_infection": true
+      },
+      "expected": "Withhold all regimen components; missing fields do not cancel entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Pregnancy overrides historical/organ review",
+      "input": {
+        "pregnancy": true,
+        "haemodialysis": true,
+        "crcl_ml_min": 45
+      },
+      "expected": "Pregnancy exclusion outranks organ-dose review.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "PREGNANCY_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Pregnancy: source exclusion; specialist review before treatment."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          },
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "PREGNANCY_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Normal partial count is never complete",
+      "input": {
+        "anc": 2
+      },
+      "expected": "Partial normal input cannot establish regimen clearance.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Missing dialysis differs from explicit false",
+      "input": {
+        "crcl_ml_min": 20
+      },
+      "expected": "Unentered dialysis is not a false answer.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          },
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Invalid unrelated number preserves active infection hold",
+      "input": {
+        "active_infection": true,
+        "anc": -1
+      },
+      "expected": "Validation failure must not conceal separately valid entered risk.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [
+          {
+            "id": "anc",
+            "label": "Absolute neutrophil count",
+            "reason": "must be at least 0"
+          }
+        ],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "One low count overrides intermediate/missing partner {\"anc\":0.9,\"platelets\":80}",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 0.9,
+        "platelets": 80
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          },
+          {
+            "id": "COUNTS_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–1.5 or platelets 70–100 are inclusive; full-dose boundaries are strictly > 1.5 and > 100. Confirm both counts and dose history; any delay criterion takes precedence."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "One low count overrides intermediate/missing partner {\"anc\":1.2,\"platelets\":60}",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 1.2,
+        "platelets": 60
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          },
+          {
+            "id": "COUNTS_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–1.5 or platelets 70–100 are inclusive; full-dose boundaries are strictly > 1.5 and > 100. Confirm both counts and dose history; any delay criterion takes precedence."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "One low count overrides intermediate/missing partner {\"anc\":0.9}",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 0.9
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "One low count overrides intermediate/missing partner {\"platelets\":60}",
+      "input": {
+        "assessment_phase": "day1",
+        "platelets": 60
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Ifos stop with simultaneous doxorubicin hepatic and renal reviews",
+      "input": {
+        "assessment_phase": "day1",
+        "neurotoxicity_grade": 3,
+        "bilirubin_umol_l": 40,
+        "crcl_ml_min": 10,
+        "haemodialysis": true,
+        "prior_anc_nadir": 0.2,
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Permanent ifosfamide stop does not permanently stop doxorubicin; separate risk/history findings remain.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "IFO_NEUROTOXICITY_STOP",
+            "action": "permanently_discontinue",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Grade ≥ 3 neurotoxicity: discontinue ifosfamide. This does not automatically discontinue doxorubicin."
+          },
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "IFO_HAEMODIALYSIS",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended on haemodialysis. Doxorubicin has a separate dialysis review branch."
+          },
+          {
+            "id": "DOX_BILI_20_50",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Bilirubin 20–50 µmol/L: source specifies 50% of the original doxorubicin dose; review the original/current dose and all other restrictions."
+          },
+          {
+            "id": "DOX_CRCL_EXACT10",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "The doxorubicin renal table prints > 10 and < 10 mL/min, leaving exactly 10 unallocated; confirm with oncology pharmacy."
+          },
+          {
+            "id": "DOX_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required."
+          },
+          {
+            "id": "PRIOR_FN_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Previous ANC nadir < 0.5 ×10⁹/L WITH neutropenic fever: source specifies 80% doxorubicin and ifosfamide. Confirm current recovery and dose history; this history is distinct from current ANC or active infection."
+          }
+        ],
+        "components": [
+          {
+            "component": "ifosfamide",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "IFO_NEUROTOXICITY_STOP"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DOX_BILI_20_50"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Infection and renal hold survive prior neutropenic fever reduction",
+      "input": {
+        "assessment_phase": "day1",
+        "active_infection": true,
+        "crcl_ml_min": 20,
+        "haemodialysis": false,
+        "prior_anc_nadir": 0.2,
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Historical 80% discussion cannot permit treatment during current infection.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "PRIOR_FN_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Previous ANC nadir < 0.5 ×10⁹/L WITH neutropenic fever: source specifies 80% doxorubicin and ifosfamide. Confirm current recovery and dose history; this history is distinct from current ANC or active infection."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_anc_nadir\":0.2}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_anc_nadir": 0.2
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_neutropenic_fever\":true}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_anc_nadir\":0.2,\"prior_neutropenic_fever\":false}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_anc_nadir": 0.2,
+        "prior_neutropenic_fever": false
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_anc_nadir\":0.5,\"prior_neutropenic_fever\":true}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_anc_nadir": 0.5,
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Absolute bilirubin51.3 with AST300 does not invent ifos hepatic row",
+      "input": {
+        "assessment_phase": "day1",
+        "bilirubin_umol_l": 51.3,
+        "ast_u_l": 300
+      },
+      "expected": "Ifos row is strict AST>300 OR bilirubin>51.3; doxorubicin absolute bilirubin row remains.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOX_BILI_51_86",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Bilirubin 51–86 µmol/L: source specifies 25% of the original doxorubicin dose; review the original/current dose and all other restrictions."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DOX_BILI_51_86"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Absolute bilirubin51.31 independently activates ifos review",
+      "input": {
+        "assessment_phase": "day1",
+        "bilirubin_umol_l": 51.31,
+        "ast_u_l": 10
+      },
+      "expected": "Separate doxorubicin and ifosfamide absolute concentration thresholds.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOX_BILI_51_86",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Bilirubin 51–86 µmol/L: source specifies 25% of the original doxorubicin dose; review the original/current dose and all other restrictions."
+          },
+          {
+            "id": "IFO_AST_BILI_CLINICAL_CHOICE",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DOX_BILI_51_86"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "IFO_AST_BILI_CLINICAL_CHOICE"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Mesna/hydration deficits remain alongside permanent neurological stop",
+      "input": {
+        "assessment_phase": "day1",
+        "neurotoxicity_grade": 4,
+        "mesna_plan_confirmed": false,
+        "hydration_plan_confirmed": false,
+        "urine_output_ml_hour": 99
+      },
+      "expected": "Support deficits remain visible; ifosfamide stop stays component-specific.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "IFO_NEUROTOXICITY_STOP",
+            "action": "permanently_discontinue",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Grade ≥ 3 neurotoxicity: discontinue ifosfamide. This does not automatically discontinue doxorubicin."
+          },
+          {
+            "id": "MESNA_PLAN_CONFIRMED_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "The source includes mesna support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none."
+          },
+          {
+            "id": "HYDRATION_PLAN_CONFIRMED_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "The source includes hydration support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none."
+          },
+          {
+            "id": "IFO_URINE_OUTPUT",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Source target urine output is at least 100 mL/hour. Assess fluid balance, renal function and the prescribed hydration plan; do not give an automatic fluid or diuretic dose."
+          }
+        ],
+        "components": [
+          {
+            "component": "ifosfamide",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "IFO_NEUROTOXICITY_STOP"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00391",
+      "name": "Exactly shared count boundary retains source distinction",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 1.5,
+        "platelets": 100
+      },
+      "expected": "00391 inclusive intermediate upper bounds differ from00392 strict upper bounds.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–1.5 or platelets 70–100 are inclusive; full-dose boundaries are strictly > 1.5 and > 100. Confirm both counts and dose history; any delay criterion takes precedence."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "COUNTS_80_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "COUNTS_80_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "One low count overrides intermediate/missing partner {\"anc\":0.9,\"platelets\":80}",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 0.9,
+        "platelets": 80
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          },
+          {
+            "id": "COUNTS_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–< 1.5 or platelets 70–< 100; full-dose boundaries are ≥ 1.5 and ≥ 100. Confirm both counts and dose history; any delay criterion takes precedence."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "One low count overrides intermediate/missing partner {\"anc\":1.2,\"platelets\":60}",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 1.2,
+        "platelets": 60
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          },
+          {
+            "id": "COUNTS_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "The source intermediate count row specifies 80% doxorubicin and ifosfamide. ANC 1–< 1.5 or platelets 70–< 100; full-dose boundaries are ≥ 1.5 and ≥ 100. Confirm both counts and dose history; any delay criterion takes precedence."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "One low count overrides intermediate/missing partner {\"anc\":0.9}",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 0.9
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "One low count overrides intermediate/missing partner {\"platelets\":60}",
+      "input": {
+        "assessment_phase": "day1",
+        "platelets": 60
+      },
+      "expected": "Any source low-count condition delays both drugs.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "ANC < 1 or platelets < 70 ×10⁹/L: delay treatment and reassess. The intermediate-dose row does not override a low second count."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Ifos stop with simultaneous doxorubicin hepatic and renal reviews",
+      "input": {
+        "assessment_phase": "day1",
+        "neurotoxicity_grade": 3,
+        "bilirubin_umol_l": 40,
+        "crcl_ml_min": 10,
+        "haemodialysis": true,
+        "prior_anc_nadir": 0.2,
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Permanent ifosfamide stop does not permanently stop doxorubicin; separate risk/history findings remain.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "IFO_NEUROTOXICITY_STOP",
+            "action": "permanently_discontinue",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Grade ≥ 3 neurotoxicity: discontinue ifosfamide. This does not automatically discontinue doxorubicin."
+          },
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "IFO_HAEMODIALYSIS",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended on haemodialysis. Doxorubicin has a separate dialysis review branch."
+          },
+          {
+            "id": "DOX_BILI_20_50",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Bilirubin 20–50 µmol/L: source specifies 50% of the original doxorubicin dose; review the original/current dose and all other restrictions."
+          },
+          {
+            "id": "DOX_CRCL_EXACT10",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "The doxorubicin renal table prints > 10 and < 10 mL/min, leaving exactly 10 unallocated; confirm with oncology pharmacy."
+          },
+          {
+            "id": "DOX_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required."
+          },
+          {
+            "id": "PRIOR_FN_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Previous ANC nadir < 0.5 ×10⁹/L WITH neutropenic fever: source specifies 80% doxorubicin and ifosfamide. Confirm current recovery and dose history; this history is distinct from current ANC or active infection."
+          }
+        ],
+        "components": [
+          {
+            "component": "ifosfamide",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "IFO_NEUROTOXICITY_STOP"
+          },
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DOX_BILI_20_50"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Infection and renal hold survive prior neutropenic fever reduction",
+      "input": {
+        "assessment_phase": "day1",
+        "active_infection": true,
+        "crcl_ml_min": 20,
+        "haemodialysis": false,
+        "prior_anc_nadir": 0.2,
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Historical 80% discussion cannot permit treatment during current infection.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "CURRENT_INFECTION_REVIEW",
+            "action": "withhold",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Current infection requires clinical assessment before the next dose; assess urgently if febrile or systemically unwell. Prior-cycle dose reductions do not authorise treatment through an active infection."
+          },
+          {
+            "id": "IFO_RENAL_LT50",
+            "action": "withhold",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives."
+          },
+          {
+            "id": "PRIOR_FN_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin",
+              "ifosfamide"
+            ],
+            "message": "Previous ANC nadir < 0.5 ×10⁹/L WITH neutropenic fever: source specifies 80% doxorubicin and ifosfamide. Confirm current recovery and dose history; this history is distinct from current ANC or active infection."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "CURRENT_INFECTION_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_anc_nadir\":0.2}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_anc_nadir": 0.2
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_neutropenic_fever\":true}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_anc_nadir\":0.2,\"prior_neutropenic_fever\":false}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_anc_nadir": 0.2,
+        "prior_neutropenic_fever": false
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Prior nadir AND fever requires complete matching history {\"prior_anc_nadir\":0.5,\"prior_neutropenic_fever\":true}",
+      "input": {
+        "assessment_phase": "day1",
+        "prior_anc_nadir": 0.5,
+        "prior_neutropenic_fever": true
+      },
+      "expected": "Neither incomplete history nor exact0.5 meets nadir<0.5 WITH fever.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Absolute bilirubin51.3 with AST300 does not invent ifos hepatic row",
+      "input": {
+        "assessment_phase": "day1",
+        "bilirubin_umol_l": 51.3,
+        "ast_u_l": 300
+      },
+      "expected": "Ifos row is strict AST>300 OR bilirubin>51.3; doxorubicin absolute bilirubin row remains.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOX_BILI_51_86",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Bilirubin 51–86 µmol/L: source specifies 25% of the original doxorubicin dose; review the original/current dose and all other restrictions."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DOX_BILI_51_86"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Absolute bilirubin51.31 independently activates ifos review",
+      "input": {
+        "assessment_phase": "day1",
+        "bilirubin_umol_l": 51.31,
+        "ast_u_l": 10
+      },
+      "expected": "Separate doxorubicin and ifosfamide absolute concentration thresholds.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOX_BILI_51_86",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Bilirubin 51–86 µmol/L: source specifies 25% of the original doxorubicin dose; review the original/current dose and all other restrictions."
+          },
+          {
+            "id": "IFO_AST_BILI_CLINICAL_CHOICE",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DOX_BILI_51_86"
+          },
+          {
+            "component": "ifosfamide",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "IFO_AST_BILI_CLINICAL_CHOICE"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Mesna/hydration deficits remain alongside permanent neurological stop",
+      "input": {
+        "assessment_phase": "day1",
+        "neurotoxicity_grade": 4,
+        "mesna_plan_confirmed": false,
+        "hydration_plan_confirmed": false,
+        "urine_output_ml_hour": 99
+      },
+      "expected": "Support deficits remain visible; ifosfamide stop stays component-specific.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "IFO_NEUROTOXICITY_STOP",
+            "action": "permanently_discontinue",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Grade ≥ 3 neurotoxicity: discontinue ifosfamide. This does not automatically discontinue doxorubicin."
+          },
+          {
+            "id": "MESNA_PLAN_CONFIRMED_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "The source includes mesna support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none."
+          },
+          {
+            "id": "HYDRATION_PLAN_CONFIRMED_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "The source includes hydration support. Confirm the prescribed regimen and timing before treatment; no product or dose is inferred where the source gives none."
+          },
+          {
+            "id": "IFO_URINE_OUTPUT",
+            "action": "consultant_review",
+            "components": [
+              "ifosfamide"
+            ],
+            "message": "Source target urine output is at least 100 mL/hour. Assess fluid balance, renal function and the prescribed hydration plan; do not give an automatic fluid or diuretic dose."
+          }
+        ],
+        "components": [
+          {
+            "component": "ifosfamide",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "IFO_NEUROTOXICITY_STOP"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00392",
+      "name": "Exactly shared count boundary retains source distinction",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 1.5,
+        "platelets": 100
+      },
+      "expected": "00391 inclusive intermediate upper bounds differ from00392 strict upper bounds.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Stage-specific LVEF with older age/FN history baseline/49.9",
+      "input": {
+        "assessment_phase": "baseline",
+        "lvef_percent": 49.9,
+        "age_years": 75,
+        "febrile_neutropenia_occurrences": 2
+      },
+      "expected": "Cardiac stop/hold outranks age or dose-history review; stage thresholds remain distinct.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "BASELINE_LVEF",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Before treatment, the source requires LVEF ≥50%; obtain cardiac and treatment-suitability review."
+          },
+          {
+            "id": "FN_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "After the second occurrence, reduce one dose level. Source levels are 75 → 60 → 50 mg/m², then discontinue; confirm the current level."
+          },
+          {
+            "id": "AGE_GT70",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "For patients over 70 years the source advises considering doxorubicin 60 mg/m²; individual suitability and current dose require review."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "BASELINE_LVEF"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Stage-specific LVEF with older age/FN history baseline/50",
+      "input": {
+        "assessment_phase": "baseline",
+        "lvef_percent": 50,
+        "age_years": 75,
+        "febrile_neutropenia_occurrences": 2
+      },
+      "expected": "Cardiac stop/hold outranks age or dose-history review; stage thresholds remain distinct.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "FN_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "After the second occurrence, reduce one dose level. Source levels are 75 → 60 → 50 mg/m², then discontinue; confirm the current level."
+          },
+          {
+            "id": "AGE_GT70",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "For patients over 70 years the source advises considering doxorubicin 60 mg/m²; individual suitability and current dose require review."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "FN_SECOND"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Stage-specific LVEF with older age/FN history day1/44.99",
+      "input": {
+        "assessment_phase": "day1",
+        "lvef_percent": 44.99,
+        "age_years": 75,
+        "febrile_neutropenia_occurrences": 2
+      },
+      "expected": "Cardiac stop/hold outranks age or dose-history review; stage thresholds remain distinct.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "ON_TREATMENT_LVEF_LT45",
+            "action": "permanently_discontinue",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "During treatment, absolute LVEF < 45% meets the source discontinuation criterion for doxorubicin."
+          },
+          {
+            "id": "FN_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "After the second occurrence, reduce one dose level. Source levels are 75 → 60 → 50 mg/m², then discontinue; confirm the current level."
+          },
+          {
+            "id": "AGE_GT70",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "For patients over 70 years the source advises considering doxorubicin 60 mg/m²; individual suitability and current dose require review."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "ON_TREATMENT_LVEF_LT45"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Stage-specific LVEF with older age/FN history recovery/44.99",
+      "input": {
+        "assessment_phase": "recovery",
+        "lvef_percent": 44.99,
+        "age_years": 75,
+        "febrile_neutropenia_occurrences": 2
+      },
+      "expected": "Cardiac stop/hold outranks age or dose-history review; stage thresholds remain distinct.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "ON_TREATMENT_LVEF_LT45",
+            "action": "permanently_discontinue",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "During treatment, absolute LVEF < 45% meets the source discontinuation criterion for doxorubicin."
+          },
+          {
+            "id": "FN_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "After the second occurrence, reduce one dose level. Source levels are 75 → 60 → 50 mg/m², then discontinue; confirm the current level."
+          },
+          {
+            "id": "AGE_GT70",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "For patients over 70 years the source advises considering doxorubicin 60 mg/m²; individual suitability and current dose require review."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "ON_TREATMENT_LVEF_LT45"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Stage-specific LVEF with older age/FN history on_treatment/45",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "lvef_percent": 45,
+        "age_years": 75,
+        "febrile_neutropenia_occurrences": 2
+      },
+      "expected": "Cardiac stop/hold outranks age or dose-history review; stage thresholds remain distinct.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "FN_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "After the second occurrence, reduce one dose level. Source levels are 75 → 60 → 50 mg/m², then discontinue; confirm the current level."
+          },
+          {
+            "id": "AGE_GT70",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "For patients over 70 years the source advises considering doxorubicin 60 mg/m²; individual suitability and current dose require review."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "FN_SECOND"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Prior severe toxicity recovery state 0",
+      "input": {
+        "assessment_phase": "recovery",
+        "prior_nonhaem_grade3_or4": true,
+        "other_nonhaem_toxicity_grade": 0,
+        "anc": 0.9
+      },
+      "expected": "Recovered nonhaem toxicity does not cancel current count delay.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "ANC < 1 or platelets < 100 ×10⁹/L: delay one week or until recovery. Both counts are required to assess recovery."
+          },
+          {
+            "id": "NONHAEM_RECOVERED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Following recovery to grade ≤ 1, consider one dose-level reduction or discontinuation. Confirm current dose level; no automatic restart."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Prior severe toxicity recovery state 1",
+      "input": {
+        "assessment_phase": "recovery",
+        "prior_nonhaem_grade3_or4": true,
+        "other_nonhaem_toxicity_grade": 1,
+        "anc": 0.9
+      },
+      "expected": "Recovered nonhaem toxicity does not cancel current count delay.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "ANC < 1 or platelets < 100 ×10⁹/L: delay one week or until recovery. Both counts are required to assess recovery."
+          },
+          {
+            "id": "NONHAEM_RECOVERED",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Following recovery to grade ≤ 1, consider one dose-level reduction or discontinuation. Confirm current dose level; no automatic restart."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Prior severe toxicity recovery state 2",
+      "input": {
+        "assessment_phase": "recovery",
+        "prior_nonhaem_grade3_or4": true,
+        "other_nonhaem_toxicity_grade": 2,
+        "anc": 0.9
+      },
+      "expected": "Recovered nonhaem toxicity does not cancel current count delay.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "NONHAEM_NOT_RECOVERED",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Previous grade 3–4 toxicity has not recovered to grade ≤ 1; continue withholding."
+          },
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "ANC < 1 or platelets < 100 ×10⁹/L: delay one week or until recovery. Both counts are required to assess recovery."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "NONHAEM_NOT_RECOVERED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Prior severe toxicity recovery state 3",
+      "input": {
+        "assessment_phase": "recovery",
+        "prior_nonhaem_grade3_or4": true,
+        "other_nonhaem_toxicity_grade": 3,
+        "anc": 0.9
+      },
+      "expected": "Recovered nonhaem toxicity does not cancel current count delay.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "NONHAEM_ACTIVE",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Grade 3–4 non-haematological toxicity: withhold until grade ≤ 1, then consider one dose-level reduction or discontinuation."
+          },
+          {
+            "id": "NONHAEM_NOT_RECOVERED",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Previous grade 3–4 toxicity has not recovered to grade ≤ 1; continue withholding."
+          },
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "ANC < 1 or platelets < 100 ×10⁹/L: delay one week or until recovery. Both counts are required to assess recovery."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "NONHAEM_ACTIVE"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Prior severe toxicity recovery state 4",
+      "input": {
+        "assessment_phase": "recovery",
+        "prior_nonhaem_grade3_or4": true,
+        "other_nonhaem_toxicity_grade": 4,
+        "anc": 0.9
+      },
+      "expected": "Recovered nonhaem toxicity does not cancel current count delay.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "NONHAEM_ACTIVE",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Grade 3–4 non-haematological toxicity: withhold until grade ≤ 1, then consider one dose-level reduction or discontinuation."
+          },
+          {
+            "id": "NONHAEM_NOT_RECOVERED",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Previous grade 3–4 toxicity has not recovered to grade ≤ 1; continue withholding."
+          },
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "ANC < 1 or platelets < 100 ×10⁹/L: delay one week or until recovery. Both counts are required to assess recovery."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "NONHAEM_ACTIVE"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00500",
+      "name": "Unknown current grade after severe toxicity is unassessed",
+      "input": {
+        "assessment_phase": "recovery",
+        "prior_nonhaem_grade3_or4": true
+      },
+      "expected": "No presumed recovery from missing current grade.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "partial_context_required",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00500",
+      "name": "ChildPughC dominates decimal bilirubin gap and dialysis reductions",
+      "input": {
+        "assessment_phase": "day1",
+        "child_pugh_c": true,
+        "bilirubin_umol_l": 50.5,
+        "haemodialysis": true
+      },
+      "expected": "Hepatic not-recommended branch dominates review-only percentages.",
+      "status": "failed",
+      "errors": [
+        "The input did not match the regular expression /unallocated|gap|between/i. Input:\n\n'Doxorubicin is not recommended when bilirubin is > 86 µmol/L or Child–Pugh C; specialist review of alternatives.\\n' +\n  'The printed bilirubin rows end at 50 and restart at 51 µmol/L. This decimal interval is not allocated; do not round or substitute a multiple of ULN.\\n' +\n  'On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required.'\n"
+      ],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOX_HEPATIC_NOT_RECOMMENDED",
+            "action": "withhold",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "Doxorubicin is not recommended when bilirubin is > 86 µmol/L or Child–Pugh C; specialist review of alternatives."
+          },
+          {
+            "id": "DOX_BILI_DECIMAL_GAP",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "The printed bilirubin rows end at 50 and restart at 51 µmol/L. This decimal interval is not allocated; do not round or substitute a multiple of ULN."
+          },
+          {
+            "id": "DOX_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "doxorubicin"
+            ],
+            "message": "On haemodialysis, 75% of the original doxorubicin dose may be considered; specialist prescription and timing review are required."
+          }
+        ],
+        "components": [
+          {
+            "component": "doxorubicin",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "DOX_HEPATIC_NOT_RECOMMENDED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 0/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 0
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 0/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 0,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_LT30",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl < 30 mL/min: source table lists 70%, but severe kidney disease is also excluded. Reconcile eligibility and severity with consultant/pharmacy; no automatic dose or treatment clearance."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_LT30"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 0/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 0,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 29.99/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 29.99
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 29.99/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 29.99,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_LT30",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl < 30 mL/min: source table lists 70%, but severe kidney disease is also excluded. Reconcile eligibility and severity with consultant/pharmacy; no automatic dose or treatment clearance."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_LT30"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 29.99/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 29.99,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 30/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 30
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 30/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 30,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_30_45",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl 30–< 45 mL/min: source 30–45 row specifies 75% dose; confirm suitability and current prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_30_45"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 30/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 30,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 44.99/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 44.99
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 44.99/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 44.99,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_30_45",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl 30–< 45 mL/min: source 30–45 row specifies 75% dose; confirm suitability and current prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_30_45"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 44.99/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 44.99,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 45/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 45
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 45/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 45,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_EXACT45",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl exactly 45 mL/min appears in both printed 45–60 (80%) and 30–45 (75%) rows. Obtain clarification; do not choose an automatic percentage."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_EXACT45"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 45/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 45,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 45.01/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 45.01
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 45.01/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 45.01,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_45_60",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl > 45–60 mL/min: source 45–60 row specifies 80% dose; confirm suitability and current prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_45_60"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 45.01/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 45.01,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 60/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 60
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_DIALYSIS_STATUS_MISSING",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Confirm dialysis status before applying the dacarbazine renal table. No haemodialysis dose is provided by this source."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_DIALYSIS_STATUS_MISSING"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 60/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 60,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_RENAL_45_60",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl > 45–60 mL/min: source 45–60 row specifies 80% dose; confirm suitability and current prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_RENAL_45_60"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 60/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 60,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 60.01/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 60.01
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 60.01/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 60.01,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 60.01/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 60.01,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 90/undefined",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 90
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 90/false",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 90,
+        "haemodialysis": false
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Dialysis three-state matrix 90/true",
+      "input": {
+        "assessment_phase": "day1",
+        "crcl_ml_min": 90,
+        "haemodialysis": true
+      },
+      "expected": "A dialysis patient or unknown status must not receive non-dialysis renal percentage.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/70%|75%|80%/.test(t))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DTIC_HAEMODIALYSIS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "The source does not give a haemodialysis dose or timing. Do not extend the CrCl < 30 (70%) row to dialysis; obtain a specialist renal prescription."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "DTIC_HAEMODIALYSIS"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Severe renal exclusion dominates historical prior-dose80%",
+      "input": {
+        "assessment_phase": "day1",
+        "severe_renal_disease": true,
+        "crcl_ml_min": 25,
+        "haemodialysis": false,
+        "prior_neutropenic_sepsis_admission": true
+      },
+      "expected": "Severe renal exclusion remains with both renal-row and prior-dose history review.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "SEVERE_ORGAN_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Severe liver or kidney disease is a source exclusion. Reconcile the treatment choice with the organ-function table before prescribing."
+          },
+          {
+            "id": "PRIOR_SEPSIS_80_PREVIOUS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "After admission with neutropenic sepsis in the previous interval, reduce to 80% of the PREVIOUS dose. This is distinct from 80% of the original dose and from uncomplicated fever alone; confirm recovery and dose history."
+          },
+          {
+            "id": "DTIC_RENAL_LT30",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "CrCl < 30 mL/min: source table lists 70%, but severe kidney disease is also excluded. Reconcile eligibility and severity with consultant/pharmacy; no automatic dose or treatment clearance."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "SEVERE_ORGAN_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Prior sepsis plus current low/intermediate counts",
+      "input": {
+        "assessment_phase": "day1",
+        "anc": 0.9,
+        "platelets": 80,
+        "prior_neutropenic_sepsis_admission": true
+      },
+      "expected": "Current low count dominates intermediate row and previous-dose reduction.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "delay",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "COUNTS_DELAY",
+            "action": "delay",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "ANC < 1 or platelets < 70×10⁹/L: delay one week and reassess. Baseline suitability must also be assessed separately."
+          },
+          {
+            "id": "COUNTS_80_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "On-treatment ANC 1–< 1.5 or platelets 70–< 100×10⁹/L: source specifies 80% dose. Check both counts; any delay row takes precedence. Confirm current dose history."
+          },
+          {
+            "id": "PRIOR_SEPSIS_80_PREVIOUS",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "After admission with neutropenic sepsis in the previous interval, reduce to 80% of the PREVIOUS dose. This is distinct from 80% of the original dose and from uncomplicated fever alone; confirm recovery and dose history."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "delay",
+            "quantified": false,
+            "ruleId": "COUNTS_DELAY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00511",
+      "name": "Baseline cytopenia differs from subsequent treatment history",
+      "input": {
+        "assessment_phase": "baseline",
+        "baseline_leukopenia_or_thrombocytopenia": true,
+        "anc": 1.2,
+        "platelets": 80
+      },
+      "expected": "Baseline exclusion cannot be replaced by later-cycle intermediate-dose row.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "contraindicated",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "BASELINE_CYTOPENIA_EXCLUSION",
+            "action": "contraindicated",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Leukopenia or thrombocytopenia is listed as an exclusion. The source does not provide numerical baseline eligibility thresholds; do not borrow the on-treatment 80% row to establish eligibility."
+          },
+          {
+            "id": "BASELINE_COUNTS_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "dacarbazine"
+            ],
+            "message": "Baseline leukopenia/thrombocytopenia is excluded in the source without numerical definitions. These counts require suitability review; the on-treatment 80% row is not baseline clearance."
+          }
+        ],
+        "components": [
+          {
+            "component": "dacarbazine",
+            "action": "contraindicated",
+            "quantified": false,
+            "ruleId": "BASELINE_CYTOPENIA_EXCLUSION"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Day-context-independent very low count {\"assessment_phase\":\"recovery\",\"anc\":0.1,\"platelets\":10}",
+      "input": {
+        "assessment_phase": "recovery",
+        "anc": 0.1,
+        "platelets": 10
+      },
+      "expected": "Below every regimen administration threshold cannot be called no restriction.",
+      "status": "failed",
+      "errors": [
+        "Very low count needs delay/withhold despite unknown planned day"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Day-context-independent very low count {\"assessment_phase\":\"recovery\",\"anc\":0.9,\"platelets\":80}",
+      "input": {
+        "assessment_phase": "recovery",
+        "anc": 0.9,
+        "platelets": 80
+      },
+      "expected": "Below every regimen administration threshold cannot be called no restriction.",
+      "status": "failed",
+      "errors": [
+        "Very low count needs delay/withhold despite unknown planned day"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Day-context-independent very low count {\"assessment_phase\":\"recovery\",\"anc\":2,\"platelets\":74.9}",
+      "input": {
+        "assessment_phase": "recovery",
+        "anc": 2,
+        "platelets": 74.9
+      },
+      "expected": "Below every regimen administration threshold cannot be called no restriction.",
+      "status": "failed",
+      "errors": [
+        "Very low count needs delay/withhold despite unknown planned day"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Day-context-independent very low count {\"anc\":0.1,\"platelets\":10}",
+      "input": {
+        "anc": 0.1,
+        "platelets": 10
+      },
+      "expected": "Below every regimen administration threshold cannot be called no restriction.",
+      "status": "failed",
+      "errors": [
+        "Very low count needs delay/withhold despite unknown planned day"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "STAGE_REQUIRED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Choose the assessment stage. Baseline suitability, treatment-day counts and recovery are distinct; omitted domains are not assumed normal."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "STAGE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Recovery count75–99 requires planned day",
+      "input": {
+        "assessment_phase": "recovery",
+        "anc": 2,
+        "platelets": 80
+      },
+      "expected": "Platelets80 meets Day8 but not Day1; explicit planned-day assessment required.",
+      "status": "failed",
+      "errors": [
+        "Expected source-driven clinical finding, not only partial-domain bookkeeping"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Prior severe neuropathy not recovered despite other grade0",
+      "input": {
+        "assessment_phase": "day8",
+        "neuropathy_grade": 2,
+        "other_nonhaem_toxicity_grade": 0,
+        "prior_nonhaem_grade3_or4": true
+      },
+      "expected": "Prior severe nonhaem toxicity must recover to≤1; current neuropathy2 does not qualify.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(['withhold','delay'].includes(a.actionType))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "NEUROPATHY_G2_HISTORY",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Grade-2 neuropathy requires occurrence and dose-history review. The source explicitly lists first and second occurrences; do not invent a later recurrence algorithm."
+          },
+          {
+            "id": "NONHAEM_RECOVERED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "After recovery to grade ≤ 1, reduce one dose level and confirm the current prescription; no automatic restart."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "NEUROPATHY_G2_HISTORY"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "NEUROPATHY_G2_HISTORY"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Missing neuropathy grade does not confirm severe-toxicity recovery",
+      "input": {
+        "assessment_phase": "recovery",
+        "other_nonhaem_toxicity_grade": 0,
+        "prior_nonhaem_grade3_or4": true
+      },
+      "expected": "Broad prior-toxicity flag requires neuropathy recovery context too.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/After recovery to grade ≤ 1/i.test(text(a)))\n"
+      ],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "NONHAEM_RECOVERED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "After recovery to grade ≤ 1, reduce one dose level and confirm the current prescription; no automatic restart."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "NONHAEM_RECOVERED"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "NONHAEM_RECOVERED"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Current neuropathy3 cannot also be labelled recovered",
+      "input": {
+        "assessment_phase": "recovery",
+        "neuropathy_grade": 3,
+        "other_nonhaem_toxicity_grade": 0,
+        "prior_nonhaem_grade3_or4": true
+      },
+      "expected": "Severe current neuropathy and recovery wording must not conflict.",
+      "status": "failed",
+      "errors": [
+        "The expression evaluated to a falsy value:\n\n  assert.ok(!/After recovery to grade ≤ 1/i.test(text(a)))\n"
+      ],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "NONHAEM_ACTIVE",
+            "action": "withhold",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "Grade ≥ 3 non-haematological toxicity: hold until grade ≤ 1, then reduce by one dose level. Identify and grade the event; component-specific permanent-stop rules take precedence."
+          },
+          {
+            "id": "NONHAEM_RECOVERED",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "After recovery to grade ≤ 1, reduce one dose level and confirm the current prescription; no automatic restart."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "NONHAEM_ACTIVE"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "NONHAEM_ACTIVE"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "PlannedDay8/actualDay contradiction 15",
+      "input": {
+        "assessment_phase": "day8",
+        "cycle_day": 15,
+        "anc": 2,
+        "platelets": 200
+      },
+      "expected": "Delayed administration cannot bypass timing review through planned-Day8 selector.",
+      "status": "failed",
+      "errors": [
+        "Expected source-driven clinical finding, not only partial-domain bookkeeping"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "PlannedDay8/actualDay contradiction 15.01",
+      "input": {
+        "assessment_phase": "day8",
+        "cycle_day": 15.01,
+        "anc": 2,
+        "platelets": 200
+      },
+      "expected": "Delayed administration cannot bypass timing review through planned-Day8 selector.",
+      "status": "failed",
+      "errors": [
+        "Expected source-driven clinical finding, not only partial-domain bookkeeping"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "PlannedDay8/actualDay contradiction 20",
+      "input": {
+        "assessment_phase": "day8",
+        "cycle_day": 20,
+        "anc": 2,
+        "platelets": 200
+      },
+      "expected": "Delayed administration cannot bypass timing review through planned-Day8 selector.",
+      "status": "failed",
+      "errors": [
+        "Expected source-driven clinical finding, not only partial-domain bookkeeping"
+      ],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Gem permanent stop does not permanently stop docetaxel",
+      "input": {
+        "assessment_phase": "day8",
+        "severe_cutaneous_reaction": true,
+        "bilirubin_uln_multiple": 2,
+        "bilirubin_umol_l": 40,
+        "prior_fn_occurrences": 2
+      },
+      "expected": "Gemcitabine permanent SCAR stop and docetaxel hepatic hold remain distinct.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "GEM_SCAR_STOP",
+            "action": "permanently_discontinue",
+            "components": [
+              "gemcitabine"
+            ],
+            "message": "SJS, TEN, DRESS or AGEP: discontinue gemcitabine and obtain urgent clinical assessment."
+          },
+          {
+            "id": "DOC_HEPATIC_HIGH_REVIEW",
+            "action": "withhold",
+            "components": [
+              "docetaxel"
+            ],
+            "message": "High liver-test values intersect the source not-recommended region. Withhold docetaxel pending specialist review of the combined pattern; the ambiguous AND/OR row is not converted into an invented independent numerical contraindication."
+          },
+          {
+            "id": "FN_PRIOR_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "After the second occurrence, consider one dose-level reduction. Confirm recovery and current dose levels: gemcitabine 675→540→450 mg/m²; docetaxel 75→60→50 mg/m²; then discontinue."
+          },
+          {
+            "id": "GEM_BILIRUBIN_GE27",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine"
+            ],
+            "message": "Gemcitabine at bilirubin ≥ 27 µmol/L: consider starting at 80% of the original dose and escalating if tolerated, OR full dose with active monitoring. This regimen starts at 675 mg/m²; an 800 mg/m² starting dose is not this source pathway. Consultant/pharmacy must choose the approach."
+          },
+          {
+            "id": "DOC_HEPATIC_PATTERN_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "docetaxel"
+            ],
+            "message": "Review all bilirubin, AST, ALT and ALP results together for docetaxel. The source hepatic table contains an ambiguous bilirubin range and AND/OR grouping, so no automatic numeric docetaxel dose is emitted. Confirm the actual table pattern and obtain oncology-pharmacy clarification."
+          }
+        ],
+        "components": [
+          {
+            "component": "gemcitabine",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "GEM_SCAR_STOP"
+          },
+          {
+            "component": "docetaxel",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "DOC_HEPATIC_HIGH_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Doc severe hypersensitivity with current febrile neutropenia",
+      "input": {
+        "assessment_phase": "day8",
+        "severe_docetaxel_hypersensitivity": true,
+        "febrile_neutropenia_this_cycle": true,
+        "prior_fn_occurrences": 2
+      },
+      "expected": "Permanent docetaxel stop does not hide current-cycle hold on gemcitabine.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "permanently_discontinue",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOC_SEVERE_HYPERSENSITIVITY_STOP",
+            "action": "permanently_discontinue",
+            "components": [
+              "docetaxel"
+            ],
+            "message": "Severe hypersensitivity: stop docetaxel immediately and do not rechallenge; provide urgent clinical treatment."
+          },
+          {
+            "id": "FN_CURRENT_CYCLE",
+            "action": "withhold",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "After febrile neutropenia, hold the remainder of the current cycle; consider G-CSF for subsequent cycles and confirm recovery."
+          },
+          {
+            "id": "FN_PRIOR_SECOND",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine",
+              "docetaxel"
+            ],
+            "message": "After the second occurrence, consider one dose-level reduction. Confirm recovery and current dose levels: gemcitabine 675→540→450 mg/m²; docetaxel 75→60→50 mg/m²; then discontinue."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "permanently_discontinue",
+            "quantified": false,
+            "ruleId": "DOC_SEVERE_HYPERSENSITIVITY_STOP"
+          },
+          {
+            "component": "gemcitabine",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "FN_CURRENT_CYCLE"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Absolute/ULN separation 26/10",
+      "input": {
+        "assessment_phase": "day8",
+        "bilirubin_uln_multiple": 2.6,
+        "bilirubin_umol_l": "26"
+      },
+      "expected": "Gem uses absolute≥27µmol/L, docetaxel separately uses localULN ratio; one must not substitute for other.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "withhold",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "DOC_HEPATIC_HIGH_REVIEW",
+            "action": "withhold",
+            "components": [
+              "docetaxel"
+            ],
+            "message": "High liver-test values intersect the source not-recommended region. Withhold docetaxel pending specialist review of the combined pattern; the ambiguous AND/OR row is not converted into an invented independent numerical contraindication."
+          },
+          {
+            "id": "DOC_HEPATIC_PATTERN_REVIEW",
+            "action": "consultant_review",
+            "components": [
+              "docetaxel"
+            ],
+            "message": "Review all bilirubin, AST, ALT and ALP results together for docetaxel. The source hepatic table contains an ambiguous bilirubin range and AND/OR grouping, so no automatic numeric docetaxel dose is emitted. Confirm the actual table pattern and obtain oncology-pharmacy clarification."
+          }
+        ],
+        "components": [
+          {
+            "component": "docetaxel",
+            "action": "withhold",
+            "quantified": false,
+            "ruleId": "DOC_HEPATIC_HIGH_REVIEW"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Absolute/ULN separation 27/30",
+      "input": {
+        "assessment_phase": "day8",
+        "bilirubin_uln_multiple": 0.9,
+        "bilirubin_umol_l": "27"
+      },
+      "expected": "Gem uses absolute≥27µmol/L, docetaxel separately uses localULN ratio; one must not substitute for other.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "GEM_BILIRUBIN_GE27",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine"
+            ],
+            "message": "Gemcitabine at bilirubin ≥ 27 µmol/L: consider starting at 80% of the original dose and escalating if tolerated, OR full dose with active monitoring. This regimen starts at 675 mg/m²; an 800 mg/m² starting dose is not this source pathway. Consultant/pharmacy must choose the approach."
+          }
+        ],
+        "components": [
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "GEM_BILIRUBIN_GE27"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Absolute/ULN separation 26.99/30",
+      "input": {
+        "assessment_phase": "day8",
+        "bilirubin_uln_multiple": 0.8996666666666666,
+        "bilirubin_umol_l": "26.99"
+      },
+      "expected": "Gem uses absolute≥27µmol/L, docetaxel separately uses localULN ratio; one must not substitute for other.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "proceed_with_caution",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00501",
+      "name": "Absolute/ULN separation 27.01/30",
+      "input": {
+        "assessment_phase": "day8",
+        "bilirubin_uln_multiple": 0.9003333333333334,
+        "bilirubin_umol_l": "27.01"
+      },
+      "expected": "Gem uses absolute≥27µmol/L, docetaxel separately uses localULN ratio; one must not substitute for other.",
+      "status": "passed",
+      "errors": [],
+      "observed": {
+        "actionType": "consultant_review",
+        "complete": false,
+        "coverageComplete": false,
+        "invalid": [],
+        "findings": [
+          {
+            "id": "GEM_BILIRUBIN_GE27",
+            "action": "consultant_review",
+            "components": [
+              "gemcitabine"
+            ],
+            "message": "Gemcitabine at bilirubin ≥ 27 µmol/L: consider starting at 80% of the original dose and escalating if tolerated, OR full dose with active monitoring. This regimen starts at 675 mg/m²; an 800 mg/m² starting dose is not this source pathway. Consultant/pharmacy must choose the approach."
+          }
+        ],
+        "components": [
+          {
+            "component": "gemcitabine",
+            "action": "consultant_review",
+            "quantified": false,
+            "ruleId": "GEM_BILIRUBIN_GE27"
+          }
+        ]
+      }
+    }
+  ]
+}

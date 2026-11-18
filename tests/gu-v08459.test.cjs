@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),vm=require('node:vm');
 const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f));
 const S=json('validation/gu-v08459/scope.json'),A=require('../js/patient-asset-registry-v0810.js'),H=require('./helpers/gu-inputs-v08459.cjs'),C=require('../tools/consent-core-v08455.cjs'),V=require('../js/protocol-validator.js'),E=require('../js/assessment-engine.js'),I=json('protocols/index.json').protocols;
-assert.equal(json('package.json').version,'0.84.59');assert.equal(A.release,'0.84.59');assert.equal(I.length,377);assert.equal(A.codes.length,267);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,297);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,305);
+const release=json('package.json').version,counts={'0.84.59':[267,297,305],'0.84.60':[272,302,310]};assert(counts[release]);assert.equal(A.release,release);assert.equal(I.length,377);assert.equal(A.codes.length,counts[release][0]);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,counts[release][1]);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,counts[release][2]);
 assert.equal(S.new_routes.length,6);assert.equal(S.retrospective_codes.length,5);assert.equal(S.presentation_repair_routes.length,10);assert.equal(S.independent_clinical_approval,false);
 const norm=s=>s.replace(/<[^>]*>/g,'').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#(?:039|39);/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
 for(const c of S.new_routes){

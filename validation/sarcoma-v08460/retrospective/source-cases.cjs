@@ -1,0 +1,94 @@
+'use strict';
+// Exact five-code retrospective scope. Existing boundary fixtures retained after fresh
+// current NCCP web-text reconciliation on 2026-11-18; supplemented below.
+// This checks encoded rules, not independent clinical approval or browser behaviour.
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const R=path.resolve(__dirname,'../../..'),E=require(R+'/js/assessment-engine'),V=require(R+'/js/protocol-validator');
+const codes=['00453','00602','00807','00894','00945'],index=require(R+'/protocols/index.json').protocols;
+const P=Object.fromEntries(codes.map(c=>[c,JSON.parse(fs.readFileSync(R+'/'+index.find(x=>x.path.includes('/'+c+'-')).path))]));const rows=[];
+function check(code,label,input,yes=[],no=[],action){const row={code,label,input,expected:{yes,no,action}};try{assert.deepEqual(V.validate(P[code]).errors,[]);for(const key of Object.keys(input))assert(key in P[code].input_definitions,'Unknown test input '+key);const a=E.assess(P[code],input);assert.deepEqual(a.errors,[]);assert.deepEqual(a.invalid,[]);const ids=a.findings.map(f=>f.ruleId);yes.forEach(id=>assert(ids.includes(id),'Missing '+id));no.forEach(id=>assert(!ids.includes(id),'Unexpected '+id));if(action)assert.equal(a.actionType,action);if(!Object.keys(input).length)assert.notEqual(a.actionType,'proceed');row.pass=true;row.actual={ids,action:a.actionType};}catch(e){row.pass=false;row.error=e.message;}rows.push(row);}
+function boundary(code,field,n,id,predicate,extra={}){for(const value of [n-.01,n,n+.01])check(code,field+' exact boundary '+value,{...extra,[field]:value},predicate(value)?[id]:[],predicate(value)?[]:[id]);}
+for(const c of codes)check(c,'Missing inputs cannot authorise treatment',{});
+boundary('00453','cd34_million_per_kg',1,'CELLS_LT1',v=>v<1);
+boundary('00453','gfr_ml_min',20,'CARBO_GFR_LE20',v=>v<=20);
+boundary('00453','gfr_ml_min',30,'CARBO_GFR_20_30',v=>v<=30);
+boundary('00453','gfr_ml_min',125,'CARBO_GFR_CAP',v=>v>125);
+boundary('00453','crcl_ml_min',10,'ETOP_RENAL_LT10',v=>v<10);
+boundary('00453','crcl_ml_min',50,'ETOP_RENAL_10_50',v=>v<=50);
+boundary('00453','bilirubin_umol_l',50,'ETOP_BILI_GE50',v=>v>=50);
+boundary('00453','fluid_balance_ml',1000,'FLUID_REVIEW',v=>v>1000);
+boundary('00453','weight_gain_kg',1,'FLUID_REVIEW',v=>v>1);
+boundary('00453','days_since_previous_cycle',28,'SECOND_TOO_EARLY',v=>v<28,{cycle_number:2});
+boundary('00453','creatinine_percent_of_gfr_baseline',110,'GFR_REMEASURE',v=>v>110,{renal_measurement_method:'measured'});
+boundary('00453','creatinine_age_hours',48,'ESTIMATE_STALE',v=>v>48,{renal_measurement_method:'estimated'});
+check('00453','No automatic second course after nonresponse',{cycle_number:2,no_first_cycle_response:true},['NO_FIRST_CYCLE_RESPONSE','SECOND_REVIEW']);
+boundary('00602','anc',1.5,'BASELINE_ANC',v=>v<1.5,{assessment_phase:'baseline'});
+check('00602','On-treatment ANC is not baseline eligibility',{assessment_phase:'treatment',anc:1.2},[],['BASELINE_ANC','PACLITAXEL_COUNTS','IFOSFAMIDE_COUNTS']);
+boundary('00602','anc',1,'PACLITAXEL_COUNTS',v=>v<1);
+boundary('00602','platelets',90,'PACLITAXEL_COUNTS',v=>v<90);
+boundary('00602','platelets',75,'IFOSFAMIDE_COUNTS',v=>v<75);
+check('00602','Platelets80 affects paclitaxel only',{platelets:80},['PACLITAXEL_COUNTS'],['IFOSFAMIDE_COUNTS']);
+boundary('00602','crcl_ml_min',40,'CIS_LT40',v=>v<40);
+boundary('00602','crcl_ml_min',50,'IFO_LT50',v=>v<50);
+for(const value of [49.1,49.9,59.1,59.9])check('00602','Unallocated renal decimal '+value,{crcl_ml_min:value},['CIS_RENAL_GAPS']);
+boundary('00602','alt_uln_multiple',10,'PACLITAXEL_LIVER_STOP',v=>v>=10);
+boundary('00602','bilirubin_uln_multiple',5,'PACLITAXEL_LIVER_STOP',v=>v>5);
+for(const value of [1.255,2.005])check('00602','Unallocated bilirubin decimal '+value,{bilirubin_uln_multiple:value},['PAC_LIVER_GAPS']);
+boundary('00602','ast_u_l',300,'IFO_LIVER',v=>v>300);
+boundary('00602','bilirubin_umol_l',51.3,'IFO_LIVER',v=>v>51.3);
+check('00602','Encephalopathy blocks further ifosfamide',{encephalopathy_suspected:true},['ENCEPHALOPATHY_SUSPECTED']);
+check('00602','Mesna is required protection',{mesna_or_hydration_unconfirmed:true},['MESNA_OR_HYDRATION_UNCONFIRMED']);
+boundary('00807','days_since_turbt',14,'RECENT_PROCEDURE',v=>v<14);
+check('00807','Day14 still needs product timing review',{days_since_turbt:14},['PRODUCT_TIMING_REVIEW'],['RECENT_PROCEDURE']);
+check('00807','No automatic exclusion for asymptomatic bacteriuria',{},[],['ACTIVE_UTI']);
+for(const f of ['active_uti','haematuria','traumatic_catheterisation','immunosuppression','active_tb','fever','suspected_systemic_bcg'])check('00807','Instillation hazard '+f,{[f]:true},[f.toUpperCase()]);
+boundary('00894','days_since_turbt',21,'RECENT_TURBT',v=>v<21);
+for(const f of ['active_uti','haematuria','traumatic_catheterisation','bladder_perforation_suspected'])check('00894','Instillation hazard '+f,{[f]:true},[f.toUpperCase()]);
+check('00894','Severe gemcitabine reaction is component-specific',{severe_gemcitabine_effects:true},['GEM_SEVERE']);
+boundary('00945','blood_glucose_mmol_l',13.9,'GLUCOSE_GT13_9',v=>v>13.9);
+check('00945','Platelets equality is not silently converted to monotherapy',{platelets:75},['EV_COUNTS_EQUALITY'],['PLATELETS_50_75_HOLD']);
+check('00945','ANC equality is not silently converted to monotherapy',{anc:1.5},['EV_COUNTS_EQUALITY']);
+for(const [n,id]of [[24.9,'COUNTS_SEVERE'],[25,'COUNTS_INTERMEDIATE'],[49.9,'COUNTS_INTERMEDIATE'],[50,'PLATELETS_50_75_HOLD'],[74.9,'PLATELETS_50_75_HOLD']])check('00945','Platelet band '+n,{platelets:n},[id]);
+check('00945','Suspected severe skin reaction holds EV',{suspected_sjs_ten_or_bullous:true},['SKIN_SUSPECTED_SCAR'],['SKIN_PERMANENT_STOP']);
+check('00945','Confirmed SJS/TEN stops both components',{confirmed_sjs_ten:true},['SKIN_PERMANENT_STOP','ICI_SKIN_STOP']);
+check('00945','Grade3 EV lung discrepancy uses explicit EMA safety rule',{pneumonitis_grade:'3'},['LUNG_G3_PLUS']);
+for(const g of ['2','3','4'])check('00945','EV neuropathy '+g,{neuropathy_grade:g},[g==='2'?'NEURO_G2':'NEURO_G3_PLUS']);
+boundary('00945','alt_ast_uln_multiple',3,'ICI_HEPATITIS_HOLD',v=>v>3);
+boundary('00945','alt_ast_uln_multiple',5,'ICI_HEPATITIS_STOP',v=>v>5);
+boundary('00945','bilirubin_uln_multiple',1.5,'ICI_HEPATITIS_HOLD',v=>v>1.5);
+boundary('00945','bilirubin_uln_multiple',3,'ICI_HEPATITIS_STOP',v=>v>3);
+check('00945','Baseline hepatic metastasis exception',{liver_metastases_baseline_grade2:true,liver_increase_percent:50,liver_increase_days:7},['ICI_HEPATITIS_STOP']);
+check('00945','Controlled endocrine restart remains specialist decision',{controlled_endocrine_restart_considered:true},['ENDOCRINE_RESTART'],['ICI_OTHER_STOP']);
+for(const n of [83.99,84,84.01])check('00945','Twelve-week recovery '+n,{days_since_last_pembrolizumab:n,immune_toxicity_resolved_grade01:false},n>84?['ICI_12_WEEK_STOP']:n===84?['ICI_12_WEEK_REVIEW']:[],n<=84?['ICI_12_WEEK_STOP']:[]);
+check('00945','Axitinib combination liver thresholds were not copied',{alt_ast_uln_multiple:6,bilirubin_uln_multiple:1},['ICI_HEPATITIS_STOP'],['COMBINATION_LIVER_STOP']);
+
+// Additional current-source checks: endpoints, cross-agent attribution, component separation.
+check('00453','CrCl does not substitute for Calvert GFR',{crcl_ml_min:15},['ETOP_RENAL_10_50'],['CARBO_GFR_LE20','CARBO_GFR_20_30']);
+check('00453','Low albumin independently triggers etoposide review',{low_albumin:true,bilirubin_umol_l:20},['LOW_ALBUMIN'],['ETOP_BILI_GE50']);
+check('00453','First-course grade4 toxicity blocks further high-dose therapy',{previous_grade4_nonhaem:true},['PREVIOUS_GRADE4_NONHAEM']);
+for(const [value,id] of [[40,'CIS_40_49'],[49,'CIS_40_49'],[50,'CIS_50_59'],[59,'CIS_50_59']])check('00602','Printed cisplatin renal endpoint '+value,{crcl_ml_min:value},[id]);
+check('00602','Ifosfamide renal ≥50 is explicit in current Table3',{crcl_ml_min:50},[],['IFO_LT50']);
+check('00602','Cisplatin full-dose boundary 60',{crcl_ml_min:60},[],['CIS_50_59','CIS_40_49','CIS_LT40','CIS_RENAL_GAPS','IFO_LT50']);
+for(const [value,id] of [[1.26,'PAC_BILI_75'],[2,'PAC_BILI_75'],[2.01,'PAC_BILI_50'],[5,'PAC_BILI_50']])check('00602','Paclitaxel bilirubin ULN endpoint '+value,{alt_uln_multiple:9.99,bilirubin_uln_multiple:value},[id],['PACLITAXEL_LIVER_STOP']);
+check('00602','ALT exactly10 overrides low bilirubin',{alt_uln_multiple:10,bilirubin_uln_multiple:1},['PACLITAXEL_LIVER_STOP']);
+check('00602','Aprepitant interaction is ifosfamide-specific review',{aprepitant_planned:true},['APREPITANT_PLANNED']);
+check('00602','Haematuria blocks ifosfamide despite count recovery',{haematuria:true,anc:2,platelets:150},['HAEMATURIA'],['PACLITAXEL_COUNTS','IFOSFAMIDE_COUNTS']);
+check('00807','Missing brand remains explicit review',{assessment_phase:'treatment'},['BRAND_REQUIRED']);
+for(const value of [14,20.99])check('00807','BCG product timing window '+value,{days_since_turbt:value},['PRODUCT_TIMING_REVIEW'],['RECENT_PROCEDURE']);
+check('00807','At21 days no date-only procedural restriction',{days_since_turbt:21,days_since_biopsy:21,days_since_trauma:21},[],['RECENT_PROCEDURE','PRODUCT_TIMING_REVIEW']);
+check('00807','Biopsy timing cannot be omitted from product review',{days_since_biopsy:13},['PRODUCT_TIMING_REVIEW']);
+check('00894','Maintenance eligibility requires explicit urology review',{maintenance_eligible:false},['MAINTENANCE_REVIEW']);
+check('00894','Small bladder capacity is a clinical review trigger',{small_bladder_capacity:true},['SMALL_BLADDER_CAPACITY']);
+for(const [value,id] of [[0.49,'COUNTS_SEVERE'],[0.5,'COUNTS_INTERMEDIATE'],[0.99,'COUNTS_INTERMEDIATE']])check('00945','Printed ANC band '+value,{anc:value},[id]);
+check('00945','ANC1.0 with adequate platelets does not use intermediate hold',{anc:1,platelets:100},[],['COUNTS_INTERMEDIATE','COUNTS_SEVERE','PLATELETS_50_75_HOLD']);
+check('00945','Normal ANC never overrides platelet hold',{anc:3,platelets:60},['PLATELETS_50_75_HOLD']);
+boundary('00945','crcl_ml_min',15,'EV_RENAL_EQUAL15',v=>v===15);
+check('00945','EV renal data limit below15',{crcl_ml_min:14.99},['RENAL_DATA_LIMIT']);
+check('00945','Grade2 stable skin alone does not trigger conditional EV hold',{skin_grade:'2',skin_worsening_or_fever:false},[],['SKIN_HOLD','SKIN_PERMANENT_STOP']);
+check('00945','Grade2 worsening skin holds EV',{skin_grade:'2',skin_worsening_or_fever:true},['SKIN_HOLD']);
+check('00945','Recurrent grade3 skin permanently stops EV',{skin_grade:'3',recurrent_grade3_skin:true},['SKIN_PERMANENT_STOP']);
+check('00945','Immune recurrent grade2 lung permanently stops pembrolizumab',{immune_pneumonitis_grade:'2',recurrent_grade2_pneumonitis:true},['ICI_LUNG_STOP']);
+check('00945','Controlled endocrine exception never overrides confirmed SJS/TEN',{controlled_endocrine_restart_considered:true,confirmed_sjs_ten:true},['ENDOCRINE_RESTART','SKIN_PERMANENT_STOP','ICI_SKIN_STOP'],[],'permanently_discontinue');
+
+for(const [code,id,components]of [['00602','PACLITAXEL_COUNTS',['paclitaxel']],['00602','IFOSFAMIDE_COUNTS',['ifosfamide']],['00945','GLUCOSE_GT13_9',['enfortumab vedotin']],['00945','ICI_HEPATITIS_STOP',['pembrolizumab']]])assert.deepEqual(P[code].rule_engine.rules.find(x=>x.rule_id===id).action.components,components);
+const report={release:'0.84.60',source_checked:'2026-11-18',scope:codes,independent_clinical_approval:false,total:rows.length,passed:rows.filter(r=>r.pass).length,cases:rows};fs.writeFileSync(path.join(__dirname,'source-case-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({total:report.total,passed:report.passed,failures:rows.filter(r=>!r.pass)}));if(report.total!==report.passed)process.exitCode=1;

@@ -1,0 +1,86 @@
+{
+  "release": "0.84.60",
+  "base_commit": "c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c",
+  "source_case_results_sha256": "aae07b2796f749e041d6b9bb816d69dfb8a90f618cef7ed05eb8d089df0a74fc",
+  "records": {
+    "00500": {
+      "path": "protocols/sarcoma/00500-doxorubicin-75-mg-m2-monotherapy.json",
+      "before_sha256": "1624b1dffc950cb76aadcddf304e1d974262f3cc1714bd441c0ce2b33b885539",
+      "after_sha256": "ccac567d3132e7fe659e82af21fb6860b56280911c2bdb734eb237d8e3f26366",
+      "source_url": "https://healthservice.hse.ie/documents/6738/500_V3_DOXOrubicin_75.pdf",
+      "source_version": "3",
+      "review_basis": "validation/sarcoma-v08460/clinical/source-manifest.json; complete extracted text; visual source-table layout unverified; original binary PDF unavailable",
+      "new_input_contract": "Exact numeric CrCl, independent haemodialysis status, absolute bilirubin where required, explicit treatment stage and recovery/history inputs.",
+      "independent_clinical_approval": false
+    },
+    "00391": {
+      "path": "protocols/sarcoma/00391-doxorubicin-60-mg-m2-and-ifosfamide-therapy.json",
+      "before_sha256": "4ee45be5c191d29669aac3a5c977a6bec6c46d13305e8dddd737561672056529",
+      "after_sha256": "9997a3299ad25578d324403009a81e05d14881b17f0a37eda6f6e372ce368c49",
+      "source_url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf",
+      "source_version": "5",
+      "review_basis": "validation/sarcoma-v08460/clinical/source-manifest.json; complete extracted text; visual source-table layout unverified; original binary PDF unavailable",
+      "new_input_contract": "Exact numeric CrCl, independent haemodialysis status, absolute bilirubin where required, explicit treatment stage and recovery/history inputs.",
+      "independent_clinical_approval": false
+    },
+    "00392": {
+      "path": "protocols/sarcoma/00392-doxorubicin-75-mg-m2-and-ifosfamide-therapy.json",
+      "before_sha256": "3b15ec3a76838780cd20b88b804403a15f7f539cef930bbb2af5753b2b141625",
+      "after_sha256": "6adc00e14d2b5852b03bada2400cc3f2d5bf32258917a24950dc210d71f266c1",
+      "source_url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf",
+      "source_version": "5",
+      "review_basis": "validation/sarcoma-v08460/clinical/source-manifest.json; complete extracted text; visual source-table layout unverified; original binary PDF unavailable",
+      "new_input_contract": "Exact numeric CrCl, independent haemodialysis status, absolute bilirubin where required, explicit treatment stage and recovery/history inputs.",
+      "independent_clinical_approval": false
+    },
+    "00501": {
+      "path": "protocols/sarcoma/00501-gemcitabine-and-docetaxel-therapy-21-day.json",
+      "before_sha256": "4681d6f599215c3ceca325b265854eab49a509ead0fdaad447ac7854f891b5b2",
+      "after_sha256": "19921ef1f94d49a132ac2be32065da0d14e0be5100d9549d32c7b48518a73d5b",
+      "source_url": "https://healthservice.hse.ie/documents/6739/501_V4_Gemcitabine_DOCEtaxel.pdf",
+      "source_version": "4",
+      "review_basis": "validation/sarcoma-v08460/clinical/source-manifest.json; complete extracted text; visual source-table layout unverified; original binary PDF unavailable",
+      "new_input_contract": "Exact numeric CrCl, independent haemodialysis status, absolute bilirubin where required, explicit treatment stage and recovery/history inputs.",
+      "independent_clinical_approval": false
+    },
+    "00511": {
+      "path": "protocols/sarcoma/00511-dacarbazine-1-2-g-m2-therapy-21-day.json",
+      "before_sha256": "c275df298c6081b9e9e021010e43df263ee0b2e615d49f8b6febc2590a37de3e",
+      "after_sha256": "4b67f7aacf30ceba568e1c4f2c66f909fd5f924cb537f5a9de8145ea155f7f70",
+      "source_url": "https://healthservice.hse.ie/documents/6741/511_V2_Dacarbazine.pdf",
+      "source_version": "2",
+      "review_basis": "validation/sarcoma-v08460/clinical/source-manifest.json; complete extracted text; visual source-table layout unverified; original binary PDF unavailable",
+      "new_input_contract": "Exact numeric CrCl, independent haemodialysis status, absolute bilirubin where required, explicit treatment stage and recovery/history inputs.",
+      "independent_clinical_approval": false
+    }
+  },
+  "test_migrations": [
+    {
+      "file": "tests/platform-standardisation-v0370.test.js",
+      "reason": "Reference-creatinine percentage mentions measured GFR but is not itself a renal filtration measurement; classify the measured quantity, with positive and negative coverage. v60 exact numeric renal inputs validated against pinned clinical/source evidence."
+    },
+    {
+      "file": "tests/sarcoma-complete-library-v0410.test.js",
+      "reason": "Retain historical field/rule assertions for historical encodings; the five exactv60 source-reconciled protocols instead assert numeric CrCl and current source-derived count/dialysis boundaries through the actual assessment engine."
+    }
+  ],
+  "pre_release_corrections": [
+    {
+      "code": "00501",
+      "prior_review_sha256": "0b6b6ac931ccab6610b3739586a7e512e182b35d58642650f243e5a189d22fda",
+      "corrected_sha256": "19921ef1f94d49a132ac2be32065da0d14e0be5100d9549d32c7b48518a73d5b",
+      "reason": "Independent adversarial software review found three real gaps: low counts could be omitted in recovery stage; grade2 neuropathy could coexist with a recovered message; planned Day8 at an incompatible late cycle day lacked a guard. Source-grounded corrections and new regressions were added before release freeze.",
+      "author_cases_passed": 265,
+      "independent_replay_report": "validation/sarcoma-v08460/independent-review/current-independent-results.json",
+      "independent_clinical_approval": false,
+      "independent_replay": {
+        "total": 112,
+        "frozen_passed": 101,
+        "frozen_failed": 11,
+        "corrected_passed": 112,
+        "corrected_failed": 0,
+        "expectations_unchanged": true
+      }
+    }
+  ]
+}

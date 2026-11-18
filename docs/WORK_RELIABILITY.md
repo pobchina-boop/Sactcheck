@@ -1,5 +1,7 @@
 # Dependable batch delivery
 
+Current sarcoma campaign, 18 November 2026: Paul requested sequential batches of five saved for manual application at the end. This overrides the ten-new-suite cadence below for this campaign. Keep five retrospective audits per batch. Application ZIP members are repository-relative at the archive root, with no UPDATE or project-name wrapper; supply external instructions, commit text and audit evidence separately.
+
 Paul's instruction, 17 November 2026: preserve a dependable, consistent process.
 If a check cannot finish, save its log and useful work so a later batch can fix it.
 

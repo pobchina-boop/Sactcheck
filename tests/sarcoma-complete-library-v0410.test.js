@@ -4,6 +4,7 @@ const path = require('path');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const SARCOMA60=require('./helpers/sarcoma-inputs-v08460.cjs');
 const expectedCodes = [
  '00511','00420','00391','00392','00500','00228','00501','00675','00747','00596','00680','00504','00754',
  '00335','00463','00100','00445','00205','00462','00244','00325','00719','00374','00554','00757'
@@ -70,7 +71,8 @@ for(const {data} of sarcoma){
  assert.strictEqual(data.status,'encoded_prototype_pending_clinical_and_pharmacy_validation',`${code} is not an active encoded prototype.`);
  assert(!/placeholder|draft/i.test(String(data.status||'')),`${code} remains a placeholder/draft.`);
  const oralV34=code==='00244'&&m.sactcheck_encoding_version==='0.84.34';
- assert(oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
+ const sarcomaV60=SARCOMA60.applies(data);if(sarcomaV60)SARCOMA60.validate(data);
+ assert(sarcomaV60 || oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
  assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
  assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/eng\/services\/list\/5\/cancer\/profinfo\/chemoprotocols\/)/.test(m.source_url||''),`${code} lacks an official HSE/NCCP PDF link.`);
  assert(m.sarcoma_subgroup,`${code} lacks Sarcoma subgroup.`);
@@ -92,7 +94,12 @@ for(const {data} of sarcoma){
  }
  if((m.drugs||[]).map(x=>String(x).toLowerCase()).includes('ifosfamide')){
   ifosfamideProtocols++;
+  if(sarcomaV60){
+   for(const field of ['crcl_ml_min','neurotoxicity_grade','suspected_ifosfamide_encephalopathy','haematuria','urine_output_ml_hour'])assert(defs[field],`${code} lacks reviewed ifosfamide safety field ${field}.`);
+   assert(SARCOMA60.numericRenal(data,'crcl_ml_min',defs.crcl_ml_min));assert.equal(defs.urine_output_ml_hour.unit,'mL/hour');
+  }else{
   for(const field of ['ifosfamide_renal_band','encephalopathy_grade','haematuria','urine_output_below_target'])assert(defs[field],`${code} lacks ifosfamide safety field ${field}.`);
+  }
   assert((sc.additional_supportive_care||[]).some(x=>/mesna/i.test(x)),`${code} lacks Mesna supportive-care mapping.`);
   assert((sc.additional_supportive_care||[]).some(x=>/hydration/i.test(x)),`${code} lacks hydration mapping.`);
  }
@@ -166,13 +173,26 @@ assert.strictEqual(dox500.metadata.nccp_version,'3','NCCP 00500 must use current
 assert.strictEqual(dox500.protocol_id,'nccp-00500-v3','NCCP 00500 protocol ID must track Version 3.');
 assert(/^https:\/\/healthservice\.hse\.ie\/documents\//.test(dox500.metadata.source_url),'NCCP 00500 must use the current official source URL.');
 assert.strictEqual(dox500.supportive_care.emetogenic_risk,'high','NCCP 00500 must use the current high-emetogenic classification.');
+if(SARCOMA60.applies(dox500)){
+ SARCOMA60.validate(dox500);const assess=input=>Engine.assess(dox500,{assessment_phase:'day1',...input}),has=(r,id)=>r.findings.some(f=>f.ruleId===id);
+ assert(has(assess({anc:.99,platelets:100}),'COUNTS_DELAY'));assert(has(assess({anc:1,platelets:99.99}),'COUNTS_DELAY'));assert(!has(assess({anc:1,platelets:100}),'COUNTS_DELAY'));
+}else{
 assert.strictEqual(ruleById(dox500,'ANC_LT1')?.when?.value,1,'NCCP 00500 ANC threshold must be 1.0.');
 assert.strictEqual(ruleById(dox500,'PLT_LT100')?.when?.value,100,'NCCP 00500 platelet threshold must be 100.');
+}
 const dac=byCode('00511');
+if(SARCOMA60.applies(dac)){
+ assert(SARCOMA60.numericRenal(dac,'crcl_ml_min',dac.input_definitions.crcl_ml_min));
+ const assess=value=>Engine.assess(dac,{assessment_phase:'day1',crcl_ml_min:value,haemodialysis:false}),has=(r,id)=>r.findings.some(f=>f.ruleId===id);
+ for(const [value,id,percent]of [[60,'DTIC_RENAL_45_60','80%'],[30,'DTIC_RENAL_30_45','75%'],[29.99,'DTIC_RENAL_LT30','70%']]){assert(has(assess(value),id));assert(dac.rule_engine.rules.find(r=>r.rule_id===id).action.message.includes(percent));}
+ assert(has(assess(45),'DTIC_RENAL_EXACT45'),'Overlapping source boundary must request specialist review');
+ const hd=Engine.assess(dac,{assessment_phase:'day1',crcl_ml_min:20,haemodialysis:true});assert(has(hd,'DTIC_HAEMODIALYSIS'));assert(!has(hd,'DTIC_RENAL_LT30'),'Non-dialysis dose row must not be extrapolated to dialysis');
+}else{
 assert(dac.input_definitions.dacarbazine_renal_band,'Dacarbazine must expose source renal tiers.');
 assert(/80%/.test(ruleById(dac,'DAC_CRCL_45_60')?.action?.message||''),'Dacarbazine CrCl 45–60 must map to 80%.');
 assert(/75%/.test(ruleById(dac,'DAC_CRCL_30_44')?.action?.message||''),'Dacarbazine CrCl 30–44 must map to 75%.');
 assert(/70%/.test(ruleById(dac,'DAC_CRCL_LT30')?.action?.message||''),'Dacarbazine CrCl <30 must map to 70%.');
+}
 const doxCis=byCode('00420');
 assert(/75%/.test(ruleById(doxCis,'CIS_50_59')?.action?.message||''),'Cisplatin CrCl 50–59 must map to 75%.');
 assert(/50%/.test(ruleById(doxCis,'CIS_40_49')?.action?.message||''),'Cisplatin CrCl 40–49 must map to 50%.');
