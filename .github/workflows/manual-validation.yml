@@ -34,13 +34,6 @@ jobs:
   browser:
     runs-on: ubuntu-24.04
     timeout-minutes: 40
-    env:
-      SACT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/sact-browser/node_modules/playwright
-      SACT_SITE_DIR: ${{ github.workspace }}/_site
-      SACT_VISUAL_DIR: ${{ runner.temp }}/sact-evidence/screenshots/navigation
-      SACT_WORKFLOW_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/workflow
-      SACT_CONTRAST_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/contrast
-      SACT_CLINICAL_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/clinical
     steps:
       - uses: actions/checkout@v4
         with:
@@ -59,6 +52,8 @@ jobs:
           --output "$RUNNER_TEMP/sact-evidence/install-browser" --
           node "$RUNNER_TEMP/sact-browser/node_modules/playwright/cli.js" install --with-deps chromium
       - name: Check browser environment once
+        env:
+          SACT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/sact-browser/node_modules/playwright
         run: >-
           python3 tools/run-bounded-check.py --seconds 30 --browser
           --output "$RUNNER_TEMP/sact-evidence/preflight" -- node tools/browser-preflight.cjs
@@ -67,6 +62,13 @@ jobs:
           python3 tools/run-bounded-check.py --seconds 300
           --output "$RUNNER_TEMP/sact-evidence/build" -- npm run build:pages
       - name: Exercise existing desktop and mobile browser tests
+        env:
+          SACT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/sact-browser/node_modules/playwright
+          SACT_SITE_DIR: ${{ github.workspace }}/_site
+          SACT_VISUAL_DIR: ${{ runner.temp }}/sact-evidence/screenshots/navigation
+          SACT_WORKFLOW_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/workflow
+          SACT_CONTRAST_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/contrast
+          SACT_CLINICAL_EVIDENCE_DIR: ${{ runner.temp }}/sact-evidence/screenshots/clinical
         run: >-
           python3 tools/run-bounded-check.py --seconds 900 --browser
           --output "$RUNNER_TEMP/sact-evidence/browser-tests" -- npm run test:patient-browser

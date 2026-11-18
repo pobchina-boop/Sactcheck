@@ -37,10 +37,10 @@ let record,convert;function load(){if(!record){record=JSON.parse(fs.readFileSync
 function expectedHash(f,h){load();return convert(f,h);}
 function expectedBytes(f,n,h){const r=load();convert(f,h);const c=r.files[f];if(!c)return n;assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return c.after_bytes;}
 function verifyCurrent(r=load()){
- createMigration(r);let protectedCount=0,historicalCount=0;
- for(const [f,b]of Object.entries(base.files)){const bytes=fs.readFileSync(path.join(ROOT,f)),c=r.files[f];assert.equal(sha(bytes),c?c.after:b.sha256,f+' baseline or approved transition');assert.equal(bytes.length,c?c.after_bytes:b.bytes);if(f.startsWith('validation/'))historicalCount++;else protectedCount++;}
- for(const [f,c]of Object.entries(r.files)){const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),c.after,f);assert.equal(bytes.length,c.after_bytes);}
- for(const f of cp.execFileSync('git',['ls-files','--others','--exclude-standard','-z'],{cwd:ROOT,env:{...process.env,GIT_NO_LAZY_FETCH:'1',GIT_TERMINAL_PROMPT:'0'}}).toString().split('\0').filter(Boolean))assert(f==='validation/sarcoma-v08460/asset-migrations.json'||r.files[f], 'Unrecorded new file '+f);
+ createMigration(r);const repair=require('./release-repair-v08460.cjs');repair.verify();let protectedCount=0,historicalCount=0;
+ for(const [f,b]of Object.entries(base.files)){const bytes=fs.readFileSync(path.join(ROOT,f)),c=r.files[f];const expected=repair.expected(f,c?c.after:b.sha256,c?c.after_bytes:b.bytes);assert.equal(sha(bytes),expected.sha256,f+' baseline or approved transition');assert.equal(bytes.length,expected.bytes);if(f.startsWith('validation/'))historicalCount++;else protectedCount++;}
+ for(const [f,c]of Object.entries(r.files)){const bytes=fs.readFileSync(path.join(ROOT,f));const expected=repair.expected(f,c.after,c.after_bytes);assert.equal(sha(bytes),expected.sha256,f);assert.equal(bytes.length,expected.bytes);}
+ for(const f of cp.execFileSync('git',['ls-files','--others','--exclude-standard','-z'],{cwd:ROOT,env:{...process.env,GIT_NO_LAZY_FETCH:'1',GIT_TERMINAL_PROMPT:'0'}}).toString().split('\0').filter(Boolean))assert(f==='validation/sarcoma-v08460/asset-migrations.json'||r.files[f]||repair.isAddition(f), 'Unrecorded new file '+f);
  return {protectedCount,historicalCount,currentCount:Object.keys(base.files).length+Object.keys(r.files).filter(f=>!base.files[f]).length,changedFiles:Object.keys(r.files).length};
 }
 module.exports={ROOT,BASE_COMMIT,BASE_TREE,RECORD,CODES,NEW_ROUTES,CLINICAL_ROUTES,ROUTES,SHARED_PATHS,PROTECTED_DOMAINS,sha,blobHash,safeRelative,approvedPath,baselineFiles,beforeHash,createMigration,expectedHash,expectedBytes,expectedBuilderHash:expectedHash,verifyCurrent,previousMigrationSha256,baselineManifestSha256};
