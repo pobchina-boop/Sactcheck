@@ -48397,7 +48397,12 @@ const definitions={
     "00807",
     "00885",
     "00894",
-    "00945"
+    "00945",
+    "00500",
+    "00391",
+    "00392",
+    "00501",
+    "00511"
   ],
   "00622": {
     "code": "00622",
@@ -49751,6 +49756,521 @@ const definitions={
         "id": "keytruda",
         "title": "Keytruda product information",
         "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+      }
+    ]
+  },
+  "00500": {
+    "code": "00500",
+    "title": "Doxorubicin for soft tissue sarcoma: treatment and checks",
+    "release": "0.84.60",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced unresectable or metastatic soft tissue sarcoma",
+    "summary": "NCCP 00500 gives doxorubicin 75 mg/m² on day 1 of a 21-day cycle, usually for 3–6 cycles. The source allows consideration of 60 mg/m² in people over 70; the prescribed dose and number of cycles are individual decisions.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete baseline checks in the full treatment reference.",
+          "Repeat cycle tests and the regimen-specific checks in your written test plan.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the written treatment and support prescriptions.",
+          "Record actual treatment, support and any safety hold.",
+          "Follow the support and contact plan.",
+          "Review ongoing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Cancer treatment and follow-up",
+        "cells": [
+          "Agree the treatment goal and baseline cancer assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing cancer-related symptoms.",
+          "Agree the next sarcoma treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Doxorubicin day 1, every 21 days",
+        "why": "The aim is usually to control advanced sarcoma, reduce cancer-related symptoms or slow growth. Your consultant explains the realistic goal for your own tumour and circumstances.",
+        "clinical": "NCCP 00500 gives doxorubicin 75 mg/m² on day 1 of a 21-day cycle, usually for 3–6 cycles. The source allows consideration of 60 mg/m² in people over 70; the prescribed dose and number of cycles are individual decisions.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. New breathlessness, chest pain, palpitations or ankle swelling needs prompt assessment. Pain or burning at the infusion site requires immediate nursing review.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00500 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6738/500_V3_DOXOrubicin_75.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GeDDiS: first-line chemotherapy in advanced soft tissue sarcoma",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5622179/"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance",
+        "url": "https://assets.hse.ie/media/documents/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "sarcoma-context",
+        "title": "NCI adult soft tissue sarcoma treatment overview",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      }
+    ]
+  },
+  "00391": {
+    "code": "00391",
+    "title": "Doxorubicin 60 mg/m² and ifosfamide for sarcoma: treatment and checks",
+    "release": "0.84.60",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced unresectable or metastatic soft tissue sarcoma",
+    "summary": "NCCP 00391: doxorubicin 20 mg/m² and ifosfamide 3000 mg/m² on each of days 1–3, repeated every 21 days for up to 6 cycles. Per-cycle totals are doxorubicin 60 mg/m² and ifosfamide 9000 mg/m². Mesna, hydration and other support continue for their prescribed periods.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete baseline checks in the full treatment reference.",
+          "Repeat cycle tests and the regimen-specific checks in your written test plan.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the written treatment and support prescriptions.",
+          "Record actual treatment, support and any safety hold.",
+          "Follow the support and contact plan.",
+          "Review ongoing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Cancer treatment and follow-up",
+        "cells": [
+          "Agree the treatment goal and baseline cancer assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing cancer-related symptoms.",
+          "Agree the next sarcoma treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Doxorubicin 60 mg/m² total + ifosfamide, days 1–3 every 21 days",
+        "why": "Your team may choose a combination when reducing tumour size is an important goal and you are fit for more intensive treatment. For advanced disease, treatment generally aims at control and symptom relief; a combination is not a guarantee of longer survival.",
+        "clinical": "NCCP 00391: doxorubicin 20 mg/m² and ifosfamide 3000 mg/m² on each of days 1–3, repeated every 21 days for up to 6 cycles. Per-cycle totals are doxorubicin 60 mg/m² and ifosfamide 9000 mg/m². Mesna, hydration and other support continue for their prescribed periods.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Confusion, unusual sleepiness, hallucinations, seizures, blood in urine or very little urine requires immediate assessment. New breathlessness or swelling also needs urgent advice.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00391 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6730/391_DOXOrubicin_60_and_Ifosfamide.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EORTC 62012: doxorubicin with or without intensified ifosfamide",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24618336/"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance",
+        "url": "https://assets.hse.ie/media/documents/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "sarcoma-context",
+        "title": "NCI adult soft tissue sarcoma treatment overview",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA ifosfamide product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00392": {
+    "code": "00392",
+    "title": "Doxorubicin 75 mg/m² and ifosfamide for sarcoma: treatment and checks",
+    "release": "0.84.60",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-risk soft tissue sarcoma before surgery, or advanced/metastatic soft tissue sarcoma",
+    "summary": "NCCP 00392: doxorubicin 25 mg/m² and ifosfamide 3000 mg/m² on each of days 1–3, repeated every 21 days for up to 6 cycles. Per-cycle totals are doxorubicin 75 mg/m² and ifosfamide 9000 mg/m². Mesna, hydration and other support continue for their prescribed periods.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete baseline checks in the full treatment reference.",
+          "Repeat cycle tests and the regimen-specific checks in your written test plan.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the written treatment and support prescriptions.",
+          "Record actual treatment, support and any safety hold.",
+          "Follow the support and contact plan.",
+          "Review ongoing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Cancer treatment and follow-up",
+        "cells": [
+          "Agree the treatment goal and baseline cancer assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing cancer-related symptoms.",
+          "Agree the next sarcoma treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Doxorubicin 75 mg/m² total + ifosfamide, days 1–3 every 21 days",
+        "why": "Your team may choose a combination when reducing tumour size is an important goal and you are fit for more intensive treatment. For high-risk disease before surgery, the goal and local-treatment plan require specialist sarcoma review; for advanced disease, treatment generally aims at control and symptom relief.",
+        "clinical": "NCCP 00392: doxorubicin 25 mg/m² and ifosfamide 3000 mg/m² on each of days 1–3, repeated every 21 days for up to 6 cycles. Per-cycle totals are doxorubicin 75 mg/m² and ifosfamide 9000 mg/m². Mesna, hydration and other support continue for their prescribed periods.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Confusion, unusual sleepiness, hallucinations, seizures, blood in urine or very little urine requires immediate assessment. New breathlessness or swelling also needs urgent advice.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00392 v5 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EORTC 62012: doxorubicin with or without intensified ifosfamide",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24618336/"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance",
+        "url": "https://assets.hse.ie/media/documents/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "sarcoma-context",
+        "title": "NCI adult soft tissue sarcoma treatment overview",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA ifosfamide product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00501": {
+    "code": "00501",
+    "title": "Gemcitabine and docetaxel for soft tissue sarcoma: treatment and checks",
+    "release": "0.84.60",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Locally advanced unresectable or metastatic soft tissue sarcoma",
+    "summary": "NCCP 00501 gives gemcitabine 675 mg/m² on days 1 and 8, with docetaxel 75 mg/m² on day 8. Repeat every 21 days for up to 6 cycles if suitable. Day 8 has its own safety review and can be delayed or omitted on clinical advice.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete baseline checks in the full treatment reference.",
+          "Repeat cycle tests and the regimen-specific checks in your written test plan.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the written treatment and support prescriptions.",
+          "Record actual treatment, support and any safety hold.",
+          "Follow the support and contact plan.",
+          "Review ongoing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Cancer treatment and follow-up",
+        "cells": [
+          "Agree the treatment goal and baseline cancer assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing cancer-related symptoms.",
+          "Agree the next sarcoma treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Gemcitabine days 1 and 8; docetaxel day 8; repeat every 21 days",
+        "why": "The treatment aims to control advanced sarcoma and help cancer-related symptoms. The choice depends on sarcoma subtype, previous treatment, fitness and your priorities; your consultant explains why this combination is being considered.",
+        "clinical": "NCCP 00501 gives gemcitabine 675 mg/m² on days 1 and 8, with docetaxel 75 mg/m² on day 8. Repeat every 21 days for up to 6 cycles if suitable. Day 8 has its own safety review and can be delayed or omitted on clinical advice.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. New breathlessness, reduced urine, severe abdominal pain or diarrhoea, widespread blistering rash, rapid swelling or new visual symptoms needs urgent assessment. Fever is never assumed to be only a flu-like drug effect.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00501 v4 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6739/501_V4_Gemcitabine_DOCEtaxel.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GeDDiS: gemcitabine/docetaxel versus doxorubicin",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5622179/"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance",
+        "url": "https://assets.hse.ie/media/documents/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "sarcoma-context",
+        "title": "NCI adult soft tissue sarcoma treatment overview",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "gemcitabine-pi",
+        "title": "HPRA gemcitabine product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/28076/Licence_PA2059-039-001_04062024175114.pdf"
+      },
+      {
+        "id": "docetaxel-pi",
+        "title": "EMA Taxotere product information; confirm the supplied formulation",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/taxotere-epar-product-information_en.pdf"
+      }
+    ]
+  },
+  "00511": {
+    "code": "00511",
+    "title": "Dacarbazine for metastatic soft tissue sarcoma: treatment and checks",
+    "release": "0.84.60",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic soft tissue sarcoma",
+    "summary": "NCCP 00511 gives dacarbazine 1.2 g/m² on day 1 every 21 days. The source describes 4 cycles or treatment until progression or unacceptable toxicity; your consultant must specify the planned duration and review point.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete baseline checks in the full treatment reference.",
+          "Repeat cycle tests and the regimen-specific checks in your written test plan.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the written treatment and support prescriptions.",
+          "Record actual treatment, support and any safety hold.",
+          "Follow the support and contact plan.",
+          "Review ongoing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Cancer treatment and follow-up",
+        "cells": [
+          "Agree the treatment goal and baseline cancer assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing cancer-related symptoms.",
+          "Agree the next sarcoma treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and cancer-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Dacarbazine day 1, every 21 days",
+        "why": "Dacarbazine may be used to control metastatic sarcoma and help symptoms. Expected benefit depends on tumour subtype, previous treatment and your overall condition; your consultant explains why this option is appropriate.",
+        "clinical": "NCCP 00511 gives dacarbazine 1.2 g/m² on day 1 every 21 days. The source describes 4 cycles or treatment until progression or unacceptable toxicity; your consultant must specify the planned duration and review point.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Severe upper abdominal pain, jaundice, rapidly increasing abdominal swelling, persistent vomiting or bleeding needs urgent assessment. Report burning at the infusion site immediately.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00511 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6741/511_V2_Dacarbazine.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Historical EORTC phase II study of high-dose dacarbazine",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/1868027/"
+      },
+      {
+        "id": "ncis",
+        "title": "NCCP NCIS antiemetic guidance",
+        "url": "https://assets.hse.ie/media/documents/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "sarcoma-context",
+        "title": "NCI adult soft tissue sarcoma treatment overview",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "dacarbazine-pi",
+        "title": "HPRA dacarbazine product information; confirm the supplied formulation",
+        "url": "https://assets.hpra.ie/products/Human/29355/Licence_PA1760-001-001_31052024114641.pdf"
       }
     ]
   }

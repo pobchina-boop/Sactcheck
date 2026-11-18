@@ -50,14 +50,14 @@ for(const {entry,data} of gu){
   assert.strictEqual(patient.schedule_kind,'continuous');assert.strictEqual(patient.patient_summary.card_cycle_count,null);
  }else assert(card.contexts.some(c=>c.cycle_length_days>0),`${code} cycle interval`);
  const side=cardSidecar.protocols.find(x=>x.id===data.protocol_id);assert(side,`${code} sidecar`);
- if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);if(['00104','00326','00518','00564'].includes(code)){assert(require('./helpers/prostate-inputs-v08457.cjs').validate(data));}else if(code==='00535'){assert(require('./helpers/skin-inputs-v08442.cjs').validate(data));assert.equal(m.sactcheck_encoding_version,'0.84.42');}else if(require('./helpers/gu-inputs-v08458.cjs').codes.includes(code)){assert(require('./helpers/gu-inputs-v08458.cjs').validate(data));}else assert(['0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
+ if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);if(['00104','00326','00518','00564'].includes(code)){assert(require('./helpers/prostate-inputs-v08457.cjs').validate(data));}else if(code==='00535'){assert(require('./helpers/skin-inputs-v08442.cjs').validate(data));assert.equal(m.sactcheck_encoding_version,'0.84.42');}else if(require('./helpers/gu-inputs-v08458.cjs').codes.includes(code)){assert(require('./helpers/gu-inputs-v08458.cjs').validate(data));}else if(require('./helpers/gu-inputs-v08459.cjs').codes.includes(code)){assert(require('./helpers/gu-inputs-v08459.cjs').validate(data));}else assert(['0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}
 }
 assert.strictEqual(newCount,21);assert(inputs>=650);assert(rules>=600);assert(cardContexts>=67);
 const by=c=>gu.find(x=>String(x.data.metadata.nccp_regimen_code).padStart(5,'0')===c).data;
-assert.strictEqual(by('00807').treatment.cycle_length_days,7);assert(/6 weeks/i.test(by('00807').treatment.schedule_summary));
-assert.strictEqual(by('00894').treatment.cycle_length_days,7);assert(/18 months/i.test(by('00894').treatment.schedule_summary));
-assert.strictEqual(by('00945').treatment.cycle_length_days,21);assert(by('00945').input_definitions.tsh_miu_l?.required===false);assert(by('00945').input_definitions.free_t4_pmol_l?.required===false);
-assert.strictEqual(by('00602').treatment.planned_cycles,4);assert(by('00602').input_definitions.mesna_and_hydration_confirmed);
+assert.strictEqual(by('00807').treatment.cycle_length_days,7);assert(/weekly for six induction doses/i.test(by('00807').treatment.schedule_summary));
+assert.strictEqual(by('00894').treatment.cycle_length_days,7);assert(/18 months/i.test(by('00894').treatment.duration_text));
+assert.strictEqual(by('00945').treatment.cycle_length_days,21);assert.strictEqual(by('00945').input_definitions.hyperthyroidism_grade.required,false);assert.strictEqual(by('00945').input_definitions.controlled_endocrine_restart_considered.required,false);
+assert.strictEqual(by('00602').treatment.planned_cycles,4);assert.strictEqual(by('00602').input_definitions.mesna_or_hydration_unconfirmed.type,'boolean');assert(by('00602').rule_engine.rules.some(r=>r.rule_id==='MESNA_OR_HYDRATION_UNCONFIRMED'));
 assert.strictEqual(by('00450').treatment.planned_cycles,1);assert(/days 1–5 and 22–26/i.test(by('00450').treatment.schedule_summary));
 assert.strictEqual(by('00104').treatment.cycle_length_days,null);assert(by('00104').input_definitions.systolic_bp);
 assert.strictEqual(by('00326').treatment.cycle_length_days,28);assert(by('00326').input_definitions.pneumonitis_or_new_respiratory_symptoms);

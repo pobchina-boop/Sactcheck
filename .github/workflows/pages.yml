@@ -32,7 +32,7 @@ jobs:
           node-version: "20"
 
       - name: Run release architecture gate first
-        run: npm run release:gate
+        run: node tools/run-regression-stage.cjs -- npm run release:gate
 
       - name: Run repository security checks
         run: npm run security:check
@@ -44,7 +44,7 @@ jobs:
         run: git diff --exit-code -- protocols/index.json data/regimen-card-metadata.json REGIMEN_CARD_METADATA_REVIEW.csv
 
       - name: Run complete regression suite
-        run: npm test
+        run: node tools/run-regression-stage.cjs -- npm test
 
       - name: Validate reviewed UI assets and regeneration
         run: npm run test:patient-ui
@@ -54,6 +54,14 @@ jobs:
 
       - name: Validate deployable site contents
         run: npm run security:site
+
+      - name: Retain generated regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-evidence
+          path: ${{ runner.temp }}/sactcheck-regression-reports
+          if-no-files-found: ignore
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

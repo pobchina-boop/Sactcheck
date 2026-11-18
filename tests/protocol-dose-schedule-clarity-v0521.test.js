@@ -63,9 +63,20 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.56 supplies usable source schedules for cabazitaxel and radium-223;
 // the three docetaxel schedules are reconciled in place.
 // v0.84.57 adds four renal monotherapy schedules, with no invented generic dose ladders.
-assert.strictEqual(usefulCoverage, 239);
-assert.strictEqual(scheduleCoverage, 239);
+assert.strictEqual(usefulCoverage, 254);
+assert.strictEqual(scheduleCoverage, 254);
 assert.strictEqual(doseLevelCoverage, 65);
+// v58/v59 add exactly these fifteen structured schedules; no generic dose ladders.
+for(const code of ['00282','00622','00628','00450','00759','00333','00337','00338','00583','00846','00453','00602','00885','00894','00945']){
+ const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
+ const p=require(path.join(root,entry.path));
+ assert(require('./helpers/gu-inputs-v08458.cjs').validate(p),code+' reviewed source contract');
+ const before=JSON.parse(require('node:child_process').execFileSync('git',['show','0eba2249a65dce9bcdf6be1b2115869b9563cd38:'+entry.path],{cwd:root}));
+ assert.equal(DoseSchedule.hasData(before),false,code+' exact Git57 schedule baseline');
+ assert.equal(DoseSchedule.hasData(p),true);assert.equal(DoseSchedule.buildModel(p).phases.length,1);
+ assert.equal(DoseSchedule.buildModel(p).doseLevels.length,0,code+' no inferred dose ladder');
+}
+
 for(const code of ['00104','00326','00518','00564']){
  const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
  const p=require(path.join(root,entry.path));require('./helpers/prostate-inputs-v08457.cjs').validate(p);

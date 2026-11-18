@@ -34,8 +34,8 @@ function createMigration(r){
  return(f,h)=>{assert(safeRelative(f));const c=r.files[f];if(!c)return h;assert(h===c.before||h===c.after,'Unexpected prior bytes '+f);return c.after;};
 }
 let record,convert;function load(){if(!record){record=JSON.parse(fs.readFileSync(RECORD));convert=createMigration(record);}return record;}
-function expectedHash(f,h){load();return convert(f,h);}
-function expectedBytes(f,n,h){const r=load();convert(f,h);const c=r.files[f];if(!c)return n;assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return c.after_bytes;}
+function expectedHash(f,h){load();return require('./release-repair-v08460.cjs').expected(f,convert(f,h)).sha256;}
+function expectedBytes(f,n,h){const r=load();convert(f,h);const c=r.files[f];if(!c)return require('./release-repair-v08460.cjs').expected(f,h,n).bytes;assert.equal(n,h===c.before?c.before_bytes:c.after_bytes);return require('./release-repair-v08460.cjs').expected(f,c.after,c.after_bytes).bytes;}
 function verifyCurrent(r=load()){
  createMigration(r);const repair=require('./release-repair-v08460.cjs');repair.verify();let protectedCount=0,historicalCount=0;
  for(const [f,b]of Object.entries(base.files)){const bytes=fs.readFileSync(path.join(ROOT,f)),c=r.files[f];const expected=repair.expected(f,c?c.after:b.sha256,c?c.after_bytes:b.bytes);assert.equal(sha(bytes),expected.sha256,f+' baseline or approved transition');assert.equal(bytes.length,expected.bytes);if(f.startsWith('validation/'))historicalCount++;else protectedCount++;}

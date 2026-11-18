@@ -34,3 +34,26 @@ for(let i=0;i<releases.length;i++)for(const code of releases[i][1])for(const nam
  assert(expected,rel+' exact recorded hash');assert.equal(hash(fs.readFileSync(path.join(root,rel))),expected,rel+' bytes');assets++;
 }
 assert.equal(assets,63);console.log('All three route-list consumers cover v58-v60; all 63 affected assets match their continuous recorded transitions. Full historical audit remains a separate required check.');
+
+const model=JSON.parse(fs.readFileSync(path.join(root,'data/patient-knowledge/00453.json')));
+const timeline=require('../tools/gu-chronology-v08459.cjs').render(model);
+const labels=[...timeline.matchAll(/<span class="wiki-cycle-day">([^<]+)<\/span>/g)].map(m=>m[1]);
+assert.deepEqual(labels,Array.from({length:14},(_,i)=>(i>5?'+':'')+(i-5)));
+for(const marker of ['data-cycle-track="conditioning"','data-cycle-track="rescue"','wiki-cycle-key','wiki-cycle-evidence','wiki-cycle-warning','There are no guaranteed'])assert(timeline.includes(marker),marker+' retained');
+assert.throws(()=>require('../tools/gu-chronology-v08459.cjs').render({...model,relative_day_origin:1}));
+const wiki=fs.readFileSync(path.join(root,'patient/00453/knowledge.html'),'utf8');
+assert.deepEqual([...wiki.matchAll(/<span class="wiki-cycle-day">([^<]+)<\/span>/g)].map(m=>m[1]),labels);assert(!wiki.includes('Day 1 → Day 14: a general pattern'));
+console.log('00453 signed transplant axis, source-bound origin, authored tracks and safety warnings verified.');
+
+const journeys=require('../js/treatment-journey-v0837.js');
+const authored=JSON.parse(fs.readFileSync(path.join(root,'data/breast-treatment-journeys-v0837.json')));
+assert.deepEqual(journeys.definitions,authored,'Every authored journey reaches the runtime');
+for(const code of ['00500','00391','00392','00501','00511']){
+ assert(journeys.renderForCode(code).includes('data-treatment-journey="'+code+'"'));
+ for(const name of ['knowledge.html','treatment-journey.html'])assert(fs.readFileSync(path.join(root,'patient',code,name),'utf8').includes('data-treatment-journey="'+code+'"'));
+}
+for(const code of ['00333','00338']){
+ const guide=fs.readFileSync(path.join(root,'patient',code,'guide.html'),'utf8');
+ assert.equal((guide.match(/id="gu58-mvac-monitoring-columns"/g)||[]).length,1);
+}
+console.log('Authored journey/runtime parity, five sarcoma journey pages and single MVAC print style verified.');

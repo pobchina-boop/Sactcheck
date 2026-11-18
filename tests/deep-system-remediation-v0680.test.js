@@ -72,7 +72,18 @@ for (const entry of index.protocols) {
       const ci = new Set(ai.components || rules[i].components || []);
       const cj = new Set(aj.components || rules[j].components || []);
       const overlap = ci.size === 0 || cj.size === 0 || [...ci].some(component => cj.has(component));
-      assert(!overlap, `${entry.path}: identical condition has conflicting actions for overlapping components: ${ruleId(rules[i])} and ${ruleId(rules[j])}`);
+      // Exact reviewed TIP layering: a whole-regimen review cannot override
+      // the stricter ifosfamide contraindication. All other overlaps still fail.
+      const tipPair=p.metadata.nccp_regimen_code==='00602'&&[ruleId(rules[i]),ruleId(rules[j])].sort().join('|')==='HAEMODIALYSIS|IFO_DIALYSIS';
+      if(overlap&&tipPair){
+        assert(require('./helpers/gu-inputs-v08459.cjs').validate(p));
+        const result=Engine.assess(p,{haemodialysis:true},{profileId:'default'});
+        assert.strictEqual(result.actionType,'contraindicated');
+        const review=result.findings.find(f=>f.ruleId==='HAEMODIALYSIS'),stop=result.findings.find(f=>f.ruleId==='IFO_DIALYSIS');
+        assert(review&&stop);assert.strictEqual(review.actionType,'consultant_review');assert.strictEqual(stop.actionType,'contraindicated');
+        assert(stop.priority>review.priority);assert.deepStrictEqual(stop.action.components,['ifosfamide']);
+        assert.strictEqual(review.action.block_numeric_dose,true);assert.strictEqual(stop.action.block_numeric_dose,true);
+      }else assert(!overlap, `${entry.path}: identical condition has conflicting actions for overlapping components: ${ruleId(rules[i])} and ${ruleId(rules[j])}`);
     }
   }
 }

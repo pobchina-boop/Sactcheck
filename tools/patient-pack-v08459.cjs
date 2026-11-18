@@ -19,7 +19,7 @@ function enhance(d, html) {
 function render(d) {
   return Object.fromEntries(Object.entries(previous.render(applies(d)?{...d,title:d.patient_summary.card_title,treatment_scope_notice:d.context_label}:d)).map(([key, html]) => {
     html = enhance(d, html);
-    if (['00333','00338'].includes(d.code)) html=html.replace('</head>','<style id="gu58-mvac-monitoring-columns">@media print{.pt-first.pt-first .pt-tests th:first-child{width:12%!important}.pt-first.pt-first .pt-tests th:nth-child(2){width:20%!important}}</style></head>');
+    if (['00333','00338'].includes(d.code) && !html.includes('id="gu58-mvac-monitoring-columns"')) html=html.replace('</head>','<style id="gu58-mvac-monitoring-columns">@media print{.pt-first.pt-first .pt-tests th:first-child{width:12%!important}.pt-first.pt-first .pt-tests th:nth-child(2){width:20%!important}}</style></head>');
     // Keep wording, font sizes and the approved map/card dimensions unchanged.
     // Tighter print-only spacing prevents long regimen-specific callouts being clipped.
     if (applies(d)) {

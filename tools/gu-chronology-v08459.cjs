@@ -1,12 +1,21 @@
 'use strict';
 const previous=require('./adt-chronology-v08454.cjs');
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const assert=require('node:assert/strict');
 function render(d){
  if(d.code!=='00453'||d.suite_release!=='0.84.59')return previous.render(d);
- if(d.relative_day_origin!==-5)throw Error('Transplant chronology requires explicit day origin');
- const days=Array.from({length:14},(_,i)=>i-5);
- const axis=days.map(n=>`<span class="wiki-cycle-day">${n>0?'+':''}${n}</span>`).join('');
- const rows=d.timeline.map(r=>`<div class="wiki-cycle-track"><span class="wiki-cycle-label">${esc(r.label)}</span><span class="wiki-cycle-band treatment" style="grid-column:${r.start+1}/${r.end+2}">${esc(r.text)}</span></div>`).join('');
- return `<div id="wikiCycleChronology" class="wiki-cycle-map" data-cycle-days="14" data-day-origin="-5" style="--cycle-days:14"><h3>Days relative to your stem-cell infusion</h3><p class="wiki-cycle-intro">Day 0 is the stem-cell infusion. Negative days come before it; positive days come afterwards.</p><p class="wiki-cycle-schedule">${esc(d.schedule_summary)}</p><div class="wiki-cycle-scroll" tabindex="0" role="region" aria-label="Conditioning and stem-cell rescue timeline"><div class="wiki-cycle-chart"><div class="wiki-cycle-axis"><span class="wiki-cycle-label">Transplant day</span>${axis}</div>${rows}</div></div><p class="wiki-cycle-warning">Recovery can extend beyond this reference diagram. It does not set a discharge date or automatically schedule another high-dose cycle.</p></div>`;
+ assert.equal(d.relative_day_origin,-5,'Transplant chronology requires explicit day origin');
+ assert.equal(d.cycle_days,14,'Reviewed transplant reference has fourteen columns');
+ // Retain every authored track, legend, source link and safety warning.
+ // Change only the origin and labels of the existing reference axis.
+ let html=previous.render(d);
+ const labels=Array.from({length:14},(_,i)=>'<span class="wiki-cycle-day">'+(i>5?'+':'')+(i-5)+'</span>').join('');
+ const axis=/<span class="wiki-cycle-label">Day of cycle<\/span>(?:<span class="wiki-cycle-day">\d+<\/span>){14}/;
+ assert(axis.test(html),'Expected original fourteen-day axis');
+ return html.replace('data-cycle-days="14"','data-cycle-days="14" data-day-origin="-5"')
+ .replace('<h3>Day 1 → Day 14: a general pattern</h3>','<h3>Days relative to your stem-cell infusion</h3>')
+ .replace(/<p class="wiki-cycle-intro">[\s\S]*?<\/p>/,'<p class="wiki-cycle-intro">Day 0 is the stem-cell infusion. Negative days come before it; positive days come afterwards. This is a reference view, not a prediction of recovery or a discharge date.</p>')
+ .replace('aria-label="General 14-day treatment pattern"','aria-label="Conditioning and stem-cell rescue timeline"')
+ .replace('not an outpatient 28-day cycle','not an outpatient 28-day reference view')
+ .replace(axis,'<span class="wiki-cycle-label">Transplant day</span>'+labels);
 }
 module.exports={...previous,render};
