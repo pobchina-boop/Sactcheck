@@ -19,12 +19,12 @@ for (const protocol of [p451, p450]) {
   }
   assert.strictEqual(defs.ast_u_l.visible, false, 'Absolute AST should be derived from the visible local-lab AST input.');
   assert.strictEqual(defs.ast_uln_multiple.derived_actual_field, 'ast_u_l');
-  assert.strictEqual(protocol.metadata.encoding_maturity.level, 'rule_level_source_reconciled');
+  if(protocol===p450){assert(require('./helpers/gu-inputs-v08458.cjs').validate(protocol));assert.strictEqual(protocol.metadata.encoding_maturity.level,'source_reconciled_pending_independent_review');}else assert.strictEqual(protocol.metadata.encoding_maturity.level, 'rule_level_source_reconciled');
   assert.strictEqual(protocol.metadata.validation.clinical_use_authorised, false);
-  assert.ok(protocol.rule_engine.rules.some(rule => rule.id === '5FU_BILIRUBIN_GT_85'));
-  assert.ok(protocol.rule_engine.rules.some(rule => rule.id === '5FU_AST_GT_180'));
-  assert.ok(protocol.rule_engine.rules.some(rule => rule.id === 'MITOMYCIN_CRCL_LT_10'));
-  assert.ok(protocol.rule_engine.rules.some(rule => rule.id === 'MITOMYCIN_AST_GT_2_ULN'));
+  assert.ok(protocol.rule_engine.rules.some(rule => (rule.rule_id || rule.id) === '5FU_BILIRUBIN_GT_85'));
+  assert.ok(protocol.rule_engine.rules.some(rule => (rule.rule_id || rule.id) === '5FU_AST_GT_180'));
+  assert.ok(protocol.rule_engine.rules.some(rule => (rule.rule_id || rule.id) === 'MITOMYCIN_CRCL_LT_10'));
+  assert.ok(protocol.rule_engine.rules.some(rule => (rule.rule_id || rule.id) === 'MITOMYCIN_AST_GT_2_ULN'));
 }
 
 assert.ok(!p450.input_definitions.alt_ast_uln_multiple, '00450 must not use combined ALT/AST ×ULN for an AST-specific rule.');

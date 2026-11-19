@@ -49,6 +49,7 @@ test('v44 exact current bytes follow the pinned v43 package; every protected ass
  const repairRecord=JSON.parse(fs.readFileSync(repair.RECORD,'utf8'));repair.createMigration(repairRecord);
  const batch56Record=JSON.parse(fs.readFileSync(batch56.RECORD,'utf8'));batch56.createMigration(batch56Record);
  const batch57Record=JSON.parse(fs.readFileSync(batch57.RECORD,'utf8'));batch57.createMigration(batch57Record);
+ const later=[58,59,60].map(n=>{const helper=require('./helpers/retrospective-v084'+n+'.cjs'),record=JSON.parse(fs.readFileSync(helper.RECORD,'utf8'));helper.createMigration(record);return {helper,record};});
  const precedingRecord=JSON.parse(fs.readFileSync(preceding.RECORD,'utf8'));preceding.createMigration(precedingRecord);
  assert.equal(cp.execFileSync('git',['rev-parse',m.BASE_COMMIT+'^{tree}'],{cwd:m.ROOT,encoding:'utf8'}).trim(),m.BASE_TREE);
  const historical=JSON.parse(fs.readFileSync(path.join(m.ROOT,'validation/patient-design-v08443/asset-migrations.json'),'utf8'));
@@ -78,7 +79,7 @@ test('v44 exact current bytes follow the pinned v43 package; every protected ass
    if(entry.isDirectory())checkMembership(f);
    else{
     assert(entry.isFile(),f+' must be a regular protected asset');
-    assert(m.BASE_FILES.has(f)||Object.hasOwn(record.files,f)||Object.hasOwn(latestRecord.files,f)||Object.hasOwn(successorRecord.files,f)||Object.hasOwn(batchRecord.files,f)||Object.hasOwn(previous49Record.files,f)||Object.hasOwn(previous50Record.files,f)||Object.hasOwn(recentRecord.files,f)||Object.hasOwn(repairRecord.files,f)||Object.hasOwn(batch56Record.files,f)||Object.hasOwn(batch57Record.files,f)||Object.hasOwn(previous51Record.files,f)||Object.hasOwn(previous53Record.files,f)||Object.hasOwn(previous52Record.files,f)||Object.hasOwn(precedingRecord.files,f),f+' is an unrecorded addition to a protected directory');
+    assert(m.BASE_FILES.has(f)||Object.hasOwn(record.files,f)||Object.hasOwn(latestRecord.files,f)||Object.hasOwn(successorRecord.files,f)||Object.hasOwn(batchRecord.files,f)||Object.hasOwn(previous49Record.files,f)||Object.hasOwn(previous50Record.files,f)||Object.hasOwn(recentRecord.files,f)||Object.hasOwn(repairRecord.files,f)||Object.hasOwn(batch56Record.files,f)||Object.hasOwn(batch57Record.files,f)||Object.hasOwn(previous51Record.files,f)||Object.hasOwn(previous53Record.files,f)||Object.hasOwn(previous52Record.files,f)||Object.hasOwn(precedingRecord.files,f)||later.some(({helper,record})=>Object.hasOwn(record.files,f)&&helper.approvedPath(f)),f+' is an unrecorded addition to a protected directory');
    }
   }
  }
