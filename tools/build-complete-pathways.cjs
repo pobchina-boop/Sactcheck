@@ -133,8 +133,8 @@ Object.assign(severity,{
   ]
 });
 for(const code of codes){
- // Shared 00419 has only an authored head-and-neck context, never a generic plan.
- if(['00419','00294'].includes(code)&&!suiteContext.context)continue;
+ // These shared regimens have only explicitly authored contexts, never a generic plan.
+ if(['00419','00294','00325','00719'].includes(code)&&!suiteContext.context)continue;
  if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(code))continue;
  const d=presentation.legacyProfile(JSON.parse(read(`data/patient-knowledge/${code}.json`)));
  if(d.patient_context_selector&&!suiteContext.context)continue;

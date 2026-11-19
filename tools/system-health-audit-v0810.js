@@ -46,7 +46,7 @@ for(const code of registry.codes.flatMap(c=>registry.bundleRoutes(c))){
     if(!exists(rel))report.critical.push(`Missing canonical patient asset ${rel}`);
     else {
       const fixture=protectedManifest.assets?.[code.split('/')[0]]?.[[...code.split('/').slice(1),file].join('/')];
-      const migration=[require('../tests/helpers/retrospective-v08445.cjs'),require('../tests/helpers/retrospective-v08446.cjs'),require('../tests/helpers/retrospective-v08447.cjs'),require('../tests/helpers/retrospective-v08448.cjs'),require('../tests/helpers/retrospective-v08449.cjs'),require('../tests/helpers/retrospective-v08450.cjs'),require('../tests/helpers/retrospective-v08451.cjs'),require('../tests/helpers/retrospective-v08452.cjs'),require('../tests/helpers/retrospective-v08453.cjs'),require('../tests/helpers/retrospective-v08454.cjs'),require('../tests/helpers/retrospective-v08456.cjs'),require('../tests/helpers/retrospective-v08457.cjs'),require('../tests/helpers/retrospective-v08458.cjs'),require('../tests/helpers/retrospective-v08459.cjs'),require('../tests/helpers/retrospective-v08460.cjs')].find(m=>m.NEW_ROUTES.includes(code));
+      const migration=require('../tests/helpers/patient-migration-catalogue.cjs').getMigrations().map(({helper})=>helper).find(m=>m.NEW_ROUTES.includes(code));
       if(!fixture&&!migration)report.critical.push(`Unrecorded patient route: ${code}`);
       else {
         const expected=fixture?presentationMigration.expectedHash(rel,fixture.sha256):migration.expectedHash(rel,null);

@@ -25,7 +25,8 @@ const releases=[['gu-v08458',['00282','00622','00628','00450','00759','00333','0
 const records=releases.map(([dir])=>JSON.parse(fs.readFileSync(path.join(root,'validation',dir,'asset-migrations.json'))));
 for(const tool of ['tools/system-health-audit-v0810.js','tools/validate-pages-site.js','tests/v0810-architecture-consolidation.test.js']){
  const src=fs.readFileSync(path.join(root,tool),'utf8');
- for(const version of ['08458','08459','08460'])assert(src.includes('retrospective-v'+version+'.cjs'),tool+' covers '+version);
+ assert(src.includes('patient-migration-catalogue.cjs'),tool+' uses the shared reviewed migration catalogue');
+ for(const version of [58,59,60,61])assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
 }
 let assets=0;
 for(let i=0;i<releases.length;i++)for(const code of releases[i][1])for(const name of ['index.html','guide.pdf','passport.pdf']){

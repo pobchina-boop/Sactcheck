@@ -63,9 +63,21 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.56 supplies usable source schedules for cabazitaxel and radium-223;
 // the three docetaxel schedules are reconciled in place.
 // v0.84.57 adds four renal monotherapy schedules, with no invented generic dose ladders.
-assert.strictEqual(usefulCoverage, 254);
-assert.strictEqual(scheduleCoverage, 254);
-assert.strictEqual(doseLevelCoverage, 65);
+assert.strictEqual(usefulCoverage, 255);
+assert.strictEqual(scheduleCoverage, 255);
+assert.strictEqual(doseLevelCoverage, 66);
+// v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
+// The other three GIST protocols retain their prior structured-model coverage.
+for(const code of ['00244','00325','00335','00719']){
+ const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));
+ const current=require(path.join(root,entry.path));require('./helpers/gist-inputs-v08461.cjs').validate(current);
+ const before=JSON.parse(require('node:child_process').execFileSync('git',['show','b9f502e43794579e732431354ceb5314981b78ad:'+entry.path],{cwd:root}));
+ const a=DoseSchedule.buildModel(before),b=DoseSchedule.buildModel(current);
+ assert.equal(DoseSchedule.hasData(before),code==='00244');
+ assert.equal(DoseSchedule.hasData(current),['00244','00719'].includes(code));
+ assert.equal(b.phases.length-a.phases.length,code==='00719'?1:0);
+ assert.equal(b.doseLevels.length-a.doseLevels.length,code==='00719'?1:0);
+}
 // v58/v59 add exactly these fifteen structured schedules; no generic dose ladders.
 for(const code of ['00282','00622','00628','00450','00759','00333','00337','00338','00583','00846','00453','00602','00885','00894','00945']){
  const entry=catalogue.protocols.find(p=>p.path.includes('/'+code+'-'));

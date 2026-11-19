@@ -135,3 +135,10 @@ The temporary onboarding write-access test alone does not authorize changes to `
 - Work internally in two groups of five new suites, preserving checkpoints between groups, and deliver one cumulative ZIP with one commit summary and description. Do not require the user to install two separate half-batches.
 - Apply the complete source-boundary clinical assessment audit, workflow, knowledge, consent, monitoring/support, patient portal, full handbook, three-page pack, anatomy, PDF and QR checks to all ten new suites. Larger batches do not dilute review or convert blocked checks into passes.
 - Keep the existing five retrospective audits unless Paul requests a different count. Do not silently expand to ten retrospectives. Explain timing honestly; a larger batch is not expected to finish in the same time as five new suites.
+
+## Release handoff gate — 19 November 2026
+
+- Before every manual batch, fetch origin/main and reconcile the package with that exact commit, including prior repairs. Do not redistribute an older saved ZIP as compatible with current main without checking it.
+- Architecture, system-health, deployed-site and patient-inventory checks share tests/helpers/patient-migration-catalogue.cjs. New 0.84.x batches must supply their authenticated retrospective helper and migration record; the catalogue derives the active release from package.json. Never maintain separate version lists in those consumers.
+- Run test:route-registration first, then full test:ci and every Pages build step against the exact assembled package in a disposable full-history checkout. Preserve historical evidence using the regression-stage runner. Missing history is a blocked release check, not evidence of deployment readiness.
+- Before handing over ZIPs, check origin/main has not advanced, verify ZIP bytes reproduce the tested diff, and record baseline SHA, file hashes, results and remaining limitations. Do not call a package deployment-ready while required checks are blocked or failing. Deployment success must be checked separately after the user's push.

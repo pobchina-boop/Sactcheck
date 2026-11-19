@@ -125,3 +125,7 @@ it cannot guarantee background execution or completion notifications.
 ## Historical Git preflight added in v0.84.58
 
 `npm run test:ci` first checks availability of pinned historical Git objects with lazy fetching disabled. Missing objects stop the run with an explicit full-checkout requirement; a 30-second limit guards each Git command. This does not waive or replace any historical content/hash assertion. On a complete checkout the original regression sequence follows unchanged. A preflight pass is availability evidence only.
+
+## Prevent stale-batch deployment failures
+
+Use the current origin/main as the exact merge base for every delivered batch. The shared patient migration catalogue now supplies all six route and inventory consumers; do not add per-consumer version arrays. Run the route-registration negative tests before the full release suite. Test the exact assembled archive against full Git history and recheck the remote head before handoff. A focused clinical pass or successful build does not substitute for the Pages checks.

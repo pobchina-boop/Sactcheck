@@ -5,6 +5,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const SKIN40Inputs = require('./helpers/skin-inputs-v08440.cjs');
+const GIST61 = require('./helpers/gist-inputs-v08461.cjs');
 const NET37Inputs = require('./helpers/neuroendocrine-inputs-v08437.cjs');
 // v0.84.35 current NCCP PDFs do not name a CTCAE edition for these exact rows.
 // Keep the separate v5 UI reference; do not attribute its edition to NCCP.
@@ -113,6 +114,7 @@ let exactCarboplatin = 0;
 for (const { file, data } of gi) {
   const code = String(data.metadata.nccp_regimen_code).padStart(5, '0');
   const metadata = data.metadata || {};
+  const gistV61=GIST61.applies(data);if(gistV61)GIST61.validate(data);
   NET37Inputs.validateProtocol(data);
   const skin40 = SKIN40Inputs.validate(data);
   if (code === '00431') {
@@ -137,7 +139,7 @@ for (const { file, data } of gi) {
   if(folfox4V36)require('./helpers/folfox4-grading-v08436.cjs').metadata(data);
   const capecitabineV36=code==='00216';
   if(capecitabineV36)require('./helpers/capecitabine-grading-v08436.cjs').metadata(data);
-  assert(require('./helpers/gu-inputs-v08458.cjs').validate(data) || require("./helpers/prostate-inputs-v08457.cjs").validate(data) || require("./helpers/prostate-inputs-v08456.cjs").validate(data) || require("./helpers/head-neck-inputs-v08450.cjs").validate(data) || require("./helpers/head-neck-inputs-v08445.cjs").validate(data) || skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  assert(gistV61 || require('./helpers/gu-inputs-v08458.cjs').validate(data) || require("./helpers/prostate-inputs-v08457.cjs").validate(data) || require("./helpers/prostate-inputs-v08456.cjs").validate(data) || require("./helpers/head-neck-inputs-v08450.cjs").validate(data) || require("./helpers/head-neck-inputs-v08445.cjs").validate(data) || skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/(?:healthservice\.hse\.ie\/documents\/|assets\.hse\.ie\/media\/documents\/)/.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -173,7 +175,8 @@ for (const { file, data } of gi) {
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       const folfoxSourceDiarrhoea = (['00447','00733'].includes(code) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field)) || (code==='00791'&&['diarrhoea_grade','diarrhoea_highest_grade','mucositis_grade','stomatitis_highest_grade'].includes(field));
       const nivoFruqV35Source=nivoFruqV35Grading[code]?.fields.includes(field);
-      if(require('./helpers/head-neck-grading-v08445.cjs').applies(data)){require('./helpers/head-neck-grading-v08445.cjs').check(data,field,definition,require('../js/ctcae-descriptors.js'));}
+      if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}
+      else if(require('./helpers/head-neck-grading-v08445.cjs').applies(data)){require('./helpers/head-neck-grading-v08445.cjs').check(data,field,definition,require('../js/ctcae-descriptors.js'));}
       else if(code==='00505'){
         require('./helpers/captem-grading-v08437.cjs').check(data,field,definition);
       }else if(capecitabineV36) {
@@ -209,7 +212,7 @@ for (const { file, data } of gi) {
       const grades = new Set((definition.options || []).map(item => Number(item.value)));
       const net37Hfs = NET37Inputs.handFoot(data, field, definition);
       const sourceHfs=net37Hfs ||(code==='00890'&&field==='ppes_grade') || (oralV34&&code==='00244'&&field==='hfsr_grade') || (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || ['00216','00586','00623','00505'].includes(code)&&['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field);
-      const expectedGrades=code==='00588'&&field==='febrile_neutropenia_grade'?[0,3,4]:sourceHfs?[0,1,2,3]:[0,1,2,3,4];
+      const expectedGrades=gistV61?GIST61.ranges[code][field]:code==='00588'&&field==='febrile_neutropenia_grade'?[0,3,4]:sourceHfs?[0,1,2,3]:[0,1,2,3,4];
       expectedGrades.forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}.`));
       if(sourceHfs) assert(!grades.has(4));
       const guide = CTCAE.guide({ ...definition, id: field });

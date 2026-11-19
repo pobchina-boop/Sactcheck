@@ -202,7 +202,7 @@ test('v43–v50 explicit reviewed migrations cover the complete current asset di
  const repairRecord=JSON.parse(fs.readFileSync(repair.RECORD,'utf8'));repair.createMigration(repairRecord);
  const batch56Record=JSON.parse(fs.readFileSync(batch56.RECORD,'utf8'));batch56.createMigration(batch56Record);
  const batch57Record=JSON.parse(fs.readFileSync(batch57.RECORD,'utf8'));batch57.createMigration(batch57Record);
- const later=[58,59,60].map(n=>{const helper=require('./helpers/retrospective-v084'+n+'.cjs'),record=JSON.parse(fs.readFileSync(helper.RECORD,'utf8'));helper.createMigration(record);return {helper,record};});
+ const later=require('./helpers/patient-migration-catalogue.cjs').getInventoryMigrations().filter(({version})=>version>57);
  const precedingRecord=JSON.parse(fs.readFileSync(preceding.RECORD,'utf8'));preceding.createMigration(precedingRecord);
   const domains = ['patient', 'docs/patient', 'data/patient-knowledge', 'data/patient-knowledge-contexts', 'protocols', 'assets/patient', 'js/patient-anatomy-v08431.js', ...m.SHARED_PATHS, ...next.SHARED_PATHS];
   const latestFiles=Object.keys(latestRecord.files).filter(f=>domains.some(d=>f===d||f.startsWith(d+'/')));
