@@ -52,13 +52,16 @@
       })
       .then(async payload => {
         for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json", "data/regimen-knowledge-base-v08425-addendum.json", "data/regimen-knowledge-base-v08426-addendum.json", "data/regimen-knowledge-base-v08427-addendum.json", "data/regimen-knowledge-base-v08428-addendum.json", "data/regimen-knowledge-base-v08429-addendum.json", "data/regimen-knowledge-base-v08430-addendum.json", "data/regimen-knowledge-base-v08432-addendum.json", "data/regimen-knowledge-base-v08433-addendum.json", "data/regimen-knowledge-base-v08434-addendum.json", "data/regimen-knowledge-base-v08435-addendum.json", "data/regimen-knowledge-base-v08436-addendum.json", "data/regimen-knowledge-base-v08437-addendum.json", "data/regimen-knowledge-base-v08438-addendum.json", "data/regimen-knowledge-base-v08439-addendum.json", "data/regimen-knowledge-base-v08440-addendum.json", "data/regimen-knowledge-base-v08441-addendum.json", "data/regimen-knowledge-base-v08442-addendum.json", "data/regimen-knowledge-base-v08445-addendum.json", "data/regimen-knowledge-base-v08446-addendum.json", "data/regimen-knowledge-base-v08447-addendum.json", "data/regimen-knowledge-base-v08448-addendum.json", "data/regimen-knowledge-base-v08449-addendum.json", "data/regimen-knowledge-base-v08450-addendum.json", "data/regimen-knowledge-base-v08451-addendum.json", "data/regimen-knowledge-base-v08452-addendum.json", "data/regimen-knowledge-base-v08453-addendum.json","data/regimen-knowledge-base-v08454-addendum.json","data/regimen-knowledge-base-v08456-addendum.json", "data/regimen-knowledge-base-v08457-addendum.json", "data/regimen-knowledge-base-v08458-addendum.json", "data/regimen-knowledge-base-v08459-addendum.json",
-    "data/regimen-knowledge-base-v08460-addendum.json"]) {
+    "data/regimen-knowledge-base-v08460-addendum.json", "data/regimen-knowledge-base-v08461-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
-        for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["evidence_records", "evidence_id"], ["drug_profiles", "id"]]) {
+        for (const [collection, key] of [["regimen_profiles", "protocol_id"], ["context_regimen_profiles", null], ["evidence_records", "evidence_id"], ["drug_profiles", "id"]]) {
+          payload[collection] ||= [];
+          const itemKey = item => collection === "context_regimen_profiles" ? `${item.protocol_id}:${item.context_id}` : item[key];
           for (const item of extra[collection] || []) {
-            const i = payload[collection].findIndex(existing => existing[key] === item[key]);
+            if (collection === "context_regimen_profiles" && (!item.protocol_id || !item.context_id)) throw new Error("Context knowledge requires explicit protocol and context IDs.");
+            const i = payload[collection].findIndex(existing => itemKey(existing) === itemKey(item));
             if (i < 0) payload[collection].push(item); else payload[collection][i] = item;
           }
         }
@@ -130,11 +133,33 @@
   function regimenProfileForProtocol(protocol, payload = data) {
     const id = String(protocol?.protocol_id || "");
     const keys = root.SACTCheckProtocolIds?.compatibleKeys(protocol) || [id];
+    let profile = null;
     for (const key of keys) {
-      const profile = (payload?.regimen_profiles || []).find(item => String(item.protocol_id || "") === key);
-      if (profile) return profile;
+      profile = (payload?.regimen_profiles || []).find(item => String(item.protocol_id || "") === key);
+      if (profile) break;
     }
-    return null;
+    const scoped = (payload?.context_regimen_profiles || []).filter(item => keys.includes(String(item.protocol_id || "")));
+    if (!scoped.length) return profile;
+    const contexts = [...(profile?.context_profiles || [])];
+    if (profile && !contexts.length) {
+      // The existing 00244 profile is explicitly CRC. Never relabel or replace it with GIST.
+      if (String(protocolCode(protocol)) !== "00244") throw new Error("An existing knowledge profile needs an explicit preserved context.");
+      contexts.push({...profile, context_id:"colorectal", context_label:"Metastatic colorectal cancer"});
+    }
+    for (const item of scoped) {
+      const index = contexts.findIndex(existing => existing.context_id === item.context_id);
+      if (index < 0) contexts.push(item); else contexts[index] = item;
+    }
+    return {...(profile || {protocol_id:id}), context_profiles:contexts};
+  }
+
+  function contextIdForProtocol(protocol, selectedContext) {
+    const requested = String(selectedContext ?? protocol?.patient_context ?? root.SACTCheckProtocolContext?.activeTumourGroup?.() ?? "").toLowerCase();
+    if (!requested) return "";
+    if (["00325","00719","00244"].includes(String(protocolCode(protocol)))) {
+      return root.SACTCheckPatientAssets?.contextFor?.(protocol,requested) || requested;
+    }
+    return requested;
   }
 
   function ensurePanel() {
@@ -349,7 +374,7 @@
     const evidence = evidenceForProtocol(protocol, payload);
     const baseProfile = regimenProfileForProtocol(protocol, payload);
     const contextProfiles = baseProfile?.context_profiles || [];
-    const contextId = String(selectedContext ?? root.SACTCheckProtocolContext?.activeTumourGroup?.() ?? '').toLowerCase();
+    const contextId = contextIdForProtocol(protocol, selectedContext);
     const regimenProfile = contextProfiles.length ? contextProfiles.find(p=>p.context_id===contextId) : baseProfile;
     const contextPicker = contextProfiles.length ? `<section class="regimen-information-section"><label for="regimen-info-context"><strong>Select the treatment context</strong></label><p>Evidence, treatment aims and patient resources are specific to the selected indication.</p><select id="regimen-info-context" data-regimen-info-context><option value="">Choose an indication context…</option>${contextProfiles.map(p=>`<option value="${escapeHtml(p.context_id)}"${p.context_id===contextId?' selected':''}>${escapeHtml(p.context_label)}</option>`).join('')}</select>${regimenProfile?'':'<p>For other tumour sites, use the official protocol. A dedicated patient suite has not been established here.</p>'}</section>` : '';
     const official = metadata.source_url ? `<a class="btn" href="${escapeHtml(metadata.source_url)}" target="_blank" rel="noopener noreferrer">Open official NCCP protocol</a>` : "";
@@ -477,6 +502,7 @@
     profilesForProtocol,
     evidenceForProtocol,
     regimenProfileForProtocol,
+    contextIdForProtocol,
     prostatePathwayMarkup,
     get activeProtocol() { return activeProtocol; }
   });

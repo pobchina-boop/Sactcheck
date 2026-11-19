@@ -13,10 +13,13 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.60';
+  const RELEASE='0.84.61';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00335':{"title": "Imatinib: GIST", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00325':{"title": "Sunitinib: 42-day schedule \u2014 choose indication", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["gist"], "scopeGuard": true, "scope": "GIST patient information is available. RCC requires separately authored information; select the indication."},
+    '00719':{"title": "Sunitinib: 21-day schedule \u2014 choose indication", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["gist"], "scopeGuard": true, "scope": "GIST patient information is available. RCC requires separately authored information; select the indication."},
     '00500':{"title": "Doxorubicin: soft tissue sarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00391':{"title": "Doxorubicin 60 and ifosfamide: soft tissue sarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00392':{"title": "Doxorubicin 75 and ifosfamide: soft tissue sarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -301,13 +304,18 @@
   const MELANOMA_CODES=['00455','00558','00483','00484'];
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
   const HEAD_NECK46_CODES=Object.freeze(['00261','00483','00484','00455','00558']);
-  const CONTEXT_CODES=Object.freeze(['00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const GIST_CONTEXT_CODES=Object.freeze(['00325','00719','00244']);
+  const CONTEXT_CODES=Object.freeze(['00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(GIST_CONTEXT_CODES.includes(code)){
+      if(['gist','sarcoma'].includes(selected))return 'gist';
+      return code==='00244'&&['colorectal','gastrointestinal'].includes(selected)?'colorectal':'';
+    }
     if(['00203','00588'].includes(code)&&['prostate','genitourinary','genitourinary_prostate'].includes(selected))return 'prostate';
     if(code==='00588')return selected==='breast'?'breast':'';
     if(HEAD_NECK46_CODES.includes(code)&&['head_neck','head and neck','head/neck'].includes(selected))return 'head_neck';
@@ -343,6 +351,8 @@
   }
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
+    if(['00325','00719'].includes(d.code))return [d.code+'/gist'];
+    if(d.code==='00244')return [d.code,d.code+'/gist'];
     if(d.code==='00261')return [d.code,d.code+'/head_neck'];
     if(d.code==='00588')return ['00588','00588/prostate'];
     if(d.code==='00203')return ['00203','00203/lung','00203/prostate'];
@@ -364,6 +374,7 @@
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      if(GIST_CONTEXT_CODES.includes(def.code))return `patient/${def.code}/${selected==='gist'?'gist/':''}${CONTEXT_ASSETS[asset]}`;
       if(HEAD_NECK46_CODES.includes(def.code)&&selected==='head_neck')return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
       if(['00203','00588'].includes(def.code)&&selected==='prostate')return `patient/${def.code}/prostate/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00588')return `patient/00588/${CONTEXT_ASSETS[asset]}`;

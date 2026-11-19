@@ -56,6 +56,7 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   if(['index.html','knowledge.html'].includes(t.name))result=editorial.applyEditorial(result,{route:t.route,documentKind:t.name.replace(/\.html$/,''),data,root});
   if(t.relative.startsWith('docs/'))result=result.replace(/\b(href|src)=(["'])(?:\.\.\/)+((?:assets|js|data)\/[^"']+)\2/g,
     (_,attribute,quote,asset)=>`${attribute}=${quote}${path.posix.relative(path.posix.dirname(t.relative),asset)}${quote}`);
+  if(data.suite_release==='0.84.61'&&data.code==='00335')result=require('./patient-pack-v08461.cjs').continuous(data,result);
   return result;
 }
 

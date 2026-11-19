@@ -1,0 +1,40 @@
+'use strict';
+// Fresh cross-risk probes for the preceding five suites, written after v60 freeze.
+// These test current encoded safeguards against the retained current NCCP text;
+// they are not another source acquisition or independent clinical approval.
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const root=path.resolve(__dirname,'../../..'),E=require(root+'/js/assessment-engine'),D=require(root+'/js/protocol-dose-schedule');
+const codes=['00500','00391','00392','00501','00511'];
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const P={},files={};for(const c of codes){const f='protocols/sarcoma/'+fs.readdirSync(root+'/protocols/sarcoma').find(n=>n.startsWith(c+'-'));files[c]=f;P[c]=JSON.parse(fs.readFileSync(root+'/'+f));}
+const cases=[];const add=(code,name,input,expected,fn)=>cases.push({code,name,input,expected,fn});
+const restrictive=['delay','withhold','withhold_then_reduce','contraindicated','discontinue','permanently_discontinue'];
+const clinical=a=>a.findings.filter(f=>!f.domainAssessment&&!/^PARTIAL_/.test(f.ruleId));
+function held(a){assert(restrictive.includes(a.actionType),'A known active hazard must retain a hold or stronger action');}
+function component(m,id,type){const r=m.rows.find(r=>r.componentId===id);assert(r,'Missing component '+id);assert.equal(r.actionType,type);}
+for(const c of codes){
+ add(c,'Hypersensitivity remains restrictive despite unrelated invalid renal result',{hypersensitivity:true,crcl_ml_min:-1,anc:3,platelets:200},'Known exclusion survives invalid unrelated input',(a)=>{assert(a.invalid.length);assert.equal(a.actionType,'contraindicated');});
+ for(const phase of ['baseline','day1','recovery'])add(c,'Active infection with adequate counts at '+phase,{assessment_phase:phase,active_infection:true,anc:3,platelets:200,crcl_ml_min:90},'Normal counts and review stage cannot clear an active infection',held);
+}
+for(const c of ['00500','00391','00392']){
+ add(c,'Child-Pugh C remains held despite low absolute bilirubin and normal counts',{assessment_phase:'recovery',child_pugh_c:true,bilirubin_umol_l:12,anc:3,platelets:200},'Source hepatic exclusion is not cleared by one reassuring liver result',held);
+ add(c,'Symptomatic cardiac dysfunction remains held despite preserved EF',{assessment_phase:'day1',symptomatic_cardiac_dysfunction:true,lvef_percent:65,anc:3,platelets:200,bilirubin_umol_l:12},'Symptoms require cardiac assessment even with normal EF',held);
+}
+for(const phase of ['day1','on_treatment','recovery'])add('00500','Severe cardiac decline with mild recovered nonhaematological toxicity at '+phase,{assessment_phase:phase,lvef_percent:44.9,prior_nonhaem_grade3_or4:true,other_nonhaem_toxicity_grade:1,bilirubin_umol_l:25,anc:3,platelets:200},'The cardiac discontinuation criterion dominates recovered toxicity and hepatic dose review',(a,m)=>{assert.equal(a.actionType,'permanently_discontinue');component(m,'doxorubicin','permanently_discontinue');});
+for(const c of ['00391','00392']){
+ for(const phase of ['day1','on_treatment','recovery'])add(c,'Ifosfamide neurotoxicity with confirmed protection at '+phase,{assessment_phase:phase,neurotoxicity_grade:3,mesna_plan_confirmed:true,hydration_plan_confirmed:true,urine_output_ml_hour:150,anc:3,platelets:200,bilirubin_umol_l:12,crcl_ml_min:90},'Mesna and hydration cannot prevent a required neurotoxicity stop; retain component attribution',(a,m)=>{assert.equal(a.actionType,'permanently_discontinue');component(m,'ifosfamide','permanently_discontinue');const dox=m.rows.find(r=>r.componentId==='doxorubicin');assert(!dox||dox.actionType!=='permanently_discontinue','Ifosfamide stop must not become doxorubicin discontinuation');});
+ add(c,'Visible haematuria despite documented mesna and adequate urine output',{assessment_phase:'recovery',haematuria:true,mesna_plan_confirmed:true,hydration_plan_confirmed:true,urine_output_ml_hour:200,crcl_ml_min:90,anc:3,platelets:200},'Protective plans do not clear active urotoxicity',(a,m)=>{held(a);component(m,'ifosfamide','withhold');});
+ add(c,'Suspected encephalopathy at recorded grade zero',{assessment_phase:'on_treatment',suspected_ifosfamide_encephalopathy:true,neurotoxicity_grade:0,crcl_ml_min:90,mesna_plan_confirmed:true,hydration_plan_confirmed:true},'Urgent suspected toxicity remains held until assessed despite a conflicting grade-zero entry',(a,m)=>{held(a);component(m,'ifosfamide','withhold');});
+}
+for(const phase of ['day1','day8','delayed_day8','recovery']){
+ const recovery={assessment_phase:phase,cycle_day:8,prior_nonhaem_grade3_or4:true,other_nonhaem_toxicity_grade:0,neuropathy_grade:0,anc:3,platelets:200,docetaxel_premed_doses_taken:3};
+ add('00501','Gemcitabine pulmonary stop with recovered other toxicity at '+phase,{...recovery,suspected_drug_induced_pneumonitis:true},'Recovered counts/toxicity and completed premedication never clear the gemcitabine pulmonary stop',(a,m)=>{assert.equal(a.actionType,'permanently_discontinue');component(m,'gemcitabine','permanently_discontinue');});
+ add('00501','Docetaxel severe reaction with completed premedication at '+phase,{...recovery,severe_docetaxel_hypersensitivity:true},'Prior completed dexamethasone does not permit docetaxel rechallenge',(a,m)=>{assert.equal(a.actionType,'permanently_discontinue');component(m,'docetaxel','permanently_discontinue');});
+}
+for(const [anc,platelets] of [[.9,200],[3,69.9]])add('00511','Prior sepsis reduction cannot clear current cytopenia '+anc+'/'+platelets,{assessment_phase:'recovery',prior_neutropenic_sepsis_admission:true,anc,platelets,crcl_ml_min:45},'Current low count remains delayed despite prior-dose and overlapping renal percentage reviews',held);
+for(const phase of ['baseline','day1','recovery'])add('00511','Severe renal disease with reassuring measured clearance at '+phase,{assessment_phase:phase,severe_renal_disease:true,crcl_ml_min:90,anc:3,platelets:200,prior_neutropenic_sepsis_admission:true},'A recorded source exclusion requires resolution; one normal measurement cannot erase it',held);
+const results=[];
+for(const c of cases){let a,m,error;try{for(const k of Object.keys(c.input))assert(k in P[c.code].input_definitions,'Unknown fixture input '+k);a=E.assess(P[c.code],c.input);m=D.buildModificationModel(P[c.code],a);assert.deepEqual(a.errors,[]);if(!c.name.includes('invalid renal'))assert.deepEqual(a.invalid,[]);assert(!m.hasQuantified,'No numeric prescription may escape a source-review safeguard');assert(m.rows.every(r=>!r.quantified));c.fn(a,m);}catch(e){error=e.message;}results.push({code:c.code,name:c.name,input:c.input,expected:c.expected,passed:!error,error:error||null,observed:a?{action:a.actionType,invalid:a.invalid,findings:clinical(a).map(f=>({rule:f.ruleId,action:f.actionType,components:f.action.components})),components:m.rows.map(r=>({id:r.componentId,action:r.actionType,quantified:r.quantified}))}:null});}
+const report={release:'0.84.61',review_kind:'fresh cross-risk retrospective software cases',source_basis:'Current NCCP extracted text retained with v0.84.60; no new source acquisition claimed',clinical_approval:false,codes,protocols:codes.map(c=>({code:c,path:files[c],sha256:sha(fs.readFileSync(root+'/'+files[c]))})),engine_sha256:sha(fs.readFileSync(root+'/js/assessment-engine.js')),dose_model_sha256:sha(fs.readFileSync(root+'/js/protocol-dose-schedule.js')),script_sha256:sha(fs.readFileSync(__filename)),total:results.length,passed:results.filter(r=>r.passed).length,failed:results.filter(r=>!r.passed).length,results};
+const target=path.join(__dirname,'cross-risk-results.json');if(process.argv.includes('--record')){assert(!fs.existsSync(target),'Do not overwrite an existing retrospective evidence snapshot');fs.writeFileSync(target,JSON.stringify(report,null,2)+'\n');}else assert.deepEqual(report,JSON.parse(fs.readFileSync(target)),'Current replay differs from retained retrospective evidence');
+console.log(JSON.stringify({total:report.total,passed:report.passed,failed:report.failed,failures:results.filter(r=>!r.passed)},null,2));process.exitCode=report.failed?1:0;

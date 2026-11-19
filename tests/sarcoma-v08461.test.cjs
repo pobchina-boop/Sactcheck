@@ -1,0 +1,35 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f));
+const S=json('validation/sarcoma-v08461/scope.json'),A=require('../js/patient-asset-registry-v0810.js'),C=require('../tools/consent-core-v08455.cjs'),V=require('../js/protocol-validator.js'),E=require('../js/assessment-engine.js'),I=json('protocols/index.json').protocols;
+const routes=['00335','00325/gist','00719/gist','00244/gist'],codes=['00335','00325','00719','00244'],retro=['00500','00391','00392','00501','00511'];
+assert.equal(json('package.json').version,'0.84.61');assert.equal(A.release,'0.84.61');assert.equal(json('data/app-release.json').release,'0.84.61');
+assert.equal(I.length,377);assert.equal(A.codes.length,275);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,306);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,314);
+assert.deepEqual(S.new_routes,routes);assert.deepEqual(S.document_routes,routes);assert.deepEqual(S.retrospective_codes,retro);assert.deepEqual(S.changed_retrospective_routes,[]);assert.equal(S.independent_clinical_approval,false);assert.equal(S.base_state_kind,'verified_working_state');assert.equal(S.base_release,'0.84.60');assert.equal(S.blocked_codes[0].code,'00445');assert(!S.completed_suites.includes('00445'));
+const KB=json('data/regimen-knowledge-base-v08461-addendum.json'),phase=json('data/phase-support-v0838.json').regimens,contextPhase=json('data/phase-support-contexts-v08461.json').regimens,workflow=json('data/regimen-workflow-v0750.json'),presentation=json('data/patient-presentation-v08431.json').routes,journey=json('data/breast-treatment-journeys-v0837.json'),register=json('data/clinical-validation-register-v0630.json').protocols;
+assert.equal(KB.regimen_profiles.length,1);assert.equal(KB.context_regimen_profiles.length,3);
+assert(read('js/regimen-knowledge-base.js').toString().includes('data/regimen-knowledge-base-v08461-addendum.json'));
+const norm=s=>s.replace(/<[^>]*>/g,'').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#(?:039|39);/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
+for(const route of routes){
+ const [c,context]=route.split('/'),entry=I.find(x=>x.path.includes('/'+c+'-'));assert(entry);const p=json(entry.path),profile='data/'+(context?'patient-knowledge-contexts/':'patient-knowledge/')+route+'.json',d=json(profile),base='patient/'+route+'/';
+ assert.deepEqual(V.validate(p,{strict:true}).errors,[]);assert.notEqual(E.assess(p,{}).actionType,'proceed');
+ assert.equal(d.suite_release,'0.84.61');assert.equal(d.protocol_id,p.protocol_id);assert.equal(String(d.protocol_version),String(p.metadata.nccp_version));assert.equal(d.anatomy.length,8);assert.equal(d.independent_clinical_approval,false);assert.equal(d.patient_route,route);
+ assert.equal(p.metadata.integration_review.status,'locally_integrated_review_pending_human_approval');assert.equal(p.metadata.integration_review.visual_table_layout,'unverified_no_image_pixels');
+ for(const field of ['clinical_use_authorised','consultant_reviewed','oncology_pharmacy_reviewed'])assert.equal(p.metadata.validation[field],false);
+ const row=register.find(x=>x.nccp_code===c);assert.equal(row.rule_count,p.rule_engine.rules.length);assert.equal(row.input_count,Object.keys(p.input_definitions).length);assert.equal(row.knowledge_base_profile,true);assert.equal(row.formal_consultant_reviewed,false);assert.equal(row.formal_pharmacy_reviewed,false);assert.equal(row.original_source_pdf_sha256,null);assert.equal(row.scoped_independent_software_validation.failed,0);
+ assert.equal(presentation[route],profile);assert(journey[context?c+':'+context:c]);
+ if(context){assert.equal(d.patient_context,'gist');assert(contextPhase[c].gist.length);assert.equal(workflow.context_supportive_phase_selectors[c].gist.protocol_id,p.protocol_id);assert(KB.context_regimen_profiles.some(k=>k.protocol_id===p.protocol_id&&k.context_id==='gist'&&k.patient_route===route));}
+ else{assert(phase[c].length);assert.equal(workflow.supportive_phase_selectors[c].protocol_id,p.protocol_id);assert(KB.regimen_profiles.some(k=>k.protocol_id===p.protocol_id));}
+ const guide=read(base+'guide.html').toString(),consent=read(base+'consent-form.html').toString(),knowledge=read(base+'knowledge.html').toString();
+ assert.equal((guide.match(/class="pt-page /g)||[]).length,3,route+' three-page pack');assert.equal((guide.match(/data-hcc-target=/g)||[]).length,8,route+' anatomy targets');assert(!knowledge.includes('undefined'));
+ assert.deepEqual(C.classify(d),['targeted']);
+ for(const agent of d.agents)for(const risk of agent.risks)assert(norm(consent).includes(norm(risk)),route+' agent-specific consent omission: '+risk);
+ for(const category of C.classify(d))for(const risk of C.model.categories[category].risks)assert(consent.includes(`data-nccp-risk="${category}-${risk.id}"`),route+' generic consent omission: '+risk.id);
+ assert.equal(C.transform(consent,d,base+'consent-form.html'),consent,route+' stable consent transform');
+ for(const name of ['guide','sactcard','handbook','knowledge','passport','logistics','consent-form','treatment-journey','supportive-care']){const b=read(base+name+'.pdf');assert.equal(b.subarray(0,4).toString(),'%PDF');assert(b.equals(read('docs/'+base+name+'.pdf')),route+' '+name+' mirror');}
+ for(const file of ['source-reconciliation-v0700.js','source-reconciliation-v0701.js']){const copy=structuredClone(p),before=JSON.stringify(copy);require('../js/'+file).apply(copy);assert.equal(JSON.stringify(copy),before,route+' runtime reconciliation must preserve audited rules');}
+}
+const reports=['imatinib-sunitinib42-draft-test-results.json','sunitinib21-regorafenib-draft-tests.json'].map(f=>json('validation/sarcoma-v08461/clinical/'+f));assert.equal(reports.reduce((n,r)=>n+r.passed,0),310);assert(reports.every(r=>r.failed===0));assert.deepEqual([...new Set(reports.flatMap(r=>r.cases).map(c=>c.code))].sort(),[...codes,'shared'].sort());assert.deepEqual(reports.flatMap(r=>r.cases).filter(c=>c.code==='shared'),[{code:'shared',name:'Application protocol bytes unchanged by external draft work',passed:true}],'The author suite includes its explicit shared preservation assertion');
+const independent=json('validation/sarcoma-v08461/independent-review/current-results.json');assert.equal(independent.total,119);assert.equal(independent.passed,119);assert.equal(independent.failed,0);assert.equal(independent.independent_from_author_cases,true);
+const retrospective=json('validation/sarcoma-v08461/retrospective/cross-risk-results.json');assert.equal(retrospective.total,52);assert.equal(retrospective.passed,52);assert.equal(retrospective.failed,0);assert.deepEqual(retrospective.codes,retro);
+console.log('Sarcoma v0.84.61: four GIST suites, distinct shared contexts, current source status, workflow/consent/patient documents and exact evidence counts passed; human clinical/pharmacy acceptance remains pending.');

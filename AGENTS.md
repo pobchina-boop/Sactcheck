@@ -5,6 +5,7 @@
 - Paul authorised completing the sarcoma group in sequential batches of five, saving each batch for manual application and sequential commits at the end. This campaign instruction supersedes the ten-suite batch size below. Preserve the five retrospective audits and all clinical/patient acceptance requirements.
 - Update ZIPs must contain repository-relative files directly at the archive root. Never enclose application files in UPDATE, Sactcheck, or another wrapper directory. Ordinary project subdirectories such as data, patient and tools retain their paths.
 - Supply application instructions, commit text and external audit evidence separately from the drop-in update ZIP. If splitting a batch, each ordinary ZIP uses the same repository-root layout and all parts of that batch must be applied before committing it.
+- After each batch is packaged and saved, immediately post its download links, exact application order, commit summary and description, and outstanding checks in the chat; continue the next batch without waiting for Paul. This per-batch output is a recovery safeguard and does not authorize committing or pushing.
 - Saving a checkpoint does not mark a suite complete or guarantee background execution. Never promote the initial sarcoma targeted-fix drafts without the complete source, workflow, patient and document checks.
 
 ## Batch size and handbook scope — user instruction, 9 November 2026

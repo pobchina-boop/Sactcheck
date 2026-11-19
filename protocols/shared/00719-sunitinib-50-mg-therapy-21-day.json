@@ -11,7 +11,7 @@
     "indication": "Unresectable/metastatic GIST after imatinib failure or intolerance.",
     "source_url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "sactcheck_encoding_version": "0.84.61",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "gist",
@@ -42,11 +42,13 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "locally_integrated_v08461_review_source_ambiguities_and_human_approval_pending",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "source_reconciled": false
     },
     "tumour_groups": [
       "Genitourinary",
@@ -59,7 +61,7 @@
     "genitourinary_subgroups": [
       "renal"
     ],
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-18",
     "regimen_card": {
       "contexts": [
         {
@@ -90,12 +92,15 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
-      "source_reconciled": true,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Locally integrated review · source ambiguities and clinical/pharmacy approval pending",
+      "source_reconciled": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.61",
+      "source_checked_date": "2026-11-18",
+      "scope_note": "Complete current official source text checked. Original PDF bytes and visual table layout unverified. Source conflicts remain explicit review branches. Scoped software cases are separate from full historical CI, browser acceptance and independent clinical/pharmacy approval."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -113,7 +118,39 @@
       "clinical_use_authorised": false,
       "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
     },
-    "canonical_protocol_id": "nccp-00719-v2"
+    "canonical_protocol_id": "nccp-00719-v2",
+    "batch2_draft_review": {
+      "status": "locally_integrated_review_pending_human_approval",
+      "checked_date": "2026-11-18",
+      "source_content": "current_complete_official_extracted_text",
+      "visual_table_layout": "unverified_no_image_pixels",
+      "original_pdf_binary": "unavailable",
+      "independent_clinical_approval": false,
+      "independent_pharmacy_approval": false,
+      "notes": [
+        "Replaces generic unsupported transaminase 3/5×ULN stop ladder with source toxicity/recovery and product-information hepatic-failure review.",
+        "21-day schedule, baselineLVEF < 55 exclusion and Child–Pugh Cnot-recommended pathway must not be copied from 00325 v 6.",
+        "Source > 20% LVEF reduction wording needs clinical interpretation; no percentage-point conversion.",
+        "Original PDF binary and actual table pixel inspection unavailable; independent review pending."
+      ]
+    },
+    "clinical_audit_release": "0.84.61",
+    "draft_only": false,
+    "source_retrieval_method": "Current official HSE/NCCP listing and complete extracted source text checked; original PDF binary unavailable; source table visual layout unverified.",
+    "source_pdf_sha256": null,
+    "source_text_snapshot_sha256": "fa8e564003c8beaa113d9e15de8eb75505354db52bcb3018a8fc42637fc36f2f",
+    "integration_review": {
+      "release": "0.84.61",
+      "status": "locally_integrated_review_pending_human_approval",
+      "source_checked_date": "2026-11-18",
+      "source_content": "complete_current_official_extracted_text",
+      "original_pdf_binary": "unavailable",
+      "visual_table_layout": "unverified_no_image_pixels",
+      "source_ambiguities": "Explicit hold/review branches retained; no numeric prescription inferred across source conflicts.",
+      "clinical_use_authorised": false,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
@@ -127,12 +164,13 @@
       "description": "Unresectable/metastatic GIST after imatinib failure or intolerance.",
       "tumour_groups": [
         "Sarcoma"
-      ]
+      ],
+      "code": "00719a"
     },
     {
       "indication_id": "00719-gu",
-      "code": "00719g",
-      "description": "Advanced renal-cell carcinoma treated with sunitinib on a 2-weeks-on/1-week-off schedule.",
+      "code": "00719b",
+      "description": "Treatment of clear-cell metastatic renal-cell carcinoma on the 21-day sunitinib schedule.",
       "tumour_groups": [
         "Genitourinary"
       ]
@@ -140,16 +178,213 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Sunitinib 50 mg Therapy – 21 day",
+    "schedule_summary": "Sunitinib 50 mg orally daily Days 1–14; Days 15–21 off. Repeat until progression or unacceptable toxicity.",
     "drugs": [
       "sunitinib"
     ]
   },
   "input_definitions": {
-    "ecog": {
-      "label": "ECOG performance status",
+    "assessment_phase": {
       "type": "select",
+      "label": "Assessment stage",
       "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first dose"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "restart",
+          "label": "Restart after interruption"
+        }
+      ],
+      "demo_value": "baseline"
+    },
+    "indication_code": {
+      "type": "select",
+      "label": "Official NCCP indication",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "00719a",
+          "label": "GIST after imatinib resistance or intolerance"
+        },
+        {
+          "value": "00719b",
+          "label": "Clear-cell metastatic renal-cell carcinoma"
+        },
+        {
+          "value": "other",
+          "label": "Other: separate specialist review"
+        }
+      ],
+      "demo_value": "00719a"
+    },
+    "gist_prior_imatinib_criteria_met": {
+      "type": "boolean",
+      "label": "GIST: prior imatinib resistance or intolerance confirmed",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "ecog": {
+      "type": "select",
+      "label": "ECOG performance status",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "hypersensitivity": {
+      "type": "boolean",
+      "label": "Hypersensitivity to sunitinib or an excipient",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "pregnancy": {
+      "type": "boolean",
+      "label": "Pregnancy",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "breastfeeding": {
+      "type": "boolean",
+      "label": "Breastfeeding",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "anc": {
+      "type": "number",
+      "label": "Absolute neutrophil count",
+      "unit": "×10⁹/L",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2
+    },
+    "platelets": {
+      "type": "number",
+      "label": "Platelet count",
+      "unit": "×10⁹/L",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 150
+    },
+    "child_pugh_class": {
+      "type": "select",
+      "label": "Child–Pugh class",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "No hepatic impairment"
+        },
+        {
+          "value": "A",
+          "label": "A"
+        },
+        {
+          "value": "B",
+          "label": "B"
+        },
+        {
+          "value": "C",
+          "label": "C"
+        }
+      ],
+      "demo_value": "none"
+    },
+    "haemodialysis": {
+      "type": "boolean",
+      "label": "Receiving haemodialysis",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "lvef_percent": {
+      "type": "number",
+      "label": "Current LVEF",
+      "unit": "%",
+      "required": false,
+      "input_role": "decision",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 60
+    },
+    "significant_cardiovascular_disease": {
+      "type": "boolean",
+      "label": "Significant cardiovascular disease",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "clinical_congestive_heart_failure": {
+      "type": "boolean",
+      "label": "Clinical manifestations of congestive heart failure",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "asymptomatic_lvef_decline_gt20_source_confirmed": {
+      "type": "boolean",
+      "label": "Clinician confirms asymptomatic LVEF > 20% below baseline (source definition reviewed)",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "uncontrolled_hypertension": {
+      "type": "boolean",
+      "label": "Uncontrolled hypertension",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hypertension_control_confirmed": {
+      "type": "boolean",
+      "label": "Hypertension control confirmed before restart",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "current_toxicity_grade": {
+      "type": "select",
+      "label": "Current relevant non-haematological toxicity (clinician-assessed adverse-event grade)",
+      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -173,259 +408,162 @@
         }
       ],
       "demo_value": 0,
-      "input_role": "decision"
+      "grading_source_url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+      "grading_source_label": "NCCP 00719 v2 Table 3; grading edition not specified",
+      "source_grading_note": "Apply the named adverse event and the NCCP source severity; no CTCAE v5.0 or v6.0 substitution. The generic 0–4 selector is not a complete event-specific grading table.",
+      "assessment_guidance": "Record the current grade of the same specific toxicity under review; do not substitute its prior worst grade. Identify the actual adverse event and use its applicable severity criteria with the NCCP source action. Grade 0 means documented absence, not unknown."
     },
-    "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "pregnancy": {
-      "label": "Pregnant",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST results (actual values entered; highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (actual value entered; ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "decision"
-    },
-    "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
+    "prior_worst_toxicity_grade": {
       "type": "select",
+      "label": "Worst grade of the toxicity that caused interruption (clinician-assessed adverse-event grade)",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "4"
         }
       ],
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Count stools over baseline and assess hydration, continence, admission and functional impact.",
-      "input_role": "decision"
+      "grading_source_url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+      "grading_source_label": "NCCP 00719 v2 Table 3; grading edition not specified",
+      "source_grading_note": "Apply the named adverse event and the NCCP source severity; no CTCAE v5.0 or v6.0 substitution. The generic 0–4 selector is not a complete event-specific grading table.",
+      "assessment_guidance": "Retain the worst grade of the specific toxicity that caused interruption; do not overwrite it with the recovered current grade. Identify the actual adverse event and use its applicable severity criteria with the NCCP source action. Grade 0 means documented absence, not unknown."
     },
-    "rash_or_hfsr_grade": {
-      "label": "Rash / hand-foot skin reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess morphology, body-surface area, pain, blistering, infection and functional impact.",
-      "input_role": "decision"
-    },
-    "uncontrolled_hypertension": {
-      "label": "Uncontrolled hypertension",
+    "restart_after_toxicity": {
       "type": "boolean",
+      "label": "Considering restart after toxicity interruption",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "qtcf_ms": {
-      "label": "QTcF",
+    "current_sunitinib_daily_mg": {
       "type": "number",
+      "label": "Current prescribed daily sunitinib dose",
+      "unit": "mg",
       "required": false,
+      "input_role": "decision",
       "min": 0,
-      "step": 1,
-      "demo_value": 430,
-      "unit": "ms",
-      "input_role": "decision"
+      "step": 0.01,
+      "demo_value": 50
     },
-    "symptomatic_cardiac_dysfunction": {
-      "label": "Symptoms/signs of cardiac dysfunction",
+    "dose_reduction_required": {
       "type": "boolean",
+      "label": "A further 12.5 mg reduction is required",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "consultant_restart_confirmed": {
+      "type": "boolean",
+      "label": "Consultant has confirmed recovery, current dose and restart plan",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "prior_permanent_discontinuation": {
+      "type": "boolean",
+      "label": "A prior irreversible discontinuation/no-rechallenge criterion has been met",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "suspected_sjs_ten_or_em": {
+      "type": "boolean",
+      "label": "Suspected Stevens–Johnson syndrome, toxic epidermal necrolysis or erythema multiforme",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "confirmed_sjs_or_ten": {
+      "type": "boolean",
+      "label": "Confirmed SJS or TEN at any time on sunitinib",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "hepatic_failure_signs": {
+      "type": "boolean",
+      "label": "Clinical signs or symptoms of hepatic failure",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "qt_risk_or_prolongation": {
+      "type": "boolean",
+      "label": "QT prolongation or relevant QT-risk factors/medicines",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     },
     "clinically_significant_bleeding": {
-      "label": "Clinically significant bleeding",
       "type": "boolean",
+      "label": "Clinically significant bleeding",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
     "major_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
       "type": "boolean",
+      "label": "Major surgery or wound-healing concern",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "strong_cyp_interaction": {
-      "label": "Clinically important CYP3A/P-gp interacting medicine",
+    "thyroid_dysfunction_unmanaged": {
       "type": "boolean",
+      "label": "Thyroid dysfunction not yet appropriately managed",
       "required": false,
-      "demo_value": false,
-      "input_role": "decision"
+      "input_role": "decision",
+      "demo_value": false
     },
-    "proteinuria_grade": {
-      "label": "Proteinuria grade",
+    "cyp3a4_interaction": {
       "type": "select",
+      "label": "CYP 3 A 4 interaction",
       "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use quantified urine protein where indicated; assess nephrotic syndrome and renal function.",
-      "input_role": "decision"
-    },
-    "sunitinib_renal_band": {
-      "label": "Renal status for sunitinib",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "non_dialysis",
-          "label": "Mild, moderate or severe renal impairment (not dialysis)",
-          "decision_value": 0
-        },
-        {
-          "value": "dialysis",
-          "label": "End-stage renal disease on haemodialysis",
-          "decision_value": 1
-        }
-      ],
-      "demo_value": "non_dialysis",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "context"
-    },
-    "child_pugh_class": {
-      "label": "Child–Pugh class",
-      "type": "select",
-      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": "none",
-          "label": "No hepatic impairment"
+          "label": "None identified"
         },
         {
-          "value": "A",
-          "label": "Child–Pugh A"
+          "value": "inhibitor",
+          "label": "Potent inhibitor"
         },
         {
-          "value": "B",
-          "label": "Child–Pugh B"
+          "value": "inducer",
+          "label": "Potent inducer"
         },
         {
-          "value": "C",
-          "label": "Child–Pugh C"
+          "value": "unknown",
+          "label": "Medication reconciliation incomplete"
         }
       ],
-      "demo_value": "none",
-      "ui_section": "labs",
-      "always_show": true,
-      "input_role": "decision"
+      "demo_value": "none"
+    },
+    "oral_plan_uncertain": {
+      "type": "boolean",
+      "label": "Dosing-day, rest-week, missed-dose or capsule plan uncertain",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -460,8 +598,131 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_USUAL_RANGE",
-        "priority": 8,
+        "rule_id": "STAGE_REQUIRED",
+        "when": {
+          "field": "assessment_phase",
+          "operator": "missing"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Specify baseline, on-treatment or restart assessment; no stage is inferred.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Specify baseline, on-treatment or restart assessment; no stage is inferred.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Eligibility / monitoring",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
+      },
+      {
+        "rule_id": "INDICATION_REQUIRED",
+        "when": {
+          "field": "indication_code",
+          "operator": "missing"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Select the official GIST or clear-cell metastatic RCC indication. The 21-day calendar is not interchangeable with the 42-day regimen.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Select the official GIST or clear-cell metastatic RCC indication. The 21-day calendar is not interchangeable with the 42-day regimen.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Indications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "OTHER_INDICATION",
+        "when": {
+          "field": "indication_code",
+          "operator": "==",
+          "value": "other"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Other settings require separate source and specialist review.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Other settings require separate source and specialist review.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Indications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "GIST_IMATINIB_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "indication_code",
+              "operator": "==",
+              "value": "00719a"
+            },
+            {
+              "any": [
+                {
+                  "field": "gist_prior_imatinib_criteria_met",
+                  "operator": "missing"
+                },
+                {
+                  "field": "gist_prior_imatinib_criteria_met",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Confirm imatinib failure through resistance or intolerance before this GIST regimen.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm imatinib failure through resistance or intolerance before this GIST regimen.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "00719a",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "ECOG_OUTSIDE_SOURCE",
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -470,19 +731,25 @@
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "ECOG is outside the usual source eligibility range; review the indication and current NCCP regimen."
+          "message": "ECOG above 2 is outside source eligibility.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "ECOG above 2 is outside source eligibility.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ECOG is outside the usual source eligibility range; review the indication and current NCCP regimen."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "HYPERSENSITIVITY",
-        "priority": 10,
+        "rule_id": "HYPERSENSITIVITY_EXCLUSION",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -491,154 +758,730 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
+          "message": "Hypersensitivity to sunitinib or an excipient: source exclusion.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Hypersensitivity to sunitinib or an excipient: source exclusion.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Known hypersensitivity to a regimen component triggers the exclusion pathway."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "PREGNANCY_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREGNANCY_EXCLUSION",
+        "when": {
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Pregnancy: source exclusion.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Pregnancy: source exclusion.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "BREASTFEEDING_EXCLUSION",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Breastfeeding: source exclusion.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Breastfeeding: source exclusion.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "BASELINE_CARDIAC_EXCLUSION",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "lvef_percent",
+                  "operator": "<",
+                  "value": 55
+                },
+                {
+                  "field": "significant_cardiovascular_disease",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Baseline significant cardiovascular disease and/or LVEF < 55% is excluded by NCCP 00719. Do not substitute the different on-treatment cardiac threshold or the newer 42-day source.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Baseline significant cardiovascular disease and/or LVEF < 55% is excluded by NCCP 00719. Do not substitute the different on-treatment cardiac threshold or the newer 42-day source.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "ANC_DELAY",
+        "when": {
+          "field": "anc",
+          "operator": "<",
+          "value": 1
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "ANC < 1×10⁹/L: delay sunitinib and reassess.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "ANC < 1×10⁹/L: delay sunitinib and reassess.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Table1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PLATELETS_DELAY",
+        "when": {
+          "field": "platelets",
+          "operator": "<",
+          "value": 75
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Platelets < 75×10⁹/L: delay sunitinib and reassess.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Platelets < 75×10⁹/L: delay sunitinib and reassess.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Table1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "CHILD_PUGH_C",
+        "when": {
+          "field": "child_pugh_class",
+          "operator": "==",
+          "value": "C"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Child–Pugh C: sunitinib is not recommended by this 21-day NCCP source. Do not copy the 42-day source’s 75% suggestion.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Child–Pugh C: sunitinib is not recommended by this 21-day NCCP source. Do not copy the 42-day source’s 75% suggestion.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DIALYSIS_REVIEW",
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "No initial dose adjustment is required by the source, including haemodialysis. Subsequent dose changes depend on individual safety/tolerability; confirm renal and medication review.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "No initial dose adjustment is required by the source, including haemodialysis. Subsequent dose changes depend on individual safety/tolerability; confirm renal and medication review.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "TOXICITY_G3_4_HOLD",
+        "when": {
+          "field": "current_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Grade 3–4 reactions: delay until recovery to grade 1, then reduce one 12.5 mg dose level. Component-specific stop criteria override this general pathway.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Grade 3–4 reactions: delay until recovery to grade 1, then reduce one 12.5 mg dose level. Component-specific stop criteria override this general pathway.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PRIOR_TOXICITY_NOT_RECOVERED",
+        "when": {
+          "all": [
+            {
+              "field": "prior_worst_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "current_toxicity_grade",
+              "operator": ">",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "A prior grade 3–4 reaction has not recovered to grade 1 or better; continue withholding.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A prior grade 3–4 reaction has not recovered to grade 1 or better; continue withholding.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PRIOR_TOXICITY_RECOVERY_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "prior_worst_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "current_toxicity_grade",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "A documented prior grade 3–4 event needs an entered current grade showing recovery to grade 1 or better. Missing recovery cannot be cleared by a stage selection or restart checkbox.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A documented prior grade 3–4 event needs an entered current grade showing recovery to grade 1 or better. Missing recovery cannot be cleared by a stage selection or restart checkbox.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PRIOR_TOXICITY_RECOVERED",
+        "when": {
+          "all": [
+            {
+              "field": "prior_worst_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "current_toxicity_grade",
+              "operator": "<=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "After recovery from grade 3–4 toxicity, review one 12.5 mg level reduction from the actual current dose; minimum 25 mg/day. Recovery is not an automatic restart.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "After recovery from grade 3–4 toxicity, review one 12.5 mg level reduction from the actual current dose; minimum 25 mg/day. Recovery is not an automatic restart.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "RESTART_CONTEXT_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "restart_after_toxicity",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "assessment_phase",
+                  "operator": "==",
+                  "value": "restart"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "prior_worst_toxicity_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_toxicity_grade",
+                  "operator": "missing"
+                },
+                {
+                  "field": "current_sunitinib_daily_mg",
+                  "operator": "missing"
+                },
+                {
+                  "any": [
+                    {
+                      "field": "consultant_restart_confirmed",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "consultant_restart_confirmed",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Do not restart without the prior event, current recovery grade, actual dose and consultant-confirmed plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Do not restart without the prior event, current recovery grade, actual dose and consultant-confirmed plan.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Table 3 / dose modifications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
+      },
+      {
+        "rule_id": "DOSE_FLOOR",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "dose_reduction_required",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "all": [
+                    {
+                      "field": "prior_worst_toxicity_grade",
+                      "operator": ">=",
+                      "value": 3
+                    },
+                    {
+                      "field": "current_toxicity_grade",
+                      "operator": "<=",
+                      "value": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "current_sunitinib_daily_mg",
+              "operator": "<=",
+              "value": 25
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Another 12.5 mg reduction would breach the source minimum 25 mg/day. Review discontinuation or an alternative plan; do not calculate below the floor.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Another 12.5 mg reduction would breach the source minimum 25 mg/day. Review discontinuation or an alternative plan; do not calculate below the floor.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Dose modifications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOSE_BELOW_MINIMUM",
+        "when": {
+          "field": "current_sunitinib_daily_mg",
+          "operator": "<",
+          "value": 25
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "A dose below 25 mg/day is outside the source dose range; reconcile the prescription.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A dose below 25 mg/day is outside the source dose range; reconcile the prescription.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Dose modifications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "CYP_INTERACTION",
         "when": {
           "any": [
             {
-              "field": "pregnancy",
+              "field": "cyp3a4_interaction",
               "operator": "==",
-              "value": true
+              "value": "inhibitor"
             },
             {
-              "field": "breastfeeding",
+              "field": "cyp3a4_interaction",
+              "operator": "==",
+              "value": "inducer"
+            },
+            {
+              "field": "cyp3a4_interaction",
+              "operator": "==",
+              "value": "unknown"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Avoid potent CYP 3 A 4 inhibitors/inducers where possible. If unavoidable, specialist exceptions may involve 37.5 mg minimum with inhibitor or up to 87.5 mg with inducer; these are not routine dose changes or automatic prescriptions.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Avoid potent CYP 3 A 4 inhibitors/inducers where possible. If unavoidable, specialist exceptions may involve 37.5 mg minimum with inhibitor or up to 87.5 mg with inducer; these are not routine dose changes or automatic prescriptions.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Dose modifications / interactions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "DOSE_ABOVE_ROUTINE",
+        "when": {
+          "field": "current_sunitinib_daily_mg",
+          "operator": ">",
+          "value": 50
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Dose exceeds the routine 50 mg/day reference. Confirm whether a source-described interaction exception applies and monitor toxicity; do not assume routine escalation.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Dose exceeds the routine 50 mg/day reference. Confirm whether a source-described interaction exception applies and monitor toxicity; do not assume routine escalation.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Dose modifications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
+      },
+      {
+        "rule_id": "DOSE_ABOVE_SOURCE_EXCEPTION",
+        "when": {
+          "field": "current_sunitinib_daily_mg",
+          "operator": ">",
+          "value": 87.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "The entered daily dose exceeds even the source-described CYP3A4-inducer exception maximum of 87.5 mg. Withhold and reconcile the prescription; do not calculate a replacement dose.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "The entered daily dose exceeds even the source-described CYP3A4-inducer exception maximum of 87.5 mg. Withhold and reconcile the prescription; do not calculate a replacement dose.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 2,
+          "section": "Dose modifications / interaction exception",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "CHF_DISCONTINUE",
+        "when": {
+          "field": "clinical_congestive_heart_failure",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Clinical manifestations of congestive heart failure: source recommends discontinuing sunitinib.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Clinical manifestations of congestive heart failure: source recommends discontinuing sunitinib.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Cardiac toxicity",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "ASYMPTOMATIC_LVEF",
+        "when": {
+          "all": [
+            {
+              "field": "clinical_congestive_heart_failure",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "field": "asymptomatic_lvef_decline_gt20_source_confirmed",
               "operator": "==",
               "value": true
             }
           ]
         },
         "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Pregnancy or breastfeeding triggers the protocol exclusion pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility/exclusions section"
-        },
-        "explanation": "Pregnancy or breastfeeding triggers the protocol exclusion pathway."
-      },
-      {
-        "id": "TKI_LIVER_3",
-        "priority": 9,
-        "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 3
-        },
-        "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "ALT/AST >3 ×ULN requires protocol-specific interruption and hepatic review."
+          "message": "Asymptomatic LVEF < 50% AND clinically confirmed > 20% below baseline: interrupt and/or reduce dose. The source percentage is not automatically converted to percentage points.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Asymptomatic LVEF < 50% AND clinically confirmed > 20% below baseline: interrupt and/or reduce dose. The source percentage is not automatically converted to percentage points.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ALT/AST >3 ×ULN requires protocol-specific interruption and hepatic review."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Cardiac toxicity",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "TKI_LIVER_5",
-        "priority": 10,
+        "rule_id": "LOW_LVEF_CONTEXT",
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "!=",
+              "value": "baseline"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            },
+            {
+              "any": [
+                {
+                  "field": "clinical_congestive_heart_failure",
+                  "operator": "missing"
+                },
+                {
+                  "field": "asymptomatic_lvef_decline_gt20_source_confirmed",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Severe/recurrent hepatotoxicity requires permanent discontinuation review."
+          "message": "Low LVEF needs clinical heart-failure assessment and baseline-change interpretation; do not assume the missing part of the combined source criterion.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Low LVEF needs clinical heart-failure assessment and baseline-change interpretation; do not assume the missing part of the combined source criterion.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Severe/recurrent hepatotoxicity requires permanent discontinuation review."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Cardiac toxicity",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
       },
       {
-        "id": "TKI_BILI",
-        "priority": 9,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Bilirubin >2 ×ULN requires interruption and hepatic review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Bilirubin >2 ×ULN requires interruption and hepatic review."
-      },
-      {
-        "id": "TKI_DIARRHOEA",
-        "priority": 9,
-        "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse diarrhoea requires interruption and reduced-dose restart review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade 3 or worse diarrhoea requires interruption and reduced-dose restart review."
-      },
-      {
-        "id": "TKI_HFSR",
-        "priority": 9,
-        "when": {
-          "field": "rash_or_hfsr_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 skin toxicity/HFSR requires interruption and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Grade 3 skin toxicity/HFSR requires interruption and dose modification."
-      },
-      {
-        "id": "TKI_BP",
-        "priority": 9,
+        "rule_id": "BP_UNCONTROLLED",
         "when": {
           "field": "uncontrolled_hypertension",
           "operator": "==",
@@ -647,61 +1490,211 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Withhold until blood pressure is controlled."
+          "message": "Uncontrolled hypertension is a baseline exclusion. During treatment, severe hypertension uncontrolled with medical management requires suspension until controlled.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Uncontrolled hypertension is a baseline exclusion. During treatment, severe hypertension uncontrolled with medical management requires suspension until controlled.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Withhold until blood pressure is controlled."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Exclusions and p 4 hypertension",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "TKI_QTC",
-        "priority": 10,
+        "rule_id": "BP_RESTART_REVIEW",
         "when": {
-          "field": "qtcf_ms",
-          "operator": ">=",
-          "value": 500
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "restart"
+            },
+            {
+              "field": "uncontrolled_hypertension",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "hypertension_control_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hypertension_control_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "QTcF ≥500 ms requires interruption and correction of reversible causes."
+          "message": "Confirm hypertension is controlled before restarting; a normal dose history does not override current uncontrolled BP.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Confirm hypertension is controlled before restarting; a normal dose history does not override current uncontrolled BP.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "QTcF ≥500 ms requires interruption and correction of reversible causes."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Hypertension",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "TKI_CARDIAC",
-        "priority": 10,
+        "rule_id": "SCAR_SUSPECTED",
         "when": {
-          "field": "symptomatic_cardiac_dysfunction",
+          "field": "suspected_sjs_ten_or_em",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold",
+          "type": "discontinue",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Symptomatic cardiac dysfunction requires interruption and cardiac assessment."
+          "message": "If signs of SJS, TEN or erythema multiforme are present, discontinue sunitinib and assess urgently. A resolved suspected EM event may be reviewed separately; confirmed SJS/TEN must not be restarted.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "If signs of SJS, TEN or erythema multiforme are present, discontinue sunitinib and assess urgently. A resolved suspected EM event may be reviewed separately; confirmed SJS/TEN must not be restarted.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Symptomatic cardiac dysfunction requires interruption and cardiac assessment."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Skin and tissue disorders",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "TKI_BLEED",
-        "priority": 10,
+        "rule_id": "SJS_TEN_NO_RECHALLENGE",
+        "when": {
+          "field": "confirmed_sjs_or_ten",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Confirmed SJS/TEN: sunitinib must not be restarted, even if the current skin grade has recovered.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirmed SJS/TEN: sunitinib must not be restarted, even if the current skin grade has recovered.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Skin and tissue disorders",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "PRIOR_PERMANENT_STOP",
+        "when": {
+          "field": "prior_permanent_discontinuation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "A prior permanent-discontinuation/no-rechallenge criterion remains in force despite normal current measurements.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "A prior permanent-discontinuation/no-rechallenge criterion remains in force despite normal current measurements.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Source permanent-stop history",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
+      },
+      {
+        "rule_id": "HEPATIC_FAILURE_STOP",
+        "when": {
+          "field": "hepatic_failure_signs",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Clinical signs/symptoms of hepatic failure require discontinuation and supportive care; see the current product information. An isolated ALT/AST > 5×ULN is not automatically this diagnosis.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Clinical signs/symptoms of hepatic failure require discontinuation and supportive care; see the current product information. An isolated ALT/AST > 5×ULN is not automatically this diagnosis.",
+        "source": {
+          "document": "EMA Sutent product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/sutent-epar-product-information_en.pdf",
+          "page": 3,
+          "section": "4.4 Hepatotoxicity",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_primary_source_search_excerpt; full EMA PDF retrieval rate-limited",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
+      },
+      {
+        "rule_id": "QT_REVIEW",
+        "when": {
+          "field": "qt_risk_or_prolongation",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "sunitinib"
+          ],
+          "message": "Review QT prolongation, interacting medicines, electrolytes and cardiac risks. This NCCP source does not provide an automatic 500 ms stop algorithm.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Review QT prolongation, interacting medicines, electrolytes and cardiac risks. This NCCP source does not provide an automatic 500 ms stop algorithm.",
+        "source": {
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 3,
+          "section": "Regimen-specific complications / administration",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "BLEEDING_REVIEW",
         "when": {
           "field": "clinically_significant_bleeding",
           "operator": "==",
@@ -710,19 +1703,26 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Clinically significant bleeding requires interruption and specialist review."
+          "message": "Clinically significant bleeding requires urgent assessment and interruption pending an individual plan.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Clinically significant bleeding requires urgent assessment and interruption pending an individual plan.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Clinically significant bleeding requires interruption and specialist review."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications / administration",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text",
+          "interpretation_note": "Conservative clinical review safeguard, not a verbatim numerical source threshold."
+        }
       },
       {
-        "id": "TKI_SURGERY",
-        "priority": 9,
+        "rule_id": "WOUND_REVIEW",
         "when": {
           "field": "major_surgery_or_unhealed_wound",
           "operator": "==",
@@ -731,79 +1731,76 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Withhold around major surgery and until adequate wound healing."
+          "message": "Temporarily interrupt around major surgery and review wound healing before restart.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Temporarily interrupt around major surgery and review wound healing before restart.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Withhold around major surgery and until adequate wound healing."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications / administration",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "TKI_CYP",
-        "priority": 8,
+        "rule_id": "THYROID_REVIEW",
         "when": {
-          "field": "strong_cyp_interaction",
+          "field": "thyroid_dysfunction_unmanaged",
           "operator": "==",
           "value": true
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "sunitinib"
           ],
-          "message": "Clinically important CYP3A/P-gp interaction requires medication and dose review."
+          "message": "Treat pre-existing thyroid dysfunction appropriately and monitor thyroid function during therapy.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Treat pre-existing thyroid dysfunction appropriately and monitor thyroid function during therapy.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Clinically important CYP3A/P-gp interaction requires medication and dose review."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 4,
+          "section": "Regimen-specific complications / administration",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       },
       {
-        "id": "TKI_PROTEIN_G3",
-        "priority": 9,
+        "rule_id": "ORAL_PLAN_REVIEW",
         "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Severe proteinuria requires interruption and quantified renal assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Severe proteinuria requires interruption and quantified renal assessment."
-      },
-      {
-        "id": "OF590_00719_SUNITINIB_CHILD_C",
-        "priority": 20,
-        "when": {
-          "field": "child_pugh_class",
+          "field": "oral_plan_uncertain",
           "operator": "==",
-          "value": "C"
+          "value": true
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "sunitinib"
           ],
-          "message": "Child–Pugh C: sunitinib is not recommended.",
-          "recommendation": "Child–Pugh C: sunitinib is not recommended."
+          "message": "Confirm 50 mg daily Days 1–14 then 7 days off. With/without food; omit a missed dose and take the usual dose the following day, without an extra dose.",
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true
         },
+        "explanation": "Confirm 50 mg daily Days 1–14 then 7 days off. With/without food; omit a missed dose and take the usual dose the following day, without an extra dose.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Child–Pugh C: sunitinib is not recommended."
+          "document": "NCCP 00719 v2",
+          "url": "https://healthservice.hse.ie/documents/6595/719_v2_SUNitinib_50mg21_days.pdf",
+          "page": 1,
+          "section": "Regimen-specific complications / administration",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
       }
     ]
   },
@@ -818,8 +1815,10 @@
     "Regimen-specific exclusions encoded in the interactive assessment"
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Regimen-specific cardiac, neurological, urine, methotrexate-level, CK, blood-pressure and toxicity monitoring as applicable"
+    "Baseline and regular full blood count, renal/liver profile, thyroid function and blood pressure.",
+    "MUGA/ECHO if clinically indicated or cardiac history; periodic LVEF assessment may be considered.",
+    "The 00719 source does not assign 00325’s fixed 12-week TFT interval; specify local timing explicitly.",
+    "Monitor skin, bleeding, thyroid dysfunction, QT risk and wound healing."
   ],
   "dose_modifications": [
     "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
@@ -835,6 +1834,56 @@
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
-    "additional_supportive_care": []
+    "additional_supportive_care": [
+      "No routine premedication.",
+      "Anti-diarrhoeal treatment may be required; confirm the local prescription.",
+      "Minimal-to-low emetogenic risk; follow the prescribed supportive plan."
+    ]
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "main_cycle",
+      "label": "21-day oral cycle",
+      "active_drugs": [
+        "sunitinib"
+      ],
+      "cycle_length_days": 21,
+      "duration": "Until disease progression or unacceptable toxicity",
+      "administration": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "drug": "sunitinib",
+          "route": "PO",
+          "dose": {
+            "value": 50,
+            "unit": "mg once daily"
+          },
+          "note": "Reference starting dose; individual prescription may be lower. Days 15–21 are tablet-free. With/without food; no extra dose after a missed dose."
+        }
+      ]
+    }
+  ],
+  "dose_levels": {
+    "sunitinib": {
+      "0": 50,
+      "-1": 37.5,
+      "-2": 25,
+      "minimum": 25
+    }
   }
 }

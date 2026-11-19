@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),assert=require('node:assert/strict'),M=require('./helpers/retrospective-v08461.cjs');
+const r=JSON.parse(fs.readFileSync(M.RECORD));M.createMigration(r);
+assert.equal(M.baselineFiles().size,21288);assert.equal(M.ROUTES.length,314);
+const copy=()=>structuredClone(r),file=Object.keys(r.files).find(f=>r.files[f].before!==null);assert(file);
+let bad=copy();bad.files[file].before='0'.repeat(64);assert.throws(()=>M.createMigration(bad),'A different prior hash must fail');
+bad=copy();bad.files['validation/sarcoma-v08460/asset-migrations.json']=structuredClone(r.files[file]);assert.throws(()=>M.createMigration(bad),'Historical evidence is immutable');
+bad=copy();bad.baseline_manifest_sha256='0'.repeat(64);assert.throws(()=>M.createMigration(bad),'The frozen baseline manifest is pinned');
+bad=copy();bad.previous_migration_sha256='0'.repeat(64);assert.throws(()=>M.createMigration(bad),'The prior approved migration is pinned');
+bad=copy();bad.files['patient/00244/guide.pdf']=structuredClone(r.files[file]);assert.throws(()=>M.createMigration(bad),'Existing colorectal documents remain protected');
+const result=M.verifyCurrent();console.log('v61 working-state baseline preservation verified: '+JSON.stringify(result)+'. Historical provenance gates remain separate and enabled.');

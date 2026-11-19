@@ -2,11 +2,11 @@
 
 SACTCheck connects source-linked oncology assessment, clinical knowledge, consent, supportive care and patient information. The visible service currently focuses on solid tumours. Haematology source, data and tests are retained while that service is hidden.
 
-## Current manual update: v0.84.60
+## Current manual update: v0.84.61
 
-This review update builds on v0.84.59 at commit `c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c`. It covers the first five sarcoma suites: NCCP 00500, 00391, 00392, 00501 and 00511, with a retrospective audit of 00453, 00602, 00807, 00894 and 00945. The sarcoma campaign proceeds in sequential groups of five.
+This review update follows the saved v0.84.60 working state, authenticated by its complete manifest and migration chain anchored to actual v0.84.59 Git commit `c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c`. It adds four GIST service routes: 00335, 00325/gist, 00719/gist and 00244/gist, while preserving the existing 00244 colorectal patient service. The planned fifth item, pazopanib 00445, remains blocked by its unavailable current source. A fresh retrospective audit covers the preceding five suites: 00500, 00391, 00392, 00501 and 00511.
 
-The scope includes clinical decision rules, supportive workflows, generic and agent-specific consent information, clinical knowledge and patient companions. Current scope, source evidence, test results and explicit file migrations are in `validation/sarcoma-v08460/`. Automated checks and source reconciliation support review; independent clinical and oncology-pharmacy acceptance remain pending. Browser checks and the full historical Git gate have separately recorded environment blocks.
+The scope includes clinical decision rules, supportive workflows, generic and agent-specific consent information, clinical knowledge and patient companions. Current scope, source evidence, test results and explicit file migrations are in `validation/sarcoma-v08461/`. Automated checks and source reconciliation support review; independent clinical and oncology-pharmacy acceptance remain pending. Browser checks and the full historical Git gate have separately recorded environment blocks.
 
 Manual update archives contain repository-relative files directly at the archive root. Extract or copy their contents into the Sactcheck repository root; there is no enclosing `UPDATE/` directory. Evidence and installation instructions are packaged separately. Preparing the files does not commit, push or deploy the site.
 

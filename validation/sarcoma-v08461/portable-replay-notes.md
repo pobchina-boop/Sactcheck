@@ -1,0 +1,20 @@
+# Portable clinical replay
+
+18 November2026. Both original author scripts and the119-case independent script are preserved byte-for-byte. Frozen reports are never overwritten by these wrappers.
+
+- `node tools/check-sarcoma-independent-v08461.cjs`:119/119. Temporary overlay maps current application protocols to the original external draft paths. All non-timestamp results and protocol/tool/script hashes must exactly equal the retained corrected review.
+- `node tools/check-sarcoma-clinical-v08461.cjs`:310/310 (158+152). Unchanged scripts run in temporary sibling staging. Only temporary original-manifest baseline hashes are adapted to the reviewed integrated application hashes, so the unchanged no-app-mutation assertions remain relevant after integration. Exact clinical case results must match retained outputs.
+- The author CRC preservation assertion is supplemented with an explicit comparison against the immutable prior draft’s indications, treatment phases and dose levels, avoiding a current-to-current comparison alone.
+- Both wrappers verify current protocol hashes before and after execution, use30-second subprocess limits and remove only their own temporary directories. No application/clinical JSON or frozen evidence is rewritten.
+
+Portability setup uncovered two missing auxiliary fixture paths (`sunitinib-dose-range-replay.json`, then the sibling `initial-probes.json`), which were added to temporary staging. These were adapter errors, not clinical test failures; observed ENOENT diagnostics remain in the tool run record. The independent wrapper passed on its first run. After the two fixes, author310/310 and exact-result comparison passed; after adding immutable CRC provenance validation, author310/310 passed again. Node runtime24.22.1.
+
+The original external evidence contains absolute historical paths and external-draft status labels. Those are intentionally retained as provenance; the wrappers document and perform current-app replay separately. Software passes do not imply source-conflict resolution, browser/device checks or independent oncology/pharmacy approval.
+
+## Explicit integrated metadata, grading and indication transitions
+
+The earlier result above records the first replay of exact external draft bytes. `integrated-portable-replay-results.json` records the later final application snapshot. The shared transition verifier reconstructs each current protocol from its immutable corrected draft using only declared before/after JSON paths and compares the entire reconstructed object and final byte hash. Five grading definitions must equal the exact SHA-pinned source-review handoff. The only indication edits permitted are NCCP 00325 national codes: missing GIST code to 00325a and renal code 00325g to 00325b, with source page/lines and text hash checked; internal IDs stay unchanged. No rule or schedule transitions are permitted.
+
+The original 119-case and 310-case scripts and frozen results remain unchanged. The independent wrapper adjusts only expected protocol fingerprints in memory after authenticating those transitions; every other non-timestamp result, runtime hash and expectation must match the original corrected report. The author wrapper requires exact original clinical results. Both pass on the final application hashes. The full sarcoma legacy test also passes with 25 protocols, 664 inputs, 685 rules and 510 independently assessed rule-linked fields. All 12 grading fields passed current-engine/descriptor verification, including rejecting unsupported grade 4 HFS/HFSR input.
+
+The platform legacy test received the same strict version-scoped grading delegation; its historical assertions remain. Its previously documented missing historical Git object remains blocked and was not rerun; syntax passed. One new mapping assertion used the wrong internal property name before correction; the failed fixture log is retained separately from clinical failures. A concurrent manifest-format mismatch was resolved without protocol changes. Raw final replay logs are in `compatibility-logs/`.

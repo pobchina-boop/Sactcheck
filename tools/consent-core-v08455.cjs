@@ -33,6 +33,7 @@ function render(profile){
 function transform(html,profile,file){
  const scope59={ '00453':'Specialist transplant pathway','00807':'Induction and maintenance schedule','00885':'Continuous daily tablets','00894':'Induction and maintenance schedule','00945':'21- or 42-day option; confirm the selected plan' };
  if(profile.suite_release==='0.84.59' && scope59[profile.code])html=html.replace(profile.cycle_days+'-day cycle',scope59[profile.code]);
+ if(profile.suite_release==='0.84.61' && profile.code==='00335' && profile.schedule_kind==='continuous')html=html.replace(profile.cycle_days+'-day cycle','Continuous daily tablets; 28-day reference view');
  const start='<!-- consent-core-v08455:start -->',end='<!-- consent-core-v08455:end -->';
  html=html.replace(/<!-- consent-core-v08455:start -->[\s\S]*?<!-- consent-core-v08455:end -->/g,'');
  const marker=/<h2\b[^>]*>[^<]*(?:Regimen\s*\/\s*agent-specific|[Aa]gent-specific|[Mm]edicine-specific|[Mm]aterial risks)[^<]*<\/h2>/;

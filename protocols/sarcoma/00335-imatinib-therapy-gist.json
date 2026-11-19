@@ -10,8 +10,8 @@
     "short_title": "Imatinib Therapy – GIST",
     "indication": "Unresectable/metastatic KIT-positive GIST or adjuvant treatment after resection when relapse risk is significant.",
     "source_url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.59.0",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.61",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "sarcoma_subgroup": "gist",
@@ -40,11 +40,13 @@
     },
     "validation": {
       "official_catalogue_and_source_link_checked": true,
-      "rule_level_source_reconciliation_status": "source_reconciled_organ_function_v0590",
-      "software_tests_completed": true,
+      "rule_level_source_reconciliation_status": "locally_integrated_v08461_review_source_ambiguities_and_human_approval_pending",
+      "software_tests_completed": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "source_document_checked": true,
+      "source_reconciled": false
     },
     "tumour_group": "Sarcoma",
     "partial_assessment_policy": "Each entered value is assessed independently. Organ-function values or categories are optional; omitted domains remain unassessed and are never assumed normal.",
@@ -61,12 +63,15 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "source_reconciled_rule_encoding",
-      "label": "Source-reconciled organ-function encoding · clinical/pharmacy review pending",
-      "source_reconciled": true,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "Locally integrated review · source ambiguities and clinical/pharmacy approval pending",
+      "source_reconciled": false,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
-      "clinical_use_authorised": false
+      "clinical_use_authorised": false,
+      "audit_release": "0.84.61",
+      "source_checked_date": "2026-11-18",
+      "scope_note": "Complete current official source text checked. Original PDF bytes and visual table layout unverified. Source conflicts remain explicit review branches. Scoped software cases are separate from full historical CI, browser acceptance and independent clinical/pharmacy approval."
     },
     "organ_function_reconciliation": {
       "release": "0.59.0",
@@ -86,13 +91,37 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00335-v4"
+    "canonical_protocol_id": "nccp-00335-v4",
+    "source_checked_date": "2026-11-18",
+    "clinical_audit_release": "0.84.61",
+    "source_boundary_notes": [
+      "NCCP and Glivec differ for cytopenia restart dosing; no automatic numeric dose.",
+      "NCCP lowest-count merged dose-cell geometry remains unverified; original PDF binary unavailable.",
+      "Hepatic restart requires bilirubin <1.5 AND ALT/AST <2.5×ULN; actual-dose/source differences must be reviewed.",
+      "Non-haematological toxicity uses active grade, worst grade, occurrence and recovery separately."
+    ],
+    "draft_only": false,
+    "source_retrieval_method": "Current official HSE/NCCP listing and complete extracted source text checked; original PDF binary unavailable; source table visual layout unverified.",
+    "source_pdf_sha256": null,
+    "source_text_snapshot_sha256": "3ec03accbc1aab4820343004c6de2938b70a3cf4e919fb0ed780b3a2bcdec9ae",
+    "integration_review": {
+      "release": "0.84.61",
+      "status": "locally_integrated_review_pending_human_approval",
+      "source_checked_date": "2026-11-18",
+      "source_content": "complete_current_official_extracted_text",
+      "original_pdf_binary": "unavailable",
+      "visual_table_layout": "unverified_no_image_pixels",
+      "source_ambiguities": "Explicit hold/review branches retained; no numeric prescription inferred across source conflicts.",
+      "clinical_use_authorised": false,
+      "consultant_reviewed": false,
+      "oncology_pharmacy_reviewed": false
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or appropriately authorised specialist named in the current NCCP source.",
-    "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
+    "dose_modification_note": "All dose/percentage options require consultant and oncology-pharmacy confirmation of source, actual prior dose, event history and recovery. No automatic numeric prescription is generated.",
     "disclaimer": "Decision-support encoding derived from NCCP 00335 Version 4. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement.",
-    "organ_function_rule_status": "Source reconciled in SACTCheck v0.59.0; independent Consultant and oncology-pharmacy validation pending."
+    "organ_function_rule_status": "External v0.84.61 draft; source disagreements remain unresolved."
   },
   "indications": [
     {
@@ -102,16 +131,239 @@
   ],
   "treatment": {
     "cycle_length_days": 1,
-    "schedule_summary": "Imatinib Therapy – GIST",
+    "schedule_summary": "Imatinib 400 mg orally once daily with food. Advanced GIST continues until progression/unacceptable toxicity; specialist escalation to 800 mg/day uses 400 mg twice daily. NCCP adjuvant treatment is up to 3 years after resection.",
     "drugs": [
       "imatinib"
     ]
   },
   "input_definitions": {
+    "assessment_phase": {
+      "label": "Assessment stage",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "baseline",
+          "label": "Before first treatment"
+        },
+        {
+          "value": "on_treatment",
+          "label": "During treatment"
+        },
+        {
+          "value": "restart",
+          "label": "Recovery / restart review"
+        }
+      ],
+      "demo_value": "baseline"
+    },
     "ecog": {
       "label": "ECOG performance status",
       "type": "select",
       "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 1,
+          "label": "1"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "3"
+        },
+        {
+          "value": 4,
+          "label": "4"
+        }
+      ],
+      "demo_value": 0
+    },
+    "hypersensitivity": {
+      "label": "Known hypersensitivity to medicine/excipient",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pregnancy": {
+      "label": "Pregnancy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "breastfeeding": {
+      "label": "Breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "anc": {
+      "label": "Absolute neutrophil count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 3,
+      "input_role": "decision"
+    },
+    "platelets": {
+      "label": "Platelet count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×10⁹/L",
+      "demo_value": 200,
+      "input_role": "decision"
+    },
+    "active_infection": {
+      "label": "Current infection or fever requiring assessment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "current_daily_dose_mg": {
+      "label": "Actual current prescribed daily dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg",
+      "demo_value": 400,
+      "input_role": "decision"
+    },
+    "treatment_setting": {
+      "label": "GIST treatment setting",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "advanced",
+          "label": "Unresectable / metastatic"
+        },
+        {
+          "value": "adjuvant",
+          "label": "After resection; adjuvant"
+        }
+      ],
+      "demo_value": "advanced"
+    },
+    "kit_positive_confirmed": {
+      "label": "KIT/CD117-positive GIST confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "adjuvant_low_recurrence_risk": {
+      "label": "Low recurrence risk in proposed adjuvant treatment",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "specialist_escalation_plan": {
+      "label": "Specialist escalation plan for progressing advanced disease confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "prior_severe_count_event": {
+      "label": "Previous severe neutropenia/thrombocytopenia causing a treatment hold",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "count_event_occurrence": {
+      "label": "Severe count-toxicity occurrence",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": 0,
+          "label": "Unknown / not established"
+        },
+        {
+          "value": 1,
+          "label": "First"
+        },
+        {
+          "value": 2,
+          "label": "Second"
+        },
+        {
+          "value": 3,
+          "label": "Third or later"
+        }
+      ],
+      "demo_value": 0
+    },
+    "count_toxicity_recovered_grade_le1": {
+      "label": "Haematological toxicity clinically confirmed recovered to grade ≤1",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bilirubin_uln_multiple": {
+      "label": "Bilirubin relative to local laboratory ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "alt_uln_multiple": {
+      "label": "ALT relative to local laboratory ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "ast_uln_multiple": {
+      "label": "AST relative to local laboratory ULN",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "×ULN",
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "prior_hepatotoxicity_hold": {
+      "label": "Previous imatinib hepatotoxicity requiring interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "current_nonhaem_grade": {
+      "label": "Current named non-haematological toxicity (clinician-assessed CTCAE grade)",
+      "type": "select",
+      "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
@@ -135,390 +387,163 @@
         }
       ],
       "demo_value": 0,
-      "input_role": "decision"
+      "ctcae_version": "5.0",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Grade the named event using its own criteria; a generic symptom score is not a CTCAE grade."
     },
-    "hypersensitivity": {
-      "label": "Known hypersensitivity to a regimen component",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "pregnancy": {
-      "label": "Pregnant",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "breastfeeding": {
-      "label": "Breastfeeding",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT/AST result (enter actual result; ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "always_show": true,
-      "input_role": "decision"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin result (enter actual result; ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "always_show": true,
-      "input_role": "decision"
-    },
-    "diarrhoea_grade": {
-      "label": "Diarrhoea grade",
+    "worst_nonhaem_grade": {
+      "label": "Worst grade of this same toxicity episode (clinician-assessed CTCAE grade)",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "0"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "1"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "2"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "3"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "4"
         }
       ],
       "demo_value": 0,
       "ctcae_version": "5.0",
-      "ctcae_category": "diarrhoea",
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Count stools over baseline and assess hydration, continence, admission and functional impact.",
-      "input_role": "context"
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Grade the named event using its own criteria; a generic symptom score is not a CTCAE grade."
     },
-    "rash_or_hfsr_grade": {
-      "label": "Rash / hand-foot skin reaction grade",
+    "nonhaem_occurrence": {
+      "label": "Occurrence of this same non-haematological toxicity",
       "type": "select",
       "required": false,
+      "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
+          "label": "Unknown"
         },
         {
           "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
+          "label": "First"
         },
         {
           "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
+          "label": "Second"
         },
         {
           "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
+          "label": "Third"
         },
         {
           "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
+          "label": "Fourth or later"
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess morphology, body-surface area, pain, blistering, infection and functional impact.",
-      "input_role": "context"
+      "demo_value": 0
     },
-    "uncontrolled_hypertension": {
-      "label": "Uncontrolled hypertension",
+    "severe_fluid_retention": {
+      "label": "Clinically severe fluid retention",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
-    "qtcf_ms": {
-      "label": "QTcF",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 430,
-      "unit": "ms",
-      "input_role": "context"
-    },
-    "symptomatic_cardiac_dysfunction": {
-      "label": "Symptoms/signs of cardiac dysfunction",
+    "prior_severe_fluid_retention": {
+      "label": "Previous severe fluid retention causing a hold",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
+    },
+    "fluid_retention_resolved": {
+      "label": "Previous severe fluid retention resolved",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cardiac_or_renal_failure_symptoms": {
+      "label": "New cardiac or renal failure symptoms/signs",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     },
     "clinically_significant_bleeding": {
       "label": "Clinically significant bleeding",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
-    "major_surgery_or_unhealed_wound": {
-      "label": "Recent major surgery or unhealed wound",
+    "hbv_screen_complete": {
+      "label": "Baseline hepatitis B screen completed",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
+    },
+    "hbv_positive": {
+      "label": "Positive hepatitis B serology or infection",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hbv_specialist_plan_confirmed": {
+      "label": "Hepatitis B specialist treatment/monitoring plan confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "renal_impairment_or_dialysis": {
+      "label": "Renal impairment or dialysis",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "hepatic_dysfunction": {
+      "label": "Pre-existing hepatic dysfunction",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     },
     "strong_cyp_interaction": {
-      "label": "Clinically important CYP3A/P-gp interacting medicine",
+      "label": "Important CYP interaction requiring prescription review",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
-    },
-    "oedema_or_fluid_retention_grade": {
-      "label": "Oedema/fluid retention grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess weight gain, peripheral/generalised oedema, effusions, respiratory symptoms and functional impact.",
-      "input_role": "context"
-    },
-    "anc_x10e9_l": {
-      "label": "Absolute neutrophil count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
       "input_role": "decision"
     },
-    "platelets_x10e9_l": {
-      "label": "Platelet count",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 150,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "active_infection": {
-      "label": "Active infection requiring treatment",
+    "tma_suspected": {
+      "label": "Clinical/laboratory findings suggesting thrombotic microangiopathy",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
+      "input_role": "decision"
     },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+    "tma_no_restart_criterion": {
+      "label": "Elevated anti-ADAMTS13 antibody with low ADAMTS13 activity: no-restart criterion confirmed",
       "type": "boolean",
       "required": false,
       "demo_value": false,
-      "input_role": "context"
-    },
-    "mucositis_grade": {
-      "label": "Mucositis/stomatitis grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "mucositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess pain, ulceration and the effect on oral intake; distinguish altered diet from inability to eat or drink.",
-      "input_role": "context"
-    },
-    "other_nonhaem_toxicity_grade": {
-      "label": "Worst relevant non-haematological toxicity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the exact adverse event and apply its own CTCAE criteria, intervention requirement and functional impact.",
-      "input_role": "context"
-    },
-    "current_imatinib_dose_mg": {
-      "label": "Current daily imatinib dose",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 400,
-          "label": "400 mg"
-        },
-        {
-          "value": 300,
-          "label": "300 mg"
-        },
-        {
-          "value": 200,
-          "label": "200 mg"
-        }
-      ],
-      "demo_value": 400,
-      "input_role": "context"
-    },
-    "other_nonhaem_toxicity_occurrence": {
-      "label": "Occurrence of Grade 2–4 non-haematological toxicity",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "None"
-        },
-        {
-          "value": 1,
-          "label": "First occurrence"
-        },
-        {
-          "value": 2,
-          "label": "Second occurrence"
-        },
-        {
-          "value": 3,
-          "label": "Third or later occurrence"
-        }
-      ],
-      "demo_value": 0,
       "input_role": "decision"
-    },
-    "imatinib_renal_status": {
-      "label": "Renal status for imatinib",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "normal_or_impaired",
-          "label": "Normal renal function or renal impairment",
-          "decision_value": 0
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis",
-          "decision_value": 1
-        }
-      ],
-      "demo_value": "normal_or_impaired",
-      "ui_section": "labs",
-      "always_show": true,
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "context"
     }
   },
   "required_inputs": [],
@@ -553,29 +578,61 @@
     ],
     "rules": [
       {
-        "id": "ECOG_OUTSIDE_SOURCE_RANGE",
-        "priority": 8,
+        "rule_id": "STAGE_REQUIRED",
         "when": {
-          "field": "ecog",
-          "operator": ">",
-          "value": 2
+          "field": "assessment_phase",
+          "operator": "missing"
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "imatinib"
           ],
-          "message": "ECOG above 2 is outside the usual source eligibility range; verify the indication and current NCCP regimen."
+          "message": "Select baseline, treatment or restart review. Missing clinical domains remain unassessed; normal entered values are not overall clearance.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Eligibility / treatment review",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
         },
-        "explanation": "ECOG above 2 is outside the usual source eligibility range; verify the indication and current NCCP regimen."
+        "explanation": "Select baseline, treatment or restart review. Missing clinical domains remain unassessed; normal entered values are not overall clearance."
       },
       {
-        "id": "HYPERSENSITIVITY",
-        "priority": 10,
+        "rule_id": "ECOG_REVIEW",
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "ECOG above 3 is outside the listed eligibility range; review suitability.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Eligibility",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "ECOG above 3 is outside the listed eligibility range; review suitability."
+      },
+      {
+        "rule_id": "HYPERSENSITIVITY",
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -584,28 +641,160 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
+            "imatinib"
           ],
-          "message": "Known hypersensitivity to a regimen component triggers the source exclusion pathway."
+          "message": "Known hypersensitivity to medicine/excipient: source exclusion; review before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Exclusions section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
         },
-        "explanation": "Known hypersensitivity to a regimen component triggers the source exclusion pathway."
+        "explanation": "Known hypersensitivity to medicine/excipient: source exclusion; review before treatment."
       },
       {
-        "id": "PREGNANCY_BREASTFEEDING",
-        "priority": 10,
+        "rule_id": "PREGNANCY",
         "when": {
-          "any": [
+          "field": "pregnancy",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Pregnancy: source exclusion; review before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Pregnancy: source exclusion; review before treatment."
+      },
+      {
+        "rule_id": "BREASTFEEDING",
+        "when": {
+          "field": "breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Breastfeeding: source exclusion; review before treatment.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Breastfeeding: source exclusion; review before treatment."
+      },
+      {
+        "rule_id": "ACTIVE_INFECTION",
+        "when": {
+          "field": "active_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Current fever/infection requires clinical assessment before further treatment; prior dose reductions do not establish recovery.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Safety assessment",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
+        },
+        "explanation": "Current fever/infection requires clinical assessment before further treatment; prior dose reductions do not establish recovery."
+      },
+      {
+        "rule_id": "GIST_KIT_CONTEXT",
+        "when": {
+          "all": [
             {
-              "field": "pregnancy",
+              "field": "assessment_phase",
               "operator": "==",
-              "value": true
+              "value": "baseline"
             },
             {
-              "field": "breastfeeding",
+              "any": [
+                {
+                  "field": "kit_positive_confirmed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "kit_positive_confirmed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Confirm adult KIT/CD117-positive GIST and the intended advanced or adjuvant setting before starting.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Indications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Confirm adult KIT/CD117-positive GIST and the intended advanced or adjuvant setting before starting."
+      },
+      {
+        "rule_id": "ADJUVANT_LOW_RISK",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_setting",
+              "operator": "==",
+              "value": "adjuvant"
+            },
+            {
+              "field": "adjuvant_low_recurrence_risk",
               "operator": "==",
               "value": true
             }
@@ -614,187 +803,199 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "whole_regimen"
-          ],
-          "message": "Pregnancy or breastfeeding is outside the routine source pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Eligibility/exclusions section"
-        },
-        "explanation": "Pregnancy or breastfeeding is outside the routine source pathway."
-      },
-      {
-        "id": "IMAT_ANC_LT05",
-        "priority": 10,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
             "imatinib"
           ],
-          "message": "ANC <0.5 ×10⁹/L: hold until ≤Grade 1, then resume at the next lower dose level."
+          "message": "Low-risk recurrence is excluded from adjuvant imatinib in this source.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Exclusions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
         },
-        "explanation": "ANC <0.5 ×10⁹/L: hold until ≤Grade 1, then resume at the next lower dose level."
+        "explanation": "Low-risk recurrence is excluded from adjuvant imatinib in this source."
       },
       {
-        "id": "IMAT_PLT_LT10",
-        "priority": 10,
+        "rule_id": "HIGHER_DOSE_CONTEXT",
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 10
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "imatinib"
-          ],
-          "message": "Platelets <10 ×10⁹/L: hold until ≤Grade 1, then resume at the next lower dose level."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets <10 ×10⁹/L: hold until ≤Grade 1, then resume at the next lower dose level."
-      },
-      {
-        "id": "IMAT_ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "imatinib"
-          ],
-          "message": "ANC 0.5–0.99 ×10⁹/L: hold until recovery and resume at a lower dose according to occurrence."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "ANC 0.5–0.99 ×10⁹/L: hold until recovery and resume at a lower dose according to occurrence."
-      },
-      {
-        "id": "IMAT_PLT_LT50",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 50
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "imatinib"
-          ],
-          "message": "Platelets 10–49 ×10⁹/L: hold until recovery and resume at a lower dose according to occurrence."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Platelets 10–49 ×10⁹/L: hold until recovery and resume at a lower dose according to occurrence."
-      },
-      {
-        "id": "IMAT_BILI_GT3",
-        "priority": 10,
-        "when": {
-          "field": "bilirubin_uln_multiple",
+          "field": "current_daily_dose_mg",
           "operator": ">",
-          "value": 3
+          "value": 400
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "consultant_review",
           "components": [
             "imatinib"
           ],
-          "message": "Bilirubin >3 ×ULN: hold until <1.5 ×ULN, then resume at 300 mg."
+          "message": "A dose above 400 mg/day requires an explicit advanced-disease escalation and tolerance plan. NCCP allows consideration of 800 mg/day for progressing advanced GIST, administered as 400 mg twice daily; this is not routine adjuvant dosing. Review the higher emetogenic category.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 1,
+          "section": "Treatment",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
         },
-        "explanation": "Bilirubin >3 ×ULN: hold until <1.5 ×ULN, then resume at 300 mg."
+        "explanation": "A dose above 400 mg/day requires an explicit advanced-disease escalation and tolerance plan. NCCP allows consideration of 800 mg/day for progressing advanced GIST, administered as 400 mg twice daily; this is not routine adjuvant dosing. Review the higher emetogenic category."
       },
       {
-        "id": "IMAT_TRANS_GT5",
-        "priority": 10,
+        "rule_id": "COUNTS_HOLD",
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "imatinib"
-          ],
-          "message": "Transaminases >5 ×ULN: hold until <2.5 ×ULN, then resume at 300 mg."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
-        },
-        "explanation": "Transaminases >5 ×ULN: hold until <2.5 ×ULN, then resume at 300 mg."
-      },
-      {
-        "id": "IMAT_OTHER_FIRST",
-        "priority": 8,
-        "when": {
-          "field": "other_nonhaem_toxicity_occurrence",
-          "operator": "==",
-          "value": 1
+          "any": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "imatinib"
           ],
-          "message": "Clinically significant non-haematological toxicity: hold until recovery and follow the occurrence-based source pathway."
+          "message": "Severe neutropenia/thrombocytopenia requires interruption. NCCP Table 1 and the Glivec GIST table must be reconciled for the restart dose; no automatic numeric restart is issued.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
         },
-        "explanation": "Clinically significant non-haematological toxicity: hold until recovery and follow the occurrence-based source pathway."
+        "explanation": "Severe neutropenia/thrombocytopenia requires interruption. NCCP Table 1 and the Glivec GIST table must be reconciled for the restart dose; no automatic numeric restart is issued."
       },
       {
-        "id": "IMAT_OTHER_REPEAT",
-        "priority": 9,
+        "rule_id": "LOWEST_COUNT_ROW_REVIEW",
         "when": {
-          "field": "other_nonhaem_toxicity_occurrence",
-          "operator": ">=",
-          "value": 2
+          "any": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 0.5
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 10
+            }
+          ]
         },
         "action": {
-          "type": "dose_reduce_one_level",
+          "type": "consultant_review",
           "components": [
             "imatinib"
           ],
-          "message": "Recurrent non-haematological toxicity: resume at a lower imatinib dose after recovery."
+          "message": "The lowest-count row appears with a merged dose cell in extracted NCCP text. The active event remains held; confirm the original table layout before choosing a restart dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modification section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
         },
-        "explanation": "Recurrent non-haematological toxicity: resume at a lower imatinib dose after recovery."
+        "explanation": "The lowest-count row appears with a merged dose cell in extracted NCCP text. The active event remains held; confirm the original table layout before choosing a restart dose."
       },
       {
-        "id": "OF590_00335_IMATINIB_LFT_HOLD",
-        "priority": 20,
+        "rule_id": "COUNT_RECOVERY_NOT_CONFIRMED",
+        "when": {
+          "all": [
+            {
+              "field": "prior_severe_count_event",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "count_toxicity_recovered_grade_le1",
+                  "operator": "missing"
+                },
+                {
+                  "field": "count_toxicity_recovered_grade_le1",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "A prior severe count event remains on hold until toxicity recovery to grade ≤1 is clinically confirmed. Both counts and the original source pathway must be reviewed.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "A prior severe count event remains on hold until toxicity recovery to grade ≤1 is clinically confirmed. Both counts and the original source pathway must be reviewed."
+      },
+      {
+        "rule_id": "COUNT_RESTART_SOURCE_CONFLICT",
+        "when": {
+          "field": "prior_severe_count_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Source disagreement: NCCP lists 300 mg after a first severe count event and 200 mg after a second, after grade ≤1 recovery. Glivec GIST starting-400-mg guidance resumes the previous dose after ANC ≥1.5 AND platelets ≥75, then 300 mg for recurrence. Consultant/pharmacy must reconcile source, occurrence, current dose and recovery; no automatic prescription.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 2,
+          "section": "Table 1",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
+        },
+        "explanation": "Source disagreement: NCCP lists 300 mg after a first severe count event and 200 mg after a second, after grade ≤1 recovery. Glivec GIST starting-400-mg guidance resumes the previous dose after ANC ≥1.5 AND platelets ≥75, then 300 mg for recurrence. Consultant/pharmacy must reconcile source, occurrence, current dose and recovery; no automatic prescription."
+      },
+      {
+        "rule_id": "HEPATIC_ACTIVE_HOLD",
         "when": {
           "any": [
             {
@@ -803,7 +1004,12 @@
               "value": 3
             },
             {
-              "field": "alt_ast_uln_multiple",
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "ast_uln_multiple",
               "operator": ">",
               "value": 5
             }
@@ -814,33 +1020,849 @@
           "components": [
             "imatinib"
           ],
-          "message": "Bilirubin >3 ×ULN or transaminases >5 ×ULN: withhold imatinib; resume at the source-reduced dose only after recovery below the specified thresholds.",
-          "recommendation": "Bilirubin >3 ×ULN or transaminases >5 ×ULN: withhold imatinib; resume at the source-reduced dose only after recovery below the specified thresholds."
+          "message": "Bilirubin >3×ULN or ALT/AST >5×ULN: withhold imatinib. Restart requires bilirubin <1.5 AND both transaminases <2.5×ULN, plus dose-history review.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
         },
-        "explanation": "Bilirubin >3 ×ULN or transaminases >5 ×ULN: withhold imatinib; resume at the source-reduced dose only after recovery below the specified thresholds."
+        "explanation": "Bilirubin >3×ULN or ALT/AST >5×ULN: withhold imatinib. Restart requires bilirubin <1.5 AND both transaminases <2.5×ULN, plus dose-history review."
+      },
+      {
+        "rule_id": "HEPATIC_RECOVERY_INCOMPLETE",
+        "when": {
+          "all": [
+            {
+              "field": "prior_hepatotoxicity_hold",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "missing"
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "missing"
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": "missing"
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">=",
+                  "value": 1.5
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">=",
+                  "value": 2.5
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">=",
+                  "value": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Prior hepatotoxicity has not demonstrated every strict recovery criterion: bilirubin <1.5 and ALT/AST <2.5×ULN. Missing values and exact-threshold values do not establish recovery.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
+        },
+        "explanation": "Prior hepatotoxicity has not demonstrated every strict recovery criterion: bilirubin <1.5 and ALT/AST <2.5×ULN. Missing values and exact-threshold values do not establish recovery."
+      },
+      {
+        "rule_id": "HEPATIC_RECOVERED_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "prior_hepatotoxicity_hold",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": "<",
+              "value": 2.5
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": "<",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "All biochemical recovery criteria are met. NCCP lists restart at 300 mg/day; Glivec adjusts by prior dose (400→300, 600→400, 800→600 mg/day). Reconcile the actual dose and source choice; never automatically raise a previously reduced dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
+        },
+        "explanation": "All biochemical recovery criteria are met. NCCP lists restart at 300 mg/day; Glivec adjusts by prior dose (400→300, 600→400, 800→600 mg/day). Reconcile the actual dose and source choice; never automatically raise a previously reduced dose."
+      },
+      {
+        "rule_id": "NONHAEM_ACTIVE",
+        "when": {
+          "field": "current_nonhaem_grade",
+          "operator": ">=",
+          "value": 2
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Grade 2–4 named non-haematological toxicity: hold until toxicity ≤grade 1. Recovery and occurrence determine the restart pathway; source-specific serious events take precedence.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Grade 2–4 named non-haematological toxicity: hold until toxicity ≤grade 1. Recovery and occurrence determine the restart pathway; source-specific serious events take precedence."
+      },
+      {
+        "rule_id": "NONHAEM_RECOVERY_UNKNOWN",
+        "when": {
+          "all": [
+            {
+              "field": "worst_nonhaem_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "current_nonhaem_grade",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Previous grade ≥2 toxicity: current recovery grade is missing, so restart is not established.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
+        },
+        "explanation": "Previous grade ≥2 toxicity: current recovery grade is missing, so restart is not established."
+      },
+      {
+        "rule_id": "NONHAEM_G2_FIRST",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "current_nonhaem_grade",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "After first grade-2 toxicity and recovery to ≤grade 1, NCCP resumes the same daily dose. Confirm prior dose and source applicability; do not automatically increase a lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "After first grade-2 toxicity and recovery to ≤grade 1, NCCP resumes the same daily dose. Confirm prior dose and source applicability; do not automatically increase a lower dose."
+      },
+      {
+        "rule_id": "NONHAEM_G2_SECOND",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "current_nonhaem_grade",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "After second grade-2 toxicity and recovery, NCCP lists 300 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "After second grade-2 toxicity and recovery, NCCP lists 300 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose."
+      },
+      {
+        "rule_id": "NONHAEM_G2_THIRD",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "current_nonhaem_grade",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "==",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "After third grade-2 toxicity and recovery, NCCP lists 200 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "After third grade-2 toxicity and recovery, NCCP lists 200 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose."
+      },
+      {
+        "rule_id": "NONHAEM_G34_FIRST",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "current_nonhaem_grade",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "==",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "After first grade-3/4 toxicity and recovery, NCCP lists 300 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "After first grade-3/4 toxicity and recovery, NCCP lists 300 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose."
+      },
+      {
+        "rule_id": "NONHAEM_G34_SECOND",
+        "when": {
+          "all": [
+            {
+              "all": [
+                {
+                  "field": "current_nonhaem_grade",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "worst_nonhaem_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "After second grade-3/4 toxicity and recovery, NCCP lists 200 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "After second grade-3/4 toxicity and recovery, NCCP lists 200 mg/day. Confirm prior dose and source applicability; do not automatically increase a lower dose."
+      },
+      {
+        "rule_id": "NONHAEM_HISTORY_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "worst_nonhaem_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "missing"
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": "==",
+                  "value": 0
+                },
+                {
+                  "field": "nonhaem_occurrence",
+                  "operator": ">=",
+                  "value": 4
+                },
+                {
+                  "all": [
+                    {
+                      "field": "worst_nonhaem_grade",
+                      "operator": ">=",
+                      "value": 3
+                    },
+                    {
+                      "field": "nonhaem_occurrence",
+                      "operator": ">=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Occurrence is missing or exceeds the explicit NCCP table. Do not fabricate an additional dose-reduction step or automatic rechallenge.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Table 4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Occurrence is missing or exceeds the explicit NCCP table. Do not fabricate an additional dose-reduction step or automatic rechallenge."
+      },
+      {
+        "rule_id": "FLUID_RETENTION_HOLD",
+        "when": {
+          "any": [
+            {
+              "field": "severe_fluid_retention",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "all": [
+                {
+                  "field": "prior_severe_fluid_retention",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "any": [
+                    {
+                      "field": "fluid_retention_resolved",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "fluid_retention_resolved",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Severe fluid retention requires withholding until resolved; assess weight gain, oedema, effusions and cardiac/renal causes.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Severe fluid retention requires withholding until resolved; assess weight gain, oedema, effusions and cardiac/renal causes."
+      },
+      {
+        "rule_id": "CARDIORENAL_SYMPTOMS",
+        "when": {
+          "field": "cardiac_or_renal_failure_symptoms",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "New cardiac or renal failure symptoms require prompt assessment before further imatinib.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 3,
+          "section": "Regimen-specific complications",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
+        },
+        "explanation": "New cardiac or renal failure symptoms require prompt assessment before further imatinib."
+      },
+      {
+        "rule_id": "BLEEDING_REVIEW",
+        "when": {
+          "field": "clinically_significant_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Significant bleeding requires prompt clinical assessment and treatment review; GIST can bleed within the tumour or gastrointestinal tract.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 4,
+          "section": "Gastrointestinal haemorrhage",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
+        },
+        "explanation": "Significant bleeding requires prompt clinical assessment and treatment review; GIST can bleed within the tumour or gastrointestinal tract."
+      },
+      {
+        "rule_id": "HBV_SCREEN_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "hbv_screen_complete",
+                  "operator": "missing"
+                },
+                {
+                  "field": "hbv_screen_complete",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Complete hepatitis B testing before initiation and review HBsAg/core antibody results.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 2,
+          "section": "Baseline tests",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Complete hepatitis B testing before initiation and review HBsAg/core antibody results."
+      },
+      {
+        "rule_id": "HBV_POSITIVE_REVIEW",
+        "when": {
+          "field": "hbv_positive",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Positive hepatitis B serology requires liver/HBV specialist consultation and a documented monitoring/treatment plan; monitor carriers during therapy and for several months afterwards.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 4,
+          "section": "HBV reactivation",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text"
+        },
+        "explanation": "Positive hepatitis B serology requires liver/HBV specialist consultation and a documented monitoring/treatment plan; monitor carriers during therapy and for several months afterwards."
+      },
+      {
+        "rule_id": "ORGAN_IMPAIRMENT_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "renal_impairment_or_dialysis",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "hepatic_dysfunction",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "NCCP lists no routine organ/dialysis adjustment, with careful hepatic blood-count/liver monitoring. Glivec describes a minimum starting dose of 400 mg/day in renal/dialysis or hepatic impairment, adjusted for tolerance. Confirm baseline versus escalated ongoing dose; organ advice never overrides toxicity holds.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 2,
+          "section": "Table 2",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
+        },
+        "explanation": "NCCP lists no routine organ/dialysis adjustment, with careful hepatic blood-count/liver monitoring. Glivec describes a minimum starting dose of 400 mg/day in renal/dialysis or hepatic impairment, adjusted for tolerance. Confirm baseline versus escalated ongoing dose; organ advice never overrides toxicity holds."
+      },
+      {
+        "rule_id": "CYP_INTERACTION",
+        "when": {
+          "field": "strong_cyp_interaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Review the current medicine list with oncology pharmacy; avoid strong CYP3A4 inducers where possible and assess inhibitors/substrates and anticoagulants using the current SmPC.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "NCCP 00335 v4",
+          "url": "https://healthservice.hse.ie/documents/6727/335_v4_Imatinib.pdf",
+          "page": 4,
+          "section": "Drug interactions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_official_web_extracted_text",
+          "additional_primary_source": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf"
+        },
+        "explanation": "Review the current medicine list with oncology pharmacy; avoid strong CYP3A4 inducers where possible and assess inhibitors/substrates and anticoagulants using the current SmPC."
+      },
+      {
+        "rule_id": "TMA_SUSPECTED",
+        "when": {
+          "field": "tma_suspected",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Findings suggesting thrombotic microangiopathy require stopping treatment pending urgent specialist evaluation, including the appropriate ADAMTS13 work-up.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Glivec product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf",
+          "section": "4.4 Special warnings and precautions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_primary_source_web_text",
+          "scope_note": "Additional medicine-specific safety source; this action is not attributed to an NCCP numerical dose table.",
+          "interpretation_note": "Explicit conservative safety/source-uncertainty review, not an invented NCCP numerical dose criterion."
+        },
+        "explanation": "Findings suggesting thrombotic microangiopathy require stopping treatment pending urgent specialist evaluation, including the appropriate ADAMTS13 work-up."
+      },
+      {
+        "rule_id": "TMA_NO_RESTART",
+        "when": {
+          "field": "tma_no_restart_criterion",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "imatinib"
+          ],
+          "message": "Confirmed elevated anti-ADAMTS13 antibody with low ADAMTS13 activity: Glivec must not be resumed.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "source": {
+          "document": "EMA Glivec product information",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/glivec-epar-product-information_en.pdf",
+          "section": "4.4 Special warnings and precautions",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_primary_source_web_text",
+          "scope_note": "Additional medicine-specific safety source; this action is not attributed to an NCCP numerical dose table."
+        },
+        "explanation": "Confirmed elevated anti-ADAMTS13 antibody with low ADAMTS13 activity: Glivec must not be resumed."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and age/treatment-setting eligibility appropriate to the selected indication",
-    "Adequate organ and bone-marrow function for the selected regimen"
+    "Adult KIT/CD117-positive unresectable/metastatic GIST, or resected GIST at significant relapse risk.",
+    "ECOG 0–3; adequate marrow, renal and liver function."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the interactive assessment"
+    "Hypersensitivity.",
+    "Low recurrence risk for adjuvant treatment.",
+    "Pregnancy or breastfeeding."
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Regimen-specific cardiac, neurological, urine, methotrexate-level, CK, blood-pressure and toxicity monitoring as applicable"
+    "Baseline full blood count, renal/liver profile, ECG and hepatitis B screen (HBsAg and core antibody).",
+    "FBC every 2 weeks for the first 12 weeks, then monthly or as indicated; renal/liver profiles monthly.",
+    "Monitor weight/fluid retention, cardiac/renal symptoms and bleeding. Check TSH in thyroidectomy patients taking thyroxine. HBV-positive patients need specialist management and monitoring through treatment and several months afterwards."
   ],
   "dose_modifications": [
-    "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
+    "NCCP and Glivec differ for cytopenia restart dosing; no automatic numeric dose.",
+    "NCCP lowest-count merged dose-cell geometry remains unverified; original PDF binary unavailable.",
+    "Hepatic restart requires bilirubin <1.5 AND ALT/AST <2.5×ULN; actual-dose/source differences must be reviewed.",
+    "Non-haematological toxicity uses active grade, worst grade, occurrence and recovery separately."
   ],
   "supportive_care": {
     "emetogenic_risk": "oral_minimal_low",
@@ -853,6 +1875,9 @@
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for oral SACT",
-    "additional_supportive_care": []
+    "additional_supportive_care": [
+      "Dose ≤400 mg/day: minimal-to-low emetogenic risk; >400 mg/day: moderate-to-high. The antiemetic plan must follow the actual prescribed dose.",
+      "No usual specific premedication; practical oral-adherence and interaction counselling."
+    ]
   }
 }
