@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "base_commit": "a827d2bed3761997a3cc0b26f5bc68a810a8cfd0",
+  "purpose": "Publish the approved SACTCheck explainer on the standalone About page; no clinical or patient-service changes.",
+  "files": {
+    "about.html": {
+      "before": "9e66a1471e26d9eb776e83b19bd84ff7250c324cb5b25df490c2ba29ec32f51f",
+      "before_bytes": 18943,
+      "after": "a5c8e5f8a35b01ae497359c16364a52d45855af3b80a7f774bd13439660e6425",
+      "after_bytes": 20584,
+      "edits": [
+        {
+          "start_line": 10,
+          "old_lines": [
+            "  <link rel=\"stylesheet\" href=\"css/about-sactcheck.css?app=0.84.61&amp;ui=2\">\n"
+          ],
+          "new_lines": [
+            "  <link rel=\"stylesheet\" href=\"css/about-sactcheck.css?app=0.84.61&amp;ui=3\">\n"
+          ]
+        },
+        {
+          "start_line": 43,
+          "old_lines": [],
+          "new_lines": [
+            "        <a href=\"#overview\">Watch the overview</a>\n"
+          ]
+        },
+        {
+          "start_line": 53,
+          "old_lines": [],
+          "new_lines": [
+            "      <section class=\"overview-section\" id=\"overview\" aria-labelledby=\"overview-title\">\n",
+            "        <div class=\"section-heading\">\n",
+            "          <span class=\"eyebrow\">Watch the overview</span>\n",
+            "          <h2 id=\"overview-title\">See SACTCheck in action.</h2>\n",
+            "          <p>Discover why SACTCheck was developed and how its connected oncology tools support the journey from clinic to home. Explore the regimen library, clinical assessment, knowledge, consent, supportive care and patient resources.</p>\n",
+            "        </div>\n",
+            "        <video class=\"overview-video\" controls playsinline preload=\"metadata\" width=\"1280\" height=\"720\" poster=\"assets/video/sactcheck-overview-poster.jpg\" aria-label=\"SACTCheck platform overview\" aria-describedby=\"overview-details\">\n",
+            "          <source src=\"assets/video/sactcheck-overview.mp4\" type=\"video/mp4\">\n",
+            "          <track kind=\"captions\" src=\"assets/video/sactcheck-overview-en.vtt\" srclang=\"en\" label=\"English\" default>\n",
+            "          Your browser cannot play this video. <a href=\"assets/video/sactcheck-overview.mp4\" download>Download the SACTCheck overview</a> to watch it on your device.\n",
+            "        </video>\n",
+            "        <div class=\"overview-details\" id=\"overview-details\">\n",
+            "          <p>8 minutes 33 seconds · Irish narration · English captions</p>\n",
+            "          <a class=\"button button-light\" href=\"assets/video/sactcheck-overview.mp4\" download=\"SACTCheck-Overview.mp4\">Download the video</a>\n",
+            "        </div>\n",
+            "        <p class=\"small-note overview-credit\">Voice: Patrick · <a href=\"https://elevenlabs.io/\">ElevenLabs</a>. Demonstration uses fictional assessment data.</p>\n",
+            "      </section>\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    "css/about-sactcheck.css": {
+      "before": "3170bac241165a9f74e36ee49b075070e2099c80b0551dacafd9ca8f8ea095ff",
+      "before_bytes": 11485,
+      "after": "04fa9fd22e74c4ea4867a5c56f2cb9d4bf5beea26c04d18b3b65c45c67245666",
+      "after_bytes": 12141,
+      "edits": [
+        {
+          "start_line": 155,
+          "old_lines": [],
+          "new_lines": [
+            "\n",
+            "/* Accessible, responsive platform overview. */\n",
+            ".overview-video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--deep); border: 1px solid var(--line); border-radius: 10px; }\n",
+            ".overview-video:focus-visible { outline: 3px solid var(--teal); outline-offset: 4px; }\n",
+            ".overview-details { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin-top: 18px; }\n",
+            ".overview-details p { margin: 0; color: var(--muted); font-size: 14px; }\n",
+            ".overview-credit { margin-top: 16px; }\n",
+            "@media print { .overview-video { display: none; } .overview-details .button { border: 0; padding: 0; } }\n"
+          ]
+        }
+      ]
+    },
+    "tests/helpers/ribociclib-review-v08461.cjs": {
+      "before": "372d45bbe159b1b42094928ca1445b729902d9789588d8f89c7ec3e0fdff1848",
+      "before_bytes": 1039,
+      "after": "330ce1a92c618c327c8b88b6529e836d61a8a2d5a33a8670aa931c32551587b1",
+      "after_bytes": 1177,
+      "edits": [
+        {
+          "start_line": 4,
+          "old_lines": [
+            "function expected(f,h,n){const c=record.files[f];if(!c)return{sha256:h,bytes:n};assert.equal(h,c.before,f+' ribociclib review origin');if(n!==undefined)assert.equal(n,c.before_bytes,f+' ribociclib review origin size');return{sha256:c.after,bytes:c.after_bytes};}\n",
+            "function verify(){for(const[f,c]of Object.entries(record.files)){const b=fs.readFileSync(path.join(root,f));assert.equal(crypto.createHash('sha256').update(b).digest('hex'),c.after,f+' ribociclib review bytes');assert.equal(b.length,c.after_bytes);}return true;}\n",
+            "function isAddition(f){return f===file||record.files[f]?.before===null;}\n",
+            "module.exports={expected,verify,isAddition,files:record.files};\n"
+          ],
+          "new_lines": [
+            "const next=require('./about-video-v08461.cjs');\n",
+            "function expected(f,h,n){const c=record.files[f];if(!c)return next.expected(f,h,n);assert.equal(h,c.before,f+' ribociclib review origin');if(n!==undefined)assert.equal(n,c.before_bytes,f+' ribociclib review origin size');return next.expected(f,c.after,c.after_bytes);}\n",
+            "function verify(){for(const[f,c]of Object.entries(record.files)){const b=fs.readFileSync(path.join(root,f)),e=next.expected(f,c.after,c.after_bytes);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),e.sha256,f+' ribociclib review bytes');assert.equal(b.length,e.bytes);}return next.verify();}\n",
+            "function isAddition(f){return next.isAddition(f)||f===file||record.files[f]?.before===null;}\n",
+            "module.exports={expected,verify,isAddition,files:{...record.files,...next.files}};\n"
+          ]
+        }
+      ]
+    },
+    "assets/video/sactcheck-overview-en.vtt": {
+      "before": null,
+      "before_bytes": null,
+      "after": "d783e1e25d5faa7009e751ae0e13990bb3e782c842ad7d0dbbbab050a6d3d5d9",
+      "after_bytes": 13291
+    },
+    "assets/video/sactcheck-overview-poster.jpg": {
+      "before": null,
+      "before_bytes": null,
+      "after": "5f3be55d508f85934d9555059551b47ebe5b1db3d973ecded8b0ac5ed0db84ba",
+      "after_bytes": 94455
+    },
+    "assets/video/sactcheck-overview.mp4": {
+      "before": null,
+      "before_bytes": null,
+      "after": "58e06479f75b35be3da8acb3eb8967dabfa3d69cb4cabe67b52b8e46c72dc3c3",
+      "after_bytes": 12072466
+    }
+  },
+  "unchanged_clinical_files": {
+    "package.json": "bc8670b322b575805a63f6bf5e85db1c877624ce70b426ac0cfd871642c09b13",
+    "js/sactcheck-release.js": "0a3db06df39cbbea33748bdaee26ccbc5b86ca0d4e7d5cb7129894256035c9d5",
+    "js/assessment-engine.js": "cdc0b3fffed4064030da8fd71327b356db49a84f402132b248c1f4839a096a58",
+    "js/rule-engine.js": "acde175c0dedc658458c02fc62579e7ee23a709cf155e04259a5ebcdcacd4b82",
+    "js/assessment-output.js": "3981145ad41b114de812f186a97d9c7458ac67584eb6d35c34289cbbdd040442",
+    "js/generic-assessment-ui.js": "8cf574366d8d7ccfa8ae69c87cb1fedb3e23b813339ce5c448240db9af075e36",
+    "protocols/index.json": "617efc59cb37bd574a230fdd14da05b3f929c163b51269aac0e6bf693d101225",
+    "protocols/catalogue-bundle.json.gz": "ab0111120db809bee5f5aec532ca646d8da1572f06fade41b3d944bc3e601b88",
+    "protocols/breast/00525-ribociclib-metastatic.json": "e0df756c946e29ae13a6b81f579d16658c69d6041b5db844c4ddd20c3dcf83ea",
+    "protocols/breast/00892-ribociclib-adjuvant.json": "86aa4a36853e9b43d6316d7277340e20b778de9c59effbaf78ae9030de66c349"
+  }
+}
