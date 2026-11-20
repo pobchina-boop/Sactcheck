@@ -336,7 +336,7 @@ def deduplicate_explanations(tree, changes):
     answered_details = [element for element in tree.xpath('//details') if has_answer_content(element)]
     seen = {}
     # Chapter identity is deliberate navigation, not duplicate clinical prose.
-    protected = {"book44-chapter-head", "book44-phase", "pk-phases", "scv-phase-path", "scv-schedule-graphic", "journey-checks"}
+    protected = {"ribo-practical", "ribo-review", "book44-chapter-head", "book44-phase", "pk-phases", "scv-phase-path", "scv-schedule-graphic", "journey-checks"}
     for element in list(tree.xpath("//p | //li")):
         if element.getparent() is None or element.xpath(".//p | .//li | .//table"):
             continue

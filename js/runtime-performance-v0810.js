@@ -11,7 +11,8 @@
   if(!root||typeof root.fetch!=='function'||root.SACTCheckRuntimePerformanceV0810) return;
 
   const RELEASE=root.SACTCHECK_RELEASE||'0.81.0';
-  const CACHE_NAME=`sactcheck-runtime-${RELEASE}`;
+  const REVISION=root.SACTCHECK_DATA_REVISION||"";
+  const CACHE_NAME=`sactcheck-runtime-${RELEASE}${REVISION?"-"+REVISION:""}`;
   const INDEX_PATH='protocols/index.json';
   const PREFETCH_CONCURRENCY=16; // explicit legacy prewarm only; never on startup
   let cachePromise;
@@ -38,7 +39,7 @@
     copy.searchParams.delete('_');
     // Scope the HTTP URL as well as CacheStorage to the active release.
     // Otherwise a new cache can be populated with an older HTTP-cached JSON response.
-    if(isCacheable(copy)) copy.searchParams.set('sact_release',RELEASE);
+    if(isCacheable(copy)){copy.searchParams.set('sact_release',RELEASE);if(REVISION)copy.searchParams.set('sact_revision',REVISION);}
     return copy;
   }
   function cacheApi(){return root.caches&&typeof root.caches.open==='function'?root.caches:null;}

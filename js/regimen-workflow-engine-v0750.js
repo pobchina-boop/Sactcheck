@@ -141,6 +141,13 @@
     // finished, regimen/context-specific form with print/download controls.
     // Preserve its scope-selection route rather than guessing a PDF filename.
     const form=registry?.runtimeUrl?.(protocol,"consent-draft");
+    if(form&&/\/consent-form\.html(?:[?#].*)?$/.test(form)&&root.document?.createElement){
+      const pdf=form.replace(/consent-form\.html(?=[?#]|$)/,"consent-form.pdf");
+      const link=root.document.createElement("a");
+      link.href=pdf;link.download="SACTCheck-consent-"+(protocol?.metadata?.nccp_regimen_code||"regimen")+".pdf";
+      link.rel="noopener";root.document.body.appendChild(link);link.click();link.remove();
+      return {downloaded:true,url:pdf};
+    }
     if(form&&typeof root.open==="function"){
       const viewer=root.open(form,"_blank");
       if(viewer){try{viewer.opener=null;}catch(_){}return viewer;}
@@ -702,7 +709,7 @@
           <div class="workflow-module-icon">✎</div>
           <div><span>Clinic workflow</span><h3>Consent generator</h3><p>Open the completed SACTCheck regimen form, ready for review, patient details and signatures.</p></div>
           ${moduleStatus("review_required")}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Generate consent</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Download consent PDF</button>
           <small class="workflow-module-note">Content is awaiting consultant and oncology-pharmacy review. Supports discussion; it does not replace formal consent, the national consent form or clinical judgement.</small>
         </article>
 

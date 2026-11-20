@@ -62,7 +62,14 @@ test('NCCP treatment-type lists are complete, treatment-specific, and preserve e
 });
 test('all consent PDFs retain source content and have identical published download copies',()=>{
  const report=json('validation/usability-consent-v08455/consent-pdf-verification.json');assert.equal(report.forms,279);assert.equal(report.status,'passed');assert.equal(report.published,true);
- for(const r of report.routes){assert(r.pages>=1&&r.pages<=6);assert(r.all_source_units_retained);assert.equal(r.a4_and_bounds,'pass');assert.equal(sha(read(`patient/${r.route}/consent-form.html`)),r.source_sha256);assert.equal(sha(read(`patient/${r.route}/consent-form.pdf`)),r.sha256);assert.equal(sha(read(`docs/patient/${r.route}/consent-form.pdf`)),r.sha256);}
+ const migrate=require('./helpers/retrospective-v08456.cjs').expectedHash;
+ const reviewed=json('validation/ribociclib-review-v08461/companion-pdfs.json').filter(r=>r.document==='consent-form');
+ assert.deepEqual(reviewed.map(r=>r.route).sort(),['00525','00892']);
+ for(const r of report.routes){assert(r.pages>=1&&r.pages<=6);assert(r.all_source_units_retained);assert.equal(r.a4_and_bounds,'pass');
+  const source=`patient/${r.route}/consent-form.html`,pdf=`patient/${r.route}/consent-form.pdf`,mirror=`docs/patient/${r.route}/consent-form.pdf`;
+  assert.equal(sha(read(source)),migrate(source,r.source_sha256));assert.equal(sha(read(pdf)),migrate(pdf,r.sha256));assert.equal(sha(read(mirror)),migrate(mirror,r.sha256));
+  const current=reviewed.find(x=>x.route===r.route);if(current){assert.equal(current.pages,2);assert.equal(current.all_source_clauses_retained,true);assert.equal(current.bounds_pass,true);assert.equal(sha(read(source)),current.source_sha256);assert.equal(sha(read(pdf)),current.sha256);assert.equal(sha(read(mirror)),current.sha256);}
+ }
 });
 test('v55 accepts only exact consent and startup transitions and retains historical provenance',async()=>{
  const m=require('./helpers/retrospective-v08455.cjs'),record=json('validation/usability-consent-v08455/asset-migrations.json');

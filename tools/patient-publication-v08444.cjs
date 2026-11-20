@@ -30,8 +30,9 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   if(isRedirect(html))return html;
   root=path.resolve(root);
   const t=target(file,root);
-  if(!t)return html;
+  if(!t)return require('./ribociclib-patient-review-v08461.cjs').transform(file,html);
   const data=JSON.parse(fs.readFileSync(path.join(root,t.profileFile),'utf8'));
+  if(t.name!=='index.html')html=require('./ribociclib-patient-review-v08461.cjs').transform(file,html);
   // Reinstall the v44 stylesheet after the shared v43 sheet on every pass.
   // Its location depends on whether this is a canonical page or a docs mirror.
   const clean=html.replace(/<link\b(?=[^>]*\bhref\s*=\s*["'][^"']*patient-(?:visual-language|distilled-print)-v08444\.css(?:\?[^"']*)?["'])[^>]*>/gi,'');
@@ -56,6 +57,7 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   if(['index.html','knowledge.html'].includes(t.name))result=editorial.applyEditorial(result,{route:t.route,documentKind:t.name.replace(/\.html$/,''),data,root});
   if(t.relative.startsWith('docs/'))result=result.replace(/\b(href|src)=(["'])(?:\.\.\/)+((?:assets|js|data)\/[^"']+)\2/g,
     (_,attribute,quote,asset)=>`${attribute}=${quote}${path.posix.relative(path.posix.dirname(t.relative),asset)}${quote}`);
+  if(t.name==='index.html')result=require('./ribociclib-patient-review-v08461.cjs').transform(file,result);
   if(data.suite_release==='0.84.61'&&data.code==='00335')result=require('./patient-pack-v08461.cjs').continuous(data,result);
   return result;
 }

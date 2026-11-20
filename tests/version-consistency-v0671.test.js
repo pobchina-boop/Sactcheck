@@ -34,8 +34,10 @@ console.log("Cumulative public release and module version separation tests passe
   const origin = "https://sactcheck.com/";
   const protocolUrl = origin + "protocols/breast/example.json";
   const oldName = "sactcheck-runtime-previous";
-  const currentName = `sactcheck-runtime-${pkg.version}`;
-  const stores = new Map([[oldName, new Map()], [currentName, new Map([
+  const priorRevisionName = `sactcheck-runtime-${pkg.version}`;
+  const currentName = `${priorRevisionName}-ribo-20261119`;
+  const stores = new Map([[oldName, new Map()], [priorRevisionName, new Map([
+    [protocolUrl+"?sact_release="+pkg.version, new Response(JSON.stringify({release: "stale-same-version"}))],
     [protocolUrl, new Response(JSON.stringify({release: "stale"}))]
   ])]]);
   const requests = [];
@@ -57,9 +59,11 @@ console.log("Cumulative public release and module version separation tests passe
   const runtime = context.SACTCheckRuntimePerformanceV0810;
   assert.strictEqual(runtime.release, pkg.version);
   assert.strictEqual(runtime.cacheName, currentName);
+  assert.strictEqual(context.SACTCHECK_DATA_REVISION,"ribo-20261119");
   const first = await context.fetch(protocolUrl);
   assert.strictEqual((await first.json()).release, pkg.version, "Upgrade must not reuse stale unversioned JSON");
   assert.strictEqual(new URL(requests[0]).searchParams.get("sact_release"), pkg.version, "HTTP requests must carry the release, not just the CacheStorage name");
+  assert.strictEqual(new URL(requests[0]).searchParams.get("sact_revision"),context.SACTCHECK_DATA_REVISION);
   const second = await context.fetch(protocolUrl);
   assert.strictEqual((await second.json()).release, pkg.version);
   assert.strictEqual(requests.length, 1, "Current-release cache reuse must still work");

@@ -7,8 +7,8 @@
     "nccp_regimen_code": "00525",
     "nccp_version": 6,
     "tumour_group": "Breast",
-    "title": "Ribociclib Therapy (Metastatic) - 28 day",
-    "short_title": "Ribociclib metastatic",
+    "title": "Ribociclib (Kisqali) Therapy (Metastatic) - 28 day",
+    "short_title": "Ribociclib (Kisqali) metastatic",
     "indication": "Ribociclib with an aromatase inhibitor or fulvestrant for eligible HR-positive, HER2-negative locally advanced or metastatic breast cancer.",
     "icd10": "C50",
     "source_document_pages": 9,
@@ -85,7 +85,16 @@
     "source_checked_date": "2026-10-25",
     "full_suite_release": "0.84.21",
     "schedule_summary": "The usual metastatic starting dose is ribociclib 600 mg once daily on Days 1–21 followed by Days 22–28 off. Continue the prescribed AI daily or fulvestrant on its own injection schedule; add ovarian suppression when indicated. Continue while beneficial and tolerated.",
-    "source_schedule_interval_label": "28 days; oral targeted treatment on Days 1–21"
+    "source_schedule_interval_label": "28 days; oral targeted treatment on Days 1–21",
+    "source_title": "Ribociclib Therapy (Metastatic) - 28 day",
+    "brand_names": [
+      "Kisqali"
+    ],
+    "ribociclib_quality_review": {
+      "date": "2026-11-19",
+      "independent_clinical_signoff": "pending",
+      "record": "validation/ribociclib-review-v08461/clinical-audit.json"
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -456,7 +465,7 @@
       "demo_value": false
     },
     "strong_cyp3a_or_qt_drug": {
-      "label": "Strong CYP3A interaction or QT-prolonging medicine",
+      "label": "CYP3A inhibitor/inducer, QT-prolonging drug, or other clinically significant interaction",
       "type": "boolean",
       "required": false,
       "input_role": "decision",
@@ -574,6 +583,14 @@
       "required": false,
       "input_role": "decision",
       "demo_value": false
+    },
+    "further_reduction_required": {
+      "label": "Further dose reduction required",
+      "type": "boolean",
+      "demo_value": false,
+      "required": false,
+      "always_show": true,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -897,21 +914,39 @@
         },
         "explanation": "If a further dose reduction below 200 mg/day is required, discontinue treatment.",
         "when": {
-          "all": [
+          "any": [
             {
-              "field": "dose_level",
-              "operator": "==",
-              "value": 200
+              "all": [
+                {
+                  "field": "dose_level",
+                  "operator": "==",
+                  "value": 200
+                },
+                {
+                  "field": "recurrent_grade3",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 1
+                }
+              ]
             },
             {
-              "field": "recurrent_grade3",
-              "operator": "==",
-              "value": true
-            },
-            {
-              "field": "anc",
-              "operator": ">=",
-              "value": 1
+              "all": [
+                {
+                  "field": "dose_level",
+                  "operator": "==",
+                  "value": 200
+                },
+                {
+                  "field": "further_reduction_required",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
             }
           ]
         }
@@ -1588,16 +1623,22 @@
           "components": [
             "ribociclib"
           ],
-          "recommendation": "Check the current product information and pharmacy interaction review before ribociclib; avoid interacting QT-prolonging medicines and apply any CYP3A adjustment to the actual dose.",
+          "recommendation": "Obtain oncology/pharmacy review of the complete medicine and supplement list. CYP3A inhibitors can increase ribociclib exposure and toxicity; inducers can reduce exposure and efficacy; QT-prolonging drugs add cardiac risk. Ribociclib can increase concentrations of other CYP3A substrates. Avoid strong inhibitors/inducers and QT-prolonging combinations where possible. Do not calculate a dose change automatically; apply current product information to the actual prescribed dose.",
           "show_in_dose_actions": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Check the current product information and pharmacy interaction review before ribociclib; avoid interacting QT-prolonging medicines and apply any CYP3A adjustment to the actual dose.",
+        "explanation": "Obtain oncology/pharmacy review of the complete medicine and supplement list. CYP3A inhibitors can increase ribociclib exposure and toxicity; inducers can reduce exposure and efficacy; QT-prolonging drugs add cardiac risk. Ribociclib can increase concentrations of other CYP3A substrates. Avoid strong inhibitors/inducers and QT-prolonging combinations where possible. Do not calculate a dose change automatically; apply current product information to the actual prescribed dose.",
         "source": {
           "document": "NCCP 00525 v6",
           "url": "https://healthservice.hse.ie/documents/6629/525_v6_Ribociclib_Metastatic_hghzyyD.pdf",
           "page": 7
-        }
+        },
+        "secondary_sources": [
+          {
+            "document": "Kisqali European product information, sections 4.2 and 4.5",
+            "url": "https://www.ema.europa.eu/en/documents/product-information/kisqali-epar-product-information_en.pdf"
+          }
+        ]
       },
       {
         "rule_id": "QT_RECURRENCE_REVIEW",
