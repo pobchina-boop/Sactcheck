@@ -112,13 +112,13 @@ assert.strictEqual(new Set(codes).size, 59, 'The Lung deck contains duplicate NC
 assert.strictEqual(new Set(lung.map(({ data }) => data.protocol_id)).size, 59, 'The Lung deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root,'protocols','index.json'),'utf8'));
-assert.strictEqual(index.protocol_count, 377, 'Complete protocol index must contain 270 protocols.');
-assert.strictEqual(index.protocols.length, 377, 'Complete protocol index array must contain 270 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 377, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, require('./helpers/live-inventory-v08462.cjs').total, 'Complete protocol index must contain 270 protocols.');
+assert.strictEqual(index.protocols.length, require('./helpers/live-inventory-v08462.cjs').total, 'Complete protocol index array must contain 270 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, require('./helpers/live-inventory-v08462.cjs').total, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root,'data','emetogenic-risk-map.json'),'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 377, 'Supportive-care map must cover all protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, require('./helpers/live-inventory-v08462.cjs').total, 'Supportive-care map must cover all protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);

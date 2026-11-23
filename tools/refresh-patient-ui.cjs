@@ -2,6 +2,7 @@
 // Patch only the existing UI fragments. Do not regenerate protected patient content.
 const fs=require('node:fs'),path=require('node:path');
 const Chronology=require('./gu-chronology-v08459.cjs');
+const combinationSuites=require('./build-durvalumab-patient-suites.cjs');
 const SUPPORT_LABEL='Supportive medicines: medicine, dose and timing';
 const SUPPORT_HINT='<p class="support-table-hint no-print">Scroll the table sideways to read all medicine, dose and timing columns.</p>';
 const SUPPORT_WRAPPER=`<div class="support-table-scroll" role="region" tabindex="0" aria-label="${SUPPORT_LABEL}">`;
@@ -64,6 +65,13 @@ function refreshKnowledge(html,profile){
   // Its controls, dates and full text must not be replaced by a static chart.
   const interactive=all.some(t=>hasClass(t.raw,'pk-chart'))&&all.some(t=>attribute(t.raw,'id')==='pk-phase')&&all.some(t=>attribute(t.raw,'id')==='pk-start');
   if(interactive&&wrappers.length===0)return {html,status:'preserved-interactive'};
+  if (combinationSuites.codes.has(profile.code) && !wrappers.length) {
+   const sections=all.filter(t=>!t.closing && t.name==='section' && attribute(t.raw,'id')==='cycle');
+   if (sections.length!==1) throw new Error(`Expected one authored infusion schedule for ${profile.code}`);
+   const range=elementRange(all,sections[0]);
+   const schedule=combinationSuites.scheduleSection(profile);
+   return {html:html.slice(0,range.start)+schedule+html.slice(range.end),status:'preserved-specialized'};
+  }
   throw new Error('Expected one existing chronology, or the recognized interactive cycle presentation');
  }
  if(primary.length!==1||primary[0].name!=='div'||wrappers.length>1)throw new Error('Unexpected chronology roots');
@@ -210,7 +218,14 @@ function planRefresh(root){
   inspectChronology(file,route,source,false);
  }
  for(const absolute of patientFiles.filter(f=>/\/(supportive-care|support-[^/]+)\.html$/.test(f.replaceAll('\\','/')))){
-  const file=path.relative(root,absolute).replaceAll('\\','/'),before=fs.readFileSync(absolute,'utf8'),result=refreshSupport(before,file);
+  const file=path.relative(root,absolute).replaceAll('\\','/'),before=fs.readFileSync(absolute,'utf8');
+  const native=combinationSuites.renderFile(file,root);
+  if (native!==null) {
+   report.support.pages++;report.support.tables+=tags(native).filter(t=>!t.closing&&t.name==='table').length;
+   stage(file,before,native,'support');
+   continue;
+  }
+  const result=refreshSupport(before,file);
   report.support.pages++;report.support.tables+=result.tables;stage(file,before,finish(file,result.html),'support');
  }
  const css='assets/patient/cycle-chronology-v0831.css',cssAbsolute=path.join(root,css),before=fs.existsSync(cssAbsolute)?fs.readFileSync(cssAbsolute,'utf8'):null;

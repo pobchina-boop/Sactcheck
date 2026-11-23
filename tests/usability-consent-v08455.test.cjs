@@ -2,8 +2,12 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),zlib=require('node:zlib'),vm=require('node:vm');
 const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const core=require('../tools/consent-core-v08455.cjs'),idx=json('protocols/index.json');
+// The shared inventory authenticates all prior IDs, the 00897 version migration and the new 00953 record.
+const expectedIds=idx.protocols.map(entry=>entry.id).sort();
+assert.equal(expectedIds.length,require('./helpers/live-inventory-v08462.cjs').total);
+
 test('compressed catalogue retains every source protocol and its exact clinical content',()=>{
- const bytes=zlib.gunzipSync(read(idx.bundle.path)),bundle=JSON.parse(bytes);assert.equal(sha(bytes),idx.bundle.sha256);assert.equal(bytes.length,idx.bundle.bytes);assert.equal(bundle.records.length,377);
+ const bytes=zlib.gunzipSync(read(idx.bundle.path)),bundle=JSON.parse(bytes);assert.equal(sha(bytes),idx.bundle.sha256);assert.equal(bytes.length,idx.bundle.bytes);assert.deepEqual(Array.from(bundle.records,record=>record.entry.id).sort(),expectedIds);
  for(const {entry,protocol} of bundle.records){assert.deepEqual(protocol,json(entry.path));assert.deepEqual(entry,idx.protocols.find(e=>e.id===entry.id));}
  assert(read(idx.bundle.path).length<3*1024*1024);
  const baseline=json('validation/usability-consent-v08455/baseline-v54-protected.json');
@@ -12,7 +16,7 @@ test('compressed catalogue retains every source protocol and its exact clinical 
 function loader(fetch,overrides={}){const context={AbortController,console:{warn(){},error(){},info(){}},fetch,URL,Response,DecompressionStream,TextDecoder,crypto:crypto.webcrypto,document:{readyState:'loading',addEventListener(){}},setTimeout,clearTimeout,...overrides};context.window=context;vm.runInNewContext(read('js/protocol-loader.js').toString(),context);return context.SACTCheckProtocolLoader;}
 test('fast catalogue uses one payload request and rejects corrupt or mismatched data',async()=>{
  let requests=0;const api=loader(async url=>{requests++;assert.equal(url,idx.bundle.path);return new Response(read(url));});
- const result=await api.loadBundledProtocols(idx,idx.protocols);assert.equal(result.protocols.length,377);assert.equal(requests,1);
+ const result=await api.loadBundledProtocols(idx,idx.protocols);assert.deepEqual(Array.from(result.protocols,record=>record.entry.id).sort(),expectedIds);assert.equal(requests,1);
  assert.equal(await api.loadBundledProtocols({...idx,bundle:{...idx.bundle,sha256:'0'.repeat(64)}},idx.protocols),null);
  assert.equal(await api.loadBundledProtocols(idx,[{...idx.protocols[0],path:'protocols/wrong.json'}]),null);
  assert.equal(await loader(async()=>new Response('bad',{status:503})).loadBundledProtocols(idx,idx.protocols),null);

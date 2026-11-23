@@ -15,8 +15,8 @@ const protocolIndex = JSON.parse(fs.readFileSync(path.join(root, "protocols", "i
 
 assert.ok(pkg.version.localeCompare("0.63.0", undefined, { numeric: true }) >= 0, "package version must be at least 0.63.0");
 assert.strictEqual(register.protocol_count, protocolIndex.protocols.filter(item => item.enabled !== false).length, "validation register must include every enabled protocol");
-assert.strictEqual(register.protocol_count, 377, "expected enabled protocol count must remain 377");
-assert.strictEqual(register.tissue_context_count, 458, "shared protocols must create separate tissue review contexts");
+assert.strictEqual(register.protocol_count, require('./helpers/live-inventory-v08462.cjs').total, "expected enabled protocol count must match the reviewed index");
+assert.strictEqual(register.tissue_context_count, require('./helpers/live-inventory-v08462.cjs').tissueContexts, "shared protocols must create separate tissue review contexts");
 // NCCP 00431 v11 adds a separate HCC tissue review context in v0.84.40.
 const skinHcc=register.protocols.find(item=>item.path.includes('/00431-'));
 assert.deepStrictEqual([...skinHcc.tumour_groups].sort(),['Gastrointestinal','Skin/Melanoma']);

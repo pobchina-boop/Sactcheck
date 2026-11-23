@@ -31,6 +31,8 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   root=path.resolve(root);
   const t=target(file,root);
   if(!t)return require('./ribociclib-patient-review-v08461.cjs').transform(file,html);
+  const native = require('./build-durvalumab-patient-suites.cjs').renderFile(t.relative,root);
+  if (native !== null) return native;
   const data=JSON.parse(fs.readFileSync(path.join(root,t.profileFile),'utf8'));
   if(t.name!=='index.html')html=require('./ribociclib-patient-review-v08461.cjs').transform(file,html);
   // Reinstall the v44 stylesheet after the shared v43 sheet on every pass.
@@ -59,6 +61,7 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
     (_,attribute,quote,asset)=>`${attribute}=${quote}${path.posix.relative(path.posix.dirname(t.relative),asset)}${quote}`);
   if(t.name==='index.html')result=require('./ribociclib-patient-review-v08461.cjs').transform(file,result);
   if(data.suite_release==='0.84.61'&&data.code==='00335')result=require('./patient-pack-v08461.cjs').continuous(data,result);
+  if (!t.relative.startsWith('docs/')) result = require('./durvalumab-symptom-entry.cjs').entry(t.route, t.name, result);
   return result;
 }
 

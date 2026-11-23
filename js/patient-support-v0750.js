@@ -183,17 +183,23 @@
     if(lower.includes("maintenance")) return `Maintenance · ${raw.replace(/maintenance/ig,"").replace(/^\s*[-:·]\s*/,"").trim()||`Phase ${index+1}`}`;
     return raw;
   }
+  function statedCycles(cycles) {
+    if (!Array.isArray(cycles) || !cycles.length || !cycles.every(n => Number.isInteger(n) && n > 0)) return "";
+    if (cycles.length === 1) return "Cycle " + cycles[0];
+    if (cycles.every((n, i) => n === cycles[0] + i)) return "Cycles " + cycles[0] + "–" + cycles[cycles.length - 1];
+    return "Cycles " + cycles.join(", ");
+  }
   function scheduleRows(protocol){
     const rows=[];
     arr(protocol?.treatment_phases).forEach((phase,phaseIndex)=>{
-      const phaseName=phaseDisplayName(phase,phaseIndex),cycle=Number(phase?.cycle_length_days||phase?.cycle_days||phase?.cycle_length),phaseFrequency=text(phase?.frequency||phase?.schedule||phase?.interval||phase?.administration_frequency||"");
+      const phaseName=[phaseDisplayName(phase,phaseIndex),statedCycles(phase.cycles)].filter(Boolean).join(" · "),cycle=Number(phase?.cycle_length_days||phase?.cycle_days||phase?.cycle_length),phaseFrequency=text(phase?.frequency||phase?.schedule||phase?.interval||phase?.administration_frequency||"");
       const byDay=new Map();
       arr(phase?.administration).forEach(item=>{
         const drug=text(item?.drug||item?.name||item?.medicine); if(!drug) return;
         const route=displayRoute(item?.route||item?.administration_route||item?.route_of_administration),frequency=text(item?.frequency||item?.schedule||item?.timing||item?.administration_frequency||"");
         const days=expandDays(item?.days??item?.day??item?.cycle_days??item?.treatment_days); (days.length?days:[""]).forEach(day=>{
           const key=text(day)||"other"; if(!byDay.has(key)) byDay.set(key,[]);
-          byDay.get(key).push([route?`${drug} (${route})`:drug,frequency].filter(Boolean).join(" · "));
+          byDay.get(key).push([route?`${drug} (${route})`:drug,frequency,text(item.cycle_note)].filter(Boolean).join(" · "));
         });
       });
       if(!byDay.size) return;

@@ -80,8 +80,8 @@ assert(html.includes('<title>SACTCheck v0.56.1 — Five-Regimen Knowledge Base P
 assert(html.includes('<span class="header-version">v0.56.1</span>'), 'Current header version is missing.');
 assert(html.includes('v0.56.1 · What changed?'), 'Current release summary is missing.');
 assert(html.includes('js/protocol-loader.js?v=0.56.1'), 'Protocol-loader cache key is stale.');
-assert.equal(catalogue.protocols.length, 377, 'Expected 377 indexed protocols.');
-assert.equal(catalogue.protocol_count, 377, 'Catalogue protocol_count is not 377.');
+assert.equal(catalogue.protocols.length, require('./helpers/live-inventory-v08462.cjs').total, 'Indexed protocol inventory mismatch.');
+assert.equal(catalogue.protocol_count, require('./helpers/live-inventory-v08462.cjs').total, 'Catalogue protocol_count mismatch.');
 
 const loaded = catalogue.protocols.map(entry => ({
   entry,
@@ -89,7 +89,7 @@ const loaded = catalogue.protocols.map(entry => ({
 }));
 const solid = loaded.filter(item => !isHaematology(item.protocol));
 const haem = loaded.filter(item => isHaematology(item.protocol));
-assert.equal(solid.length, 362, 'Expected 362 Solid Tumour protocols.');
+assert.equal(solid.length, require('./helpers/live-inventory-v08462.cjs').solid, 'Solid Tumour inventory mismatch.');
 assert.equal(haem.length, 15, 'Expected 15 Haematology protocols.');
 
 assert.equal(duplicateValues(solid.map(item => item.entry.id)).length, 0, 'Duplicate Solid Tumour index IDs found.');
@@ -124,8 +124,8 @@ for (const { entry, protocol } of solid) {
   }
   assert.equal(metadata.partial_assessment_supported, true, `${protocolCode}: partial-assessment flag is missing.`);
   assert(/entered value is assessed independently/i.test(metadata.partial_assessment_policy || ''), `${protocolCode}: partial-assessment policy is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.release, protocolCode==='00947'?'0.84.20':RECONCILIATION_RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.checked_date, protocolCode==='00947'?'2026-10-25':CHECK_DATE, `${protocolCode}: reconciliation date metadata is missing.`);
+  assert.equal(metadata.catalogue_reconciliation?.release, protocolCode==='00953'?'0.84.62':protocolCode==='00947'?'0.84.20':RECONCILIATION_RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
+  assert.equal(metadata.catalogue_reconciliation?.checked_date, protocolCode==='00953'?'2026-11-23':protocolCode==='00947'?'2026-10-25':CHECK_DATE, `${protocolCode}: reconciliation date metadata is missing.`);
   assert.equal(metadata.catalogue_reconciliation?.clinical_use_authorised, false, `${protocolCode}: reconciliation must not authorise clinical use.`);
   assert.notEqual(metadata.validation?.clinical_use_authorised, true, `${protocolCode}: protocol is incorrectly marked authorised.`);
   inputCount += Object.keys(protocol.input_definitions || {}).length;
@@ -195,7 +195,7 @@ for (const { protocol } of solid) {
   assert(protocolPassed, `${protocolCode}: no rule-linked field produced a meaningful single-value assessment.`);
   singleValueProtocols += 1;
 }
-assert.equal(singleValueProtocols, 362, 'Single-value assessment did not cover all 362 Solid Tumour protocols.');
+assert.equal(singleValueProtocols, require('./helpers/live-inventory-v08462.cjs').solid, 'Single-value assessment did not cover all indexed Solid Tumour protocols.');
 
 let numericBoundaryLeaves = 0;
 const epsilonFor = value => Math.max(1e-9, Math.abs(value) * 1e-9);
@@ -234,14 +234,25 @@ for (const { protocol } of solid) {
 }
 assert(numericBoundaryLeaves >= 4000, `Expected at least 4,000 numeric condition leaves, audited ${numericBoundaryLeaves}.`);
 
-execFileSync(process.execPath, [path.join(root, 'tools', 'reconcile-solid-tumour-library.js')], { cwd: root, stdio: 'pipe' });
-const report = readJson('V0510_SOLID_TUMOUR_RECONCILIATION.json');
+const historical = readJson('V0510_SOLID_TUMOUR_RECONCILIATION.json');
+assert.equal(historical.pass, true);
+assert.equal(historical.counts.solid_tumour_protocols, 362);
+const reportDir = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'sactcheck-solid-'));
+let report;
+try {
+  execFileSync(process.execPath, [path.join(root, 'tools', 'reconcile-solid-tumour-library.js')], {
+    cwd: root, stdio: 'pipe', env: {...process.env, SACTCHECK_RECONCILIATION_OUTPUT: reportDir}
+  });
+  report = JSON.parse(fs.readFileSync(path.join(reportDir, 'V0510_SOLID_TUMOUR_RECONCILIATION.json'), 'utf8'));
+} finally {
+  fs.rmSync(reportDir, {recursive: true, force: true});
+}
 assert.equal(report.pass, true, 'Generated reconciliation report does not pass.');
 assert.equal(report.hard_failure_count, 0, 'Generated reconciliation report contains hard findings.');
-assert.equal(report.counts.solid_tumour_protocols, 362, 'Generated report Solid Tumour count is wrong.');
+assert.equal(report.counts.solid_tumour_protocols, require('./helpers/live-inventory-v08462.cjs').solid, 'Generated report Solid Tumour count is wrong.');
 assert.equal(report.counts.haematology_protocols, 15, 'Generated report Haematology count is wrong.');
 assert.equal(report.counts.primary_storage_groups['Cross-listed/shared'], 5, 'Shared-protocol storage count is wrong.');
 assert.equal(report.counts.tumour_site_coverage.Breast, 84, 'Breast site-coverage count is wrong.');
 assert.equal(report.counts.tumour_site_coverage.Gastrointestinal, 94, 'GI site-coverage count is wrong.');
 
-console.log(`v0.51.0 Solid Tumour reconciliation passed: 362 protocols, ${inputCount} inputs, ${ruleCount} rules, ${singleValueProtocols} single-value protocol checks and ${numericBoundaryLeaves} numeric boundary leaves.`);
+console.log(`v0.51.0 Solid Tumour reconciliation passed: ${solid.length} protocols, ${inputCount} inputs, ${ruleCount} rules, ${singleValueProtocols} single-value protocol checks and ${numericBoundaryLeaves} numeric boundary leaves.`);

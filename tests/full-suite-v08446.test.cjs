@@ -11,9 +11,9 @@ const registry = require('../js/patient-asset-registry-v0810.js');
 const codes = ['00261', '00455', '00483', '00484', '00558'];
 const routes = codes.map(c => c + '/head_neck');
 const index = json('protocols/index.json').protocols;
-assert(['0.84.46','0.84.47','0.84.48','0.84.49','0.84.50','0.84.51','0.84.52','0.84.53','0.84.54','0.84.55','0.84.56','0.84.57','0.84.58','0.84.59','0.84.60','0.84.61'].includes(json('package.json').version));
+assert(['0.84.46','0.84.47','0.84.48','0.84.49','0.84.50','0.84.51','0.84.52','0.84.53','0.84.54','0.84.55','0.84.56','0.84.57','0.84.58','0.84.59','0.84.60','0.84.61','0.84.62'].includes(json('package.json').version));
 assert.equal(registry.release,json('package.json').version);
-assert.equal(index.length, 377);
+assert.equal(index.length, require('./helpers/live-inventory-v08462.cjs').total);
 for (const route of routes) {
   const code = route.split('/')[0];
   const d = json('data/patient-knowledge-contexts/' + route + '.json');

@@ -27,7 +27,16 @@ for(const dir of directories(path.join(root,'protocols'))){
   protocolRows.push({group,protocol:filename.replace('.json',''),automatic:local.filter(d=>d.status.startsWith('automatic')).length,fields:local});
  }
 }
-assert.equal(protocolCount,380);
+const retainedCount=380;
+assert.equal(protocolCount,retainedCount+1);
+assert.equal(protocolRows.filter(row=>row.protocol==='00953-durvalumab-carboplatin-paclitaxel').length,1);
+for (const analyte of ['alt','ast']) {
+  for (const [period,label] of [['baseline','Pretreatment'],['current','Current']]) {
+    const adapter=Lab.adapterFor(analyte+'_'+period+'_uln');
+    assert.equal(adapter.title,label+' '+analyte.toUpperCase());
+    assert.deepEqual(adapter.analytes.map(a=>a.id),[analyte]);
+  }
+}
 const automaticDefinitions=rows.filter(r=>r.status.startsWith('automatic')).length; assert(automaticDefinitions >=450);
 Lab.reset();Lab.write({altUln:39,astUln:47,bilirubinUln:22,alpUln:130,creatinineUln:105});
 Lab.selectProfile('male');assert.equal(Lab.read().altUln,40);assert.equal(Lab.read().astUln,40);assert.equal(Lab.read().creatinineUln,105);assert.equal(Lab.read().alpUln,130);

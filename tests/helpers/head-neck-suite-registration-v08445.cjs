@@ -4,5 +4,16 @@ const added=['00104','00326','00518','00564','00101','00257','00313','00546','00
 const gu58=['00282','00622','00628','00450','00759','00333','00337','00338','00583','00846'];
 const gu59=['00453','00602','00807','00885','00894','00945'];
 const sarcoma60=['00500','00391','00392','00501','00511','00335','00325','00719'];
-function registry(codes,prior){assert.equal(prior.length,199);assert(added.every(x=>!prior.includes(x)));assert(gu58.every(x=>!prior.includes(x)&&!added.includes(x)));assert.equal(new Set([...prior,...added,...gu58,...gu59,...sarcoma60]).size,275,'Expected route lists must be distinct');assert.deepEqual([...codes].sort(),[...prior,...added,...gu58,...gu59,...sarcoma60].sort(),'Exact registry codes: preserved 251 prior plus ten v58, six v59 and five v60 root suites and three v61 GIST root routes');}
+function registry(codes,prior){
+  assert.equal(prior.length,199);
+  assert(added.every(x=>!prior.includes(x)));
+  assert(gu58.every(x=>!prior.includes(x)&&!added.includes(x)));
+  const through61=[...prior,...added,...gu58,...gu59,...sarcoma60];
+  assert.equal(new Set(through61).size,275,'All previously reviewed routes must remain distinct');
+  const {NEW_ROUTES}=require('./retrospective-v08462.cjs');
+  assert.deepEqual(NEW_ROUTES,['00897','00926','00953']);
+  const expected=[...through61,...NEW_ROUTES];
+  assert.equal(new Set(expected).size,278);
+  assert.deepEqual([...codes].sort(),expected.sort(),'Exact prior registry and three reviewed durvalumab root routes');
+}
 module.exports={registry,added};

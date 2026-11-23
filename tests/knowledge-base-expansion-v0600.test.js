@@ -39,6 +39,13 @@ const protocolHashes = {};
     }
   }
 })(path.join(root, 'protocols'));
+// The fifteen legacy profiles retain their original source identity. Reconcile the
+// live 00897 v4 and the authenticated last v3 rather than relabelling old evidence.
+const biliaryPath='protocols/gastrointestinal/00897-durvalumab-gemcitabine-cisplatin.json';
+const priorBiliary=JSON.parse(require('node:child_process').execFileSync('git',['show',require('./helpers/retrospective-v08462.cjs').BASE_COMMIT+':'+biliaryPath],{cwd:root}));
+assert.equal(priorBiliary.protocol_id,'nccp-00897-v3');
+assert.equal(protocolMap.get('nccp-00897-v4').metadata.source_url,'https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf');
+protocolMap.set(priorBiliary.protocol_id,priorBiliary);
 
 const moduleRequirements = {
   patient_selection: ['treatment_intent', 'disease_and_biomarker_context', 'eligibility_orientation', 'important_cautions'],

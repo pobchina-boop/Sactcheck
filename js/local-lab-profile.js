@@ -36,8 +36,8 @@
   const BILIRUBIN_FIELDS = new Set([
     "bilirubin_ratio_uln", "bilirubin_uln_multiple", "bilirubin_uln"
   ]);
-  const ALT_FIELDS = new Set(["alt_uln_multiple"]);
-  const AST_FIELDS = new Set(["ast_uln_multiple", "ast_uln"]);
+  const ALT_FIELDS = new Set(["alt_uln_multiple", "alt_current_uln", "alt_baseline_uln"]);
+  const AST_FIELDS = new Set(["ast_uln_multiple", "ast_uln", "ast_current_uln", "ast_baseline_uln"]);
   const COMBINED_TRANSAMINASE_FIELDS = new Set([
     "alt_ast_uln_multiple", "alt_ast_ratio_uln", "ast_alt_uln",
     "ast_alt_uln_multiple", "transaminases_uln_multiple", "alt_ratio_uln"
@@ -165,6 +165,11 @@
     return AST_FIELDS.has(id) || /(?:^|_)ast_(?:ratio_)?uln(?:_multiple)?$/.test(id);
   }
 
+  const timedTransaminaseTitles = Object.freeze({
+    alt_current_uln: "Current ALT", alt_baseline_uln: "Pretreatment ALT",
+    ast_current_uln: "Current AST", ast_baseline_uln: "Pretreatment AST"
+  });
+
   function adapterFor(definitionOrId) {
     const { definition, id, label } = fieldIdentity(definitionOrId);
     if (!id || (definition?.type && definition.type !== "number")) return null;
@@ -205,7 +210,7 @@
     if (altAlias(id)) {
       return {
         target: id,
-        title: "ALT",
+        title: timedTransaminaseTitles[id] || "ALT",
         analytes: [{ id: "alt", label: "ALT", unit: "U/L", setting: "altUln" }],
         decisionUnit: "×ULN"
       };
@@ -214,7 +219,7 @@
     if (astAlias(id)) {
       return {
         target: id,
-        title: "AST",
+        title: timedTransaminaseTitles[id] || "AST",
         analytes: [{ id: "ast", label: "AST", unit: "U/L", setting: "astUln" }],
         decisionUnit: "×ULN"
       };

@@ -1,20 +1,20 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00897-v3",
+  "protocol_id": "nccp-00897-v4",
   "file_name": "00897-durvalumab-gemcitabine-cisplatin.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00897",
-    "nccp_version": "3",
+    "nccp_version": "4",
     "tumour_group": "Gastrointestinal",
     "title": "Durvalumab 1500 mg, Gemcitabine 1000 mg/m² and Cisplatin 25 mg/m² Therapy",
     "short_title": "Durvalumab + Gemcitabine + Cisplatin",
     "indication": "First-line treatment of adults with unresectable or metastatic biliary tract cancer.",
     "regimen_reimbursement_code": "00897",
     "published_date": "2025-02-20",
-    "review_date": "2026-02-20",
-    "source_url": "https://healthservice.hse.ie/documents/6652/897_v3_Durvalumab_Gem_Cis.pdf",
-    "source_document_pages": 11,
+    "review_date": "2031-08-20",
+    "source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+    "source_document_pages": 9,
     "catalog": {
       "enabled": true
     },
@@ -22,7 +22,7 @@
       "mode": "live_json"
     },
     "assessment_model": "ici_plus_cytotoxic",
-    "sactcheck_encoding_version": "0.39.0",
+    "sactcheck_encoding_version": "0.84.62",
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
     "treatment_class": [
@@ -69,25 +69,27 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_review",
+      "label": "NCCP v4 reconciled; independent clinical and pharmacy review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.62",
+      "audit_date": "2026-11-23",
+      "scope_note": "Reviewed source sections on eligibility, phase-specific dosing, blood counts, organ function, and toxicity actions. Clinical authorisation and independent oncology/pharmacy review remain pending."
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-23",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00897-v3"
+    "canonical_protocol_id": "nccp-00897-v4",
+    "source_pdf_sha256": "beb8e9c57f50cda374267be0c2760623ebaff6b0f743fcf408da15aaf7b34383"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
     "dose_modification_note": "Any dose modification should be discussed with a Consultant.",
     "anaphylaxis_facilities_required": true,
-    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification."
+    "disclaimer": "Decision-support encoding of the NCCP source document. It does not replace the current NCCP regimen, clinical judgement, local policy, prescribing review, or pharmacy verification.",
+    "baseline_and_regular_tests": "Baseline: FBC, renal and liver profile, glucose and thyroid function; audiology as indicated. Regular: day 1 FBC, renal and liver profile, day 8 FBC and creatinine while receiving chemotherapy, glucose and thyroid function; cortisol as clinically indicated (page 3)."
   },
   "indications": [
     {
@@ -150,7 +152,9 @@
           },
           "route": "IV infusion"
         }
-      ]
+      ],
+      "label": "Initial combination (cycles 1–8 at most)",
+      "frequency": "Every 21 days for up to eight cycles"
     },
     {
       "phase_id": "maintenance",
@@ -167,7 +171,9 @@
           },
           "route": "IV infusion"
         }
-      ]
+      ],
+      "label": "Durvalumab alone from cycle 9",
+      "frequency": "Every 28 days from cycle 9 if continuing"
     }
   ],
   "input_definitions": {
@@ -194,6 +200,10 @@
         {
           "value": "pre_treatment",
           "label": "Pre-treatment assessment"
+        },
+        {
+          "value": "during_treatment",
+          "label": "Assessment during treatment"
         }
       ],
       "demo_value": "pre_treatment",
@@ -394,7 +404,7 @@
       "label": "Body weight (kg)",
       "type": "number",
       "required": false,
-      "min": 0,
+      "min": 0.1,
       "max": 300,
       "step": 0.1,
       "demo_value": 70,
@@ -467,40 +477,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No infection. Select the anatomical site-specific CTCAE infection term."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Localised infection requiring local treatment only."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Oral or non-invasive systemic antimicrobial treatment indicated."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "IV antimicrobial treatment, invasive intervention or hospital care indicated."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening infection; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "infection",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Use the site-specific CTCAE infection term and grade according to local versus systemic treatment, IV antimicrobials, hospitalisation, organ dysfunction and life-threatening consequences.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Use the site-specific CTCAE infection term and grade according to local versus systemic treatment, IV antimicrobials, hospitalisation, organ dysfunction and life-threatening consequences.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "pneumonitis_grade": {
       "label": "Immune-mediated pneumonitis / interstitial lung disease grade",
@@ -511,40 +524,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No pneumonitis."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Asymptomatic; clinical or diagnostic observations only; intervention not indicated."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Symptomatic; medical intervention indicated; limits instrumental activities of daily living."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe symptoms; oxygen indicated; limits self-care activities of daily living."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening respiratory compromise; urgent intervention such as ventilatory support required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "pneumonitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess new cough, dyspnoea, oxygen requirement, imaging findings, infection and alternative causes. Immune-related or drug-related pneumonitis requires urgent senior review when symptomatic.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Assess new cough, dyspnoea, oxygen requirement, imaging findings, infection and alternative causes. Immune-related or drug-related pneumonitis requires urgent senior review when symptomatic.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "diarrhoea_colitis_grade": {
       "label": "Immune-mediated diarrhoea / colitis grade",
@@ -555,40 +571,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "Neither diarrhoea nor colitis is present."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Diarrhoea: fewer than 4 stools/day above baseline or mild ostomy-output increase. Colitis: asymptomatic, clinical/diagnostic observations only."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Diarrhoea: 4-6 stools/day above baseline or moderate ostomy-output increase; limits instrumental ADL. Colitis: abdominal pain or mucus/blood in stool."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Diarrhoea: at least 7 stools/day above baseline, incontinence, hospitalisation or severe ostomy-output increase; limits self-care ADL. Colitis: severe abdominal pain or peritoneal signs."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening diarrhoea or colitis; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "diarrhoea_or_colitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess stool frequency above baseline and also assess abdominal pain, mucus/blood in stool and peritoneal signs. Grade diarrhoea and colitis separately using CTCAE v5.0, then enter the higher applicable grade and document which term determines it.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Assess stool frequency above baseline and also assess abdominal pain, mucus/blood in stool and peritoneal signs. Grade diarrhoea and colitis separately using CTCAE v5.0, then enter the higher applicable grade and document which term determines it.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "alt_ast_uln_multiple": {
       "label": "Highest ALT or AST",
@@ -732,40 +751,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No rash. Use the most specific CTCAE skin term when a rash is present."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "For maculopapular rash: under 10% body-surface area, with or without symptoms such as itch, burning or tightness."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "For maculopapular rash: 10–30% body-surface area, or rash limiting instrumental activities of daily living."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "For maculopapular rash: over 30% body-surface area with moderate/severe symptoms, or limitation of self-care activities of daily living."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Grade 4 is not defined for uncomplicated maculopapular rash; use the appropriate severe cutaneous-reaction term if life-threatening features are present."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "rash",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess morphology, body-surface area, symptoms, mucosal involvement, blistering, systemic features and effect on daily activities. Use the specific CTCAE skin term where possible.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Assess morphology, body-surface area, symptoms, mucosal involvement, blistering, systemic features and effect on daily activities. Use the specific CTCAE skin term where possible.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "rash_grade_2_over_one_week": {
       "label": "Grade 2 rash lasting more than one week",
@@ -806,40 +828,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No myocarditis."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Grade 1 is not defined for CTCAE v5.0 myocarditis."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Symptoms with moderate activity or exertion."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe symptoms at rest or with minimal activity/exertion; intervention indicated; new onset of symptoms."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention such as continuous IV therapy or mechanical haemodynamic support indicated."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "myocarditis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess symptoms at rest and with activity, troponin/other biomarkers, ECG, echocardiography or cardiac MRI as appropriate, treatment required and haemodynamic compromise. Suspected immune-mediated myocarditis requires urgent senior review.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Assess symptoms at rest and with activity, troponin/other biomarkers, ECG, echocardiography or cardiac MRI as appropriate, treatment required and haemodynamic compromise. Suspected immune-mediated myocarditis requires urgent senior review.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "myositis_grade": {
       "label": "Immune-mediated myositis / polymyositis grade",
@@ -850,40 +875,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No myositis."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Mild muscle pain."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Moderate pain associated with weakness; pain limits instrumental activities of daily living."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Pain associated with severe weakness; limits self-care activities of daily living."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "myositis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess pain, objective weakness, CK and other relevant investigations, swallowing or respiratory involvement, and impact on instrumental versus self-care activities. Suspected immune-mediated myositis requires urgent senior review.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Assess pain, objective weakness, CK and other relevant investigations, swallowing or respiratory involvement, and impact on instrumental versus self-care activities. Suspected immune-mediated myositis requires urgent senior review.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "serious_neurological_irae_grade": {
       "label": "Serious immune-mediated neurological syndrome grade",
@@ -894,41 +922,44 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No serious neurological adverse event."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Mild symptoms under the named CTCAE neurological term."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Moderate symptoms limiting instrumental activities of daily living under the named term."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe symptoms limiting self-care activities of daily living or requiring hospital care under the named term."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening neurological consequences; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
       "help": "For syndromes such as myasthenia gravis, encephalitis, Guillain–Barré syndrome, myelitis or meningitis.",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "serious_neurological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify and document the exact neurological adverse event before grading. Assess objective deficit, instrumental versus self-care ADL limitation, bulbar/respiratory involvement and need for hospitalisation.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Identify and document the exact neurological adverse event before grading. Assess objective deficit, instrumental versus self-care ADL limitation, bulbar/respiratory involvement and need for hospitalisation.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "infusion_reaction_grade": {
       "label": "Infusion-related reaction grade",
@@ -939,40 +970,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No infusion-related or hypersensitivity reaction."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption of the infusion is not indicated; intervention not indicated."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Infusion interruption or treatment is indicated, with prompt response to symptomatic medication; prophylaxis may be needed for 24 hours or less."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Prolonged symptoms not rapidly responsive to treatment/brief interruption, or recurrence after initial improvement; hospitalisation indicated for clinical sequelae."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Document timing, symptoms, need to interrupt treatment, response to symptomatic therapy, recurrence, hospitalisation and any airway or haemodynamic compromise.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Document timing, symptoms, need to interrupt treatment, response to symptomatic therapy, recurrence, hospitalisation and any airway or haemodynamic compromise.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "other_immune_toxicity_grade": {
       "label": "Other immune-mediated toxicity grade",
@@ -983,40 +1017,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No adverse event."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; clinical observation only and intervention generally not indicated."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Moderate; minimal, local or non-invasive intervention may be indicated; may limit instrumental activities of daily living."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe or medically significant but not immediately life-threatening; hospital care may be indicated; limits self-care activities of daily living."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "generic",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "recurrent_grade_3_immune_toxicity": {
       "label": "Recurrent grade 3 immune-mediated toxicity",
@@ -1035,40 +1072,43 @@
           "value": 0,
           "label": "Grade 0",
           "ctcae_grade": 0,
-          "description": "No adverse event."
+          "description": "Documented absence of this event."
         },
         {
           "value": 1,
           "label": "Grade 1",
           "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; clinical observation only and intervention generally not indicated."
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 2,
           "label": "Grade 2",
           "ctcae_grade": 2,
-          "description": "Moderate; minimal, local or non-invasive intervention may be indicated; may limit instrumental activities of daily living."
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 3,
           "label": "Grade 3",
           "ctcae_grade": 3,
-          "description": "Severe or medically significant but not immediately life-threatening; hospital care may be indicated; limits self-care activities of daily living."
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         },
         {
           "value": 4,
           "label": "Grade 4",
           "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using its CTCAE v4.03 criteria."
         }
       ],
       "demo_value": 0,
       "ui_section": "clinical",
-      "ctcae_version": "5.0",
+      "ctcae_version": "4.03",
       "ctcae_category": "generic",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
-      "input_role": "decision"
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "assessment_guidance": "Record the clinician-confirmed CTCAE v4.03 grade of the named event. Identify the actual adverse event first, then apply that toxicity-specific CTCAE definition. The generic severity anchors are not a substitute for the named CTCAE criterion.",
+      "input_role": "decision",
+      "grading_source_label": "NCCP 00897 v4, Table 5: CTCAE v4.03",
+      "source_grading_note": "Table 5 footnote a specifies CTCAE v4.03. The table links grades to treatment actions. Confirm the grade using the named event in that edition.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     },
     "systemic_steroids_mg_pred": {
       "label": "Current systemic steroid dose",
@@ -1090,6 +1130,203 @@
       "ui_section": "clinical",
       "help": "FBC abnormalities are monitored but do not trigger a protocol-defined ANC/platelet hold unless the source protocol states a threshold.",
       "input_role": "decision"
+    },
+    "alternative_cause_of_bilirubin_elevation": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Alternative cause of the concurrent bilirubin elevation established (for example, biliary obstruction)?",
+      "type": "boolean",
+      "demo_value": ""
+    },
+    "immune_neurological_syndrome": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Which immune neurological syndrome is suspected or confirmed?",
+      "type": "select",
+      "options": [
+        {
+          "value": "meningitis",
+          "label": "Meningitis"
+        },
+        {
+          "value": "myelitis",
+          "label": "Transverse myelitis"
+        },
+        {
+          "value": "encephalitis",
+          "label": "Encephalitis"
+        },
+        {
+          "value": "myasthenia",
+          "label": "Myasthenia gravis"
+        },
+        {
+          "value": "guillain_barre",
+          "label": "Guillain–Barré syndrome"
+        },
+        {
+          "value": "other",
+          "label": "Other or not yet determined"
+        }
+      ],
+      "demo_value": ""
+    },
+    "history_pneumonitis_g2_or_crt_related": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "History of grade 2 or worse pneumonitis, or pneumonitis of any grade after chemoradiation",
+      "type": "boolean",
+      "demo_value": false
+    },
+    "preexisting_renal_impairment_at_initiation": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Pre-existing renal impairment when initiating this regimen",
+      "type": "boolean",
+      "demo_value": false
+    },
+    "grade4_lab_only": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Grade 4 non-immune event is an isolated laboratory abnormality",
+      "type": "boolean",
+      "demo_value": ""
+    },
+    "myositis_not_resolved_by_day30_or_respiratory_insufficiency": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Myositis not improved to grade ≤1 within 30 days or signs of respiratory insufficiency",
+      "type": "boolean",
+      "demo_value": ""
+    },
+    "chemotherapy_nonhaem_grade": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Chemotherapy non-haematological toxicity grade (exclude nausea/vomiting)",
+      "type": "select",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented absence of this event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_category": "other_nonhaematological",
+      "assessment_guidance": "Identify the named adverse event. Exclude nausea and vomiting from this table. Document its current and recovery grades.",
+      "grading_source_label": "NCCP 00897 v4, Table 6: chemotherapy toxicity grades",
+      "source_grading_note": "Table 6 gives gemcitabine and cisplatin treatment actions. It does not name a grading edition or provide a complete grading table. Use the clinician-confirmed grade of the specific event.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
+    },
+    "peripheral_neuropathy_grade": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Peripheral neuropathy grade",
+      "type": "select",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented absence of this event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_category": "neuropathy",
+      "assessment_guidance": "Identify the sensory or motor event and examine function. Record the clinician-assessed grade and effect on everyday activity.",
+      "grading_source_label": "NCCP 00897 v4, Table 6: chemotherapy toxicity grades",
+      "source_grading_note": "Table 6 gives gemcitabine and cisplatin treatment actions. It does not name a grading edition or provide a complete grading table. Use the clinician-confirmed grade of the specific event.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
+    },
+    "gemcitabine_pneumonitis_grade": {
+      "required": false,
+      "ui_section": "clinical",
+      "input_role": "decision",
+      "label": "Pneumonitis grade when assessing gemcitabine",
+      "type": "select",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "Documented absence of this event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Record grade 1 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Record grade 2 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Record grade 3 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Record grade 4 only when the clinician has confirmed that grade for this event using the applicable event-specific grading criteria."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_category": "pneumonitis",
+      "assessment_guidance": "Review symptoms, oxygen needs, imaging and possible infection. Confirm the named-event grade and document the gemcitabine decision separately from durvalumab.",
+      "grading_source_label": "NCCP 00897 v4, Table 6: chemotherapy toxicity grades",
+      "source_grading_note": "Table 6 gives gemcitabine and cisplatin treatment actions. It does not name a grading edition or provide a complete grading table. Use the clinician-confirmed grade of the specific event.",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+      "ctcae_source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
     }
   },
   "required_inputs": [],
@@ -1122,15 +1359,18 @@
         "action": {
           "type": "contraindicated",
           "components": [
-            "durvalumab"
+            "durvalumab",
+            "gemcitabine",
+            "cisplatin"
           ],
-          "recommendation": "Do not administer durvalumab; obtain consultant review."
+          "recommendation": "Known hypersensitivity to any of the three agents or relevant excipients is a regimen exclusion. Confirm the implicated medicine and a new plan."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 3,
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Relevant hypersensitivity is an exclusion."
+        "explanation": "Known hypersensitivity to any of the three agents or relevant excipients is a regimen exclusion. Confirm the implicated medicine and a new plan."
       },
       {
         "rule_id": "PREGNANCY_OR_BREASTFEEDING_REVIEW",
@@ -1147,17 +1387,20 @@
           }
         ],
         "action": {
-          "type": "consultant_review",
+          "type": "contraindicated",
           "components": [
-            "durvalumab"
+            "durvalumab",
+            "gemcitabine",
+            "cisplatin"
           ],
-          "recommendation": "Do not proceed without urgent consultant review of pregnancy or breastfeeding risk."
+          "recommendation": "Pregnancy and breastfeeding are listed exclusions for this regimen. Obtain consultant review."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 3,
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Pregnancy or breastfeeding requires specialist review."
+        "explanation": "Pregnancy and breastfeeding are listed exclusions for this regimen. Obtain consultant review."
       },
       {
         "rule_id": "INFECTION_G3_G4",
@@ -1172,8 +1415,10 @@
           "recommendation": "Withhold durvalumab until the infection is clinically stable."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 3–4 infection requires withholding until stable."
       },
@@ -1187,13 +1432,14 @@
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Review the FBC abnormality clinically; no protocol-defined ANC or platelet hold threshold is encoded for single-agent durvalumab."
+          "recommendation": "Review abnormal blood counts against the treatment day and Table 3. The combination and maintenance phases have different components."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 3,
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "FBC is monitored, but the NCCP protocol does not specify an ANC or platelet treatment threshold."
+        "explanation": "Review abnormal blood counts against the treatment day and Table 3. The combination and maintenance phases have different components."
       },
       {
         "rule_id": "PNEUMONITIS_G2",
@@ -1209,7 +1455,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2 immune-mediated pneumonitis requires withholding."
       },
@@ -1227,67 +1475,186 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 3–4 immune-mediated pneumonitis requires permanent discontinuation."
       },
       {
         "rule_id": "HEPATITIS_WITHHOLD",
-        "any": [
-          {
-            "all": [
-              {
-                "field": "alt_ast_uln_multiple",
-                "operator": ">",
-                "value": 3
-              },
-              {
-                "field": "alt_ast_uln_multiple",
-                "operator": "<=",
-                "value": 5
-              }
-            ]
-          },
-          {
-            "all": [
-              {
-                "field": "bilirubin_uln_multiple",
-                "operator": ">",
-                "value": 1.5
-              },
-              {
-                "field": "bilirubin_uln_multiple",
-                "operator": "<=",
-                "value": 3
-              }
-            ]
-          }
-        ],
         "action": {
           "type": "withhold",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Withhold durvalumab and manage as immune-mediated hepatitis."
+          "recommendation": "Withhold durvalumab for the intermediate immune-hepatitis thresholds pending evaluation. Higher or concurrent findings may require permanent discontinuation. Check for biliary obstruction or another cause."
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "ALT/AST >3–5×ULN or bilirubin >1.5–3×ULN requires withholding."
+        "explanation": "Withhold durvalumab for the intermediate immune-hepatitis thresholds pending evaluation. Higher or concurrent findings may require permanent discontinuation. Check for biliary obstruction or another cause.",
+        "all": [
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": ">",
+                    "value": 3
+                  },
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": "<=",
+                    "value": 10
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "bilirubin_uln_multiple",
+                    "operator": ">",
+                    "value": 1.5
+                  },
+                  {
+                    "field": "bilirubin_uln_multiple",
+                    "operator": "<=",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": "missing",
+                "value": true
+              },
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": "<=",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": "missing",
+                "value": true
+              },
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": "<=",
+                "value": 2
+              },
+              {
+                "all": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": "<=",
+                    "value": 3
+                  },
+                  {
+                    "field": "bilirubin_uln_multiple",
+                    "operator": "<=",
+                    "value": 3
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "bilirubin_uln_multiple",
+                    "operator": "<=",
+                    "value": 3
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": ">",
+                    "value": 3
+                  },
+                  {
+                    "any": [
+                      {
+                        "field": "alternative_cause_of_bilirubin_elevation",
+                        "operator": "==",
+                        "value": true
+                      },
+                      {
+                        "field": "alternative_cause_of_bilirubin_elevation",
+                        "operator": "missing",
+                        "value": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       {
         "rule_id": "HEPATITIS_PERMANENT",
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Permanently discontinue durvalumab for ALT/AST >10× ULN, isolated bilirubin >3× ULN, or ALT/AST >3× with bilirubin >2× ULN and no alternative cause. Apply the AST/ALT recommendations if the concurrent bilirubin rise has an alternative cause."
+        },
+        "source": {
+          "page": 5,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
+        },
+        "explanation": "Permanently discontinue durvalumab for ALT/AST >10× ULN, isolated bilirubin >3× ULN, or ALT/AST >3× with bilirubin >2× ULN and no alternative cause. Apply the AST/ALT recommendations if the concurrent bilirubin rise has an alternative cause.",
         "any": [
           {
             "field": "alt_ast_uln_multiple",
             "operator": ">",
-            "value": 5
+            "value": 10
           },
           {
-            "field": "bilirubin_uln_multiple",
-            "operator": ">",
-            "value": 3
+            "all": [
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "any": [
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": "<=",
+                    "value": 3
+                  },
+                  {
+                    "field": "alt_ast_uln_multiple",
+                    "operator": "missing",
+                    "value": true
+                  }
+                ]
+              }
+            ]
           },
           {
             "all": [
@@ -1300,22 +1667,15 @@
                 "field": "bilirubin_uln_multiple",
                 "operator": ">",
                 "value": 2
+              },
+              {
+                "field": "alternative_cause_of_bilirubin_elevation",
+                "operator": "==",
+                "value": false
               }
             ]
           }
-        ],
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "durvalumab"
-          ],
-          "recommendation": "Permanently discontinue durvalumab for severe immune-mediated hepatitis."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ALT/AST >5×ULN, bilirubin >3×ULN, or concurrent transaminase and bilirubin elevation meets the permanent-discontinuation pathway."
+        ]
       },
       {
         "rule_id": "COLITIS_G2_G3",
@@ -1334,7 +1694,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2–3 immune-mediated diarrhoea or colitis requires withholding."
       },
@@ -1352,7 +1714,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 4 immune-mediated diarrhoea or colitis requires permanent discontinuation."
       },
@@ -1370,7 +1734,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2–4 immune-mediated hyperthyroidism or thyroiditis requires withholding until stable."
       },
@@ -1388,7 +1754,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Immune-mediated hypothyroidism is treated with hormone replacement without a protocol dose change."
       },
@@ -1406,7 +1774,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Symptomatic adrenal insufficiency or hypophysitis requires withholding until stable."
       },
@@ -1423,8 +1793,9 @@
           "recommendation": "Endocrinopathy controlled on replacement therapy does not automatically require permanent discontinuation; confirm stability."
         },
         "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
+          "page": 7,
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Controlled endocrinopathies are an exception to the general permanent-discontinuation rule."
       },
@@ -1442,7 +1813,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Immune-mediated type 1 diabetes is managed with insulin without a protocol dose change."
       },
@@ -1469,7 +1842,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Creatinine >1.5–3× baseline or ULN meets the grade 2 nephritis pathway."
       },
@@ -1487,7 +1862,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Creatinine >3× baseline or ULN meets the permanent-discontinuation pathway."
       },
@@ -1505,7 +1882,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2 immune-mediated rash lasting more than one week requires withholding."
       },
@@ -1523,7 +1902,9 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 3 immune-mediated rash requires withholding."
       },
@@ -1540,8 +1921,10 @@
           "recommendation": "Permanently discontinue durvalumab for grade 4 immune-mediated rash."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 4 immune-mediated rash requires permanent discontinuation."
       },
@@ -1558,8 +1941,10 @@
           "recommendation": "Permanently discontinue durvalumab and urgently manage suspected immune-mediated myocarditis."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2–4 myocarditis requires permanent discontinuation."
       },
@@ -1579,8 +1964,10 @@
           "recommendation": "Withhold durvalumab and manage immune-mediated myositis/polymyositis."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2–3 myositis requires withholding."
       },
@@ -1597,28 +1984,50 @@
           "recommendation": "Permanently discontinue durvalumab for grade 4 myositis."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 4 myositis requires permanent discontinuation."
       },
       {
         "rule_id": "SERIOUS_NEUROLOGICAL_IRAE",
-        "field": "serious_neurological_irae_grade",
-        "operator": ">=",
-        "value": 2,
         "action": {
-          "type": "permanently_discontinue",
+          "type": "consultant_review",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Permanently discontinue durvalumab and urgently manage the serious immune-mediated neurological syndrome."
+          "recommendation": "Urgently clarify the neurological syndrome and grade. Grade 2 meningitis needs interruption; transverse myelitis at any grade requires permanent discontinuation."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Serious neurological immune-mediated syndromes generally require permanent discontinuation."
+        "explanation": "Urgently clarify the neurological syndrome and grade. Grade 2 meningitis needs interruption; transverse myelitis at any grade requires permanent discontinuation.",
+        "all": [
+          {
+            "field": "serious_neurological_irae_grade",
+            "operator": ">=",
+            "value": 1
+          },
+          {
+            "any": [
+              {
+                "field": "immune_neurological_syndrome",
+                "operator": "missing",
+                "value": true
+              },
+              {
+                "field": "immune_neurological_syndrome",
+                "operator": "==",
+                "value": "other"
+              }
+            ]
+          }
+        ]
       },
       {
         "rule_id": "INFUSION_REACTION_G1_G2",
@@ -1629,17 +2038,19 @@
           2
         ],
         "action": {
-          "type": "proceed_with_caution",
+          "type": "withhold",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Interrupt or slow the infusion; consider prophylaxis and close monitoring for subsequent doses."
+          "recommendation": "Interrupt or slow the durvalumab infusion for a grade 1 or 2 reaction. Assess and manage the reaction according to the unit protocol."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Grade 1–2 infusion reactions require interruption or slowing rather than an automatic permanent hold."
+        "explanation": "Interrupt or slow the durvalumab infusion for a grade 1 or 2 reaction. Assess and manage the reaction according to the unit protocol."
       },
       {
         "rule_id": "INFUSION_REACTION_G3_G4",
@@ -1654,28 +2065,35 @@
           "recommendation": "Permanently discontinue durvalumab for a grade 3–4 infusion reaction."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 3–4 infusion reactions require permanent discontinuation."
       },
       {
         "rule_id": "OTHER_IMMUNE_G3",
-        "field": "other_immune_toxicity_grade",
-        "operator": "==",
-        "value": 3,
         "action": {
           "type": "withhold",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Withhold durvalumab and follow the toxicity-specific immune-mediated pathway."
+          "recommendation": "Withhold durvalumab for other grade 2 or 3 immune-mediated reactions. Use the specific organ rule where available."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 6,
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Grade 3 other immune-mediated toxicity requires withholding."
+        "explanation": "Withhold durvalumab for other grade 2 or 3 immune-mediated reactions. Use the specific organ rule where available.",
+        "field": "other_immune_toxicity_grade",
+        "operator": "in",
+        "value": [
+          2,
+          3
+        ]
       },
       {
         "rule_id": "OTHER_IMMUNE_G4",
@@ -1691,7 +2109,9 @@
         },
         "source": {
           "page": 6,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 4 immune-mediated toxicity generally requires permanent discontinuation."
       },
@@ -1708,8 +2128,9 @@
           "recommendation": "Permanently discontinue durvalumab for recurrent grade 3 immune-mediated toxicity."
         },
         "source": {
-          "page": 6,
-          "document": "Current mapped NCCP source"
+          "page": 7,
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Recurrent grade 3 immune-mediated toxicity requires permanent discontinuation."
       },
@@ -1730,27 +2151,40 @@
         },
         "source": {
           "page": 6,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Grade 2–3 non-immune adverse reactions require withholding."
       },
       {
         "rule_id": "NONIMMUNE_G4",
-        "field": "other_nonimmune_toxicity_grade",
-        "operator": ">=",
-        "value": 4,
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Permanently discontinue durvalumab for a grade 4 non-immune adverse reaction unless the protocol exception is agreed by the consultant."
+          "recommendation": "Permanently discontinue for a grade 4 non-immune adverse event other than an isolated laboratory abnormality."
         },
         "source": {
           "page": 6,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Grade 4 non-immune adverse reactions generally require permanent discontinuation."
+        "explanation": "Permanently discontinue for a grade 4 non-immune adverse event other than an isolated laboratory abnormality.",
+        "all": [
+          {
+            "field": "other_nonimmune_toxicity_grade",
+            "operator": "==",
+            "value": 4
+          },
+          {
+            "field": "grade4_lab_only",
+            "operator": "==",
+            "value": false
+          }
+        ]
       },
       {
         "rule_id": "PRIOR_SEVERE_IRAE_EXCLUSION",
@@ -1767,17 +2201,18 @@
           }
         ],
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Do not administer durvalumab without consultant review because the source excludes prior grade ≥3 or unresolved >grade 1 immune toxicity."
+          "recommendation": "Prior grade ≥3 or unresolved >grade 1 immune toxicity is a source-listed caution: obtain consultant review before initiating or resuming therapy."
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Prior severe or unresolved immune toxicity is an exclusion."
+        "explanation": "Prior grade ≥3 or unresolved >grade 1 immune toxicity is a source-listed caution: obtain consultant review before initiating or resuming therapy."
       },
       {
         "rule_id": "ACTIVE_INFECTION_ALL_COMPONENTS",
@@ -1795,7 +2230,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Active clinically significant infection requiring therapy is a caution."
       },
@@ -1815,38 +2251,103 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Biliary tract infection/cholangitis requires close monitoring and treatment review."
       },
       {
         "rule_id": "LOW_WEIGHT_DURVALUMAB",
-        "field": "weight_kg",
-        "operator": "<=",
-        "value": 36,
         "action": {
           "type": "proceed_with_caution",
           "components": [
             "durvalumab"
           ],
-          "recommendation": "Use weight-based durvalumab 20 mg/kg rather than the fixed 1500 mg dose while body weight is 36 kg or less."
+          "recommendation": "If durvalumab is due: use 20 mg/kg at body weight ≤36 kg. It is given on day 1 every 21 days during induction and every 28 days during maintenance."
         },
         "source": {
           "page": 2,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
-        "explanation": "Patients ≤36 kg require weight-based durvalumab dosing."
+        "explanation": "Patients ≤36 kg require weight-based durvalumab dosing.",
+        "all": [
+          {
+            "field": "weight_kg",
+            "operator": "<=",
+            "value": 36
+          },
+          {
+            "any": [
+              {
+                "field": "treatment_phase",
+                "operator": "missing",
+                "value": true
+              },
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "maintenance"
+                ]
+              }
+            ]
+          }
+        ]
       },
       {
         "rule_id": "CHEMO_COUNTS_75_GEM",
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Give gemcitabine at 75%; cisplatin remains at 100% according to Table 3."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3",
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
+        },
+        "explanation": "ANC 0.5–0.99 or platelets 50–100 requires gemcitabine 75% and cisplatin 100%.",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
+          },
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 50
           },
           {
             "any": [
@@ -1880,30 +2381,35 @@
               }
             ]
           }
-        ],
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "gemcitabine"
-          ],
-          "recommendation": "Give gemcitabine at 75%; cisplatin remains at 100% according to Table 3."
-        },
-        "source": {
-          "page": 4,
-          "table": "Table 3",
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "ANC 0.5–0.99 or platelets 50–100 requires gemcitabine 75% and cisplatin 100%."
+        ]
       },
       {
         "rule_id": "CHEMO_COUNTS_OMIT",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -1932,7 +2438,8 @@
         "source": {
           "page": 4,
           "table": "Table 3",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "ANC <0.5 or platelets <50 requires omission of gemcitabine and cisplatin."
       },
@@ -1940,11 +2447,29 @@
         "rule_id": "CISPLATIN_CRCL_50_59",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -1966,9 +2491,10 @@
           "recommendation": "Give cisplatin at 75% of the original dose."
         },
         "source": {
-          "page": 5,
+          "page": 4,
           "table": "Table 4",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "CrCl 50–59 mL/min requires cisplatin 75%."
       },
@@ -1976,11 +2502,29 @@
         "rule_id": "CISPLATIN_CRCL_40_49",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -2002,9 +2546,10 @@
           "recommendation": "Give cisplatin at 50% of the original dose."
         },
         "source": {
-          "page": 5,
+          "page": 4,
           "table": "Table 4",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "CrCl 40–49 mL/min requires cisplatin 50%."
       },
@@ -2012,11 +2557,29 @@
         "rule_id": "CISPLATIN_CRCL_LT40",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -2033,9 +2596,10 @@
           "recommendation": "Cisplatin is not recommended at CrCl below 40 mL/min; obtain consultant/pharmacy review of the regimen."
         },
         "source": {
-          "page": 5,
+          "page": 4,
           "table": "Table 4",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Cisplatin is not recommended below CrCl 40 mL/min."
       },
@@ -2043,11 +2607,29 @@
         "rule_id": "CISPLATIN_HAEMODIALYSIS",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -2064,9 +2646,10 @@
           "recommendation": "In haemodialysis, 50% cisplatin may be considered; specialist consultant/pharmacy review is required."
         },
         "source": {
-          "page": 5,
+          "page": 4,
           "table": "Table 4",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "The source permits consideration of 50% cisplatin in haemodialysis."
       },
@@ -2074,11 +2657,29 @@
         "rule_id": "GEMCITABINE_BILI_GE27",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -2095,9 +2696,10 @@
           "recommendation": "Consider starting gemcitabine at 80% and increasing if tolerated, or full dose with active monitoring."
         },
         "source": {
-          "page": 5,
+          "page": 4,
           "table": "Table 4",
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Bilirubin ≥27 µmol/L requires an 80% start or active monitoring option."
       },
@@ -2105,11 +2707,29 @@
         "rule_id": "HEARING_IMPAIRMENT_CISPLATIN",
         "all": [
           {
-            "field": "treatment_phase",
-            "operator": "in",
-            "value": [
-              "induction_day1",
-              "induction_day8"
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
             ]
           },
           {
@@ -2127,9 +2747,644 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00897 v4",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
         },
         "explanation": "Significant hearing impairment/tinnitus is an exclusion."
+      },
+      {
+        "rule_id": "COUNTS_INCOMPLETE_ANC",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "anc",
+                "operator": ">=",
+                "value": 0.5
+              },
+              {
+                "field": "anc",
+                "operator": "<",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "field": "platelets",
+            "operator": "missing",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Confirm the other blood count before interpreting the 75% gemcitabine band; a value in the omission band takes priority."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Confirm the other blood count before interpreting the 75% gemcitabine band; a value in the omission band takes priority."
+      },
+      {
+        "rule_id": "COUNTS_INCOMPLETE_PLATELETS",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "platelets",
+                "operator": ">=",
+                "value": 50
+              },
+              {
+                "field": "platelets",
+                "operator": "<=",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "field": "anc",
+            "operator": "missing",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Confirm the other blood count before interpreting the 75% gemcitabine band; a value in the omission band takes priority."
+        },
+        "source": {
+          "page": 4,
+          "table": "Table 3",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Confirm the other blood count before interpreting the 75% gemcitabine band; a value in the omission band takes priority."
+      },
+      {
+        "rule_id": "HEPATITIS_CONCURRENT_CAUSE_UNKNOWN",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "alt_ast_uln_multiple",
+                "operator": ">",
+                "value": 3
+              },
+              {
+                "field": "bilirubin_uln_multiple",
+                "operator": ">",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "field": "alternative_cause_of_bilirubin_elevation",
+            "operator": "missing",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Withhold while the cause of transaminase and bilirubin elevation is established. If there is no alternative cause, the concurrent thresholds require permanent discontinuation. With an alternative explanation apply the AST/ALT pathway (footnote b)."
+        },
+        "source": {
+          "page": 5,
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Withhold while the cause of transaminase and bilirubin elevation is established. If there is no alternative cause, the concurrent thresholds require permanent discontinuation. With an alternative explanation apply the AST/ALT pathway (footnote b)."
+      },
+      {
+        "rule_id": "MENINGITIS_G2",
+        "all": [
+          {
+            "field": "immune_neurological_syndrome",
+            "operator": "==",
+            "value": "meningitis"
+          },
+          {
+            "field": "serious_neurological_irae_grade",
+            "operator": "==",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Withhold durvalumab for grade 2 immune-mediated meningitis; arrange urgent specialist assessment."
+        },
+        "source": {
+          "page": 6,
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Withhold durvalumab for grade 2 immune-mediated meningitis; arrange urgent specialist assessment."
+      },
+      {
+        "rule_id": "NEURO_PERMANENT",
+        "any": [
+          {
+            "field": "immune_neurological_syndrome",
+            "operator": "==",
+            "value": "myelitis"
+          },
+          {
+            "all": [
+              {
+                "field": "immune_neurological_syndrome",
+                "operator": "==",
+                "value": "meningitis"
+              },
+              {
+                "field": "serious_neurological_irae_grade",
+                "operator": ">=",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "immune_neurological_syndrome",
+                "operator": "in",
+                "value": [
+                  "encephalitis",
+                  "myasthenia",
+                  "guillain_barre"
+                ]
+              },
+              {
+                "field": "serious_neurological_irae_grade",
+                "operator": ">=",
+                "value": 2
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Permanently discontinue for immune transverse myelitis at any grade, grade 3–4 meningitis, or grade 2–4 encephalitis, myasthenia gravis or Guillain–Barré syndrome."
+        },
+        "source": {
+          "page": 6,
+          "table": "Table 5",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Permanently discontinue for immune transverse myelitis at any grade, grade 3–4 meningitis, or grade 2–4 encephalitis, myasthenia gravis or Guillain–Barré syndrome."
+      },
+      {
+        "rule_id": "PRIOR_PNEUMONITIS_CAUTION",
+        "field": "history_pneumonitis_g2_or_crt_related",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Previous grade ≥2 pneumonitis or any pneumonitis from prior chemoradiation requires consultant review as a caution."
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Previous grade ≥2 pneumonitis or any pneumonitis from prior chemoradiation requires consultant review as a caution."
+      },
+      {
+        "rule_id": "BASELINE_RENAL_EXCLUSION",
+        "field": "preexisting_renal_impairment_at_initiation",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Pre-existing renal impairment is a regimen exclusion. Confirm the treatment plan with the initiating consultant."
+        },
+        "source": {
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Pre-existing renal impairment is a regimen exclusion. Confirm the treatment plan with the initiating consultant."
+      },
+      {
+        "rule_id": "GRADE4_LAB_CONTEXT",
+        "all": [
+          {
+            "field": "other_nonimmune_toxicity_grade",
+            "operator": "==",
+            "value": 4
+          },
+          {
+            "any": [
+              {
+                "field": "grade4_lab_only",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "field": "grade4_lab_only",
+                "operator": "missing",
+                "value": true
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Urgently clarify whether this is an isolated grade 4 laboratory result. Clinical findings and consultant judgement govern discontinuation for a laboratory abnormality."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 5 footnote f",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Urgently clarify whether this is an isolated grade 4 laboratory result. Clinical findings and consultant judgement govern discontinuation for a laboratory abnormality."
+      },
+      {
+        "rule_id": "PERSISTENT_MUSCLE_TOXICITY",
+        "field": "myositis_not_resolved_by_day30_or_respiratory_insufficiency",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "durvalumab"
+          ],
+          "recommendation": "Permanently discontinue durvalumab for immune myositis that does not resolve to ≤grade 1 within 30 days or if respiratory insufficiency develops."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 5 footnote d",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Permanently discontinue durvalumab for immune myositis that does not resolve to ≤grade 1 within 30 days or if respiratory insufficiency develops."
+      },
+      {
+        "rule_id": "CHEMO_NONHAEM_G3_PLUS",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "chemotherapy_nonhaem_grade",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Withhold both chemotherapy agents until recovery to grade ≤1, except nausea/vomiting. Subsequent dose reduction is at the prescribing consultant’s discretion."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 6",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Withhold both chemotherapy agents until recovery to grade ≤1, except nausea/vomiting. Subsequent dose reduction is at the prescribing consultant’s discretion."
+      },
+      {
+        "rule_id": "CISPLATIN_NEUROPATHY_G2_PLUS",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "peripheral_neuropathy_grade",
+            "operator": ">=",
+            "value": 2
+          }
+        ],
+        "action": {
+          "type": "omit",
+          "components": [
+            "cisplatin"
+          ],
+          "recommendation": "Omit cisplatin or consider substitution with carboplatin after consultant review. Table 6 specifies gemcitabine 100% for neuropathy alone; other toxicities may independently modify its dose."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 6",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Omit cisplatin or consider substitution with carboplatin after consultant review. Table 6 specifies gemcitabine 100% for neuropathy alone; other toxicities may independently modify its dose."
+      },
+      {
+        "rule_id": "GEMCITABINE_PNEUMONITIS_G2_PLUS",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "gemcitabine_pneumonitis_grade",
+                "operator": ">=",
+                "value": 2
+              },
+              {
+                "field": "pneumonitis_grade",
+                "operator": ">=",
+                "value": 2
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Discontinue gemcitabine for grade ≥2 pneumonitis. Assess the immune component separately; this gemcitabine decision does not automatically discontinue durvalumab."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 6",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Discontinue gemcitabine for grade ≥2 pneumonitis. Assess the immune component separately; this gemcitabine decision does not automatically discontinue durvalumab."
+      },
+      {
+        "rule_id": "GEMCITABINE_CONFIRMED_SCAR",
+        "all": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "any": [
+                  {
+                    "field": "cycle_number",
+                    "operator": "missing",
+                    "value": true
+                  },
+                  {
+                    "field": "cycle_number",
+                    "operator": "<=",
+                    "value": 8
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "scar_status",
+            "operator": "==",
+            "value": "confirmed"
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "gemcitabine"
+          ],
+          "recommendation": "Discontinue gemcitabine for a severe cutaneous adverse reaction including SJS, TEN, DRESS or AGEP. Assess each other agent separately."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 6",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Discontinue gemcitabine for a severe cutaneous adverse reaction including SJS, TEN, DRESS or AGEP. Assess each other agent separately."
+      },
+      {
+        "rule_id": "SUSPECTED_SCAR_REVIEW",
+        "field": "scar_status",
+        "operator": "==",
+        "value": "suspected",
+        "action": {
+          "type": "withhold",
+          "components": [
+            "durvalumab",
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "Interrupt administration pending emergency assessment of a suspected severe skin reaction and confirmation of the culprit medicines."
+        },
+        "source": {
+          "page": 7,
+          "table": "Table 6 – suspected toxicity review",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "Interrupt administration pending emergency assessment of a suspected severe skin reaction and confirmation of the culprit medicines."
+      },
+      {
+        "rule_id": "CYCLE_PHASE_CONFLICT",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "in",
+                "value": [
+                  "induction_day1",
+                  "induction_day8"
+                ]
+              },
+              {
+                "field": "cycle_number",
+                "operator": ">=",
+                "value": 9
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "treatment_phase",
+                "operator": "==",
+                "value": "maintenance"
+              },
+              {
+                "field": "cycle_number",
+                "operator": "<=",
+                "value": 8
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "durvalumab",
+            "gemcitabine",
+            "cisplatin"
+          ],
+          "recommendation": "The documented cycle and phase are discordant. Confirm actual treatment and any individualised plan with the consultant before determining which agents are due."
+        },
+        "source": {
+          "page": 2,
+          "table": "Tables 1–2",
+          "url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf",
+          "document": "NCCP 00897 v4"
+        },
+        "explanation": "The documented cycle and phase are discordant. Confirm actual treatment and any individualised plan with the consultant before determining which agents are due."
       }
     ]
   },
@@ -2138,15 +3393,31 @@
     "coverage_gap": "One or more potentially relevant protocol domains were not assessed."
   },
   "supportive_care": {
-    "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Cisplatin is high emetogenic risk in NCCP V6 Table 7.",
+    "mapping_basis": "Select the current phase and treatment visit. Induction is high emetogenic risk; durvalumab-only maintenance is minimal.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "phase_profiles": {
+      "induction_day1": {
+        "level": "high",
+        "script_id": "nccp-parenteral-high"
+      },
+      "induction_day8": {
+        "level": "high",
+        "script_id": "nccp-parenteral-high"
+      },
+      "maintenance": {
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
+      }
+    },
+    "phase_specific_plan": "patient/00897/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/6652/897_Durvalumab_Gem_CIS_.pdf"
   }
 }
