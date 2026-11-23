@@ -83,7 +83,8 @@ for (const directory of publicDirectories) {
 // Each film belongs only to the explicitly listed regimen(s).
 const patientFilms = [
   { name: "durvalumab-consolidation", regimens: ["00576", "00655"] },
-  { name: "stride-00926", regimens: ["00926"] }
+  { name: "stride-00926", regimens: ["00926"] },
+  { name: "osimertinib-00353", regimens: ["00353"] }
 ];
 for (const { name, regimens } of patientFilms) {
   const panel = fs.readFileSync(path.join(__dirname, `${name}-film.html`), "utf8").trim();
@@ -102,13 +103,19 @@ for (const { name, regimens } of patientFilms) {
   }
 }
 
-// The STRIDE wallet-card QR opens the full treatment reference directly.
-const strideReference = path.join(out, "patient", "00926", "knowledge.html");
-const referenceHtml = fs.readFileSync(strideReference, "utf8");
-const treatmentLink = '<a href="./">My treatment</a>';
-if (!referenceHtml.includes(treatmentLink)) throw new Error("Missing 00926 treatment reference navigation");
-const filmLink = '<a href="./#treatment-film">Watch the STRIDE treatment video</a>';
-fs.writeFileSync(strideReference, referenceHtml.replace(treatmentLink, treatmentLink + filmLink), "utf8");
+// These wallet-card QR codes open the full treatment reference directly.
+const referenceFilms = [
+  { code: "00926", portalLabel: "My treatment", filmLabel: "Watch the STRIDE treatment video" },
+  { code: "00353", portalLabel: "Your treatment portal", filmLabel: "Watch the osimertinib treatment video" }
+];
+for (const { code, portalLabel, filmLabel } of referenceFilms) {
+  const reference = path.join(out, "patient", code, "knowledge.html");
+  const html = fs.readFileSync(reference, "utf8");
+  const portalLink = `<a href="./">${portalLabel}</a>`;
+  if (!html.includes(portalLink)) throw new Error(`Missing ${code} treatment reference navigation`);
+  const filmLink = `<a href="./#treatment-film">${filmLabel}</a>`;
+  fs.writeFileSync(reference, html.replace(portalLink, portalLink + filmLink), "utf8");
+}
 
 copyFile(path.join(root,"protocols/catalogue-bundle.json.gz"),path.join(out,"protocols/catalogue-bundle.json.gz"));
 const protocolCount = copyProtocolJson(path.join(root, "protocols"), path.join(out, "protocols"));

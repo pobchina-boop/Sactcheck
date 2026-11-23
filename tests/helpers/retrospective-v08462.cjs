@@ -90,7 +90,12 @@ const strideBytes = fs.readFileSync(path.join(ROOT, strideRecordPath));
 assert.equal(sha(strideBytes), 'a539d91f2e308efd12be8a01776c8fed459dc3de452b57f52a38c75092199713', 'Reviewed STRIDE film publication');
 const strideRecord = JSON.parse(strideBytes);
 assert.deepEqual(strideRecord.regimens, ['00926']);
-const filmRecords = [filmRecord, strideRecord];
+const osimertinibRecordPath = 'validation/osimertinib-film-v08462/transition.json';
+const osimertinibBytes = fs.readFileSync(path.join(ROOT, osimertinibRecordPath));
+assert.equal(sha(osimertinibBytes), 'cb14449c585529b7d356f6d5b0b5fab4d967658e450de97a3f6b16bc8dbc472d', 'Reviewed osimertinib film publication');
+const osimertinibRecord = JSON.parse(osimertinibBytes);
+assert.deepEqual(osimertinibRecord.regimens, ['00353']);
+const filmRecords = [filmRecord, strideRecord, osimertinibRecord];
 function filmExpected(f, h, n) {
   const changes = filmRecords.map(record => record.files[f]).filter(Boolean);
   if (!changes.length) return {sha256: h, bytes: n};
@@ -116,7 +121,7 @@ function currentReplayHash(file, historicalHash){
   assert.equal(live.length,reviewed.bytes,file+' live tool size');
   return reviewed.sha256;
 }
-function isAddition(f){return f===filmRecordPath||f===strideRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
+function isAddition(f){return f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
 function verify(){
   const latest = new Map();
   for (const record of filmRecords) {
