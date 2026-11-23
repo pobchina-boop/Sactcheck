@@ -100,7 +100,12 @@ const biliaryFilmBytes = fs.readFileSync(path.join(ROOT, biliaryFilmRecordPath))
 assert.equal(sha(biliaryFilmBytes), '3f41063262370cf139ae30d8a97e6bba9cca247dadde1b60edc89fa48e2c2dde', 'Reviewed biliary combination film publication');
 const biliaryFilmRecord = JSON.parse(biliaryFilmBytes);
 assert.deepEqual(biliaryFilmRecord.regimens, ['00897']);
-const filmRecords = [filmRecord, strideRecord, osimertinibRecord, biliaryFilmRecord];
+const biliaryAudioRecordPath = 'validation/gemcis-durvalumab-film-audio-v08462/transition.json';
+const biliaryAudioBytes = fs.readFileSync(path.join(ROOT, biliaryAudioRecordPath));
+assert.equal(sha(biliaryAudioBytes), '5f4e85f98181de1917b00bc553bc9a1f81423f0993fbbbcb8eaa538ee9ea0a2c', 'Reviewed biliary film narration revision');
+const biliaryAudioRecord = JSON.parse(biliaryAudioBytes);
+assert.deepEqual(biliaryAudioRecord.regimens, ['00897']);
+const filmRecords = [filmRecord, strideRecord, osimertinibRecord, biliaryFilmRecord, biliaryAudioRecord];
 function filmExpected(f, h, n) {
   const changes = filmRecords.map(record => record.files[f]).filter(Boolean);
   if (!changes.length) return {sha256: h, bytes: n};
@@ -126,7 +131,7 @@ function currentReplayHash(file, historicalHash){
   assert.equal(live.length,reviewed.bytes,file+' live tool size');
   return reviewed.sha256;
 }
-function isAddition(f){return f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||f===biliaryFilmRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
+function isAddition(f){return f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||f===biliaryFilmRecordPath||f===biliaryAudioRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
 function verify(){
   const latest = new Map();
   for (const record of filmRecords) {
