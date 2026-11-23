@@ -84,7 +84,8 @@ for (const directory of publicDirectories) {
 const patientFilms = [
   { name: "durvalumab-consolidation", regimens: ["00576", "00655"] },
   { name: "stride-00926", regimens: ["00926"] },
-  { name: "osimertinib-00353", regimens: ["00353"] }
+  { name: "osimertinib-00353", regimens: ["00353"] },
+  { name: "gemcis-durvalumab-00897", regimens: ["00897"] }
 ];
 for (const { name, regimens } of patientFilms) {
   const panel = fs.readFileSync(path.join(__dirname, `${name}-film.html`), "utf8").trim();
@@ -106,7 +107,8 @@ for (const { name, regimens } of patientFilms) {
 // These wallet-card QR codes open the full treatment reference directly.
 const referenceFilms = [
   { code: "00926", portalLabel: "My treatment", filmLabel: "Watch the STRIDE treatment video" },
-  { code: "00353", portalLabel: "Your treatment portal", filmLabel: "Watch the osimertinib treatment video" }
+  { code: "00353", portalLabel: "Your treatment portal", filmLabel: "Watch the osimertinib treatment video" },
+  { code: "00897", portalLabel: "My treatment", filmLabel: "Watch the cisplatin, gemcitabine and durvalumab treatment video" }
 ];
 for (const { code, portalLabel, filmLabel } of referenceFilms) {
   const reference = path.join(out, "patient", code, "knowledge.html");
