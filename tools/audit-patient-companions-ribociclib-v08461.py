@@ -22,10 +22,12 @@ def heading(e):
   hs=parent.xpath('./h2|./h3')
   if hs:return b.visible_text(hs[0])
  return ''
-def main():
+def main(permitted_routes=None, release='0.84.61'):
  p=argparse.ArgumentParser();p.add_argument('--routes',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--decisions',type=Path);p.add_argument('--reviewed',action='store_true');a=p.parse_args()
- scope=json.loads((R/'validation/ribociclib-review-v08461/scope.json').read_text());selected=a.routes.split(',')
- if len(set(selected))!=len(selected) or not set(selected)<=set(scope['document_routes']):p.error('Choose distinct routes within the v61 document scope')
+ if permitted_routes is None:
+  permitted_routes=json.loads((R/'validation/ribociclib-review-v08461/scope.json').read_text())['document_routes']
+ selected=a.routes.split(',')
+ if len(set(selected))!=len(selected) or not set(selected)<=set(permitted_routes):p.error('Choose distinct routes within the specified document scope')
  old=json.loads((R/'validation/head-neck-v08446/pdf/companion-content-retention.json').read_text())
  prior={(u['route'],Path(u['source_file']).name,u['source_sha256']):u for u in old['units']}
  decisions=json.loads(a.decisions.read_text()) if a.decisions else {}
@@ -78,7 +80,7 @@ def main():
     matched=any(retains_table(target) for target in desttables)
     tables.append({'route':route,'source':path,'xpath':tree.getroottree().getpath(table),'status':'complete_rows_and_timing_headers_retained' if matched else 'unmatched'})
     if not matched:errors.append({'route':route,'file':name,'error':'Table contents/timing headers not exactly retained'})
- report={'schema_version':1,'release':'0.84.61','status':'reviewed' if a.reviewed and not errors else 'candidate','normalization':old['normalization'],'extraction_policy':{**old['extraction_policy'],'scope':a.routes.split(',')},'source_files':files,'units':rows,'errors':errors,'table_context_check':{'records':tables,'unmatched':[r for r in tables if r['status']=='unmatched']},'summary':dict(collections.Counter(x['status'] for x in rows)),'review_evidence':{'policy':'Every unmatched unit retained in full; no automated semantic equivalence. Explicit prior equivalences reused only with current exact counterparts.','reviewed':a.reviewed}}
+ report={'schema_version':1,'release':release,'status':'reviewed' if a.reviewed and not errors else 'candidate','normalization':old['normalization'],'extraction_policy':{**old['extraction_policy'],'scope':a.routes.split(',')},'source_files':files,'units':rows,'errors':errors,'table_context_check':{'records':tables,'unmatched':[r for r in tables if r['status']=='unmatched']},'summary':dict(collections.Counter(x['status'] for x in rows)),'review_evidence':{'policy':'Every unmatched unit retained in full; no automated semantic equivalence. Explicit prior equivalences reused only with current exact counterparts.','reviewed':a.reviewed}}
  a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n');print(json.dumps({'summary':report['summary'],'errors':errors,'status':report['status']}))
  if errors:raise SystemExit(1)
 if __name__=='__main__':main()

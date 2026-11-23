@@ -92,12 +92,12 @@ assert.strictEqual(new Set(codes).size, 94, 'The GI deck contains duplicate NCCP
 assert.strictEqual(new Set(gi.map(({ data }) => data.protocol_id)).size, 94, 'The GI deck contains duplicate protocol IDs.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 377, 'Complete protocol index must contain 210 distinct protocols.');
-assert.strictEqual(index.protocols.length, 377, 'Complete protocol index array must contain 210 entries.');
+assert.strictEqual(index.protocol_count, require('./helpers/live-inventory-v08462.cjs').total, 'Complete protocol index must contain 210 distinct protocols.');
+assert.strictEqual(index.protocols.length, require('./helpers/live-inventory-v08462.cjs').total, 'Complete protocol index array must contain 210 entries.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 377, 'Central supportive-care map must cover all 210 protocols.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, require('./helpers/live-inventory-v08462.cjs').total, 'Central supportive-care map must cover all 210 protocols.');
 
 const ctcaeContext = { window: {} };
 vm.createContext(ctcaeContext);
@@ -139,7 +139,14 @@ for (const { file, data } of gi) {
   if(folfox4V36)require('./helpers/folfox4-grading-v08436.cjs').metadata(data);
   const capecitabineV36=code==='00216';
   if(capecitabineV36)require('./helpers/capecitabine-grading-v08436.cjs').metadata(data);
-  assert(gistV61 || require('./helpers/gu-inputs-v08458.cjs').validate(data) || require("./helpers/prostate-inputs-v08457.cjs").validate(data) || require("./helpers/prostate-inputs-v08456.cjs").validate(data) || require("./helpers/head-neck-inputs-v08450.cjs").validate(data) || require("./helpers/head-neck-inputs-v08445.cjs").validate(data) || skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
+  const durvalumabV62 = ['00897','00926'].includes(code) && metadata.sactcheck_encoding_version === '0.84.62';
+  if (durvalumabV62) {
+    assert.equal(metadata.nccp_version, code === '00897' ? '4' : '1');
+    assert.equal(metadata.source_pdf_sha256, code === '00897'
+      ? 'beb8e9c57f50cda374267be0c2760623ebaff6b0f743fcf408da15aaf7b34383'
+      : '6b06aa3928706bfb22cec463d2e13164f0dcba387f04c51d01f7d8e1307825e4');
+  }
+  assert(durvalumabV62 || gistV61 || require('./helpers/gu-inputs-v08458.cjs').validate(data) || require("./helpers/prostate-inputs-v08457.cjs").validate(data) || require("./helpers/prostate-inputs-v08456.cjs").validate(data) || require("./helpers/head-neck-inputs-v08450.cjs").validate(data) || require("./helpers/head-neck-inputs-v08445.cjs").validate(data) || skin40 || net37 || folfox4V36 || capecitabineV36 || colorectalV35 || colorectalV34 || v08433 || (['00660','00421','00427','00428','00486','00209','00321','00227','00586','00623'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.32') || v08430 || v08429 || v08428 || (['00483','00484'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.27') || v08425 || v08424 || (['00455','00558'].includes(code) && ['0.84.22','0.84.26'].includes(metadata.sactcheck_encoding_version)) || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && metadata.sactcheck_encoding_version==='0.84.21') || (code==='00588' && metadata.sactcheck_encoding_version==='0.84.9') || ['0.39.0','0.40.0','0.41.0','0.43.0','0.44.0','0.45.0', '0.45.1','0.46.0','0.47.0','0.58.1','0.59.0','0.83.4','0.83.5','0.83.6','0.84.0'].includes(metadata.sactcheck_encoding_version), `${code} lacks a supported GI/Lung encoding marker.`);
   assert.strictEqual(metadata.partial_assessment_supported, true, `${code} does not declare single-entry support.`);
   assert(/^https:\/\/(?:healthservice\.hse\.ie\/documents\/|assets\.hse\.ie\/media\/documents\/)/.test(metadata.source_url || ''), `${code} does not link directly to an official HSE/NCCP source PDF.`);
   assert(metadata.gi_subgroup, `${code} lacks a GI subgroup.`);
@@ -175,7 +182,13 @@ for (const { file, data } of gi) {
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       const folfoxSourceDiarrhoea = (['00447','00733'].includes(code) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field)) || (code==='00791'&&['diarrhoea_grade','diarrhoea_highest_grade','mucositis_grade','stomatitis_highest_grade'].includes(field));
       const nivoFruqV35Source=nivoFruqV35Grading[code]?.fields.includes(field);
-      if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}
+      if(durvalumabV62){
+        const chemotherapy = code === '00897' && ['chemotherapy_nonhaem_grade','peripheral_neuropathy_grade','gemcitabine_pneumonitis_grade'].includes(field);
+        assert.equal(definition.ctcae_version, chemotherapy ? undefined : '4.03');
+        assert.match(definition.grading_source_label, chemotherapy ? /Table 6/ : code === '00897' ? /Table 5.*4.03/ : /Table 2.*4.03/);
+        assert.equal(definition.grading_source_url, metadata.source_url);
+        assert.equal(CTCAE.guide({...definition, id:field}).sourceSpecific, true);
+      }else if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}
       else if(require('./helpers/head-neck-grading-v08445.cjs').applies(data)){require('./helpers/head-neck-grading-v08445.cjs').check(data,field,definition,require('../js/ctcae-descriptors.js'));}
       else if(code==='00505'){
         require('./helpers/captem-grading-v08437.cjs').check(data,field,definition);
@@ -262,7 +275,17 @@ for (const { data } of gi) {
   const candidates = definitions.filter(definition => definition.visible !== false && ruleFields.has(definition.id) && demoValue(definition) !== '');
   assert(candidates.length > 0, `${code} has no independently testable clinical field.`);
   for (const definition of candidates) {
-    const result = Engine.assess(data, { [definition.id]: demoValue(definition) }, { profileId });
+    let exampleInputs = { [definition.id]: demoValue(definition) };
+    if (code === '00926' && ['alt_blv','ast_blv'].includes(definition.id)) {
+      assert.equal(definition.derived_value.operation, 'ratio');
+      const enzyme = definition.id.slice(0, 3);
+      const [current, baseline] = definition.derived_value.fields;
+      assert.deepEqual([current, baseline], [enzyme+'_current_uln', enzyme+'_baseline_uln']);
+      assert.equal(Engine.assess(data, exampleInputs, { profileId }).actionType, 'incomplete',
+        'A direct value for the calculated enzyme ratio must not count as a measured input');
+      exampleInputs = { [current]: 3.1, [baseline]: 1.4 };
+    }
+    const result = Engine.assess(data, exampleInputs, { profileId });
     assert(result.findings.length > 0, `${code}/${definition.id} produced no partial finding.`);
     assert(!/insufficient data/i.test(String(result.status || '')), `${code}/${definition.id} returned the obsolete insufficient-data state.`);
     auditedFields += 1;

@@ -21,15 +21,17 @@ function reconstruct(f,c){
  }
  out.push(...lines.slice(cursor));const after=Buffer.from(out.join(''));assert.equal(sha(after),c.after,f+' reviewed text reconstruction');assert.equal(after.length,c.after_bytes);return after;
 }
-function expected(f,h,n){const c=record.files[f];if(!c)return{sha256:h,bytes:n};assert.equal(h,c.before,f+' About publication origin');if(n!==undefined)assert.equal(n,c.before_bytes,f+' About publication origin size');return{sha256:c.after,bytes:c.after_bytes};}
+const next=require('./retrospective-v08462.cjs');
+function expected(f,h,n){const c=record.files[f];if(!c)return next.expected(f,h,n);assert.equal(h,c.before,f+' About publication origin');if(n!==undefined)assert.equal(n,c.before_bytes,f+' About publication origin size');return next.expected(f,c.after,c.after_bytes);}
 function verify(){
  for(const[f,c]of Object.entries(record.files)){
-  const bytes=fs.readFileSync(path.join(root,f));
-  if(c.before!==null)assert.deepEqual(bytes,reconstruct(f,c),f+' exact reviewed text');
-  else {assert.equal(cp.spawnSync('git',['cat-file','-e',baseCommit+':'+f],{cwd:root,env:{...process.env,GIT_NO_LAZY_FETCH:'1',GIT_TERMINAL_PROMPT:'0'}}).status,128,f+' authenticated new media path');assert.equal(sha(bytes),c.after,f+' approved media bytes');assert.equal(bytes.length,c.after_bytes);assert(bytes.length<=20*1024*1024,f+' file size limit');}
+  if(c.before!==null)reconstruct(f,c);
+  else assert.equal(cp.spawnSync('git',['cat-file','-e',baseCommit+':'+f],{cwd:root,env:{...process.env,GIT_NO_LAZY_FETCH:'1',GIT_TERMINAL_PROMPT:'0'}}).status,128,f+' authenticated new About publication path');
+  if(c.before===null)assert(c.after_bytes<=20*1024*1024,f+' About media size limit');
+  const bytes=fs.readFileSync(path.join(root,f)),e=next.expected(f,c.after,c.after_bytes);assert.equal(sha(bytes),e.sha256,f+' reviewed current bytes');assert.equal(bytes.length,e.bytes);
  }
- for(const[f,h]of Object.entries(record.unchanged_clinical_files)){assert.equal(sha(baseline(f)),h,f+' clinical Git origin');assert.equal(sha(fs.readFileSync(path.join(root,f))),h,f+' clinical bytes unchanged');}
- return true;
+ for(const[f,h]of Object.entries(record.unchanged_clinical_files)){const b=baseline(f);assert.equal(sha(b),h,f+' clinical Git origin');const e=next.expected(f,h,b.length);const current=fs.readFileSync(path.join(root,f));assert.equal(sha(current),e.sha256);assert.equal(current.length,e.bytes);}
+ return next.verify();
 }
-function isAddition(f){return f===recordPath||f===helperPath||record.files[f]?.before===null;}
+function isAddition(f){return f===recordPath||f===helperPath||record.files[f]?.before===null||next.isAddition(f);}
 module.exports={expected,verify,isAddition,reconstruct,files:record.files};

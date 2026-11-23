@@ -1,0 +1,70 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const zlib = require('node:zlib');
+const assets = require('../js/patient-asset-registry-v0810.js');
+const ids = require('../js/protocol-id-migrations.js');
+const engine = require('../js/assessment-engine.js');
+const root = path.resolve(__dirname, '..');
+const read = f => fs.readFileSync(path.join(root, f));
+const json = f => JSON.parse(read(f));
+const sha = b => crypto.createHash('sha256').update(b).digest('hex');
+const versions = {'00576':'5','00655':'3a','00897':'4','00926':'1','00953':'1a'};
+const pictures = json('data/patient-symptom-pictures.json');
+const index = json('protocols/index.json');
+const bundle = zlib.gunzipSync(read(index.bundle.path));
+assert.equal(sha(bundle),index.bundle.sha256);
+const records = JSON.parse(bundle).records;
+const scoped = records.filter(r=>/durvalumab/i.test(r.protocol.metadata.title));
+assert.deepEqual(scoped.map(r=>r.protocol.metadata.nccp_regimen_code).sort(),Object.keys(versions));
+assert.deepEqual(Object.keys(pictures.regimens).sort(), Object.keys(versions));
+const validation = json('data/clinical-validation-register-v0630.json');
+const tracker = json('data/nccp-change-tracker/source-register-v0620.json');
+const cards = json('data/regimen-card-metadata.json');
+const emesis = json('data/emetogenic-risk-map.json');
+const presentation = json('data/patient-presentation-v08431.json');
+const sources = Object.fromEntries(tracker.records.map(r=>[r.nccp_regimen_code,r]));
+const expectedDocs = ['guide','passport','handbook','knowledge','consent-form','sactcard','supportive-care','logistics','treatment-journey','symptom-icons'];
+for(const {entry,protocol} of scoped){
+ const m=protocol.metadata, code=m.nccp_regimen_code, prefix='patient/'+code+'/';
+ assert.equal(String(m.nccp_version), versions[code]);
+ assert.equal(protocol.protocol_id,entry.id);
+ assert.deepEqual(protocol,json(entry.path));
+ assert.equal(engine.assess(protocol,{}).actionType,'incomplete');
+ const row=validation.protocols.find(r=>r.nccp_code===code);
+ assert.equal(row.protocol_id,entry.id);
+ assert.equal(row.rule_count,protocol.rule_engine.rules.length);
+ assert.equal(row.input_count,Object.keys(protocol.input_definitions).length);
+ assert.equal(row.formal_consultant_reviewed,false);
+ assert.equal(sources[code].pdf_sha256,m.source_pdf_sha256);
+ assert.equal(sources[code].protocol_json_sha256,sha(read(entry.path)));
+ assert.equal(cards.protocols.find(r=>r.nccp_code===code).id,entry.id);
+ assert(emesis.protocols[code]);
+ const model=json(presentation.routes[code]);
+ assert.equal(model.protocol_id,entry.id);assert.equal(String(model.protocol_version),versions[code]);
+ assert(assets.hasDedicated(code));
+ assert.equal(assets.publicPortalUrl(code),'https://sactcheck.com/'+prefix);
+ const landing=read(prefix+'index.html').toString(),wiki=read(prefix+'knowledge.html').toString();
+ assert.match(landing,/symptom-icons\.html/);assert.match(landing,/symptom-icons\.pdf/);
+ assert.match(wiki,/symptom-icons\.html/);
+ assert(!/087 ?12345678|087 ?87654321/.test(landing),code+' contains example emergency contact');
+ const atlas=read(prefix+'symptom-icons.html').toString();
+ assert(atlas.includes(code));assert.match(atlas,/112 or 999/);
+ assert(!atlas.includes('[object Object]'));
+ for(const key of [...pictures.regimens[code].everyday,...pictures.regimens[code].urgent]){
+  const record=pictures.symptoms[key];
+  assert(record && record.label && record.recognise);
+  assert.match(read('patient/assets/symptom-icons/'+record.icon+'.svg').toString(),/<title>/);
+  assert(atlas.includes('symptom-icons/'+record.icon+'.svg'));
+ }
+ for(const doc of expectedDocs){
+  const bytes=read(prefix+doc+'.pdf');
+  assert.equal(bytes.subarray(0,5).toString(),'%PDF-',code+' '+doc);
+  assert.deepEqual(read('docs/'+prefix+doc+'.pdf'),bytes,code+' '+doc+' download mirror');
+ }
+}
+assert.equal(ids.canonicalId('nccp-00897-v3'),'nccp-00897-v4');
+assert.equal(records.filter(r=>r.entry.id==='nccp-00897-v3').length,0);
+console.log('Verified five source versions, registered clinician and patient entries, patient source models, shared picture guide, ten PDF types per regimen, source registers and saved biliary ID migration.');

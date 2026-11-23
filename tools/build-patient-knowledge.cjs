@@ -2,6 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const presentation=require('./patient-presentation-v08431.cjs');
+const combinations = require('./build-durvalumab-patient-suites.cjs');
 const suiteContext=require('./patient-suite-context-v08425.cjs');
 const chronology=require('./gu-chronology-v08459.cjs');
 const monitoring=require('./monitoring-schedule-v0838.cjs');
@@ -49,6 +50,10 @@ for(const file of profiles){
   const d=presentation.legacyProfile(suiteContext.profile(file.replace('.json','')));
  if(d.patient_context_selector&&!suiteContext.context)continue;
   if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(d.code))continue;
+  if (!suiteContext.context && combinations.codes.has(d.code)) {
+    combinations.build(d.code,{names:['knowledge.html','consent.html'],check:process.argv.includes('--check')});
+    continue;
+  }
   if(d.service_kind==='targeted'&&!['0.84.30','0.84.34','0.84.35','0.84.36','0.84.37','0.84.38','0.84.39','0.84.40','0.84.41','0.84.42','0.84.45','0.84.46','0.84.47','0.84.48','0.84.49','0.84.50','0.84.51','0.84.52','0.84.53','0.84.54','0.84.56','0.84.57','0.84.58','0.84.59','0.84.60','0.84.61'].includes(d.patient_summary?.template_version)){fs.mkdirSync(path.join(root,'patient',d.code),{recursive:true});require('./targeted-patient-suite-v0849.cjs').buildKnowledge(d,writeOutput);continue;}
   if(d.service_kind==='endocrine'){fs.mkdirSync(path.join(root,'patient',d.code),{recursive:true});require('./endocrine-patient-suite-v0842.cjs').buildKnowledge(d,writeOutput);continue;}
   assert.equal(d.schema_version,1); for(const c of d.chapters||[])for(const b of c.items)for(const id of b.source_ids)assert(d.sources.some(s=>s.id===id),`Unknown source ${id}`);assert.match(d.code,/^\d{5}$/);assert(Number.isInteger(d.cycle_days)&&d.cycle_days>=1&&(d.cycle_days<=56||chronology.isDepot(d)),'cycle length must be 1–56 days or a source-verified ADT depot');

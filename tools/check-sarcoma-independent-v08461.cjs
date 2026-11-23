@@ -8,6 +8,10 @@ const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex'
 const transition=require('./lib/sarcoma-v08461-transitions.cjs').verify(root);
 // Only fingerprints of explicitly reconstructed integration transitions change in memory.
 const integratedExpected=structuredClone(expected);
+// The clinical cases and findings remain frozen. The shared current dose renderer
+// must continue to produce those findings through its authenticated v62 transition.
+const {currentReplayHash}=require('../tests/helpers/retrospective-v08462.cjs');
+integratedExpected.dose_model_sha256=currentReplayHash('js/protocol-dose-schedule.js',expected.dose_model_sha256);
 for(const p of integratedExpected.protocols){const r=transition.records.get(p.code);assert.equal(p.sha256,r.before_sha256);p.sha256=r.after_sha256;}
 assert.equal(expected.mode,'current');assert.equal(expected.independent_from_author_cases,true);assert.equal(expected.total,119);assert.equal(expected.passed,119);assert.equal(expected.failed,0);
 assert.equal(sha(path.join(source,'independent-cases.cjs')),expected.script_sha256,'Archived independent script changed');
@@ -27,5 +31,5 @@ try{
  const actual=JSON.parse(fs.readFileSync(path.join(temporary,'current-results.json')));
  assert.deepEqual(deterministic(actual),deterministic(integratedExpected),'Independent expectations, findings, protocol/tool hashes or case count changed');
  for(const p of checkpoint.protocols)assert.equal(sha(path.join(root,p.repository_path)),transition.records.get(p.code).after_sha256,'App protocol changed during replay');
- console.log('Independent v61 replay passed:119/119; all non-timestamp case results and tool hashes match retained evidence; protocol fingerprints match verified explicit integration transitions. No clinical approval is inferred.');
+ console.log('Independent v61 replay passed:119/119; all retained case outcomes match; the dose-renderer and integrated protocol fingerprints follow their verified transitions. No clinical approval is inferred.');
 }finally{fs.rmSync(temporary,{recursive:true,force:true});}

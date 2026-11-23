@@ -4,6 +4,7 @@
 const fs = require("fs");
 const path = require("path");
 const root = path.resolve(__dirname, "..");
+const outputDir = process.env.SACTCHECK_RECONCILIATION_OUTPUT || root;
 const catalogue = JSON.parse(fs.readFileSync(path.join(root, "protocols/index.json"), "utf8"));
 const SOURCE_HOSTS = new Set(["healthservice.hse.ie", "assets.hse.ie", "www.hse.ie"]);
 const RELEASE = "0.51.0";
@@ -113,7 +114,9 @@ for (const { entry, protocol } of solid) {
   }
   if (metadata.partial_assessment_supported !== true) findings.missing_partial_assessment_flag.push(protocolCode);
   const reconciliation = metadata.catalogue_reconciliation || {};
-  const expectedReconciliation = protocolCode === "00947"
+  const expectedReconciliation = protocolCode === "00953"
+    ? { release: "0.84.62", checked_date: "2026-11-23" }
+    : protocolCode === "00947"
     ? { release: "0.84.20", checked_date: "2026-10-25" }
     : { release: RELEASE, checked_date: CHECK_DATE };
   if (reconciliation.release !== expectedReconciliation.release || reconciliation.checked_date !== expectedReconciliation.checked_date) findings.missing_reconciliation_metadata.push(protocolCode);
@@ -175,7 +178,7 @@ const report = {
     protocols_marked_source_document_checked: solid.length - findings.source_document_not_marked_checked.length
   },
   hard_failure_count: hardFailureCount,
-  pass: hardFailureCount === 0 && solid.length === 362 && loaded.length === 377,
+  pass: hardFailureCount === 0 && solid.length === 363 && loaded.length === 378,
   findings,
   governance_backlog: {
     missing_published_date: findings.missing_published_date,
@@ -186,12 +189,12 @@ const report = {
   protocols: rows
 };
 
-const jsonPath = path.join(root, "V0510_SOLID_TUMOUR_RECONCILIATION.json");
+const jsonPath = path.join(outputDir, "V0510_SOLID_TUMOUR_RECONCILIATION.json");
 fs.writeFileSync(jsonPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
 const columns = Object.keys(rows[0]);
 const csvLines = [columns.join(","), ...rows.map(row => columns.map(column => csvEscape(row[column])).join(","))];
-fs.writeFileSync(path.join(root, "V0510_SOLID_TUMOUR_RECONCILIATION.csv"), `${csvLines.join("\n")}\n`, "utf8");
+fs.writeFileSync(path.join(outputDir, "V0510_SOLID_TUMOUR_RECONCILIATION.csv"), `${csvLines.join("\n")}\n`, "utf8");
 
 const primaryGroupTable = Object.entries(primaryStorageGroupCounts).sort((a,b) => a[0].localeCompare(b[0])).map(([group,count]) => `| ${group} | ${count} |`).join("\n");
 const coverageTable = Object.entries(tumourSiteCoverageCounts).sort((a,b) => a[0].localeCompare(b[0])).map(([group,count]) => `| ${group} | ${count} |`).join("\n");
@@ -206,7 +209,7 @@ const md = `# SACTCheck v0.51.0 Solid Tumour Reconciliation\n\n`+
 `## Partial-assessment standardisation\n\nAll ${solid.length} indexed solid tumour protocols now use the platform policy that every entered value is assessed independently. No static field, profile or phase is required merely to launch an assessment. Missing domains remain unassessed and are never assumed normal. Conditional follow-on fields may still be requested when a clinician enters a trigger that requires additional context.\n\n`+
 `## Governance metadata backlog\n\nThese are not automated release failures, because older NCCP documents do not use a uniform publication/review header and many encodings pre-date the structured metadata model. They remain an explicit manual source-review queue.\n\n- Missing stored publication date: **${findings.missing_published_date.length}** (${backlog(findings.missing_published_date)})\n- Missing stored review or last-reviewed date: **${findings.missing_review_date.length}** (${backlog(findings.missing_review_date)})\n- Source document not explicitly marked as manually checked: **${findings.source_document_not_marked_checked.length}** (${backlog(findings.source_document_not_marked_checked)})\n\n`+
 `## Clinical boundary\n\nNo treatment threshold, dose-modification condition or recommendation was intentionally changed in v0.51.0. All protocols remain decision-support encodings pending the level of consultant and oncology-pharmacy validation recorded in their individual metadata. The current official NCCP protocol and clinician judgement remain authoritative.\n`;
-fs.writeFileSync(path.join(root, "SOLID_TUMOUR_RECONCILIATION_v0.51.0.md"), md, "utf8");
+fs.writeFileSync(path.join(outputDir, "SOLID_TUMOUR_RECONCILIATION_v0.51.0.md"), md, "utf8");
 
 console.log(`Solid tumour reconciliation ${report.pass ? "PASSED" : "FAILED"}: ${solid.length} solid protocols, ${hardFailureCount} hard findings.`);
 console.log(`Governance backlog: ${findings.missing_published_date.length} missing publication dates, ${findings.missing_review_date.length} missing review/last-reviewed dates.`);

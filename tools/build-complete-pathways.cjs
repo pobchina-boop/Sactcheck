@@ -132,10 +132,15 @@ Object.assign(severity,{
     "Immediate danger to yourself: emergency help"
   ]
 });
-for(const code of codes){
+const durvalumabCombinations = require('./build-durvalumab-patient-suites.cjs');
+for(const code of [...new Set([...codes, ...(!suiteContext.context ? durvalumabCombinations.codes : [])])]){
  // These shared regimens have only explicitly authored contexts, never a generic plan.
  if(['00419','00294','00325','00719'].includes(code)&&!suiteContext.context)continue;
  if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(code))continue;
+ if (!suiteContext.context && durvalumabCombinations.codes.has(code)) {
+  durvalumabCombinations.build(code,{check:process.argv.includes('--check')});
+  continue;
+ }
  const d=presentation.legacyProfile(JSON.parse(read(`data/patient-knowledge/${code}.json`)));
  if(d.patient_context_selector&&!suiteContext.context)continue;
  if(d.service_kind==='targeted'&&!['0.84.29','0.84.30','0.84.32','0.84.33','0.84.34','0.84.35','0.84.36','0.84.37','0.84.38','0.84.39','0.84.40','0.84.41','0.84.42','0.84.45','0.84.46','0.84.47','0.84.48','0.84.49','0.84.50','0.84.51','0.84.52','0.84.53','0.84.54','0.84.56','0.84.57','0.84.58','0.84.59','0.84.60','0.84.61'].includes(d.patient_summary?.template_version)){require('./targeted-patient-suite-v0849.cjs').buildSuite(d,{anatomy,write});continue;}

@@ -3,10 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
+const outputDir = process.env.SACTCHECK_ORGAN_AUDIT_OUTPUT || root;
 const protocolRoot = path.join(root, 'protocols');
-const OUTPUT_JSON = path.join(root, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json');
-const OUTPUT_CSV = path.join(root, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.csv');
-const OUTPUT_MD = path.join(root, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.md');
+const OUTPUT_JSON = path.join(outputDir, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json');
+const OUTPUT_CSV = path.join(outputDir, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.csv');
+const OUTPUT_MD = path.join(outputDir, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.md');
 
 function files(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {

@@ -117,6 +117,10 @@
       if (unit) pieces.push(unit);
       if (dose.frequency) pieces.push(humanise(dose.frequency).toLowerCase());
       if (dose.duration) pieces.push(String(dose.duration));
+      const weightException = dose.weight_exception;
+      if (weightException?.at_or_below_kg > 0 && weightException?.dose_mg_per_kg > 0) {
+        pieces.push(`above ${weightException.at_or_below_kg} kg; ${weightException.dose_mg_per_kg} mg/kg at or below ${weightException.at_or_below_kg} kg`);
+      }
       return pieces.join(" ");
     }
 
@@ -656,7 +660,10 @@
   }
 
   function interpretFindingForComponent(finding, component, model, result) {
-    const type = String(finding?.actionType || finding?.action?.type || "consultant_review");
+    const componentOverride = componentChange(finding.action, component.id);
+    const permanentComponentStop = componentOverride?.permanently_discontinue === true;
+    const type = permanentComponentStop ? "permanently_discontinue" : componentOverride?.discontinue ? "discontinue" :
+      String(finding?.actionType || finding?.action?.type || "consultant_review");
     const structured = explicitDoseInstruction(finding.action || {}, component.id, model, result);
     const parsed = structured || parseRecommendationInstruction(finding, component.id, model, result);
     const isImmediatePrecise = ["permanently_discontinue", "contraindicated", "discontinue", "cease", "omit", "withhold", "delay"].includes(type);
@@ -665,7 +672,7 @@
     if (!isImmediatePrecise && !hasQuantifiedFuture && !explicitReview && !["withhold_then_reduce", "delay_then_dose_reduce"].includes(type)) return null;
     // An immediate hold remains actionable even when the restart dose needs review.
 
-    let actionLabel = immediateAction(finding);
+    let actionLabel = permanentComponentStop ? "Permanently discontinue" : immediateAction({ actionType: type });
     let protocolDose = explicitReview ? (finding.action.recommendation || "Individualised clinical decision required") : "";
     if (parsed) {
       if (["withhold_then_reduce", "delay_then_dose_reduce"].includes(type)) actionLabel = `${actionLabel}; then ${parsed.label.toLowerCase()}`;
@@ -713,9 +720,18 @@
     const contextInput=protocol.metadata?.dose_schedule_context_input;
     const phaseId = result.inputs?.[contextInput || 'treatment_phase'];
     const variant = protocol.metadata?.dose_schedule_variants?.[phaseId]?.[result.inputs?.[protocol.metadata?.dose_schedule_variant_input || 'trastuzumab_schedule']];
-    const currentPhase = model.allPhases.find(p => p.id === (variant || phaseId));
+    let currentPhase = model.allPhases.find(p => p.id === (variant || phaseId));
+    const cycleInput = protocol.metadata?.dose_schedule_cycle_input;
+    if (cycleInput) {
+      const cycle = result.inputs?.[cycleInput];
+      const ranges = Number.isInteger(cycle) && cycle > 0 ? (protocol.treatment_phases || []).filter(phase =>
+        Number.isInteger(phase.min_cycle) && cycle >= phase.min_cycle && (phase.max_cycle == null || cycle <= phase.max_cycle)
+      ) : [];
+      // Only one unambiguous cycle range may select a treatment phase.
+      currentPhase = ranges.length === 1 ? model.allPhases.find(phase => phase.id === ranges[0].phase_id) : null;
+    }
     if (currentPhase) model = {...model, activePhase:currentPhase, allPhases:[currentPhase,...model.allPhases.filter(p=>p!==currentPhase)]};
-    const unresolvedSchedule=Boolean(contextInput&&!currentPhase);
+    const unresolvedSchedule=Boolean((contextInput || cycleInput) && !currentPhase);
     const actions = [];
     result.findings
       .filter(finding => !finding.domainAssessment && !["proceed", "proceed_with_caution", "partial_context_required"].includes(String(finding.actionType || "")))

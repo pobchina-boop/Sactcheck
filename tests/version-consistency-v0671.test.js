@@ -35,11 +35,16 @@ console.log("Cumulative public release and module version separation tests passe
   const protocolUrl = origin + "protocols/breast/example.json";
   const oldName = "sactcheck-runtime-previous";
   const priorRevisionName = `sactcheck-runtime-${pkg.version}`;
-  const currentName = `${priorRevisionName}-ribo-20261119`;
+  const revisions = {"0.84.61":"ribo-20261119","0.84.62":"durvalumab-20261123"};
+  const expectedRevision = revisions[pkg.version];
+  assert(expectedRevision,"Review the cache revision for this release");
+  const previousPublicCache = "sactcheck-runtime-0.84.61-" + revisions["0.84.61"];
+  const currentName = `${priorRevisionName}-${expectedRevision}`;
   const stores = new Map([[oldName, new Map()], [priorRevisionName, new Map([
     [protocolUrl+"?sact_release="+pkg.version, new Response(JSON.stringify({release: "stale-same-version"}))],
     [protocolUrl, new Response(JSON.stringify({release: "stale"}))]
   ])]]);
+  if (pkg.version === "0.84.62") stores.set(previousPublicCache, new Map());
   const requests = [];
   const context = {
     URL, location: {href: origin},
@@ -59,7 +64,7 @@ console.log("Cumulative public release and module version separation tests passe
   const runtime = context.SACTCheckRuntimePerformanceV0810;
   assert.strictEqual(runtime.release, pkg.version);
   assert.strictEqual(runtime.cacheName, currentName);
-  assert.strictEqual(context.SACTCHECK_DATA_REVISION,"ribo-20261119");
+  assert.strictEqual(context.SACTCHECK_DATA_REVISION,expectedRevision);
   const first = await context.fetch(protocolUrl);
   assert.strictEqual((await first.json()).release, pkg.version, "Upgrade must not reuse stale unversioned JSON");
   assert.strictEqual(new URL(requests[0]).searchParams.get("sact_release"), pkg.version, "HTTP requests must carry the release, not just the CacheStorage name");
@@ -67,6 +72,7 @@ console.log("Cumulative public release and module version separation tests passe
   const second = await context.fetch(protocolUrl);
   assert.strictEqual((await second.json()).release, pkg.version);
   assert.strictEqual(requests.length, 1, "Current-release cache reuse must still work");
+  if (pkg.version === "0.84.62") assert.ok(!stores.has(previousPublicCache),"The superseded public cache should be pruned");
   assert.ok(!stores.has(oldName), "Previous runtime caches should be pruned");
   assert.strictEqual(new URL(runtime.canonicalUrl(origin + "patient/00722/guide.pdf")).search, "", "Patient PDF paths remain unchanged");
   console.log("Runtime release, stale-cache upgrade and current-release reuse checks passed.");

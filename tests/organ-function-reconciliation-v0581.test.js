@@ -65,10 +65,24 @@ assert.ok(html.includes('SACTCheck v0.59.0 — Library-Wide Organ-Function Recon
 assert.ok(html.includes('js/generic-assessment-ui.js?v=0.59.0'));
 assert.ok(html.includes('js/protocol-loader.js?v=0.59.0'));
 
-execFileSync(process.execPath, [path.join(root, 'tools/audit-organ-function-rule-coverage.js'), '--fail-on-mismatch'], { cwd: root, stdio: 'pipe' });
-const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json'), 'utf8'));
-assert.strictEqual(audit.summary.protocols_with_rule_level_claim_mismatch, 0);
-assert.strictEqual(audit.summary.protocols_scanned, 382);
+const archived = JSON.parse(fs.readFileSync(path.join(root,'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json'),'utf8'));
+assert.strictEqual(archived.summary.protocols_scanned,382);
+const outputDir = fs.mkdtempSync(path.join(require('node:os').tmpdir(),'sactcheck-organ-'));
+let audit;
+try {
+  execFileSync(process.execPath, [path.join(root,'tools/audit-organ-function-rule-coverage.js'),'--fail-on-mismatch'], {
+    cwd:root, stdio:'pipe', env:{...process.env,SACTCHECK_ORGAN_AUDIT_OUTPUT:outputDir}
+  });
+  audit=JSON.parse(fs.readFileSync(path.join(outputDir,'V0581_ORGAN_FUNCTION_RULE_COVERAGE_AUDIT.json'),'utf8'));
+} finally {
+  fs.rmSync(outputDir,{recursive:true,force:true});
+}
+assert.strictEqual(audit.summary.protocols_with_rule_level_claim_mismatch,0);
+assert.strictEqual(audit.summary.protocols_scanned,383);
+const addedPath='protocols/gynaecology/00953-durvalumab-carboplatin-paclitaxel.json';
+const baselinePaths=archived.records.map(r=>r.path);
+assert(!baselinePaths.includes(addedPath));
+assert.deepStrictEqual(audit.records.map(r=>r.path).sort(),[...baselinePaths,addedPath].sort());
 
 const partial = audit.records.filter(record => record.encoding_maturity === 'partial_rule_encoding');
 assert.strictEqual(partial.length, 0, 'v0.59.0 should reconcile all records previously marked partial.');

@@ -42,7 +42,7 @@ for (const entry of catalogue.protocols) {
   }
 }
 
-assert.strictEqual(catalogue.protocols.length, 377);
+assert.strictEqual(catalogue.protocols.length, require('./helpers/live-inventory-v08462.cjs').total);
 // v0.84.9 adds the four previously unstructured targeted schedules; olaparib gains its continuous schedule alongside its existing dose table.
 // PLD reductions depend on the toxicity/history pathway, so no generic ladder is inferred.
 // v0.84.16 adds the structured lapatinib/capecitabine schedule.
@@ -63,8 +63,12 @@ assert.strictEqual(catalogue.protocols.length, 377);
 // v0.84.56 supplies usable source schedules for cabazitaxel and radium-223;
 // the three docetaxel schedules are reconciled in place.
 // v0.84.57 adds four renal monotherapy schedules, with no invented generic dose ladders.
-assert.strictEqual(usefulCoverage, 255);
-assert.strictEqual(scheduleCoverage, 255);
+// The two GI schedules retain structured coverage. NCCP 00953 adds the 256th.
+const endometrial=require('../protocols/gynaecology/00953-durvalumab-carboplatin-paclitaxel.json');
+assert(DoseSchedule.hasData(endometrial));
+assert.equal(DoseSchedule.buildModel(endometrial).phases.length,2);
+assert.strictEqual(usefulCoverage, 255+1);
+assert.strictEqual(scheduleCoverage, 255+1);
 assert.strictEqual(doseLevelCoverage, 66);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.

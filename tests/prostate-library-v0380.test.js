@@ -59,13 +59,13 @@ assert.deepStrictEqual(codes, expectedCodes, 'The encoded prostate deck does not
 assert.strictEqual(prostate.length, 26, 'Expected 26 distinct fully encoded prostate regimen protocols.');
 
 const index = JSON.parse(fs.readFileSync(path.join(root, 'protocols', 'index.json'), 'utf8'));
-assert.strictEqual(index.protocol_count, 377, 'The protocol index must contain 210 distinct regimen protocols.');
-assert.strictEqual(index.protocols.length, 377, 'The protocol index array must contain 210 entries.');
-assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, 377, 'Protocol index contains duplicate IDs.');
+assert.strictEqual(index.protocol_count, require('./helpers/live-inventory-v08462.cjs').total, 'The protocol index must contain 210 distinct regimen protocols.');
+assert.strictEqual(index.protocols.length, require('./helpers/live-inventory-v08462.cjs').total, 'The protocol index array must contain 210 entries.');
+assert.strictEqual(new Set(index.protocols.map(item => item.id)).size, require('./helpers/live-inventory-v08462.cjs').total, 'Protocol index contains duplicate IDs.');
 
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 assert.strictEqual(riskMap.release, '0.48.0');
-assert.strictEqual(Object.keys(riskMap.protocols || {}).length, 377, 'Central supportive-care map must cover the entire indexed library.');
+assert.strictEqual(Object.keys(riskMap.protocols || {}).length, require('./helpers/live-inventory-v08462.cjs').total, 'Central supportive-care map must cover the entire indexed library.');
 
 for (const { file, data } of prostate) {
   const code = String(data.metadata.nccp_regimen_code);
