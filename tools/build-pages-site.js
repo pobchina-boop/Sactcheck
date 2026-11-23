@@ -80,24 +80,35 @@ for (const directory of publicDirectories) {
   if (fs.existsSync(source)) copyDirectory(source, path.join(out, directory));
 }
 
-// The film covers single-agent consolidation following chemoradiotherapy.
-// Publish it alongside the separately versioned treatment sheets.
-const filmPanel = fs.readFileSync(path.join(__dirname, "durvalumab-consolidation-film.html"), "utf8").trim();
-for (const filename of [
-  "durvalumab-consolidation-irish.mp4", "durvalumab-consolidation-irish.vtt",
-  "durvalumab-consolidation-poster.jpg", "durvalumab-consolidation-transcript.txt"
-]) {
-  if (!fs.statSync(path.join(out, "assets", "media", filename)).size) {
-    throw new Error(`Empty patient film asset: ${filename}`);
+// Each film belongs only to the explicitly listed regimen(s).
+const patientFilms = [
+  { name: "durvalumab-consolidation", regimens: ["00576", "00655"] },
+  { name: "stride-00926", regimens: ["00926"] }
+];
+for (const { name, regimens } of patientFilms) {
+  const panel = fs.readFileSync(path.join(__dirname, `${name}-film.html`), "utf8").trim();
+  for (const suffix of ["-irish.mp4", "-irish.vtt", "-poster.jpg", "-transcript.txt"]) {
+    const filename = name + suffix;
+    if (!fs.statSync(path.join(out, "assets", "media", filename)).size) {
+      throw new Error(`Empty patient film asset: ${filename}`);
+    }
+  }
+  for (const code of regimens) {
+    const portal = path.join(out, "patient", code, "index.html");
+    const html = fs.readFileSync(portal, "utf8");
+    const schedule = /<section\b[^>]*\bid="overview-1"[^>]*>/;
+    if (!schedule.test(html)) throw new Error(`Missing schedule section on patient portal ${code}`);
+    fs.writeFileSync(portal, html.replace(schedule, section => panel + section), "utf8");
   }
 }
-for (const code of ["00576", "00655"]) {
-  const portal = path.join(out, "patient", code, "index.html");
-  const html = fs.readFileSync(portal, "utf8");
-  const schedule = /<section\b[^>]*\bid="overview-1"[^>]*>/;
-  if (!schedule.test(html)) throw new Error(`Missing schedule section on patient portal ${code}`);
-  fs.writeFileSync(portal, html.replace(schedule, section => filmPanel + section), "utf8");
-}
+
+// The STRIDE wallet-card QR opens the full treatment reference directly.
+const strideReference = path.join(out, "patient", "00926", "knowledge.html");
+const referenceHtml = fs.readFileSync(strideReference, "utf8");
+const treatmentLink = '<a href="./">My treatment</a>';
+if (!referenceHtml.includes(treatmentLink)) throw new Error("Missing 00926 treatment reference navigation");
+const filmLink = '<a href="./#treatment-film">Watch the STRIDE treatment video</a>';
+fs.writeFileSync(strideReference, referenceHtml.replace(treatmentLink, treatmentLink + filmLink), "utf8");
 
 copyFile(path.join(root,"protocols/catalogue-bundle.json.gz"),path.join(out,"protocols/catalogue-bundle.json.gz"));
 const protocolCount = copyProtocolJson(path.join(root, "protocols"), path.join(out, "protocols"));

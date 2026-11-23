@@ -85,12 +85,20 @@ const filmBytes = fs.readFileSync(path.join(ROOT, filmRecordPath));
 assert.equal(sha(filmBytes), '3ff8cbd9057f40a212daee133252cbfbd324aee791a41de31c186e54aaba35e6', 'Reviewed durvalumab film publication');
 const filmRecord = JSON.parse(filmBytes);
 assert.deepEqual(filmRecord.regimens, ['00576', '00655']);
+const strideRecordPath = 'validation/stride-film-v08462/transition.json';
+const strideBytes = fs.readFileSync(path.join(ROOT, strideRecordPath));
+assert.equal(sha(strideBytes), 'a539d91f2e308efd12be8a01776c8fed459dc3de452b57f52a38c75092199713', 'Reviewed STRIDE film publication');
+const strideRecord = JSON.parse(strideBytes);
+assert.deepEqual(strideRecord.regimens, ['00926']);
+const filmRecords = [filmRecord, strideRecord];
 function filmExpected(f, h, n) {
-  const change = filmRecord.files[f];
-  if (!change) return {sha256: h, bytes: n};
-  assert(h === change.before || h === change.after, f + ' unexpected film publication origin');
-  if (n !== undefined) assert.equal(n, h === change.before ? change.before_bytes : change.after_bytes);
-  return {sha256: change.after, bytes: change.after_bytes};
+  const changes = filmRecords.map(record => record.files[f]).filter(Boolean);
+  if (!changes.length) return {sha256: h, bytes: n};
+  const versions = [{hash: changes[0].before, bytes: changes[0].before_bytes},
+    ...changes.map(change => ({hash: change.after, bytes: change.after_bytes}))];
+  assert(versions.some(v => v.hash === h && (n === undefined || v.bytes === n)), f + ' unexpected film publication origin');
+  const latest = changes[changes.length - 1];
+  return {sha256: latest.after, bytes: latest.after_bytes};
 }
 function expected(f,h,n){
   assert(validPath(f));const c=load().files[f];if(!c)return filmExpected(f,h,n);
@@ -108,17 +116,27 @@ function currentReplayHash(file, historicalHash){
   assert.equal(live.length,reviewed.bytes,file+' live tool size');
   return reviewed.sha256;
 }
-function isAddition(f){return f===filmRecordPath||filmRecord.files[f]?.before===null||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
+function isAddition(f){return f===filmRecordPath||f===strideRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
 function verify(){
-  for (const [f, change] of Object.entries(filmRecord.files)) {
-    assert(validPath(f));
-    if (change.before !== null) {
-      const original = git(['show', filmRecord.base_commit + ':' + f]);
-      assert.equal(sha(original), change.before, f + ' pre-publication Git bytes');
-      assert.equal(original.length, change.before_bytes);
-    } else {
-      assert.equal(cp.spawnSync('git', ['cat-file', '-e', filmRecord.base_commit + ':' + f], {cwd: ROOT}).status, 128, f + ' new publication asset');
+  const latest = new Map();
+  for (const record of filmRecords) {
+    for (const [f, change] of Object.entries(record.files)) {
+      assert(validPath(f));
+      if (change.before !== null) {
+        const original = git(['show', record.base_commit + ':' + f]);
+        assert.equal(sha(original), change.before, f + ' pre-publication Git bytes');
+        assert.equal(original.length, change.before_bytes);
+      } else {
+        assert.equal(cp.spawnSync('git', ['cat-file', '-e', record.base_commit + ':' + f], {cwd: ROOT}).status, 128, f + ' new publication asset');
+      }
+      if (latest.has(f)) {
+        assert.equal(change.before, latest.get(f).after, f + ' previous film publication');
+        assert.equal(change.before_bytes, latest.get(f).after_bytes);
+      }
+      latest.set(f, change);
     }
+  }
+  for (const [f, change] of latest) {
     const bytes = fs.readFileSync(path.join(ROOT, f));
     assert.equal(sha(bytes), change.after, f + ' published film asset');
     assert.equal(bytes.length, change.after_bytes);
