@@ -80,6 +80,25 @@ for (const directory of publicDirectories) {
   if (fs.existsSync(source)) copyDirectory(source, path.join(out, directory));
 }
 
+// The film covers single-agent consolidation following chemoradiotherapy.
+// Publish it alongside the separately versioned treatment sheets.
+const filmPanel = fs.readFileSync(path.join(__dirname, "durvalumab-consolidation-film.html"), "utf8").trim();
+for (const filename of [
+  "durvalumab-consolidation-irish.mp4", "durvalumab-consolidation-irish.vtt",
+  "durvalumab-consolidation-poster.jpg", "durvalumab-consolidation-transcript.txt"
+]) {
+  if (!fs.statSync(path.join(out, "assets", "media", filename)).size) {
+    throw new Error(`Empty patient film asset: ${filename}`);
+  }
+}
+for (const code of ["00576", "00655"]) {
+  const portal = path.join(out, "patient", code, "index.html");
+  const html = fs.readFileSync(portal, "utf8");
+  const schedule = /<section\b[^>]*\bid="overview-1"[^>]*>/;
+  if (!schedule.test(html)) throw new Error(`Missing schedule section on patient portal ${code}`);
+  fs.writeFileSync(portal, html.replace(schedule, section => filmPanel + section), "utf8");
+}
+
 copyFile(path.join(root,"protocols/catalogue-bundle.json.gz"),path.join(out,"protocols/catalogue-bundle.json.gz"));
 const protocolCount = copyProtocolJson(path.join(root, "protocols"), path.join(out, "protocols"));
 if (!fs.existsSync(path.join(out, "protocols", "index.json"))) {
