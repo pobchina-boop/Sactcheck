@@ -713,7 +713,10 @@
   }
 
   function buildModificationModel(protocol, result, suppliedModel) {
-    let model = suppliedModel || buildModel(protocol || {});
+    const selected = globalThis.SACTCheckAssessmentEngine?.protocolForIndication?.(protocol, result?.inputs) || protocol;
+    const modelForProtocol = selected === protocol ? suppliedModel : null;
+    protocol = selected;
+    let model = modelForProtocol || buildModel(protocol || {});
     if (!result || !Array.isArray(result.findings)) return { rows: [], labTriggered: false, title: "" };
     // Explicit treatment-phase IDs select the correct reference dose when a
     // medicine changes frequency between combination and continuation.

@@ -309,7 +309,7 @@
     });
 
     document.getElementById("jsonDoseScheduleButton")?.addEventListener("click", () => {
-      root.SACTCheckProtocolDoseSchedule?.open?.(activeProtocol);
+      root.SACTCheckProtocolDoseSchedule?.open?.(Engine.protocolForIndication(activeProtocol, collectRawInputs(true)));
     });
 
     document.getElementById("jsonImmuneSafetyButton")?.addEventListener("click", () => {
@@ -337,7 +337,13 @@
     });
 
     document.querySelectorAll(INPUT_GRID_SELECTOR).forEach(grid => {
-      grid.addEventListener("change", updateConditionalInputs);
+      grid.addEventListener("change", event => {
+        if (event.target.id === "jsonInput_indication_id" && activeProtocol?.assessment_by_indication) {
+          renderInputs({ indication_id: event.target.value });
+          hideResult();
+        }
+        updateConditionalInputs();
+      });
       grid.addEventListener("input", updateConditionalInputs);
     });
 
@@ -678,6 +684,11 @@
 
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
+    if (activeProtocol.assessment_by_indication && !Object.hasOwn(rawInputs, "indication_id") && activeTumourGroup !== "all") {
+      const preferred = root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol, activeTumourGroup);
+      if (preferred) rawInputs = { ...rawInputs, indication_id: preferred };
+    }
+    if (activeProtocol.assessment_by_indication) renderProtocolInformation(Engine.protocolForIndication(activeProtocol, rawInputs));
     const definitions = presentationInputDefinitions(activeProtocol, activeProfileId, rawInputs);
     const contextDefinitions = definitions.filter(isTreatmentContext);
     const clinicalDefinitions = definitions.filter(definition => !isTreatmentContext(definition));
@@ -697,7 +708,12 @@
     document.getElementById("jsonToxicityInputGrid").innerHTML = toxicityDefinitions.map(definition => renderInput(definition, { compact: true, toxicity: true })).join("");
     document.getElementById("jsonInputGrid").innerHTML = additionalDefinitions.map(definition => renderInput(definition, { compact: true })).join("");
     document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(definition => renderInput(definition, { compact: true, context: true })).join("");
-    applyPreferredIndication();
+    if (activeProtocol.assessment_by_indication && Object.hasOwn(rawInputs, "indication_id")) {
+      const selector = document.getElementById("jsonInput_indication_id");
+      if (selector) selector.value = rawInputs.indication_id;
+    } else {
+      applyPreferredIndication();
+    }
 
     const visibleLabs = laboratoryDefinitions.filter(definition => definition.visible !== false);
     const visibleToxicities = toxicityDefinitions.filter(definition => definition.visible !== false);
@@ -1233,7 +1249,7 @@
     if (!latestResult || !activeProtocol) return null;
     return AssessmentOutput.buildModel({
       result: latestResult,
-      protocol: activeProtocol,
+      protocol: Engine.protocolForIndication(activeProtocol, latestResult.inputs),
       assessmentId: latestAssessmentId,
       tumourGroup: activeTumourGroup,
       labCalculations: latestLabCalculations,

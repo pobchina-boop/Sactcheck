@@ -278,7 +278,14 @@
     ];
   }
 
+  function protocolForIndication(protocol, inputs) {
+    const variants = protocol?.assessment_by_indication;
+    const id = inputs?.indication_id;
+    return variants && typeof id === "string" && Object.hasOwn(variants, id) ? variants[id] : protocol;
+  }
+
   function getInputDefinitions(protocol, profileId, rawInputs = {}) {
+    protocol = protocolForIndication(protocol, rawInputs);
     const profile = getSelectedProfile(protocol, profileId);
     const potentialRules = getPotentialRules(protocol, profile.context);
     const conditionFields = unique(potentialRules.flatMap(rule =>
@@ -847,6 +854,7 @@
   }
 
   function assess(protocol, rawInputs, options = {}) {
+    protocol = protocolForIndication(protocol, rawInputs);
     if (!protocol || typeof protocol !== "object") throw new Error("A protocol object is required.");
     const profile = getSelectedProfile(protocol, options.profileId);
     const definitions = getInputDefinitions(protocol, profile.id, rawInputs || {});
@@ -1153,6 +1161,7 @@
   return Object.freeze({
     version: "0.45.3",
     getProfiles,
+    protocolForIndication,
     getInputDefinitions,
     explicitInputDefinitions,
     getProtocolTitle,
