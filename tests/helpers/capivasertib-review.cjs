@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '../..');
 const base = '71d089b071bff6f8ed3ff6eb3cad49a5e6577105';
 const manifestPath = 'validation/capivasertib-review/changes.json';
 const helperPath = 'tests/helpers/capivasertib-review.cjs';
-const manifestHash = '09281753cbf676841c9a6935c09be14b2e909cf39e22c7efe2c4da6da667e0b1';
+const manifestHash = 'bbbf1ea6735e1911d694842104453bba08c709ac00e712e66d5122aa1ae2869e';
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const manifest = fs.readFileSync(path.join(root, manifestPath));
 assert.equal(hash(manifest), manifestHash, 'Capivasertib review manifest');
@@ -53,10 +53,9 @@ function owns(file) {
   return Object.hasOwn(record.files, file) || addition(file);
 }
 
-function getInventoryMigrations() {
+function withReviewInventories(catalogue) {
   // The release catalogue is pinned by earlier deployment evidence. Include
   // both additional review branches when checking today's full asset tree.
-  const catalogue = require('./patient-migration-catalogue.cjs').getInventoryMigrations();
   const olaparib = require('./retrospective-v08463.cjs');
   const enhertu = require('./enhertu-review-v08462.cjs');
   olaparib.verifyPriorEnhertu(enhertu);
@@ -67,4 +66,4 @@ function getInventoryMigrations() {
   ];
 }
 
-module.exports = {original, expected, addition, verify, owns, getInventoryMigrations};
+module.exports = {original, expected, addition, verify, owns, withReviewInventories};
