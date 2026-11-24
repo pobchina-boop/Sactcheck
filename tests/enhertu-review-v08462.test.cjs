@@ -139,6 +139,7 @@ if(olaparib){
     assert.deepEqual(current.entry,indexed,'Current bundle entry matches the actual index: '+current.entry.id);
     assert.deepEqual(current.protocol,JSON.parse(fs.readFileSync(path.join(root,indexed.path))),'Current bundle delivers the exact current protocol JSON: '+current.entry.id);
     if(successors.has(current.entry.id))olaparib.validateProtocol(current.protocol);
+    else if (['nccp-00862-v2','nccp-00929-v1'].includes(current.entry.id)) require('./helpers/live-release-v08464.cjs').verifyFile(indexed.path);
     else assert.deepEqual(current,inheritedCatalogue.records.find(record=>record.entry.id===current.entry.id),'Unrelated current protocol, including Enhertu, remains unchanged after olaparib: '+current.entry.id);
   }
 }

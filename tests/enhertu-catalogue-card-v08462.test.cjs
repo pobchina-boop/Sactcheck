@@ -91,7 +91,7 @@ assert.deepEqual(otherOverrides, originalOverrides, 'Only the 00776 override was
 const withoutTargetRow = bytes => bytes.toString().split('\n').filter(line => !line.includes(',' + id + ','));
 assert.deepEqual(withoutTargetRow(inheritedReport), withoutTargetRow(old(reportPath)), 'All other CSV rows remain byte-identical in the authenticated Enhertu state');
 if (olaparib) {
-  const successors = new Set(['nccp-00588-v5b', 'nccp-00746-v2']);
+  const successors = new Set(['nccp-00588-v5b', 'nccp-00746-v2', 'nccp-00862-v2', 'nccp-00929-v1']);
   const withoutOlaparib = value => ({...value, protocols: value.protocols.filter(p => !successors.has(p.id))});
   assert.deepEqual(withoutOlaparib(sidecar), withoutOlaparib(inheritedSidecar), 'Only the two authenticated olaparib sidecar records may succeed the Enhertu state; all other 376 records remain exact');
   const withoutOlaparibOverrides = value => {
@@ -101,7 +101,7 @@ if (olaparib) {
   };
   assert.deepEqual(withoutOlaparibOverrides(overrides), withoutOlaparibOverrides(inheritedOverrides), 'Only the two named olaparib overrides may be added after Enhertu');
   const withoutOlaparibRows = bytes => bytes.toString().split('\n').filter(line => ![...successors].some(successor => line.includes(',' + successor + ',')));
-  assert.deepEqual(withoutOlaparibRows(read(reportPath)), withoutOlaparibRows(inheritedReport), 'All 376 unrelated CSV rows, including Enhertu, remain byte-identical after olaparib');
+  assert.deepEqual(withoutOlaparibRows(read(reportPath)), withoutOlaparibRows(inheritedReport), 'All 374 unrelated CSV rows, including Enhertu, remain byte-identical after olaparib');
   for (const file of ['protocols/shared/00588-olaparib-tablet-monotherapy.json', 'protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json']) olaparib.validateProtocol(json(file));
 }
 for (const f of ['js/regimen-course-metadata.js', 'js/regimen-card-metadata.js', 'tools/add-regimen-card-metadata.js']) {

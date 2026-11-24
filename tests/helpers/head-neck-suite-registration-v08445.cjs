@@ -19,6 +19,8 @@ function registry(codes,prior){
   assert(!through62.includes('00746'));
   const expected=[...through62,'00746'];
   assert.equal(new Set(expected).size,279);
-  assert.deepEqual([...codes].sort(),expected.sort(),'Exact prior278 registry entries plus the reviewed00746 combination');
+  const gynaecology = require('./gynaecology-00862-00929.cjs').NEW_ROUTES;
+  assert.deepEqual(gynaecology,['00862','00929']);
+  assert.deepEqual([...codes].sort(),[...expected,...gynaecology].sort(),'All 279 prior registry entries and both reviewed gynaecology roots');
 }
 module.exports={registry,added};

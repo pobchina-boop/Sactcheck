@@ -19,4 +19,6 @@ function verify() {
     assert.equal(bytes.length, entry.after_bytes, file);
   }
 }
-module.exports = {NEW_ROUTES, approvedPath, expectedHash, expectedBytes, verify, record};
+// Both new root codes contribute one canonical and one visual route apiece.
+const inventory = {codes: 279 + NEW_ROUTES.length, routes: 313 + NEW_ROUTES.length, visualRoutes: 321 + NEW_ROUTES.length};
+module.exports = {inventory, NEW_ROUTES, approvedPath, expectedHash, expectedBytes, verify, record};

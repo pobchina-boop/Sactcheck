@@ -20,7 +20,14 @@ assert.deepEqual(inheritedRegister,reviewedRegister,'The inherited Enhertu regis
 assert.equal(currentRegister.protocols.length,inheritedRegister.protocols.length);
 for(const row of currentRegister.protocols){
  const old=inheritedRegister.protocols.find(item=>item.nccp_code===row.nccp_code);assert(old);
- if(!successor.CODES.includes(row.nccp_code))assert.deepEqual(row,old,'Unrelated clinical register row remains unchanged: '+row.nccp_code);
+ if(['00862','00929'].includes(row.nccp_code)) {
+  const file = fs.readdirSync(path.join(review.ROOT,'protocols/gynaecology')).find(name => name.startsWith(row.nccp_code+'-'));
+  const protocol = JSON.parse(fs.readFileSync(path.join(review.ROOT,'protocols/gynaecology',file)));
+  assert.equal(row.rule_count,protocol.rule_engine.rules.length);
+  assert.equal(row.input_count,Object.keys(protocol.input_definitions).length);
+  assert.equal(row.formal_consultant_reviewed,false);
+  assert.equal(row.formal_pharmacy_reviewed,false);
+ } else if(!successor.CODES.includes(row.nccp_code))assert.deepEqual(row,old,'Unrelated clinical register row remains unchanged: '+row.nccp_code);
  else{
   const protocol=JSON.parse(fs.readFileSync(path.join(review.ROOT,successor.PROTOCOLS[row.nccp_code])));successor.validateProtocol(protocol);
   assert.equal(row.rule_count,protocol.rule_engine.rules.length);assert.equal(row.input_count,Object.keys(protocol.input_definitions).length);

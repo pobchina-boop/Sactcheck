@@ -1,4 +1,5 @@
 'use strict';
+const gynaecologyCounts = require('./helpers/gynaecology-00862-00929.cjs').inventory;
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const registry=require('../js/patient-asset-registry-v0810.js');
@@ -6,10 +7,10 @@ const check=require('./helpers/head-neck-suite-registration-v08445.cjs').registr
 const prior=Object.keys(JSON.parse(fs.readFileSync(path.join(root,'data/protected-patient-assets-v0810.json'))).assets);
 check(registry.codes,prior);
 const release=require('../package.json').version;
-assert.equal(registry.codes.length,release==='0.84.63'?279:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
+assert.equal(registry.codes.length,release==='0.84.63'?gynaecologyCounts.codes:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
 if(release==='0.84.63'){
- assert.equal(registry.codes.flatMap(code=>registry.bundleRoutes(code)).length,313);
- assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,321);
+ assert.equal(registry.codes.flatMap(code=>registry.bundleRoutes(code)).length,gynaecologyCounts.routes);
+ assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,gynaecologyCounts.visualRoutes);
 }
 for(const code of ['00453','00602','00807','00885','00894','00945','00500','00391','00392','00501','00511']) {
  assert.throws(()=>check(registry.codes.filter(x=>x!==code),prior),'Missing '+code+' must fail');

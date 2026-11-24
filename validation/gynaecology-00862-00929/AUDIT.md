@@ -34,7 +34,7 @@ For both regimens, the sustainability record leaves unmeasured travel and carbon
 - Verified all 21 patient PDFs and their 21 mirrored copies. Text was present on every page and within page bounds. Checked 196 local HTML resource references, all four source QR images and six QR-bearing rendered pages. Decoded destinations matched the regimen-specific portal or knowledge page. Physical printing and phone-camera tests remain open.
 - Both consent forms are two pages. The source and print checks include the clinician/date area. [Print checksums and page counts](audit-results/print.json)
 - Five retrospective comparators had their source versions and hashes checked against the original HSE PDFs. Their protocol JSON files matched the production baseline byte for byte. Ten trigger/control cases passed across osimertinib, durvalumab/gemcitabine/cisplatin, tremelimumab/durvalumab, olaparib and olaparib/bevacizumab. These are focused regression checks. [Comparator records](audit-results/comparators.json)
-- The established olaparib tests also passed 306 source cases and 1,516 unchanged assessments across 376 other protocols. The established clinician workflow, catalogue fallback and six olaparib patient suites were checked separately.
+- The established olaparib tests also passed 306 source cases and 1,516 unchanged assessments across 376 other protocols. The established clinician workflow, catalogue fallback, six olaparib patient suites and authenticated transition also passed. The ribociclib suite passed 56 boundary and mixed-risk cases. Enhertu passed 108 cardiac and mixed-risk checks, 112 transition-file checks, catalogue and supportive-care preservation checks.
 
 ## Release acceptance
 

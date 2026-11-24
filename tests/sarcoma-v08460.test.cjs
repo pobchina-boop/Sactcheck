@@ -1,9 +1,10 @@
 'use strict';
+const gynaecologyCounts = require('./helpers/gynaecology-00862-00929.cjs').inventory;
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),vm=require('node:vm');
 const R=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(R,f)),json=f=>JSON.parse(read(f));
 const S=json('validation/sarcoma-v08460/scope.json'),A=require('../js/patient-asset-registry-v0810.js'),C=require('../tools/consent-core-v08455.cjs'),V=require('../js/protocol-validator.js'),E=require('../js/assessment-engine.js'),I=json('protocols/index.json').protocols;
 const codes=['00500','00391','00392','00501','00511'],retro=['00453','00602','00807','00894','00945'];
-const release=json('package.json').version,counts={'0.84.60':[272,302,310],'0.84.61':[275,306,314],'0.84.62':[278,309,317],'0.84.63':[279,313,321]};assert(counts[release]);assert.equal(A.release,release);assert.equal(json('data/app-release.json').release,release);
+const release=json('package.json').version,counts={'0.84.60':[272,302,310],'0.84.61':[275,306,314],'0.84.62':[278,309,317],'0.84.63':[gynaecologyCounts.codes,gynaecologyCounts.routes,gynaecologyCounts.visualRoutes]};assert(counts[release]);assert.equal(A.release,release);assert.equal(json('data/app-release.json').release,release);
 assert.equal(I.length, require('./helpers/live-inventory-v08462.cjs').total);assert.equal(A.codes.length,counts[release][0]);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,counts[release][1]);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(R).length,counts[release][2]);
 assert.deepEqual(S.new_routes,codes);assert.deepEqual(S.document_routes,codes);assert.deepEqual(S.retrospective_codes,retro);assert.deepEqual(S.changed_retrospective_routes,[]);assert.equal(S.independent_clinical_approval,false);
 assert(read('js/regimen-knowledge-base.js').toString().includes('data/regimen-knowledge-base-v08460-addendum.json'));
