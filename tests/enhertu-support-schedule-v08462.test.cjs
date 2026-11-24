@@ -43,11 +43,11 @@ assert.deepEqual(otherRegimens(inheritedPhase), otherRegimens(JSON.parse(old('da
 if (olaparib) {
   const withoutOlaparib = value => {
     const copy = structuredClone(value);
-    for (const code of ['00588', '00746']) delete copy.regimens[code];
+    for (const code of ['00588', '00746', '00862', '00929']) delete copy.regimens[code];
     return copy;
   };
-  assert.deepEqual(withoutOlaparib(phase), withoutOlaparib(inheritedPhase), 'Only the authenticated 00588/00746 support plans may succeed the Enhertu state; every other plan and all registry metadata remain exact');
-  for (const code of ['00588', '00746']) {
+  assert.deepEqual(withoutOlaparib(phase), withoutOlaparib(inheritedPhase), 'Only the four authenticated successor support plans may succeed the Enhertu state; every other plan and all registry metadata remain exact');
+  for (const code of ['00588', '00746', '00862', '00929']) {
     assert(Array.isArray(phase.regimens[code]) && phase.regimens[code].length, code + ' keeps an explicit current support plan');
     assert.notDeepEqual(phase.regimens[code], inheritedPhase.regimens[code], code + ' has an explicit reviewed support transition');
   }

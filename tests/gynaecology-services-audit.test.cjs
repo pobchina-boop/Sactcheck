@@ -64,6 +64,14 @@ async function check() {
       assert(body.innerHTML.toLowerCase().includes('patient-risk-source">'+agent.toLowerCase()),code+' consent must identify '+agent);
     }
     assert(!body.innerHTML.includes('[object Object]'));
+    const sharedPhases=json('data/phase-support-v0838.json').regimens[code];
+    assert.deepEqual(sharedPhases.map(s=>s.id),oral?['continuous_oral']:['induction','maintenance']);
+    assert.equal(p.supportive_care.phase_specific_plan,'patient/'+code+'/supportive-care.html');
+    if(!oral) {
+      assert.equal(p.supportive_care.emetogenic_risk,'phase_dependent');
+      assert.equal(risk.protocols[code].phase_profiles.maintenance.level,'minimal');
+      assert.equal(p.supportive_care.supportive_medications_pdf_url,undefined);
+    }
     const empty = workflow.buildManifest(p,config,risk.protocols[code]);
     assert.equal(empty.supportiveCare.status,'phase_review_required');
     for(const [phase,id,level] of oral?[['continuous_oral','niraparib_tablets_00862','oral_moderate_high']]:[['combination','high_carboplatin','high'],['maintenance','minimal','minimal']]) {

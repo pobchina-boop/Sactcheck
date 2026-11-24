@@ -109,7 +109,12 @@ assert.strictEqual(result.actionType, "withhold_then_reduce", "Platelets <75 sho
 result = assess("00862", { confirmed_mds_or_aml: true });
 assert.strictEqual(result.actionType, "permanently_discontinue", "Confirmed MDS/AML should permanently discontinue niraparib");
 result = assess("00862", { hepatic_impairment: "moderate" });
-assert.strictEqual(result.actionType, "dose_reduce", "Moderate hepatic impairment should use about 66% of the original dose");
+assert.strictEqual(result.actionType, "consultant_review", "Moderate hepatic impairment requires NCCP and tablet SmPC reconciliation");
+const hepatic = result.findings.find(f => f.ruleId === "HEPATIC_MODERATE_SEVERE");
+assert.deepStrictEqual(hepatic.action.components, ["niraparib"]);
+assert.match(hepatic.action.recommendation, /66% of original dose/);
+assert.match(hepatic.action.recommendation, /200 mg starting dose for moderate impairment/);
+assert.match(hepatic.action.recommendation, /no severe-impairment data/);
 result = assess("00862", { other_ae_grade: 3, other_ae_occurrence: "first" });
 assert.strictEqual(result.actionType, "withhold_then_reduce", "First grade ≥3 non-haematologic AE should withhold then reduce");
 result = assess("00862", { hypertensive_crisis: true });

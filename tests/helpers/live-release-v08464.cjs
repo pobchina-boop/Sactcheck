@@ -11,7 +11,7 @@ const baseline = '0dd8f23fbdf18895fc1ca2aeb45e5cfa6ac380aa';
 const manifestFile = 'validation/gynaecology-00862-00929/release-transition.json';
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const raw = fs.readFileSync(path.join(root, manifestFile));
-assert.equal(hash(raw), 'be0afae953ef7205f625d433df4edcfccde4961f50a5480be1934fcc01e48513');
+assert.equal(hash(raw), '8e18efeb0ea7b764082fc7770abe2368a26c618bd83f16f4f535e225cb4859f3');
 const transition = JSON.parse(raw);
 assert.equal(transition.base, baseline);
 const verifier = fs.readFileSync(__filename, 'utf8').replace(/(assert\.equal\(hash\(raw\), ')[a-f0-9]{64}/, '$1PENDING');

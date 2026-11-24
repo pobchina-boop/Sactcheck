@@ -731,25 +731,43 @@
       "required": false,
       "options": [
         {
-          "value": "1",
-          "label": "Grade 1"
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No adverse event."
         },
         {
-          "value": "2",
-          "label": "Grade 2"
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
         },
         {
-          "value": "3",
-          "label": "Grade 3"
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
         },
         {
-          "value": "4",
-          "label": "Grade 4"
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
         }
       ],
-      "demo_value": "1",
+      "demo_value": 0,
       "input_role": "decision",
-      "ui_section": "clinical"
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "NCCP 00929 Table 3 cites CTCAE v5.0. Select the event-specific CTCAE term and its applicable grade. General severity labels alone do not establish the diagnosis or grade. Grade 0 records absence of the event."
     },
     "severe_skin_status": {
       "label": "Exfoliative skin reaction (SJS, TEN or DRESS)",
@@ -2292,14 +2310,24 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_basis": "NCCP 00929 v1 p8: carboplatin high, paclitaxel low, dostarlimab minimal. Select the current phase.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance: high during combination, minimal during dostarlimab maintenance"
+    "phase_specific_plan": "patient/00929/supportive-care.html",
+    "source_url": "https://healthservice.hse.ie/documents/8284/929_Dostarlimab_-_PACLi_CARBO_Regimen.pdf",
+    "phase_profiles": {
+      "combination": {
+        "level": "high",
+        "script_id": "nccp-parenteral-high"
+      },
+      "maintenance": {
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
+      }
+    }
   },
   "treatment_phases": [
     {
@@ -2345,6 +2373,11 @@
           },
           "route": "IV infusion"
         }
+      ],
+      "active_drugs": [
+        "dostarlimab",
+        "paclitaxel",
+        "carboplatin"
       ]
     },
     {
@@ -2364,7 +2397,12 @@
           },
           "route": "IV infusion"
         }
-      ]
+      ],
+      "active_drugs": [
+        "dostarlimab"
+      ],
+      "schedule_interval_label": "First dose 3 weeks after cycle 6, then every 42 days",
+      "duration_text": "Up to 3 years of dostarlimab maintenance, stopping earlier for progression or unacceptable toxicity."
     }
   ]
 }

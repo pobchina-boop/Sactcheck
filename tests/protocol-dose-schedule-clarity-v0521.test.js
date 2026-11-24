@@ -71,8 +71,16 @@ const combination=require('../protocols/gynaecology/00746-olaparib-tablet-and-be
 assert(DoseSchedule.hasData(combination));
 const combinationModel=DoseSchedule.buildModel(combination);
 assert(combinationModel.phases.length && combinationModel.doseLevels.length);
-assert.strictEqual(usefulCoverage, 255+1+1);
-assert.strictEqual(scheduleCoverage, 255+1+1);
+const gynaecologyCombination=require('../protocols/gynaecology/00929-dostarlimab-paclitaxel-and-carboplatin-therapy.json');
+const auditedPhases=DoseSchedule.buildModel(gynaecologyCombination).phases;
+assert.deepEqual(Array.from(auditedPhases, phase => phase.id), ['combination','maintenance']);
+assert.equal(auditedPhases[0].components.length,3);
+assert.equal(auditedPhases[1].components.length,1);
+assert.equal(auditedPhases[1].components[0].id,'dostarlimab');
+assert.equal(auditedPhases[1].cycleLength,42);
+assert.match(auditedPhases[1].intervalLabel,/3 weeks after cycle 6/);
+assert.strictEqual(usefulCoverage, 255+1+1+1);
+assert.strictEqual(scheduleCoverage, 255+1+1+1);
 assert.strictEqual(doseLevelCoverage, 67);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.
