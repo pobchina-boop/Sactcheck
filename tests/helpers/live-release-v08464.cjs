@@ -9,7 +9,7 @@ const astra = '51bded8c59210c052873b577af444f07579fd44f';
 const sarcoma = '51bded8c59210c052873b577af444f07579fd44f';
 const filename = 'validation/olaparib-source-20261124/release-files.json';
 const ownFile = 'tests/helpers/live-release-v08464.cjs';
-const pin = 'a63516edfaeecbe73613b8654b9121e442baf9c5f61cb0818077abbb737cfdb1';
+const pin = 'd1462f31e893da1f6e3581c4d03fadece2d89a1044fd7e10c847215635ad888d';
 const sha = b => crypto.createHash('sha256').update(b).digest('hex');
 const blob = b => crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
 const git = args => execFileSync('git', args, {cwd: root, maxBuffer: 128*1024*1024});

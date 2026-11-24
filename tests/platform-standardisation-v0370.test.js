@@ -217,6 +217,19 @@ for (const { file, data } of protocols) {
     if (!bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
+      const product = require('./helpers/ifosfamide-pair-v08462.cjs');
+      if (product.grade(data,field,def,ctcae)) continue;
+      const sarcomaGrades = require('../validation/sarcoma-v08462/clinical-compatibility.json');
+      if (metadata.sactcheck_encoding_version === '0.84.62' && sarcomaGrades.ranges[code]?.[field]) {
+        const expected = sarcomaGrades.ranges[code][field];
+        const digest = require('node:crypto').createHash('sha256').update(JSON.stringify(def)).digest('hex');
+        assert.equal(digest,sarcomaGrades.records[code].grade_definitions_sha256[field],code+'/'+field+' reviewed grading definition');
+        assert.equal(metadata.source_url,sarcomaGrades.records[code].source_url);
+        assert.deepEqual(def.options.map(option=>Number(option.value)),expected);
+        const guide = ctcae.guide({...def,id:field});
+        for (const grade of expected) assert(guide.grades.find(row=>Number(row.grade)===grade)?.description);
+        continue;
+      }
       const headNeckV45Source = HEADNECK45.applies(data);
       const gistV61=GIST61.applies(data);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
@@ -356,6 +369,24 @@ for (const { file, data } of protocols) {
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
     if(['00705','00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
     if ((require('./helpers/gu-inputs-v08458.cjs').numericRenal(data,field,def) || require('./helpers/prostate-inputs-v08457.cjs').numericRenal(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').numericRenal(data,field,def) || HEADNECK47Inputs.numericRenal(data, field, def) || SKIN42Inputs.numericRenal(data, field, def) || SKIN40Inputs.numericRenal(data, field, def) || NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
+    if(['00391','00392'].includes(code) && field==='serum_creatinine_umol_l'){
+      assert.equal(def.type,'number');assert.equal(def.unit,'µmol/L');assert.equal(def.required,false);
+      assert.match(def.label,/serum creatinine.*not CrCl or eGFR/i);
+      assert(rules.some(rule=>(rule.id||rule.rule_id)==='IFO_PRODUCT_SERUM_CREATININE_UMOL_L'));
+      continue;
+    }
+    if(metadata.sactcheck_encoding_version==='0.84.62' && field==='crcl_ml_min' && ['00374','00554','00205','00462'].includes(code)) {
+      assert(rules.filter(rule=>collectComparisons([rule],field,[]).length).every(rule=>rule.source?.url===metadata.source_url && rule.source?.page), code+' source-linked renal criteria');
+      assert.equal(def.type,'number');assert.equal(def.unit,'mL/min');assert.equal(def.required,false);
+      if(['00374','00554'].includes(code)) {
+        const values=[...new Set(collectComparisons(rules,field,[]))].sort((a,b)=>a-b);
+        assert.deepEqual(values,code==='00374'?[30]:[30,50,60]);
+      } else {
+        assert.equal(def.renal_input.mode,'source_threshold_numeric');
+        assert.equal(def.renal_input.source_url,metadata.source_url);
+      }
+      continue;
+    }
     if(SARCOMA60.numericRenal(data,field,def))continue;
     if (!isRenalMeasurement(field,def)) continue;
     if (!['number', 'select'].includes(def.type)) continue;
