@@ -1,0 +1,618 @@
+/**
+ * SACTCheck v0.75.1 - patient-facing regimen support.
+ *
+ * Patient agnostic by design:
+ * - no patient identifiers are requested or persisted;
+ * - no symptom data are stored;
+ * - blank patient fields exist only in the printable paper passport;
+ * - regimen links/QRs identify the regimen, not a patient.
+ */
+(function(root,factory){
+  const api=factory(root||{});
+  if(typeof module==="object"&&module.exports) module.exports=api;
+  if(root?.document){
+    root.SACTCheckPatientContent=api;
+    // Compatibility name retained for the v0.72 clinic-workflow "consent" action.
+    root.SACTCheckRegimenConsentBuilder=api;
+    if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",api.install,{once:true});
+    else api.install();
+  }
+})(typeof globalThis!=="undefined"?globalThis:this,function(root){
+  "use strict";
+
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
+  const CONTENT_URL="data/patient-content-v0730.json";
+  const RISK_URL="data/consent-content-v0710.json";
+  let contentPromise=null;
+  let riskPromise=null;
+  let activeProtocol=null;
+
+  function patientAssets(){
+    if(root.SACTCheckPatientAssets) return root.SACTCheckPatientAssets;
+    if(typeof require==="function"){
+      try{return require("./patient-asset-registry-v0810.js");}catch(_){}
+    }
+    return null;
+  }
+
+  const CORE_IRAE_IDS=["pneumonitis","colitis","hepatitis","endocrine","nephritis","skin"];
+  const URGENT_IDS=new Set([
+    "pneumonitis","ild","perforation","bleeding","thrombosis","vte","myocarditis",
+    "meningoencephalitis","gbs","myasthenia","myositis","neurological","cardiac",
+    "rare_fatal","severe_skin","pres"
+  ]);
+  const CONTACT_IDS=new Set([
+    "hypertension","proteinuria","neutropenia","hepatitis","endocrine","nephritis",
+    "skin","diarrhoea","colitis","liver","wound","pancreatitis","ocular","jaw_osteonecrosis"
+  ]);
+
+  const PATIENT_SYMPTOMS={
+    hypertension:"Headache, dizziness or a blood-pressure rise may occur. Blood pressure is usually monitored.",
+    proteinuria:"Protein can appear in the urine and is usually detected on monitoring.",
+    bleeding:"Unexpected or significant bleeding, black stools, vomiting blood, coughing blood or unusual bruising.",
+    thrombosis:"New one-sided leg swelling/pain, sudden chest pain, breathlessness or stroke-like symptoms.",
+    vte:"New one-sided leg swelling/pain, sudden chest pain or breathlessness.",
+    wound:"Problems with wound healing, especially around surgery.",
+    perforation:"Severe or persistent abdominal pain, fever or sudden deterioration.",
+    ild:"New or worsening cough, breathlessness, chest discomfort or reduced exercise tolerance.",
+    pneumonitis:"New or worsening cough, breathlessness, chest discomfort or reduced exercise tolerance.",
+    colitis:"New diarrhoea, abdominal pain, blood or mucus in the stool.",
+    hepatitis:"Yellowing of the skin/eyes, dark urine, nausea or abnormal liver blood tests.",
+    endocrine:"Unusual fatigue, dizziness, headache, thirst, frequent urination, temperature intolerance or weakness.",
+    nephritis:"Reduced urine, swelling, nausea or changes in kidney blood tests.",
+    skin:"New or worsening rash; urgent review for blistering, painful skin or mouth involvement.",
+    myocarditis:"Chest pain, breathlessness, palpitations, fainting or unexplained severe weakness.",
+    meningoencephalitis:"New confusion, severe headache, seizures, marked drowsiness or other neurological change.",
+    gbs:"Progressive weakness, numbness, tingling or difficulty walking/breathing.",
+    myasthenia:"New muscle weakness, drooping eyelids, swallowing difficulty or breathing difficulty.",
+    myositis:"New marked muscle weakness or severe muscle pain.",
+    pancreatitis:"Severe or persistent upper abdominal pain, nausea or vomiting.",
+    ocular:"New eye pain, redness or change in vision.",
+    jaw_osteonecrosis:"New jaw or tooth pain, swelling, a loose tooth or an unhealed mouth sore: tell your oncology team and dentist promptly.",
+    pres:"A severe headache, new vision change, confusion or a seizure needs emergency assessment, even if your blood pressure is normal."
+  };
+
+  // The clinician-facing source retains its clinical labels; the patient guide
+  // consistently leads with what a person can recognise and explains the term.
+  const PATIENT_LABELS={
+    hypertension:"High blood pressure (hypertension)",
+    proteinuria:"Protein leaking into urine (proteinuria)",
+    bleeding:"Bleeding (haemorrhage)",
+    thrombosis:"Clots in veins or arteries (thromboembolism)",
+    vte:"Clots in the legs or lungs (venous thromboembolism)",
+    wound:"Slow wound healing (impaired wound healing)",
+    perforation:"A hole or abnormal connection in the gut (perforation / fistula)",
+    jaw_osteonecrosis:"Jaw-bone damage (osteonecrosis of the jaw)",
+    pres:"Rare brain condition (PRES)",
+    pneumonitis:"New cough or breathlessness (pneumonitis)",
+    colitis:"Diarrhoea or bowel inflammation (colitis)",
+    hepatitis:"Liver inflammation (hepatitis)",
+    endocrine:"Hormone changes (endocrine problems)",
+    nephritis:"Kidney inflammation (nephritis)",
+    skin:"New rash or blisters (skin toxicity)",
+    myocarditis:"Chest pain or heart inflammation (myocarditis)",
+    meningoencephalitis:"Confusion or severe headache (meningoencephalitis)",
+    myositis:"Muscle pain or weakness (myositis)"
+  };
+  const RISK_ICONS={hypertension:"pressure",proteinuria:"kidney",bleeding:"bleeding",thrombosis:"clot",vte:"clot",wound:"wound",perforation:"bowel",jaw_osteonecrosis:"jaw",pres:"brain",pneumonitis:"lungs",ild:"lungs",colitis:"bowel",hepatitis:"liver",endocrine:"brain",nephritis:"kidney",skin:"skin",myocarditis:"heart",meningoencephalitis:"brain",myositis:"muscle"};
+
+  const text=v=>String(v??"").trim();
+  const arr=v=>Array.isArray(v)?v:(v==null?[]:[v]);
+  const esc=v=>text(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  function normalise(v){
+    return text(v).toLowerCase()
+      .replace(/[®™]/g,"")
+      .replace(/\([^)]*\)/g," ")
+      .replace(/[_/–—-]+/g," ")
+      .replace(/\b(?:iv|po|sc|oral|intravenous|subcutaneous|infusion|bolus)\b/g," ")
+      .replace(/[^a-z0-9]+/g," ")
+      .replace(/\s+/g," ")
+      .trim();
+  }
+
+  async function fetchJson(url){
+    const response=await root.fetch(url,{cache:"no-store"});
+    if(!response.ok) throw new Error(`${url} HTTP ${response.status}`);
+    return response.json();
+  }
+  function loadContent(){ if(!contentPromise) contentPromise=fetchJson(CONTENT_URL).catch(()=>({})); return contentPromise; }
+  function loadRisk(){ if(!riskPromise) riskPromise=fetchJson(RISK_URL).catch(()=>({agent_profiles:{},generic_modules:{}})); return riskPromise; }
+  function preload(){ return Promise.allSettled([loadContent(),loadRisk()]); }
+
+  function protocolTitle(protocol){
+    const md=protocol?.metadata||{};
+    return text(md.short_title||md.display_title||md.title||protocol?.title||protocol?.protocol_id||"Selected SACT regimen");
+  }
+  function protocolCode(protocol){
+    const md=protocol?.metadata||{};
+    return text(md.nccp_regimen_code||md.nccp_number||protocol?.nccp_regimen_code||"");
+  }
+  function protocolVersion(protocol){ return text(protocol?.metadata?.nccp_version||""); }
+  function protocolIndication(protocol){
+    const v=protocol?.metadata?.indication||protocol?.indication||protocol?.metadata?.clinical_indication;
+    return Array.isArray(v)?v.join("; "):text(v);
+  }
+
+  function componentsForProtocol(protocol){
+    const values=[];
+    const add=v=>{
+      if(v==null) return;
+      if(typeof v==="string"){ if(text(v)) values.push(text(v)); return; }
+      if(Array.isArray(v)){ v.forEach(add); return; }
+      if(typeof v==="object"){
+        const direct=v.drug||v.agent||v.medicine||v.name||v.generic_name||v.display_name;
+        if(direct) add(direct);
+      }
+    };
+    arr(protocol?.treatment_phases).forEach(phase=>arr(phase?.administration).forEach(add));
+    add(protocol?.regimen_components);
+    add(protocol?.components);
+    add(protocol?.agents);
+    add(protocol?.drugs);
+    add(protocol?.metadata?.agents);
+    const helper=root?.SACTCheckRegimenComponents;
+    try{ if(helper?.forProtocol) add(helper.forProtocol(protocol)); }catch(_){}
+    const seen=new Set();
+    return values.filter(v=>{
+      const k=normalise(v); if(!k||seen.has(k)) return false;
+      seen.add(k); return true;
+    });
+  }
+
+  function displayRoute(value){
+    const k=normalise(value);
+    if(k==="iv"||k==="intravenous") return "IV";
+    if(k==="sc"||k==="subcutaneous") return "SC";
+    if(k==="po"||k==="oral") return "oral";
+    return text(value);
+  }
+
+  function expandDays(value){
+    if(value===undefined||value===null||value==="") return [];
+    if(Array.isArray(value)) return value.flatMap(expandDays);
+    if(typeof value==="number") return [value];
+    const raw=text(value).toLowerCase().replace(/days?/g,"").trim();
+    const range=raw.match(/^(\d+)\s*(?:-|–|—|to)\s*(\d+)$/);
+    if(range){ const a=Number(range[1]),b=Number(range[2]); if(b>=a&&b-a<=31) return Array.from({length:b-a+1},(_,i)=>a+i); }
+    if(/^[0-9,\s]+$/.test(raw)) return raw.split(/[,\s]+/).filter(Boolean).map(Number).filter(Number.isFinite);
+    return [text(value)];
+  }
+  function phaseDisplayName(phase,index){
+    const raw=text(phase?.name||phase?.label||phase?.phase_name||`Phase ${index+1}`),lower=raw.toLowerCase();
+    if(lower.includes("induction")) return `Induction · ${raw.replace(/induction/ig,"").replace(/^\s*[-:·]\s*/,"").trim()||`Phase ${index+1}`}`;
+    if(lower.includes("maintenance")) return `Maintenance · ${raw.replace(/maintenance/ig,"").replace(/^\s*[-:·]\s*/,"").trim()||`Phase ${index+1}`}`;
+    return raw;
+  }
+  function scheduleRows(protocol){
+    const rows=[];
+    arr(protocol?.treatment_phases).forEach((phase,phaseIndex)=>{
+      const phaseName=phaseDisplayName(phase,phaseIndex),cycle=Number(phase?.cycle_length_days||phase?.cycle_days||phase?.cycle_length),phaseFrequency=text(phase?.frequency||phase?.schedule||phase?.interval||phase?.administration_frequency||"");
+      const byDay=new Map();
+      arr(phase?.administration).forEach(item=>{
+        const drug=text(item?.drug||item?.name||item?.medicine); if(!drug) return;
+        const route=displayRoute(item?.route||item?.administration_route||item?.route_of_administration),frequency=text(item?.frequency||item?.schedule||item?.timing||item?.administration_frequency||"");
+        const days=expandDays(item?.days??item?.day??item?.cycle_days??item?.treatment_days); (days.length?days:[""]).forEach(day=>{
+          const key=text(day)||"other"; if(!byDay.has(key)) byDay.set(key,[]);
+          byDay.get(key).push([route?`${drug} (${route})`:drug,frequency].filter(Boolean).join(" · "));
+        });
+      });
+      if(!byDay.size) return;
+      const sorted=[...byDay.entries()].sort((a,b)=>Number(a[0])-Number(b[0]));
+      rows.push({phase:phaseName,cycle:cycle||null,frequency:phaseFrequency,days:sorted.map(([day,medicines])=>({day:day==="other"?"As scheduled":/^\d+$/.test(day)?`Day ${day}`:day,medicines:[...new Set(medicines)]}))});
+    });
+    return rows;
+  }
+
+  function scheduleSummary(protocol){
+    const rows=scheduleRows(protocol);
+    if(rows.length){
+      return rows.map(row=>{
+        const prefix=[row.phase,row.cycle?`${row.cycle}-day cycle`:"",row.frequency].filter(Boolean).join(" - ");
+        return `${prefix}: ${row.days.map(d=>`${d.day}: ${d.medicines.join(" + ")}`).join("; ")}`;
+      }).join(" -> ");
+    }
+    const md=protocol?.metadata||{};
+    return text(md.schedule_summary||md.schedule||protocol?.schedule||"Schedule should be confirmed with the treating team.");
+  }
+
+  function buildProfileIndex(risk){
+    const map=new Map();
+    Object.entries(risk?.agent_profiles||{}).forEach(([key,profile])=>{
+      const terms=[key,profile?.display_name,...arr(profile?.aliases)];
+      terms.forEach(term=>{ const k=normalise(term); if(k) map.set(k,{key,profile}); });
+    });
+    return map;
+  }
+
+  const ISOLATED_AGENT_FAMILIES=["trastuzumab","trastuzumab deruxtecan","trastuzumab emtansine","ado trastuzumab emtansine","pertuzumab","enhertu","kadcyla","t dxd","t dm1"];
+  function isIsolatedAgentName(v){ const n=normalise(v); return ISOLATED_AGENT_FAMILIES.some(x=>n===normalise(x)||n.includes(normalise(x))); }
+  function profileMatches(protocol,risk){
+    const index=buildProfileIndex(risk),out=[],seen=new Set();
+    componentsForProtocol(protocol).forEach(component=>{
+      const k=normalise(component); let hit=index.get(k);
+      if(!hit&&!isIsolatedAgentName(k)){
+        const candidates=[]; for(const [term,value] of index.entries()){
+          if(!term||isIsolatedAgentName(term)) continue;
+          if(k===term) candidates.push([term,value,3]); else if(k.startsWith(term+" ")||term.startsWith(k+" ")) candidates.push([term,value,2]); else if(k.length>8&&term.length>8&&(k.includes(term)||term.includes(k))) candidates.push([term,value,1]);
+        }
+        candidates.sort((a,b)=>b[2]-a[2]||b[0].length-a[0].length); hit=candidates[0]?.[1];
+      }
+      if(hit&&!seen.has(hit.key)){seen.add(hit.key);out.push({component,key:hit.key,profile:hit.profile});}
+    }); return out;
+  }
+
+  function actionLevel(risk){
+    const id=normalise(risk?.id).replace(/\s+/g,"_");
+    const plain=text(risk?.id).toLowerCase();
+    if(URGENT_IDS.has(plain)||/life-threatening|fatal|perforation|embol|myocard|encephal|pneumon|interstitial lung/i.test(`${risk?.label} ${risk?.detail}`))
+      return "urgent";
+    if(CONTACT_IDS.has(plain)||String(risk?.tier||"").toLowerCase()==="serious") return "contact";
+    return "know";
+  }
+
+  function patientGradeScale(){
+    return [
+      {grade:"0",label:"None",meaning:"No symptom or change."},
+      {grade:"1",label:"Mild",meaning:"Noticeable but usual activities are largely unchanged."},
+      {grade:"2",label:"Moderate",meaning:"Affects usual activities or needs extra symptom treatment - contact the oncology team for advice."},
+      {grade:"3",label:"Severe",meaning:"Markedly limits normal or self-care activities - urgent oncology assessment is usually needed."},
+      {grade:"4",label:"Emergency",meaning:"Potentially life-threatening symptoms - seek emergency assessment using your oncology team's instructions."}
+    ];
+  }
+
+  function patientSymptoms(risk){
+    return PATIENT_SYMPTOMS[String(risk?.id||"").toLowerCase()]||text(risk?.detail)||"Report a new or worsening symptom to the oncology team.";
+  }
+
+  function buildRiskRows(protocol,riskContent){
+    const matches=profileMatches(protocol,riskContent);
+    const rows=[];
+    const seen=new Set();
+    const add=(risk,agent,frequency="",source="",category="agent")=>{
+      const key=`${normalise(agent)}|${normalise(risk?.id||risk?.label)}`;
+      if(!risk?.label||seen.has(key)) return;
+      seen.add(key);
+      rows.push({
+        id:text(risk.id||risk.label),
+        label:text(PATIENT_LABELS[String(risk.id||"").toLowerCase()]||risk.label),
+        detail:patientSymptoms(risk),
+        agent:text(agent),
+        tier:text(risk.tier||"important"),
+        action:actionLevel(risk),
+        frequency:text(frequency),
+        frequencySource:text(source),
+        category:text(category||"agent")
+      });
+    };
+
+    const immuneModule=riskContent?.generic_modules?.immune_checkpoint_inhibitor;
+    const chemoModule=riskContent?.generic_modules?.cytotoxic_chemotherapy;
+    let hasImmune=false,hasChemo=false;
+
+    matches.forEach(({profile})=>{
+      if(profile?.module==="immune_checkpoint_inhibitor") hasImmune=true;
+      if(profile?.category==="cytotoxic") hasChemo=true;
+    });
+
+    if(hasChemo){
+      arr(chemoModule?.risks).slice(0,10).forEach(r=>add(r,"Chemotherapy","","","general"));
+    }
+
+    matches.forEach(({component,profile})=>{
+      arr(profile?.risks).forEach(r=>add(r,profile.display_name||component,"","","agent"));
+      if(profile?.module==="immune_checkpoint_inhibitor"){
+        const coreFreq=profile?.immune_core_frequency_estimates||{};
+        arr(immuneModule?.risks).filter(r=>CORE_IRAE_IDS.includes(String(r.id))).forEach(r=>{
+          add(r,profile.display_name||component,coreFreq?.[r.id]?.display||"",profile?.immune_frequency_source?.label||"","immune");
+        });
+        arr(profile?.rare_immune_events).forEach(r=>add(
+          {...r,tier:"serious"},
+          profile.display_name||component,
+          r.frequency||"",
+          profile?.immune_frequency_source?.label||"",
+          "immune"
+        ));
+      }
+    });
+
+    return {rows,matches,hasImmune};
+  }
+
+  function bodyMapItems(rows){
+    const all=(rows||[]).map(r=>`${String(r.id||"")}|${String(r.label||"")}|${String(r.detail||"")}`.toLowerCase()).join(" ");
+    const checks=[
+      ["Head / hormones","head","headache dizziness confusion hormone endocrine thyroid pituitary adrenal"],
+      ["Lungs","chest","cough breathless breathlessness pneumonitis ild chest"],
+      ["Skin","skin","skin rash itch blister mouth"],
+      ["Gut","abdomen","diarrhoea diarrhea vomiting nausea abdominal colitis bowel"],
+      ["Liver","liver","liver hepatitis jaundice dark urine"],
+      ["Kidneys / urine","kidney","kidney nephritis urine swelling proteinuria"],
+      ["Blood / infection","blood","fever infection neutropenia bruising bleeding"],
+      ["Nerves / muscles","legs","weakness neuropathy numbness tingling myositis myasthenia"],
+    ];
+    return checks.filter(([, , terms])=>terms.split(/\s+/).some(t=>all.includes(t))).map(([label,key])=>({label,key}));
+  }
+
+  function bodyMapMarkup(rows,protocol){
+    if(["00372","00388"].includes(protocolCode(protocol))) return `<section class="patient-bodymap-card"><div><h4>Your treatment plan matters</h4><p>Choose your prescribed ${protocolCode(protocol)==="00372"?"treatment phase":"etoposide schedule"} to see its anatomical side-effect map.</p><a href="patient/${protocolCode(protocol)}/">Choose your prescribed treatment plan</a></div></section>`;
+    const authored=root.SACTCheckAnatomyData?.[protocolCode(protocol)];
+    if(authored&&root.SACTCheckAnatomy&&protocolCode(protocol)!=="00831"){ensureHccAssets();return root.SACTCheckAnatomy.render(authored,new URL("assets/patient/",root.location?.href||"https://sactcheck.com/").href);}
+
+    const regimenMap=dedicatedRegimenMap(protocol);
+    if(regimenMap) return regimenMap;
+    if(protocolCode(protocol)==="00831"){
+      ensureHccAssets();
+      const source=new URL("assets/patient/anatomy-hcc-v0762.png",root.location?.href||"https://sactcheck.com/").href;
+      const iconBase=new URL("docs/patient/assets/toxicity-icons.svg",root.location?.href||"https://sactcheck.com/").href;
+      const cards=[
+        {side:"left",key:"brain",number:1,icon:"brain",title:"Hormones / brain",symptom:"Tiredness, thirst, dizziness or a new headache",term:"hormone or pituitary inflammation"},
+        {side:"right",key:"lungs",number:2,icon:"lungs",title:"Lungs",symptom:"New cough or shortness of breath",term:"pneumonitis"},
+        {side:"left",key:"heart",number:3,icon:"heart",title:"Heart",symptom:"Chest pain, palpitations or shortness of breath",term:"myocarditis / pericarditis"},
+        {side:"right",key:"liver",number:4,icon:"liver",title:"Liver",symptom:"Yellow eyes, dark urine or changes in blood tests",term:"hepatitis"},
+        {side:"left",key:"kidneys",number:5,icon:"kidney",title:"Kidneys",symptom:"Passing less urine, swelling or blood test changes",term:"nephritis"},
+        {side:"right",key:"bowel",number:6,icon:"bowel",title:"Bowel",symptom:"New diarrhoea, blood or tummy pain",term:"colitis; severe pain may have another urgent cause"},
+        {side:"left",key:"muscles",number:7,icon:"muscle",title:"Skin / nerves / muscles",symptom:"Rash or blisters; weakness, numbness or muscle pain",term:"skin inflammation / nerve effects / myositis"},
+        {side:"right",key:"joints",number:8,icon:"joint",title:"Joints",symptom:"Painful, swollen joints",term:"inflammatory arthritis"},
+        {side:"right",key:"vessels",number:9,drug:"bev",icon:"vessel",title:"Blood vessels / healing",symptom:"Bleeding, clots or slow wound healing",term:"bevacizumab-related effects"}
+      ];
+      const card=(c)=>`<article class="hcc-organ-card ${c.side} ${c.key} ${c.drug||"atezo"}" data-hcc-target="${c.key}"><div class="hcc-organ-head"><span class="hcc-card-number">${c.number}</span><svg class="hcc-organ-icon" aria-hidden="true"><use href="${esc(iconBase)}#${c.icon}"></use></svg><strong>${esc(c.title)}</strong></div><div class="hcc-drug-label">${c.drug==="bev"?"BEVACIZUMAB · VESSELS / HEALING":"ATEZOLIZUMAB · IMMUNE EFFECT"}</div><p>${esc(c.symptom)} <span>(${esc(c.term)})</span></p>${c.key==="kidneys"?'<p class="hcc-secondary-bev"><b>BEVACIZUMAB</b> can also cause protein in the urine, usually found on a urine test.</p>':c.key==="bowel"?'<p class="hcc-secondary-bev"><b>BEVACIZUMAB</b> can rarely cause a gut perforation; severe belly pain needs urgent assessment.</p>':""}</article>`;
+      const left=cards.filter(c=>c.side==="left").map(card).join("");
+      const right=cards.filter(c=>c.side==="right"&&c.key!=="joints"&&c.key!=="vessels").map(card).join("")+`<div class="hcc-split">${cards.filter(c=>c.key==="joints"||c.key==="vessels").map(card).join("")}</div>`;
+      const pins=cards.map(c=>`<span class="hcc-pin ${c.key} ${c.drug||"atezo"}" data-hcc-pin="${c.key}" aria-label="${c.number}: ${esc(c.title)}"><span>${c.number}</span></span>`).join("");
+      return `<section class="patient-bodymap-card hcc-bodymap"><div class="hcc-visual-title"><span class="patient-a4-label">NCCP 00831 v2a · Every 21 days</span><h4>A picture of side effects</h4><p>Atezolizumab can cause immune inflammation in many organs. Bevacizumab can affect blood vessels, bleeding and wound healing. Any new symptom may have more than one cause — tell your team.</p><div class="hcc-drug-key"><span class="hcc-key-atezo"><b>1–8</b> Atezolizumab · immune inflammation</span><span class="hcc-key-bev"><b>9</b> Bevacizumab · blood vessels / healing</span></div></div><div class="hcc-visual-stage"><div class="hcc-organ-column">${left}</div><div class="hcc-anatomy"><div class="hcc-image-wrap"><img src="${esc(source)}" alt="Front anatomy showing numbered brain, lung, heart, liver, kidney, bowel, muscle, joint and blood vessel locations">${pins}</div></div><div class="hcc-organ-column">${right}</div></div><div class="hcc-visual-foot">Numbered lines join each symptom box to its anatomical marker. Purple circles show possible atezolizumab immune effects; coral diamonds show bevacizumab vessel and healing effects. The same symptom can have another cause.</div><div class="hcc-visual-alert">Also report new jaw or tooth pain (rare jaw-bone damage), and seek emergency assessment for a severe headache, vision change, confusion or seizure (rare PRES).</div></section>`;
+    }
+    const items=bodyMapItems(rows);
+    const pills=items.map(item=>`<span class="bodymap-pill ${esc(item.key)}">${esc(item.label)}</span>`).join("") || '<span class="bodymap-pill general">General treatment effects can affect different parts of the body.</span>';
+    return `<section class="patient-bodymap-card"><div class="patient-bodymap-copy"><span class="patient-a4-label">Chemo man guide</span><h4>Where side effects may appear</h4><p>Use this simple body map to explain that treatment effects can involve different body systems. The exact important effects for this regimen are shown beside it.</p><div class="bodymap-pill-list">${pills}</div></div><div class="patient-bodymap-figure" aria-hidden="true"><svg viewBox="0 0 180 260" role="img"><circle cx="90" cy="34" r="22"/><rect x="68" y="58" width="44" height="78" rx="18"/><rect x="42" y="70" width="22" height="72" rx="10" transform="rotate(18 42 70)"/><rect x="116" y="70" width="22" height="72" rx="10" transform="rotate(-18 116 70)"/><rect x="70" y="134" width="16" height="92" rx="9" transform="rotate(5 70 134)"/><rect x="94" y="134" width="16" height="92" rx="9" transform="rotate(-5 94 134)"/></svg><div class="bodymap-dot head">Head / hormones</div><div class="bodymap-dot chest">Lungs</div><div class="bodymap-dot skin">Skin</div><div class="bodymap-dot abdomen">Gut</div><div class="bodymap-dot liver">Liver</div><div class="bodymap-dot kidney">Kidneys</div><div class="bodymap-dot blood">Blood</div><div class="bodymap-dot legs">Nerves / muscles</div></div></section>`;
+  }
+
+  function dedicatedRegimenMap(protocol){
+    const code=protocolCode(protocol);
+    const maps={
+      "00209":{name:"bowel and infusion pump",title:"Bowel treatment and the 14-day pump",copy:"Oxaliplatin and fluorouracil act throughout the body. The bowel drawing anchors the cancer site; the pump shows why treatment continues at home after day 1.",org:"<path d='M63 54c-19 0-25 18-14 31 8 10 25 6 25-7 0-9-14-11-17-2-2 5 4 9 8 6M106 54c19 0 25 18 14 31-8 10-25 6-25-7 0-9 14-11 17-2 2 5-4 9-8 6M63 89c-18 0-23 17-12 28 9 9 24 4 23-8-1-9-14-10-17-2-2 5 3 9 8 6M106 89c18 0 23 17 12 28-9 9-24 4-23-8 1-9 14-10 17-2 2 5-3 9-8 6M72 120c-8 8-6 18 4 22 8 4 18-3 15-11-2-6-11-6-13 0'/>"},
+      "00568":{name:"lungs and immune effects",title:"Lungs and immune-system treatment",copy:"The lung illustration anchors the treatment site. Pembrolizumab can cause inflammation in different organs, while chemotherapy can affect blood counts, kidneys, skin and nerves.",org:"<path d='M87 46v34M87 61c-12 2-18 11-22 22M87 61c12 2 18 11 22 22M64 77c-12-4-22 8-25 25-4 19 3 32 17 30 13-2 20-17 20-34V86c-3-5-7-8-12-9ZM110 77c12-4 22 8 25 25 4 19-3 32-17 30-13-2-20-17-20-34V86c3-5 7-8 12-9Z'/>"},
+      "00857":{name:"breast and lymph nodes",title:"Breast treatment through several phases",copy:"The breast and nearby lymph nodes anchor the treatment site. This regimen changes from paclitaxel/carboplatin to doxorubicin/cyclophosphamide, then continues pembrolizumab around surgery.",org:"<path d='M87 47v47M87 72c-18-8-36 1-37 17-1 12 12 19 26 14 7-3 11-10 11-18M87 72c18-8 36 1 37 17 1 12-12 19-26 14-7-3-11-10-11-18M58 98l-14 13M64 105l-11 14M116 98l14 13M110 105l11 14'/>"},
+      "00722":{name:"breast and HER2-directed treatment",title:"Breast and HER2-directed treatment",copy:"The breast and nearby lymph nodes anchor the treatment site. Trastuzumab and pertuzumab target HER2; docetaxel and carboplatin are chemotherapy medicines.",org:"<path d='M87 47v47M87 72c-18-8-36 1-37 17-1 12 12 19 26 14 7-3 11-10 11-18M87 72c18-8 36 1 37 17 1 12-12 19-26 14-7-3-11-10-11-18M58 98l-14 13M64 105l-11 14M116 98l14 13M110 105l11 14'/>"},
+      "00382":{name:"bowel and oral treatment",title:"Bowel cancer treatment taken by mouth",copy:"The bowel drawing anchors the cancer site. Trifluridine/tipiracil is taken as tablets on specific days of each cycle; blood counts and infection symptoms need attention.",org:"<path d='M63 54c-19 0-25 18-14 31 8 10 25 6 25-7 0-9-14-11-17-2-2 5 4 9 8 6M106 54c19 0 25 18 14 31-8 10-25 6-25-7 0-9 14-11 17-2 2 5-4 9-8 6M63 89c-18 0-23 17-12 28 9 9 24 4 23-8-1-9-14-10-17-2-2 5 3 9 8 6M106 89c18 0 23 17 12 28-9 9-24 4-23-8 1-9 14-10 17-2 2 5-3 9-8 6M72 120c-8 8-6 18 4 22 8 4 18-3 15-11-2-6-11-6-13 0'/>"},
+      "00619":{name:"breast and cell-growth treatment",title:"Breast cancer and ongoing tablet treatment",copy:"The breast and lymph nodes anchor the cancer site. Abemaciclib slows cell-cycle progression and is taken alongside endocrine therapy; report diarrhoea promptly and follow blood-test monitoring.",org:"<path d='M87 47v47M87 72c-18-8-36 1-37 17-1 12 12 19 26 14 7-3 11-10 11-18M87 72c18-8 36 1 37 17 1 12-12 19-26 14-7-3-11-10-11-18M58 98l-14 13M64 105l-11 14M116 98l14 13M110 105l11 14'/>"}
+    };
+    const m=maps[code]; if(!m) return "";
+    const icons={"00209":[["1","Bowel","Tummy pain or persistent bowel changes"],["2","Nerves","Cold sensitivity, tingling or numbness"],["3","Home pump","Check the pump and line as taught; call if disconnected or leaking"],["4","Blood","Fever or sudden illness needs immediate contact"]],"00568":[["1","Lungs","New cough or breathlessness"],["2","Immune effects","New symptoms can occur during or after treatment"],["3","Blood","Fever or sudden illness needs immediate contact"],["4","Kidneys / skin","Report reduced urine, rash or new nerve symptoms"]],"00857":[["1","Breast / nodes","Treatment is planned around breast surgery"],["2","Immune effects","Report new symptoms during or after pembrolizumab"],["3","Blood","Fever or sudden illness needs immediate contact"],["4","Heart / nerves","Report chest symptoms, tingling or numbness"]],"00722":[["1","Breast / nodes","Treatment is directed at HER2-positive breast cancer"],["2","Heart","Heart function may be monitored during HER2-directed treatment"],["3","Blood","Fever or sudden illness needs immediate contact"],["4","Gut / nerves","Report persistent diarrhoea or new tingling"]],"00382":[["1","Bowel","Treatment is used in bowel cancer"],["2","Blood","Low blood counts can increase infection or bruising risk"],["3","Gut","Report persistent diarrhoea, vomiting or abdominal pain"],["4","Skin / mouth","Report significant rash or mouth soreness"]],"00619":[["1","Breast / nodes","Treatment follows surgery for hormone-receptor-positive disease"],["2","Bowel","Diarrhoea can occur; contact your team early"],["3","Blood","Blood tests monitor treatment effects"],["4","Joints / bones","Endocrine therapy can cause joint symptoms"]]};
+    const cardItems=icons[code].map(([n,t,d])=>`<article class="prm-card"><span>${n}</span><div><b>${t}</b><small>${d}</small></div></article>`);
+    const center=`<svg viewBox="0 0 174 190" role="img" aria-label="Illustration of ${esc(m.name)} with treatment-relevant anatomical focus"><defs><linearGradient id="prm-fill" x2="0" y2="1"><stop stop-color="#d8eeeb"/><stop offset="1" stop-color="#a9d0ca"/></linearGradient></defs><circle cx="87" cy="21" r="15" fill="#edf4f2" stroke="#9bbdb8"/><path d="M65 45Q49 48 45 67L51 108 64 105 63 76 68 121 62 181 78 183 87 133 96 183 112 181 106 121 111 76 110 105 123 108 129 67Q125 48 109 45Z" fill="url(#prm-fill)" stroke="#7aa8a0" stroke-width="2"/>${m.org}<g fill="#bd4d61" stroke="white" stroke-width="2"><circle cx="87" cy="85" r="5"/><circle cx="68" cy="93" r="4"/><circle cx="106" cy="93" r="4"/></g></svg>`;
+    return `<section class="patient-bodymap-card patient-regimen-map" data-regimen-map="${code}"><header><span class="patient-a4-label">REGIMEN-SPECIFIC VISUAL · NCCP ${code}</span><h4>${m.title}</h4><p>${m.copy}</p></header><div class="prm-layout"><div class="prm-column">${cardItems.slice(0,2).join("")}</div><div class="prm-anatomy">${center}<span class="prm-organ-label">${m.name}</span></div><div class="prm-column">${cardItems.slice(2).join("")}</div></div><footer>Illustrative guide: the marker identifies the treatment context; call your oncology team about new or worsening symptoms. It does not predict which effects you will experience.</footer></section>`;
+  }
+
+  function ensureHccAssets(){
+    if(!root.document) return;
+    const base=new URL("assets/patient/",root.location?.href||"https://sactcheck.com/");
+    if(!root.document.getElementById("hcc-bodymap-css-v0763")){
+      const link=root.document.createElement("link");
+      link.id="hcc-bodymap-css-v0763";link.rel="stylesheet";
+      link.href=new URL("hcc-bodymap-v08431.css",base).href;
+      root.document.head.appendChild(link);
+    }
+    if(root.SACTCheckHccConnectors){root.SACTCheckHccConnectors();return;}
+    if(!root.document.getElementById("hcc-connectors-v0763")){
+      const script=root.document.createElement("script");
+      script.id="hcc-connectors-v0763";
+      script.src=new URL("hcc-connectors-v08431.js",base).href;
+      root.document.head.appendChild(script);
+    }
+  }
+
+  function regimenLink(protocol){
+    const registry=patientAssets();
+    if(registry?.publicPortalUrl) return registry.publicPortalUrl(protocol);
+    const base=new URL("https://sactcheck.com/"); const id=text(protocol?.protocol_id); if(id) base.searchParams.set("patientSupport",id); return base.href;
+  }
+
+  function guideLink(protocol){
+    const registry=patientAssets();
+    return registry?.guideUrl?.(protocol)||null;
+  }
+
+  function qrUrl(protocol){
+    if(protocolCode(protocol)==="00655") return new URL("assets/patient/durvalumab-00655-qr.png",root.location?.href||"https://sactcheck.com/").href;
+    const link=regimenLink(protocol);
+    return `https://api.qrserver.com/v1/create-qr-code/?size=210x210&margin=8&data=${encodeURIComponent(link)}`;
+  }
+
+  function ensureShell(){
+    let shell=root.document.getElementById("patientSupportShell");
+    if(shell) return shell;
+    shell=root.document.createElement("div");
+    shell.id="patientSupportShell";
+    shell.className="patient-support-shell";
+    shell.hidden=true;
+    shell.innerHTML=`
+      <div class="patient-support-backdrop" data-close-patient-support></div>
+      <section class="patient-support-panel" role="dialog" aria-modal="true" aria-labelledby="patientSupportTitle">
+        <header class="patient-support-header">
+          <div class="patient-support-brand">
+            <img src="assets/branding/sactcheck-mark.svg" alt="">
+            <div><strong>SACTCheck</strong><span>SACT support at point of care</span></div>
+          </div>
+          <div class="patient-support-heading"><span>Patient-facing regimen support</span><h2 id="patientSupportTitle">Treatment support</h2><p id="patientSupportSubtitle"></p></div>
+          <button type="button" class="patient-support-close" data-close-patient-support aria-label="Close">×</button>
+        </header>
+        <nav class="patient-support-tabs" aria-label="Patient support sections">
+          <button type="button" data-patient-tab="overview" aria-selected="true">At a glance</button>
+          <button type="button" data-patient-tab="schedule" aria-selected="false">Treatment schedule</button>
+          <button type="button" data-patient-tab="toxicity" aria-selected="false">Detailed toxicities</button>
+          <button type="button" data-patient-tab="urgent" aria-selected="false">When to call</button>
+          <button type="button" data-patient-tab="print" aria-selected="false">Print / PDF</button>
+        </nav>
+        <div class="patient-support-body" id="patientSupportBody"></div>
+      </section>`;
+    root.document.body.appendChild(shell);
+    shell.querySelectorAll("[data-close-patient-support]").forEach(x=>x.addEventListener("click",close));
+    shell.querySelectorAll("[data-patient-tab]").forEach(button=>button.addEventListener("click",()=>{
+      shell.querySelectorAll("[data-patient-tab]").forEach(b=>b.setAttribute("aria-selected",b===button?"true":"false"));
+      shell.querySelectorAll("[data-patient-view]").forEach(v=>v.classList.toggle("active",v.dataset.patientView===button.dataset.patientTab));
+    }));
+    root.document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!shell.hidden) close(); });
+    return shell;
+  }
+
+  function actionLegend(){
+    return `<div class="patient-action-strip">
+      <div class="patient-action know"><strong>KNOW</strong><span>Expected or useful information to understand.</span></div>
+      <div class="patient-action contact"><strong>CONTACT</strong><span>Tell the oncology team promptly about new or worsening symptoms.</span></div>
+      <div class="patient-action urgent"><strong>URGENT</strong><span>Symptoms that may need urgent clinical assessment.</span></div>
+    </div>`;
+  }
+
+  function riskCard(r){
+    const freq=r.frequency?`<span class="risk-frequency">${esc(r.frequency)}</span>`:"",categoryLabel=r.category==="general"?"GENERAL":r.category==="immune"?"IMMUNE":"AGENT-SPECIFIC";
+    const glyph=RISK_ICONS[String(r.id||"").toLowerCase()]||"warning";
+    const iconUrl=new URL("docs/patient/assets/toxicity-icons.svg",root.location?.href||"https://sactcheck.com/").href;
+    return `<article class="patient-risk-card ${esc(r.action)} category-${esc(r.category)}"><div class="patient-risk-head"><span class="patient-risk-action">${esc(r.action.toUpperCase())}</span>${freq}</div><span class="patient-risk-category">${categoryLabel}</span><h4><svg class="patient-tox-icon" aria-hidden="true" focusable="false"><use href="${esc(iconUrl)}#${esc(glyph)}"></use></svg>${esc(r.label)}</h4><p>${esc(r.detail)}</p><small>${esc(r.agent)}${r.frequencySource?` · ${esc(r.frequencySource)}`:""}</small></article>`;
+  }
+
+  function scheduleMarkup(protocol){
+    const relationship=root.SACTCheckTreatmentRelationship?.renderForCode(protocol?.metadata?.nccp_regimen_code)||"";
+    const rows=scheduleRows(protocol);
+    if(!rows.length) return `${relationship}<div class="patient-card"><p>${esc(scheduleSummary(protocol))}</p></div>`;
+    return relationship+rows.map((row,i)=>`<article class="patient-phase-card">
+      <div class="patient-phase-number">${i+1}</div>
+      <div><span class="patient-phase-eyebrow">${esc([row.cycle?`${row.cycle}-day cycle`:"Treatment phase",row.frequency].filter(Boolean).join(" · "))}</span>
+      <h4>${esc(row.phase)}</h4>
+      <div class="patient-phase-days">${row.days.map(d=>`<div><strong>${esc(d.day)}</strong><span>${esc(d.medicines.join(" + "))}</span></div>`).join("")}</div></div>
+    </article>`).join("");
+  }
+
+  function categoryBlock(title,subtitle,rows,kind,limit=6){ if(!rows.length) return ""; return `<section class="patient-a4-section ${esc(kind)}"><div class="patient-a4-section-head"><span>${esc(title)}</span><small>${esc(subtitle)}</small></div><div class="patient-a4-risk-grid">${rows.slice(0,limit).map(riskCard).join("")}</div></section>`; }
+  function renderViews(protocol,content,riskContent){
+    const title=protocolTitle(protocol),code=protocolCode(protocol),version=protocolVersion(protocol),indication=protocolIndication(protocol),components=componentsForProtocol(protocol),riskData=buildRiskRows(protocol,riskContent);
+    const general=riskData.rows.filter(r=>r.category==="general"),immune=riskData.rows.filter(r=>r.category==="immune"),agent=riskData.rows.filter(r=>r.category!=="general"&&r.category!=="immune"),urgent=riskData.rows.filter(r=>r.action==="urgent"),rows=scheduleRows(protocol);
+    const quickSchedule=rows.length?rows.map(r=>`${r.phase}${r.cycle?` · ${r.cycle}-day cycle`:""}${r.frequency?` · ${r.frequency}`:""}: ${r.days.map(d=>`${d.day} ${d.medicines.join(" + ")}`).join("; ")}`).join(" → "):scheduleSummary(protocol);
+    const overview=`<section class="patient-support-view active" data-patient-view="overview"><article class="patient-a4-sheet${code==="00831"?" hcc-guide":""}"><header class="patient-a4-header"><div><span class="patient-kicker">SACTCHECK · PATIENT TREATMENT GUIDE</span><h3>${esc(title)}</h3><p>${code?`NCCP ${esc(code)}${version?` · v${esc(version)}`:""}`:"Regimen-specific information"}</p></div><img src="assets/branding/sactcheck-mark.svg" alt="SACTCheck"></header><div class="patient-a4-treatment-grid"><section><span class="patient-a4-label">Your medicines</span><div class="patient-medicine-list">${components.map(m=>`<span>${esc(m)}</span>`).join("")}</div>${indication?`<p><strong>Why this treatment is used:</strong> ${esc(indication)}</p>`:""}</section><section><span class="patient-a4-label">Your schedule</span><p>${esc(quickSchedule)}</p></section></div>${bodyMapMarkup(riskData.rows,protocol)}<div class="patient-a4-callout"><strong>Know what is common. Recognise what is specific. Act early on warning symptoms.</strong><span>How often a side effect occurs is different from how urgently it needs assessment.</span></div>${categoryBlock("General treatment effects","Effects shared across the chemotherapy / SACT backbone",general,"general")}${categoryBlock("Agent-specific effects","Effects linked to one of the medicines in this exact regimen",agent,"agent",agent.length)}${categoryBlock("Immunotherapy-related effects","Immune effects can affect almost any organ and may occur during or after treatment",immune,"immune")}<div class="patient-a4-urgent"><strong>Contact your oncology team urgently</strong><span> for severe or rapidly worsening symptoms, fever or sudden illness, new breathlessness or chest pain, persistent diarrhoea or vomiting, neurological change, significant bleeding, or another symptom your team has told you is urgent.</span></div><footer class="patient-a4-footer"><div><strong>More detailed regimen information</strong><span>Scan to reopen this regimen guide. The QR contains a public regimen link — no patient data.</span><code>${esc(regimenLink(protocol))}</code></div><a href="${esc(regimenLink(protocol))}" target="_blank" rel="noopener noreferrer"><img src="${esc(qrUrl(protocol))}" alt="Regimen QR"></a></footer></article><div class="patient-print-actions"><button type="button" class="btn" data-open-print-passport>Print / save this page</button><button type="button" class="btn secondary" data-copy-regimen-link>Copy regimen link</button></div></section>`;
+    const schedule=`<section class="patient-support-view" data-patient-view="schedule"><div class="patient-section-title"><div><h3>Your treatment schedule</h3><p>Each treatment day is kept separate. Sequential phases are labelled explicitly, including induction and maintenance when encoded in the NCCP regimen.</p></div></div><div class="patient-schedule-timeline">${scheduleMarkup(protocol)}</div><div class="patient-card patient-note"><strong>The schedule is pulled from the selected regimen record. Confirm dates and individual changes with your oncology team.</strong></div></section>`;
+    const grades=patientGradeScale(),toxicity=`<section class="patient-support-view" data-patient-view="toxicity"><div class="patient-section-title"><div><h3>Detailed toxicity guide</h3><p>General, agent-specific and immune toxicities stay separated so drug content cannot bleed between regimens.</p></div></div>${categoryBlock("General treatment effects","Shared treatment effects",general,"general")}${categoryBlock("Agent-specific effects","Medicine-specific effects",agent,"agent",agent.length)}${categoryBlock("Immunotherapy-related effects","Immune-mediated effects",immune,"immune")}<div class="patient-section-title"><div><h3>How severe does it feel?</h3></div></div><div class="patient-grade-scale">${grades.map(g=>`<div class="grade-${g.grade}"><strong>${g.grade} · ${esc(g.label)}</strong><span>${esc(g.meaning)}</span></div>`).join("")}</div><div class="patient-grade-boundary">Communication aid only — not a CTCAE assessment and not a treatment decision tool.</div></section>`;
+    const urgentCards=[...(content?.urgent_general||[]).map(x=>({title:x.title,text:x.text})),...urgent.slice(0,6).map(x=>({title:x.label,text:x.detail}))],urgentView=`<section class="patient-support-view" data-patient-view="urgent"><div class="patient-emergency-banner"><strong>Do not wait for the next appointment if you are significantly unwell.</strong><span>Use your treating centre's emergency instructions.</span></div><div class="urgent-grid">${urgentCards.map(x=>`<article><strong>${esc(x.title)}</strong><p>${esc(x.text)}</p></article>`).join("")}</div></section>`;
+    const printView=`<section class="patient-support-view" data-patient-view="print"><div class="patient-print-card"><div><span class="patient-kicker">A4 · GRASP AT A GLANCE</span><h3>Printable regimen guide</h3><p>Open the regimen-specific A4 / PDF guide directly. This is now the default patient-information output.</p></div><a href="${esc(regimenLink(protocol))}" target="_blank" rel="noopener noreferrer"><img src="${esc(qrUrl(protocol))}" alt="Regimen QR"></a></div><div class="patient-print-actions"><button type="button" class="btn" data-open-print-passport>Open printable A4 guide</button><button type="button" class="btn secondary" data-open-treatment-passport>Open Treatment Passport Card</button><button type="button" class="btn secondary" data-copy-regimen-link>Copy regimen link</button></div></section>`;
+    return overview+schedule+toxicity+urgentView+printView;
+  }
+
+  function printableRiskRows(protocol,riskContent){
+    const rows=buildRiskRows(protocol,riskContent).rows;
+    return rows.slice(0,14);
+  }
+
+  function openPrintablePassport(protocol,riskContent,options={}){
+    const consentSupport=Boolean(options?.consentSupport);
+    const registry=patientAssets();
+    // Dedicated patient guides are immutable static assets. They must always win
+    // over the historical dynamic about:blank renderer. The dynamic renderer is
+    // retained only for consent-discussion output and unsupported-regimen fallback.
+    if(!consentSupport && registry?.hasDedicated?.(protocol)){
+      return registry.openGuide(protocol);
+    }
+    const viewer=root.open?.("about:blank","_blank");
+    if(!viewer){ root.alert?.("Allow pop-ups for SACTCheck to open the printable guide."); return null; }
+    const title=protocolTitle(protocol),code=protocolCode(protocol),version=protocolVersion(protocol),components=componentsForProtocol(protocol),rows=buildRiskRows(protocol,riskContent).rows;
+    const general=rows.filter(r=>r.category==="general"),immune=rows.filter(r=>r.category==="immune"),agent=rows.filter(r=>r.category!=="general"&&r.category!=="immune");
+    const phaseHtml=scheduleRows(protocol).map(p=>`<div class="phase"><b>${esc(p.phase)}</b><span>${esc([p.cycle?`${p.cycle}-day cycle`:"",p.frequency].filter(Boolean).join(" · "))}</span>${p.days.map(d=>`<div><strong>${esc(d.day)}</strong> ${esc(d.medicines.join(" + "))}</div>`).join("")}</div>`).join("")||`<p>${esc(scheduleSummary(protocol))}</p>`;
+    const cards=(list,limit=6)=>list.slice(0,limit).map(r=>`<div class="risk ${esc(r.action)}"><b>${esc(r.label)}</b><span>${esc(r.detail)}</span><small>${esc(r.agent)}</small></div>`).join("");
+    const link=regimenLink(protocol),qr=qrUrl(protocol),logoUrl=(()=>{try{return new URL("assets/branding/sactcheck-mark.svg",root.location?.href||"https://sactcheck.com/").href;}catch(_){return "https://sactcheck.com/assets/branding/sactcheck-mark.svg";}})();
+    viewer.document.open();
+    const headerLabel=consentSupport?"SACTCHECK · CONSENT DISCUSSION SUPPORT":"SACTCHECK · PATIENT TREATMENT GUIDE";
+    const discussionFields=consentSupport?`<section class="section consent-prompts"><h2>For discussion with your oncology team</h2><div><b>Treatment aim and expected benefit discussed</b><span></span></div><div><b>Alternatives, including no SACT, discussed</b><span></span></div><div><b>Questions, preferences and follow-up</b><span></span></div></section>`:"";
+    viewer.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>SACTCheck ${consentSupport?"Consent Discussion Support":"Patient Guide"} - ${esc(title)}</title><style>@page{size:A4;margin:9mm}*{box-sizing:border-box}body{margin:0;background:#eaf0f2;font-family:Arial,Helvetica,sans-serif;color:#17212b}.toolbar{padding:9px;text-align:center;background:#10354f}.toolbar button{border:0;border-radius:7px;background:#fff;color:#10354f;font-weight:800;padding:9px 14px}.page{width:192mm;min-height:279mm;margin:10px auto;background:#fff;padding:10mm;box-shadow:0 8px 28px rgba(0,0,0,.12)}header{display:flex;justify-content:space-between;gap:12px;border-bottom:4px solid #0b7f7a;padding-bottom:8px}header img{width:38px}h1{font-size:22px;color:#10354f;margin:4px 0}.sub{font-size:9px;color:#60737e}.meds{display:flex;gap:5px;flex-wrap:wrap}.meds span{background:#e7f7f5;color:#0b6f6a;border-radius:99px;padding:4px 7px;font-size:8px;font-weight:700}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0}.box{border:1px solid #d6e2e7;border-radius:8px;padding:8px}.box h2,.section h2{font-size:12px;color:#10354f;margin:0 0 5px}.phase,.risk,.footer,.box{font-size:8.3px;line-height:1.35}.phase{border-left:3px solid #0b7f7a;padding:5px 7px;background:#f6fafb;margin:4px 0}.phase b,.phase span{display:block}.section{margin-top:8px}.riskgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.risk{border:1px solid #d6e2e7;border-left:4px solid #90a5af;border-radius:7px;padding:6px}.risk.contact{border-left-color:#d49a23}.risk.urgent{border-left-color:#b73743}.risk b,.risk span,.risk small{display:block}.risk b{font-size:8.5px;color:#10354f}.risk small{margin-top:3px;color:#71828a}.general h2{color:#315f78}.agent h2{color:#8b5f0a}.immune h2{color:#6d438d}.urgentbox{margin-top:8px;background:#9c2d37;color:#fff;border-radius:8px;padding:8px;font-size:9px}.qr{display:grid;grid-template-columns:1fr 88px;gap:8px;align-items:center;border-top:1px solid #d6e2e7;margin-top:8px;padding-top:7px}.qr img{width:80px}.qr code{font-size:7px;word-break:break-all}.footer{color:#657780;margin-top:6px}.consent-prompts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.consent-prompts h2{grid-column:1/-1}.consent-prompts div{border:1px solid #d6e2e7;border-radius:6px;padding:6px;font-size:7.8px}.consent-prompts span{display:block;height:15px;border-bottom:1px solid #9aaeb8;margin-top:3px}.patient-bodymap-card{display:grid;grid-template-columns:1.15fr .85fr;gap:8px;border:1px solid #d6e2e7;border-radius:8px;padding:8px;background:#fbfdfe;margin:9px 0}.patient-bodymap-card h4{margin:2px 0 4px;color:#10354f;font-size:12px}.patient-bodymap-card p{margin:0 0 5px;font-size:8.2px;line-height:1.4;color:#5b7079}.bodymap-pill-list{display:flex;flex-wrap:wrap;gap:4px}.bodymap-pill{border-radius:999px;background:#eef5f7;padding:3px 6px;font-size:7.3px;font-weight:700;color:#355567}.patient-bodymap-figure{position:relative;min-height:168px;background:linear-gradient(180deg,#eef8f6,#ffffff);border:1px solid #d5e6e3;border-radius:8px;overflow:hidden}.patient-bodymap-figure svg{position:absolute;left:52px;top:12px;width:76px;height:136px;fill:#d4e8e3;stroke:#7aa7a0;stroke-width:2}.bodymap-dot{position:absolute;background:#fff;border:1px solid #d4e1e5;border-radius:999px;padding:2px 5px;font-size:6.9px;color:#4f6873;box-shadow:0 1px 4px rgba(0,0,0,.04)}.bodymap-dot.head{right:8px;top:10px}.bodymap-dot.chest{right:12px;top:45px}.bodymap-dot.skin{right:14px;top:78px}.bodymap-dot.abdomen{right:8px;top:111px}.bodymap-dot.liver{left:8px;top:74px}.bodymap-dot.kidney{left:8px;top:104px}.bodymap-dot.blood{left:10px;bottom:28px}.bodymap-dot.legs{right:12px;bottom:20px}.hcc-bodymap{display:block;border:1px solid #cddfe4;background:#f3f8f9}.hcc-bodymap .patient-bodymap-copy{margin-bottom:8px}.hcc-bodymap .patient-bodymap-figure{display:flex;justify-content:center;border:0;background:transparent;min-height:0;overflow:visible}.hcc-bodymap .patient-bodymap-figure img{display:block;width: min(100%,340px);height:auto;max-height:380px;object-fit:contain}.hcc-bodymap h4{font-size:14px}.hcc-bodymap p{font-size:8.5px}.hcc-bodymap,.risk{break-inside:avoid;page-break-inside:avoid}.hcc-page .agent .riskgrid{grid-template-columns:repeat(2,1fr)}.hcc-page .risk{min-height:68px}.hcc-page .hcc-bodymap img{max-height:none}.hcc-bodymap{padding:10px!important;background:#e8f6f5!important;border:0!important}.hcc-visual-title h4{font-size:19px!important;color:#123a58!important;margin:2px 0 4px}.hcc-visual-title p{font-size:9px!important;line-height:1.35!important;margin:0 0 8px!important}.hcc-visual-stage{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:4px;align-items:stretch;min-height:156mm;background:linear-gradient(#e8f6f5,#e6f3f1);border-radius:8px;padding:5px}.hcc-organ-column{display:grid;grid-template-rows:repeat(4,1fr);gap:7px}.hcc-organ-card{position:relative;z-index:2;min-width:0;padding:6px!important;border-radius:10px;background:#fff;border:1px solid #d6e3e2;box-shadow:0 1px 4px #3452}.hcc-organ-head{display:flex;align-items:center;gap:5px;background:#f1eafa;color:#4e287b;font-size:10px;font-weight:800;line-height:1.1;border-radius:20px}.hcc-organ-icon{flex:0 0 26px;width:26px;height:26px;padding:4px;background:#64249c;color:#fff;border-radius:50%}.hcc-organ-card p{color:#102138!important;font-size:8.2px!important;line-height:1.27!important;margin:5px 2px 0!important}.hcc-organ-card p span{color:#614b80}.hcc-anatomy{position:relative;min-height:156mm;display:flex;justify-content:center;align-items:stretch}.hcc-anatomy img{width:100%!important;height:156mm!important;max-height:none!important;object-fit:contain!important}.hcc-pin{position:absolute;z-index:3;width:16px;height:16px;border:4px solid #fff;border-radius:50%;background:#702a9c;box-shadow:0 0 0 2px #702a9c}.hcc-pin.coral{background:#b13c4f;box-shadow:0 0 0 2px #b13c4f}.hcc-pin.brain{left:48%;top:6%}.hcc-pin.lungs{right:20%;top:25%}.hcc-pin.heart{left:55%;top:27%}.hcc-pin.liver{left:35%;top:37%}.hcc-pin.kidneys{left:24%;top:43%}.hcc-pin.bowel{right:30%;top:52%}.hcc-pin.muscles{left:28%;top:68%}.hcc-pin.vessels{right:23%;top:75%}.hcc-visual-foot{display:flex;gap:15px;padding:8px 5px 3px;color:#35485a;font-size:8px}.hcc-legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#702a9c}.hcc-legend-dot.coral{background:#b13c4f}.hcc-visual-alert{border-left:4px solid #b13c4f;background:#fff3f4;border-radius:5px;padding:6px 8px;font-size:8px;line-height:1.3;color:#713340}.hcc-bodymap{break-inside:avoid;page-break-inside:avoid}@media print{body{background:#fff}.toolbar{display:none}.page{margin:0;box-shadow:none;width:auto;min-height:0;padding:0}}</style>${(code==="00831"||root.SACTCheckAnatomyData?.[code])?`<link rel="stylesheet" href="${esc(new URL("assets/patient/hcc-bodymap-v08431.css",root.location?.href||"https://sactcheck.com/").href)}">`:""}</head><body class="${code==="00831"?"hcc-guide":""}"><div class="toolbar"><button onclick="window.print()">Print / Save PDF</button></div><main class="page${code==="00831"?" hcc-page":""}"><header><div><div class="sub">${headerLabel}</div><h1>${esc(title)}</h1><div class="sub">${code?`NCCP ${esc(code)}${version?` · v${esc(version)}`:""}`:"Regimen-specific information"}</div></div><img src="${esc(logoUrl)}" alt=""></header><div class="grid"><section class="box"><h2>Your medicines</h2><div class="meds">${components.map(x=>`<span>${esc(x)}</span>`).join("")}</div></section><section class="box"><h2>Your treatment schedule</h2>${phaseHtml}</section></div>${bodyMapMarkup(rows,protocol)}${general.length?`<section class="section general"><h2>General treatment effects</h2><div class="riskgrid">${cards(general)}</div></section>`:""}${agent.length?`<section class="section agent"><h2>Agent-specific effects</h2><div class="riskgrid">${cards(agent,agent.length)}</div></section>`:""}${immune.length?`<section class="section immune"><h2>Immunotherapy-related effects</h2><div class="riskgrid">${cards(immune)}</div></section>`:""}${discussionFields}<div class="urgentbox"><b>Contact your oncology team urgently</b> for severe or rapidly worsening symptoms, fever or sudden illness, new breathlessness or chest pain, persistent diarrhoea or vomiting, neurological change, significant bleeding, or another symptom your team has told you is urgent.</div><div class="qr"><div><b>More detailed regimen information</b><p>Scan to reopen this regimen guide. The QR contains a public regimen link and no patient data.</p><code>${esc(link)}</code></div><a href="${esc(link)}"><img src="${esc(qr)}" alt="Regimen QR"></a></div><div class="footer">${consentSupport?"Discussion support only; document individualised benefits, risks, alternatives and the patient’s decision through the approved consent process. Draft content requires clinician and oncology-pharmacy review.":"Patient information support only."} This does not replace your oncology team's advice, formal consent, current NCCP guidance or local emergency instructions.</div></main>${root.SACTCheckTreatmentRelationship?.definitions?.[code]?`<section class="page" style="break-before:page">${root.SACTCheckTreatmentRelationship.renderForCode(code)}</section>`:""}${code==="00831"?`<script src="${esc(new URL("assets/patient/hcc-connectors-v08431.js",root.location?.href||"https://sactcheck.com/").href)}"><\/script>`:""}</body></html>`);
+    viewer.document.close(); return viewer;
+  }
+
+  async function open(protocol,options={}){
+    const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol?.protocol_id)||protocol;
+    if(!live) return null;
+    activeProtocol=live;
+    try{
+      const registry=patientAssets();
+      if((options?.autoPdf || options?.tab==="print") && !options?.consentSupport && registry?.hasDedicated?.(live)){
+        close();
+        return registry.openGuide(live);
+      }
+      const [content,risk]=await Promise.all([loadContent(),loadRisk()]);
+      if(options?.autoPdf || options?.tab==="print"){
+        close();
+        return openPrintablePassport(live,risk,{consentSupport:Boolean(options?.consentSupport)});
+      }
+      const shell=ensureShell();
+      shell.hidden=false;
+      root.document.body.classList.add("patient-content-open");
+      shell.querySelector("#patientSupportTitle").textContent=protocolTitle(live);
+      shell.querySelector("#patientSupportSubtitle").textContent="Regimen-specific treatment guide · schedule · toxicity recognition · printable A4 overview";
+      const body=shell.querySelector("#patientSupportBody");
+      body.innerHTML=renderViews(live,content,risk);
+      const requested=options?.tab||"overview";
+      shell.querySelectorAll("[data-patient-tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.patientTab===requested?"true":"false"));
+      shell.querySelectorAll("[data-patient-view]").forEach(v=>v.classList.toggle("active",v.dataset.patientView===requested));
+      body.querySelectorAll("[data-open-print-passport]").forEach(button=>button.addEventListener("click",()=>openPrintablePassport(live,risk)));
+      body.querySelectorAll("[data-open-treatment-passport]").forEach(button=>button.addEventListener("click",()=>{
+        const registry=patientAssets();
+        if(registry?.hasDedicated?.(live)) registry.openPassport(live);
+        else root.SACTCheckTreatmentPassportCard?.open?.(live);
+      }));
+      body.querySelectorAll("[data-copy-regimen-link]").forEach(button=>button.addEventListener("click",async()=>{
+        const link=regimenLink(live);
+        try{ await root.navigator.clipboard.writeText(link); root.showToast?.("Regimen link copied"); }
+        catch(_){ root.prompt?.("Copy this regimen link:",link); }
+      }));
+      return shell;
+    }catch(error){
+      const shell=ensureShell(); shell.hidden=false;
+      root.document.body.classList.add("patient-content-open");
+      const body=shell.querySelector("#patientSupportBody");
+      body.innerHTML=`<div class="patient-error-card"><strong>Patient support could not be generated.</strong><p>${esc(error.message)}</p></div>`;
+      return null;
+    }
+  }
+
+  function close(){
+    const shell=root.document?.getElementById("patientSupportShell");
+    if(shell) shell.hidden=true;
+    root.document?.body?.classList?.remove("patient-content-open");
+    activeProtocol=null;
+  }
+
+  function openFromUrl(){
+    let id="";
+    try{id=new URL(root.location.href).searchParams.get("patientSupport")||"";}catch(_){}
+    if(!id) return;
+    const attempt=()=>{
+      const p=root.SACTCheckProtocolLoader?.getProtocolById?.(id);
+      if(!p) return false;
+      root.SACTCheckInterface?.setMode?.("patient");
+      const registry=patientAssets();
+      if(registry?.hasDedicated?.(p)){
+        const target=registry.runtimeUrl?.(p,"portal");
+        if(target&&root.location?.replace) root.location.replace(target);
+        else registry.openPortal?.(p);
+      }else{
+        open(p,{tab:"print",autoPdf:true});
+      }
+      return true;
+    };
+    if(attempt()) return;
+    root.addEventListener?.("sactcheck:protocols-loaded",attempt,{once:true});
+  }
+
+  function install(){
+    ensureShell();
+    preload();
+    openFromUrl();
+  }
+
+  // Compatibility methods used by the existing v0.72 clinic workflow.
+  async function generateConsentPdf(protocol){ return open(protocol,{tab:"print",autoPdf:true,consentSupport:true}); }
+  function consentText(){ return "Regimen-specific patient information and consent-support content."; }
+
+  return Object.freeze({
+    release:RELEASE,version:RELEASE,
+    normalise,componentsForProtocol,scheduleRows,scheduleSummary,profileMatches,
+    actionLevel,patientGradeScale,buildRiskRows,bodyMapMarkup,regimenLink,guideLink,qrUrl,
+    preload,open,openPatientSupport:open,close,install,openPrintablePassport,
+    generateConsentPdf,consentText
+  });
+});

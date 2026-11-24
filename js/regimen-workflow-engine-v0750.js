@@ -668,6 +668,13 @@
     }).join("");
   }
 
+
+  function renderCompleteCuhReference(reference){
+    if(!reference?.display_only_reference) return "";
+    const display=(item,key)=>item.display_fields?.[key]??item[key];
+    return `<section class="workflow-rx-evidence workflow-complete-local-reference"><strong>Complete supplied local reference · individual reconciliation required</strong><p>${esc(reference.label)}</p><p>${esc(reference.note)}</p><table><thead><tr><th>Medicine</th><th>Historical dose / route / frequency</th><th>Timing, directions and reconciliation</th></tr></thead><tbody>${asArray(reference.items).map(item=>`<tr><td>${esc(item.medicine)}</td><td>${esc([display(item,"dose"),display(item,"route"),display(item,"frequency")].filter(Boolean).join(" · "))}</td><td>${esc(display(item,"timing"))}<p>${esc(display(item,"directions"))}</p>${item.source_clarification?`<p class="local-source-clarification">${esc(item.source_clarification)}</p>`:""}</td></tr>`).join("")}</tbody></table></section>`;
+  }
+
   function renderSupportiveScript(manifest){
     const supportive=manifest.supportiveCare||{};
     if(supportive.status!=="available") return `<div class="workflow-support-script"><p>${esc(supportive.message||"Confirm current supportive-care guidance.")}</p></div>`;
@@ -680,7 +687,7 @@
       ${adjunctNames.length?`<div class="workflow-rx-note"><strong>Local-reference adjuncts retained:</strong> ${esc(adjunctNames.join(", "))}. These are not all antiemetics; verify the current local prescription.</div>`:""}
       ${agent.length?`<div class="workflow-rx-note"><strong>Agent-specific support:</strong> ${agent.map(x=>esc(x.label)).join(" · ")}</div>`:""}
       ${supportive.evidence_update?`<div class="workflow-rx-evidence"><strong>Evidence update:</strong> ${esc(supportive.evidence_update)}</div>`:""}
-      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}
+      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}${supportive.local_reference?.display_only_reference?renderCompleteCuhReference(supportive.local_reference):asArray(supportive.local_reference?.items).filter(item=>item.source_clarification).map(item=>`<div class="workflow-rx-evidence workflow-local-source-clarification"><strong>${esc(item.medicine)} · supplied local reference</strong><p>${esc([item.dose,item.route,item.frequency].filter(Boolean).join(" · "))}</p><p>${esc(item.timing)} ${esc(item.directions)}</p><p>${esc(item.source_clarification)}</p></div>`).join("")}
     </div>`;
   }
 

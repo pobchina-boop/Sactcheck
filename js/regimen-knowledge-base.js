@@ -52,7 +52,10 @@
       })
       .then(async payload => {
         for (const extraUrl of ["data/regimen-knowledge-base-v0832-addendum.json", "data/regimen-knowledge-base-v0834-addendum.json", "data/regimen-knowledge-base-v0835-addendum.json", "data/regimen-knowledge-base-v0836-addendum.json", "data/regimen-knowledge-base-v0837-addendum.json", "data/regimen-knowledge-base-v0838-addendum.json", "data/regimen-knowledge-base-v0839-addendum.json", "data/regimen-knowledge-base-v0840-addendum.json", "data/regimen-knowledge-base-v0841-addendum.json", "data/regimen-knowledge-base-v0842-addendum.json", "data/regimen-knowledge-base-v0849-addendum.json", "data/regimen-knowledge-base-v08412-addendum.json", "data/regimen-knowledge-base-v08413-addendum.json", "data/regimen-knowledge-base-v08414-addendum.json", "data/regimen-knowledge-base-v08415-addendum.json", "data/regimen-knowledge-base-v08416-addendum.json", "data/regimen-knowledge-base-v08417-addendum.json", "data/regimen-knowledge-base-v08418-addendum.json", "data/regimen-knowledge-base-v08419-addendum.json", "data/regimen-knowledge-base-v08420-addendum.json", "data/regimen-knowledge-base-v08421-addendum.json", "data/regimen-knowledge-base-v08422-addendum.json", "data/regimen-knowledge-base-v08423-addendum.json", "data/regimen-knowledge-base-v08424-addendum.json", "data/regimen-knowledge-base-v08425-addendum.json", "data/regimen-knowledge-base-v08426-addendum.json", "data/regimen-knowledge-base-v08427-addendum.json", "data/regimen-knowledge-base-v08428-addendum.json", "data/regimen-knowledge-base-v08429-addendum.json", "data/regimen-knowledge-base-v08430-addendum.json", "data/regimen-knowledge-base-v08432-addendum.json", "data/regimen-knowledge-base-v08433-addendum.json", "data/regimen-knowledge-base-v08434-addendum.json", "data/regimen-knowledge-base-v08435-addendum.json", "data/regimen-knowledge-base-v08436-addendum.json", "data/regimen-knowledge-base-v08437-addendum.json", "data/regimen-knowledge-base-v08438-addendum.json", "data/regimen-knowledge-base-v08439-addendum.json", "data/regimen-knowledge-base-v08440-addendum.json", "data/regimen-knowledge-base-v08441-addendum.json", "data/regimen-knowledge-base-v08442-addendum.json", "data/regimen-knowledge-base-v08445-addendum.json", "data/regimen-knowledge-base-v08446-addendum.json", "data/regimen-knowledge-base-v08447-addendum.json", "data/regimen-knowledge-base-v08448-addendum.json", "data/regimen-knowledge-base-v08449-addendum.json", "data/regimen-knowledge-base-v08450-addendum.json", "data/regimen-knowledge-base-v08451-addendum.json", "data/regimen-knowledge-base-v08452-addendum.json", "data/regimen-knowledge-base-v08453-addendum.json","data/regimen-knowledge-base-v08454-addendum.json","data/regimen-knowledge-base-v08456-addendum.json", "data/regimen-knowledge-base-v08457-addendum.json", "data/regimen-knowledge-base-v08458-addendum.json", "data/regimen-knowledge-base-v08459-addendum.json",
-    "data/regimen-knowledge-base-v08460-addendum.json", "data/regimen-knowledge-base-v08461-addendum.json", "data/regimen-knowledge-ribociclib-review-v08461.json", "data/regimen-knowledge-durvalumab-endometrial-v08462.json", "data/regimen-knowledge-durvalumab-biliary-v08462.json", "data/regimen-knowledge-durvalumab-hcc-v08462.json", "data/regimen-knowledge-base-v08463-addendum.json"]) {
+    "data/regimen-knowledge-base-v08460-addendum.json", "data/regimen-knowledge-base-v08461-addendum.json", "data/regimen-knowledge-ribociclib-review-v08461.json", "data/regimen-knowledge-durvalumab-endometrial-v08462.json", "data/regimen-knowledge-durvalumab-biliary-v08462.json", "data/regimen-knowledge-durvalumab-hcc-v08462.json", "data/regimen-knowledge-base-v08463-addendum.json",
+    "data/regimen-knowledge-base-v08462-addendum.json",
+    "data/regimen-knowledge-sarcoma-v08463.json",
+    "data/regimen-knowledge-base-v08464-addendum.json"]) {
         const response = await fetch(extraUrl, { cache: "no-store" });
         if (!response.ok) throw new Error(`Could not load regimen knowledge (${response.status}).`);
         const extra = await response.json();
@@ -142,9 +145,10 @@
     if (!scoped.length) return profile;
     const contexts = [...(profile?.context_profiles || [])];
     if (profile && !contexts.length) {
-      // The existing 00244 profile is explicitly CRC. Never relabel or replace it with GIST.
-      if (String(protocolCode(protocol)) !== "00244") throw new Error("An existing knowledge profile needs an explicit preserved context.");
-      contexts.push({...profile, context_id:"colorectal", context_label:"Metastatic colorectal cancer"});
+      const preservedContexts={"00244":["colorectal","Metastatic colorectal cancer"],"00228":["breast","Breast cancer"],"00205":["breast","Breast cancer"]};
+      const preserved=preservedContexts[String(protocolCode(protocol))];
+      if(!preserved)throw new Error("An existing knowledge profile needs an explicit preserved context.");
+      contexts.push({...profile,context_id:preserved[0],context_label:preserved[1]});
     }
     for (const item of scoped) {
       const index = contexts.findIndex(existing => existing.context_id === item.context_id);
@@ -159,7 +163,7 @@
     }
     const requested = String(selectedContext ?? protocol?.patient_context ?? root.SACTCheckProtocolContext?.activeTumourGroup?.() ?? "").toLowerCase();
     if (!requested) return "";
-    if (["00325","00719","00244"].includes(String(protocolCode(protocol)))) {
+    if (["00325","00719","00244","00228","00205"].includes(String(protocolCode(protocol)))) {
       return root.SACTCheckPatientAssets?.contextFor?.(protocol,requested) || requested;
     }
     return requested;

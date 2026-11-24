@@ -19,6 +19,8 @@ function registry(codes,prior){
   assert(!through62.includes('00746'));
   const expected=[...through62,'00746'];
   assert.equal(new Set(expected).size,279);
-  assert.deepEqual([...codes].sort(),expected.sort(),'Exact prior278 registry entries plus the reviewed00746 combination');
+  const sarcoma = require('./retrospective-v08464.cjs').NEW_ROUTES.filter(route => !route.includes('/'));
+  assert.equal(sarcoma.length,13);
+  assert.deepEqual([...codes].sort(),[...expected,...sarcoma].sort(),'Retain the 279 prior registry entries and add the 13 new sarcoma codes');
 }
 module.exports={registry,added};

@@ -1,0 +1,3 @@
+'use strict';
+const path=require('node:path'),R=require('./lib/sarcoma-v08464-replay.cjs'),root=path.resolve(__dirname,'..'),s=R.prepare(root);
+try{const runs=['independent-213','independent-12'].map(n=>R.runSuite(s,n)),contract=R.runContract(s);const result={status:'accepted_exact_installed_independent_replay_and_bounded_current_contract',release:'0.84.64',clinical_approval:false,pharmacy_approval:false,independent:{passed:225,failed:0,total:225},bounded_current_contract:contract,retained_product_347_and_cns_123_not_rerun_or_recounted:true,runs};if(s.output)R.save(path.join(s.output,'independent-replay-summary.json'),result);console.log(JSON.stringify(result,null,2));R.finish(s);}catch(e){console.error('Preserved disposable replay at '+s.temp);throw e;}

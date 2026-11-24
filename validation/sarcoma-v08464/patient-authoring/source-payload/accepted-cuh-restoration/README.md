@@ -1,0 +1,9 @@
+# v0.84.64 complete CUH support-reference overlay
+
+This external overlay preserves the accepted v64 clinical JSON, all five patient profiles and every original phase/support paragraph. It adds complete verbatim historical CUH high-risk reference rows across twelve phases, totalling108row instances. These are display-only reference blocks, not automatic prescriptions or newly assigned overall emetic grades.
+
+Source mapping and exceptions are pinned in `cuh-support/SUPPORT-REFERENCE-ADJUDICATION.md` and `support-source-manifest.json`. Keep the irinotecan-specific prescribed diarrhoea plan, required infection prophylaxis, vincristine constipation considerations and adult/paediatric boundaries. VIT Day8 remains minimal active-agent risk; its full high-risk reference describes the initial combination days and must not start a new course. Final IE/VAC VC phases retain the source-classification uncertainty. All original CUH rows and template safety notes remain visible, with explicit row-level reconciliation for aprepitant/ifosfamide/vinca and generic loperamide applicability.
+
+Run `python3 prepare-cuh-support-v08464.py` to reproduce the external overlay. It refuses application or accepted-source output and proves all accepted v64 source files remain byte-identical. Future application must merge only the selected phase/reference keys and copy `local_reference` into the matching workflow plans; do not replace current unrelated shared JSON with a stale preview.
+
+Use the narrow clinician and print renderer candidates from `../sarcoma-batch4-integration-preparation-20261118/renderer-candidates/`. The shared actual-renderer check covers all21v63/v64phases and all179reference rows. Final independent rendering review and actual PDF/footer/visual checks remain pending; no application or clinical approval is claimed.

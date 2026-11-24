@@ -2,7 +2,11 @@
 
 SACTCheck connects source-linked oncology assessment, clinical knowledge, consent, supportive care and patient information. The visible service currently focuses on solid tumours. Haematology source, data and tests are retained while that service is hidden.
 
-## Current manual review candidate: v0.84.63
+## Current integration review candidate: v0.84.64
+
+Fifteen sarcoma suites from the 18 November review packages are integrated on the cumulative AstraZeneca review branch. The original source and approval limitations are recorded in the three sarcoma scope files.
+
+## Olaparib review candidate: v0.84.63
 
 This olaparib update reviews two existing NCCP protocols across six treatment settings: adjuvant breast, BRCA-selected prostate, first-line ovarian maintenance, relapsed ovarian maintenance, pancreatic maintenance, and olaparib with bevacizumab. Breast and prostate retain their existing route origins; the other four patient routes are newly authored. Treatment duration, eligibility, monitoring and individual-drug actions remain specific to the selected setting.
 

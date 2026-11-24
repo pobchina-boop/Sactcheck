@@ -35,7 +35,7 @@ console.log("Cumulative public release and module version separation tests passe
   const protocolUrl = origin + "protocols/breast/example.json";
   const oldName = "sactcheck-runtime-previous";
   const priorRevisionName = `sactcheck-runtime-${pkg.version}`;
-  const revisions = {"0.84.61":"ribo-20261119","0.84.62":"enhertu-20261123","0.84.63":"olaparib-20261124"};
+  const revisions = {"0.84.61":"ribo-20261119","0.84.62":"enhertu-20261123","0.84.63":"olaparib-20261124","0.84.64":"sarcoma-20261124"};
   const expectedRevision = revisions[pkg.version];
   assert(expectedRevision,"Review the cache revision for this release");
   const previousPublicCache = "sactcheck-runtime-0.84.61-" + revisions["0.84.61"];

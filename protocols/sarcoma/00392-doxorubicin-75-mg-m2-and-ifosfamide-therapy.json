@@ -95,6 +95,24 @@
       "binary_retrieval_status": "blocked_http_403",
       "extracted_text": "validation/sarcoma-v08460/clinical/sources/00392-web.txt",
       "visual_table_layout_inspection": "unverified_screenshot_text_marker_only_no_inspectable_pixels"
+    },
+    "ifosfamide_product_reconciliation": {
+      "checked_date": "2026-11-18",
+      "status": "locally_integrated_independent_software_checked_human_approval_pending",
+      "product_page": "https://www.hpra.ie/find-a-medicine/for-human-use/authorised-medicines/details/15731",
+      "source_url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+      "source_date": "2023-09-11",
+      "pdf_binary_sha256": null,
+      "visual_page_inspection_verified": false,
+      "source_scope": "Named Mitoxana 1 g product; actual local supplied product requires verification",
+      "prior_protocol_sha256": "6adc00e14d2b5852b03bada2400cc3f2d5bf32258917a24950dc210d71f266c1",
+      "prior_release_preserved": true,
+      "clinical_use_authorised": false,
+      "conflict_resolved_by_source_authority": false,
+      "numeric_dose_generated": false,
+      "known_product_contraindication_not_overridden_by_approval": true,
+      "integration_release": "0.84.62",
+      "independent_software_review": "validation/sarcoma-v08462/ifosfamide-product/review/final-review-summary.json"
     }
   },
   "clinical_governance": {
@@ -222,7 +240,7 @@
       "min": 0,
       "step": 0.01,
       "unit": "µmol/L",
-      "demo_value": 12,
+      "demo_value": "",
       "input_role": "decision"
     },
     "hepatic_impairment_severity": {
@@ -344,14 +362,16 @@
       "input_role": "decision"
     },
     "ast_u_l": {
-      "label": "AST — absolute result",
+      "label": "Absolute AST derived from the same raw result; retained for NCCP thresholds",
       "type": "number",
       "required": false,
       "min": 0,
       "step": 0.01,
       "unit": "U/L",
-      "demo_value": 20,
-      "input_role": "decision"
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_derived_from": "ast_uln_multiple",
+      "visible": false
     },
     "mucositis_grade": {
       "label": "Mucositis (clinician-assessed CTCAE grade)",
@@ -387,37 +407,42 @@
       "assessment_guidance": "Grade the named adverse event using its own CTCAE criteria; a generic symptom score is not a CTCAE grade."
     },
     "neurotoxicity_grade": {
-      "label": "Ifosfamide-associated neurotoxicity (clinician-assessed CTCAE grade)",
+      "label": "Current ifosfamide-associated neurological adverse event — named-event grade (central or peripheral)",
       "type": "select",
       "required": false,
       "input_role": "decision",
       "options": [
         {
           "value": 0,
-          "label": "0"
+          "label": "Grade 0",
+          "description": "No current neurological adverse event documented."
         },
         {
           "value": 1,
-          "label": "1"
+          "label": "Grade 1",
+          "description": "Clinician-assessed grade 1 of the documented named neurological event; apply that event's verified criteria. Central versus peripheral localisation is assessed separately."
         },
         {
           "value": 2,
-          "label": "2"
+          "label": "Grade 2",
+          "description": "Clinician-assessed grade 2 of the documented named neurological event; apply that event's verified criteria. Central versus peripheral localisation is assessed separately."
         },
         {
           "value": 3,
-          "label": "3"
+          "label": "Grade 3",
+          "description": "Clinician-assessed grade 3 of the documented named neurological event; apply that event's verified criteria. Central versus peripheral localisation is assessed separately."
         },
         {
           "value": 4,
-          "label": "4"
+          "label": "Grade 4",
+          "description": "Clinician-assessed grade 4 of the documented named neurological event; apply that event's verified criteria. Central versus peripheral localisation is assessed separately."
         }
       ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neurological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Grade the named adverse event using its own CTCAE criteria; a generic symptom score is not a CTCAE grade."
+      "demo_value": "",
+      "assessment_guidance": "Distinguish central symptoms (altered alertness, confusion, hallucinations or seizures) from peripheral sensory, motor or autonomic neuropathy. Document the exact adverse-event term, objective findings, functional limitation and interventions before assigning its grade. Assess current CNS toxicity separately; a generic activity score does not establish encephalopathy.",
+      "grading_source_label": "NCCP neurotoxicity action table; grading edition not specified",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf",
+      "source_grading_note": "NCCP Table 3 supplies the grade≥3 action but no full severity scale or grading edition. Document the exact neurological event and apply its verified named-event criteria. These broad source grades must not automatically be interpreted as CNS toxicity."
     },
     "suspected_ifosfamide_encephalopathy": {
       "label": "Suspected ifosfamide encephalopathy or new cognitive change",
@@ -477,6 +502,104 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "ifosfamide_product": {
+      "type": "select",
+      "label": "Actual supplied ifosfamide product — verify with pharmacy",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "options": [
+        {
+          "value": "mitoxana_pa2299_028_001",
+          "label": "Mitoxana 1 g, PA2299/028/001 (verified supplied product)"
+        },
+        {
+          "value": "other",
+          "label": "Another supplied product — identify and review its current information"
+        },
+        {
+          "value": "unknown",
+          "label": "Product not yet confirmed"
+        }
+      ]
+    },
+    "ifosfamide_other_product_name_and_source": {
+      "type": "text",
+      "label": "Other supplied ifosfamide product and current product-information reference",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "visible_when": {
+        "field": "ifosfamide_product",
+        "operator": "==",
+        "value": "other"
+      }
+    },
+    "ifosfamide_laboratory_units_verified": {
+      "type": "boolean",
+      "label": "Current serum creatinine/bilirubin units and AST/ALT/ALP local laboratory ULNs verified; do not use unverified defaults",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "restart_requested": {
+      "type": "boolean",
+      "label": "A further ifosfamide administration or restart is proposed",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "serum_creatinine_umol_l": {
+      "type": "number",
+      "label": "Actual serum creatinine — not CrCl or eGFR",
+      "unit": "µmol/L",
+      "min": 0,
+      "step": 0.001,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "alt_uln_multiple": {
+      "type": "number",
+      "label": "ALT result with actual verified local laboratory ULN",
+      "unit": "×ULN",
+      "min": 0,
+      "step": 0.001,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "ast_uln_multiple": {
+      "type": "number",
+      "label": "AST result with actual verified local laboratory ULN",
+      "unit": "×ULN",
+      "min": 0,
+      "step": 0.001,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "derived_actual_fields": {
+        "ast": "ast_u_l"
+      }
+    },
+    "alp_uln_multiple": {
+      "type": "number",
+      "label": "ALP result with actual verified local laboratory ULN",
+      "unit": "×ULN",
+      "min": 0,
+      "step": 0.001,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": ""
+    },
+    "current_ifosfamide_cns_toxicity": {
+      "type": "boolean",
+      "label": "Current suspected or established ifosfamide CNS toxicity (altered alertness/confusion, hallucinations or seizure)",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": "",
+      "assessment_guidance": "Assess current mental status and central neurological symptoms urgently, including alertness, confusion, hallucinations and seizures; consider metabolic, infective and medicine causes. Peripheral neuropathy alone does not establish this CNS finding. This is a current-event assessment, not a severity grade or a decision on future rechallenge."
     }
   },
   "required_inputs": [],
@@ -1155,12 +1278,12 @@
           "components": [
             "ifosfamide"
           ],
-          "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives.",
+          "message": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
           "show_in_dose_actions": true,
           "block_numeric_dose": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives.",
+        "explanation": "Ifosfamide is not recommended at CrCl < 50 mL/min; specialist review of alternatives. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
         "source": {
           "document": "NCCP 00392 v5",
           "url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf",
@@ -1182,12 +1305,12 @@
           "components": [
             "ifosfamide"
           ],
-          "message": "The ifosfamide renal table prints > 50 and < 50 mL/min; exactly 50 is unallocated. Do not round into automatic dosing.",
+          "message": "The ifosfamide renal table prints > 50 and < 50 mL/min; exactly 50 is unallocated. Do not round into automatic dosing. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
           "show_in_dose_actions": true,
           "block_numeric_dose": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "The ifosfamide renal table prints > 50 and < 50 mL/min; exactly 50 is unallocated. Do not round into automatic dosing.",
+        "explanation": "The ifosfamide renal table prints > 50 and < 50 mL/min; exactly 50 is unallocated. Do not round into automatic dosing. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
         "source": {
           "document": "NCCP 00392 v5",
           "url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf",
@@ -1236,12 +1359,12 @@
           "components": [
             "ifosfamide"
           ],
-          "message": "Ifosfamide is not recommended in severe hepatic impairment because efficacy may be reduced.",
+          "message": "Ifosfamide is not recommended in severe hepatic impairment because efficacy may be reduced. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
           "show_in_dose_actions": true,
           "block_numeric_dose": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Ifosfamide is not recommended in severe hepatic impairment because efficacy may be reduced.",
+        "explanation": "Ifosfamide is not recommended in severe hepatic impairment because efficacy may be reduced. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
         "source": {
           "document": "NCCP 00392 v5",
           "url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf",
@@ -1272,12 +1395,12 @@
           "components": [
             "ifosfamide"
           ],
-          "message": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended.",
+          "message": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
           "show_in_dose_actions": true,
           "block_numeric_dose": true,
           "dose_calculation": "specialist_review"
         },
-        "explanation": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended.",
+        "explanation": "Some clinicians consider a 25% ifosfamide reduction if AST > 300 U/L or bilirubin > 51.3 µmol/L. This is an individual clinical decision; severe hepatic impairment remains not recommended. This is the NCCP regimen reference; the actual supplied-product restrictions require separate reconciliation and may be more restrictive.",
         "source": {
           "document": "NCCP 00392 v5",
           "url": "https://healthservice.hse.ie/documents/6731/392_DOXOrubicin_75_and_ifosfamide.pdf",
@@ -1560,6 +1683,710 @@
           "section": "Antiemetics / drug interactions",
           "checked_date": "2026-11-18",
           "evidence_kind": "current_official_web_pdf_extracted_text"
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_SERUM_CREATININE_UMOL_L",
+        "when": {
+          "all": [
+            {
+              "field": "ifosfamide_product",
+              "operator": "==",
+              "value": "mitoxana_pa2299_028_001"
+            },
+            {
+              "field": "serum_creatinine_umol_l",
+              "operator": ">",
+              "value": 120
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The verified Mitoxana 1 g product lists serum creatinine >120 µmol/L (not CrCl/eGFR) as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The verified Mitoxana 1 g product lists serum creatinine >120 µmol/L (not CrCl/eGFR) as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_BILIRUBIN_UMOL_L",
+        "when": {
+          "all": [
+            {
+              "field": "ifosfamide_product",
+              "operator": "==",
+              "value": "mitoxana_pa2299_028_001"
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 17
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The verified Mitoxana 1 g product lists bilirubin >17 µmol/L as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The verified Mitoxana 1 g product lists bilirubin >17 µmol/L as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_ALT_ULN_MULTIPLE",
+        "when": {
+          "all": [
+            {
+              "field": "ifosfamide_product",
+              "operator": "==",
+              "value": "mitoxana_pa2299_028_001"
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The verified Mitoxana 1 g product lists ALT >2.5× the actual local ULN as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The verified Mitoxana 1 g product lists ALT >2.5× the actual local ULN as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_AST_ULN_MULTIPLE",
+        "when": {
+          "all": [
+            {
+              "field": "ifosfamide_product",
+              "operator": "==",
+              "value": "mitoxana_pa2299_028_001"
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The verified Mitoxana 1 g product lists AST >2.5× the actual local ULN as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The verified Mitoxana 1 g product lists AST >2.5× the actual local ULN as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_ALP_ULN_MULTIPLE",
+        "when": {
+          "all": [
+            {
+              "field": "ifosfamide_product",
+              "operator": "==",
+              "value": "mitoxana_pa2299_028_001"
+            },
+            {
+              "field": "alp_uln_multiple",
+              "operator": ">",
+              "value": 2.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The verified Mitoxana 1 g product lists ALP >2.5× the actual local ULN as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The verified Mitoxana 1 g product lists ALP >2.5× the actual local ULN as a contraindication. Withhold further ifosfamide and resolve this product/NCCP conflict with oncology pharmacy and the consultant. NCCP reference reductions and generic approval flags do not clear it; no replacement dose is generated.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_UNKNOWN_ABNORMAL",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "ifosfamide_product",
+                  "operator": "missing"
+                },
+                {
+                  "field": "ifosfamide_product",
+                  "operator": "==",
+                  "value": "unknown"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "serum_creatinine_umol_l",
+                  "operator": ">",
+                  "value": 120
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">",
+                  "value": 17
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "A supplied laboratory result crosses a current Mitoxana product restriction, but the actual ifosfamide product is unconfirmed. Hold further ifosfamide pending product identification and source reconciliation. This does not declare the same restriction universal to every product.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "A supplied laboratory result crosses a current Mitoxana product restriction, but the actual ifosfamide product is unconfirmed. Hold further ifosfamide pending product identification and source reconciliation. This does not declare the same restriction universal to every product.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_IDENTIFICATION_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "in",
+                  "value": [
+                    "baseline",
+                    "day1",
+                    "on_treatment",
+                    "treatment",
+                    "restart"
+                  ]
+                },
+                {
+                  "field": "restart_requested",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "ifosfamide_product",
+                  "operator": "missing"
+                },
+                {
+                  "field": "ifosfamide_product",
+                  "operator": "==",
+                  "value": "unknown"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Before the planned ifosfamide administration or restart, identify the actual supplied product and reconcile its current product information with NCCP. An unidentified product is not cleared by the regimen table.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Before the planned ifosfamide administration or restart, identify the actual supplied product and reconcile its current product information with NCCP. An unidentified product is not cleared by the regimen table.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_OTHER_PRODUCT_REVIEW",
+        "when": {
+          "field": "ifosfamide_product",
+          "operator": "==",
+          "value": "other"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "A different ifosfamide product requires review of its own current product information and the patient-specific prescription. Mitoxana thresholds are not automatically substituted; entering a product name does not establish treatment clearance.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "A different ifosfamide product requires review of its own current product information and the patient-specific prescription. Mitoxana thresholds are not automatically substituted; entering a product name does not establish treatment clearance.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_OTHER_PRODUCT_IDENTITY_MISSING",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "in",
+                  "value": [
+                    "baseline",
+                    "day1",
+                    "on_treatment",
+                    "treatment",
+                    "restart"
+                  ]
+                },
+                {
+                  "field": "restart_requested",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "ifosfamide_product",
+              "operator": "==",
+              "value": "other"
+            },
+            {
+              "field": "ifosfamide_other_product_name_and_source",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Record the actual alternate ifosfamide product and current product-information reference for pharmacy review before the planned dose. Selecting another product alone cannot bypass reconciliation.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Record the actual alternate ifosfamide product and current product-information reference for pharmacy review before the planned dose. Selecting another product alone cannot bypass reconciliation.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_PHASE_UNRESOLVED",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "ifosfamide_product",
+                  "operator": "missing"
+                },
+                {
+                  "field": "ifosfamide_product",
+                  "operator": "==",
+                  "value": "unknown"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "The ifosfamide administration context and supplied product are incomplete. Reconcile the actual phase/day and product; do not infer an ifosfamide dose or clearance from partial input.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The ifosfamide administration context and supplied product are incomplete. Reconcile the actual phase/day and product; do not infer an ifosfamide dose or clearance from partial input.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_LABS_MISSING",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "assessment_phase",
+                  "operator": "in",
+                  "value": [
+                    "baseline",
+                    "day1",
+                    "on_treatment",
+                    "treatment",
+                    "restart"
+                  ]
+                },
+                {
+                  "field": "restart_requested",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "serum_creatinine_umol_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "missing"
+                },
+                {
+                  "field": "ast_uln_multiple",
+                  "operator": "missing"
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Before planned ifosfamide, obtain actual serum creatinine and bilirubin in µmol/L plus AST, ALT and ALP with the applicable local ULNs. CrCl, an absolute AST alone or a partial panel cannot resolve the product restrictions.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Before planned ifosfamide, obtain actual serum creatinine and bilirubin in µmol/L plus AST, ALT and ALP with the applicable local ULNs. CrCl, an absolute AST alone or a partial panel cannot resolve the product restrictions.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_UNITS_UNVERIFIED",
+        "when": {
+          "any": [
+            {
+              "field": "ifosfamide_laboratory_units_verified",
+              "operator": "==",
+              "value": false
+            },
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "assessment_phase",
+                      "operator": "in",
+                      "value": [
+                        "baseline",
+                        "day1",
+                        "on_treatment",
+                        "treatment",
+                        "restart"
+                      ]
+                    },
+                    {
+                      "field": "restart_requested",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "field": "ifosfamide_laboratory_units_verified",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "ifosfamide_laboratory_units_verified",
+                      "operator": "==",
+                      "value": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Verify the current laboratory units and actual local AST/ALT/ALP ULNs before further ifosfamide. An automatically populated laboratory profile is not verification. Do not equate CrCl with serum creatinine or assume a conversion from the printed alternative creatinine units.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Verify the current laboratory units and actual local AST/ALT/ALP ULNs before further ifosfamide. An automatically populated laboratory profile is not verification. Do not equate CrCl with serum creatinine or assume a conversion from the printed alternative creatinine units.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 2,
+          "section": "4.3",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_PRODUCT_CURRENT_CNS",
+        "when": {
+          "field": "current_ifosfamide_cns_toxicity",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "Current suspected or established ifosfamide CNS toxicity requires interruption of further administration and urgent assessment under the product warning. This explicit central finding is distinct from peripheral neuropathy. Preserve the NCCP severe-event rule and assess future therapy separately.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "Current suspected or established ifosfamide CNS toxicity requires interruption of further administration and urgent assessment under the product warning. This explicit central finding is distinct from peripheral neuropathy. Preserve the NCCP severe-event rule and assess future therapy separately.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 3,
+          "section": "4.4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Current administration interruption is distinct from future source-specific rechallenge management."
+        }
+      },
+      {
+        "rule_id": "IFO_NEURO_LOCALISATION_UNRESOLVED",
+        "when": {
+          "all": [
+            {
+              "field": "neurotoxicity_grade",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "current_ifosfamide_cns_toxicity",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "A current grade 1/2 neurological event is recorded, but central versus peripheral localisation is unresolved. Conservatively hold further ifosfamide for prompt clarification. This is not a claim that every peripheral event meets the product CNS-toxicity criterion.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "A current grade 1/2 neurological event is recorded, but central versus peripheral localisation is unresolved. Conservatively hold further ifosfamide for prompt clarification. This is not a claim that every peripheral event meets the product CNS-toxicity criterion.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 3,
+          "section": "4.4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
+        }
+      },
+      {
+        "rule_id": "IFO_NON_CNS_NEURO_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "neurotoxicity_grade",
+              "operator": "in",
+              "value": [
+                1,
+                2
+              ]
+            },
+            {
+              "field": "current_ifosfamide_cns_toxicity",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "ifosfamide"
+          ],
+          "message": "A current lower-grade neurological event is documented with CNS toxicity explicitly absent. Review the exact peripheral/other event, functional impact and treatment plan. Do not relabel it as product-defined CNS toxicity or automatically apply the NCCP grade≥3 stop.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "A current lower-grade neurological event is documented with CNS toxicity explicitly absent. Review the exact peripheral/other event, functional impact and treatment plan. Do not relabel it as product-defined CNS toxicity or automatically apply the NCCP grade≥3 stop.",
+        "source": {
+          "document": "Mitoxana 1 g SmPC; PA2299/028/001; 11 September 2023",
+          "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf",
+          "page": 3,
+          "section": "4.4",
+          "checked_date": "2026-11-18",
+          "evidence_kind": "current_live_hpra_link_and_official_extracted_text",
+          "scope_note": "Named-product information; no universal replacement of source-specific NCCP dose tables. Current local supplied product must be established.",
+          "interpretation_note": "Conservative source-conflict hold/review; no calculated dose or automatic permanent prohibition."
         }
       }
     ]
