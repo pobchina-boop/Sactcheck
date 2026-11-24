@@ -4,6 +4,7 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const cp = require('node:child_process');
+const release = require('./live-release-v08464.cjs');
 const root = path.resolve(__dirname, '../..');
 const base = '71d089b071bff6f8ed3ff6eb3cad49a5e6577105';
 const manifestPath = 'validation/capivasertib-review/changes.json';
@@ -14,7 +15,7 @@ const manifest = fs.readFileSync(path.join(root, manifestPath));
 assert.equal(hash(manifest), manifestHash, 'Capivasertib review manifest');
 const record = JSON.parse(manifest);
 assert.equal(record.base, base);
-const sourceHelper = fs.readFileSync(__filename, 'utf8').replace(/^const manifestHash = '.*';$/m, "const manifestHash = 'PENDING';");
+const sourceHelper = release.astraBytes(helperPath).toString('utf8').replace(/^const manifestHash = '.*';$/m, "const manifestHash = 'PENDING';");
 assert.equal(hash(sourceHelper), record.verifier, 'Reviewed capivasertib verifier');
 
 function original(file) {
@@ -22,15 +23,16 @@ function original(file) {
 }
 
 function expected(file, digest, size) {
+  if (release.isCurrent(file,digest,size)) return {sha256:digest,bytes:size};
   const entry = record.files[file];
-  if (!entry) return {sha256: digest, bytes: size};
+  if (!entry) return release.expected(file,digest,size);
   assert(digest === entry.before || digest === entry.after, file + ' unexpected capivasertib review origin');
   if (size !== undefined) assert.equal(size, digest === entry.before ? entry.before_bytes : entry.after_bytes);
-  return {sha256: entry.after, bytes: entry.after_bytes};
+  return release.expected(file,entry.after,entry.after_bytes);
 }
 
 function addition(file) {
-  return file === manifestPath || file === helperPath || record.files[file]?.before === null;
+  return release.addition(file) || file === manifestPath || file === helperPath || record.files[file]?.before === null;
 }
 
 function verify() {
@@ -44,13 +46,14 @@ function verify() {
       assert.equal(absent.status, 128, file + ' must be new at baseline');
     }
     const bytes = fs.readFileSync(path.join(root, file));
-    assert.equal(hash(bytes), entry.after, file + ' review hash');
-    assert.equal(bytes.length, entry.after_bytes);
+    const target = release.expected(file,entry.after,entry.after_bytes);
+    assert.equal(hash(bytes), target.sha256, file + ' review hash');
+    assert.equal(bytes.length, target.bytes);
   }
 }
 
 function owns(file) {
-  return Object.hasOwn(record.files, file) || addition(file);
+  return Object.hasOwn(record.files, file) || addition(file) || release.owns(file);
 }
 
 function withReviewInventories(catalogue) {

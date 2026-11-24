@@ -18,9 +18,10 @@ enhertuRegister.rule_count=clinical.rule_engine.rules.length;enhertuRegister.inp
 const inheritedRegister=successor.baselineJson(registerPath);
 assert.deepEqual(inheritedRegister,reviewedRegister,'The inherited Enhertu register changed only reviewed00776 rule/input counts; all other rows and approval flags remained unchanged');
 assert.equal(currentRegister.protocols.length,inheritedRegister.protocols.length);
+const astraRegister=require('./helpers/live-release-v08464.cjs').astraJson(registerPath);
 for(const row of currentRegister.protocols){
  const old=inheritedRegister.protocols.find(item=>item.nccp_code===row.nccp_code);assert(old);
- if(!successor.CODES.includes(row.nccp_code))assert.deepEqual(row,old,'Unrelated clinical register row remains unchanged: '+row.nccp_code);
+ if(!successor.CODES.includes(row.nccp_code))assert.deepEqual(astraRegister.protocols.find(r=>r.nccp_code===row.nccp_code),old,'Unrelated clinical register row remains unchanged: '+row.nccp_code);
  else{
   const protocol=JSON.parse(fs.readFileSync(path.join(review.ROOT,successor.PROTOCOLS[row.nccp_code])));successor.validateProtocol(protocol);
   assert.equal(row.rule_count,protocol.rule_engine.rules.length);assert.equal(row.input_count,Object.keys(protocol.input_definitions).length);

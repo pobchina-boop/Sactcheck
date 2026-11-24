@@ -1,4 +1,5 @@
 'use strict';
+const release = require('./helpers/live-release-v08464.cjs');
 // Source-based catalogue acceptance for the two existing NCCP00776 contexts.
 // The real sidecar loader and renderer run in a minimal DOM fixture; this is
 // software verification, not a substitute for the blocked browser acceptance.
@@ -31,7 +32,7 @@ const override = overrides.protocols[id];
 // The v63 successor is limited to the two source-reviewed olaparib records.
 // Authenticate its actual bytes before reading the inherited Enhertu state;
 // the original 377-record preservation assertions still run against that state.
-const olaparib = json('package.json').version === '0.84.63' ? require('./helpers/retrospective-v08463.cjs') : null;
+const olaparib = require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(item => item.version === 63) ? require('./helpers/retrospective-v08463.cjs') : null;
 const inheritedSidecar = olaparib ? olaparib.baselineJson(sidecarPath) : sidecar;
 const inheritedOverrides = olaparib ? olaparib.baselineJson(overridesPath) : overrides;
 const inheritedReport = olaparib ? olaparib.baselineBytes(reportPath) : read(reportPath);
@@ -93,15 +94,15 @@ assert.deepEqual(withoutTargetRow(inheritedReport), withoutTargetRow(old(reportP
 if (olaparib) {
   const successors = new Set(['nccp-00588-v5b', 'nccp-00746-v2']);
   const withoutOlaparib = value => ({...value, protocols: value.protocols.filter(p => !successors.has(p.id))});
-  assert.deepEqual(withoutOlaparib(sidecar), withoutOlaparib(inheritedSidecar), 'Only the two authenticated olaparib sidecar records may succeed the Enhertu state; all other 376 records remain exact');
+  assert.deepEqual(withoutOlaparib(release.astraJson(sidecarPath)), withoutOlaparib(inheritedSidecar), 'Only the two authenticated olaparib sidecar records may succeed the Enhertu state; all other 376 records remain exact');
   const withoutOlaparibOverrides = value => {
     const copy = structuredClone(value);
     for (const successor of successors) delete copy.protocols[successor];
     return copy;
   };
-  assert.deepEqual(withoutOlaparibOverrides(overrides), withoutOlaparibOverrides(inheritedOverrides), 'Only the two named olaparib overrides may be added after Enhertu');
+  assert.deepEqual(withoutOlaparibOverrides(release.astraJson(overridesPath)), withoutOlaparibOverrides(inheritedOverrides), 'Only the two named olaparib overrides may be added after Enhertu');
   const withoutOlaparibRows = bytes => bytes.toString().split('\n').filter(line => ![...successors].some(successor => line.includes(',' + successor + ',')));
-  assert.deepEqual(withoutOlaparibRows(read(reportPath)), withoutOlaparibRows(inheritedReport), 'All 376 unrelated CSV rows, including Enhertu, remain byte-identical after olaparib');
+  assert.deepEqual(withoutOlaparibRows(release.astraBytes(reportPath)), withoutOlaparibRows(inheritedReport), 'All 376 unrelated CSV rows, including Enhertu, remain byte-identical after olaparib');
   for (const file of ['protocols/shared/00588-olaparib-tablet-monotherapy.json', 'protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json']) olaparib.validateProtocol(json(file));
 }
 for (const f of ['js/regimen-course-metadata.js', 'js/regimen-card-metadata.js', 'tools/add-regimen-card-metadata.js']) {

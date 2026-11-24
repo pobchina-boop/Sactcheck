@@ -51114,7 +51114,7 @@ const definitions={
       {
         "id": "nccp",
         "title": "NCCP 00746 v2 · olaparib tablets and bevacizumab",
-        "url": "https://assets.hse.ie/media/documents/746_V2_Olaparib_bevacizumab_therapy.pdf"
+        "url": "https://healthservice.hse.ie/documents/6626/746_V2_Olaparib_bevacizumab_therapy.pdf"
       },
       {
         "id": "smpc",

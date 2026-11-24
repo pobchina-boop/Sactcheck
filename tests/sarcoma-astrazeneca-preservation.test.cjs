@@ -1,4 +1,5 @@
 'use strict';
+const release = require('./helpers/live-release-v08464.cjs');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
@@ -19,7 +20,9 @@ for (const item of published) {
   const protocol = name.match(/^protocols\/[^/]+\/(\d{5})-/);
   const profile = name.match(/^data\/patient-knowledge(?:-contexts)?\/(\d{5})[./]/);
   if (![patient, protocol, profile].some(match => match && codes.has(match[1])) && !name.startsWith('assets/media/')) continue;
-  assert.equal(gitBlob(read(name)), entry.split(' ')[2], 'AstraZeneca publication changed: ' + name);
+  const code=[patient,protocol,profile].find(Boolean)?.[1];
+  const check = ['00588','00746'].includes(code) && Object.hasOwn(release.record.files,name) ? release.astraBytes(name) : read(name);
+  assert.equal(gitBlob(check), entry.split(' ')[2], 'AstraZeneca publication changed: ' + name);
   files++;
 }
 assert(files > 300);
@@ -39,7 +42,15 @@ for (const [file,key,field] of [
     return field ? group.filter(row => codes.has(row[field])) :
       Object.fromEntries(Object.entries(group).filter(([name]) => codes.has(name.split(/[:/]/)[0])));
   }
-  assert.deepEqual(select(JSON.parse(read(file))), select(oldJson(file)), file);
+  const actual=select(JSON.parse(read(file))), prior=select(oldJson(file));
+  if(field){
+    assert.deepEqual(actual.filter(row=>!['00588','00746'].includes(row[field])),prior.filter(row=>!['00588','00746'].includes(row[field])),file);
+    release.verifyFile(file);
+  } else {
+    const other = data=>Object.fromEntries(Object.entries(data).filter(([id])=>!['00588','00746'].includes(id.split(/[:/]/)[0])));
+    assert.deepEqual(other(actual),other(prior),file);
+    release.astraBytes(file);
+  }
 }
 // Compare every bundled protocol with its source and its reviewed predecessor.
 const catalogue = 'protocols/catalogue-bundle.json.gz';
@@ -58,7 +69,13 @@ for (const row of currentRecords) {
   previousRecords.delete(sourcePath);
   assert.deepEqual(row.protocol,JSON.parse(read(sourcePath)),sourcePath);
   const code = row.protocol.metadata.nccp_regimen_code;
-  if (scoped.has(code)) {
+  if (['00588','00746'].includes(code)) {
+    release.verifyFile(sourcePath);
+    const rules = p => p.rule_engine.rules.map(({source,...rule})=>rule);
+    assert.deepEqual(rules(row.protocol),rules(previous.protocol), sourcePath+' dose and treatment actions');
+    assert.deepEqual(row.protocol.indications,previous.protocol.indications,sourcePath+' indications and duration');
+    assert.deepEqual(row.protocol.metadata.validation,previous.protocol.metadata.validation,sourcePath+' clinical approval status');
+  } else if (scoped.has(code)) {
     assert.notDeepEqual(row,previous,sourcePath);
     changed.push(code);
   } else {
@@ -67,7 +84,7 @@ for (const row of currentRecords) {
 }
 assert.deepEqual(changed.sort(),[...scoped].sort());
 assert.equal(previousRecords.size,0);
-console.log('All 378 bundled protocols match their source JSON; the 361 outside the 17 named sarcoma updates match the AstraZeneca baseline.');
+console.log('All 378 bundled protocols match their source JSON; the 359 outside the 17 named sarcoma updates and two olaparib source refreshes match the AstraZeneca baseline.');
 const registry = require('../js/patient-asset-registry-v0810.js');
 const registryFile = 'js/patient-asset-registry-v0810.js';
 const context = {module: {exports: {}}};
@@ -83,4 +100,4 @@ for (const code of codes) {
     }
   }
 }
-console.log(files+' protected AstraZeneca and media files match Git, eight shared data collections match, and every prior patient route is retained alongside the 15 sarcoma routes.');
+console.log(files+' protected AstraZeneca and media files checked against authenticated Git states, eight shared data collections match, and every prior patient route is retained alongside the 15 sarcoma routes.');

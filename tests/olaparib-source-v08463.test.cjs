@@ -1,6 +1,6 @@
 'use strict';
 // Current-source boundaries and component safety, not authority to prescribe.
-// NCCP 00588 v5b pp1–6; NCCP 00746 v2 pp1–10; EMA Lynparza/Avastin SmPC.
+// NCCP 00588 v6 pp1–6; NCCP 00746 v2 pp1–10; EMA Lynparza/Avastin SmPC.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
