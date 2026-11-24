@@ -512,6 +512,14 @@
 
     const percent = merged.dose_percent_of_original ?? merged.dose_percent;
     if (percent != null && Number.isFinite(Number(percent))) {
+      if (merged.original_dose_field) {
+        const original = result?.inputs?.[merged.original_dose_field];
+        if (!Number.isFinite(original) || original <= 0) {
+          return { kind: "review", label: "Confirm original prescription", dose: "Original prescribed dose required", precise: false };
+        }
+        return { kind: "percent", label: `Use ${percent}% of original prescribed dose`,
+          dose: `${formatNumber(original * percent / 100)} mg/m²`, startingDose: `${formatNumber(original)} mg/m²`, precise: true };
+      }
       if (merged.dose_basis === "documented_starting_dose") {
         return { kind: "percent", label: `Use ${formatNumber(Number(percent))}% of documented starting dose`,
           percent: Number(percent), dose: `${formatNumber(Number(percent))}% of documented starting dose per administration; confirm prior reductions and pharmacy tablet banding`, precise: true };
@@ -661,6 +669,11 @@
 
   function interpretFindingForComponent(finding, component, model, result) {
     const componentOverride = componentChange(finding.action, component.id);
+    const basisField = finding.action?.original_dose_field;
+    const original = basisField ? result.inputs?.[basisField] : null;
+    const referenceDose = basisField
+      ? (Number.isFinite(original) && original > 0 ? `${formatNumber(original)} mg/m²` : "")
+      : startingDoseFor(model, component.id);
     const permanentComponentStop = componentOverride?.permanently_discontinue === true;
     const type = permanentComponentStop ? "permanently_discontinue" : componentOverride?.discontinue ? "discontinue" :
       String(finding?.actionType || finding?.action?.type || "consultant_review");
@@ -702,7 +715,7 @@
       rank,
       actionLabel,
       protocolDose,
-      startingDose: startingDoseFor(model, component.id),
+      startingDose: parsed?.startingDose || referenceDose,
       trigger: displayInputTrigger(finding, result),
       explanation: finding?.explanation || "",
       sourceText: finding?.sourceText || "Source encoded in protocol",
