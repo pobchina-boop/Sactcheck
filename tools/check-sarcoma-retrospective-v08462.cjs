@@ -29,6 +29,7 @@ try {
   cp.execFileSync(process.execPath,[replayScript,'--record'],{cwd:temporary});
   const actual = JSON.parse(fs.readFileSync(path.join(replay,result)));
   const expected = structuredClone(retained);
+  expected.engine_sha256 = require('./lib/sarcoma-engine-replay.cjs').publishedEngineHash(ROOT,expected.engine_sha256);
   expected.dose_model_sha256 = currentReplayHash('js/protocol-dose-schedule.js',retained.dose_model_sha256);
   assert.deepEqual(actual,expected,'Retrospective case results or input fingerprints changed');
   console.log('All 52 archived cross-risk findings and input identities passed with the reviewed dose-model transition.');

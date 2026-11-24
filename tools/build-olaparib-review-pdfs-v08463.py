@@ -227,6 +227,9 @@ def main():
                 for tree in ('patient', 'docs/patient'):
                     shutil.copy2(products / route / name, ROOT / tree / route / name)
             shutil.copy2(ROOT / 'patient' / route / 'oncowiki-qr.png', ROOT / 'docs/patient' / route / 'oncowiki-qr.png')
+        # Full compatibility HTML needs its links rebased one directory below the canonical site.
+        subprocess.run(['node', 'tools/patient-publication-v08444.cjs', '--routes', ','.join(ROUTES),
+                        '--mirrors-only', '--write'], cwd=ROOT, check=True)
     (stage / 'document-review.json').write_text(json.dumps(reports, ensure_ascii=False, indent=2) + '\n')
 
 

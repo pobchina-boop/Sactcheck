@@ -11,6 +11,7 @@ const integratedExpected=structuredClone(expected);
 // The clinical cases and findings remain frozen. The shared current dose renderer
 // must continue to produce those findings through its authenticated v62 transition.
 const {currentReplayHash}=require('../tests/helpers/retrospective-v08462.cjs');
+integratedExpected.engine_sha256 = require('./lib/sarcoma-engine-replay.cjs').publishedEngineHash(root,integratedExpected.engine_sha256);
 integratedExpected.dose_model_sha256=currentReplayHash('js/protocol-dose-schedule.js',expected.dose_model_sha256);
 for(const p of integratedExpected.protocols){const r=transition.records.get(p.code);assert.equal(p.sha256,r.before_sha256);p.sha256=r.after_sha256;}
 assert.equal(expected.mode,'current');assert.equal(expected.independent_from_author_cases,true);assert.equal(expected.total,119);assert.equal(expected.passed,119);assert.equal(expected.failed,0);

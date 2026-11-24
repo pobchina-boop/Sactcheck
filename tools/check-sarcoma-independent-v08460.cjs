@@ -7,6 +7,7 @@ assert.equal(expected.mode,'current');assert.equal(expected.independent_from_aut
 // Replay all 112 original cases with the two reviewed shared-tool transitions.
 const {currentReplayHash}=require('../tests/helpers/retrospective-v08462.cjs');
 const currentExpected=structuredClone(expected);
+currentExpected.engine_sha256 = require('./lib/sarcoma-engine-replay.cjs').publishedEngineHash(root,currentExpected.engine_sha256);
 currentExpected.dose_model_sha256=currentReplayHash('js/protocol-dose-schedule.js',expected.dose_model_sha256);
 currentExpected.lab_adapter_sha256=currentReplayHash('js/local-lab-profile.js',expected.lab_adapter_sha256);
 const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'sactcheck-independent-v08460-'));
