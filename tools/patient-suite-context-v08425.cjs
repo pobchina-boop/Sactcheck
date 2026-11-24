@@ -15,9 +15,11 @@ if(v30Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').
 const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
 if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='gist'&&context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context)&&!olaparibContexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && context!=='gist'&&context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context)&&context!=='liposarcoma'&&context!=='sarcoma'&&!olaparibContexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
 if(olaparibContexts.includes(context)&&codes.some(c=>c!=='00588'))throw new Error('Olaparib monotherapy context escaped00588');
+if(context==='liposarcoma'&&codes.some(c=>c!=='00228'))throw Error('Liposarcoma context escaped00228');
+if(context==='sarcoma'&&codes.some(c=>c!=='00205'))throw Error('Sarcoma context escaped00205');
 if(context==='gist'&&codes.some(c=>!['00325','00719','00244'].includes(c)))throw Error('GIST context escaped the three reviewed shared regimens');
 if(hn45Contexts.includes(context)&&codes.some(c=>context==='nasopharyngeal'?c!=='00385':!['00294','00419','00385','00207','00261','00483','00484','00455','00558'].includes(c)))throw Error('Unsupported head/neck regimen context');
 if(melanomaContexts.includes(context)&&codes.some(c=>!['00455','00558','00483','00484'].includes(c)||(context==='melanoma_perioperative'&&c!=='00455')))throw new Error('Unsupported melanoma regimen/context');
@@ -93,6 +95,8 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(prostate56.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const gu57=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08457.json'),'utf8'));
  for(const [c,plans]of Object.entries(gu57.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ const sarcoma62=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08462.json'),'utf8'));
+ for(const [c,plans]of Object.entries(sarcoma62.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const gist=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08461.json'),'utf8'));
  for(const [c,plans]of Object.entries(gist.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  if(codes.includes('00588')&&(context==='prostate'||olaparibContexts.includes(context))){
