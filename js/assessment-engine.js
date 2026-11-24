@@ -280,7 +280,7 @@
 
   function protocolForIndication(protocol, inputs) {
     const variants = protocol?.assessment_by_indication;
-    const id = inputs?.indication_id;
+    const id = inputs?.indication_id || protocol?.default_assessment_indication;
     return variants && typeof id === "string" && Object.hasOwn(variants, id) ? variants[id] : protocol;
   }
 

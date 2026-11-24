@@ -60,6 +60,24 @@ const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
           await clinic.getByRole('button',{name:'Run assessment engine',exact:true}).click();
           await clinic.locator('#jsonResult').waitFor({state:'attached'});
           assert.equal(await selector.inputValue(),indication);
+          if(indication==='00205a'){
+            async function fillField(name,value){
+              const field=clinic.locator('#jsonInput_'+name);
+              await field.evaluate(e=>{for(let p=e.parentElement;p;p=p.parentElement) if(p.tagName==='DETAILS')p.open=true;});
+              await field.fill(value);
+            }
+            await fillField('bilirubin_umol_l','51');
+            await fillField('current_pld_mg_m2','40');
+            await fillField('original_pld_mg_m2','40');
+            await clinic.getByRole('button',{name:'Run assessment engine',exact:true}).click();
+            const preview=clinic.locator('#jsonPrintSummary');
+            await preview.waitFor({state:'attached'});
+            assert.match(await preview.textContent(),/20 mg.m²/);
+            await fillField('original_pld_mg_m2','');
+            await clinic.getByRole('button',{name:'Run assessment engine',exact:true}).click();
+            assert.match(await preview.textContent(),/Confirm the original/i);
+            assert(!/25 mg.m²/.test(await preview.textContent()));
+          }
           rows.push({code,indication,width,ruleCount});
         }
         await clinic.close();
