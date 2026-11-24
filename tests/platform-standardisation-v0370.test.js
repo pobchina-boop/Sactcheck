@@ -370,6 +370,12 @@ for (const { file, data } of protocols) {
     }
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
     if(['00705','00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
+    if(['00391','00392','00596','00680'].includes(code) && field==='serum_creatinine_umol_l'){
+      assert.equal(def.type,'number');assert.equal(def.unit,'µmol/L');assert.equal(def.required,false);
+      assert.match(def.label,/serum creatinine.*not CrCl or eGFR/i);
+      assert(rules.some(rule=>(rule.id||rule.rule_id)==='IFO_PRODUCT_SERUM_CREATININE_UMOL_L'));
+      continue;
+    }
     if(SARCOMA62.applies(data) && field==='crcl_ml_min' && ['00374','00554','00205','00462'].includes(code)) {
       SARCOMA62.validate(data);
       assert.equal(def.type,'number');assert.equal(def.unit,'mL/min');assert.equal(def.required,false);

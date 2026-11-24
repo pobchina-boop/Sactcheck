@@ -16,11 +16,17 @@ function companionTransition() {
   const plan=JSON.parse(fs.readFileSync(path.join(root,'data/patient-canonical-retention-v08445.json'),'utf8'));
   const rows=plan.rows.filter(row=>row.route==='00588');
   assert(rows.length===6 && rows.every(row=>row.source_file===source && row.source_file_sha256===digest(before)),'Authenticate original breast companion clauses');
-  const record={release:'0.84.63',base_commit:base,files:[{path:source,before_sha256:digest(before),after_sha256:digest(fs.readFileSync(path.join(root,source))),reason:'Indication-specific olaparib update. All six original unique companion clauses remain required by the unchanged exact-clause retention checks.'}]};
-  const file=path.join(root,'validation/olaparib-v08463/companion-transitions.json');
-  const bytes=JSON.stringify(record,null,2)+'\n';
-  if(check)assert.equal(fs.readFileSync(file,'utf8'),bytes,'Olaparib companion transition is frozen');
-  else {fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,bytes);}
+  const originalRelease='71d089b071bff6f8ed3ff6eb3cad49a5e6577105';
+  const oldPath='validation/olaparib-v08463/companion-transitions.json';
+  const frozen=cp.execFileSync('git',['show',originalRelease+':'+oldPath],{cwd:root});
+  assert(fs.readFileSync(path.join(root,oldPath)).equals(frozen),'Original olaparib companion transition is frozen');
+  const previous=JSON.parse(frozen).files.find(row=>row.path===source);
+  assert.equal(previous.before_sha256,digest(before));
+  const current=JSON.parse(fs.readFileSync(path.join(root,'validation/olaparib-source-20261124/companion-transition.json')));
+  assert.equal(current.path,source);
+  assert.equal(current.before_sha256,previous.after_sha256);
+  assert.equal(current.after_sha256,digest(fs.readFileSync(path.join(root,source))),'Current logistics source must match the version 6 transition');
+
 }
 companionTransition();
 const file = 'data/breast-treatment-journeys-v0837.json';
