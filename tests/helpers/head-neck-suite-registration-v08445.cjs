@@ -12,8 +12,13 @@ function registry(codes,prior){
   assert.equal(new Set(through61).size,275,'All previously reviewed routes must remain distinct');
   const {NEW_ROUTES}=require('./retrospective-v08462.cjs');
   assert.deepEqual(NEW_ROUTES,['00897','00926','00953']);
-  const expected=[...through61,...NEW_ROUTES];
-  assert.equal(new Set(expected).size,278);
-  assert.deepEqual([...codes].sort(),expected.sort(),'Exact prior registry and three reviewed durvalumab root routes');
+  const through62=[...through61,...NEW_ROUTES];
+  assert.equal(new Set(through62).size,278);
+  const olaparib=require('./retrospective-v08463.cjs');
+  assert.deepEqual(olaparib.NEW_ROUTES,['00588/ovarian_first_line','00588/ovarian_relapsed','00588/pancreatic','00746']);
+  assert(!through62.includes('00746'));
+  const expected=[...through62,'00746'];
+  assert.equal(new Set(expected).size,279);
+  assert.deepEqual([...codes].sort(),expected.sort(),'Exact prior278 registry entries plus the reviewed00746 combination');
 }
 module.exports={registry,added};

@@ -107,6 +107,8 @@ const biliaryAudioRecord = JSON.parse(biliaryAudioBytes);
 assert.deepEqual(biliaryAudioRecord.regimens, ['00897']);
 const filmRecords = [filmRecord, strideRecord, osimertinibRecord, biliaryFilmRecord, biliaryAudioRecord];
 const enhertuReview = require("./enhertu-review-v08462.cjs");
+const olaparibReview = require("./retrospective-v08463.cjs");
+function reviewedExpected(f,h,n){const inherited=enhertuReview.expected(f,h,n);return olaparibReview.expected(f,inherited.sha256,inherited.bytes);}
 function filmExpected(f, h, n) {
   const changes = filmRecords.map(record => record.files[f]).filter(Boolean);
   if (!changes.length) return {sha256: h, bytes: n};
@@ -118,7 +120,8 @@ function filmExpected(f, h, n) {
 }
 function expected(f,h,n){
   assert(validPath(f));
-  if(enhertuReview.isCurrent(f,h,n))return enhertuReview.expected(f,h,n);
+  if(olaparibReview.isCurrent(f,h,n))return olaparibReview.expected(f,h,n);
+  if(enhertuReview.isCurrent(f,h,n))return reviewedExpected(f,h,n);
   const c=load().files[f];let prior;
   if(!c)prior=filmExpected(f,h,n);
   else{
@@ -126,7 +129,7 @@ function expected(f,h,n){
     if(n!==undefined)assert.equal(n,h===c.before?c.before_bytes:c.after_bytes,f+' mismatched origin size');
     prior=filmExpected(f,c.after,c.after_bytes);
   }
-  return enhertuReview.expected(f,prior.sha256,prior.bytes);
+  return reviewedExpected(f,prior.sha256,prior.bytes);
 }
 function currentReplayHash(file, historicalHash){
   assert(['js/protocol-dose-schedule.js','js/local-lab-profile.js'].includes(file));
@@ -138,9 +141,11 @@ function currentReplayHash(file, historicalHash){
   assert.equal(live.length,reviewed.bytes,file+' live tool size');
   return reviewed.sha256;
 }
-function isAddition(f){return enhertuReview.isAddition(f)||f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||f===biliaryFilmRecordPath||f===biliaryAudioRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
+function isAddition(f){return olaparibReview.isAddition(f)||enhertuReview.isAddition(f)||f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||f===biliaryFilmRecordPath||f===biliaryAudioRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
 function verify(){
-  enhertuReview.verify();
+  // Verify the unchanged Enhertu record and all of its original Git bytes,
+  // followed only by explicitly pinned v63 successors of its shared files.
+  olaparibReview.verify();
   const latest = new Map();
   for (const record of filmRecords) {
     for (const [f, change] of Object.entries(record.files)) {
@@ -161,12 +166,12 @@ function verify(){
   }
   for (const [f, change] of latest) {
     const bytes = fs.readFileSync(path.join(ROOT, f));
-    const reviewed=enhertuReview.expected(f,change.after,change.after_bytes);
+    const reviewed=reviewedExpected(f,change.after,change.after_bytes);
     assert.equal(sha(bytes), reviewed.sha256, f + ' published film asset / reviewed successor');
     assert.equal(bytes.length, reviewed.bytes);
   }
   for(const [f,v] of Object.entries(load().files)){
-    const reviewed=enhertuReview.expected(f,v.after,v.after_bytes);const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),reviewed.sha256,f+' reviewed output');assert.equal(bytes.length,reviewed.bytes);
+    const reviewed=reviewedExpected(f,v.after,v.after_bytes);const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),reviewed.sha256,f+' reviewed output');assert.equal(bytes.length,reviewed.bytes);
   }
   return true;
 }

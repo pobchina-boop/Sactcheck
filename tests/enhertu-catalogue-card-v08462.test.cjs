@@ -28,6 +28,14 @@ const overrides = json(overridesPath);
 const originalOverrides = JSON.parse(old(overridesPath));
 const item = sidecar.protocols.find(p => p.id === id);
 const override = overrides.protocols[id];
+// The v63 successor is limited to the two source-reviewed olaparib records.
+// Authenticate its actual bytes before reading the inherited Enhertu state;
+// the original 377-record preservation assertions still run against that state.
+const olaparib = json('package.json').version === '0.84.63' ? require('./helpers/retrospective-v08463.cjs') : null;
+const inheritedSidecar = olaparib ? olaparib.baselineJson(sidecarPath) : sidecar;
+const inheritedOverrides = olaparib ? olaparib.baselineJson(overridesPath) : overrides;
+const inheritedReport = olaparib ? olaparib.baselineBytes(reportPath) : read(reportPath);
+if (olaparib) olaparib.assertCurrent(reportPath, sha(inheritedReport), inheritedReport.length);
 
 assert.equal(sha(read('validation/enhertu-review-v08462/sources/nccp-00776-v3b.pdf')), sourceSha);
 assert.equal(item.path, 'protocols/breast/00776-trastuzumab-deruxtecan.json');
@@ -76,12 +84,26 @@ for (const c of summary.contexts) {
 }
 
 const withoutTarget = value => ({...value, protocols: value.protocols.filter(p => p.id !== id)});
-assert.deepEqual(withoutTarget(sidecar), withoutTarget(originalSidecar), 'All 377 other sidecar entries and container metadata are unchanged');
-const otherOverrides = structuredClone(overrides);
+assert.deepEqual(withoutTarget(inheritedSidecar), withoutTarget(originalSidecar), 'All 377 other sidecar entries and container metadata are unchanged in the authenticated Enhertu state');
+const otherOverrides = structuredClone(inheritedOverrides);
 delete otherOverrides.protocols[id];
 assert.deepEqual(otherOverrides, originalOverrides, 'Only the 00776 override was added');
 const withoutTargetRow = bytes => bytes.toString().split('\n').filter(line => !line.includes(',' + id + ','));
-assert.deepEqual(withoutTargetRow(read(reportPath)), withoutTargetRow(old(reportPath)), 'All other CSV rows remain byte-identical');
+assert.deepEqual(withoutTargetRow(inheritedReport), withoutTargetRow(old(reportPath)), 'All other CSV rows remain byte-identical in the authenticated Enhertu state');
+if (olaparib) {
+  const successors = new Set(['nccp-00588-v5b', 'nccp-00746-v2']);
+  const withoutOlaparib = value => ({...value, protocols: value.protocols.filter(p => !successors.has(p.id))});
+  assert.deepEqual(withoutOlaparib(sidecar), withoutOlaparib(inheritedSidecar), 'Only the two authenticated olaparib sidecar records may succeed the Enhertu state; all other 376 records remain exact');
+  const withoutOlaparibOverrides = value => {
+    const copy = structuredClone(value);
+    for (const successor of successors) delete copy.protocols[successor];
+    return copy;
+  };
+  assert.deepEqual(withoutOlaparibOverrides(overrides), withoutOlaparibOverrides(inheritedOverrides), 'Only the two named olaparib overrides may be added after Enhertu');
+  const withoutOlaparibRows = bytes => bytes.toString().split('\n').filter(line => ![...successors].some(successor => line.includes(',' + successor + ',')));
+  assert.deepEqual(withoutOlaparibRows(read(reportPath)), withoutOlaparibRows(inheritedReport), 'All 376 unrelated CSV rows, including Enhertu, remain byte-identical after olaparib');
+  for (const file of ['protocols/shared/00588-olaparib-tablet-monotherapy.json', 'protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json']) olaparib.validateProtocol(json(file));
+}
 for (const f of ['js/regimen-course-metadata.js', 'js/regimen-card-metadata.js', 'tools/add-regimen-card-metadata.js']) {
   assert(read(f).equals(old(f)), 'The generic metadata logic and renderer remain unchanged: ' + f);
 }
@@ -169,5 +191,5 @@ class Element {
   const before = new Map([sidecarPath, reportPath].map(f => [f, read(f)]));
   cp.execFileSync(process.execPath, ['tools/add-regimen-card-metadata.js'], {cwd: root, stdio: 'pipe'});
   for (const [f, bytes] of before) assert(read(f).equals(bytes), 'Canonical card generator is byte-idempotent: ' + f);
-  console.log('Enhertu catalogue source, two advanced-disease contexts, indefinite duration, actual sidecar renderer and both unavailable/invalid-sidecar fallback paths, brand/code/tissue/route identity, generator idempotence and 377 unrelated records passed. Browser acceptance remains separate.');
+  console.log('Enhertu catalogue source, two advanced-disease contexts, indefinite duration, actual sidecar renderer and both unavailable/invalid-sidecar fallback paths, brand/code/tissue/route identity and generator idempotence passed. ' + (olaparib ? 'The original 377-record preservation check passed against the authenticated Enhertu state; 376 current records remain exact after only the two authenticated olaparib successors.' : 'All 377 unrelated records remain unchanged.') + ' Browser acceptance remains separate.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

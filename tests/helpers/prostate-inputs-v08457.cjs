@@ -6,7 +6,11 @@ function validate(p){
  const c=p.metadata?.nccp_regimen_code;if(!codes.includes(c))return null;
  const rec=read('validation/prostate-v08457/clinical/clinical-migration.json'),row=rec.records[c];
  assert.equal(rec.release,'0.84.57');assert.equal(rec.base_commit,'90ae67a0a3f565cb57f73072137c52c4851fec5b');assert(row);
- assert.deepEqual(p,read(row.path));assert.equal(sha(row.path),row.sha256);
+ if(c==='00588'&&p.metadata.sactcheck_encoding_version==='0.84.63'){
+  const successor=require('./retrospective-v08463.cjs'),reviewed=successor.validateProtocol(p),original=successor.baselineBytes(row.path);
+  assert.equal(crypto.createHash('sha256').update(original).digest('hex'),row.sha256,'The inherited00588 protocol is the exact original v57 review');
+  p=reviewed.historical;
+ }else{assert.deepEqual(p,read(row.path));assert.equal(sha(row.path),row.sha256);}
  assert.equal(crypto.createHash('sha256').update(cp.execFileSync('git',['show',rec.base_commit+':'+row.path],{cwd:root})).digest('hex'),row.before_sha256);
  assert.equal(sha(row.source_pdf),row.source_sha256);assert.equal(p.metadata.source_url,row.source_url);assert.equal(p.metadata.nccp_version,row.source_version);
  assert.equal(p.metadata.sactcheck_encoding_version,'0.84.57');
@@ -20,5 +24,5 @@ function grade(p,field,d){
  const guide=require('../../js/ctcae-descriptors.js').guide({...d,id:field});assert.equal(guide.sourceSpecific,true);assert.equal(guide.calculable,false);assert.equal(guide.grades.length,5);assert(guide.grades.every(x=>x.description));return true;
 }
 function numericRenal(p,field,d){if(p.metadata?.nccp_regimen_code!=='00518'||field!=='crcl_ml_min')return false;validate(p);assert.equal(d.type,'number');assert.equal(d.renal_input.mode,'source_threshold_numeric');assert.equal(d.renal_input.source_url,p.metadata.source_url);return true;}
-function retainedBreastRuleCount(p){const row=validate(p);assert.equal(p.metadata.nccp_regimen_code,'00588');const baseline=JSON.parse(cp.execFileSync('git',['show','90ae67a0a3f565cb57f73072137c52c4851fec5b:'+row.path],{cwd:root}));const original=baseline.rule_engine.rules;assert.deepEqual(p.rule_engine.rules.slice(0,original.length),original);const added=p.rule_engine.rules.slice(original.length);assert.equal(added.length,5);for(const rule of added){assert(rule.when.all.some(c=>c.field==='indication_id'&&c.operator==='=='&&c.value==='mcrpc_brca_monotherapy'),'New eligibility rule must be confined to the prostate monotherapy indication');}return original.length;}
+function retainedBreastRuleCount(p){const row=validate(p);assert.equal(p.metadata.nccp_regimen_code,'00588');if(p.metadata.sactcheck_encoding_version==='0.84.63')p=require('./retrospective-v08463.cjs').historicalProtocol(p);const baseline=JSON.parse(cp.execFileSync('git',['show','90ae67a0a3f565cb57f73072137c52c4851fec5b:'+row.path],{cwd:root}));const original=baseline.rule_engine.rules;assert.deepEqual(p.rule_engine.rules.slice(0,original.length),original);const added=p.rule_engine.rules.slice(original.length);assert.equal(added.length,5);for(const rule of added){assert(rule.when.all.some(c=>c.field==='indication_id'&&c.operator==='=='&&c.value==='mcrpc_brca_monotherapy'),'New eligibility rule must be confined to the prostate monotherapy indication');}return original.length;}
 module.exports={validate,grade,numericRenal,retainedBreastRuleCount,codes};

@@ -1,6 +1,10 @@
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),crypto=require('crypto'),vm=require('vm');
-const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
+// Preserve this historical suite's clinical/layout assertions against the exact
+// pre-v63 source, after authenticating its reviewed current successor.
+const root=path.resolve(__dirname,'..'),V63=require('./helpers/retrospective-v08463.cjs');
+const historicalFiles=new Set(['data/patient-knowledge/00588.json']);
+const read=p=>{const live=fs.readFileSync(path.join(root,p),'utf8');if(historicalFiles.has(p)||/^patient\/00588\/[^/]+\.html$/.test(p)){const prior=V63.baselineBytes(p);V63.assertCurrent(p,V63.sha(prior),prior.length);return prior.toString();}return live;},json=p=>JSON.parse(read(p));
 const idx=json('data/breast-completion-v08421-source-index.json'),codes=idx.codes,KB=json('data/regimen-knowledge-base-v08421-addendum.json'),support=json('data/phase-support-v0838.json').regimens,J=require('../js/treatment-journey-v0837'),V=require('../js/treatment-evidence-v08413'),D=require('../js/protocol-dose-schedule'),R=require('../js/patient-asset-registry-v0810');
 assert.equal(codes.length,40);assert.equal(idx.new_codes.length,2);assert.equal(idx.retrospective_codes.length,38);assert.equal(KB.regimen_profiles.length,40);
 // Capecitabine and cetuximab/FOLFOX-4 were re-audited and regenerated in v36; retain every other historical expectation.

@@ -107,10 +107,44 @@ const cp=require('node:child_process'),zlib=require('node:zlib');
 const root=path.resolve(__dirname,'..');
 const previousBytes=cp.execFileSync('git',['show','f3b923b247b5663b2bd90b2ffb352fccc5a347ea:protocols/catalogue-bundle.json.gz'],{cwd:root,maxBuffer:5*1024*1024,env:{...process.env,GIT_NO_LAZY_FETCH:'1'}});
 const previousCatalogue=JSON.parse(zlib.gunzipSync(previousBytes));
-const currentCatalogue=JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root,'protocols/catalogue-bundle.json.gz'))));
-assert.equal(currentCatalogue.records.length,previousCatalogue.records.length);
+const bundlePath='protocols/catalogue-bundle.json.gz';
+const currentBundleBytes=fs.readFileSync(path.join(root,bundlePath));
+const currentBundleJson=zlib.gunzipSync(currentBundleBytes);
+const currentCatalogue=JSON.parse(currentBundleJson);
+const olaparib=JSON.parse(fs.readFileSync(path.join(root,'package.json'))).version==='0.84.63'?require('./helpers/retrospective-v08463.cjs'):null;
+let inheritedCatalogue=currentCatalogue;
+if(olaparib){
+  // Authenticate the actual successor before replaying the original preservation
+  // assertion against the exact inherited Enhertu tree. Only00588/00746 may
+  // differ afterward, and their current source JSON must reach the live bundle.
+  const inheritedBytes=olaparib.baselineBytes(bundlePath);
+  olaparib.assertCurrent(bundlePath,olaparib.sha(inheritedBytes),inheritedBytes.length);
+  inheritedCatalogue=JSON.parse(zlib.gunzipSync(inheritedBytes));
+  const indexPath='protocols/index.json',inheritedIndexBytes=olaparib.baselineBytes(indexPath);
+  const currentIndex=JSON.parse(olaparib.assertCurrent(indexPath,olaparib.sha(inheritedIndexBytes),inheritedIndexBytes.length));
+  assert.equal(currentIndex.protocol_count,currentIndex.protocols.length);
+  assert.equal(currentIndex.bundle.path,bundlePath);
+  assert.equal(currentIndex.bundle.sha256,olaparib.sha(currentBundleJson),'Index authenticates the exact decompressed current catalogue');
+  assert.equal(currentIndex.bundle.bytes,currentBundleJson.length);
+  assert.equal(currentIndex.bundle.compressed_bytes,currentBundleBytes.length);
+  assert.equal(currentIndex.bundle.protocol_count,currentCatalogue.records.length);
+  assert.equal(currentCatalogue.schema_version,inheritedCatalogue.schema_version);
+  assert.equal(currentCatalogue.records.length,currentIndex.protocol_count);
+  assert.equal(currentCatalogue.records.length,inheritedCatalogue.records.length);
+  assert.equal(new Set(currentCatalogue.records.map(record=>record.entry.id)).size,currentCatalogue.records.length,'Current catalogue cannot duplicate a record to hide a missing protocol');
+  assert.deepEqual(currentCatalogue.records.map(record=>record.entry.id).sort(),inheritedCatalogue.records.map(record=>record.entry.id).sort(),'Current catalogue retains every inherited protocol identity');
+  const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
+  for(const current of currentCatalogue.records){
+    const indexed=currentIndex.protocols.find(entry=>entry.id===current.entry.id);assert(indexed,'Current record is indexed: '+current.entry.id);
+    assert.deepEqual(current.entry,indexed,'Current bundle entry matches the actual index: '+current.entry.id);
+    assert.deepEqual(current.protocol,JSON.parse(fs.readFileSync(path.join(root,indexed.path))),'Current bundle delivers the exact current protocol JSON: '+current.entry.id);
+    if(successors.has(current.entry.id))olaparib.validateProtocol(current.protocol);
+    else assert.deepEqual(current,inheritedCatalogue.records.find(record=>record.entry.id===current.entry.id),'Unrelated current protocol, including Enhertu, remains unchanged after olaparib: '+current.entry.id);
+  }
+}
+assert.equal(inheritedCatalogue.records.length,previousCatalogue.records.length);
 for(const previous of previousCatalogue.records){
-  const current=currentCatalogue.records.find(r=>r.entry.id===previous.entry.id);assert(current);
+  const current=inheritedCatalogue.records.find(r=>r.entry.id===previous.entry.id);assert(current);
   if(previous.entry.id==='nccp-00776-v3b')assert.deepEqual(current.protocol,protocol,'Compressed catalogue delivers the corrected clinical protocol');
   else assert.deepEqual(current,previous,'Unrelated protocol unchanged: '+previous.entry.id);
 }
