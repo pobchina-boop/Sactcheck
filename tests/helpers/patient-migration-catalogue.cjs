@@ -10,6 +10,10 @@ function getMigrations(){
  const entries=fs.readdirSync(__dirname).map(name=>({name,match:/^retrospective-v084(\d+)\.cjs$/.exec(name)})).filter(x=>x.match&&Number(x.match[1])>=45&&Number(x.match[1])<=last).sort((a,b)=>Number(a.match[1])-Number(b.match[1]));
  assert(entries.some(x=>Number(x.match[1])===last),'Current release has no authenticated migration helper');
  cached=entries.map(({name,match})=>{const helper=require('./'+name),record=JSON.parse(fs.readFileSync(helper.RECORD));helper.createMigration(record);assert(Array.isArray(helper.NEW_ROUTES),name+' must declare its route additions');return{version:Number(match[1]),helper,record};});
+ const gynaecology = require('./gynaecology-00862-00929.cjs');
+ gynaecology.verify();
+ cached.push({version: 63, helper: gynaecology, record: gynaecology.record});
+ cached.sort((a,b) => a.version-b.version);
  return cached;
 }
 function assertCoverage(registry,manifest,migrations=getMigrations()){

@@ -32,6 +32,11 @@ def render_route(code):
         source = folder / (html + '.html')
         pdf = folder / (name + '.pdf')
         data = HTML(filename=str(source)).write_pdf()
+        if code in ('00862', '00929') and name == 'handbook':
+            # Retain the full-size printed anatomy and cut-out front/back card.
+            with fitz.open(stream=data, filetype='pdf') as book, fitz.open(folder / 'guide.pdf') as guide:
+                book.insert_pdf(guide, from_page=1, to_page=2)
+                data = book.tobytes(garbage=3, deflate=True)
         with fitz.open(stream=data, filetype='pdf') as doc:
             if any(not page.get_text().strip() for page in doc):
                 raise ValueError(f'{code} {name} contains a blank page')
@@ -47,6 +52,6 @@ if __name__ == '__main__':
     parser.add_argument('codes', nargs='*')
     args = parser.parse_args()
     for route in args.codes or ROUTES:
-        if route not in ROUTES:
+        if route not in (*ROUTES, '00862', '00929'):
             parser.error('Unknown combination: ' + route)
         render_route(route)

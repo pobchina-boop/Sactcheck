@@ -16,7 +16,7 @@
     "source_url": "https://healthservice.hse.ie/documents/8284/929_Dostarlimab_-_PACLi_CARBO_Regimen.pdf",
     "source_document_pages": null,
     "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-24",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "endometrial_immunochemotherapy",
@@ -78,7 +78,9 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00929-v1"
+    "canonical_protocol_id": "nccp-00929-v1",
+    "review_date": "2027-04-01",
+    "published_date": "2026-03-27"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -94,7 +96,7 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Dostarlimab, Paclitaxel and Carboplatin Therapy",
+    "schedule_summary": "Combination every 21 days for six cycles. Give the first dostarlimab-only dose three weeks after cycle 6, then every 42 days, subject to the NCCP stopping criteria.",
     "drugs": [
       "dostarlimab",
       "paclitaxel",
@@ -564,6 +566,43 @@
       "unit": "mmol/L",
       "ui_section": "immunotherapy_bloods",
       "input_role": "context"
+    },
+    "treatment_phase": {
+      "label": "Current treatment phase",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "combination",
+          "label": "Dostarlimab + paclitaxel + carboplatin (cycles 1–6)"
+        },
+        {
+          "value": "maintenance",
+          "label": "Dostarlimab alone (cycle 7 onwards)"
+        }
+      ],
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "demo_value": "combination"
+    },
+    "pneumonitis_recurrence": {
+      "type": "boolean",
+      "label": "Recurrent grade 2 immune pneumonitis",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "visible_when": {
+        "field": "pneumonitis_grade",
+        "operator": "==",
+        "value": 2
+      }
+    },
+    "starting_first_cycle": {
+      "type": "boolean",
+      "label": "Assessing eligibility before the first dose",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -646,109 +685,184 @@
           "value": 3
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
             "whole_regimen"
           ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
+          "message": "Stop the infusion and initiate emergency management. Identify the causative infusion before deciding which drug to discontinue. Follow the agent-specific protocol."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 8
         },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
+        "explanation": "Stop the infusion and initiate emergency management. Identify the causative infusion before deciding which drug to discontinue. Follow the agent-specific protocol."
       },
       {
         "id": "ANC_LT1",
         "priority": 9,
         "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "delay",
           "components": [
-            "whole_regimen"
+            "paclitaxel",
+            "carboplatin"
           ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+          "message": "Delay paclitaxel and carboplatin until neutrophil recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 5
         },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+        "explanation": "Delay paclitaxel and carboplatin until neutrophil recovery."
       },
       {
-        "id": "PLT_LT75",
+        "id": "PLT_LT100",
         "priority": 9,
         "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "delay",
           "components": [
-            "whole_regimen"
+            "paclitaxel",
+            "carboplatin"
           ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+          "message": "Delay paclitaxel and carboplatin until platelet recovery. Confirm the individual threshold with the treating team."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 5
         },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+        "explanation": "Delay paclitaxel and carboplatin until platelet recovery. Confirm the individual threshold with the treating team."
       },
       {
         "id": "FN",
         "priority": 10,
         "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "delay",
           "components": [
-            "whole_regimen"
+            "paclitaxel",
+            "carboplatin"
           ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
+          "message": "Arrange acute management of febrile neutropenia. Delay chemotherapy until recovery and discuss a 25% reduction of both chemotherapy drugs for subsequent cycles."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 5
         },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
+        "explanation": "Arrange acute management of febrile neutropenia. Delay chemotherapy until recovery and discuss a 25% reduction of both chemotherapy drugs for subsequent cycles."
       },
       {
         "id": "CARBO_GFR_LOW",
         "priority": 9,
         "when": {
-          "field": "gfr_or_crcl_ml_min",
-          "operator": "<",
-          "value": 30
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": ">",
+                  "value": 20
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "carboplatin"
           ],
-          "message": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
+          "message": "Extreme caution with carboplatin at GFR above 20 and up to 30 mL/min. Confirm kidney function measure and dosing with oncology pharmacy."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 6
         },
-        "explanation": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
+        "explanation": "Extreme caution with carboplatin at GFR above 20 and up to 30 mL/min. Confirm kidney function measure and dosing with oncology pharmacy."
       },
       {
         "id": "CARBO_HSR",
         "priority": 10,
         "when": {
-          "field": "carboplatin_hypersensitivity_history",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "carboplatin_hypersensitivity_history",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -767,51 +881,78 @@
         "id": "TAXANE_NEURO_G2",
         "priority": 8,
         "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "paclitaxel"
           ],
-          "message": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
+          "message": "Discuss reducing paclitaxel by 25% for grade 2 neuropathy, or by 50% if grade 2 persists."
         },
         "source": {
           "document": "Current official NCCP regimen",
           "page": "Dose modifications"
         },
-        "explanation": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
+        "explanation": "Discuss reducing paclitaxel by 25% for grade 2 neuropathy, or by 50% if grade 2 persists."
       },
       {
         "id": "TAXANE_NEURO_G3",
         "priority": 10,
         "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "omit",
           "components": [
             "paclitaxel"
           ],
-          "message": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
+          "message": "Omit paclitaxel for grade 3 or 4 peripheral neuropathy."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 8
         },
-        "explanation": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
+        "explanation": "Omit paclitaxel for grade 3 or 4 peripheral neuropathy."
       },
       {
         "id": "TAXANE_LFT",
         "priority": 8,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.25
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.25
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -831,13 +972,13 @@
         "priority": 10,
         "when": {
           "field": "pneumonitis_grade",
-          "operator": ">=",
+          "operator": "==",
           "value": 2
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
         },
@@ -858,7 +999,7 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
         },
@@ -879,7 +1020,7 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
         },
@@ -900,7 +1041,7 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
         },
@@ -914,22 +1055,31 @@
         "id": "ICI_HEP_G3",
         "priority": 10,
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
+          "any": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
-          "message": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+          "message": "Withhold dostarlimab and urgently assess possible immune hepatitis. Confirm attribution, baseline liver involvement and the Table 3 exception before a permanent discontinuation decision."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00929 v1",
+          "page": 7
         },
-        "explanation": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+        "explanation": "Withhold dostarlimab and urgently assess possible immune hepatitis. Confirm attribution, baseline liver involvement and the Table 3 exception before a permanent discontinuation decision."
       },
       {
         "id": "ICI_BILI",
@@ -942,7 +1092,7 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
         },
@@ -963,7 +1113,7 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
         },
@@ -972,6 +1122,264 @@
           "page": "Dose modifications"
         },
         "explanation": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
+      },
+      {
+        "id": "SEVERE_CYTOPENIA",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay both chemotherapy drugs until recovery. Discuss reducing both by 25% for subsequent cycles."
+        },
+        "explanation": "Delay both chemotherapy drugs until recovery. Discuss reducing both by 25% for subsequent cycles.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 5
+        }
+      },
+      {
+        "id": "FIRST_DOSE_ANC",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "starting_first_cycle",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Below the first-dose neutrophil eligibility threshold. Defer initiation and review with the treating team."
+        },
+        "explanation": "Below the first-dose neutrophil eligibility threshold. Defer initiation and review with the treating team.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 4
+        }
+      },
+      {
+        "id": "CARBO_GFR_20",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Do not administer carboplatin at GFR of 20 mL/min or less."
+        },
+        "explanation": "Do not administer carboplatin at GFR of 20 mL/min or less.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 6
+        }
+      },
+      {
+        "id": "TAXANE_HEPATIC_STOP",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "==",
+              "value": "combination"
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Paclitaxel is contraindicated at this hepatic threshold. Assess the other agents separately."
+        },
+        "explanation": "Paclitaxel is contraindicated at this hepatic threshold. Assess the other agents separately.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 5
+        }
+      },
+      {
+        "id": "ICI_PNEUM_RECURRENCE",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "pneumonitis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "pneumonitis_recurrence",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Discontinue dostarlimab permanently for recurrent grade 2 immune pneumonitis."
+        },
+        "explanation": "Discontinue dostarlimab permanently for recurrent grade 2 immune pneumonitis.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 7
+        }
+      },
+      {
+        "id": "ICI_COLITIS_G4",
+        "priority": 7,
+        "when": {
+          "field": "diarrhoea_colitis_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Discontinue dostarlimab permanently for grade 4 immune colitis."
+        },
+        "explanation": "Discontinue dostarlimab permanently for grade 4 immune colitis.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 7
+        }
+      },
+      {
+        "id": "REVIEW_PHASE",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_phase",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                },
+                {
+                  "field": "febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                },
+                {
+                  "field": "paclitaxel_neuropathy_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "carboplatin_hypersensitivity_history",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm the treatment phase and review this abnormal result before treatment. Chemotherapy thresholds apply only while paclitaxel and carboplatin are being given."
+        },
+        "explanation": "Confirm the treatment phase and review this abnormal result before treatment. Chemotherapy thresholds apply only while paclitaxel and carboplatin are being given.",
+        "source": {
+          "document": "NCCP 00929 v1",
+          "page": 5
+        }
       }
     ]
   },
@@ -986,13 +1394,79 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "emetogenic_risk": "high",
+    "script_id": "nccp-parenteral-high",
+    "mapping_basis": "NCCP 00929 v1 p8: carboplatin high, paclitaxel low, dostarlimab minimal. Select the current phase.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance: high during combination, minimal during dostarlimab maintenance"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "label": "Cycles 1–6 · three-drug treatment",
+      "cycle_length_days": 21,
+      "cycles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "dostarlimab",
+          "dose": {
+            "value": 500,
+            "unit": "mg"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 175,
+            "unit": "mg/m2"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 3,
+          "drug": "carboplatin",
+          "dose": {
+            "value": 5,
+            "unit": "target AUC"
+          },
+          "route": "IV infusion"
+        }
+      ]
+    },
+    {
+      "phase_id": "maintenance",
+      "label": "Cycle 7 onwards · dostarlimab alone",
+      "cycle_length_days": 42,
+      "cycles": [],
+      "frequency": "First maintenance infusion three weeks after cycle six, then every six weeks. Maximum treatment duration three years.",
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "dostarlimab",
+          "dose": {
+            "value": 1000,
+            "unit": "mg"
+          },
+          "route": "IV infusion"
+        }
+      ]
+    }
+  ]
 }

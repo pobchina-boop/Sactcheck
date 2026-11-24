@@ -22,7 +22,7 @@
     },
     "sactcheck_encoding_version": "0.43.0",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-24",
     "assessment_model": "oral_parp_inhibitor",
     "catalogue_section": "targeted_her2_therapy",
     "catalogue_section_label": "Targeted & HER2 therapies",
@@ -197,7 +197,7 @@
       ],
       "ui_section": "treatment_context",
       "demo_value": "200",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "weight_kg": {
       "label": "Weight",
@@ -288,7 +288,7 @@
       "input_role": "decision"
     },
     "haematology_recovered_within_28_days": {
-      "label": "Haematology recovered within 28 days",
+      "label": "At the end of a 28-day interruption, have the affected counts recovered? Leave blank before day 28.",
       "type": "boolean",
       "required": false,
       "demo_value": true,
@@ -478,7 +478,7 @@
       "input_role": "decision"
     },
     "uncontrolled_clinically_significant_hypertension": {
-      "label": "Uncontrolled clinically significant hypertension",
+      "label": "Medically significant hypertension despite adequate antihypertensive therapy",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -786,6 +786,11 @@
             "field": "haematology_recovered_within_28_days",
             "operator": "==",
             "value": false
+          },
+          {
+            "field": "platelet_event_occurrence",
+            "operator": "==",
+            "value": "second_or_later"
           }
         ],
         "action": {
@@ -981,17 +986,17 @@
         "operator": "==",
         "value": true,
         "action": {
-          "type": "withhold",
+          "type": "discontinue",
           "components": [
             "niraparib"
           ],
-          "recommendation": "Withhold niraparib and control clinically significant hypertension; reassess before resuming."
+          "recommendation": "Discontinue niraparib when medically significant hypertension cannot be controlled with antihypertensive therapy. Arrange urgent clinical review."
         },
         "source": {
           "page": 5,
           "document": "Current mapped NCCP source"
         },
-        "explanation": "Uncontrolled significant hypertension requires treatment interruption."
+        "explanation": "Discontinue niraparib when medically significant hypertension cannot be controlled with antihypertensive therapy. Arrange urgent clinical review."
       },
       {
         "rule_id": "HYPERTENSIVE_CRISIS",
@@ -1028,6 +1033,145 @@
           "document": "Current mapped NCCP source"
         },
         "explanation": "PRES requires permanent discontinuation."
+      },
+      {
+        "rule_id": "PLATELET_HISTORY_UNKNOWN",
+        "all": [
+          {
+            "field": "platelets",
+            "operator": "<",
+            "value": 100
+          },
+          {
+            "field": "platelet_event_occurrence",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "Withhold niraparib and monitor counts weekly. Establish the platelet nadir, event history and current dose before determining the restart plan."
+        },
+        "explanation": "Withhold niraparib and monitor counts weekly. Establish the platelet nadir, event history and current dose before determining the restart plan.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "STARTING_WEIGHT_LT77",
+        "all": [
+          {
+            "field": "weight_kg",
+            "operator": "<",
+            "value": 77
+          },
+          {
+            "field": "starting_dose_mg",
+            "operator": "==",
+            "value": "300"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "The NCCP starting dose below 77 kg is 200 mg daily. Verify the proposed 300 mg start with the prescriber."
+        },
+        "explanation": "The NCCP starting dose below 77 kg is 200 mg daily. Verify the proposed 300 mg start with the prescriber.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 1
+        }
+      },
+      {
+        "rule_id": "STARTING_PLATELETS_UNKNOWN",
+        "all": [
+          {
+            "field": "indication_id",
+            "operator": "==",
+            "value": "first_line_advanced_maintenance"
+          },
+          {
+            "field": "weight_kg",
+            "operator": ">=",
+            "value": 77
+          },
+          {
+            "field": "starting_dose_mg",
+            "operator": "==",
+            "value": "300"
+          },
+          {
+            "field": "baseline_platelets",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "Establish the baseline platelet count before confirming a 300 mg first-line starting dose."
+        },
+        "explanation": "Establish the baseline platelet count before confirming a 300 mg first-line starting dose.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 2
+        }
+      },
+      {
+        "rule_id": "CYTOPENIA_AT_100",
+        "all": [
+          {
+            "field": "current_dose_mg",
+            "operator": "==",
+            "value": "100"
+          },
+          {
+            "any": [
+              {
+                "field": "anc",
+                "operator": "<",
+                "value": 1
+              },
+              {
+                "field": "haemoglobin_g_l",
+                "operator": "<",
+                "value": 80
+              },
+              {
+                "all": [
+                  {
+                    "field": "platelets",
+                    "operator": "<",
+                    "value": 100
+                  },
+                  {
+                    "field": "platelet_event_occurrence",
+                    "operator": "==",
+                    "value": "second_or_later"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "At the 100 mg dose level, this event meets a discontinuation criterion. Confirm the dose history with the oncology team."
+        },
+        "explanation": "At the 100 mg dose level, this event meets a discontinuation criterion. Confirm the dose history with the oncology team.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 3
+        }
       }
     ]
   },
