@@ -65,7 +65,8 @@ async function patientJourney(page,url,width){
  await page.goto(url+'/patient/00555/');
  await retainedClinicalContent(page,'[data-patient-panel]');
  assert(await topOf(page,'.pt-tabs')<450,'named patient sections appear beside the title');
- assert.equal(await page.locator('.pt-document-choices a[href="knowledge.html"]').innerText(),'Open the full OncoWiki: your treatment, explained','established reference link retained');
+ const reference=page.getByRole('link',{name:'Understand my treatment',exact:true});
+ assert.equal(await reference.getAttribute('href'),'knowledge.html#medicines','treatment reference opens the medicines section');
  for(const href of ['guide.pdf','handbook.pdf','knowledge.pdf'])assert.equal(await page.locator(`.pt-document-choices a[href="${href}"]`).count(),1,`${href} format retained`);
  assert(await page.locator('#urgent').isVisible(),'urgent advice is never collapsed');
  const artwork=await page.locator('.hcc-anatomy img').getAttribute('src');assert.match(artwork,/body|anatom|patient/i,'detailed anatomy image is retained');
