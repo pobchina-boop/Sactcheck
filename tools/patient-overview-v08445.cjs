@@ -99,14 +99,21 @@ function buildOverview(input,{root=process.cwd(),route,profile,data,guideHtml,ca
   'between-treatments':[['supportive-care.html','My prescribed supportive care']],
   'my-passport':[['sactcard.html','My standalone treatment card'],['sactcard.pdf','Download my treatment card']]
  };
+ const declaredWallet=((profile.suite_release==='0.84.62'&&['00374','00462','00554','00228/liposarcoma','00205/sarcoma'].includes(route))||(profile.suite_release==='0.84.63'&&['00420','00463','00100','00596','00680'].includes(route))||(profile.suite_release==='0.84.64'&&['00675','00747','00504','00754','00757'].includes(route)))&&String(profile.code)===route.split('/')[0]&&(profile.patient_context||'')===(route.split('/')[1]||'');
  const deeper=destinations.map(([id,title,purpose,href])=>{
-  const companions=(companionGroups[id]||[]).filter(([name])=>fs.existsSync(path.join(folder,name)));
+  const companions=(companionGroups[id]||[]).filter(([name])=>(name==='sactcard.pdf'&&declaredWallet)||fs.existsSync(path.join(folder,name)));
   const extras=companions.length?'<ul class="po45-companion-links">'+companions.map(([name,label])=>'<li><a href="'+name+'"'+(name.endsWith('.pdf')?' download':'')+'>'+label+'</a></li>').join('')+'</ul>':'';
   return '<article class="po45-destination" id="'+id+'"><h3><a href="'+href+'">'+title+'</a></h3><p>'+purpose+'</p><a class="po45-read-more" href="'+href+'">Read more <span aria-hidden="true">→</span></a>'+extras+'</article>';
  }).join('');
  const urgentHref=find(panels,n=>attr(n,'id')==='urgent')?'#urgent':'#overview-2';
  const body='<body class="ps-body pt-body-page po45-body" data-patient-overview="0.84.45" data-overview-source="'+sha(guide)+'" data-overview-mode="'+source.mode+'"><a class="pt-skip" href="#main">Skip to treatment information</a><div class="po45-top"><a href="./">SACTCheck · My treatment</a><a href="'+urgentHref+'">I feel unwell / urgent help</a></div><main id="main" class="po45-shell"><header class="po45-introduction"><p class="po45-kicker">My treatment essentials</p><h1>'+esc(profile.title)+'</h1><p>Start with these three sections. Your complete information and personal record follow below.</p><div class="po45-downloads"><a href="guide.pdf" download>'+ (source.modern?'Download my three-page pack':'Download my treatment guide')+'</a><a href="handbook.pdf" download>Download my complete handbook</a></div></header>'+panels+'<section id="more-information" class="po45-deeper"><header><p class="po45-kicker">When I want more detail</p><h2>My complete treatment information</h2><p>Each section has a different purpose. Choose the information you need.</p></header><div class="po45-destinations">'+deeper+'</div><p class="po45-full-reference"><a href="knowledge.html">Read the full OncoWiki</a> · <a href="knowledge.pdf" download>Download the treatment reference</a></p></section><footer class="po45-footer">SACTCheck · Feasibility build · clinical and patient review pending. Your team confirms your personal treatment plan.</footer></main>';
+ let publishedBody=body;
+ if(route==='00947'){
+  const css='<link rel="stylesheet" href="../../assets/patient/capivasertib-portal.css">';
+  head=head.replace(css,'')+css;
+  publishedBody=body.replace(/<header class="po45-introduction">[\s\S]*?<\/header>/,require('./capivasertib-planner/portal.cjs').introduction());
+ }
  const connectors=elements(input).filter(n=>n.tag==='script'&&/hcc-connectors/.test(attr(n,'src')||'')).map(n=>outer(input,n)).join('');
- return '<!doctype html><html lang="en-IE"><head>'+head+'</head>'+body+connectors+'</body></html>';
+ return '<!doctype html><html lang="en-IE"><head>'+head+'</head>'+publishedBody+connectors+'</body></html>';
 }
 module.exports={buildOverview,transformHtml:buildOverview,elements,mainSections,sourceParts};

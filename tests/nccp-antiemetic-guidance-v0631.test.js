@@ -32,6 +32,7 @@ const dualImmuneV35 = {
   '00900':{path:'gastrointestinal/00900-nivolumab-240-mg-and-ipilimumab-1-mg-kg-therapy.json',version:'1a',url:'https://healthservice.hse.ie/documents/6653/900_v1a_Nivolumab_240mg_ipilimumab_1mgkg_.pdf',sha256:'a5f56d4f7f61e0b50128ba68cb8209a078184f657ac217704000cf986a9f96ac',page:9}
 };
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
+const updatedRisks={'00374':'moderate','00746':'oral_moderate_high'};
 const familyPhases = {
  '00897':{induction_day1:'high',induction_day8:'high',maintenance:'minimal'},
  '00953':{induction:'high',maintenance:'minimal'},
@@ -150,7 +151,7 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
     const migratedMap = ['00897','00691','00486','00279','00456','00561','00372','00281','00310','00339','00343','00712','00792','00849','00689','00908','00569','00579','00713','00714','00568','00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
-    const expected = migratedMap ? 'phase_dependent' : renalV57Risks[code] || allowedCorrections[code] || baseline.level;
+    const expected = migratedMap ? 'phase_dependent' : updatedRisks[code] || renalV57Risks[code] || allowedCorrections[code] || baseline.level;
     if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
   }
@@ -243,13 +244,13 @@ for (const record of index.protocols || []) {
       "skin/00431-nivolumab-1-mg-kg-and-ipilimumab-3-mg-kg-therapy.json": "low",
       "lung/00340-ceritinib-monotherapy.json": "oral_moderate_high"
     };
-    const expectedRisk = renalV57Risks[md.nccp_regimen_code] || (immune35 ? 'low' : pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
+    const expectedRisk = updatedRisks[md.nccp_regimen_code] || renalV57Risks[md.nccp_regimen_code] || (immune35 ? 'low' : pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) >= 0 && correctionByPath[relative]
       ? correctionByPath[relative]
       : (baseline.emetogenic_risk ?? null));
     const auditedPhases = md.nccp_regimen_code==='00486'?{oxaliplatin_days:'moderate',fluorouracil:'low'}:familyPhases[md.nccp_regimen_code];
     assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
-    assert.deepStrictEqual(phaseLevels, ['00309','00419'].includes(md.nccp_regimen_code)?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
+    assert.deepStrictEqual(phaseLevels, md.nccp_regimen_code==='00463'?{doxorubicin_cisplatin_phase:'high',high_dose_methotrexate_phase:'moderate',doxorubicin_only_phase:'moderate'}:['00309','00419'].includes(md.nccp_regimen_code)?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
   }
   for (const [label, url] of [["supportive", sc.supportive_medications_pdf_url], ["metadata", md.antiemetic_proforma_url]]) {
     if (!url) continue;

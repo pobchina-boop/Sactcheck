@@ -1,0 +1,55 @@
+--- tests/sarcoma-complete-library-v0410.test.js authenticated v63
++++ tests/sarcoma-complete-library-v0410.test.js v64
+@@ -8,6 +8,7 @@
+ const GIST61=require('./helpers/gist-inputs-v08461.cjs');
+ const SARCOMA62=require('./helpers/sarcoma-inputs-v08462.cjs');
+ const SARCOMA63=require('./helpers/sarcoma-inputs-v08463.cjs');
++const SARCOMA64=require('./helpers/sarcoma-inputs-v08464.cjs');
+ const IFOSPAIR62=require('./helpers/ifosfamide-pair-v08462.cjs');
+ const expectedCodes = [
+  '00511','00420','00391','00392','00500','00228','00501','00675','00747','00596','00680','00504','00754',
+@@ -79,7 +80,8 @@
+  const gistV61=GIST61.applies(data);if(gistV61)GIST61.validate(data);
+  const sarcomaV62=SARCOMA62.applies(data);if(sarcomaV62)SARCOMA62.validate(data);
+  const sarcomaV63=SARCOMA63.applies(data);if(sarcomaV63)SARCOMA63.validate(data);
+- assert(sarcomaV60 || gistV61 || sarcomaV62 || sarcomaV63 || oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
++ const sarcomaV64=SARCOMA64.applies(data);if(sarcomaV64)SARCOMA64.validate(data);
++ assert(sarcomaV60 || gistV61 || sarcomaV62 || sarcomaV63 || sarcomaV64 || oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
+  assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
+  assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/eng\/services\/list\/5\/cancer\/profinfo\/chemoprotocols\/)/.test(m.source_url||''),`${code} lacks an official HSE/NCCP PDF link.`);
+  assert(m.sarcoma_subgroup,`${code} lacks Sarcoma subgroup.`);
+@@ -94,7 +96,9 @@
+  assert(sc.mapping_source_url,`${code} lacks supportive-care source.`);
+  assert(sc.validation_status,`${code} lacks supportive-care validation status.`);
+  assert(riskMap.protocols[code],`${code} is missing from central supportive-care map.`);
+- if(!['phase_dependent','variable'].includes(sc.emetogenic_risk)){
++ if(sarcomaV64){
++  SARCOMA64.validateSupport(data,riskMap);
++ }else if(!['phase_dependent','variable'].includes(sc.emetogenic_risk)){
+   assert(sc.script_id,`${code} lacks supportive-care script.`);
+   assert(riskMap.scripts[sc.script_id],`${code} references unknown script ${sc.script_id}.`);
+   assert.strictEqual(sc.supportive_medications_pdf_url,riskMap.scripts[sc.script_id].url,`${code} supportive link is not registry controlled.`);
+@@ -104,6 +108,10 @@
+   if(sarcomaV60){
+    for(const field of ['crcl_ml_min','neurotoxicity_grade','suspected_ifosfamide_encephalopathy','haematuria','urine_output_ml_hour'])assert(defs[field],`${code} lacks reviewed ifosfamide safety field ${field}.`);
+    assert(SARCOMA60.numericRenal(data,'crcl_ml_min',defs.crcl_ml_min));assert.equal(defs.urine_output_ml_hour.unit,'mL/hour');
++  }else if(sarcomaV64){
++   const pair=['00675','00747'].includes(code);
++   for(const field of ['crcl_ml_min',pair?'current_ifos_neuro_grade':'encephalopathy_grade','haematuria',pair?'urine_output_ml_hour':'urine_output_below_target','current_ifosfamide_cns_toxicity','ifosfamide_product','serum_creatinine_umol_l','ifosfamide_laboratory_units_verified'])assert(defs[field],`${code} lacks source-reviewed ifosfamide safety field ${field}.`);
++   assert(SARCOMA64.numericRenal(data,'crcl_ml_min',defs.crcl_ml_min));assert(SARCOMA64.numericRenal(data,'serum_creatinine_umol_l',defs.serum_creatinine_umol_l));
+   }else{
+   for(const field of ['ifosfamide_renal_band','encephalopathy_grade','haematuria','urine_output_below_target'])assert(defs[field],`${code} lacks ifosfamide safety field ${field}.`);
+   }
+@@ -121,10 +129,10 @@
+   if(trueGradeField(field,definition)){
+    ctcaeFields++;
+    assert.strictEqual(definition.type,'select',`${code}/${field} CTCAE input must be select.`);
+-   if(IFOSPAIR62.grade(data,field,definition,CTCAE)){}else if(sarcomaV63){SARCOMA63.validateGrade(data,field,definition,CTCAE);}else if(sarcomaV62){SARCOMA62.validateGrade(data,field,definition,CTCAE);}else if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}else if(oralV34){assert.equal(definition.grading_source_url,m.source_url);assert.equal(definition.ctcae_version,field==='hypertension_grade'?'4.03':undefined);assert(definition.grading_source_label&&definition.source_grading_note);assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else if(code==='00205'&&['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field)){assert.equal(definition.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
++   if(IFOSPAIR62.grade(data,field,definition,CTCAE)){}else if(sarcomaV64){SARCOMA64.validateGrade(data,field,definition,CTCAE);}else if(sarcomaV63){SARCOMA63.validateGrade(data,field,definition,CTCAE);}else if(sarcomaV62){SARCOMA62.validateGrade(data,field,definition,CTCAE);}else if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}else if(oralV34){assert.equal(definition.grading_source_url,m.source_url);assert.equal(definition.ctcae_version,field==='hypertension_grade'?'4.03':undefined);assert(definition.grading_source_label&&definition.source_grading_note);assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else if(code==='00205'&&['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field)){assert.equal(definition.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
+    assert(definition.assessment_guidance,`${code}/${field} lacks assessment guidance.`);
+    const grades=new Set((definition.options||[]).map(item=>Number(item.value)));
+-   const expectedGrades=sarcomaV63?SARCOMA63.ranges[code][field]:sarcomaV62?SARCOMA62.ranges[code][field]:gistV61?GIST61.ranges[code][field]:(oralV34&&field==='hfsr_grade'?[0,1,2,3]:[0,1,2,3,4]);
++   const expectedGrades=sarcomaV64?SARCOMA64.ranges[code][field]:sarcomaV63?SARCOMA63.ranges[code][field]:sarcomaV62?SARCOMA62.ranges[code][field]:gistV61?GIST61.ranges[code][field]:(oralV34&&field==='hfsr_grade'?[0,1,2,3]:[0,1,2,3,4]);
+    if(oralV34&&field==='hfsr_grade')assert(!grades.has(4),'NCCP HFSR table has no grade4 dose pathway');
+    expectedGrades.forEach(g=>assert(grades.has(g),`${code}/${field} lacks Grade ${g}.`));
+    const guide=CTCAE.guide({...definition,id:field});assert(guide?.grades?.length>=expectedGrades.length,`${code}/${field} lacks beside-control grading guide.`);

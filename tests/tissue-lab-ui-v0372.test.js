@@ -75,6 +75,14 @@ lftInputs = { bilirubin_uln_multiple: Lab.calculate('bilirubin_uln_multiple', { 
 lftResult = Engine.assess(p568, {...lftInputs,immune_hepatitis_attribution:"confirmed_immune"});
 assert(lftResult.findings.some(item => (item.ruleId || item.id) === 'ICI_BILI_WITHHOLD'), 'Bilirubin >1.5 ×ULN must trigger the existing withholding rule.');
 
+for (const [analyte, value, uln] of [['bilirubin',40,20],['alt',70,35],['ast',80,40]]) {
+  const target='prior_cycle_'+analyte+'_peak';
+  const adapter=Lab.adapterFor(target);
+  assert.match(adapter.title,/Prior-cycle peak/);
+  assert.equal(adapter.target,target);
+  assert.equal(adapter.analytes[0].id,analyte);
+  assert.equal(Lab.calculate(target,{[analyte]:value},{...Lab.read(),[analyte+'Uln']:uln}).ratio,2);
+}
 const mappedFieldPatterns = /^(bilirubin_ratio_uln|bilirubin_uln_multiple|bilirubin_uln|alt_uln_multiple|ast_uln_multiple|ast_uln|alt_ast_uln_multiple|alt_ast_ratio_uln|ast_alt_uln|transaminases_uln_multiple|alt_ratio_uln)$/;
 let mappedDefinitions = 0;
 let allNumericLftUlnDefinitions = 0;

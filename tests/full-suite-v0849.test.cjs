@@ -2,13 +2,17 @@
 const current21=new Set(require('../data/breast-completion-v08421-source-index.json').codes);
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),vm=require('node:vm'),cp=require('node:child_process');
-const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
+// Preserve this historical suite's clinical/layout assertions against the exact
+// pre-v63 source, after authenticating its reviewed current successor.
+const root=path.resolve(__dirname,'..'),V63=require('./helpers/retrospective-v08463.cjs');
+const historicalFiles=new Set(['data/patient-knowledge/00588.json']);
+const read=p=>{const live=fs.readFileSync(path.join(root,p),'utf8');if(historicalFiles.has(p)||/^patient\/00588\/[^/]+\.html$/.test(p)){const prior=V63.baselineBytes(p);V63.assertCurrent(p,V63.sha(prior),prior.length);return prior.toString();}return live;},json=p=>JSON.parse(read(p));
 const codes=['00414','00322','00776','00794','00588'],idx=json('data/targeted-breast-v0849-source-index.json'),kb=json('data/regimen-knowledge-base-v0849-addendum.json'),R=require('../js/patient-asset-registry-v0810'),J=require('../js/treatment-journey-v0837'),B=require('../js/breast-library-v0837');
 assert.deepEqual(idx.codes,codes);assert.equal(kb.regimen_profiles.length,5);assert(kb.drug_profiles.length>=5);assert(kb.evidence_records.length>=9);
 let rules=0;
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),dir=code==='00588'?'shared':'breast',pf=fs.readdirSync(path.join(root,'protocols',dir)).find(n=>n.startsWith(code+'-')),p=json('protocols/'+dir+'/'+pf);
- assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.9'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(idx.regimens[code].rule_count,code==='00588'?require('./helpers/prostate-inputs-v08457.cjs').retainedBreastRuleCount(p):p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
+ assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.9'));assert.equal(d.protocol_version,String((code==='00588'?V63.historicalProtocol(p):p).metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(idx.regimens[code].rule_count,code==='00588'?require('./helpers/prostate-inputs-v08457.cjs').retainedBreastRuleCount(p):code==='00776'?require('./helpers/enhertu-review-v08462.cjs').historicalRuleCount(p):p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(d.service_kind,'targeted');assert(d.anatomy.length>=4&&d.anatomy.length<=6);
  for(const ch of d.chapters)for(const item of ch.items)for(const id of item.source_ids)assert(d.sources.some(s=>s.id===id),`${code}: source ${id}`);
  const j=J.definitions[code];assert.equal(j.has_patient_dates,false);assert.equal(j.schedule_type,'relative-educational');
@@ -19,7 +23,9 @@ for(const code of codes){
   const h=read(`patient/${code}/${name}.html`);assert(!/undefined|\[object Object\]/.test(h),code+'/'+name);
   for(const m of h.matchAll(/(?:src|href)="([^"#]+)"/g)){if(/^(https?:|data:|mailto:|tel:)/.test(m[1]))continue;assert(fs.existsSync(path.resolve(root,'patient',code,m[1].split(/[?#]/)[0])),`${code}/${name}: ${m[1]}`);}
   if(['index','knowledge','treatment-journey'].includes(name))assert(!/<input|<select|<textarea/.test(h),'Patient orientation requires no entry');
-  if(name==='index')require('./helpers/patient-overview-v08445.cjs').validate(h,code);if(name==='knowledge'){assert(h.includes('wikiCycleChronology'));assert(!h.includes('type="date"'));assert(!h.includes('pk-day-detail'));}
+  // Overview identity is a live cross-document contract. The historical
+  // clinical/layout replay above must not pair an old overview with a new guide.
+  if(name==='index')require('./helpers/patient-overview-v08445.cjs').validate(fs.readFileSync(path.join(root,`patient/${code}/index.html`),'utf8'),code);if(name==='knowledge'){assert(h.includes('wikiCycleChronology'));assert(!h.includes('type="date"'));assert(!h.includes('pk-day-detail'));}
   if(code==='00588')assert(h.includes('Breast adjuvant treatment only'),`Shared-indication scope absent ${name}`);
  }
  for(const name of ['guide','passport','consent-form','sactcard','logistics','supportive-care','treatment-journey',...phases.map(p=>'support-'+p.id)])assert.deepEqual(fs.readFileSync(path.join(root,`patient/${code}/${name}.pdf`)),fs.readFileSync(path.join(root,`docs/patient/${code}/${name}.pdf`)));

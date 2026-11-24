@@ -1,5 +1,5 @@
 'use strict';
-// Source-first clinical boundary matrix. NCCP00776v3b pp1–5 and EMA Enhertu §§4.2–4.4.
+// Source-first clinical boundary matrix. Current LVEF replay supplies verified baseline/current measurements after the 23 November 2026 calculated-decrease repair; historical result bytes remain preserved. NCCP00776v3b pp1–5 and EMA Enhertu §§4.2–4.4.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const repo=process.env.SACT_REPO||path.resolve(__dirname,'../..'),E=require(path.join(repo,'js/assessment-engine')),D=require(path.join(repo,'js/protocol-dose-schedule')),V=require(path.join(repo,'js/protocol-validator'));
 const p=JSON.parse(fs.readFileSync(path.join(repo,'protocols/breast/00776-trastuzumab-deruxtecan.json'),'utf8'));
@@ -22,12 +22,12 @@ run('Other infusion reaction',{mild_moderate_infusion_reaction:true},'withhold',
 run('Symptomatic CHF',{symptomatic_chf:true},'permanently_discontinue','NCCPp4');
 for(const val of [39.9,40,45,45.1,49.9,50,55])run('BaselineLVEF '+val,{assessment_stage:'baseline',lvef_percent:val},val<50?'withhold':null,'NCCPp2 firstdose≥50',r=>assert.equal(has(r,'BASELINE_LVEF_LT50'),val<50));
 for(const val of [49.9,50])run('IsolatedbaselineLVEF '+val,{baseline_lvef_percent:val},val<50?'withhold':null,'NCCPp2 baselineeligibility',r=>assert.equal(has(r,'BASELINE_LVEF_LT50'),val<50));
-for(const val of [39.9,40,45,45.1])for(const drop of [9.9,10,20,20.1])run(`OngoingLVEF${val} drop${drop}`,{assessment_stage:'ongoing',lvef_percent:val,lvef_drop_points:drop},val<40||drop>20||(val<=45&&drop>=10)?'withhold':'proceed_with_caution','NCCPp4 LVEF branches',r=>{assert.equal(has(r,'LVEF_40_45_DROP10'),val>=40&&val<=45&&drop>=10&&drop<=20);assert.equal(has(r,'LVEF_DROP_GT20'),drop>20);});
-run('LVEF44 without fall retains unresolvedcontext',{lvef_percent:44},'partial_context_required','NCCPp4 LVEFandabsolutechange',(_,m)=>noDose(m));
-run('Independent fall>20 withholds withoutabsolute',{lvef_drop_points:20.1},'withhold','NCCPp4 OR');
+for(const val of [39.9,40,45,45.1])for(const drop of [9.9,10,20,20.1])run(`OngoingLVEF${val} drop${drop}`,{assessment_stage:'ongoing',lvef_percent:val,baseline_lvef_percent:val+drop},val<40||drop>20||(val<=45&&drop>=10)?'withhold':val+drop<50?'consultant_review':'proceed_with_caution','NCCPp4 LVEF branches',r=>{assert.equal(has(r,'LVEF_40_45_DROP10'),val>=40&&val<=45&&drop>=10&&drop<=20);assert.equal(has(r,'LVEF_DROP_GT20'),drop>20);});
+run('LVEF44 without baseline requires review',{lvef_percent:44},'consultant_review','NCCPp4 LVEFandabsolutechange',(_,m)=>noDose(m));
+run('Manual fall cannot replace verified measurements',{lvef_drop_points:20.1},'incomplete','NCCPp4 requires an absolute change from measured LVEF',r=>assert.equal(r.inputs.lvef_drop_points,null));
 run('Confirmed severe recheck stops',{confirmed_severe_lvef_recheck:true},'permanently_discontinue','NCCPp4 repeatwithin3weeks');
-run('Recheck40–45 not recovered stops',{lvef_40_45_recheck:'not_recovered'},'permanently_discontinue','NCCPp4');
-run('Recheck40–45 recovered allows same-dose review',{lvef_40_45_recheck:'recovered'},'proceed_with_caution','NCCPp4');
+run('Recheck40–45 not recovered stops',{assessment_stage:'ongoing',baseline_lvef_percent:55,lvef_percent:43,lvef_40_45_recheck:'not_recovered'},'permanently_discontinue','NCCPp4');
+run('Recheck40–45 recovered allows same-dose review',{assessment_stage:'ongoing',baseline_lvef_percent:55,lvef_percent:46,lvef_40_45_recheck:'recovered'},'proceed_with_caution','NCCPp4');
 run('Recoveredrecheck cannot overrideCHF',{lvef_40_45_recheck:'recovered',symptomatic_chf:true},'permanently_discontinue','NCCPp4 conflicts');
 for(const renal of [0,29.9,30,59.9,60,90])run('CrCl '+renal,{crcl_ml_min:renal},renal<30?'consultant_review':'proceed_with_caution','NCCPp3 + EMA4.2 discrepancy',r=>{if(renal<30)assert(/cannot be determined/.test(txt(r)));if(renal>=30&&renal<60)assert(/ILD/.test(txt(r)));});
 run('Dialysis requires source reconciliation',{haemodialysis:true},'consultant_review','NCCPp3 versusEMA4.2',(_,m)=>noDose(m));
@@ -50,7 +50,7 @@ for(const e of [0,2,3,4])run('ECOG '+e,{ecog:e},e>2?'consultant_review':null,'NC
 run('Nonadvanced setting notmapped',{unresectable_or_metastatic:false},'consultant_review','NCCPp1');
 run('ActiveCNS/cord caution',{cord_compression_or_active_cns:true},'consultant_review','NCCPp2');
 for(const v of [10,24.9,25,49.9,50,75,100])run('Platelets noforeigndosealgorithm '+v,{platelets:v},null,'NCCP+EMA no plateletdose ladder',(_,m)=>noDose(m));
-structure('Strictschema andsource links',()=>{assert(V.validate(p,{strict:true}).valid);assert.deepEqual(p.required_inputs,[]);for(const d of Object.values(p.input_definitions))assert.equal(d.required,false);for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert.equal(r.source.checked_date,'2026-10-20');}for(const k of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[k],false);});
+structure('Strictschema andsource links',()=>{assert(V.validate(p,{strict:true}).valid);assert.deepEqual(p.required_inputs,[]);for(const d of Object.values(p.input_definitions))assert.equal(d.required,false);for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert(['2026-10-20','2026-11-23'].includes(r.source.checked_date));}for(const k of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[k],false);});
 structure('Twentyonedays and doses',()=>{const m=D.buildModel(p);assert.equal(m.phases[0].cycleLength,21);assert.equal(m.phases[0].components[0].dose,'5.4 mg/kg');assert.deepEqual(m.phases[0].components[0].days,['1']);});
 structure('Explicit12weekechos andno inventedgenericCTinterval',()=>{assert(/12 weeks/.test(JSON.stringify(p.monitoring)));assert(/cycle 5/.test(JSON.stringify(p.monitoring)));assert(/does not mandate a universal CT/.test(p.monitoring.disease));});
 for(const v of [1.49,1.5,1.51,3,4])run('Bilirubin EMA boundary '+v,{bilirubin_ratio_uln:v},v>1.5?'consultant_review':null,'EMA4.2 bilirubin>1.5ULN',(_,m)=>noDose(m));

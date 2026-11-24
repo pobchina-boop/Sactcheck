@@ -897,10 +897,22 @@
       findings.sort((a, b) => b.priority - a.priority);
     }
 
-    const skippedFields = unique(evaluated.skippedRules.flatMap(rule => rule.missingFields || []));
+    // Some safety domains must remain visibly unassessed even when another
+    // operand already determines a compound rule (for example, low ANC OR
+    // low platelets). Opt-in reporting does not change rule truth or require
+    // unrelated inputs before showing an independent urgent finding.
+    const declaredCoverageGaps = definitions.filter(definition =>
+      definition.report_if_unassessed === true && definition.visible !== false &&
+      !hasEnteredValue(inputs[definition.id])
+    ).map(definition => definition.id);
+    const skippedFields = unique([
+      // Keep explicitly declared safety gaps visible in compact handover/PDF lists.
+      ...declaredCoverageGaps,
+      ...evaluated.skippedRules.flatMap(rule => rule.missingFields || [])
+    ]);
     const skippedContext = unique(evaluated.skippedRules.flatMap(rule => rule.missingContext || []));
     const definitionById = new Map(definitions.map(definition => [definition.id, definition]));
-    const complete = evaluated.skippedRules.length === 0 && evaluated.errors.length === 0;
+    const complete = evaluated.skippedRules.length === 0 && evaluated.errors.length === 0 && declaredCoverageGaps.length === 0;
     const displayInputs = buildDisplayInputs(definitions, rawInputs || {}, inputs);
     const restrictiveFindings = findings.filter(finding => finding.actionType !== "proceed");
     const proceedFindings = findings.filter(finding => finding.actionType === "proceed");

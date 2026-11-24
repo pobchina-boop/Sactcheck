@@ -94,6 +94,11 @@
     const helper=root?.SACTCheckRegimenComponents;
     if(helper?.componentsForProtocol){
       try{ add(helper.componentsForProtocol(protocol)); }catch(_){}
+    }else if(["00588","00746"].includes(protocolCode(protocol))&&helper?.forProtocol){
+      // These reviewed schemas store medicines in structured treatment fields.
+      // The current shared component module exports forProtocol; retain the
+      // historical resolution path unchanged for every other regimen.
+      try{ add(helper.forProtocol(protocol)); }catch(_){}
     }
     const seen=new Set();
     return values.filter(v=>{

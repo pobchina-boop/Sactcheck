@@ -48,6 +48,10 @@ for(const {entry,data} of gu){
   assert(/daily/.test(data.treatment.schedule_summary));
   const patient=read('data/patient-knowledge/'+code+'.json');
   assert.strictEqual(patient.schedule_kind,'continuous');assert.strictEqual(patient.patient_summary.card_cycle_count,null);
+ }else if(code==='00588'){
+  require('./helpers/retrospective-v08463.cjs').validateProtocol(data);
+  assert(card.contexts.every(c=>c.cycle_length_days==null && c.source_schedule_interval_label==='Continuous tablets twice daily'));
+  assert(card.contexts.some(c=>c.indication_id==='mcrpc_brca_monotherapy'));
  }else assert(card.contexts.some(c=>c.cycle_length_days>0),`${code} cycle interval`);
  const side=cardSidecar.protocols.find(x=>x.id===data.protocol_id);assert(side,`${code} sidecar`);
  if(newlyAdded.has(code)){newCount++;assert(entry.path.startsWith('protocols/genitourinary/'),`${code} new file path`);if(['00104','00326','00518','00564'].includes(code)){assert(require('./helpers/prostate-inputs-v08457.cjs').validate(data));}else if(code==='00535'){assert(require('./helpers/skin-inputs-v08442.cjs').validate(data));assert.equal(m.sactcheck_encoding_version,'0.84.42');}else if(require('./helpers/gu-inputs-v08458.cjs').codes.includes(code)){assert(require('./helpers/gu-inputs-v08458.cjs').validate(data));}else if(require('./helpers/gu-inputs-v08459.cjs').codes.includes(code)){assert(require('./helpers/gu-inputs-v08459.cjs').validate(data));}else assert(['0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.58.1','0.59.0'].includes(m.sactcheck_encoding_version),`${code} encoding version`);}

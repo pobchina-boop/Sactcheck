@@ -2,7 +2,21 @@
 
 SACTCheck connects source-linked oncology assessment, clinical knowledge, consent, supportive care and patient information. The visible service currently focuses on solid tumours. Haematology source, data and tests are retained while that service is hidden.
 
-## Current manual update: v0.84.61
+## Current integration review candidate: v0.84.64
+
+Fifteen sarcoma suites from the 18 November review packages are integrated on the cumulative AstraZeneca review branch. The original source and approval limitations are recorded in the three sarcoma scope files.
+
+## Olaparib review candidate: v0.84.63
+
+This olaparib update reviews two existing NCCP protocols across six treatment settings: adjuvant breast, BRCA-selected prostate, first-line ovarian maintenance, relapsed ovarian maintenance, pancreatic maintenance, and olaparib with bevacizumab. Breast and prostate retain their existing route origins; the other four patient routes are newly authored. Treatment duration, eligibility, monitoring and individual-drug actions remain specific to the selected setting.
+
+The scope covers clinical assessment and its handover, clinician knowledge, supportive-care plans, agent-specific consent, patient portals, anatomical symptom explanations, reusable records, wallet cards, three-page guides and full handbooks. Videos are unchanged. Source reconciliation, exact migrations and review evidence are under `validation/olaparib-v08463/`; run `npm run test:olaparib` for the scoped software gate.
+
+The authoring base is the unmerged Enhertu review commit `159532b7cd04238588804a504fff5427ce24a057`, which includes production main `f3b923b247b5663b2bd90b2ffb352fccc5a347ea`. The cumulative manual package preserves those pending Enhertu changes. This is a review candidate, not a deployed release or completed independent clinical/pharmacy approval. The final handoff records actual source-retrieval, software, PDF, browser and device limitations separately.
+
+Manual ZIP members are repository-relative at the archive root. Preparing or applying the files does not commit, push or deploy the site.
+
+## Historical manual update: v0.84.61
 
 This review update follows the saved v0.84.60 working state, authenticated by its complete manifest and migration chain anchored to actual v0.84.59 Git commit `c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c`. It adds four GIST service routes: 00335, 00325/gist, 00719/gist and 00244/gist, while preserving the existing 00244 colorectal patient service. The planned fifth item, pazopanib 00445, remains blocked by its unavailable current source. A fresh retrospective audit covers the preceding five suites: 00500, 00391, 00392, 00501 and 00511.
 

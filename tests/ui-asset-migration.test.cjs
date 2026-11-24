@@ -159,7 +159,8 @@ test('v34 manifest proves before/after bytes and covers the complete affected as
  const v55=require('./helpers/retrospective-v08455.cjs'),design55Record=JSON.parse(fs.readFileSync(v55.RECORD,'utf8'));v55.createMigration(design55Record);
  const v56=require('./helpers/retrospective-v08456.cjs'),design56Record=JSON.parse(fs.readFileSync(v56.RECORD,'utf8'));v56.createMigration(design56Record);
  const v57=require('./helpers/retrospective-v08457.cjs'),design57Record=JSON.parse(fs.readFileSync(v57.RECORD,'utf8'));v57.createMigration(design57Record);
- const later=require('./helpers/patient-migration-catalogue.cjs').getInventoryMigrations().filter(({version})=>version>57);
+ const catalogue=require('./helpers/patient-migration-catalogue.cjs').getInventoryMigrations();
+ const later=require('./helpers/capivasertib-review.cjs').withReviewInventories(catalogue).filter(({version})=>version>57);
  const laterPatientFiles=later.flatMap(({record})=>Object.keys(record.files).filter(file=>domains.some(domain=>file===domain||file.startsWith(domain+'/'))));
  const new57PatientFiles=Object.keys(design57Record.files).filter(file=>domains.some(domain=>file===domain||file.startsWith(domain+'/')));
  const new56PatientFiles=Object.keys(design56Record.files).filter(file=>domains.some(domain=>file===domain||file.startsWith(domain+'/')));

@@ -18,8 +18,8 @@ async function assertNoOverflow(page, label) {
 async function referenceJourney(page, url) {
   const response = await page.goto(`${url}/patient/00568/`);
   assert.equal(response.status(), 200);
-  await page.getByRole('link', { name: 'Open the full OncoWiki: your treatment, explained', exact: true }).click();
-  await page.waitForURL('**/patient/00568/knowledge.html');
+  await page.getByRole('link', {name:'Understand my treatment',exact:true}).click();
+  await page.waitForURL('**/patient/00568/knowledge.html#medicines');
 
   // v0.83.1 deliberately replaced this route's personal calendar with a complete
   // reference chronology. Assert that design rather than restoring retired controls.

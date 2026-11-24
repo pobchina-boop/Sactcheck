@@ -34,10 +34,10 @@
   const PROFILE_LABELS = Object.freeze({female: "Supplied female/local LFT limits", male: "Provisional male LFT limits — not verified for CUH", custom: "Custom laboratory LFT limits"});
 
   const BILIRUBIN_FIELDS = new Set([
-    "bilirubin_ratio_uln", "bilirubin_uln_multiple", "bilirubin_uln"
+    "bilirubin_ratio_uln", "bilirubin_uln_multiple", "bilirubin_uln", "prior_cycle_bilirubin_peak"
   ]);
-  const ALT_FIELDS = new Set(["alt_uln_multiple", "alt_current_uln", "alt_baseline_uln"]);
-  const AST_FIELDS = new Set(["ast_uln_multiple", "ast_uln", "ast_current_uln", "ast_baseline_uln"]);
+  const ALT_FIELDS = new Set(["alt_uln_multiple", "alt_current_uln", "alt_baseline_uln", "prior_cycle_alt_peak"]);
+  const AST_FIELDS = new Set(["ast_uln_multiple", "ast_uln", "ast_current_uln", "ast_baseline_uln", "prior_cycle_ast_peak"]);
   const COMBINED_TRANSAMINASE_FIELDS = new Set([
     "alt_ast_uln_multiple", "alt_ast_ratio_uln", "ast_alt_uln",
     "ast_alt_uln_multiple", "transaminases_uln_multiple", "alt_ratio_uln"
@@ -167,6 +167,7 @@
 
   const timedTransaminaseTitles = Object.freeze({
     alt_current_uln: "Current ALT", alt_baseline_uln: "Pretreatment ALT",
+    prior_cycle_alt_peak: "Prior-cycle peak ALT", prior_cycle_ast_peak: "Prior-cycle peak AST",
     ast_current_uln: "Current AST", ast_baseline_uln: "Pretreatment AST"
   });
 
@@ -188,7 +189,7 @@
     if (bilirubinAlias(id)) {
       return {
         target: id,
-        title: "Bilirubin",
+        title: id === "prior_cycle_bilirubin_peak" ? "Prior-cycle peak bilirubin" : "Bilirubin",
         analytes: [{ id: "bilirubin", label: "Bilirubin", unit: "µmol/L", setting: "bilirubinUln" }],
         decisionUnit: "×ULN"
       };

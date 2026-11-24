@@ -1,0 +1,68 @@
+[
+  {
+    "operation": "add",
+    "path": "/rule_engine/rules/65",
+    "before_absent": true,
+    "after": {
+      "rule_id": "IE_ADMINISTRATION_DAY_REVIEW",
+      "when": {
+        "all": [
+          {
+            "any": [
+              {
+                "field": "assessment_phase",
+                "operator": "==",
+                "value": "treatment"
+              },
+              {
+                "field": "restart_requested",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "field": "cycle_day",
+                "operator": "missing"
+              },
+              {
+                "field": "cycle_day",
+                "operator": "not_in",
+                "value": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "consultant_review",
+        "components": [
+          "etoposide",
+          "ifosfamide"
+        ],
+        "message": "Confirm the actual administration day against source Days 1–5. The entered cycle day may include a treatment delay; reconcile the authorised calendar and treatment-day numbering before further ifosfamide or etoposide. Do not infer an extra dose, automatic calendar reset or reduction; continue required support for doses already given.",
+        "block_numeric_dose": true,
+        "dose_calculation": "specialist_review",
+        "show_in_dose_actions": true
+      },
+      "explanation": "Confirm the actual administration day against source Days 1–5. The entered cycle day may include a treatment delay; reconcile the authorised calendar and treatment-day numbering before further ifosfamide or etoposide. Do not infer an extra dose, automatic calendar reset or reduction; continue required support for doses already given.",
+      "source": {
+        "document": "NCCP 00596 v2",
+        "url": "https://healthservice.hse.ie/documents/6747/596_v2_Ifosfamide_Etoposide_IE_Therapy.pdf",
+        "page": 1,
+        "section": "Treatment and administration table",
+        "checked_date": "2026-11-18",
+        "evidence_kind": "current_primary_extracted_text",
+        "interpretation_note": "Calendar reconciliation safeguard, not an automatic additional cytotoxic day or a dose reduction. Retains the existing calendar-day meaning used for Day 29 count recovery."
+      }
+    }
+  }
+]

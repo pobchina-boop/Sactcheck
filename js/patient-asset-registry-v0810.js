@@ -13,10 +13,23 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.62';
+  const RELEASE='0.84.64';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00675':{"title": "IE/VAC: alternating two-weekly phases", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00747':{"title": "IE/VAC: alternating three-weekly phases", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00504':{"title": "Irinotecan and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00754':{"title": "IVADo: ifosfamide, vincristine, doxorubicin and dactinomycin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00757':{"title": "VIT: vincristine, irinotecan and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00420':{"title": "Doxorubicin and cisplatin: osteosarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00463':{"title": "MAP: surgery-linked osteosarcoma reference course", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00100':{"title": "Mifamurtide: 36-week reference course", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00596':{"title": "Ifosfamide and etoposide:21-day schedule", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00680':{"title": "High-dose ifosfamide:five-day infusion", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00374':{"title": "Trabectedin: soft tissue sarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00462':{"title": "Pegylated liposomal doxorubicin:20 mg/m\u00b2 every21 days", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00554':{"title": "Vinblastine and methotrexate: sarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00335':{"title": "Imatinib: GIST", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00325':{"title": "Sunitinib: 42-day schedule \u2014 choose indication", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["gist"], "scopeGuard": true, "scope": "GIST patient information is available. RCC requires separately authored information; select the indication."},
     '00719':{"title": "Sunitinib: 21-day schedule \u2014 choose indication", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["gist"], "scopeGuard": true, "scope": "GIST patient information is available. RCC requires separately authored information; select the indication."},
@@ -223,7 +236,8 @@
     '00518':{"title": "Cabozantinib \u00b7 renal monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00564':{"title": "Tivozanib \u00b7 renal monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00326':{"title": "Temsirolimus \u00b7 renal monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
-    '00588':{"title": "Olaparib · select breast or prostate context", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Breast adjuvant 00588h or prostate monotherapy 00588g; select context"},
+    '00588':{"title": "Olaparib monotherapy · select treatment context", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Select breast, prostate, first-line ovarian, relapsed ovarian or pancreatic monotherapy; combinations have a separate regimen"},
+    '00746':{"title": "Olaparib and bevacizumab · ovarian maintenance", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00794':{"title": "Sacituzumab govitecan (Trodelvy)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00776':{"title": "Trastuzumab deruxtecan (Enhertu) · every 3 weeks", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00322':{"title": "Everolimus + exemestane", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -308,19 +322,50 @@
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
   const HEAD_NECK46_CODES=Object.freeze(['00261','00483','00484','00455','00558']);
   const GIST_CONTEXT_CODES=Object.freeze(['00325','00719','00244']);
-  const CONTEXT_CODES=Object.freeze(['00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00228','00205','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
+  const OLAPARIB_ROUTES=Object.freeze({breast:'',prostate:'prostate/',ovarian_first_line:'ovarian_first_line/',ovarian_relapsed:'ovarian_relapsed/',pancreatic:'pancreatic/'});
+  const OLAPARIB_ASSETS=Object.freeze({...CONTEXT_ASSETS,handbook:'handbook.pdf','support-treatment':'support-treatment.html','support-treatment-pdf':'support-treatment.pdf','consent-pdf':'consent-form.pdf'});
+  const OLAPARIB_CONTEXT_ALIASES=Object.freeze({
+    breast:'breast',adjuvant_high_risk_early_breast:'breast','00588-breast':'breast',
+    prostate:'prostate',gu:'prostate',genitourinary:'prostate',genitourinary_prostate:'prostate',mcrpc_brca_monotherapy:'prostate','00588-gu':'prostate',
+    ovarian_first_line:'ovarian_first_line',first_line_advanced_ovarian_maintenance:'ovarian_first_line',
+    ovarian_relapsed:'ovarian_relapsed',platinum_sensitive_relapsed_ovarian_maintenance:'ovarian_relapsed',
+    pancreatic:'pancreatic',pancreatic_maintenance:'pancreatic',gi:'pancreatic',gastrointestinal:'pancreatic','00588-gi':'pancreatic',
+    a:'ovarian_first_line',b:'ovarian_first_line',c:'ovarian_first_line',
+    d:'ovarian_relapsed',e:'ovarian_relapsed',f:'ovarian_relapsed',g:'prostate',h:'breast',i:'pancreatic'
+  });
+  function olaparibContext(value,explicit){
+    const resolve=token=>{
+      const selected=text(token).toLowerCase().replace(/^00588\s*([a-i])$/,'$1');
+      return Object.prototype.hasOwnProperty.call(OLAPARIB_CONTEXT_ALIASES,selected)?OLAPARIB_CONTEXT_ALIASES[selected]:'';
+    };
+    // An explicit but unknown/ambiguous selection must not fall back to breast
+    // or to the first ovarian indication in the shared clinical protocol.
+    if(text(explicit))return resolve(explicit);
+    if(text(value?.patient_context))return resolve(value.patient_context);
+    const indication=value?.selected_indication_id||value?.indication_id||value?.selected_indication;
+    if(indication){
+      const token=typeof indication==='object'?(indication.indication_id||indication.id||indication.code):indication;
+      return resolve(token);
+    }
+    if(text(value?.reimbursement_code))return resolve(value.reimbursement_code);
+    if(typeof value==='string'&&/^00588\s*[a-i]$/i.test(value.trim()))return resolve(value);
+    return resolve(root.SACTCheckProtocolContext?.activeTumourGroup?.()||'');
+  }
 
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
-    const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
+    if(code==='00588')return olaparibContext(value,explicit);
+    const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
+    if(code==='00228')return ['liposarcoma','sarcoma'].includes(selected)?'liposarcoma':selected==='breast'?'breast':'';
+    if(code==='00205')return selected==='sarcoma'?'sarcoma':selected==='breast'?'breast':'';
     if(GIST_CONTEXT_CODES.includes(code)){
       if(['gist','sarcoma'].includes(selected))return 'gist';
       return code==='00244'&&['colorectal','gastrointestinal'].includes(selected)?'colorectal':'';
     }
-    if(['00203','00588'].includes(code)&&['prostate','genitourinary','genitourinary_prostate'].includes(selected))return 'prostate';
-    if(code==='00588')return selected==='breast'?'breast':'';
+    if(code==='00203'&&['prostate','genitourinary','genitourinary_prostate'].includes(selected))return 'prostate';
     if(HEAD_NECK46_CODES.includes(code)&&['head_neck','head and neck','head/neck'].includes(selected))return 'head_neck';
     if(code==='00261')return selected==='breast'?'breast':'';
     if(['00419','00294'].includes(code))return ['head_neck','head and neck','head/neck','head_neck_squamous_cell'].includes(selected)?'head_neck':'';
@@ -354,10 +399,12 @@
   }
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
+    if(d.code==='00228')return [d.code,d.code+'/liposarcoma'];
+    if(d.code==='00205')return [d.code,d.code+'/sarcoma'];
     if(['00325','00719'].includes(d.code))return [d.code+'/gist'];
     if(d.code==='00244')return [d.code,d.code+'/gist'];
     if(d.code==='00261')return [d.code,d.code+'/head_neck'];
-    if(d.code==='00588')return ['00588','00588/prostate'];
+    if(d.code==='00588')return Object.values(OLAPARIB_ROUTES).map(suffix=>'00588'+(suffix?'/'+suffix.slice(0,-1):''));
     if(d.code==='00203')return ['00203','00203/lung','00203/prostate'];
     if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[])];
     if(['00419','00294'].includes(d.code))return [d.code+'/head_neck'];
@@ -373,14 +420,21 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal',context=''){
     const def=definitionFor(value); if(!def) return null;
+    if(def.code==='00588'||def.code==='00746'){
+      if(!Object.prototype.hasOwnProperty.call(OLAPARIB_ASSETS,asset))return null;
+      if(def.code==='00746')return `patient/00746/${OLAPARIB_ASSETS[asset]}`;
+      const selected=contextFor(value,context);
+      if(!selected)return `patient/00588/scope.html?asset=${encodeURIComponent(asset)}`;
+      return `patient/00588/${OLAPARIB_ROUTES[selected]}${OLAPARIB_ASSETS[asset]}`;
+    }
     if(CONTEXT_CODES.includes(def.code)){
       const selected=contextFor(value,context);
       if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      if(['00228','00205'].includes(def.code))return `patient/${def.code}/${selected==='breast'?'':selected+'/'}${CONTEXT_ASSETS[asset]}`;
       if(GIST_CONTEXT_CODES.includes(def.code))return `patient/${def.code}/${selected==='gist'?'gist/':''}${CONTEXT_ASSETS[asset]}`;
       if(HEAD_NECK46_CODES.includes(def.code)&&selected==='head_neck')return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
-      if(['00203','00588'].includes(def.code)&&selected==='prostate')return `patient/${def.code}/prostate/${CONTEXT_ASSETS[asset]}`;
-      if(def.code==='00588')return `patient/00588/${CONTEXT_ASSETS[asset]}`;
+      if(def.code==='00203'&&selected==='prostate')return `patient/${def.code}/prostate/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00261')return `patient/${def.code}/${CONTEXT_ASSETS[asset]}`;
       if(['00419','00294'].includes(def.code))return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00385')return `patient/${def.code}/${selected}/${CONTEXT_ASSETS[asset]}`;
@@ -404,18 +458,18 @@
     if(asset==='sact-card'&&def.sactCard) return `patient/${def.code}/sactcard.pdf`;
     return `patient/${def.code}/`;
   }
-  function publicUrl(value,asset='portal'){
-    const rel=relativePath(value,asset); return rel?new URL(rel,PUBLIC_ORIGIN).href:null;
+  function publicUrl(value,asset='portal',context=''){
+    const rel=relativePath(value,asset,context); return rel?new URL(rel,PUBLIC_ORIGIN).href:null;
   }
-  function runtimeUrl(value,asset='portal'){
-    const rel=relativePath(value,asset); if(!rel) return null;
+  function runtimeUrl(value,asset='portal',context=''){
+    const rel=relativePath(value,asset,context); if(!rel) return null;
     const base=root.location?.href||PUBLIC_ORIGIN;
     try{return new URL(rel,base).href;}catch(_){return new URL(rel,PUBLIC_ORIGIN).href;}
   }
-  function compatibilityUrl(value,asset='portal'){
+  function compatibilityUrl(value,asset='portal',context=''){
     const def=definitionFor(value); if(!def) return null;
-    if(CONTEXT_CODES.includes(def.code))return publicUrl(value,asset);
-    if(def.scopeGuard) return publicUrl(value,asset);
+    if(CONTEXT_CODES.includes(def.code)||def.code==='00746')return publicUrl(value,asset,context);
+    if(def.scopeGuard) return publicUrl(value,asset,context);
     const suffix=asset==='guide'?'guide.pdf':asset==='passport'?'passport.pdf':asset==='contact-card'&&def.contactCard?'contact-card.pdf':asset==='sact-card'&&def.sactCard?'sactcard.pdf':'';
     return new URL(`docs/patient/${def.code}/${suffix}`,PUBLIC_ORIGIN).href;
   }
@@ -425,10 +479,10 @@
     if(id) u.searchParams.set('patientSupport',id);
     return u.href;
   }
-  function publicPortalUrl(protocol){return publicUrl(protocol,'portal')||fallbackUrl(protocol);}
-  function guideUrl(protocol){return publicUrl(protocol,'guide');}
-  function passportUrl(protocol){return publicUrl(protocol,'passport');}
-  function sactCardUrl(protocol){return publicUrl(protocol,'sact-card');}
+  function publicPortalUrl(protocol,context=''){return publicUrl(protocol,'portal',context)||fallbackUrl(protocol);}
+  function guideUrl(protocol,context=''){return publicUrl(protocol,'guide',context);}
+  function passportUrl(protocol,context=''){return publicUrl(protocol,'passport',context);}
+  function sactCardUrl(protocol,context=''){return publicUrl(protocol,'sact-card',context);}
   function openTarget(url,target='_blank'){
     if(!url) return null;
     if(typeof root.open!=='function') return {url,opened:false};
@@ -436,23 +490,23 @@
     if(win){try{win.opener=null;}catch(_){} return win;}
     return {url,opened:false,blocked:true};
   }
-  function openPortal(protocol){
-    const url=runtimeUrl(protocol,'portal');
+  function openPortal(protocol,context=''){
+    const url=runtimeUrl(protocol,'portal',context);
     if(!url) return false;
     return openTarget(url);
   }
-  function openGuide(protocol){
-    const url=runtimeUrl(protocol,'guide');
+  function openGuide(protocol,context=''){
+    const url=runtimeUrl(protocol,'guide',context);
     if(!url) return false;
     return openTarget(url);
   }
-  function openPassport(protocol){
-    const url=runtimeUrl(protocol,'passport');
+  function openPassport(protocol,context=''){
+    const url=runtimeUrl(protocol,'passport',context);
     if(!url) return false;
     return openTarget(url);
   }
-  function openSactCard(protocol){
-    const url=runtimeUrl(protocol,'sact-card');
+  function openSactCard(protocol,context=''){
+    const url=runtimeUrl(protocol,'sact-card',context);
     if(!url) return false;
     return openTarget(url);
   }

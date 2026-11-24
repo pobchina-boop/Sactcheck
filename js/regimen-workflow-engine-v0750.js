@@ -304,18 +304,30 @@
 
   function interactionOverrides(protocol,data,activeMedicines){
     const components=(activeMedicines||componentNames(protocol)).map(normaliseDrug);
-    return asArray(data?.interaction_rules).filter(rule=>
+    const matched = asArray(data?.interaction_rules).filter(rule=>
       asArray(rule.match_agents).some(agent=>components.includes(normaliseDrug(agent)))
     ).map(rule=>({
       ...rule,
       source:data?.sources?.[rule.source_id]||null
     }));
+    if (protocol?.protocol_id === "nccp-00947-v1" && components.includes("capivasertib")) {
+      matched.push({
+        id: "capivasertib_cyp3a4_review",
+        message: "Check CYP3A4 inhibitors and inducers with pharmacy. Avoid strong inhibitors where possible. Reconcile any interaction adjustment with the current capivasertib dose and prior reductions. Avoid grapefruit.",
+        source: {label: "NCCP 00947, pages 1 and 8; EMA Truqap sections 4.2 and 4.5", url: "https://www.ema.europa.eu/en/documents/product-information/truqap-epar-product-information_en.pdf"}
+      });
+    }
+    return matched;
   }
 
   function resolveExtravasation(protocol,data){
     const rules=data?.extravasation?.drugs||{};
     const classes=data?.extravasation?.classes||{};
     const rows=administrationRows(protocol);
+    if (protocol?.protocol_id === "nccp-00947-v1" && rows.some(row => row.normalised === "fulvestrant" && row.route === "IM") &&
+        rows.every(row => routeIsOral(row.route) || (row.normalised === "fulvestrant" && row.route === "IM"))) {
+      return {status: "intramuscular", agents: [], highest: null, unknownAgents: [], emergencySteps: []};
+    }
     const byDrug=new Map();
 
     rows.forEach(row=>{
@@ -656,6 +668,13 @@
     }).join("");
   }
 
+
+  function renderCompleteCuhReference(reference){
+    if(!reference?.display_only_reference) return "";
+    const display=(item,key)=>item.display_fields?.[key]??item[key];
+    return `<section class="workflow-rx-evidence workflow-complete-local-reference"><strong>Complete supplied local reference · individual reconciliation required</strong><p>${esc(reference.label)}</p><p>${esc(reference.note)}</p><table><thead><tr><th>Medicine</th><th>Historical dose / route / frequency</th><th>Timing, directions and reconciliation</th></tr></thead><tbody>${asArray(reference.items).map(item=>`<tr><td>${esc(item.medicine)}</td><td>${esc([display(item,"dose"),display(item,"route"),display(item,"frequency")].filter(Boolean).join(" · "))}</td><td>${esc(display(item,"timing"))}<p>${esc(display(item,"directions"))}</p>${item.source_clarification?`<p class="local-source-clarification">${esc(item.source_clarification)}</p>`:""}</td></tr>`).join("")}</tbody></table></section>`;
+  }
+
   function renderSupportiveScript(manifest){
     const supportive=manifest.supportiveCare||{};
     if(supportive.status!=="available") return `<div class="workflow-support-script"><p>${esc(supportive.message||"Confirm current supportive-care guidance.")}</p></div>`;
@@ -668,7 +687,7 @@
       ${adjunctNames.length?`<div class="workflow-rx-note"><strong>Local-reference adjuncts retained:</strong> ${esc(adjunctNames.join(", "))}. These are not all antiemetics; verify the current local prescription.</div>`:""}
       ${agent.length?`<div class="workflow-rx-note"><strong>Agent-specific support:</strong> ${agent.map(x=>esc(x.label)).join(" · ")}</div>`:""}
       ${supportive.evidence_update?`<div class="workflow-rx-evidence"><strong>Evidence update:</strong> ${esc(supportive.evidence_update)}</div>`:""}
-      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}
+      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}${supportive.local_reference?.display_only_reference?renderCompleteCuhReference(supportive.local_reference):asArray(supportive.local_reference?.items).filter(item=>item.source_clarification).map(item=>`<div class="workflow-rx-evidence workflow-local-source-clarification"><strong>${esc(item.medicine)} · supplied local reference</strong><p>${esc([item.dose,item.route,item.frequency].filter(Boolean).join(" · "))}</p><p>${esc(item.timing)} ${esc(item.directions)}</p><p>${esc(item.source_clarification)}</p></div>`).join("")}
     </div>`;
   }
 
@@ -701,6 +720,11 @@
         <article class="workflow-module assessment">
           <div class="workflow-module-icon">✓</div>
           <div><span>Clinical</span><h3>Treatment assessment engine</h3><p>Open the existing structured NCCP assessment engine.</p></div>
+          ${manifest.protocolId === "nccp-00947-v1" ? `<details><summary>Capivasertib glucose checks</summary>
+            <p>Record fasting status and timing relative to the dose. Use the pre-dose fasting glucose for NCCP table 4. Record the peak grade, recovery interval and previous prescribed dose when reviewing a restart.</p>
+            <p>Suspected ketoacidosis requires immediate capivasertib interruption and urgent assessment. Confirmed ketoacidosis requires permanent discontinuation.</p>
+            <a href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">NCCP 00947 · monitoring and hyperglycaemia tables</a>
+          </details>` : ''}
           ${moduleStatus("available")}
           <button class="btn workflow-module-action" type="button" data-workflow-assess>Open assessment</button>
         </article>
@@ -732,13 +756,20 @@
           <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer"><span>NCCP antiemetic source</span>${externalLinkIcon()}</a>
         </article>
 
-        <article class="workflow-module extravasation">
+        ${extra.status === "intramuscular" ? `<article class="workflow-module extravasation">
+          <div class="workflow-module-icon">IM</div>
+          <div><span>Administration safety</span><h3>Fulvestrant injection check</h3>
+          <p>On day 1, discuss ANC below 1.0 × 10⁹/L or platelets below 100 × 10⁹/L with the consultant before the injections. These thresholds apply to fulvestrant injection safety.</p>
+          <p>Check bleeding risk and anticoagulants. Give the prescribed dose by slow gluteal injection and assess new radiating pain, numbness or weakness.</p></div>
+          <a class="btn secondary workflow-module-action" href="patient/00947/first-cycle.html" target="_blank" rel="noopener noreferrer">Injection dates and printable cycle pack</a>
+          <a class="workflow-source-link" href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">NCCP 00947 · pages 1, 2 and 5</a>
+        </article>` : `<article class="workflow-module extravasation">
           <div class="workflow-module-icon">IV</div>
           <div><span>Administration safety</span><h3>Extravasation</h3><p>${extra.highest?`${esc(extra.highest.drug)} · ${esc(extra.highest.classLabel)}`:"Regimen-derived parenteral risk"}</p></div>
           ${moduleStatus(extra.status==="available"?"available":"review_required")}
           <div class="workflow-module-expanded">${renderExtravasation(manifest)}</div>
           ${extra.sourceGuidance?.url?`<a class="workflow-source-link" href="${esc(extra.sourceGuidance.url)}" target="_blank" rel="noopener noreferrer"><span>NCCP extravasation guidance</span>${externalLinkIcon()}</a>`:""}
-        </article>
+        </article>`}
 
         <article class="workflow-module patient">
           <div class="workflow-module-icon">QR</div>

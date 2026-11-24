@@ -5,7 +5,14 @@ const registry=require('../js/patient-asset-registry-v0810.js');
 const check=require('./helpers/head-neck-suite-registration-v08445.cjs').registry;
 const prior=Object.keys(JSON.parse(fs.readFileSync(path.join(root,'data/protected-patient-assets-v0810.json'))).assets);
 check(registry.codes,prior);
-assert.equal(registry.codes.length,275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
+const release=require('../package.json').version;
+const sarcoma=release==='0.84.64' ? require('./helpers/retrospective-v08464.cjs').NEW_ROUTES : [];
+const hasOlaparib=['0.84.63','0.84.64'].includes(release);
+assert.equal(registry.codes.length,hasOlaparib?279+sarcoma.filter(route=>!route.includes('/')).length:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
+if(hasOlaparib){
+ assert.equal(registry.codes.flatMap(code=>registry.bundleRoutes(code)).length,313+sarcoma.length);
+ assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,321+sarcoma.length);
+}
 for(const code of ['00453','00602','00807','00885','00894','00945','00500','00391','00392','00501','00511']) {
  assert.throws(()=>check(registry.codes.filter(x=>x!==code),prior),'Missing '+code+' must fail');
  const migration=JSON.parse(fs.readFileSync(path.join(root,'validation/'+(code==='00500'||code==='00391'||code==='00392'||code==='00501'||code==='00511'?'sarcoma-v08460':'gu-v08459')+'/asset-migrations.json')));
@@ -16,7 +23,7 @@ assert.throws(()=>check([...registry.codes,registry.codes[0]],prior),'Duplicate 
 const repair=require('./helpers/release-repair-v08460.cjs');repair.verify();
 assert.throws(()=>repair.expected('tests/helpers/head-neck-suite-registration-v08445.cjs','0'.repeat(64),1));
 assert.deepEqual(repair.expected('patient/00500/guide.pdf','protected',123),{sha256:'protected',bytes:123});
-console.log('Registry repair: historic registry and explicit durvalumab routes, all 11 added routes and 33 recorded assets, missing/unknown/duplicate rejection, exact repair provenance pass.');
+console.log('Registry repair: historic registry and explicit durvalumab/olaparib routes, all 11 added routes and 33 recorded assets, missing/unknown/duplicate rejection, exact repair provenance pass.');
 
 // Exercise the missing route-list coverage separately from full historical Git checks.
 const crypto=require('node:crypto');
@@ -26,7 +33,7 @@ const records=releases.map(([dir])=>JSON.parse(fs.readFileSync(path.join(root,'v
 for(const tool of ['tools/system-health-audit-v0810.js','tools/validate-pages-site.js','tests/v0810-architecture-consolidation.test.js']){
  const src=fs.readFileSync(path.join(root,tool),'utf8');
  assert(src.includes('patient-migration-catalogue.cjs'),tool+' uses the shared reviewed migration catalogue');
- for(const version of [58,59,60,61,62])assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
+ for(const version of (hasOlaparib?[58,59,60,61,62,63,...(sarcoma.length?[64]:[])]:[58,59,60,61,62]))assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
 }
 let assets=0;
 for(let i=0;i<releases.length;i++)for(const code of releases[i][1])for(const name of ['index.html','guide.pdf','passport.pdf']){

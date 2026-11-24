@@ -10262,171 +10262,114 @@ const definitions={
     ]
   },
   "00588": {
+    "code": "00588",
+    "release": "0.84.63",
+    "checked": "2026-11-24",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient/PPI review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Olaparib after treatment for early breast cancer · the whole treatment journey",
+    "setting": "Germline BRCA1/2-associated, HER2-negative high-risk early breast cancer",
+    "summary": "Take your prescribed olaparib dose morning and evening every day, without a planned rest week. This breast course lasts up to one year, or stops earlier if the cancer returns or side effects make treatment unsuitable. Prescribed endocrine therapy can continue on its own timetable.",
     "stages": [
       "Before starting",
-      "First cycle / month",
-      "Early treatment",
-      "Ongoing treatment",
-      "Change / completion"
+      "Every day",
+      "Scheduled review",
+      "Change or completion"
     ],
     "lanes": [
       {
         "label": "Treatment plan",
-        "cells": [
-          "Confirm indication, goal and current prescription",
-          "Continuous tablets through a planned one-year breast course",
-          "Continue according to response, tolerance and prescribed course",
-          "Team review before restart or dose change",
-          "Agree completion or next treatment"
-        ],
         "kind": "treatment",
         "source_ids": [
-          "00588"
-        ],
-        "note": "Take olaparib tablets morning and evening every day. There is no planned week off. Blood-review appointments are usually every four weeks during this one-year breast course."
-      },
-      {
-        "label": "Blood count, kidneys and liver",
-        "cells": [
-          "Baseline FBC, renal and liver profile; recover previous blood toxicity before starting",
-          "First repeat around four weeks; earlier if symptoms or results require",
-          "Every four weeks",
-          "Every four weeks through the twelve-month course",
-          "Recheck abnormalities; severe/persistent blood toxicity may need marrow investigation"
-        ],
-        "kind": "monitoring",
-        "source_ids": [
-          "00588",
+          "nccp",
           "smpc"
         ],
-        "note": "Reference timing, not booked appointments. Ask who requests each test, when it is due, who reviews the result and whom to contact if it is missing. Delays can change cycle numbers; time-based monitoring remains time-based."
+        "note": "Dates and dose changes are confirmed by the treating team.",
+        "cells": [
+          "Confirm the cancer setting, molecular test, previous treatment and agreed purpose.",
+          "Take the prescribed olaparib tablets morning and evening, with no planned rest week.",
+          "Review symptoms, blood results, medicines, adherence and supply before agreeing the next prescription.",
+          "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food. This breast course lasts up to one year, or stops earlier if the cancer returns or side effects make treatment unsuitable. Prescribed endocrine therapy can continue on its own timetable. Follow your own prescription if the dose changes."
+        ]
       },
       {
-        "label": "Symptoms, medicines and tablet supply",
-        "cells": [
-          "Review previous treatment, medicines, supplements and anti-sickness plan",
-          "Check nausea, intake, fatigue and adherence; do not wait if unwell",
-          "Review at blood/clinic contacts; check new medicines",
-          "Continue reviews and arrange supplies",
-          "Review recovery and the final olaparib stop plan"
-        ],
+        "label": "Safety checks",
         "kind": "monitoring",
         "source_ids": [
-          "00588",
+          "nccp",
           "smpc"
         ],
-        "note": "Reference timing, not booked appointments. Ask who requests each test, when it is due, who reviews the result and whom to contact if it is missing. Delays can change cycle numbers; time-based monitoring remains time-based."
+        "note": "A normal previous test does not exclude a new problem.",
+        "cells": [
+          "Confirm the germline BRCA1/2 result and high-risk HER2-negative breast indication, recovery from chemotherapy/local treatment, full blood count, kidney/liver tests, medicines and pregnancy testing where relevant.",
+          "Report new symptoms promptly. Urgent symptoms need a call; do not wait for a planned test.",
+          "Full blood count, kidney and liver tests every four weeks through the first 12 months; extra tests for symptoms or abnormal results. Review nausea, intake, fatigue, infection, bruising, breathing, medicines and tablet supply.",
+          "The team follows up abnormal results and explains the next monitoring plan."
+        ]
       },
       {
-        "label": "Surgery, radiation and hormone treatment",
-        "cells": [
-          "Complete the agreed local treatment; confirm timing after radiation",
-          "Olaparib begins after local-treatment recovery; hormone treatment may overlap",
-          "Continue separately prescribed endocrine therapy where indicated",
-          "Endocrine therapy can continue alongside olaparib",
-          "Olaparib finishes by the planned year; endocrine treatment may continue"
-        ],
+        "label": "Cancer review and support",
         "kind": "monitoring",
         "source_ids": [
-          "00588",
-          "smpc"
+          "nccp"
         ],
-        "note": "Reference timing, not booked appointments. Ask who requests each test, when it is due, who reviews the result and whom to contact if it is missing. Delays can change cycle numbers; time-based monitoring remains time-based."
-      },
-      {
-        "label": "Breast surveillance and scans",
+        "note": "Safety blood tests and cancer-response assessment answer different questions.",
         "cells": [
-          "Confirm surgical follow-up and breast-imaging plan",
-          "No automatic olaparib-specific CT scan",
-          "Breast follow-up and symptom-directed investigation",
-          "Annual mammography of remaining breast tissue; symptom-directed tests. No routine asymptomatic CT or tumour markers.",
-          "Continue surveillance after olaparib; investigate new symptoms promptly"
-        ],
-        "kind": "monitoring",
-        "source_ids": [
-          "00588",
-          "smpc"
-        ],
-        "note": "Reference timing, not booked appointments. Ask who requests each test, when it is due, who reviews the result and whom to contact if it is missing. Delays can change cycle numbers; time-based monitoring remains time-based."
-      },
-      {
-        "label": "Echo, ECG and bone density",
-        "cells": [
-          "Check if previous/other treatments or existing conditions require testing",
-          "No routine olaparib-specific echo or ECG",
-          "Keep any separate endocrine or cardiac monitoring plan",
-          "DXA follows endocrine treatment/fracture risk, not the olaparib calendar",
-          "Continue only as indicated by the relevant treatment and risk plan"
-        ],
-        "kind": "monitoring",
-        "source_ids": [
-          "00588",
-          "smpc"
-        ],
-        "note": "Reference timing, not booked appointments. Ask who requests each test, when it is due, who reviews the result and whom to contact if it is missing. Delays can change cycle numbers; time-based monitoring remains time-based."
-      },
-      {
-        "label": "Pregnancy and contraception",
-        "cells": [
-          "Pregnancy exclusion/test where relevant; contraception discussion",
-          "Follow agreed contraception",
-          "Consider repeat testing where indicated",
-          "Continue contraception throughout",
-          "Women: six months after; men/partners: three months. No breastfeeding for one month after"
-        ],
-        "kind": "monitoring",
-        "source_ids": [
-          "00588",
-          "smpc"
-        ],
-        "note": "Reference timing, not booked appointments. Ask who requests each test, when it is due, who reviews the result and whom to contact if it is missing. Delays can change cycle numbers; time-based monitoring remains time-based."
+          "Agree who requests each test, who explains results and the daytime/out-of-hours contact routes.",
+          "Use the written support plan. Record missed tablets, symptoms and questions for review.",
+          "Continue the agreed breast follow-up and mammography plan. New symptoms need assessment. Olaparib safety blood tests are separate from surveillance; asymptomatic follow-up does not automatically require CT scans or tumour markers.",
+          "Agree how to continue, pause or finish treatment and arrange ongoing care."
+        ]
       }
     ],
     "milestones": [
       {
-        "title": "Treatment and safety review",
-        "when": "Before each planned treatment or four-week review for olaparib",
-        "why": "FBC, renal and liver profile every 4 weeks throughout the 12-month breast course; earlier/additional tests for symptoms or abnormal results. Review adherence, tablet supply, nausea, fatigue and all medicines.",
-        "clinical": "High risk:TNBC residual disease after neoadjuvant therapy or node-positive/≥2 cm after adjuvant chemotherapy; HR-positive disease requires residual disease with CPS+EG≥3 after neoadjuvant therapy or≥4 positive nodes after adjuvant chemotherapy. Ideally start within 12 weeks of the last surgery, chemotherapy or radiation.",
-        "action": "The treating team confirms results and the plan; this map does not authorise a dose.",
+        "title": "Baseline checks",
+        "when": "Before",
+        "why": "Confirm the germline BRCA1/2 result and high-risk HER2-negative breast indication, recovery from chemotherapy/local treatment, full blood count, kidney/liver tests, medicines and pregnancy testing where relevant.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
         "source_ids": [
-          "00588",
+          "nccp",
           "smpc"
         ]
       },
       {
-        "title": "Benefit and continuation",
-        "when": "At agreed clinical review points",
-        "why": "In people with the high-risk inherited BRCA-associated breast cancer studied, one year of olaparib reduced invasive recurrence and improved survival. Longer follow-up shows that the benefit persists after treatment ends. Eligibility is specific, and benefit for an individual remains uncertain.",
-        "clinical": "NCCP 00588 h breast adjuvant scope only. Hormone-receptor status and prior chemotherapy setting determine high-risk eligibility.",
-        "action": "Discuss benefit, toxicity and priorities before continuing or changing treatment.",
+        "title": "Safety blood tests and symptom review",
+        "when": "During",
+        "why": "Full blood count, kidney and liver tests every four weeks through the first 12 months; extra tests for symptoms or abnormal results. Review nausea, intake, fatigue, infection, bruising, breathing, medicines and tablet supply.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
         "source_ids": [
-          "00588",
-          "retrospective-trial"
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Cancer assessment",
+        "when": "Response",
+        "why": "Continue the agreed breast follow-up and mammography plan. New symptoms need assessment. Olaparib safety blood tests are separate from surveillance; asymptomatic follow-up does not automatically require CT scans or tumour markers.",
+        "clinical": "Individual consultant plan",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
         ]
       }
     ],
     "clinical_notes": [
       "Do not extend to BRCA variants of uncertain significance, all HER2-negative cancers, concurrent radiation or the other 00588 organ-specific indications. This update does not lengthen the one-year breast course."
     ],
-    "code": "00588",
-    "release": "0.84.21",
-    "checked": "2026-10-25",
-    "status": "Source reconciled; independent clinical, pharmacy and patient/PPI review pending",
-    "schedule_type": "relative-educational",
-    "has_patient_dates": false,
-    "title": "Olaparib · adjuvant breast treatment: treatment and checks",
-    "setting": "Germline BRCA1/2-associated, HER2-negative high-risk early breast cancer",
-    "summary": "Take olaparib tablets morning and evening every day. There is no planned week off. Blood-review appointments are usually every four weeks during this one-year breast course.",
     "sources": [
       {
-        "id": "00588",
-        "title": "NCCP 00588 v5b · official regimen",
-        "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf"
+        "id": "nccp",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
         "id": "smpc",
-        "title": "EMA Lynparza product information",
+        "title": "EMA Lynparza product information · updated 19 February 2026",
         "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf"
       },
       {
@@ -48200,94 +48143,119 @@ const definitions={
   },
   "00588:prostate": {
     "code": "00588",
-    "title": "Olaparib for prostate cancer: treatment and checks",
-    "release": "0.84.57",
-    "checked": "2026-11-16",
-    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "release": "0.84.63",
+    "checked": "2026-11-24",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient/PPI review pending.",
     "schedule_type": "relative-educational",
     "has_patient_dates": false,
+    "title": "Olaparib for prostate cancer · the whole treatment journey",
     "setting": "BRCA1/2-mutated metastatic castration-resistant prostate cancer after a new hormonal agent",
-    "summary": "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food, continuously while helpful and tolerable. Kidney function, interactions or side effects can change the prescribed dose. This prostate course does not use the one-year breast or two-year ovarian limit.",
+    "summary": "Take your prescribed olaparib dose morning and evening every day, without a planned rest week. Treatment continues while the cancer remains controlled and side effects remain acceptable; there is no fixed one-year or two-year prostate course.",
     "stages": [
       "Before starting",
-      "During treatment",
-      "Between visits",
-      "After treatment"
+      "Every day",
+      "Scheduled review",
+      "Change or completion"
     ],
     "lanes": [
       {
-        "label": "Safety and baseline tests",
-        "cells": [
-          "Validated BRCA1/2 result, full blood count, kidney and liver tests. Confirm recovery from previous blood toxicity and review current medicines, previous hormone treatment and ongoing testosterone suppression.",
-          "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Persistent low counts after an interruption may need specialist blood investigations. Review new cough, breathlessness, bleeding and leg swelling promptly.",
-          "Extra tests if symptoms or abnormal results require them.",
-          "Follow abnormal results and ongoing symptoms until a plan is agreed."
-        ],
-        "kind": "monitoring",
+        "label": "Treatment plan",
+        "kind": "treatment",
         "source_ids": [
           "nccp",
           "smpc"
         ],
-        "note": "Safety tests and cancer-response assessments have different purposes. Your plan may change after illness or a dose adjustment."
+        "note": "Dates and dose changes are confirmed by the treating team.",
+        "cells": [
+          "Confirm the cancer setting, molecular test, previous treatment and agreed purpose.",
+          "Take the prescribed olaparib tablets morning and evening, with no planned rest week.",
+          "Review symptoms, blood results, medicines, adherence and supply before agreeing the next prescription.",
+          "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food. Treatment continues while the cancer remains controlled and side effects remain acceptable; there is no fixed one-year or two-year prostate course. Follow your own prescription if the dose changes."
+        ]
       },
       {
-        "label": "Medicines and practical care",
-        "cells": [
-          "Confirm the pathogenic germline or tumour BRCA1/2 result and previous treatment. Continue prescribed androgen deprivation therapy (ADT) unless you have had surgical castration.",
-          "Swallow tablets whole; do not chew, crush, dissolve or divide them. Tablets and capsules are not interchangeable. If a dose is missed, take the next normal dose at its usual time; never double up. Avoid grapefruit and Seville oranges, and check all medicines with pharmacy.",
-          "NCCP classes oral olaparib as moderate-to-high sickness risk. The team considers anti-sickness medicine and a proton pump inhibitor for stomach protection under local policy. Obtain a written prevention/rescue plan and report persistent nausea or inability to take tablets.",
-          "Review lasting effects, support needs and safe disposal of unused medicines."
-        ],
+        "label": "Safety checks",
         "kind": "monitoring",
         "source_ids": [
           "nccp",
           "smpc"
         ],
-        "note": "Safety tests and cancer-response assessments have different purposes. Your plan may change after illness or a dose adjustment."
+        "note": "A normal previous test does not exclude a new problem.",
+        "cells": [
+          "Confirm the validated germline or tumour BRCA1/2 result, previous new hormonal treatment and ongoing testosterone suppression. Check full blood count, kidney and liver tests and recovery from previous treatment.",
+          "Report new symptoms promptly. Urgent symptoms need a call; do not wait for a planned test.",
+          "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Reviews also cover symptoms, tablets, support medicines and supply; extra tests may be needed between appointments.",
+          "The team follows up abnormal results and explains the next monitoring plan."
+        ]
       },
       {
-        "label": "Response and next steps",
-        "cells": [
-          "BRCA1/2-mutated metastatic castration-resistant prostate cancer after a new hormonal agent",
-          "Prostate-specific antigen (PSA), symptoms and scans are interpreted together. Testosterone testing can check continued castration. Your consultant sets the schedule; this source does not impose a universal three-month scan interval.",
-          "Report new or worsening symptoms promptly.",
-          "Agree the next treatment and follow-up plan."
-        ],
+        "label": "Cancer review and support",
         "kind": "monitoring",
         "source_ids": [
-          "nccp",
-          "smpc"
+          "nccp"
         ],
-        "note": "Safety tests and cancer-response assessments have different purposes. Your plan may change after illness or a dose adjustment."
+        "note": "Safety blood tests and cancer-response assessment answer different questions.",
+        "cells": [
+          "Agree who requests each test, who explains results and the daytime/out-of-hours contact routes.",
+          "Use the written support plan. Record missed tablets, symptoms and questions for review.",
+          "Your consultant reviews symptoms, prostate-specific antigen (PSA) and scans together. Testosterone testing can check continuing castration. The team sets the timetable rather than an automatic three-month scan interval.",
+          "Agree how to continue, pause or finish treatment and arrange ongoing care."
+        ]
       }
     ],
     "milestones": [
       {
-        "title": "Treatment review",
-        "when": "300 mg tablets twice daily, continuously",
-        "why": "Help control prostate cancer that has progressed despite hormone treatment, where a BRCA1 or BRCA2 mutation is confirmed.",
-        "clinical": "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food, continuously while helpful and tolerable. Kidney function, interactions or side effects can change the prescribed dose. This prostate course does not use the one-year breast or two-year ovarian limit.",
-        "action": "Call your oncology team promptly for fever, shaking chills, feeling suddenly unwell, unusual bleeding, persistent vomiting/diarrhoea or new breathlessness. Follow your own temperature and contact plan. Severe breathing difficulty, chest pain, collapse, seizures or stroke symptoms: call 112/999.",
+        "title": "Baseline checks",
+        "when": "Before",
+        "why": "Confirm the validated germline or tumour BRCA1/2 result, previous new hormonal treatment and ongoing testosterone suppression. Check full blood count, kidney and liver tests and recovery from previous treatment.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Safety blood tests and symptom review",
+        "when": "During",
+        "why": "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Reviews also cover symptoms, tablets, support medicines and supply; extra tests may be needed between appointments.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Cancer assessment",
+        "when": "Response",
+        "why": "Your consultant reviews symptoms, prostate-specific antigen (PSA) and scans together. Testosterone testing can check continuing castration. The team sets the timetable rather than an automatic three-month scan interval.",
+        "clinical": "Individual consultant plan",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
         "source_ids": [
           "nccp",
           "smpc"
         ]
       }
     ],
+    "clinical_notes": [
+      "BRCA1/2-mutated metastatic castration-resistant prostate cancer after a new hormonal agent"
+    ],
     "sources": [
       {
         "id": "nccp",
-        "title": "NCCP 00588 v5b",
-        "url": "https://healthservice.hse.ie/documents/6397/olaparib_tablet_monotherapy_588.pdf",
-        "sha256": "de66f9a3d6d802aee6d32261407a7048d2eae2441a730005e1380bda6807d489",
-        "checked": "2026-11-16"
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
         "id": "smpc",
-        "title": "Lynparza: EMA product information",
-        "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf",
-        "sha256": "04cb6a8e4fff66099a345e60858378068000de050b0e7fedaddb3d5347849598",
-        "checked": "2026-11-16"
+        "title": "EMA Lynparza product information · updated 19 February 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf"
+      },
+      {
+        "id": "profound-2020",
+        "title": "PROfound: olaparib for metastatic castration-resistant prostate cancer (2020)",
+        "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa1911440"
       }
     ]
   },
@@ -50680,6 +50648,2288 @@ const definitions={
         "id": "nci-gist",
         "title": "National Cancer Institute: gastrointestinal stromal tumours treatment overview",
         "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/gist-treatment-pdq"
+      }
+    ]
+  },
+  "00588:ovarian_first_line": {
+    "code": "00588",
+    "release": "0.84.63",
+    "checked": "2026-11-24",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient/PPI review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Olaparib after first-line ovarian cancer treatment · the whole treatment journey",
+    "setting": "BRCA1/2-mutated advanced ovarian, fallopian-tube or primary-peritoneal cancer after first-line platinum response",
+    "summary": "Take your prescribed olaparib dose morning and evening every day, without a planned rest week. Olaparib continues until cancer progression or unacceptable side effects, with a planned two-year decision. If scans show no disease after two years, treatment is completed. If disease remains, the consultant may consider continuing when further benefit is expected.",
+    "stages": [
+      "Before starting",
+      "Every day",
+      "Scheduled review",
+      "Change or completion"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "Dates and dose changes are confirmed by the treating team.",
+        "cells": [
+          "Confirm the cancer setting, molecular test, previous treatment and agreed purpose.",
+          "Take the prescribed olaparib tablets morning and evening, with no planned rest week.",
+          "Review symptoms, blood results, medicines, adherence and supply before agreeing the next prescription.",
+          "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food. Olaparib continues until cancer progression or unacceptable side effects, with a planned two-year decision. If scans show no disease after two years, treatment is completed. If disease remains, the consultant may consider continuing when further benefit is expected. Follow your own prescription if the dose changes."
+        ]
+      },
+      {
+        "label": "Safety checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "A normal previous test does not exclude a new problem.",
+        "cells": [
+          "Confirm the BRCA1/2 result, cancer type/stage, response to first-line platinum, surgery/recovery and start date. Check full blood count, kidney/liver profile, medicines and pregnancy testing where relevant.",
+          "Report new symptoms promptly. Urgent symptoms need a call; do not wait for a planned test.",
+          "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Review symptoms, food/fluid intake, medicines and tablet supply; abnormal results or new symptoms can require earlier checks.",
+          "The team follows up abnormal results and explains the next monitoring plan."
+        ]
+      },
+      {
+        "label": "Cancer review and support",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety blood tests and cancer-response assessment answer different questions.",
+        "cells": [
+          "Agree who requests each test, who explains results and the daytime/out-of-hours contact routes.",
+          "Use the written support plan. Record missed tablets, symptoms and questions for review.",
+          "The consultant sets symptom review, scans and any CA-125 monitoring. CA-125 is a blood marker used in some ovarian cancers; it is interpreted with symptoms and imaging. Agree the two-year scan/review decision separately from the four-week safety tests.",
+          "Agree how to continue, pause or finish treatment and arrange ongoing care."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline checks",
+        "when": "Before",
+        "why": "Confirm the BRCA1/2 result, cancer type/stage, response to first-line platinum, surgery/recovery and start date. Check full blood count, kidney/liver profile, medicines and pregnancy testing where relevant.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Safety blood tests and symptom review",
+        "when": "During",
+        "why": "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Review symptoms, food/fluid intake, medicines and tablet supply; abnormal results or new symptoms can require earlier checks.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Cancer assessment",
+        "when": "Response",
+        "why": "The consultant sets symptom review, scans and any CA-125 monitoring. CA-125 is a blood marker used in some ovarian cancers; it is interpreted with symptoms and imaging. Agree the two-year scan/review decision separately from the four-week safety tests.",
+        "clinical": "Individual consultant plan",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP 00588a–c · first-line olaparib maintenance without bevacizumab"
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Lynparza product information · updated 19 February 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf"
+      },
+      {
+        "id": "solo1-2018",
+        "title": "SOLO1: first-line olaparib maintenance (2018)",
+        "url": "https://www.nejm.org/doi/abs/10.1056/NEJMoa1810858"
+      }
+    ]
+  },
+  "00588:ovarian_relapsed": {
+    "code": "00588",
+    "release": "0.84.63",
+    "checked": "2026-11-24",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient/PPI review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Olaparib after treatment for relapsed ovarian cancer · the whole treatment journey",
+    "setting": "BRCA-mutated, platinum-sensitive relapsed ovarian, fallopian-tube or primary-peritoneal cancer",
+    "summary": "Take your prescribed olaparib dose morning and evening every day, without a planned rest week. Treatment continues while the cancer remains controlled and side effects remain acceptable. There is no automatic two-year endpoint for this relapsed-maintenance pathway; the first-line ovarian two-year rule does not apply.",
+    "stages": [
+      "Before starting",
+      "Every day",
+      "Scheduled review",
+      "Change or completion"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "Dates and dose changes are confirmed by the treating team.",
+        "cells": [
+          "Confirm the cancer setting, molecular test, previous treatment and agreed purpose.",
+          "Take the prescribed olaparib tablets morning and evening, with no planned rest week.",
+          "Review symptoms, blood results, medicines, adherence and supply before agreeing the next prescription.",
+          "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food. Treatment continues while the cancer remains controlled and side effects remain acceptable. There is no automatic two-year endpoint for this relapsed-maintenance pathway; the first-line ovarian two-year rule does not apply. Follow your own prescription if the dose changes."
+        ]
+      },
+      {
+        "label": "Safety checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "A normal previous test does not exclude a new problem.",
+        "cells": [
+          "Confirm a qualifying BRCA result, response to the latest platinum, earlier platinum-treatment history and CA-125 trend. Check recovery, full blood count, kidney/liver tests, medicines and pregnancy testing where relevant.",
+          "Report new symptoms promptly. Urgent symptoms need a call; do not wait for a planned test.",
+          "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Review symptoms, food/fluid intake, medicines and tablet supply; abnormal results or new symptoms can require earlier checks.",
+          "The team follows up abnormal results and explains the next monitoring plan."
+        ]
+      },
+      {
+        "label": "Cancer review and support",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety blood tests and cancer-response assessment answer different questions.",
+        "cells": [
+          "Agree who requests each test, who explains results and the daytime/out-of-hours contact routes.",
+          "Use the written support plan. Record missed tablets, symptoms and questions for review.",
+          "The team reviews symptoms, scans and any relevant CA-125 trend together. CA-125 is not a standalone instruction to change tablets. The consultant sets the response-assessment timetable and continuation decisions.",
+          "Agree how to continue, pause or finish treatment and arrange ongoing care."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline checks",
+        "when": "Before",
+        "why": "Confirm a qualifying BRCA result, response to the latest platinum, earlier platinum-treatment history and CA-125 trend. Check recovery, full blood count, kidney/liver tests, medicines and pregnancy testing where relevant.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Safety blood tests and symptom review",
+        "when": "During",
+        "why": "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Review symptoms, food/fluid intake, medicines and tablet supply; abnormal results or new symptoms can require earlier checks.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Cancer assessment",
+        "when": "Response",
+        "why": "The team reviews symptoms, scans and any relevant CA-125 trend together. CA-125 is not a standalone instruction to change tablets. The consultant sets the response-assessment timetable and continuation decisions.",
+        "clinical": "Individual consultant plan",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP 00588d–f · maintenance after a platinum-sensitive relapse"
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Lynparza product information · updated 19 February 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf"
+      },
+      {
+        "id": "solo2-2017",
+        "title": "SOLO2: tablet maintenance after platinum-sensitive relapse (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28754483/"
+      },
+      {
+        "id": "solo2-2021",
+        "title": "SOLO2 final overall-survival analysis (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33743851/"
+      }
+    ]
+  },
+  "00588:pancreatic": {
+    "code": "00588",
+    "release": "0.84.63",
+    "checked": "2026-11-24",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient/PPI review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Olaparib maintenance for pancreatic cancer · the whole treatment journey",
+    "setting": "Germline BRCA1/2-mutated metastatic pancreatic adenocarcinoma after first-line platinum control",
+    "summary": "Take your prescribed olaparib dose morning and evening every day, without a planned rest week. Olaparib continues while the cancer remains controlled and side effects remain acceptable. This pancreatic pathway has no fixed one-year or two-year course.",
+    "stages": [
+      "Before starting",
+      "Every day",
+      "Scheduled review",
+      "Change or completion"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "Dates and dose changes are confirmed by the treating team.",
+        "cells": [
+          "Confirm the cancer setting, molecular test, previous treatment and agreed purpose.",
+          "Take the prescribed olaparib tablets morning and evening, with no planned rest week.",
+          "Review symptoms, blood results, medicines, adherence and supply before agreeing the next prescription.",
+          "The usual starting dose is 300 mg of olaparib tablets twice daily, with or without food. Olaparib continues while the cancer remains controlled and side effects remain acceptable. This pancreatic pathway has no fixed one-year or two-year course. Follow your own prescription if the dose changes."
+        ]
+      },
+      {
+        "label": "Safety checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "A normal previous test does not exclude a new problem.",
+        "cells": [
+          "Confirm metastatic pancreatic adenocarcinoma, a qualifying germline BRCA1/2 result and no progression after at least 16 weeks of first-line platinum. Check blood-count recovery, kidney/liver tests, medicines and pregnancy testing where relevant.",
+          "Report new symptoms promptly. Urgent symptoms need a call; do not wait for a planned test.",
+          "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Review symptoms, food/fluid intake, medicines and tablet supply; abnormal results or new symptoms can require earlier checks.",
+          "The team follows up abnormal results and explains the next monitoring plan."
+        ]
+      },
+      {
+        "label": "Cancer review and support",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety blood tests and cancer-response assessment answer different questions.",
+        "cells": [
+          "Agree who requests each test, who explains results and the daytime/out-of-hours contact routes.",
+          "Use the written support plan. Record missed tablets, symptoms and questions for review.",
+          "The consultant sets scans, symptom reviews and any additional cancer blood tests. These are interpreted in the clinical context, not as standalone dosing instructions. Review pain, appetite, weight and the effect of treatment on daily life alongside cancer control.",
+          "Agree how to continue, pause or finish treatment and arrange ongoing care."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Baseline checks",
+        "when": "Before",
+        "why": "Confirm metastatic pancreatic adenocarcinoma, a qualifying germline BRCA1/2 result and no progression after at least 16 weeks of first-line platinum. Check blood-count recovery, kidney/liver tests, medicines and pregnancy testing where relevant.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Safety blood tests and symptom review",
+        "when": "During",
+        "why": "Full blood count, kidney and liver tests every four weeks for the first 12 months, then as clinically indicated. Review symptoms, food/fluid intake, medicines and tablet supply; abnormal results or new symptoms can require earlier checks.",
+        "clinical": "NCCP selected indication and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Cancer assessment",
+        "when": "Response",
+        "why": "The consultant sets scans, symptom reviews and any additional cancer blood tests. These are interpreted in the clinical context, not as standalone dosing instructions. Review pain, appetite, weight and the effect of treatment on daily life alongside cancer control.",
+        "clinical": "Individual consultant plan",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP 00588i · first-line pancreatic maintenance after at least16 weeks of platinum without progression"
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
+        "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Lynparza product information · updated 19 February 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf"
+      },
+      {
+        "id": "polo-2019",
+        "title": "POLO: maintenance olaparib in germline BRCA-mutated pancreatic cancer (2019)",
+        "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa1903387"
+      }
+    ]
+  },
+  "00746": {
+    "code": "00746",
+    "release": "0.84.63",
+    "checked": "2026-11-24",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient/PPI review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Olaparib and bevacizumab maintenance · the whole treatment journey",
+    "setting": "Homologous recombination deficiency (HRD)-positive advanced ovarian, fallopian-tube or primary-peritoneal cancer after first-line chemotherapy with bevacizumab",
+    "summary": "Take the prescribed olaparib dose morning and evening every day, including between infusion visits. Bevacizumab is given into a vein on Day 1 of each 21-day interval after the checks. The two medicines have separate stop dates.",
+    "stages": [
+      "Before starting",
+      "Every day",
+      "Scheduled review",
+      "Change or completion"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment plan",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "Dates and dose changes are confirmed by the treating team.",
+        "cells": [
+          "Confirm the cancer setting, molecular test, previous treatment and agreed purpose.",
+          "Take the prescribed olaparib tablets morning and evening. Bevacizumab is a separate infusion every 21 days.",
+          "Review symptoms, blood results, medicines, adherence and supply before agreeing the next prescription.",
+          "Prescribed tablets morning and evening, every day. Planned two-year disease-status decision; earlier review for progression or side effects. Infusion every three weeks. Maximum 15 months in total, including the earlier chemotherapy phase; its endpoint is separate from olaparib."
+        ]
+      },
+      {
+        "label": "Safety checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ],
+        "note": "A normal previous test does not exclude a new problem.",
+        "cells": [
+          "Confirm HRD, response, full blood count, kidney/liver tests, blood pressure, urine protein, medicines and wound/surgery history.",
+          "Report new symptoms promptly. Urgent symptoms need a call; do not wait for a planned test.",
+          "Blood count/kidney/liver tests every three weeks for 12 months; urine and blood pressure before each bevacizumab cycle. Extra checks if indicated.",
+          "The team follows up abnormal results and explains the next monitoring plan."
+        ]
+      },
+      {
+        "label": "Cancer review and support",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety blood tests and cancer-response assessment answer different questions.",
+        "cells": [
+          "Agree who requests each test, who explains results and the daytime/out-of-hours contact routes.",
+          "Use the written support plan. Record missed tablets, symptoms and questions for review.",
+          "Individual consultant plan; count all bevacizumab exposure and review olaparib at two years.",
+          "Agree how to continue, pause or finish treatment and arrange ongoing care."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Bloods, urine, BP and history",
+        "when": "Before",
+        "why": "Confirm HRD, response, full blood count, kidney/liver tests, blood pressure, urine protein, medicines and wound/surgery history.",
+        "clinical": "NCCP 00746 and SmPC",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Safety tests",
+        "when": "During",
+        "why": "Blood count/kidney/liver tests every three weeks for 12 months; urine and blood pressure before each bevacizumab cycle. Extra checks if indicated.",
+        "clinical": "NCCP 00746",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      },
+      {
+        "title": "Scans and separate endpoints",
+        "when": "Response",
+        "why": "Individual consultant plan; count all bevacizumab exposure and review olaparib at two years.",
+        "clinical": "Individual plan",
+        "action": "Ask when this check is due, who arranges it and who reviews the result. New symptoms need advice before the next appointment.",
+        "source_ids": [
+          "nccp",
+          "smpc"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "NCCP 00746a–c · first-line maintenance with olaparib tablets and bevacizumab infusion"
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00746 v2 · olaparib tablets and bevacizumab",
+        "url": "https://healthservice.hse.ie/documents/6626/746_V2_Olaparib_bevacizumab_therapy.pdf"
+      },
+      {
+        "id": "smpc",
+        "title": "EMA Lynparza product information · updated 19 February 2026",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/lynparza-epar-product-information_en.pdf"
+      },
+      {
+        "id": "smpc-bevacizumab",
+        "title": "EMA Avastin product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/avastin-epar-product-information_en.pdf"
+      },
+      {
+        "id": "paola1-2019",
+        "title": "PAOLA-1: olaparib plus bevacizumab maintenance (2019)",
+        "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa1911361"
+      }
+    ]
+  },
+  "00554": {
+    "code": "00554",
+    "context": null,
+    "title": "Vinblastine and methotrexate for aggressive fibromatosis: treatment and checks",
+    "release": "0.84.62",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced aggressive fibromatosis (desmoid tumour)",
+    "summary": "Vinblastine 6 mg/m² and methotrexate 30 mg/m² are given on days 1, 8 and 15 of each 28-day cycle. Day 22 is a planned break. National Cancer Control Programme describes 12 cycles unless progression or unacceptable toxicity requires a change.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the individual baseline test plan.",
+          "Repeat the tests at the timing specified in the test cards.",
+          "Report symptoms promptly; extra checks may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, support and access arrangements.",
+          "Record actual doses and any safety hold.",
+          "Follow the written support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Vinblastine and methotrexate on days 1, 8 and 15; repeat every 28 days",
+        "why": "Desmoid tumours do not spread to distant organs but can grow locally, cause pain and impair function. This treatment aims to control troublesome or progressive local disease and preserve daily function; it is not a metastatic-cancer survival treatment.",
+        "clinical": "Vinblastine 6 mg/m² and methotrexate 30 mg/m² are given on days 1, 8 and 15 of each 28-day cycle. Day 22 is a planned break. National Cancer Control Programme describes 12 cycles unless progression or unacceptable toxicity requires a change.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. New dry cough or breathlessness, severe mouth ulcers or diarrhoea, reduced urine, jaundice, or painful constipation with vomiting or abdominal swelling requires urgent advice.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00554, version 3",
+        "url": "https://healthservice.hse.ie/documents/6742/554_vinblastine_MTX_SAMV.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Methotrexate and vinblastine in advanced aggressive fibromatosis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11571741/"
+      },
+      {
+        "id": "vinblastine-pi",
+        "title": "Health Products Regulatory Authority: vinblastine product information, April 2025",
+        "url": "https://assets.hpra.ie/products/Human/22094/Licence_PA0822-208-001_11042025094405.pdf"
+      },
+      {
+        "id": "methotrexate-pi",
+        "title": "Health Products Regulatory Authority: methotrexate product information, September 2026",
+        "url": "https://assets.hpra.ie/products/Human/22092/Licence_PA0822-206-007_11092026121412.pdf"
+      },
+      {
+        "id": "desmopaz",
+        "title": "DESMOPAZ: non-comparative randomised phase II desmoid study",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31331699/"
+      },
+      {
+        "id": "nci-desmoid",
+        "title": "National Cancer Institute: desmoid tumour observation and treatment context",
+        "url": "https://www.cancer.gov/pediatric-adult-rare-tumor/rare-tumors/rare-soft-tissue-tumors/desmoid-tumor"
+      }
+    ]
+  },
+  "00754": {
+    "code": "00754",
+    "title": "Ifosfamide, vincristine, dactinomycin and doxorubicin: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-risk or very-high-risk rhabdomyosarcoma in people younger than 40 years",
+    "summary": "Nine cycles are planned every 21 days. In cycles 1–2, vincristine is given on days 1, 8 and 15; doxorubicin on days 1 and 2; dactinomycin on day 1; and ifosfamide on days 1 and 2. In cycles 3–4, vincristine is given only on day 1, with the other three drugs on the same days as before. In cycles 5–9, doxorubicin is omitted; day-1 vincristine/dactinomycin and day-1/2 ifosfamide continue. Use the correct phase chart for your actual cycle.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "9 cycles every 21 days · three different phases",
+        "why": "Treat rhabdomyosarcoma throughout the body as part of an individual specialist plan that also addresses local tumour control. The team explains why this combination is selected for your risk group and priorities.",
+        "clinical": "Nine cycles are planned every 21 days. In cycles 1–2, vincristine is given on days 1, 8 and 15; doxorubicin on days 1 and 2; dactinomycin on day 1; and ifosfamide on days 1 and 2. In cycles 3–4, vincristine is given only on day 1, with the other three drugs on the same days as before. In cycles 5–9, doxorubicin is omitted; day-1 vincristine/dactinomycin and day-1/2 ifosfamide continue. Use the correct phase chart for your actual cycle.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. New confusion, unusual drowsiness or seizures, blood in urine, very little urine, severe constipation, new weakness or breathlessness requires urgent assessment. Report infusion-site burning immediately.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00754 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6781/754_IVADo.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EpSSG RMS2005: adding doxorubicin to ifosfamide, vincristine and dactinomycin",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29941280/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      },
+      {
+        "id": "ifosfamide-mitoxana",
+        "title": "HPRA Mitoxana product information: supplied-product reconciliation required",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00228:liposarcoma": {
+    "code": "00228",
+    "context": "liposarcoma",
+    "title": "Eribulin for unresectable liposarcoma: treatment and checks",
+    "release": "0.84.62",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adult unresectable liposarcoma after anthracycline-containing treatment for advanced or metastatic disease, unless anthracyclines are unsuitable",
+    "summary": "Eribulin 1.23 mg/m², expressed as eribulin base, is given on days 1 and 8 of each 21-day cycle. The team reviews safety before each dose. Treatment continues while benefit and tolerability justify it.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the individual baseline test plan.",
+          "Repeat the tests at the timing specified in the test cards.",
+          "Report symptoms promptly; extra checks may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, support and access arrangements.",
+          "Record actual doses and any safety hold.",
+          "Follow the written support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Eribulin on days 1 and 8; repeat every 21 days",
+        "why": "Eribulin aims to control liposarcoma and may help symptoms. Your consultant considers the precise subtype, prior treatment, fitness and what matters to you.",
+        "clinical": "Eribulin 1.23 mg/m², expressed as eribulin base, is given on days 1 and 8 of each 21-day cycle. The team reviews safety before each dose. Treatment continues while benefit and tolerability justify it.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Palpitations, fainting, severe blistering or peeling rash needs urgent assessment. Report new numbness, weakness or difficulty walking before another dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00228, version 8",
+        "url": "https://healthservice.hse.ie/documents/6564/228_eriBULin.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Eribulin versus dacarbazine: prespecified liposarcoma subgroup",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28854066/"
+      },
+      {
+        "id": "eribulin-pi",
+        "title": "European Medicines Agency: Halaven product information; readable manufacturer text supplements limited European Medicines Agency retrieval",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/halaven-epar-product-information_en.pdf"
+      },
+      {
+        "id": "eribulin-manufacturer",
+        "title": "Manufacturer Halaven product information, updated December 2024; readable supplement to rate-limited European Medicines Agency retrieval",
+        "url": "https://www.medicines.org.uk/EMC/medicine/24382/SPC/Halaven%2B0.44%2Bmg%2Bml%2Bsolution%2Bfor%2Binjection"
+      },
+      {
+        "id": "nci-sarcoma",
+        "title": "National Cancer Institute: soft tissue sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "nci-support",
+        "title": "National Cancer Institute: palliative and supportive care alongside cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/advanced-cancer/care-choices/palliative-care-fact-sheet"
+      }
+    ]
+  },
+  "00596": {
+    "code": "00596",
+    "title": "Ifosfamide and etoposide for Ewing sarcoma or osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Relapsed Ewing sarcoma, or treatment of osteosarcoma under the national source indication",
+    "summary": "Etoposide 100 mg/m² is infused over 60 minutes, followed by ifosfamide 1,800 mg/m² over 60 minutes, on each of days 1–5. Courses repeat every 21 days for up to seven cycles while benefit and tolerability justify treatment. Mesna is given before each ifosfamide infusion and at 4 and 8 hours measured from its START.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Etoposide then ifosfamide on days 1–5; repeat every 21 days, up to 7 cycles",
+        "when": "Etoposide then ifosfamide on days 1–5; repeat every 21 days, up to 7 cycles",
+        "why": "The two medicines damage tumour genetic material through different mechanisms to help control sarcoma. The intended role, chance of benefit and how this fits with surgery, radiotherapy or trials depend on the diagnosis and previous treatment.",
+        "clinical": "Etoposide 100 mg/m² is infused over 60 minutes, followed by ifosfamide 1,800 mg/m² over 60 minutes, on each of days 1–5. Courses repeat every 21 days for up to seven cycles while benefit and tolerability justify treatment. Mesna is given before each ifosfamide infusion and at 4 and 8 hours measured from its START.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Any new confusion or unusual sleepiness, blood in urine, low urine output or infusion-related faintness needs immediate assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00596, version 2",
+        "url": "https://healthservice.hse.ie/documents/6747/596_v2_Ifosfamide_Etoposide_IE_Therapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Historical phase II ifosfamide/etoposide study in recurrent tumours of children and young adults",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/3114435/"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "Health Products Regulatory Authority: ifosfamide product information",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "Health Products Regulatory Authority: etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      }
+    ]
+  },
+  "00675": {
+    "code": "00675",
+    "title": "Alternating ifosfamide/etoposide and vincristine/doxorubicin/cyclophosphamide · every 2 weeks: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adolescents and young adults with newly diagnosed Ewing-family sarcoma, or the separately listed rhabdomyosarcoma/desmoplastic intra-abdominal small round blue cell tumour indication",
+    "summary": "There are 14 alternating administrations, planned every 14 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "14 alternating administrations · usually every 14 days",
+        "why": "Treat cancer throughout the body as part of a specialist plan that also addresses local tumour control. The intended benefit depends on the exact tumour, disease extent and treatment aim.",
+        "clinical": "There are 14 alternating administrations, planned every 14 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Confusion or unusual drowsiness during ifosfamide, blood in urine, reduced urine, severe constipation, new weakness or heart symptoms needs urgent assessment. Doxorubicin can colour urine red for one or two days; do not dismiss painful urination, clots or suspected blood as harmless colour.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00675 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6766/675_v2_IE_VAC_Two_weekly.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Interval-compressed versus three-weekly chemotherapy in localised Ewing sarcoma",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494838/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      },
+      {
+        "id": "ifosfamide-mitoxana",
+        "title": "HPRA Mitoxana product information: supplied-product reconciliation required",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00205:sarcoma": {
+    "code": "00205",
+    "context": "sarcoma",
+    "title": "Pegylated liposomal doxorubicin for metastatic soft tissue sarcoma: treatment and checks",
+    "release": "0.84.62",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic soft tissue sarcoma: the separate sarcoma indication of shared regimen 00205",
+    "summary": "Pegylated liposomal doxorubicin 50 mg/m² is given on day 1 every 28 days. National Cancer Control Programme describes typically 6 cycles or continuation until progression or unacceptable toxicity; the team confirms duration and review points.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the individual baseline test plan.",
+          "Repeat the tests at the timing specified in the test cards.",
+          "Report symptoms promptly; extra checks may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, support and access arrangements.",
+          "Record actual doses and any safety hold.",
+          "Follow the written support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Pegylated liposomal doxorubicin 50 mg/m² on day 1 every 28 days",
+        "why": "Treatment aims to control metastatic sarcoma and help symptoms. A specialist considers tumour subtype, previous treatment, heart risk and your priorities; benefit is uncertain for an individual.",
+        "clinical": "Pegylated liposomal doxorubicin 50 mg/m² is given on day 1 every 28 days. National Cancer Control Programme describes typically 6 cycles or continuation until progression or unacceptable toxicity; the team confirms duration and review points.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Chest or throat tightness during infusion needs immediate staff attention. New breathlessness, fever, painful blistered hands or feet, or mouth ulcers preventing drinking needs urgent advice.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00205, version 8",
+        "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "European Organisation for Research and Treatment of Cancer randomised phase II study: liposomal versus conventional doxorubicin in advanced sarcoma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11313175/"
+      },
+      {
+        "id": "pld-pi",
+        "title": "European Medicines Agency: Caelyx pegylated liposomal product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/caelyx-pegylated-liposomal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nci-sarcoma",
+        "title": "National Cancer Institute: soft tissue sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "nci-support",
+        "title": "National Cancer Institute: palliative and supportive care alongside cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/advanced-cancer/care-choices/palliative-care-fact-sheet"
+      }
+    ]
+  },
+  "00100": {
+    "code": "00100",
+    "title": "Mifamurtide after osteosarcoma surgery: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-grade, resectable, nonmetastatic osteosarcoma after macroscopically complete resection, alongside postoperative multi-agent chemotherapy; national age eligibility 2–30 years",
+    "summary": "Mifamurtide 2 mg/m² is infused over 1 hour after complete resection and surgical recovery. Give two infusions each week for the first 12 weeks, at least 3 days apart, then one infusion weekly for another 24 weeks: 48 infusions over 36 weeks. This timetable runs separately from the chemotherapy calendar. The specialist team confirms the actual postoperative start and any delays.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Weeks 1–12: two infusions each week",
+        "when": "Weeks 1–12: two infusions each week",
+        "why": "Mifamurtide stimulates innate immune cells to help act against remaining osteosarcoma cells after complete surgery. It is an additional postoperative treatment discussed with the patient and family, alongside chemotherapy.",
+        "clinical": "At least three days between the two weekly infusions: 24 infusions in this phase.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Do not wait eight hours to seek advice for fever or sudden illness. Severe wheeze, breathing difficulty, chest pain or faintness needs urgent assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Weeks 13–36: one infusion each week",
+        "when": "Weeks 13–36: one infusion each week",
+        "why": "Mifamurtide stimulates innate immune cells to help act against remaining osteosarcoma cells after complete surgery. It is an additional postoperative treatment discussed with the patient and family, alongside chemotherapy.",
+        "clinical": "Another 24 infusions, for 48 total over 36 weeks. The clock is independent of chemotherapy.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Do not wait eight hours to seek advice for fever or sudden illness. Severe wheeze, breathing difficulty, chest pain or faintness needs urgent assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00100, version 6",
+        "url": "https://healthservice.hse.ie/documents/6722/100_Mifamurtide.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Randomised factorial trial of mifamurtide in resectable nonmetastatic osteosarcoma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18235123/"
+      },
+      {
+        "id": "mifamurtide-pi",
+        "title": "European Medicines Agency: Mepact product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/mepact-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nci-bone",
+        "title": "National Cancer Institute: surgery, chemotherapy and selected radiotherapy in osteosarcoma",
+        "url": "https://www.cancer.gov/types/bone/hp/osteosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00462": {
+    "code": "00462",
+    "context": null,
+    "title": "Pegylated liposomal doxorubicin for Kaposi sarcoma: treatment and checks",
+    "release": "0.84.62",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "acquired immunodeficiency syndrome-related Kaposi sarcoma with a CD4 helper T-cell (infection-fighting immune-cell) count below 200 cells/mm³ and extensive disease of skin or mucous membranes, or internal organs",
+    "summary": "Pegylated liposomal doxorubicin 20 mg/m² is given on day 1 every 21 days. National Cancer Control Programme specifies a maximum of 6 cycles or earlier stopping for progression or unacceptable toxicity. A 14-day interval is a separately selected alternative and must be written into the personal prescription.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the individual baseline test plan.",
+          "Repeat the tests at the timing specified in the test cards.",
+          "Report symptoms promptly; extra checks may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, support and access arrangements.",
+          "Record actual doses and any safety hold.",
+          "Follow the written support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Pegylated liposomal doxorubicin 20 mg/m² on day 1 every 21 days",
+        "why": "Treatment aims to reduce Kaposi disease, symptoms and complications while care for human immunodeficiency virus continues. The oncology and human immunodeficiency virus teams coordinate the plan.",
+        "clinical": "Pegylated liposomal doxorubicin 20 mg/m² is given on day 1 every 21 days. National Cancer Control Programme specifies a maximum of 6 cycles or earlier stopping for progression or unacceptable toxicity. A 14-day interval is a separately selected alternative and must be written into the personal prescription.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Chest or throat tightness during infusion needs immediate staff attention. New breathlessness, fever, painful blistered hands or feet, or mouth ulcers preventing drinking needs urgent advice.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00462, version 4",
+        "url": "https://healthservice.hse.ie/documents/6735/462_v4_PegylatedLiposomalDOX_20mgm2_21_days.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Pegylated liposomal doxorubicin versus bleomycin/vincristine in Kaposi sarcoma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9469358/"
+      },
+      {
+        "id": "pld-pi",
+        "title": "European Medicines Agency: Caelyx pegylated liposomal product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/caelyx-pegylated-liposomal-epar-product-information_en.pdf"
+      }
+    ]
+  },
+  "00747": {
+    "code": "00747",
+    "title": "Alternating ifosfamide/etoposide and vincristine/doxorubicin/cyclophosphamide · every 3 weeks: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults with newly diagnosed Ewing-family sarcoma, or the separately listed rhabdomyosarcoma/desmoplastic intra-abdominal small round blue cell tumour indication",
+    "summary": "There are 14 alternating administrations, planned every 21 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "14 alternating administrations · usually every 21 days",
+        "why": "Treat cancer throughout the body as part of a specialist plan that also addresses local tumour control. The intended benefit depends on the exact tumour, disease extent and treatment aim.",
+        "clinical": "There are 14 alternating administrations, planned every 21 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Confusion or unusual drowsiness during ifosfamide, blood in urine, reduced urine, severe constipation, new weakness or heart symptoms needs urgent assessment. Doxorubicin can colour urine red for one or two days; do not dismiss painful urination, clots or suspected blood as harmless colour.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00747 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6779/747_v2_IE_VAC_three_weekly.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Interval-compressed versus three-weekly chemotherapy in localised Ewing sarcoma",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494838/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      },
+      {
+        "id": "ifosfamide-mitoxana",
+        "title": "HPRA Mitoxana product information: supplied-product reconciliation required",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00757": {
+    "code": "00757",
+    "title": "Vincristine, irinotecan and temozolomide: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Relapsed or refractory rhabdomyosarcoma",
+    "summary": "Irinotecan 50 mg/m² is given intravenously on days 1–5 of each 21-day cycle. Temozolomide is taken by mouth on days 1–5: 125 mg/m² in cycle 1. Only the treating team may select 150 mg/m² from cycle 2 after toxicity review. Vincristine 1.5 mg/m², maximum 2 mg, is given on days 1 and 8. The national plan specifies 12 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Days 1–5 and day 8 vincristine · every 21 days · 12 planned cycles",
+        "why": "Aim to shrink or control cancer and help symptoms after previous treatment. Your specialist explains the realistic benefit, uncertainty and alternatives for your particular disease.",
+        "clinical": "Irinotecan 50 mg/m² is given intravenously on days 1–5 of each 21-day cycle. Temozolomide is taken by mouth on days 1–5: 125 mg/m² in cycle 1. Only the treating team may select 150 mg/m² from cycle 2 after toxicity review. Vincristine 1.5 mg/m², maximum 2 mg, is given on days 1 and 8. The national plan specifies 12 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Irinotecan can cause two different bowel problems. Cramping, sweating and diarrhoea during or shortly after infusion can be an acute cholinergic reaction: tell the nurse immediately; prescribed atropine may be used. Delayed diarrhoea begins more than 24 hours later and can cause dangerous dehydration or infection. Contact oncology at the first loose stool and follow the written anti-diarrhoeal and rehydration prescription. Fever, severe pain, blood, faintness, very little urine or inability to drink needs immediate assessment; never wait for a time threshold when seriously unwell. Report a new cough, breathlessness, jaundice, severe rash or marked weakness urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00757 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6784/757_v2_VIT.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Randomised vincristine/irinotecan with or without temozolomide in relapsed rhabdomyosarcoma",
+        "url": "https://ascopubs.org/doi/abs/10.1200/JCO.21.00124"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00504": {
+    "code": "00504",
+    "title": "Irinotecan and temozolomide: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Relapsed or refractory Ewing sarcoma",
+    "summary": "Irinotecan 50 mg/m² intravenously and temozolomide 100 mg/m² by mouth are given on days 1–5 of each 21-day cycle. The national plan specifies 6 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Days 1–5 · every 21 days · 6 planned cycles",
+        "why": "Aim to shrink or control cancer and help symptoms after previous treatment. Your specialist explains the realistic benefit, uncertainty and alternatives for your particular disease.",
+        "clinical": "Irinotecan 50 mg/m² intravenously and temozolomide 100 mg/m² by mouth are given on days 1–5 of each 21-day cycle. The national plan specifies 6 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Irinotecan can cause two different bowel problems. Cramping, sweating and diarrhoea during or shortly after infusion can be an acute cholinergic reaction: tell the nurse immediately; prescribed atropine may be used. Delayed diarrhoea begins more than 24 hours later and can cause dangerous dehydration or infection. Contact oncology at the first loose stool and follow the written anti-diarrhoeal and rehydration prescription. Fever, severe pain, blood, faintness, very little urine or inability to drink needs immediate assessment; never wait for a time threshold when seriously unwell. Report a new cough, breathlessness, jaundice, severe rash or marked weakness urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00504 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6740/504_v2_Irinotecan_and_Temozolomide_Therapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "rEECur interim irinotecan/temozolomide report and adult-containing retrospective Ewing series",
+        "url": "https://doi.org/10.1200/JCO.2020.38.15_suppl.11502"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00420": {
+    "code": "00420",
+    "title": "Doxorubicin and cisplatin for osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Chemotherapy before and after surgery for osteosarcoma",
+    "summary": "Doxorubicin 25 mg/m² is given on days 1, 2 and 3; cisplatin 100 mg/m² on day 1. The reference course contains six 21-day cycles, usually three before surgery and three afterwards, with pathology review. Treatment dates and doses depend on recovery and the specialist plan.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Doxorubicin days 1–3 and cisplatin day 1; six 21-day cycles",
+        "when": "Doxorubicin days 1–3 and cisplatin day 1; six 21-day cycles",
+        "why": "Chemotherapy treats osteosarcoma cells throughout the body, including cells too small to see on scans, alongside surgery intended to remove the visible cancer.",
+        "clinical": "Doxorubicin 25 mg/m² is given on days 1, 2 and 3; cisplatin 100 mg/m² on day 1. The reference course contains six 21-day cycles, usually three before surgery and three afterwards, with pathology review. Treatment dates and doses depend on recovery and the specialist plan.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Report new hearing loss, reduced urine, persistent vomiting, chest symptoms or painful infusion sites urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00420, version 4",
+        "url": "https://healthservice.hse.ie/documents/6733/420_V4_DOX25CIS100.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "European Osteosarcoma Intergroup historical randomised comparison",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9314869/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "Health Products Regulatory Authority: doxorubicin product information",
+        "url": "https://assets.hpra.ie/products/Human/27561/Licence_PA2315-083-001_20022024123027.pdf"
+      },
+      {
+        "id": "cisplatin-pi",
+        "title": "Health Products Regulatory Authority: cisplatin product information",
+        "url": "https://assets.hpra.ie/products/Human/22078/Licence_PA0822-199-001_18032025120043.pdf"
+      },
+      {
+        "id": "nci-bone",
+        "title": "National Cancer Institute: surgery, chemotherapy and selected radiotherapy in osteosarcoma",
+        "url": "https://www.cancer.gov/types/bone/hp/osteosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00463": {
+    "code": "00463",
+    "title": "Methotrexate, doxorubicin and cisplatin for osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-grade osteosarcoma of an extremity or axial skeleton, excluding craniofacial sites, with all disease sites amenable to complete surgical resection; national eligibility age 40 years or younger",
+    "summary": "The reference plan is not a repeating 21-day cycle. Before surgery, doxorubicin 37.5 mg/m² and cisplatin 60 mg/m² are each given on days 1 and 2 of weeks 1 and 6; methotrexate 12 g/m² is given on day 1 of weeks 4, 5, 9 and 10. Surgery is planned for reference week 11. Afterwards, doxorubicin is given on days 1 and 2 of weeks 12, 17, 22 and 26; cisplatin on days 1 and 2 of weeks 12 and 17; methotrexate on day 1 of weeks 15, 16, 20, 21, 24, 25, 28 and 29. Actual dates depend on surgery, recovery, drug clearance and safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before surgery: weeks 1–10",
+        "when": "Before surgery: weeks 1–10",
+        "why": "The three medicines act through different mechanisms against osteosarcoma throughout the body. Surgery removes the visible tumour, and chemotherapy before and after surgery aims to reduce recurrence risk.",
+        "clinical": "Doxorubicin and cisplatin on days 1–2 of weeks 1 and 6; methotrexate in weeks 4, 5, 9 and 10.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Reduced urine, severe mouth ulcers or diarrhoea, new neurological symptoms or delayed methotrexate clearance needs urgent specialist assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Surgery: reference week 11",
+        "when": "Surgery: reference week 11",
+        "why": "The three medicines act through different mechanisms against osteosarcoma throughout the body. Surgery removes the visible tumour, and chemotherapy before and after surgery aims to reduce recurrence risk.",
+        "clinical": "Actual timing depends on the operation and recovery. Additional preoperative methotrexate is only a separate consultant decision.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Reduced urine, severe mouth ulcers or diarrhoea, new neurological symptoms or delayed methotrexate clearance needs urgent specialist assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "After surgery: weeks 12–29",
+        "when": "After surgery: weeks 12–29",
+        "why": "The three medicines act through different mechanisms against osteosarcoma throughout the body. Surgery removes the visible tumour, and chemotherapy before and after surgery aims to reduce recurrence risk.",
+        "clinical": "Doxorubicin in weeks 12, 17, 22 and 26; cisplatin in weeks 12 and 17; methotrexate in weeks 15, 16, 20, 21, 24, 25, 28 and 29.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Reduced urine, severe mouth ulcers or diarrhoea, new neurological symptoms or delayed methotrexate clearance needs urgent specialist assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00463, version 4",
+        "url": "https://healthservice.hse.ie/documents/6736/463_v4_MAP.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EURAMOS-1: preoperative platform and randomised methotrexate, doxorubicin and cisplatin plus ifosfamide and etoposide versus methotrexate, doxorubicin and cisplatin in poor responders",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27569442/"
+      },
+      {
+        "id": "methotrexate-pi",
+        "title": "Health Products Regulatory Authority: methotrexate product information",
+        "url": "https://assets.hpra.ie/products/Human/22092/Licence_PA0822-206-007_11092026121412.pdf"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "Health Products Regulatory Authority: doxorubicin product information",
+        "url": "https://assets.hpra.ie/products/Human/27561/Licence_PA2315-083-001_20022024123027.pdf"
+      },
+      {
+        "id": "cisplatin-pi",
+        "title": "Health Products Regulatory Authority: cisplatin product information",
+        "url": "https://assets.hpra.ie/products/Human/22078/Licence_PA0822-199-001_18032025120043.pdf"
+      },
+      {
+        "id": "euramos_prerandomisation2015",
+        "title": "EURAMOS-1 pre-randomisation treatment",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25421877/"
+      },
+      {
+        "id": "nci-bone",
+        "title": "National Cancer Institute: surgery, chemotherapy and selected radiotherapy in osteosarcoma",
+        "url": "https://www.cancer.gov/types/bone/hp/osteosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00374": {
+    "code": "00374",
+    "context": null,
+    "title": "Trabectedin for advanced soft tissue sarcoma: treatment and checks",
+    "release": "0.84.62",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adult advanced soft tissue sarcoma after anthracycline and ifosfamide treatment has failed, or when those medicines are unsuitable",
+    "summary": "Trabectedin 1.5 mg/m² is infused over 24 hours starting on day 1 of each 21-day cycle. Treatment continues while benefit and tolerability justify it. The actual dose, start time and any delay require a new safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the individual baseline test plan.",
+          "Repeat the tests at the timing specified in the test cards.",
+          "Report symptoms promptly; extra checks may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, support and access arrangements.",
+          "Record actual doses and any safety hold.",
+          "Follow the written support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit using the specialist plan.",
+          "Report new or changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety testing and tumour-response assessment have different purposes. Your plan may change after illness or a dose adjustment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Trabectedin: one 24-hour infusion every 21 days",
+        "why": "The aim is to control advanced sarcoma and help symptoms. The strongest trial evidence concerns previously treated liposarcoma and leiomyosarcoma; the team explains expected benefit for your particular subtype.",
+        "clinical": "Trabectedin 1.5 mg/m² is infused over 24 hours starting on day 1 of each 21-day cycle. Treatment continues while benefit and tolerability justify it. The actual dose, start time and any delay require a new safety review.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Marked muscle pain or weakness, dark or reduced urine, new swelling or faintness, jaundice, breathlessness or infusion-site pain requires urgent assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00374, version 4a",
+        "url": "https://healthservice.hse.ie/documents/6729/374_Trabectedin_monotherapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Trabectedin versus dacarbazine in previously treated liposarcoma or leiomyosarcoma",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5070559/"
+      },
+      {
+        "id": "trabectedin-pi",
+        "title": "European Medicines Agency: Yondelis product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/yondelis-epar-product-information_en.pdf"
+      },
+      {
+        "id": "final-survival",
+        "title": "Final overall-survival analysis of trabectedin versus dacarbazine",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31173362/"
+      },
+      {
+        "id": "nci-sarcoma",
+        "title": "National Cancer Institute: soft tissue sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/adult-soft-tissue-treatment-pdq"
+      },
+      {
+        "id": "nci-support",
+        "title": "National Cancer Institute: palliative and supportive care alongside cancer treatment",
+        "url": "https://www.cancer.gov/about-cancer/advanced-cancer/care-choices/palliative-care-fact-sheet"
+      }
+    ]
+  },
+  "00680": {
+    "code": "00680",
+    "title": "High-dose ifosfamide for recurrent Ewing sarcoma or relapsed osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Recurrent or primary refractory Ewing sarcoma, or relapsed osteosarcoma",
+    "summary": "Ifosfamide 3,000 mg/m² is infused over 24 hours on each of days 1–5, giving five consecutive 24-hour infusions. Repeat every 21 days for a maximum of four cycles unless progression or unacceptable toxicity stops treatment sooner. Mesna starts before the first infusion, continues throughout the five-day treatment and includes a final dose on day 6 after the last ifosfamide infusion.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Five consecutive 24-hour ifosfamide infusions; every 21 days, maximum 4 cycles",
+        "when": "Five consecutive 24-hour ifosfamide infusions; every 21 days, maximum 4 cycles",
+        "why": "High-dose ifosfamide aims to control previously treated sarcoma and can sometimes make further local treatment possible. The specialist team weighs potential tumour shrinkage against substantial bone-marrow, brain, kidney and bladder risks.",
+        "clinical": "Ifosfamide 3,000 mg/m² is infused over 24 hours on each of days 1–5, giving five consecutive 24-hour infusions. Repeat every 21 days for a maximum of four cycles unless progression or unacceptable toxicity stops treatment sooner. Mesna starts before the first infusion, continues throughout the five-day treatment and includes a final dose on day 6 after the last ifosfamide infusion.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Any change in alertness, confusion, hallucinations, seizures, blood in urine or reduced urine requires immediate assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00680, version 2",
+        "url": "https://healthservice.hse.ie/documents/6767/680_v2_Ifosfamide_highdose.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "High-dose ifosfamide cohorts in Ewing sarcoma and relapsed osteosarcoma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19142994/"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "Health Products Regulatory Authority: ifosfamide product information",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "palmerini2020",
+        "title": "High-dose ifosfamide in relapsed unresectable osteosarcoma",
+        "url": "https://www.mdpi.com/2073-4409/9/11/2389"
       }
     ]
   }

@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""Create a separate authenticated addendum; never update the prior handoff."""
+import json,hashlib,pathlib,sys
+home=pathlib.Path(__file__).resolve().parent
+prior=home.parent/'sarcoma-v63-v64-integration-handoff-20261118'
+def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def pin(path):return {'path':str(path.resolve()),'sha256':sha(path),'bytes':path.stat().st_size}
+def frozen(path,value):
+ b=(json.dumps(value,indent=2,ensure_ascii=False)+'\n').encode()
+ if path.exists():assert path.read_bytes()==b,'Refusing to alter '+str(path)
+ else:path.write_bytes(b)
+assert sha(prior/'integration-handoff.json')=='5f431a4d630ba96f056fc112765b9e6cc90b72e5496a43bba1f235786778ce36'
+review=pathlib.Path(sys.argv[1]).resolve();assert review.is_file()
+old=json.loads((prior/'integration-handoff.json').read_text())
+transition=json.loads((home/'transition-manifest.json').read_text());changes={x['code']:x for x in transition['protocols']}
+rows=[]
+for r in old['releases'][0]['protocols']:
+ path=home/'final-candidates'/pathlib.Path(r['target_application_path']).name
+ expected=changes[r['code']]['candidate_sha256']if r['code']in changes else r['final_candidate']['sha256'];assert sha(path)==expected
+ original=prior/r['original_application']['handoff_path'];assert sha(original)==r['original_application']['sha256']
+ row={k:r[k]for k in ['code','target_application_path','old_protocol_id','new_protocol_id','old_nccp_version','new_nccp_version','alias_required','original_application','base_clinical_draft','product_overlay','cns_semantic_overlay','source','prospective_metadata_transition_path']}
+ row['prior_handoff_root']=str(prior.resolve());row['prior_accepted_candidate']=r['final_candidate'];row['context_calendar_transition']=changes.get(r['code']);row['final_candidate']=pin(path);row['state']='external_reviewed_candidate_not_integrated';rows.append(row)
+focused=json.loads((home/'focused-case-results.corrected-fixtures.json').read_text());assert (focused['passed'],focused['failed'])==(87,0)
+contract=json.loads((home/'adjudicated-prior-contract-results.final.json').read_text());assert(contract['passed'],contract['failed'])==(20,0)
+identity=json.loads((home/'other-product-identity-results.json').read_text());assert(identity['passed'],identity['failed'])==(4,0)
+coverage=json.loads((home/'combined-rule-coverage.accepted.json').read_text());assert all(not v['missing']for v in coverage['protocols'].values())
+paths=['transition-manifest.json','parent-transition-review.json','ADJUDICATION.md','HISTORICAL-REGRESSION-ADJUDICATION.md','historical-adjudication-sources.json','control-description-clarification.json','schema-validation.json','focused-case-results.corrected-fixtures.json','fixture-correction-ledger.json','adjudicated-prior-contract.cjs','adjudicated-prior-contract-results.final.json','other-product-identity-results.json','combined-rule-coverage.accepted.json','fresh-independent-review/candidate-correction-adjudication.json','fresh-independent-review/corrected-replay-portability-verification.json','prior-replays/failure-ledger.json','prior-replays/replay-delta-classification.json','prior-replays/evidence-manifest.json','prior-product-cns-replay/compatibility-verification.json','prior-product-cns-replay/evidence-manifest.json','support-source-manifest.json','SUPPORT-REFERENCE-ADJUDICATION.md']
+record={'date':'2026-11-18','status':'external_reviewed_clinical_handoff_not_applied','release':'0.84.63','previous_handoff':pin(prior/'integration-handoff.json'),'previous_acceptance_addendum':pin(prior/'independent-acceptance-addendum.json'),'baseline_commit':old['baseline_commit'],'previous_artifacts_immutable':True,'application_writes':False,'protocols':rows,'aliases_required':[],'metadata_transition_boundary':'The earlier individually enumerated provenance/status transition proposals remain separate. These candidates contain only the explicitly recorded six appended clinical review rules. No new input/grading metadata edits are bundled. Integration must preserve exact clinical bytes or record separately reviewed JSON-path transitions; do not promote clinical/pharmacy approval or claim PDF-binary/visual verification.','validation':{'raw_original_clinical':{'author':{'passed':650,'failed':0,'parts':[347,303]},'independent':{'passed':197,'failed':0}},'raw_accepted_product_CNS_before_current_append':{'author':{'passed':640,'failed':10},'independent':{'passed':191,'failed':6}},'raw_current_candidate_historical_expectations':{'author':{'passed':639,'failed':11},'independent':{'passed':191,'failed':6}},'separate_source_adjudicated_contract':{'passed':20,'failed':0,'scope':'14 unchanged historical clinical inputs plus6 context-reconciliation controls; the3IE controls also reconcile the calendar'},'other_product_identity_controls':{'passed':4,'failed':0},'focused_context_calendar_author':{'passed':87,'failed':0,'initial_fixture_errors_preserved':25},'fresh_independent_context_calendar':{'passed':100,'failed':0,'original_raw_passed':87,'original_lexically_calibrated_passed':89},'prior_product_contract':{'passed':347,'failed':0,'all_observations_unchanged':True},'prior_CNS_contract_raw':{'passed':121,'failed':2,'clinical_UI_assertions_passed':118,'unchanged_structural_assertions_passed':3,'two_historical_no_later_edits_assertions_preserved_and_separately_adjudicated':True},'actual_finding_positive_coverage':{c:{'rules':v['rules'],'observed_rules':v['observed_rules']}for c,v in coverage['protocols'].items()},'counts_are_separate_suites_not_a_claim_of_that_many_unique_clinical_scenarios':True},'independent_historical_delta_review':pin(review),'evidence':[pin(home/p)for p in paths],'clinical_approval':False,'pharmacy_approval':False,'clinical_use_authorised':False,'original_pdf_binary_verified':False,'visual_table_inspection_verified':False,'policy_limit':'00680 generic other-grade3/4 review is an explicit local conservative clarification policy pending clinician approval; not an NCCP dose algorithm.'}
+frozen(home/'integration-handoff-addendum.json',record)
+files=[pin(p)for p in sorted(home.rglob('*'))if p.is_file()and p.name!='final-freeze.json']
+frozen(home/'final-freeze.json',{'status':'external_clinical_handoff_frozen_not_integrated','date':'2026-11-18','handoff':pin(home/'integration-handoff-addendum.json'),'file_count':len(files),'files':files})
+print(json.dumps({'handoff_sha256':sha(home/'integration-handoff-addendum.json'),'freeze_sha256':sha(home/'final-freeze.json'),'files':len(files)},indent=2))
