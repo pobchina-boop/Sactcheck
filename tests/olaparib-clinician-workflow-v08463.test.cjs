@@ -56,7 +56,14 @@ for(const [id,selector]of Object.entries(oldW.supportive_phase_selectors))if(id!
 assert.deepEqual(priorWorkflow.interaction_rules.filter(r=>r.id!=='olaparib_cyp3a_and_support_review_v08463'),oldW.interaction_rules);
 for(const [code,entry]of Object.entries(oldR.protocols))if(!['00588','00746'].includes(code))assert.deepEqual(priorRisk.protocols[code],entry,code);
 const consent=json('data/consent-content-v0710.json'),oldConsent=baseline('data/consent-content-v0710.json');
-for(const [id,profile]of Object.entries(oldConsent.agent_profiles))if(id!=='olaparib')assert.deepEqual(consent.agent_profiles[id],profile,id);
+for(const [id,profile]of Object.entries(oldConsent.agent_profiles))if(id==='niraparib') {
+  const reviewed=structuredClone(consent.agent_profiles[id]);
+  assert(reviewed.aliases.includes('niraparib tablets'));
+  reviewed.aliases=reviewed.aliases.filter(a=>a!=='niraparib tablets');
+  assert(reviewed.risks.some(r=>r.id==='pres'));
+  reviewed.risks=reviewed.risks.filter(r=>r.id!=='pres');
+  assert.deepEqual(reviewed,profile,id+' retained risks and aliases');
+} else if(id!=='olaparib') assert.deepEqual(consent.agent_profiles[id],profile,id);
 assert(consent.agent_profiles.olaparib.risks.some(r=>r.id==='olaparib_reproductive'));
 assert(consent.agent_profiles.bevacizumab.risks.some(r=>r.id==='reproductive'));
 assert(!consent.agent_profiles.olaparib.risks.some(r=>r.id==='reproductive'));
@@ -117,7 +124,13 @@ for(const p of [mono,combo]){
   const oldContext={...c};oldContext.window=oldContext;
   vm.createContext(oldContext);vm.runInContext(execFileSync('git',['show','159532b7cd04238588804a504fff5427ce24a057:js/regimen-consent-builder-v0710.js'],{cwd:root,encoding:'utf8'}),oldContext);
   let unchangedComponentLists=0;
-  for(const row of json('protocols/index.json').protocols){const p=json(row.path);if(['00588','00746'].includes(p.metadata.nccp_regimen_code))continue;assert.deepEqual(plain(c.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)),plain(oldContext.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)));unchangedComponentLists++;}
+  for(const row of json('protocols/index.json').protocols){const p=json(row.path);if(['00588','00746'].includes(p.metadata.nccp_regimen_code))continue;
+    if(['00862','00929'].includes(p.metadata.nccp_regimen_code)){
+      const expected=p.metadata.nccp_regimen_code==='00862'?['Niraparib Tablets']:['Dostarlimab','Paclitaxel','Carboplatin'];
+      assert.deepEqual(plain(c.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)),expected);
+      continue;
+    }
+    assert.deepEqual(plain(c.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)),plain(oldContext.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)));unchangedComponentLists++;}
   for(const p of [mono,combo]){
     await c.SACTCheckRegimenConsentBuilder.openPatientSupport(p);
     assert(!/could not be loaded|undefined|\[object Object\]/.test(body.innerHTML));

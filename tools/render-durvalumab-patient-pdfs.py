@@ -32,10 +32,10 @@ def render_route(code):
         source = folder / (html + '.html')
         pdf = folder / (name + '.pdf')
         data = HTML(filename=str(source)).write_pdf()
-        if code in ('00862', '00929') and name == 'handbook':
-            # Retain the full-size printed anatomy and cut-out front/back card.
+        if code in ('00862', '00929') and name in {'handbook', 'knowledge'}:
+            # Both references retain the full-size anatomy. The handbook also includes the wallet card.
             with fitz.open(stream=data, filetype='pdf') as book, fitz.open(folder / 'guide.pdf') as guide:
-                book.insert_pdf(guide, from_page=1, to_page=2)
+                book.insert_pdf(guide, from_page=1, to_page=2 if name == 'handbook' else 1)
                 data = book.tobytes(garbage=3, deflate=True)
         with fitz.open(stream=data, filetype='pdf') as doc:
             if any(not page.get_text().strip() for page in doc):

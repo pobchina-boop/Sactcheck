@@ -144,10 +144,38 @@ async function consentDiscussionJourney(page,url,width){
  await textareas.first().fill('Synthetic reload check');await page.reload();assert.equal(await page.locator('#discussion-benefit').inputValue(),'','entries remain memory-only and clear on reload');
  await noOverflow(page,'consent discussion after reset');
 }
+async function gynaecologyJourney(page,url,width) {
+ for (const [code,brand,phases] of [
+  ['00862','Zejula',['continuous_oral']],
+  ['00929','Jemperli',['induction','maintenance']]
+ ]) {
+  await page.goto(url+'/patient/'+code+'/');
+  assert((await page.title()).includes(brand));
+  const portal=page.url();
+  assert(await page.locator('#urgent').isVisible());
+  await noOverflow(page,code+' portal');
+  await capture(page,code+'-portal-'+width);
+  for (const name of ['guide','handbook','sactcard']) {
+   const link=page.locator('a[download][href="'+name+'.pdf"]').first();
+   const [download]=await Promise.all([page.waitForEvent('download'),link.click()]);
+   assert.equal(await download.failure(),null,code+' '+name);
+   assert.equal(page.url(),portal);
+  }
+  await page.goto(url+'/patient/'+code+'/knowledge.html');
+  assert(await page.locator('#side-effects').count());
+  await noOverflow(page,code+' reference');
+  await page.goto(url+'/patient/'+code+'/supportive-care.html');
+  for (const phase of phases) {
+   const response=await page.request.get(url+'/patient/'+code+'/support-'+phase+'.pdf');
+   assert(response.ok());
+   assert((await response.body()).subarray(0,5).equals(Buffer.from('%PDF-')));
+  }
+ }
+}
 (async()=>{
  const root=path.resolve(__dirname,'..');const server=await require('../tools/local-site-server.cjs').serve(process.env.SACT_SITE_DIR||root);let browser;
  try{browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox']});
-  for(const width of [390,1440]){const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce',serviceWorkers:'block'});const errors=[];page.on('pageerror',e=>errors.push(e.message));await homeJourney(page,server.url,width);await patientJourney(page,server.url,width);await consentDiscussionJourney(page,server.url,width);assert.deepEqual(errors,[],`${width}px: JavaScript page errors`);await page.close();}
+  for(const width of [390,1440]){const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce',serviceWorkers:'block'});const errors=[];page.on('pageerror',e=>errors.push(e.message));await homeJourney(page,server.url,width);await patientJourney(page,server.url,width);await consentDiscussionJourney(page,server.url,width);await gynaecologyJourney(page,server.url,width);assert.deepEqual(errors,[],`${width}px: JavaScript page errors`);await page.close();}
   console.log('Task navigation, evaluation disclosure, document choices, consent draft keyboard/reset and complete detail/print checks passed at 390px and 1440px.');
  }finally{if(browser)await browser.close();await server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

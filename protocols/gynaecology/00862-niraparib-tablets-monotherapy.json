@@ -71,7 +71,40 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00862-v2"
+    "canonical_protocol_id": "nccp-00862-v2",
+    "source_pdf_sha256": "31b5ff56b0b01e142d1b49e9dd54bb594f4991c023f5f300c25544762604cc76",
+    "regimen_card": {
+      "schema_version": "1.0.0",
+      "contexts": [
+        {
+          "id": "platinum_sensitive_relapsed_maintenance",
+          "indication_id": "platinum_sensitive_relapsed_maintenance",
+          "intent": "maintenance",
+          "source_schedule_interval_label": "Continuous tablets once daily",
+          "duration_type": "until_progression_or_toxicity",
+          "duration_text": "Until progression/toxicity"
+        },
+        {
+          "id": "first_line_advanced_maintenance",
+          "indication_id": "first_line_advanced_maintenance",
+          "intent": "maintenance",
+          "source_schedule_interval_label": "Continuous tablets once daily",
+          "duration_type": "until_progression_or_toxicity",
+          "duration_text": "Until progression/toxicity"
+        }
+      ],
+      "provenance": {
+        "method": "NCCP source mapping",
+        "reviewed": false,
+        "source": "https://healthservice.hse.ie/documents/6437/862_V2_Niraparib_Tablets_Monotherapy.pdf",
+        "source_sha256": "31b5ff56b0b01e142d1b49e9dd54bb594f4991c023f5f300c25544762604cc76",
+        "source_pages": [
+          1,
+          2
+        ],
+        "checked_date": "2026-11-24"
+      }
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -407,7 +440,7 @@
       "input_role": "decision"
     },
     "other_ae_grade": {
-      "label": "Other non-haematologic adverse-event grade",
+      "label": "Treatment-related toxicity where prophylaxis is infeasible or toxicity persists despite treatment (CTCAE grade)",
       "type": "select",
       "required": false,
       "options": [
@@ -524,6 +557,62 @@
       "demo_value": false,
       "ui_section": "clinical",
       "input_role": "decision"
+    },
+    "oral_review_reason": {
+      "label": "Reason for current interruption",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No interruption selected"
+        },
+        {
+          "value": "neutropenia",
+          "label": "Neutropenia"
+        },
+        {
+          "value": "anaemia",
+          "label": "Anaemia"
+        },
+        {
+          "value": "both",
+          "label": "Neutropenia and anaemia"
+        },
+        {
+          "value": "platelets",
+          "label": "Thrombocytopenia"
+        }
+      ],
+      "demo_value": "none",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "interruption_days": {
+      "label": "Elapsed days since first withheld dose",
+      "type": "number",
+      "min": 0,
+      "step": 1,
+      "required": false,
+      "demo_value": 0,
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "platelet_nadir_below_75": {
+      "label": "Platelet count below 75 ×10⁹/L at any time during this interruption",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "baseline_eligibility_concern": {
+      "label": "Before starting: ECOG outside 0–1, inadequate organ/marrow function, or a previous platinum response not established",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "ui_section": "clinical"
     }
   },
   "required_inputs": [],
@@ -658,13 +747,13 @@
           "components": [
             "niraparib"
           ],
-          "recommendation": "Withhold niraparib for up to 28 days with weekly counts; resume one dose level lower once ANC ≥1.5 and Hb ≥90 g/L."
+          "recommendation": "Interrupt niraparib and check counts weekly. Reassess the affected lineage (ANC recovery to at least 1.5 ×10⁹/L, haemoglobin to at least 90 g/L). Apply the 28-day limit and dose history before any restart."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00862 v2",
+          "page": 3
         },
-        "explanation": "ANC <1.0 or Hb <80 g/L requires withholding and dose reduction after recovery."
+        "explanation": "Interrupt niraparib and check counts weekly. Reassess the affected lineage (ANC recovery to at least 1.5 ×10⁹/L, haemoglobin to at least 90 g/L). Apply the 28-day limit and dose history before any restart."
       },
       {
         "rule_id": "ANC_HB_NO_RECOVERY",
@@ -687,6 +776,19 @@
             "field": "haematology_recovered_within_28_days",
             "operator": "==",
             "value": false
+          },
+          {
+            "any": [
+              {
+                "field": "interruption_days",
+                "operator": "missing"
+              },
+              {
+                "field": "interruption_days",
+                "operator": ">=",
+                "value": 28
+              }
+            ]
           }
         ],
         "action": {
@@ -739,13 +841,13 @@
           "components": [
             "niraparib"
           ],
-          "recommendation": "When platelets are <75 ×10⁹/L, resume niraparib one dose level lower after recovery."
+          "recommendation": "Withhold niraparib. A nadir below 75 ×10⁹/L requires a reduced dose if a restart is appropriate after platelet recovery to at least 100 ×10⁹/L. Review the 100 mg floor."
         },
         "source": {
-          "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "NCCP 00862 v2",
+          "page": 3
         },
-        "explanation": "More severe thrombocytopenia requires dose reduction."
+        "explanation": "Withhold niraparib. A nadir below 75 ×10⁹/L requires a reduced dose if a restart is appropriate after platelet recovery to at least 100 ×10⁹/L. Review the 100 mg floor."
       },
       {
         "rule_id": "PLATELETS_SECOND_EVENT",
@@ -791,6 +893,19 @@
             "field": "platelet_event_occurrence",
             "operator": "==",
             "value": "second_or_later"
+          },
+          {
+            "any": [
+              {
+                "field": "interruption_days",
+                "operator": "missing"
+              },
+              {
+                "field": "interruption_days",
+                "operator": ">=",
+                "value": 28
+              }
+            ]
           }
         ],
         "action": {
@@ -887,17 +1002,17 @@
           "severe"
         ],
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
             "niraparib"
           ],
-          "recommendation": "Use approximately 66% of the original niraparib dose for moderate or severe hepatic impairment."
+          "recommendation": "Reconcile NCCP Table 3 (66% of original dose for moderate or severe impairment) with the Zejula tablet SmPC (200 mg starting dose for moderate impairment, no severe-impairment data). Confirm the practical tablet dose with oncology pharmacy."
         },
         "source": {
           "page": 4,
           "document": "Current mapped NCCP source"
         },
-        "explanation": "Moderate/severe hepatic impairment requires reduction."
+        "explanation": "Reconcile NCCP Table 3 (66% of original dose for moderate or severe impairment) with the Zejula tablet SmPC (200 mg starting dose for moderate impairment, no severe-impairment data). Confirm the practical tablet dose with oncology pharmacy."
       },
       {
         "rule_id": "OTHER_AE_FIRST",
@@ -1171,6 +1286,206 @@
         "source": {
           "document": "NCCP 00862 v2",
           "page": 3
+        }
+      },
+      {
+        "rule_id": "RECOVERY_HOLD",
+        "any": [
+          {
+            "all": [
+              {
+                "field": "oral_review_reason",
+                "operator": "in",
+                "value": [
+                  "neutropenia",
+                  "both"
+                ]
+              },
+              {
+                "field": "anc",
+                "operator": "<",
+                "value": 1.5
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "field": "oral_review_reason",
+                "operator": "in",
+                "value": [
+                  "anaemia",
+                  "both"
+                ]
+              },
+              {
+                "field": "haemoglobin_g_l",
+                "operator": "<",
+                "value": 90
+              }
+            ]
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "Continue the interruption while the affected lineage remains below its restart threshold. Confirm weekly counts and elapsed time."
+        },
+        "explanation": "Continue the interruption while the affected lineage remains below its restart threshold. Confirm weekly counts and elapsed time.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "RECOVERY_DAY28",
+        "all": [
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "field": "oral_review_reason",
+                    "operator": "in",
+                    "value": [
+                      "neutropenia",
+                      "both"
+                    ]
+                  },
+                  {
+                    "field": "anc",
+                    "operator": "<",
+                    "value": 1.5
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "field": "oral_review_reason",
+                    "operator": "in",
+                    "value": [
+                      "anaemia",
+                      "both"
+                    ]
+                  },
+                  {
+                    "field": "haemoglobin_g_l",
+                    "operator": "<",
+                    "value": 90
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "interruption_days",
+            "operator": ">=",
+            "value": 28
+          }
+        ],
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "The affected count has not recovered by the 28-day limit. Discontinue niraparib and review with oncology."
+        },
+        "explanation": "The affected count has not recovered by the 28-day limit. Discontinue niraparib and review with oncology.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "CRITICAL_PLATELETS",
+        "field": "platelets",
+        "operator": "<=",
+        "value": 10,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "Urgent clinical and transfusion assessment. Consider platelet support and review anticoagulant or antiplatelet use and bleeding risk."
+        },
+        "explanation": "Urgent clinical and transfusion assessment. Consider platelet support and review anticoagulant or antiplatelet use and bleeding risk.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "OTHER_AE_UNKNOWN",
+        "all": [
+          {
+            "field": "other_ae_grade",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "field": "other_ae_occurrence",
+            "operator": "missing"
+          }
+        ],
+        "action": {
+          "type": "withhold",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "Interrupt for qualifying severe treatment-related toxicity and establish prior events, duration and dose before a restart decision."
+        },
+        "explanation": "Interrupt for qualifying severe treatment-related toxicity and establish prior events, duration and dose before a restart decision.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 4
+        }
+      },
+      {
+        "rule_id": "PLATELET_NADIR",
+        "all": [
+          {
+            "field": "oral_review_reason",
+            "operator": "==",
+            "value": "platelets"
+          },
+          {
+            "field": "platelet_nadir_below_75",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "At recovery, use one lower dose level if a restart is appropriate. Confirm prior dose and the minimum 100 mg daily dose."
+        },
+        "explanation": "At recovery, use one lower dose level if a restart is appropriate. Confirm prior dose and the minimum 100 mg daily dose.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 3
+        }
+      },
+      {
+        "rule_id": "BASELINE_ELIGIBILITY",
+        "field": "baseline_eligibility_concern",
+        "operator": "==",
+        "value": true,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "niraparib"
+          ],
+          "recommendation": "Defer starting-dose confirmation until the indication, platinum response, ECOG and organ/marrow function are reviewed."
+        },
+        "explanation": "Defer starting-dose confirmation until the indication, platinum response, ECOG and organ/marrow function are reviewed.",
+        "source": {
+          "document": "NCCP 00862 v2",
+          "page": 2
         }
       }
     ]

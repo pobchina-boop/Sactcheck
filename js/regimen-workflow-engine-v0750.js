@@ -320,10 +320,11 @@
     return matched;
   }
 
-  function resolveExtravasation(protocol,data){
+  function resolveExtravasation(protocol,data,activeMedicines){
     const rules=data?.extravasation?.drugs||{};
     const classes=data?.extravasation?.classes||{};
-    const rows=administrationRows(protocol);
+    const active=activeMedicines && new Set(activeMedicines.map(normaliseDrug));
+    const rows=administrationRows(protocol).filter(row=>!active || active.has(row.normalised));
     if (protocol?.protocol_id === "nccp-00947-v1" && rows.some(row => row.normalised === "fulvestrant" && row.route === "IM") &&
         rows.every(row => routeIsOral(row.route) || (row.normalised === "fulvestrant" && row.route === "IM"))) {
       return {status: "intramuscular", agents: [], highest: null, unknownAgents: [], emergencySteps: []};
@@ -405,7 +406,7 @@
     const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);
     if(supportive) supportive.agentSupport=agentSupport;
     const interactions=interactionOverrides(protocol,data,phase?.active_medicines);
-    const extra=resolveExtravasation(protocol,data);
+    const extra=resolveExtravasation(protocol,data,metadata.nccp_regimen_code==="00929" ? phase?.active_medicines : undefined);
 
     return {
       release:RELEASE,

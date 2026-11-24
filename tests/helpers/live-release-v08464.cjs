@@ -1,81 +1,58 @@
 'use strict';
-const assert = require('node:assert/strict');
+// Chain the two gynaecology suites to the immutable published olaparib checkpoint.
 const fs = require('node:fs');
 const path = require('node:path');
+const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
-const {execFileSync} = require('node:child_process');
+const cp = require('node:child_process');
+const prior = require('./olaparib-release-checkpoint.cjs');
 const root = path.resolve(__dirname, '../..');
-const astra = '51bded8c59210c052873b577af444f07579fd44f';
-const sarcoma = '51bded8c59210c052873b577af444f07579fd44f';
-const filename = 'validation/olaparib-source-20261124/release-files.json';
-const ownFile = 'tests/helpers/live-release-v08464.cjs';
-const pin = '771117859deaa4d1151091334be9087c9a055963f9ac170da44bc7aea79a756d';
-const sha = b => crypto.createHash('sha256').update(b).digest('hex');
-const blob = b => crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
-const git = args => execFileSync('git', args, {cwd: root, maxBuffer: 128*1024*1024});
-const raw = fs.readFileSync(path.join(root, filename));
-assert.equal(sha(raw), pin, 'Verified olaparib source refresh');
-const record = JSON.parse(raw);
-assert.equal(record.base, sarcoma);
-assert.equal(sha(fs.readFileSync(__filename,'utf8').replace(/^const pin = '[^']+';/m,"const pin = 'PENDING';")),record.helper_sha256);
-const changed = new Map();
-const diff = git(['diff','--no-renames','--raw','--no-abbrev','-z',astra,sarcoma]).toString().split('\0');
-for(let i=0;i<diff.length-1;i+=2){
-  const parts=diff[i].split(' ');
-  changed.set(diff[i+1],{before:parts[2],after:parts[3]});
+const baseline = '0dd8f23fbdf18895fc1ca2aeb45e5cfa6ac380aa';
+const manifestFile = 'validation/gynaecology-00862-00929/release-transition.json';
+const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+const raw = fs.readFileSync(path.join(root, manifestFile));
+assert.equal(hash(raw), 'a625168d445cb557aacbf2dd005fb16d2d7c6959b9d47ee6bdc27d637f081cf0');
+const transition = JSON.parse(raw);
+assert.equal(transition.base, baseline);
+const verifier = fs.readFileSync(__filename, 'utf8').replace(/(assert\.equal\(hash\(raw\), ')[a-f0-9]{64}/, '$1PENDING');
+assert.equal(hash(verifier), transition.verifier_sha256);
+const historical = (rev, file) => cp.execFileSync('git', ['show', rev+':'+file], {cwd: root, maxBuffer:64*1024*1024});
+assert(fs.readFileSync(require.resolve('./olaparib-release-checkpoint.cjs')).equals(historical(baseline,'tests/helpers/live-release-v08464.cjs')));
+function verifyFile(file) {
+  const e = transition.files[file];
+  if (!e) return prior.verifyFile(file);
+  const b = fs.readFileSync(path.join(root,file));
+  assert.equal(hash(b), e.after, file+' audited bytes');
+  assert.equal(b.length, e.after_bytes, file+' audited length');
 }
-const empty='0'.repeat(40), cache = new Map();
-function fromGit(id){
-  if(!id || id===empty)return {sha256:null, bytes:null};
-  if(!cache.has(id)){
-    const b=git(['cat-file','blob',id]);
-    cache.set(id,{sha256:sha(b),bytes:b.length});
+function isCurrent(file, digest, size) {
+  const e = transition.files[file];
+  return e ? digest === e.after && (size === undefined || size === e.after_bytes) : prior.isCurrent(file,digest,size);
+}
+function expected(file,digest,size) {
+  const e = transition.files[file];
+  if (!e) return prior.expected(file,digest,size);
+  if (!isCurrent(file,digest,size)) {
+    const source = prior.expected(file,digest,size);
+    assert.equal(source.sha256,e.before,file+' predecessor digest');
+    if (source.bytes !== undefined) assert.equal(source.bytes,e.before_bytes,file+' predecessor size');
   }
-  return cache.get(id);
+  return {sha256:e.after,bytes:e.after_bytes};
 }
-function entries(file){
-  const steps=[];
-  if(changed.has(file))steps.push(changed.get(file));
-  if(record.files[file])steps.push(record.files[file]);
-  return steps;
-}
-function expected(file,digest,size){
-  const steps=entries(file);
-  if(!steps.length)return {sha256:digest,bytes:size};
-  const ids=[steps[0].before,...steps.map(step=>step.after)];
-  const known=ids.map(fromGit).find(r=>r.sha256===digest && (size===undefined||r.bytes===size));
-  assert(known,file+' unknown origin for current release');
-  return fromGit(ids.at(-1));
-}
-function isCurrent(file,digest,size){
-  const steps=entries(file);
-  if(!steps.length)return false;
-  const final=fromGit(steps.at(-1).after);
-  return final.sha256===digest && (size===undefined || final.bytes===size);
-}
-function verifyFile(file){
-  const steps=entries(file);
-  if(!steps.length)return;
-  const next=steps.at(-1).after;
-  if(next===empty){assert(!fs.existsSync(path.join(root,file)),file+' was removed');return;}
-  assert.equal(blob(fs.readFileSync(path.join(root,file))),next,file+' reviewed release bytes');
-}
-function owns(file){
-  if(file===filename||file===ownFile)return true;
-  if(!changed.has(file)&&!Object.hasOwn(record.files,file))return false;
+function checkedHistorical(file,rev) {
+  const e=transition.files[file];
   verifyFile(file);
-  return true;
+  const before=historical(baseline,file);
+  assert.equal(hash(before),e.before,file+' published predecessor');
+  assert.equal(before.length,e.before_bytes);
+  return rev===baseline ? before : historical(rev,file);
 }
-function addition(file){return file===filename||file===ownFile||entries(file)[0]?.before===empty;}
-function astraBytes(file){
-  const archived = git(['show',astra+':'+file]);
-  if(entries(file).length) verifyFile(file);
-  else assert(fs.readFileSync(path.join(root,file)).equals(archived), file+' byte-identical to its AstraZeneca checkpoint');
-  return archived;
+const astraBytes = file => transition.files[file] ? checkedHistorical(file,'51bded8c59210c052873b577af444f07579fd44f') : prior.astraBytes(file);
+const approvedJson = file => transition.files[file] ? JSON.parse(checkedHistorical(file,baseline)) : prior.approvedJson(file);
+const addition = file => file === manifestFile || transition.files[file]?.before === null || prior.addition(file);
+function owns(file) {
+  if (file === manifestFile) return true;
+  if (!Object.hasOwn(transition.files,file)) return prior.owns(file);
+  verifyFile(file); return true;
 }
-function astraJson(file){return JSON.parse(astraBytes(file));}
-function approvedJson(file){
-  verifyFile(file);
-  return JSON.parse(fs.readFileSync(path.join(root,file)));
-}
-module.exports={isCurrent,expected,owns,addition,verifyFile,astraBytes,astraJson,approvedJson,record};
+module.exports = {...prior,expected,isCurrent,verifyFile,owns,addition,astraBytes,astraJson:f=>JSON.parse(astraBytes(f)),approvedJson};

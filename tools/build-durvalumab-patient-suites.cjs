@@ -90,6 +90,9 @@ function renderPages(code, root = projectRoot) {
  if (gynaecology.has(code)) {
   const map = require('../js/patient-anatomy-v08431.js').render(d);
   files['knowledge.html'] = files['knowledge.html'].replace('</head>','<link rel="stylesheet" href="../../assets/patient/hcc-bodymap-v08431.css"></head>').replace('<section id="common-effects">', map+'<section id="common-effects">');
+  const agentRisks = section('risks-by-medicine','Risks to discuss for each medicine',paragraphs(d.agents.map(a => ({title:a.name,text:a.risks.join(', ')+'. '+a.watch}))));
+  const consentWithAgents = files['consent-form.html'].replace('<section id="understanding">',agentRisks+'<section id="understanding">');
+  files['consent-form.html'] = files['consent.html'] = consentWithAgents;
   const phaseSheets = d.phases.map(p => sheet(section('support-'+p.id, p.short+' · supportive care', paragraphs(d.phase_support[p.id])))).join('');
   files['handbook-print.html'] = files['handbook-print.html'].replace('</main>', phaseSheets+'</main>');
   for (const name of Object.keys(files)) {

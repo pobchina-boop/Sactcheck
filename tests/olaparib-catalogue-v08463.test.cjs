@@ -120,8 +120,23 @@ assert.equal(protocols['00746'].indications[0].duration.olaparib.beyond_two_year
 for (const [code,card] of [['00588',mono],['00746',combo]]) assert.equal(card.provenance.source_sha256, sha(read('validation/olaparib-source-20261124/'+code+'.pdf')));
 assert.match(combo.provenance.source_verification, /HSE original PDF retrieved/);
 
-// Preserve the exact inherited Enhertu review, including the other 376 cards.
+// Preserve all inherited cards outside the four source-reconciled successors.
 const successors = new Set(Object.values(protocols).map(protocol => protocol.protocol_id));
+for (const [id, interval, duration] of [
+  ['nccp-00862-v2', 'Continuous tablets once daily', 'Until progression/toxicity'],
+  ['nccp-00929-v1', 'Combination every 21 days; first maintenance dose 3 weeks after cycle 6, then every 42 days', 'Six combination cycles followed by dostarlimab maintenance for up to 3 years, stopping earlier for progression or unacceptable toxicity']
+]) {
+  const contexts = overrides.protocols[id].contexts;
+  assert.equal(contexts.length, id === 'nccp-00862-v2' ? 2 : 1);
+  for (const context of contexts) {
+    assert.equal(context.source_schedule_interval_label, interval);
+    assert.equal(context.duration_text, duration);
+  }
+  const entry = sidecar.protocols.find(row => row.id === id);
+  assert(entry.complete);
+  assert.deepEqual(entry.regimen_card.contexts, contexts.map(c => ({...c, intent_label: c.intent === 'maintenance' ? 'Maintenance' : 'Advanced disease'})));
+  successors.add(id);
+}
 const withoutTargets = value => ({...value, protocols: value.protocols.filter(item => !successors.has(item.id))});
 assert.deepEqual(withoutTargets(sidecar), withoutTargets(JSON.parse(Migration.baselineBytes(sidecarPath))));
 const withoutTargetOverrides = value => {
@@ -193,5 +208,5 @@ class Element {
   cp.execFileSync(process.execPath, ['tools/add-regimen-card-metadata.js'], {cwd: root, stdio: 'pipe'});
   for (const [file, bytes] of generatedBefore) assert(read(file).equals(bytes), 'Standard card generation is byte-idempotent: ' + file);
   for (const [file, hash] of protocolBefore) assert.equal(sha(read(file)), hash, 'Default card generation cannot rewrite clinical protocols: ' + file);
-  console.log('Olaparib catalogue passed: five exact monotherapy settings, conditional 1/2-year and uncapped courses, independent combination clocks, continuous tablets, sidecar and both actual fallback paths, 376 unrelated entries preserved, source provenance and byte-idempotent standard generation. Browser acceptance remains separate.');
+  console.log('Olaparib catalogue passed: five exact monotherapy settings, conditional 1/2-year and uncapped courses, independent combination clocks, continuous tablets, sidecar and both actual fallback paths, 374 unrelated entries preserved and both named gynaecology successors checked, source provenance and byte-idempotent standard generation. Browser acceptance remains separate.');
 })().catch(error => { console.error(error); process.exitCode = 1; });
