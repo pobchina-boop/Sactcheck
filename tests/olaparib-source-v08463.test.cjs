@@ -51,6 +51,14 @@ for (const code of Object.keys(protocols)) {
   structure(code + ' strict schema and review flags', () => {
     const p = protocols[code], v = V.validate(p, {strict: true});
     assert.equal(v.valid, true); assert.deepEqual(v.errors, []); assert.deepEqual(v.warnings, []);
+    if (code === '00588') {
+      assert.equal(p.metadata.review_schedule, 'as_required');
+      assert.equal(p.metadata.last_reviewed_date, '2026-11-02');
+      for (const invalid of [{last_reviewed_date:null},{last_reviewed_date:'2026-02-31'},{review_schedule:null}]) {
+        const changed={...p, metadata:{...p.metadata,...invalid}};
+        assert(V.validate(changed,{strict:true}).warnings.some(issue=>issue.code==='REVIEW_DATE_MISSING'));
+      }
+    }
     assert.equal(p.metadata.sactcheck_encoding_version, '0.84.63');
     for (const flag of ['clinical_use_authorised', 'consultant_reviewed', 'oncology_pharmacy_reviewed']) assert.equal(p.metadata.validation[flag], false);
     assert.deepEqual(p.required_inputs, []);
