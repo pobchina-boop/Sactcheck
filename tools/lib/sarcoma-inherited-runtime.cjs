@@ -46,4 +46,21 @@ function stageRuntimePins(directory) {
     fs.writeFileSync(file, JSON.stringify(manifest,null,2) + '\n');
   }
 }
-module.exports = {verifiedSuccessor, currentReport, stageRuntimePins};
+// The reviewed derived-field preview adds one blank line before the closing div
+// for fields with no preview. Preserve every other character of the snapshot.
+function projectFieldMarkup(report, expectedCount) {
+  verifiedSuccessor('js/generic-assessment-ui.js','8cf574366d8d7ccfa8ae69c87cb1fedb3e23b813339ce5c448240db9af075e36');
+  const projected = structuredClone(report);
+  let changes = 0;
+  for (const row of projected.results) {
+    const field = row.observed || row;
+    if (typeof field.html !== 'string') continue;
+    const originalEnd = '\n        \n        \n        \n      </div>';
+    assert(field.html.endsWith(originalEnd), 'Unexpected prior field markup');
+    field.html = field.html.slice(0,-originalEnd.length) + '\n        ' + originalEnd;
+    changes++;
+  }
+  assert.equal(changes, expectedCount);
+  return projected;
+}
+module.exports = {verifiedSuccessor, currentReport, stageRuntimePins, projectFieldMarkup};

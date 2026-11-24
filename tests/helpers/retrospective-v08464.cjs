@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const {execFileSync} = require('node:child_process');
 const ROOT = path.resolve(__dirname, '../..');
 const RECORD = path.join(ROOT, 'validation/sarcoma-integration/asset-migrations.json');
-const DIGEST = 'c43fa9784d2e0177aec6b18c48c6dc74dfb3539dd0b2896a0f4f97252ed44b51';
+const DIGEST = 'edf16aadecd3d5592e34e022f950c78188525af9a649392678cf19e2b3b73945';
 const sha = data => crypto.createHash('sha256').update(data).digest('hex');
 const bytes = fs.readFileSync(RECORD);
 assert.equal(sha(bytes), DIGEST, 'Exact cumulative sarcoma integration record');

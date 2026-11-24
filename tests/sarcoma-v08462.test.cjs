@@ -34,7 +34,27 @@ const independent=json('validation/sarcoma-v08462/independent-review/current-res
 const retrospective=json('validation/sarcoma-v08462/retrospective-review/final-results.json'),adjudication=json('validation/sarcoma-v08462/retrospective-review/adjudication.json');assert.equal(retrospective.total,82);assert.equal(retrospective.passed,81);assert.equal(retrospective.failed_expectations_retained,1);assert.equal(retrospective.deferred_conservative_workflow_cues,1);assert.equal(retrospective.confirmed_source_mandated_dose_action_defects,0);assert.deepEqual(retrospective.scope,retro);assert.equal(adjudication.case_id,'00719-13');assert.equal(adjudication.demonstrated_source_mandated_dose_action_defect,false);assert.equal(adjudication.original_expectation_unchanged,true);
 const pair=require('./helpers/ifosfamide-pair-v08462.cjs').verify();for(const r of pair.records){const p=json(r.path);assert.equal(register.find(x=>x.nccp_code===r.code).rule_count,p.rule_engine.rules.length);assert(KB.regimen_profiles.some(x=>x.protocol_id===p.protocol_id));}
 require('../tools/check-trabectedin-phase-v08462.cjs');
-require('../validation/sarcoma-v08462/documents/transition-03/check-row-clarifications.cjs');
-const hash=b=>require('node:crypto').createHash('sha256').update(b).digest('hex'),pdfManifest='validation/sarcoma-v08462/pdf/final-pdf-manifest.json';assert.equal(hash(read(pdfManifest)),'aa776119fe1178aea5b2a92252b7861205b16a6ead4a93cf9fb3d45e25a9825a');const pdf=json(pdfManifest);assert.equal(pdf.status,'pass');assert.equal(pdf.canonical_pdfs,54);assert.equal(pdf.identical_pdf_mirrors,54);assert.equal(pdf.pdf_pages,294);assert.equal(pdf.handbook_pages,112);assert.equal(pdf.monitoring_cells_checked,87);assert.equal(pdf.source_records_checked,88);assert.equal(pdf.pdfs.length,54);for(const item of pdf.pdfs){const bytes=read(item.file);assert.equal(hash(bytes),item.sha256,item.file);assert.equal(bytes.length,item.bytes);assert(bytes.equals(read(item.mirror)),item.mirror);}
+require('../tools/check-sarcoma-row-clarifications.cjs');
+const hash=b=>require('node:crypto').createHash('sha256').update(b).digest('hex'),pdfManifest='validation/sarcoma-v08462/pdf/final-pdf-manifest.json';assert.equal(hash(read(pdfManifest)),'aa776119fe1178aea5b2a92252b7861205b16a6ead4a93cf9fb3d45e25a9825a');const pdf=json(pdfManifest);assert.equal(pdf.status,'pass');assert.equal(pdf.canonical_pdfs,54);assert.equal(pdf.identical_pdf_mirrors,54);assert.equal(pdf.pdf_pages,294);assert.equal(pdf.handbook_pages,112);assert.equal(pdf.monitoring_cells_checked,87);assert.equal(pdf.source_records_checked,88);assert.equal(pdf.pdfs.length,54);
+const nextMigration='validation/sarcoma-v08463/asset-migrations.json';
+assert.equal(hash(read(nextMigration)),'2d7a5df0e1d2f1163f98dc90ff6d7e1a1ff7bbbcb40de02689546e79560b2713');
+const successorFiles=json(nextMigration).files;
+const laterConsents=[];
+for(const item of pdf.pdfs){
+ const bytes=read(item.file);
+ let expectedHash=item.sha256,expectedBytes=item.bytes;
+ if(release!=='0.84.62' && item.file.endsWith('/consent-form.pdf')){
+  const successor=successorFiles[item.file];
+  assert.equal(successor.before,item.sha256,item.file);
+  assert.equal(successor.before_bytes,item.bytes,item.file);
+  expectedHash=successor.after;expectedBytes=successor.after_bytes;
+  laterConsents.push(item.route);
+ }
+ assert.equal(hash(bytes),expectedHash,item.file);
+ assert.equal(bytes.length,expectedBytes,item.file);
+ assert(bytes.equals(read(item.mirror)),item.mirror);
+}
+assert.deepEqual(laterConsents.sort(),release==='0.84.62'?[]:routes.slice().sort());
+
 
 console.log('Sarcoma v0.84.62: five new suites, protected breast contexts, explicit ID migrations, consent/workflow/documents and accepted prior ifosfamide pair checked. Retrospective81passes+1deferredcue remains explicit; clinical/pharmacy acceptance pending.');

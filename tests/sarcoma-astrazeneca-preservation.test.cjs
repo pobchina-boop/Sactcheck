@@ -41,6 +41,33 @@ for (const [file,key,field] of [
   }
   assert.deepEqual(select(JSON.parse(read(file))), select(oldJson(file)), file);
 }
+// Compare every bundled protocol with its source and its reviewed predecessor.
+const catalogue = 'protocols/catalogue-bundle.json.gz';
+const {gunzipSync} = require('node:zlib');
+const unpack = bytes => JSON.parse(gunzipSync(bytes)).records;
+const previousRecords = new Map(unpack(git('show',base+':'+catalogue)).map(row => [row.entry.path,row]));
+const currentRecords = unpack(read(catalogue));
+const scoped = new Set([...require('./helpers/retrospective-v08464.cjs').NEW_ROUTES.map(route => route.split('/')[0]),'00391','00392']);
+const changed = [];
+assert.equal(currentRecords.length,378);
+assert.equal(previousRecords.size,currentRecords.length);
+for (const row of currentRecords) {
+  const sourcePath = row.entry.path;
+  const previous = previousRecords.get(sourcePath);
+  assert(previous,sourcePath);
+  previousRecords.delete(sourcePath);
+  assert.deepEqual(row.protocol,JSON.parse(read(sourcePath)),sourcePath);
+  const code = row.protocol.metadata.nccp_regimen_code;
+  if (scoped.has(code)) {
+    assert.notDeepEqual(row,previous,sourcePath);
+    changed.push(code);
+  } else {
+    assert.deepEqual(row,previous,'Out-of-scope bundled protocol changed: '+sourcePath);
+  }
+}
+assert.deepEqual(changed.sort(),[...scoped].sort());
+assert.equal(previousRecords.size,0);
+console.log('All 378 bundled protocols match their source JSON; the 361 outside the 17 named sarcoma updates match the AstraZeneca baseline.');
 const registry = require('../js/patient-asset-registry-v0810.js');
 const registryFile = 'js/patient-asset-registry-v0810.js';
 const context = {module: {exports: {}}};
