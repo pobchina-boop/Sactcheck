@@ -72,6 +72,8 @@ async function check() {
       assert.equal(risk.protocols[code].phase_profiles.maintenance.level,'minimal');
       assert.equal(p.supportive_care.supportive_medications_pdf_url,undefined);
     }
+    const fallback={}; vm.runInNewContext(read('js/patient-anatomy-data-v08431.js').toString(),fallback);
+    assert.deepEqual(JSON.parse(JSON.stringify(fallback.SACTCheckAnatomyData[code].anatomy)),json('data/patient-knowledge/'+code+'.json').anatomy);
     const empty = workflow.buildManifest(p,config,risk.protocols[code]);
     assert.equal(empty.supportiveCare.status,'phase_review_required');
     for(const [phase,id,level] of oral?[['continuous_oral','niraparib_tablets_00862','oral_moderate_high']]:[['combination','high_carboplatin','high'],['maintenance','minimal','minimal']]) {

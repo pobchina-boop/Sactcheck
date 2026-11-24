@@ -11,7 +11,7 @@ const baseline = '0dd8f23fbdf18895fc1ca2aeb45e5cfa6ac380aa';
 const manifestFile = 'validation/gynaecology-00862-00929/release-transition.json';
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const raw = fs.readFileSync(path.join(root, manifestFile));
-assert.equal(hash(raw), '8e18efeb0ea7b764082fc7770abe2368a26c618bd83f16f4f535e225cb4859f3');
+assert.equal(hash(raw), '886cfa576cf565f3bffcadf0301a87581d60ae7f7423e21a61e00a8205accc56');
 const transition = JSON.parse(raw);
 assert.equal(transition.base, baseline);
 const verifier = fs.readFileSync(__filename, 'utf8').replace(/(assert\.equal\(hash\(raw\), ')[a-f0-9]{64}/, '$1PENDING');
@@ -55,4 +55,11 @@ function owns(file) {
   if (!Object.hasOwn(transition.files,file)) return prior.owns(file);
   verifyFile(file); return true;
 }
-module.exports = {...prior,expected,isCurrent,verifyFile,owns,addition,astraBytes,astraJson:f=>JSON.parse(astraBytes(f)),approvedJson};
+function gynaecologyInventory() {
+  return {version:63,record:transition,helper:{approvedPath(file) {
+    if (!Object.hasOwn(transition.files,file)) return false;
+    verifyFile(file);
+    return true;
+  }}};
+}
+module.exports = {...prior,gynaecologyInventory,expected,isCurrent,verifyFile,owns,addition,astraBytes,astraJson:f=>JSON.parse(astraBytes(f)),approvedJson};

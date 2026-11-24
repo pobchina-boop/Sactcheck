@@ -40,6 +40,8 @@ For both regimens, the sustainability record leaves unmeasured travel and carbon
 
 The scoped service tests, route registration, Pages build and built-site validation passed. The deployed-site validator checked the assembled site's canonical architecture, 281 protected portals, redirects and PDF route integrity locally. Full repository regression status is recorded in the handoff. No production deployment or independent consultant, oncology-pharmacy or patient/public-involvement sign-off was performed.
 
+The clinician patient-support anatomical map now uses the six Zejula and eight Jemperli entries authored for the corresponding portals. During regression testing the same shared map was found to contain old copies for 00588 (olaparib) and 00776 (Enhertu). Those two entries were synchronised from their existing patient profiles. Their clinical rules and authored profile wording were preserved.
+
 The printed knowledge reference now includes the same full-size anatomical page as the guide. All six niraparib and eight Jemperli anatomical instructions are required in the guide, handbook and downloadable knowledge reference.
 
 The local browser preflight failed before opening a page because the environment refused Chromium's process socket. Desktop and mobile rendering, actual browser downloads, keyboard and screen-reader behaviour, physical print legibility, and camera acceptance remain open. The existing manual GitHub browser workflow now exercises these two patient portals at 390 and 1,440 px, including browser downloads and phase-specific PDFs. Run on the review branch for external evidence. [Manual validation](https://github.com/pobchina-boop/Sactcheck/actions/workflows/manual-validation.yml)
