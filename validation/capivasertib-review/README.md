@@ -15,3 +15,11 @@ The clinic workflow includes a fasting-glucose and ketoacidosis prompt, a pharma
 Run the scoped authoring Python environment on `tools/capivasertib-planner/build.py` to generate both HTML planners and the canonical and compatibility PDF copies. Both calendars derive administration days from the protocol. Their combined packs reuse the existing anatomical and wallet-card pages. Use `node tests/capivasertib-planner.test.cjs` and the existing 00947 integrated source scenarios to verify the application.
 
 Independent oncology, pharmacy and patient review and physical printing remain pending.
+
+## Review results and release hold
+
+The integrated 00947 assessment passed 229 of 229 source checks and exercised 120 of 120 rules. The patient-interface suite passed 46 tests. The published site resolved all 54 local links across the five affected patient entry points. Both three-page packs decoded to the 00947 portal. All 21 original handbook pages rendered identically after adding the two pages. The release gate, Pages build, deployable-site validation and repository security check passed. The local browser preflight encountered a socket permission error, leaving interactive desktop and mobile verification pending.
+
+The full CI command then stopped in the legacy catalogue test at `tests/catalogue-ui-v027.test.js:26`. An isolated replay against its six original inputs from the olaparib parent commit produced the same failure. It expects an older monotherapy filename. The 00588 URL in the olaparib parent also returned HTTP 404. The current HSE breast and oral SACT registers link to NCCP 00588 version 6, reviewed 2 November 2026. The downloaded eight-page PDF has SHA-256 `552b8bc3ac1aa3ce7814391076a4fecb1c2f1790bb577c2d92bad587cee4671f`. [Current HSE 00588 PDF](https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy.pdf)
+
+The version history records an amendment to the review schedule. Extracted text across the four dose-modification tables matched the retained version 5b after normalising spacing, bullet glyphs and the spelling of CrCl. The historical 00588 source registration, links across its patient and clinician materials, and associated catalogue test still need a version 6 source migration before release. The 00947 protocol URL returned HTTP 200 and the same audited 11-page PDF recorded above.
