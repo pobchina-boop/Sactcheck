@@ -6,10 +6,12 @@ const check=require('./helpers/head-neck-suite-registration-v08445.cjs').registr
 const prior=Object.keys(JSON.parse(fs.readFileSync(path.join(root,'data/protected-patient-assets-v0810.json'))).assets);
 check(registry.codes,prior);
 const release=require('../package.json').version;
-assert.equal(registry.codes.length,release==='0.84.63'?279:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
-if(release==='0.84.63'){
- assert.equal(registry.codes.flatMap(code=>registry.bundleRoutes(code)).length,313);
- assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,321);
+const sarcoma=release==='0.84.64' ? require('./helpers/retrospective-v08464.cjs').NEW_ROUTES : [];
+const hasOlaparib=['0.84.63','0.84.64'].includes(release);
+assert.equal(registry.codes.length,hasOlaparib?279+sarcoma.filter(route=>!route.includes('/')).length:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
+if(hasOlaparib){
+ assert.equal(registry.codes.flatMap(code=>registry.bundleRoutes(code)).length,313+sarcoma.length);
+ assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,321+sarcoma.length);
 }
 for(const code of ['00453','00602','00807','00885','00894','00945','00500','00391','00392','00501','00511']) {
  assert.throws(()=>check(registry.codes.filter(x=>x!==code),prior),'Missing '+code+' must fail');
@@ -31,7 +33,7 @@ const records=releases.map(([dir])=>JSON.parse(fs.readFileSync(path.join(root,'v
 for(const tool of ['tools/system-health-audit-v0810.js','tools/validate-pages-site.js','tests/v0810-architecture-consolidation.test.js']){
  const src=fs.readFileSync(path.join(root,tool),'utf8');
  assert(src.includes('patient-migration-catalogue.cjs'),tool+' uses the shared reviewed migration catalogue');
- for(const version of (release==='0.84.63'?[58,59,60,61,62,63]:[58,59,60,61,62]))assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
+ for(const version of (hasOlaparib?[58,59,60,61,62,63,...(sarcoma.length?[64]:[])]:[58,59,60,61,62]))assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
 }
 let assets=0;
 for(let i=0;i<releases.length;i++)for(const code of releases[i][1])for(const name of ['index.html','guide.pdf','passport.pdf']){

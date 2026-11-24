@@ -12,7 +12,7 @@ assert.deepEqual(idx.codes,codes);assert.equal(kb.regimen_profiles.length,5);ass
 let rules=0;
 for(const code of codes){
  const d=json(`data/patient-knowledge/${code}.json`),dir=code==='00588'?'shared':'breast',pf=fs.readdirSync(path.join(root,'protocols',dir)).find(n=>n.startsWith(code+'-')),p=json('protocols/'+dir+'/'+pf);
- assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.9'));assert.equal(d.protocol_version,String(p.metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(idx.regimens[code].rule_count,code==='00588'?require('./helpers/prostate-inputs-v08457.cjs').retainedBreastRuleCount(p):code==='00776'?require('./helpers/enhertu-review-v08462.cjs').historicalRuleCount(p):p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
+ assert.equal(d.suite_release,current21.has(d.code)?'0.84.21':('0.84.9'));assert.equal(d.protocol_version,String((code==='00588'?V63.historicalProtocol(p):p).metadata.nccp_version));assert.equal(p.metadata.validation.clinical_use_authorised,false);assert.equal(idx.regimens[code].rule_count,code==='00588'?require('./helpers/prostate-inputs-v08457.cjs').retainedBreastRuleCount(p):code==='00776'?require('./helpers/enhertu-review-v08462.cjs').historicalRuleCount(p):p.rule_engine.rules.length);rules+=p.rule_engine.rules.length;
  assert(p.rule_engine.rules.every(r=>r.source?.url&&r.source.page));assert.equal(d.service_kind,'targeted');assert(d.anatomy.length>=4&&d.anatomy.length<=6);
  for(const ch of d.chapters)for(const item of ch.items)for(const id of item.source_ids)assert(d.sources.some(s=>s.id===id),`${code}: source ${id}`);
  const j=J.definitions[code];assert.equal(j.has_patient_dates,false);assert.equal(j.schedule_type,'relative-educational');

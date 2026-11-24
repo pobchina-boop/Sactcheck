@@ -173,4 +173,8 @@ function verify(){
  verifyPriorEnhertu();
  return true;
 }
-module.exports={ROOT,BASE_COMMIT,BASE_TREE,PRODUCTION_BASE_COMMIT,RECORD,RECORD_PATH,HELPER_PATH,CODES,ROUTES,NEW_ROUTES,PROTOCOLS,PROFILE_PATHS,SOURCE_OWNERSHIP,SHARED_PATHS,sha,validPath,approvedPath,treeEntries,baselineBytes,before,normalisedHelper,createMigration,load,isCurrent,expected,expectedHash:(f,h)=>expected(f,h).sha256,expectedBytes:(f,n,h)=>expected(f,h,n).bytes,assertCurrent,baselineJson,validateProtocol,historicalProtocol,verifyPriorEnhertu,isAddition,changedPaths,verify};
+function latest(file,hash,size){
+ const inherited=expected(file,hash,size);
+ return capivasertibReview.expected(file,inherited.sha256,inherited.bytes);
+}
+module.exports={ROOT,BASE_COMMIT,BASE_TREE,PRODUCTION_BASE_COMMIT,RECORD,RECORD_PATH,HELPER_PATH,CODES,ROUTES,NEW_ROUTES,PROTOCOLS,PROFILE_PATHS,SOURCE_OWNERSHIP,SHARED_PATHS,sha,validPath,approvedPath,treeEntries,baselineBytes,before,normalisedHelper,createMigration,load,isCurrent,expected,expectedHash:(f,h)=>latest(f,h).sha256,expectedBytes:(f,n,h)=>latest(f,h,n).bytes,assertCurrent,baselineJson,validateProtocol,historicalProtocol,verifyPriorEnhertu,isAddition,changedPaths,verify};
