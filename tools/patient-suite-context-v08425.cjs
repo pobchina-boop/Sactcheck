@@ -9,13 +9,15 @@ const context=process.env.SACT_SUITE_CONTEXT||'';
 const hn45Contexts=['head_neck','nasopharyngeal'];
 const skin42Contexts=['melanoma','merkel_cell'];
 const melanomaContexts=['melanoma_advanced','melanoma_adjuvant','melanoma_perioperative'];
+const olaparibContexts=['ovarian_first_line','ovarian_relapsed','pancreatic'];
 const v30Contexts=['combination','continuation'];
 if(v30Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00372'))throw new Error('Nintedanib context escaped00372');
 const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
 if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='gist'&&context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && context!=='gist'&&context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context)&&!olaparibContexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
+if(olaparibContexts.includes(context)&&codes.some(c=>c!=='00588'))throw new Error('Olaparib monotherapy context escaped00588');
 if(context==='gist'&&codes.some(c=>!['00325','00719','00244'].includes(c)))throw Error('GIST context escaped the three reviewed shared regimens');
 if(hn45Contexts.includes(context)&&codes.some(c=>context==='nasopharyngeal'?c!=='00385':!['00294','00419','00385','00207','00261','00483','00484','00455','00558'].includes(c)))throw Error('Unsupported head/neck regimen context');
 if(melanomaContexts.includes(context)&&codes.some(c=>!['00455','00558','00483','00484'].includes(c)||(context==='melanoma_perioperative'&&c!=='00455')))throw new Error('Unsupported melanoma regimen/context');
@@ -27,7 +29,10 @@ if(v27Contexts.includes(context)&&codes.some(c=>c!=='00849'))throw new Error('Ne
 if(context==='colorectal'&&codes.some(c=>!['00212','00214','00215','00455','00558'].includes(c)))throw new Error('Colorectal context escaped selected bevacizumab protocols');
 if(context==='prostate'&&codes.some(c=>!['00203','00588'].includes(c)))throw Error('Unsupported prostate context');
 if(context&&!codes.length)throw new Error('A context build requires an explicit SACT_SUITE_CODES scope');
-function profilePath(code){return context?`data/patient-knowledge-contexts/${code}/${context}.json`:`data/patient-knowledge/${code}.json`;}
+function profilePath(code){
+ if(olaparibContexts.includes(context)&&code!=='00588')throw new Error('Olaparib monotherapy profile escaped00588');
+ return context?`data/patient-knowledge-contexts/${code}/${context}.json`:`data/patient-knowledge/${code}.json`;
+}
 function profile(code){return JSON.parse(fs.readFileSync(path.join(root,profilePath(code)),'utf8'));}
 function readPath(p){const m=p.match(/^data\/patient-knowledge\/(\d{5})\.json$/);return m&&context?profilePath(m[1]):p;}
 function output(file,html){
@@ -90,6 +95,12 @@ function phases(defaultData){
  for(const [c,plans]of Object.entries(gu57.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
  const gist=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08461.json'),'utf8'));
  for(const [c,plans]of Object.entries(gist.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
+ if(codes.includes('00588')&&(context==='prostate'||olaparibContexts.includes(context))){
+  const olaparib=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08463.json'),'utf8'));
+  const plans=olaparib.regimens?.['00588']?.[context];
+  if(!Array.isArray(plans)||!plans.length)throw new Error('Missing reviewed olaparib support context: '+context);
+  d.regimens['00588']={...(d.regimens['00588']||{}),[context]:plans};
+ }
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
 if(context){

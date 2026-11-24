@@ -198,7 +198,14 @@
       if (!metadata.source_url) {
         addIssue(warnings, "SOURCE_URL_MISSING", "metadata.source_url is not present.", "metadata.source_url");
       }
-      if (!metadata.review_date) {
+      // NCCP also publishes regimens with an as-required review schedule.
+      // Such a source specifies its last review and does not assign a due date.
+      const lastReview = metadata.last_reviewed_date;
+      const parsedReview = typeof lastReview === "string" && /^\d{4}-\d{2}-\d{2}$/.test(lastReview)
+        ? new Date(lastReview + "T00:00:00.000Z") : null;
+      const asRequired = metadata.review_schedule === "as_required" && parsedReview &&
+        Number.isFinite(parsedReview.valueOf()) && parsedReview.toISOString().slice(0, 10) === lastReview;
+      if (!metadata.review_date && !asRequired) {
         addIssue(warnings, "REVIEW_DATE_MISSING", "metadata.review_date is not present.", "metadata.review_date");
       }
     }

@@ -754,7 +754,25 @@
 
     const rows = [...grouped.values()].map(items => {
       const sorted = [...items].sort((a, b) => b.rank - a.rank);
-      return { ...sorted[0], allActions: sorted };
+      let row = { ...sorted[0], allActions: sorted };
+      // An opted-in regimen may require a separate active hold/review to be
+      // resolved before a future reduction is displayed as a numeric dose.
+      // Preserve every source action; the conditional reduction remains in
+      // the finding, but it cannot look like the dose to administer now.
+      if (protocol.metadata?.future_dose_policy === "resolve_all_active_holds" &&
+          row.quantified && ["withhold_then_reduce", "delay_then_dose_reduce"].includes(row.actionType)) {
+        const blockers = result.findings.filter(finding =>
+          !finding.domainAssessment && ["withhold", "delay", "consultant_review"].includes(finding.actionType) &&
+          expandComponents(finding, model).some(component => componentMatches(component.id, row.componentId))
+        );
+        if (blockers.length) {
+          const message = "No dose now; resolve all active holds and reviews before selecting a later dose";
+          row = { ...row, protocolDose: message, quantified: false, futureDoseDeferred: true,
+            actionLabel: "Withhold now; review future dose", blockingRuleIds: blockers.map(finding => finding.ruleId),
+            allActions: sorted.map(action => action.quantified ? { ...action, protocolDose: message, quantified: false } : action) };
+        }
+      }
+      return row;
     }).sort((a, b) => b.rank - a.rank || a.component.localeCompare(b.component));
 
     const laboratoryPattern = /(anc|neutroph|platelet|haemoglobin|hemoglobin|wbc|crcl|egfr|gfr|creatin|renal|dialysis|bilirubin|alt|ast|transamin|hepatic|liver|albumin|potassium|magnesium|calcium|phosphate)/i;

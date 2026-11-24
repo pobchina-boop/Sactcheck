@@ -142,3 +142,11 @@ The temporary onboarding write-access test alone does not authorize changes to `
 - Architecture, system-health, deployed-site and patient-inventory checks share tests/helpers/patient-migration-catalogue.cjs. New 0.84.x batches must supply their authenticated retrospective helper and migration record; the catalogue derives the active release from package.json. Never maintain separate version lists in those consumers.
 - Run test:route-registration first, then full test:ci and every Pages build step against the exact assembled package in a disposable full-history checkout. Preserve historical evidence using the regression-stage runner. Missing history is a blocked release check, not evidence of deployment readiness.
 - Before handing over ZIPs, check origin/main has not advanced, verify ZIP bytes reproduce the tested diff, and record baseline SHA, file hashes, results and remaining limitations. Do not call a package deployment-ready while required checks are blocked or failing. Deployment success must be checked separately after the user's push.
+
+
+## Patient video standard — Paul’s instruction, 23 November 2026
+
+- Every new or revised patient regimen video must follow `docs/PATIENT_VIDEO_STANDARD.md` and `data/patient-video-standard.json`. The first seven sections remain mandatory and in their exact recorded order. Do not silently omit a section or change the order to meet a runtime target.
+- Use the exact regimen/phase generated supportive-care script, explain all scheduled, rescue and conditional support, and preserve applicable local additions. Keep the original approved Patrick Irish voice unless Paul requests a change.
+- Maintain a section-to-source manifest, run `node tools/validate-patient-video-standard.cjs MANIFEST.json`, and complete the clinical, pharmacy, audio, caption and visual checks described in the standard before publishing a film. A source-checked script or storyboard is not a completed voiced video.
+- Existing films are not automatically certified against the new standard; record a gap review before describing them as compliant.

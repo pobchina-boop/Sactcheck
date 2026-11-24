@@ -202,7 +202,19 @@ for (const { file, data } of protocols) {
   const rules = data.rule_engine?.rules || [];
   for (const [field, def] of Object.entries(definitions)) {
     const sourceGrade = require('./helpers/gu-inputs-v08458.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08457.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08456.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').grade(data,field,def) || SKIN42Inputs.grade(data, field, def) || SKIN40Inputs.grade(data, field, def) || NEURO39Inputs.grade(data, field, def) || NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
-    if (!sourceGrade && trueGradeField(field, def)) {
+    const bevacizumabGrade = code === '00746' && ['hypertension_grade','haemorrhage_grade','venous_thromboembolism_grade','fistula_grade'].includes(field);
+    if (bevacizumabGrade) {
+      assert.equal(def.grading_source_url, metadata.source_url);
+      assert.match(def.grading_source_label, /00746 v2.*Table 5/);
+      assert.match(def.assessment_guidance, /does not name a grading edition/);
+      assert.equal(def.ctcae_version, undefined);
+      assert.deepEqual(def.options.map(option=>option.value), [0,1,2,3,4]);
+      const guide=ctcae.guide({...def,id:field});
+      assert(guide.sourceSpecific && !guide.calculable);
+      assert.equal(guide.sourceUrl,metadata.source_url);
+      assert.deepEqual(Array.from(guide.grades,x=>Number(x.grade)),[0,1,2,3,4]);
+    }
+    if (!bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const headNeckV45Source = HEADNECK45.applies(data);
@@ -293,12 +305,17 @@ for (const { file, data } of protocols) {
       const net37Hfs = NET37Inputs.handFoot(data, field, def);
       const sourceHfs = net37Hfs || (code==='00890' && field==='ppes_grade') || (oralV34Source&&code==='00244'&&field==='hfsr_grade') || (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || (['00216','00586','00623','00505'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
       const sourceNausea = code === '00794' && field === 'nausea_grade';
-      const expectedGrades = gistV61 ? GIST61.ranges[code][field] : code==='00702'&&field==='hyperuricaemia_grade' ? [0,1,3,4] : code==='00947' && field.endsWith('_event_peak_grade') ? [2,3,4] : sourceNausea ? [0,1,2,3] : ['00322','00588'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
+      const expectedGrades = gistV61 ? GIST61.ranges[code][field] : code==='00702'&&field==='hyperuricaemia_grade' ? [0,1,3,4] : code==='00947' && field.endsWith('_event_peak_grade') ? [2,3,4] : sourceNausea ? [0,1,2,3] : ['00322','00588','00746'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
       if (everolimusSource) {
         assert.equal(def.grading_source_label, 'NCCP 00322 / NCI CTCAE v3.0');
         assert.match(def.grading_source_url, /cancer.gov.*ctcae-v3/);
         assert.deepEqual((def.options || []).map(x => Number(x.value)), expectedGrades);
         assert((def.options || []).every(x => x.description), 'Everolimus source descriptions must override shared defaults');
+      }
+      if (['00588','00746'].includes(code) && field === 'febrile_neutropenia_grade') {
+        assert.equal(def.ctcae_version, '5.0');
+        assert.deepEqual([...grades], [0,3,4]);
+        assert(def.options.every(option=>option.description));
       }
       expectedGrades.forEach(grade => assert(grades.has(grade), `${code}/${field} lacks Grade ${grade}`));
       if(sourceNausea) {assert(!grades.has(4), 'CTCAE v5 nausea has no grade 4');assert.match(def.grading_source_label,/v5.0.*nausea/);assert.match(def.grading_source_url,/cancer.gov.*ctcae-v5/);assert(def.options.every(x=>x.description));}

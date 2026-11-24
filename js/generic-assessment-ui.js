@@ -833,6 +833,9 @@
     const ctcaeDefinitionGuide = isEcogDefinition(definition) ? null : root.SACTCheckCTCAE?.guide(definition);
     const ctcaeGuide = renderCtcaeGuide(definition, ctcaeDefinitionGuide, { defaultOpen: Boolean(options.toxicity), compactSummary: Boolean(options.blood) });
     const ecogGuide = renderEcogGuide(definition);
+    const derivedPreviews = [...Engine.explicitInputDefinitions(activeProtocol || {}).values()]
+      .filter(item => item.derived_value && item.show_calculation === true && item.ui_derived_from === definition.id)
+      .map(item => `<div class="lab-calculation-preview" data-derived-preview="${escapeHtml(item.id)}" aria-live="polite">Not calculated: enter both verified measurements.</div>`).join("");
     const ctcaeCalculated = ctcaeDefinitionGuide?.calculable
       ? `<div class="ctcae-calculated-grade hidden" data-ctcae-calculated="${escapeHtml(definition.id)}" aria-live="polite"></div>`
       : "";
@@ -846,6 +849,7 @@
             ${control}
             <span class="hint" data-input-hint>${hints.join(" ")}</span>
             ${ctcaeCalculated}
+            ${derivedPreviews}
             ${ctcaeGuide}
             ${ecogGuide}
           </div>
@@ -859,6 +863,7 @@
         ${control}
         ${hints.length ? `<span class="hint" data-input-hint>${hints.join(" ")}</span>` : `<span class="hint hidden" data-input-hint></span>`}
         ${ctcaeCalculated}
+        ${derivedPreviews}
         ${ctcaeGuide}
         ${ecogGuide}
       </div>`;
@@ -911,6 +916,28 @@
       updateCompactInputState(control, byId.get(control.dataset.field || control.dataset.labTarget));
     });
     refreshLabPreviews();
+    refreshDerivedPreviews();
+  }
+
+  function refreshDerivedPreviews(rawInputs = collectRawInputs(true)) {
+    const previews = [...document.querySelectorAll("[data-derived-preview]")];
+    if (!activeProtocol || !previews.length) return;
+    // Use the clinical engine's validated arithmetic, including bounds and
+    // missing-value handling, rather than a second UI-only subtraction.
+    const result = Engine.assess(activeProtocol, rawInputs, { profileId: activeProfileId });
+    const definitions = new Map(result.definitions.map(item => [item.id, item]));
+    previews.forEach(preview => {
+      const definition = definitions.get(preview.dataset.derivedPreview);
+      if (!definition?.derived_value) return;
+      const value = result.inputs[definition.id];
+      if (value === null || value === undefined || !Number.isFinite(value)) {
+        preview.textContent = "Not calculated: enter valid baseline and current measurements. Missing results are not assumed normal.";
+        return;
+      }
+      const [first, second] = definition.derived_value.fields.map(id => result.inputs[id]);
+      const operator = definition.derived_value.operation === "ratio" ? "÷" : "−";
+      preview.textContent = `${definition.label}: ${first} ${operator} ${second} = ${value} ${definition.unit || ""}.${value < 0 && definition.derived_value.operation === "difference" ? " A negative decrease means an increase from baseline." : ""}`;
+    });
   }
 
   function updateConditionalInputs() {
@@ -977,6 +1004,7 @@
     document.getElementById("jsonTreatmentContextSection")?.classList.toggle("hidden", contextDefinitions.filter(definition => definition.visible !== false).length === 0);
     updateInputCount(additionalDefinitions);
     refreshLabPreviews();
+    refreshDerivedPreviews(rawInputs);
     root.SACTCheckImmunotherapySafety?.updateInputs?.(activeProtocol, definitions, rawInputs);
     hideResult();
   }

@@ -106,6 +106,14 @@ assert.equal(sha(biliaryAudioBytes), '5f4e85f98181de1917b00bc553bc9a1f81423f0993
 const biliaryAudioRecord = JSON.parse(biliaryAudioBytes);
 assert.deepEqual(biliaryAudioRecord.regimens, ['00897']);
 const filmRecords = [filmRecord, strideRecord, osimertinibRecord, biliaryFilmRecord, biliaryAudioRecord];
+const enhertuReview = require("./enhertu-review-v08462.cjs");
+const olaparibReview = require("./retrospective-v08463.cjs");
+const capReview = require('./capivasertib-review.cjs');
+function currentOlaparib(f,h,n){
+  const reviewed=olaparibReview.expected(f,h,n);
+  return capReview.expected(f,reviewed.sha256,reviewed.bytes);
+}
+function reviewedExpected(f,h,n){const inherited=enhertuReview.expected(f,h,n);return currentOlaparib(f,inherited.sha256,inherited.bytes);}
 function filmExpected(f, h, n) {
   const changes = filmRecords.map(record => record.files[f]).filter(Boolean);
   if (!changes.length) return {sha256: h, bytes: n};
@@ -116,10 +124,17 @@ function filmExpected(f, h, n) {
   return {sha256: latest.after, bytes: latest.after_bytes};
 }
 function expected(f,h,n){
-  assert(validPath(f));const c=load().files[f];if(!c)return filmExpected(f,h,n);
-  assert(h===c.before || h===c.after,f+' mismatched transition origin');
-  if(n!==undefined)assert.equal(n,h===c.before?c.before_bytes:c.after_bytes,f+' mismatched origin size');
-  return {sha256:c.after,bytes:c.after_bytes};
+  assert(validPath(f));
+  if(olaparibReview.isCurrent(f,h,n))return currentOlaparib(f,h,n);
+  if(enhertuReview.isCurrent(f,h,n))return reviewedExpected(f,h,n);
+  const c=load().files[f];let prior;
+  if(!c)prior=filmExpected(f,h,n);
+  else{
+    assert(h===c.before || h===c.after,f+' mismatched transition origin');
+    if(n!==undefined)assert.equal(n,h===c.before?c.before_bytes:c.after_bytes,f+' mismatched origin size');
+    prior=filmExpected(f,c.after,c.after_bytes);
+  }
+  return reviewedExpected(f,prior.sha256,prior.bytes);
 }
 function currentReplayHash(file, historicalHash){
   assert(['js/protocol-dose-schedule.js','js/local-lab-profile.js'].includes(file));
@@ -131,8 +146,11 @@ function currentReplayHash(file, historicalHash){
   assert.equal(live.length,reviewed.bytes,file+' live tool size');
   return reviewed.sha256;
 }
-function isAddition(f){return f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||f===biliaryFilmRecordPath||f===biliaryAudioRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
+function isAddition(f){return olaparibReview.isAddition(f)||enhertuReview.isAddition(f)||f===filmRecordPath||f===strideRecordPath||f===osimertinibRecordPath||f===biliaryFilmRecordPath||f===biliaryAudioRecordPath||filmRecords.some(record=>record.files[f]?.before===null)||f===manifestPath||f===helperPath||load().files[f]?.before===null;}
 function verify(){
+  // Verify the unchanged Enhertu record and all of its original Git bytes,
+  // followed only by explicitly pinned v63 successors of its shared files.
+  olaparibReview.verify();
   const latest = new Map();
   for (const record of filmRecords) {
     for (const [f, change] of Object.entries(record.files)) {
@@ -153,11 +171,12 @@ function verify(){
   }
   for (const [f, change] of latest) {
     const bytes = fs.readFileSync(path.join(ROOT, f));
-    assert.equal(sha(bytes), change.after, f + ' published film asset');
-    assert.equal(bytes.length, change.after_bytes);
+    const reviewed=reviewedExpected(f,change.after,change.after_bytes);
+    assert.equal(sha(bytes), reviewed.sha256, f + ' published film asset / reviewed successor');
+    assert.equal(bytes.length, reviewed.bytes);
   }
   for(const [f,v] of Object.entries(load().files)){
-    const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),v.after,f+' reviewed output');assert.equal(bytes.length,v.after_bytes);
+    const reviewed=reviewedExpected(f,v.after,v.after_bytes);const bytes=fs.readFileSync(path.join(ROOT,f));assert.equal(sha(bytes),reviewed.sha256,f+' reviewed output');assert.equal(bytes.length,reviewed.bytes);
   }
   return true;
 }

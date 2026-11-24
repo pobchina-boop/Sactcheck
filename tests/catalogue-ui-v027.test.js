@@ -23,7 +23,8 @@ assert(loader.includes("normaliseRemainingLegacyCards"));
 assert(loader.includes("Triggered rules shown in assessment"));
 assert(html.includes("regimen-description"));
 assert(html.includes("assessment-explainer"));
-assert(olaparib.metadata.source_url.includes("olaparib_tablet_monotherapy_588.pdf"));
+assert.equal(olaparib.metadata.source_url, "https://healthservice.hse.ie/documents/6397/588_Olaparib_tablet_monotherapy.pdf");
+assert.equal(olaparib.metadata.nccp_version, "6");
 assert(atezo.metadata.source_url.includes("593_v10a_Atezolizumab_1680mg_Monotherapy.pdf"));
 assert.equal(atezo.metadata.nccp_version, "10a");
 

@@ -49,7 +49,8 @@ test('v44 exact current bytes follow the pinned v43 package; every protected ass
  const repairRecord=JSON.parse(fs.readFileSync(repair.RECORD,'utf8'));repair.createMigration(repairRecord);
  const batch56Record=JSON.parse(fs.readFileSync(batch56.RECORD,'utf8'));batch56.createMigration(batch56Record);
  const batch57Record=JSON.parse(fs.readFileSync(batch57.RECORD,'utf8'));batch57.createMigration(batch57Record);
- const later=require('./helpers/patient-migration-catalogue.cjs').getInventoryMigrations().filter(({version})=>version>57);
+ const catalogue=require('./helpers/patient-migration-catalogue.cjs').getInventoryMigrations();
+ const later=require('./helpers/capivasertib-review.cjs').withReviewInventories(catalogue).filter(({version})=>version>57);
  const precedingRecord=JSON.parse(fs.readFileSync(preceding.RECORD,'utf8'));preceding.createMigration(precedingRecord);
  assert.equal(cp.execFileSync('git',['rev-parse',m.BASE_COMMIT+'^{tree}'],{cwd:m.ROOT,encoding:'utf8'}).trim(),m.BASE_TREE);
  const historical=JSON.parse(fs.readFileSync(path.join(m.ROOT,'validation/patient-design-v08443/asset-migrations.json'),'utf8'));
