@@ -10,7 +10,7 @@ const p=JSON.parse(fs.readFileSync(path.join(root,'protocols/shared/00588-olapar
 const retainedRuleCount=require(path.join(root,'tests/helpers/prostate-inputs-v08457.cjs')).retainedBreastRuleCount(p);
 const isV63=p.metadata.sactcheck_encoding_version==='0.84.63';
 const historical=isV63?require(path.join(root,'tests/helpers/retrospective-v08463.cjs')).historicalProtocol(p):p;
-const currentCases=isV63?JSON.parse(fs.readFileSync(path.join(root,'validation/olaparib-v08463/clinical/source-case-results.json'))):null;
+const currentCases=isV63?JSON.parse(fs.readFileSync(path.join(root,'validation/olaparib-source-20261124/source-case-results.json'))):null;
 if(currentCases){assert.equal(currentCases.failed,0);assert.equal(currentCases.protocols['00588'].sha256,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'protocols/shared/00588-olaparib-tablet-monotherapy.json'))).digest('hex'));}
 
 const prostateCases=JSON.parse(fs.readFileSync(path.join(root,'validation/prostate-v08457/clinical/source-case-results.json'))).cases.filter(c=>c.code==='00588');
