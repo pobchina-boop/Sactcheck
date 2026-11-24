@@ -67,9 +67,13 @@ assert.strictEqual(catalogue.protocols.length, require('./helpers/live-inventory
 const endometrial=require('../protocols/gynaecology/00953-durvalumab-carboplatin-paclitaxel.json');
 assert(DoseSchedule.hasData(endometrial));
 assert.equal(DoseSchedule.buildModel(endometrial).phases.length,2);
-assert.strictEqual(usefulCoverage, 255+1);
-assert.strictEqual(scheduleCoverage, 255+1);
-assert.strictEqual(doseLevelCoverage, 66);
+const combination=require('../protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json');
+assert(DoseSchedule.hasData(combination));
+const combinationModel=DoseSchedule.buildModel(combination);
+assert(combinationModel.phases.length && combinationModel.doseLevels.length);
+assert.strictEqual(usefulCoverage, 255+1+1);
+assert.strictEqual(scheduleCoverage, 255+1+1);
+assert.strictEqual(doseLevelCoverage, 67);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.
 for(const code of ['00244','00325','00335','00719']){

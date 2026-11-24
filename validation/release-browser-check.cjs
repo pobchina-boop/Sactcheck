@@ -39,6 +39,27 @@ const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
         assert.deepEqual(errors,[],route);rows.push({route,width,heading,metrics,guide:download.suggestedFilename()});
         await page.close();
       }
+      for (const [code,id] of [['00588','nccp-00588-v5b'],['00746','nccp-00746-v2']]) {
+        const clinic=await context.newPage();
+        await clinic.goto(server.url+'/');
+        await clinic.locator('#regimenSearch').fill(code);
+        await clinic.locator('[data-json-protocol-id="'+id+'"]').first().waitFor();
+        await clinic.evaluate(id=>window.SACTCheckProtocolLoader.launchProtocol(id),id);
+        const field=clinic.locator('#jsonInput_anc_x10e9_l');
+        await field.waitFor({state:'attached'});
+        const el=await field.elementHandle();
+        await el.evaluate(e=>{let n=e.closest('details');while(n){n.open=true;n=n.parentElement.closest('details');}});
+        await field.fill('0.8');
+        await clinic.getByRole('button',{name:'Run assessment engine',exact:true}).click();
+        const result=clinic.locator('#jsonResult');
+        await result.waitFor({state:'visible'});
+        const resultText=await result.innerText();
+        assert(/delay|withhold|hold/i.test(resultText),code+' expected neutropenia action');
+        assert(/neutrophil|ANC/i.test(resultText),code+' expected source trigger');
+        await clinic.screenshot({path:path.join(output,code+'-clinic-'+width+'.png')});
+        rows.push({code,width,low_neutrophil_action:resultText.slice(0,200)});
+        await clinic.close();
+      }
       await context.close();
     }
     fs.writeFileSync(path.join(output,'portal-checks.json'),JSON.stringify(rows,null,2));
