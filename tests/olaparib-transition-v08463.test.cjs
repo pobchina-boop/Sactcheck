@@ -12,7 +12,8 @@ assert.deepEqual(catalogue.filter(item=>item.helper.NEW_ROUTES.includes('00588/p
 for(const route of m.NEW_ROUTES)assert.deepEqual(catalogue.filter(item=>item.helper.NEW_ROUTES.includes(route)).map(item=>item.version),[63]);
 for(const [file,change]of Object.entries(record.files)){
  const current=m.expected(file,change.before,change.before_bytes);assert.equal(current.sha256,change.after);assert.equal(current.bytes,change.after_bytes);
- assert.equal(m.sha(read(file)),current.sha256);assert.equal(read(file).length,current.bytes);
+ const latest=require('./helpers/capivasertib-review.cjs').expected(file,current.sha256,current.bytes);
+ assert.equal(m.sha(read(file)),latest.sha256);assert.equal(read(file).length,latest.bytes);
  assert.throws(()=>m.expected(file,'0'.repeat(64)),/unexpected olaparib transition origin/);
  assert.throws(()=>m.expected(file,change.after,change.after_bytes+1),/mismatched olaparib origin size/);
 }

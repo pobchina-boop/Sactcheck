@@ -37,7 +37,9 @@ for(const[f,entry]of Object.entries(record.files)){
 }
 for(const f of ['../outside.txt','/tmp/outside','protocols/lung/00353-osimertinib-monotherapy.json','patient/00525/index.html','assets/media/osimertinib-00353-irish.mp4'])assert.equal(review.approvedPath(f),false,'00776 review cannot authorise '+f);
 const changes=[...cp.execFileSync('git',['diff','--name-only','-z',review.BASE_COMMIT],{cwd:review.ROOT}).toString().split('\0'),...cp.execFileSync('git',['ls-files','--others','--exclude-standard','-z'],{cwd:review.ROOT}).toString().split('\0')].filter(Boolean);
-for(const f of new Set(changes))assert([review.RECORD_PATH,review.HELPER_PATH,successor.RECORD_PATH,successor.HELPER_PATH].includes(f)||record.files[f]||successor.load().files[f],'Changed file missing from exact reviewed assembly or authenticated successor: '+f);
+const capivasertibReview = require('./helpers/capivasertib-review.cjs');
+capivasertibReview.verify();
+for(const f of new Set(changes))assert([review.RECORD_PATH,review.HELPER_PATH,successor.RECORD_PATH,successor.HELPER_PATH].includes(f)||record.files[f]||successor.load().files[f]||capivasertibReview.owns(f),'Changed file missing from exact reviewed assembly or authenticated successor: '+f);
 const prior=JSON.parse(cp.execFileSync('git',['show',review.BASE_COMMIT+':data/breast-completion-v08421-authoring.json'],{cwd:review.ROOT,maxBuffer:8*1024*1024}));
 const now=JSON.parse(fs.readFileSync(path.join(review.ROOT,'data/breast-completion-v08421-authoring.json')));
 for(const[code,entry]of Object.entries(prior.regimens))if(code!=='00776')assert.deepEqual(now.regimens[code],entry,'Unrelated authoring record unchanged: '+code);

@@ -78,6 +78,7 @@ function before(file){
  return {before:digests.get(entry.oid),before_bytes:entry.bytes};
 }
 function normalisedHelper(bytes){return bytes.toString('utf8').replace(/const REVIEWED_SHA256='[^']*';/,"const REVIEWED_SHA256='__REVIEWED_MANIFEST_SHA256__';");}
+const capivasertibReview = require('./capivasertib-review.cjs');
 let record,verifiedDigest;
 function createMigration(candidate){
  assert.match(REVIEWED_SHA256,/^[a-f\d]{64}$/,'Freeze and review the olaparib assembly before pinning the transition');
@@ -91,7 +92,7 @@ function createMigration(candidate){
  assert.deepEqual(candidate.source_ownership,SOURCE_OWNERSHIP);
  assert.equal(candidate.inherited_enhertu_review_status,'unmerged_pending_validation');assert.equal(candidate.clinical_use_authorised,false);
  assert.equal(candidate.independent_clinical_pharmacy_review,'pending');assert.equal(candidate.patient_video_change,'none_requested_voice_clone_pending');
- assert.equal(candidate.helper_template_sha256,sha(normalisedHelper(fs.readFileSync(path.join(ROOT,HELPER_PATH)))),'Reviewed olaparib verification code');
+ assert.equal(candidate.helper_template_sha256,sha(normalisedHelper(capivasertibReview.original(HELPER_PATH))),'Reviewed olaparib verification code');
  for(const [file,entry]of Object.entries(candidate.files)){
   assert(approvedPath(file),'Unapproved olaparib scope '+file);
   const origin=before(file);assert.equal(entry.before,origin.before,file+' authentic Git origin');assert.equal(entry.before_bytes,origin.before_bytes,file+' authentic origin size');
@@ -124,13 +125,13 @@ function load(){
 }
 function isCurrent(file,hash,size){const change=load().files[file];return Boolean(change&&change.after===hash&&(size===undefined||change.after_bytes===size));}
 function expected(file,hash,size){
- assert(validPath(file));const change=load().files[file];if(!change)return {sha256:hash,bytes:size};
+ assert(validPath(file));const change=load().files[file];if(!change)return capivasertibReview.expected(file,hash,size);
  assert(hash===change.before||hash===change.after,file+' unexpected olaparib transition origin');
  if(size!==undefined)assert.equal(size,hash===change.before?change.before_bytes:change.after_bytes,file+' mismatched olaparib origin size');
  return {sha256:change.after,bytes:change.after_bytes};
 }
 function assertCurrent(file,hash,size){
- const current=fs.readFileSync(path.join(ROOT,file)),target=expected(file,hash,size);
+ const current=fs.readFileSync(path.join(ROOT,file)),inherited=expected(file,hash,size),target=capivasertibReview.expected(file,inherited.sha256,inherited.bytes);
  assert.equal(sha(current),target.sha256,file+' current reviewed successor');if(target.bytes!==undefined)assert.equal(current.length,target.bytes,file+' current successor size');return current;
 }
 function baselineJson(file){
@@ -160,14 +161,15 @@ function verifyPriorEnhertu(prior=require('./enhertu-review-v08462.cjs')){
  }
  return true;
 }
-function isAddition(file){return [RECORD_PATH,HELPER_PATH].includes(file)||load().files[file]?.before===null;}
+function isAddition(file){return capivasertibReview.addition(file)||[RECORD_PATH,HELPER_PATH].includes(file)||load().files[file]?.before===null;}
 function changedPaths(){return [...new Set([...git(['diff','--name-only','-z',BASE_COMMIT,'--']).toString().split('\0'),...git(['ls-files','--others','--exclude-standard','-z']).toString().split('\0')].filter(Boolean))].sort();}
 function verify(){
  const current=load();
+ capivasertibReview.verify();
  for(const [file,entry]of Object.entries(current.files)){
   const disk=path.join(ROOT,file);assert(fs.existsSync(disk)&&fs.lstatSync(disk).isFile()&&!fs.lstatSync(disk).isSymbolicLink(),file+' must remain a regular file');assertCurrent(file,entry.before,entry.before_bytes);
  }
- for(const file of changedPaths())assert([RECORD_PATH,HELPER_PATH].includes(file)||current.files[file],'Unrecorded change outside the frozen olaparib assembly: '+file);
+ for(const file of changedPaths())assert([RECORD_PATH,HELPER_PATH].includes(file)||current.files[file]||capivasertibReview.owns(file),'Unrecorded change outside the frozen olaparib assembly: '+file);
  verifyPriorEnhertu();
  return true;
 }
