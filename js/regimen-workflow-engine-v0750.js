@@ -754,6 +754,7 @@
           <div><span>Administration safety</span><h3>Fulvestrant injection check</h3>
           <p>On day 1, discuss ANC below 1.0 × 10⁹/L or platelets below 100 × 10⁹/L with the consultant before the injections. These thresholds apply to fulvestrant injection safety.</p>
           <p>Check bleeding risk and anticoagulants. Give the prescribed dose by slow gluteal injection and assess new radiating pain, numbness or weakness.</p></div>
+          <a class="btn secondary workflow-module-action" href="patient/00947/first-cycle.html" target="_blank" rel="noopener noreferrer">Injection dates and printable cycle pack</a>
           <a class="workflow-source-link" href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">NCCP 00947 · pages 1, 2 and 5</a>
         </article>` : `<article class="workflow-module extravasation">
           <div class="workflow-module-icon">IV</div>
@@ -769,7 +770,6 @@
           <summary><span>Patient platform</span><span class="workflow-disclosure-chevron" aria-hidden="true">⌄</span></summary>
           <div class="workflow-patient-actions">
           <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient platform</button>
-          ${manifest.protocolId === "nccp-00947-v1" ? '<a class="btn secondary workflow-module-action" href="patient/00947/first-cycle.html" target="_blank" rel="noopener noreferrer">Cycle planner and three-page patient pack</a>' : ''}
           <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
           ${patientAssets()?.relativePath?.(activeProtocol,'knowledge')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'knowledge'))}" target="_blank" rel="noopener noreferrer">Complete patient reference + cycle timeline</a>`:''}
           ${patientAssets()?.relativePath?.(activeProtocol,'longitudinal')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'longitudinal'))}" target="_blank" rel="noopener noreferrer">Whole treatment journey · scans and monitoring</a>`:''}
