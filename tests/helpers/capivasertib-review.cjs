@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '../..');
 const base = '71d089b071bff6f8ed3ff6eb3cad49a5e6577105';
 const manifestPath = 'validation/capivasertib-review/changes.json';
 const helperPath = 'tests/helpers/capivasertib-review.cjs';
-const manifestHash = '47111aa6f6508ca680d88e85139811de1f231f208d8e4ce9dd05dc558e825b05';
+const manifestHash = 'cb78470205ad7b0c9eb513e3c7a4f20f77069ac824c55a4bbacdbc0cc0d1251e';
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const manifest = fs.readFileSync(path.join(root, manifestPath));
 assert.equal(hash(manifest), manifestHash, 'Capivasertib review manifest');

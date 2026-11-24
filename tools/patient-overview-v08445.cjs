@@ -109,7 +109,7 @@ function buildOverview(input,{root=process.cwd(),route,profile,data,guideHtml,ca
  let publishedBody=body;
  if(route==='00947'){
   const css='<link rel="stylesheet" href="../../assets/patient/capivasertib-portal.css">';
-  if(!head.includes(css))head+=css;
+  head=head.replace(css,'')+css;
   publishedBody=body.replace(/<header class="po45-introduction">[\s\S]*?<\/header>/,require('./capivasertib-planner/portal.cjs').introduction());
  }
  const connectors=elements(input).filter(n=>n.tag==='script'&&/hcc-connectors/.test(attr(n,'src')||'')).map(n=>outer(input,n)).join('');

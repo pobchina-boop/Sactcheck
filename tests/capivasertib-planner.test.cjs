@@ -19,6 +19,8 @@ assert.notEqual(workflow.resolveExtravasation(mixed, data).status, 'intramuscula
 const portal = read('index.html');
 assert.equal(portal.split('href="first-cycle.html"').length, 2);
 const profile = require('../data/patient-knowledge/00947.json');
+const publish = require('../tools/patient-publication-v08444.cjs').decorateGenerated;
+assert.equal(publish('patient/00947/index.html', portal, root), portal, 'Canonical publication reproduces the review portal');
 const generated = require('../tools/patient-overview-v08445.cjs').buildOverview(portal, {root, route: '00947', profile});
 assert.equal(generated.split('href="first-cycle.html"').length, 2);
 for (const [slug, visits] of [['first-cycle', [1, 15]], ['later-cycles', [1]]]) {
