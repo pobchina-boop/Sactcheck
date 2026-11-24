@@ -1,4 +1,5 @@
 'use strict';
+const release = require('./helpers/live-release-v08464.cjs');
 // Actual catalogue loader/renderer and source-specific card contracts. The DOM
 // fixture verifies software behaviour; real browser acceptance is separate.
 const assert = require('node:assert/strict');
@@ -46,7 +47,7 @@ for (const code of Object.keys(files)) {
   assert.equal(card.provenance.reviewed, false, 'Source reconciliation is not independent clinical authorisation');
   assert.equal(override.provenance.reviewed, false);
   assert.equal(card.provenance.source, protocol.metadata.source_url);
-  assert.equal(card.provenance.source_version, code === '00588' ? '5b' : '2');
+  assert.equal(card.provenance.source_version, code === '00588' ? '6' : '2');
   assert.equal(card.provenance.checked_date, '2026-11-24');
   const normalized = Metadata.serialisableRegimenCard({...protocol, metadata: {...protocol.metadata, regimen_card: override}});
   normalized.provenance = {...normalized.provenance, ...override.provenance};
@@ -101,7 +102,7 @@ const retained = mono.provenance.retained_source;
 assert.equal(retained.status, 'historical_retained_original');
 assert.equal(retained.checked_date, '2026-11-16');
 assert.equal(sha(read(retained.path)), retained.sha256, 'Retained source is authenticated without claiming a fresh original download');
-assert.match(mono.provenance.source_verification, /not a fresh successful binary retrieval/);
+assert.match(mono.provenance.source_verification, /HSE original PDF retrieved/);
 
 const combo = protocols['00746'].metadata.regimen_card, combination = combo.contexts[0];
 assert.equal(combination.intent, 'maintenance');
@@ -116,8 +117,8 @@ assert(!['Indication-dependent', 'Continuous', 'Until progression/toxicity'].inc
 assert.equal(protocols['00746'].indications[0].duration.bevacizumab.maximum_total_months_including_chemotherapy, 15);
 assert.equal(protocols['00746'].indications[0].duration.olaparib.maximum_years_if_no_radiological_evidence_of_disease, 2);
 assert.equal(protocols['00746'].indications[0].duration.olaparib.beyond_two_years_allowed_if_residual_disease_and_clinical_benefit, true);
-assert.equal(combo.provenance.source_sha256, undefined, 'No original-file hash may be invented for the blocked 00746 binary');
-assert.match(combo.provenance.source_verification, /download returned 403/);
+for (const [code,card] of [['00588',mono],['00746',combo]]) assert.equal(card.provenance.source_sha256, sha(read('validation/olaparib-source-20261124/'+code+'.pdf')));
+assert.match(combo.provenance.source_verification, /HSE original PDF retrieved/);
 
 // Preserve the exact inherited Enhertu review, including the other 376 cards.
 const successors = new Set(Object.values(protocols).map(protocol => protocol.protocol_id));

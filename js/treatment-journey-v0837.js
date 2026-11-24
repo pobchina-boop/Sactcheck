@@ -10364,7 +10364,7 @@ const definitions={
     "sources": [
       {
         "id": "nccp",
-        "title": "NCCP 00588 v5b · olaparib tablets, selected indication",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
         "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
@@ -48244,7 +48244,7 @@ const definitions={
     "sources": [
       {
         "id": "nccp",
-        "title": "NCCP 00588 v5b · olaparib tablets, selected indication",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
         "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
@@ -50754,7 +50754,7 @@ const definitions={
     "sources": [
       {
         "id": "nccp",
-        "title": "NCCP 00588 v5b · olaparib tablets, selected indication",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
         "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
@@ -50872,7 +50872,7 @@ const definitions={
     "sources": [
       {
         "id": "nccp",
-        "title": "NCCP 00588 v5b · olaparib tablets, selected indication",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
         "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
@@ -50995,7 +50995,7 @@ const definitions={
     "sources": [
       {
         "id": "nccp",
-        "title": "NCCP 00588 v5b · olaparib tablets, selected indication",
+        "title": "NCCP 00588 v6 · olaparib tablets, selected indication",
         "url": "https://healthservice.hse.ie/staff/information-healthcare-workers/nccp/oral-anti-cancer-medicines-sact-regimens/"
       },
       {
@@ -51114,7 +51114,7 @@ const definitions={
       {
         "id": "nccp",
         "title": "NCCP 00746 v2 · olaparib tablets and bevacizumab",
-        "url": "https://assets.hse.ie/media/documents/746_V2_Olaparib_bevacizumab_therapy.pdf"
+        "url": "https://healthservice.hse.ie/documents/6626/746_V2_Olaparib_bevacizumab_therapy.pdf"
       },
       {
         "id": "smpc",

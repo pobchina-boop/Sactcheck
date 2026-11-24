@@ -1,4 +1,5 @@
 'use strict';
+const release = require('./helpers/live-release-v08464.cjs');
 // Exercise production workflow, knowledge and compatibility consent renderers.
 // VM/DOM fixtures are file-based integration checks, not browser acceptance.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
@@ -44,12 +45,16 @@ for(const context of ['', 'gynaecology','unknown']){
   assert.notEqual(m.supportiveCare.status,'available');assert.equal(m.supportiveCare.planId,null);checks++;
 }
 // Exact preservation of all unrelated configuration, including the retained old plan.
+const priorWorkflow=release.astraJson('data/regimen-workflow-v0750.json');
+const priorRisk=release.astraJson('data/emetogenic-risk-map.json');
+const priorReview=release.astraJson('data/clinical-validation-register-v0630.json');
+const priorSource=release.astraJson('data/nccp-change-tracker/source-register-v0620.json');
 const oldW=baseline('data/regimen-workflow-v0750.json'),oldR=baseline('data/emetogenic-risk-map.json');
-for(const [id,plan]of Object.entries(oldW.antiemetic_plans))assert.deepEqual(workflow.antiemetic_plans[id],plan,id);
-for(const [id,selector]of Object.entries(oldW.context_supportive_phase_selectors))if(id!=='00588')assert.deepEqual(workflow.context_supportive_phase_selectors[id],selector,id);
-for(const [id,selector]of Object.entries(oldW.supportive_phase_selectors))if(id!=='00746')assert.deepEqual(workflow.supportive_phase_selectors[id],selector,id);
-assert.deepEqual(workflow.interaction_rules.filter(r=>r.id!=='olaparib_cyp3a_and_support_review_v08463'),oldW.interaction_rules);
-for(const [code,entry]of Object.entries(oldR.protocols))if(!['00588','00746'].includes(code))assert.deepEqual(risk.protocols[code],entry,code);
+for(const [id,plan]of Object.entries(oldW.antiemetic_plans))assert.deepEqual(priorWorkflow.antiemetic_plans[id],plan,id);
+for(const [id,selector]of Object.entries(oldW.context_supportive_phase_selectors))if(id!=='00588')assert.deepEqual(priorWorkflow.context_supportive_phase_selectors[id],selector,id);
+for(const [id,selector]of Object.entries(oldW.supportive_phase_selectors))if(id!=='00746')assert.deepEqual(priorWorkflow.supportive_phase_selectors[id],selector,id);
+assert.deepEqual(priorWorkflow.interaction_rules.filter(r=>r.id!=='olaparib_cyp3a_and_support_review_v08463'),oldW.interaction_rules);
+for(const [code,entry]of Object.entries(oldR.protocols))if(!['00588','00746'].includes(code))assert.deepEqual(priorRisk.protocols[code],entry,code);
 const consent=json('data/consent-content-v0710.json'),oldConsent=baseline('data/consent-content-v0710.json');
 for(const [id,profile]of Object.entries(oldConsent.agent_profiles))if(id!=='olaparib')assert.deepEqual(consent.agent_profiles[id],profile,id);
 assert(consent.agent_profiles.olaparib.risks.some(r=>r.id==='olaparib_reproductive'));
@@ -57,14 +62,14 @@ assert(consent.agent_profiles.bevacizumab.risks.some(r=>r.id==='reproductive'));
 assert(!consent.agent_profiles.olaparib.risks.some(r=>r.id==='reproductive'));
 const review=json('data/clinical-validation-register-v0630.json'),oldReview=baseline('data/clinical-validation-register-v0630.json');
 const source=json('data/nccp-change-tracker/source-register-v0620.json'),oldSource=baseline('data/nccp-change-tracker/source-register-v0620.json');
-for(const row of oldReview.protocols)if(!['00588','00746'].includes(row.nccp_code))assert.deepEqual(review.protocols.find(r=>r.protocol_id===row.protocol_id),row);
-for(const row of oldSource.records)if(!['00588','00746'].includes(row.nccp_regimen_code))assert.deepEqual(source.records.find(r=>r.tracking_key===row.tracking_key),row);
+for(const row of oldReview.protocols)if(!['00588','00746'].includes(row.nccp_code))assert.deepEqual(priorReview.protocols.find(r=>r.protocol_id===row.protocol_id),row);
+for(const row of oldSource.records)if(!['00588','00746'].includes(row.nccp_regimen_code))assert.deepEqual(priorSource.records.find(r=>r.tracking_key===row.tracking_key),row);
 for(const p of [mono,combo]){
   const code=p.metadata.nccp_regimen_code,row=review.protocols.find(r=>r.nccp_code===code),tracked=source.records.find(r=>r.nccp_regimen_code===code);
   assert.equal(row.rule_count,p.rule_engine.rules.length);assert.equal(row.input_count,Object.keys(p.input_definitions).length);assert.equal(row.encoding_version,'0.84.63');
   assert.equal(row.formal_consultant_reviewed,false);assert.equal(row.formal_pharmacy_reviewed,false);assert.equal(row.knowledge_base_profile,true);
   assert.equal(tracked.protocol_json_sha256,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,row.path))).digest('hex'));
-  assert.equal(tracked.pdf_sha256,null);assert.equal(tracked.extracted_text_sha256,null);assert.match(tracked.source_reconciliation_note,/no new NCCP PDF/);
+  assert.equal(tracked.pdf_sha256,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'validation/olaparib-source-20261124',code+'.pdf'))).digest('hex'));assert.equal(tracked.extracted_text_sha256,null);assert.match(tracked.source_reconciliation_note,/HSE original PDF retrieved/);
 }
 
 (async()=>{
@@ -102,7 +107,7 @@ for(const p of [mono,combo]){
   // All historical addenda stay intact; the new file only supersedes these two profiles.
   assert.equal(payload.regimen_profiles.filter(p=>p.protocol_id===mono.protocol_id).length,1);
   assert.equal(payload.regimen_profiles.filter(p=>p.protocol_id===combo.protocol_id).length,1);
-  for(const f of ['data/regimen-knowledge-base-v0849-addendum.json','data/regimen-knowledge-base-v08457-addendum.json'])assert.deepEqual(json(f),baseline(f));
+  for(const f of ['data/regimen-knowledge-base-v0849-addendum.json','data/regimen-knowledge-base-v08457-addendum.json'])assert.deepEqual(release.astraJson(f),baseline(f));
 
   // Public compatibility entry point exercises the real component-risk matcher
   // and renderer, retaining separately labelled olaparib/bevacizumab risks.

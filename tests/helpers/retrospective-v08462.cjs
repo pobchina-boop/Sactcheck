@@ -108,7 +108,12 @@ assert.deepEqual(biliaryAudioRecord.regimens, ['00897']);
 const filmRecords = [filmRecord, strideRecord, osimertinibRecord, biliaryFilmRecord, biliaryAudioRecord];
 const enhertuReview = require("./enhertu-review-v08462.cjs");
 const olaparibReview = require("./retrospective-v08463.cjs");
-function reviewedExpected(f,h,n){const inherited=enhertuReview.expected(f,h,n);return olaparibReview.expected(f,inherited.sha256,inherited.bytes);}
+const capReview = require('./capivasertib-review.cjs');
+function currentOlaparib(f,h,n){
+  const reviewed=olaparibReview.expected(f,h,n);
+  return capReview.expected(f,reviewed.sha256,reviewed.bytes);
+}
+function reviewedExpected(f,h,n){const inherited=enhertuReview.expected(f,h,n);return currentOlaparib(f,inherited.sha256,inherited.bytes);}
 function filmExpected(f, h, n) {
   const changes = filmRecords.map(record => record.files[f]).filter(Boolean);
   if (!changes.length) return {sha256: h, bytes: n};
@@ -120,7 +125,7 @@ function filmExpected(f, h, n) {
 }
 function expected(f,h,n){
   assert(validPath(f));
-  if(olaparibReview.isCurrent(f,h,n))return olaparibReview.expected(f,h,n);
+  if(olaparibReview.isCurrent(f,h,n))return currentOlaparib(f,h,n);
   if(enhertuReview.isCurrent(f,h,n))return reviewedExpected(f,h,n);
   const c=load().files[f];let prior;
   if(!c)prior=filmExpected(f,h,n);

@@ -9,13 +9,22 @@ const protocols=Object.fromEntries(Object.entries(paths).map(([code,file])=>[cod
 const sourceFile='data/nccp-change-tracker/source-register-v0620.json',reviewFile='data/clinical-validation-register-v0630.json';
 const source=read(sourceFile),review=read(reviewFile);
 const current=new Map(tracker.buildSourceRegister(root,date).records.map(row=>[row.nccp_regimen_code,row]));
-const note='NCCP operational text reconciled through official indexed/PDF web retrieval and current catalogue. Direct NCCP binary downloads were unavailable, so no new NCCP PDF or extracted-text hash is claimed. EMA Lynparza PDF separately downloaded and hashed. Formal consultant and oncology pharmacy approval remains pending.';
+const note='HSE original PDF retrieved and checked on 24 November 2026.';
+const hashes={
+  '00588':'552b8bc3ac1aa3ce7814391076a4fecb1c2f1790bb577c2d92bad587cee4671f',
+  '00746':'3276276c10d76300acdaa289e6617528e3a11ff880a2a6b65af1365cffcc98c9'
+};
+const digest=bytes=>require('node:crypto').createHash('sha256').update(bytes).digest('hex');
+for (const [code, expected] of Object.entries(hashes)) {
+  assert.equal(digest(fs.readFileSync(path.join(root,'validation/olaparib-source-20261124',code+'.pdf'))),expected);
+  assert.equal(protocols[code].metadata.source_pdf_sha256,expected);
+}
 source.records=source.records.map(old=>{
   const code=old.nccp_regimen_code;if(!paths[code])return old;
   const row=current.get(code);assert(row&&row.protocol_path===paths[code]);
   return {...old,...row,baseline_registered_date:old.baseline_registered_date,
-    source_status:'baseline_registered',source_status_label:'Source text reconciled; binary capture pending',
-    remote_capture_status:'pending_first_remote_scan',pdf_sha256:null,extracted_text_sha256:null,text_snapshot_path:null,last_remote_check:null,
+    source_status:'baseline_registered',source_status_label:'Official PDF retrieved',
+    remote_capture_status:'baseline_captured',pdf_sha256:hashes[code],extracted_text_sha256:null,text_snapshot_path:null,last_remote_check:date,
     review_status:'source_checked_independent_review_pending',source_text_checked_date:date,source_reconciliation_note:note,
     supporting_ema_pdf_sha256:'04cb6a8e4fff66099a345e60858378068000de050b0e7fedaddb3d5347849598'};
 });
@@ -37,4 +46,4 @@ for(const [file,data]of [[sourceFile,source],[reviewFile,review]]){
   if(process.argv.includes('--write'))fs.writeFileSync(path.join(root,file),bytes);
   else assert(fs.readFileSync(path.join(root,file)).equals(bytes),file+' differs from reviewed current 00588/00746 records');
 }
-console.log('Olaparib current source/validation registers: two records aligned; binary-capture and formal-review limits retained.');
+console.log('Olaparib current source/validation registers: two records aligned; retrieved PDF hashes verified and formal review pending.');
