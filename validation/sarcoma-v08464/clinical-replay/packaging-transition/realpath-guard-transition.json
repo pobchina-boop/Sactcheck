@@ -1,0 +1,14 @@
+{
+  "scope": "Independent-review hardening of the existing external-only materialization guard; no evidence decoder or clinical changes",
+  "path": "tools/lib/sarcoma-v08464-transitions.cjs",
+  "before_snapshot": "validation/sarcoma-v08464/clinical-replay/packaging-transition/before-realpath-guard.cjs",
+  "before_sha256": "30607c4eed84113a2591f18c6e78717bdecce50c39a1373be70931e512baa605",
+  "after_sha256": "3fd3a2f697a9a86c037fc2049e220de8ac217207e1a6d2804e728978e1913309",
+  "edits": [
+    {
+      "before": "destination=path.resolve(destination);assert(path.relative(path.resolve(root),destination).startsWith('..'+path.sep),'Materialize only outside the repository');assert(!fs.existsSync(destination),'Refusing to overwrite materialized evidence');authenticate(root);",
+      "after": "destination=path.resolve(destination);let ancestor=destination;const missing=[];for(;;){try{fs.lstatSync(ancestor);break;}catch(e){if(e.code!=='ENOENT')throw e;missing.unshift(path.basename(ancestor));const parent=path.dirname(ancestor);assert.notEqual(parent,ancestor,'No existing destination ancestor');ancestor=parent;}}\n const intended=path.join(fs.realpathSync(ancestor),...missing),physicalRoot=fs.realpathSync(root);assert(path.relative(physicalRoot,intended).startsWith('..'+path.sep),'Materialize only outside the physical repository');assert(missing.length>0,'Refusing to overwrite materialized evidence');authenticate(root);"
+    }
+  ],
+  "reason": "Resolve root and closest existing destination ancestor through realpath; reject symlink aliases into the repository and existing destinations while preserving nested external destinations."
+}

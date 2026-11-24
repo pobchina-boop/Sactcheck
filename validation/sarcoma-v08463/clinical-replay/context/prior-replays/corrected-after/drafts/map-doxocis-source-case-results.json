@@ -1,0 +1,6619 @@
+{
+  "checked_date": "2026-11-18",
+  "mode": "external_drafts_actual_engine_no_app_mutations",
+  "cases": 303,
+  "passed": 303,
+  "failed": 0,
+  "rule_coverage": {
+    "00420": {
+      "rules": 38,
+      "triggered": 38,
+      "untriggered": []
+    },
+    "00463": {
+      "rules": 93,
+      "triggered": 93,
+      "untriggered": []
+    }
+  },
+  "results": [
+    {
+      "code": "00420",
+      "name": "Empty never clears",
+      "input": {},
+      "expected": [
+        "ASSESSMENT_STAGE_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "stage remains partial",
+      "input": {
+        "assessment_phase": "on_treatment"
+      },
+      "expected": [],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "ANC alone remains partial",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 3
+      },
+      "expected": [],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "normal counts remains partial",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "hypersensitivity",
+      "input": {
+        "hypersensitivity": true
+      },
+      "expected": [
+        "HYPERSENSITIVITY"
+      ],
+      "absent": [],
+      "actual": [
+        "HYPERSENSITIVITY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "contraindicated",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "pregnancy",
+      "input": {
+        "pregnancy": true
+      },
+      "expected": [
+        "PREGNANCY"
+      ],
+      "absent": [],
+      "actual": [
+        "PREGNANCY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "breastfeeding",
+      "input": {
+        "breastfeeding": true
+      },
+      "expected": [
+        "BREASTFEEDING"
+      ],
+      "absent": [],
+      "actual": [
+        "BREASTFEEDING",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "contraindicated",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "ECOG2 boundary",
+      "input": {
+        "ecog": 2
+      },
+      "expected": [],
+      "absent": [
+        "ECOG_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "ECOG3 review",
+      "input": {
+        "ecog": 3
+      },
+      "expected": [
+        "ECOG_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "ECOG_REVIEW",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "AcuteFN independent of prior normal counts",
+      "input": {
+        "acute_fn_or_sepsis": true,
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [
+        "ACUTE_FN_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "ACUTE_FN_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Current infection",
+      "input": {
+        "active_infection": true
+      },
+      "expected": [
+        "INFECTION_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "INFECTION_REVIEW",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "prior_doxorubicin_mg_m2 449.999",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 449.999,
+        "planned_cumulative_doxorubicin_mg_m2": 75
+      },
+      "expected": [],
+      "absent": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "prior_doxorubicin_mg_m2 450",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 450,
+        "planned_cumulative_doxorubicin_mg_m2": 75
+      },
+      "expected": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_LIFETIME_LIMIT",
+        "ASSESSMENT_STAGE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "planned_cumulative_doxorubicin_mg_m2 450",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 450
+      },
+      "expected": [],
+      "absent": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "planned_cumulative_doxorubicin_mg_m2 450.001",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 450.001
+      },
+      "expected": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_LIFETIME_LIMIT",
+        "ASSESSMENT_STAGE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Other anthracycline exposure never treated as same raw mg",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 75,
+        "other_anthracycline_exposure": true
+      },
+      "expected": [
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cardiac symptoms doxorubicin only",
+      "input": {
+        "symptomatic_cardiac_dysfunction": true
+      },
+      "expected": [
+        "CARDIAC_SYMPTOMS_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "CARDIAC_SYMPTOMS_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "LVEF50 source gap",
+      "input": {
+        "lvef_percent": 50
+      },
+      "expected": [
+        "LVEF50_SOURCE_BOUNDARY"
+      ],
+      "absent": [],
+      "actual": [
+        "LVEF50_SOURCE_BOUNDARY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "LVEF50.001 not boundary",
+      "input": {
+        "lvef_percent": 50.001
+      },
+      "expected": [],
+      "absent": [
+        "LVEF50_SOURCE_BOUNDARY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Restart recovery undefined",
+      "input": {
+        "restart_requested": true
+      },
+      "expected": [
+        "RESTART_REVIEW_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "RESTART_REVIEW_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Restart recovery false",
+      "input": {
+        "restart_requested": true,
+        "restart_recovery_and_plan_confirmed": false
+      },
+      "expected": [
+        "RESTART_REVIEW_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "RESTART_REVIEW_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Restart attestation only does not clear domains",
+      "input": {
+        "restart_requested": true,
+        "restart_recovery_and_plan_confirmed": true
+      },
+      "expected": [],
+      "absent": [
+        "RESTART_REVIEW_REQUIRED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Empty never clears",
+      "input": {},
+      "expected": [
+        "ASSESSMENT_STAGE_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "stage remains partial",
+      "input": {
+        "assessment_phase": "on_treatment"
+      },
+      "expected": [],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "ANC alone remains partial",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 3
+      },
+      "expected": [],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "normal counts remains partial",
+      "input": {
+        "assessment_phase": "on_treatment",
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hypersensitivity",
+      "input": {
+        "hypersensitivity": true
+      },
+      "expected": [
+        "HYPERSENSITIVITY"
+      ],
+      "absent": [],
+      "actual": [
+        "HYPERSENSITIVITY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "contraindicated",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "pregnancy",
+      "input": {
+        "pregnancy": true
+      },
+      "expected": [
+        "PREGNANCY"
+      ],
+      "absent": [],
+      "actual": [
+        "PREGNANCY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "contraindicated",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "breastfeeding",
+      "input": {
+        "breastfeeding": true
+      },
+      "expected": [
+        "BREASTFEEDING"
+      ],
+      "absent": [],
+      "actual": [
+        "BREASTFEEDING",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "contraindicated",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "ECOG2 boundary",
+      "input": {
+        "ecog": 2
+      },
+      "expected": [],
+      "absent": [
+        "ECOG_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "ECOG3 review",
+      "input": {
+        "ecog": 3
+      },
+      "expected": [
+        "ECOG_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "ECOG_REVIEW",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "AcuteFN independent of prior normal counts",
+      "input": {
+        "acute_fn_or_sepsis": true,
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [
+        "ACUTE_FN_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "ACUTE_FN_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Current infection",
+      "input": {
+        "active_infection": true
+      },
+      "expected": [
+        "INFECTION_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "INFECTION_REVIEW",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "prior_doxorubicin_mg_m2 449.999",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 449.999,
+        "planned_cumulative_doxorubicin_mg_m2": 75
+      },
+      "expected": [],
+      "absent": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "prior_doxorubicin_mg_m2 450",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 450,
+        "planned_cumulative_doxorubicin_mg_m2": 75
+      },
+      "expected": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_LIFETIME_LIMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "planned_cumulative_doxorubicin_mg_m2 450",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 450
+      },
+      "expected": [],
+      "absent": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "planned_cumulative_doxorubicin_mg_m2 450.001",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 450.001
+      },
+      "expected": [
+        "DOX_LIFETIME_LIMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_LIFETIME_LIMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Other anthracycline exposure never treated as same raw mg",
+      "input": {
+        "anthracycline_history_reconciled": true,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 75,
+        "other_anthracycline_exposure": true
+      },
+      "expected": [
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Cardiac symptoms doxorubicin only",
+      "input": {
+        "symptomatic_cardiac_dysfunction": true
+      },
+      "expected": [
+        "CARDIAC_SYMPTOMS_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "CARDIAC_SYMPTOMS_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "LVEF50 source gap",
+      "input": {
+        "lvef_percent": 50
+      },
+      "expected": [
+        "LVEF50_SOURCE_BOUNDARY"
+      ],
+      "absent": [],
+      "actual": [
+        "LVEF50_SOURCE_BOUNDARY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "LVEF50.001 not boundary",
+      "input": {
+        "lvef_percent": 50.001
+      },
+      "expected": [],
+      "absent": [
+        "LVEF50_SOURCE_BOUNDARY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Restart recovery undefined",
+      "input": {
+        "restart_requested": true
+      },
+      "expected": [
+        "RESTART_REVIEW_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "RESTART_REVIEW_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Restart recovery false",
+      "input": {
+        "restart_requested": true,
+        "restart_recovery_and_plan_confirmed": false
+      },
+      "expected": [
+        "RESTART_REVIEW_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "RESTART_REVIEW_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Restart attestation only does not clear domains",
+      "input": {
+        "restart_requested": true,
+        "restart_recovery_and_plan_confirmed": true
+      },
+      "expected": [],
+      "absent": [
+        "RESTART_REVIEW_REQUIRED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cycle6 reference",
+      "input": {
+        "cycle_number": 6
+      },
+      "expected": [],
+      "absent": [
+        "CYCLE_LIMIT_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cycle7 review",
+      "input": {
+        "cycle_number": 7
+      },
+      "expected": [
+        "CYCLE_LIMIT_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CYCLE_LIMIT_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "anc 0.999",
+      "input": {
+        "anc": 0.999
+      },
+      "expected": [
+        "COUNTS_DELAY"
+      ],
+      "absent": [
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "actual": [
+        "COUNTS_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "anc 1",
+      "input": {
+        "anc": 1
+      },
+      "expected": [
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "absent": [
+        "COUNTS_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "anc 1.5",
+      "input": {
+        "anc": 1.5
+      },
+      "expected": [
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "absent": [
+        "COUNTS_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "anc 1.5001",
+      "input": {
+        "anc": 1.5001
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DELAY",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "platelets 69.999",
+      "input": {
+        "platelets": 69.999
+      },
+      "expected": [
+        "COUNTS_DELAY"
+      ],
+      "absent": [
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "actual": [
+        "COUNTS_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "platelets 70",
+      "input": {
+        "platelets": 70
+      },
+      "expected": [
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "absent": [
+        "COUNTS_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "platelets 100",
+      "input": {
+        "platelets": 100
+      },
+      "expected": [
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "absent": [
+        "COUNTS_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "platelets 100.001",
+      "input": {
+        "platelets": 100.001
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DELAY",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Other count severe dominates reduction review",
+      "input": {
+        "anc": 1.2,
+        "platelets": 60
+      },
+      "expected": [
+        "COUNTS_DELAY",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "COUNTS_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "COUNTS_INTERMEDIATE_REVIEW"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "PriorFN missing nadir",
+      "input": {
+        "prior_fn": true
+      },
+      "expected": [
+        "PRIOR_FN_HISTORY_MISSING"
+      ],
+      "absent": [
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PRIOR_FN_HISTORY_MISSING"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "CurrentANC cannot substitute prior nadir",
+      "input": {
+        "prior_fn": true,
+        "anc": 0.2
+      },
+      "expected": [
+        "PRIOR_FN_HISTORY_MISSING",
+        "COUNTS_DELAY"
+      ],
+      "absent": [
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "actual": [
+        "COUNTS_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PRIOR_FN_HISTORY_MISSING"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "PriorANC0.5 exact does not qualify",
+      "input": {
+        "prior_fn": true,
+        "prior_anc_nadir": 0.5
+      },
+      "expected": [],
+      "absent": [
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "PriorFN recovery missing",
+      "input": {
+        "prior_fn": true,
+        "prior_anc_nadir": 0.499
+      },
+      "expected": [
+        "PRIOR_FN_DOX_REDUCTION",
+        "PRIOR_FN_UNRECOVERED"
+      ],
+      "absent": [],
+      "actual": [
+        "PRIOR_FN_UNRECOVERED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "PriorFN recovered DOX only",
+      "input": {
+        "prior_fn": true,
+        "prior_anc_nadir": 0.499,
+        "prior_fn_recovered": true,
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "absent": [
+        "PRIOR_FN_UNRECOVERED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Low historical nadir without FN not reduction",
+      "input": {
+        "prior_anc_nadir": 0.1,
+        "prior_fn": false
+      },
+      "expected": [],
+      "absent": [
+        "PRIOR_FN_DOX_REDUCTION"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "FN reduction persists after current recovery",
+      "input": {
+        "doxo_fn_reduced_previously": true,
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [
+        "PERSISTENT_DOX_FN_REDUCTION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PERSISTENT_DOX_FN_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "No FN reescalation",
+      "input": {
+        "doxo_fn_reduced_previously": true,
+        "proposed_doxo_reescalation": true
+      },
+      "expected": [
+        "NO_FN_REESCALATION"
+      ],
+      "absent": [],
+      "actual": [
+        "NO_FN_REESCALATION",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PERSISTENT_DOX_FN_REDUCTION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 19.999",
+      "input": {
+        "bilirubin_umol_l": 19.999
+      },
+      "expected": [],
+      "absent": [
+        "DOX_BILI20_50"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 20",
+      "input": {
+        "bilirubin_umol_l": 20
+      },
+      "expected": [
+        "DOX_BILI20_50"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_BILI20_50"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 50",
+      "input": {
+        "bilirubin_umol_l": 50
+      },
+      "expected": [
+        "DOX_BILI20_50"
+      ],
+      "absent": [
+        "DOX_BILI_GAP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_BILI20_50"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 50.001",
+      "input": {
+        "bilirubin_umol_l": 50.001
+      },
+      "expected": [
+        "DOX_BILI_GAP"
+      ],
+      "absent": [
+        "DOX_BILI20_50",
+        "DOX_BILI51_86"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_BILI_GAP"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 50.999",
+      "input": {
+        "bilirubin_umol_l": 50.999
+      },
+      "expected": [
+        "DOX_BILI_GAP"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_BILI_GAP"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 51",
+      "input": {
+        "bilirubin_umol_l": 51
+      },
+      "expected": [
+        "DOX_BILI51_86"
+      ],
+      "absent": [
+        "DOX_BILI_GAP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_BILI51_86"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 86",
+      "input": {
+        "bilirubin_umol_l": 86
+      },
+      "expected": [
+        "DOX_BILI51_86"
+      ],
+      "absent": [
+        "DOX_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_BILI51_86"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Absolute bilirubin 86.001",
+      "input": {
+        "bilirubin_umol_l": 86.001
+      },
+      "expected": [
+        "DOX_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "absent": [
+        "DOX_BILI51_86"
+      ],
+      "actual": [
+        "DOX_HEPATIC_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "ChildPughC not-recommended hold",
+      "input": {
+        "child_pugh_c": true
+      },
+      "expected": [
+        "DOX_HEPATIC_NOT_RECOMMENDED"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_HEPATIC_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "DOX renal exact10 gap 9.999",
+      "input": {
+        "crcl_ml_min": 9.999
+      },
+      "expected": [],
+      "absent": [
+        "DOX_CRCL10_GAP"
+      ],
+      "actual": [
+        "CIS_RENAL_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "DOX renal exact10 gap 10",
+      "input": {
+        "crcl_ml_min": 10
+      },
+      "expected": [
+        "DOX_CRCL10_GAP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_RENAL_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_CRCL10_GAP"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "DOX renal exact10 gap 10.001",
+      "input": {
+        "crcl_ml_min": 10.001
+      },
+      "expected": [],
+      "absent": [
+        "DOX_CRCL10_GAP"
+      ],
+      "actual": [
+        "CIS_RENAL_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 39.999",
+      "input": {
+        "crcl_ml_min": 39.999
+      },
+      "expected": [
+        "CIS_RENAL_NOT_RECOMMENDED"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_RENAL_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 40",
+      "input": {
+        "crcl_ml_min": 40
+      },
+      "expected": [
+        "CIS_CRCL40_49"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL40_49"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 49",
+      "input": {
+        "crcl_ml_min": 49
+      },
+      "expected": [
+        "CIS_CRCL40_49"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL40_49"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 49.001",
+      "input": {
+        "crcl_ml_min": 49.001
+      },
+      "expected": [
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 49.999",
+      "input": {
+        "crcl_ml_min": 49.999
+      },
+      "expected": [
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 50",
+      "input": {
+        "crcl_ml_min": 50
+      },
+      "expected": [
+        "CIS_CRCL50_59"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL50_59"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 59",
+      "input": {
+        "crcl_ml_min": 59
+      },
+      "expected": [
+        "CIS_CRCL50_59"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL50_59"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 59.001",
+      "input": {
+        "crcl_ml_min": 59.001
+      },
+      "expected": [
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Cisplatin renal 59.999",
+      "input": {
+        "crcl_ml_min": 59.999
+      },
+      "expected": [
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "CrCl60 meets normal cisplatin row",
+      "input": {
+        "crcl_ml_min": 60
+      },
+      "expected": [],
+      "absent": [
+        "CIS_CRCL40_49",
+        "CIS_CRCL50_59",
+        "CIS_CRCL_DECIMAL_GAPS",
+        "CIS_RENAL_NOT_RECOMMENDED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Dialysis is independent",
+      "input": {
+        "haemodialysis": true,
+        "crcl_ml_min": 80
+      },
+      "expected": [
+        "DOX_DIALYSIS_REVIEW",
+        "CIS_RENAL_NOT_RECOMMENDED"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_RENAL_NOT_RECOMMENDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "DOX_DIALYSIS_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Current mucositis2",
+      "input": {
+        "current_mucositis_grade": 2
+      },
+      "expected": [],
+      "absent": [
+        "MUCOSITIS_CURRENT_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Current mucositis3",
+      "input": {
+        "current_mucositis_grade": 3
+      },
+      "expected": [
+        "MUCOSITIS_CURRENT_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MUCOSITIS_CURRENT_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Current mucositis4",
+      "input": {
+        "current_mucositis_grade": 4
+      },
+      "expected": [
+        "MUCOSITIS_CURRENT_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MUCOSITIS_CURRENT_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Prior severe mucositis requires recovery",
+      "input": {
+        "prior_mucositis_grade": 3
+      },
+      "expected": [
+        "MUCOSITIS_PRIOR_REDUCTION",
+        "MUCOSITIS_RECOVERY_MISSING"
+      ],
+      "absent": [],
+      "actual": [
+        "MUCOSITIS_RECOVERY_MISSING",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MUCOSITIS_PRIOR_REDUCTION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Recovered prior mucositis DOX review only",
+      "input": {
+        "prior_mucositis_grade": 3,
+        "mucositis_recovery_confirmed": true,
+        "current_mucositis_grade": 0
+      },
+      "expected": [
+        "MUCOSITIS_PRIOR_REDUCTION"
+      ],
+      "absent": [
+        "MUCOSITIS_RECOVERY_MISSING",
+        "MUCOSITIS_CURRENT_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MUCOSITIS_PRIOR_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Neuropathy1 not source omission",
+      "input": {
+        "current_neuropathy_grade": 1
+      },
+      "expected": [],
+      "absent": [
+        "CIS_NEUROPATHY_OMIT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Neuropathy2 cisplatin omission",
+      "input": {
+        "current_neuropathy_grade": 2
+      },
+      "expected": [
+        "CIS_NEUROPATHY_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEUROPATHY_OMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Neuropathy3 cisplatin omission",
+      "input": {
+        "current_neuropathy_grade": 3
+      },
+      "expected": [
+        "CIS_NEUROPATHY_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEUROPATHY_OMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Neuropathy4 cisplatin omission",
+      "input": {
+        "current_neuropathy_grade": 4
+      },
+      "expected": [
+        "CIS_NEUROPATHY_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEUROPATHY_OMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Prior omitted cisplatin cannot silently restart",
+      "input": {
+        "prior_cis_neuropathy_omission": true,
+        "current_neuropathy_grade": 0
+      },
+      "expected": [
+        "CIS_PRIOR_NEUROPATHY_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_PRIOR_NEUROPATHY_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Continuation reviewed no persistent hold",
+      "input": {
+        "prior_cis_neuropathy_omission": true,
+        "cis_neuropathy_restart_reviewed": true
+      },
+      "expected": [],
+      "absent": [
+        "CIS_PRIOR_NEUROPATHY_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "LVEF_LOW_HOLD",
+      "input": {
+        "lvef_percent": 49.999
+      },
+      "expected": [
+        "LVEF_LOW_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "LVEF_LOW_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "HEARING_REVIEW",
+      "input": {
+        "hearing_or_tinnitus": true
+      },
+      "expected": [
+        "HEARING_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "HEARING_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "CIS_HYDRATION_REVIEW",
+      "input": {
+        "electrolytes_or_hydration_unresolved": true
+      },
+      "expected": [
+        "CIS_HYDRATION_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_HYDRATION_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Age40 inclusive",
+      "input": {
+        "age_years": 40
+      },
+      "expected": [],
+      "absent": [
+        "MAP_AGE_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Age40.001 outside",
+      "input": {
+        "age_years": 40.001
+      },
+      "expected": [
+        "MAP_AGE_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_AGE_REVIEW",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Craniofacial site outside indication",
+      "input": {
+        "craniofacial_site": true
+      },
+      "expected": [
+        "MAP_SITE_EXCLUDED"
+      ],
+      "absent": [],
+      "actual": [
+        "MAP_SITE_EXCLUDED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "All-site resection missing atbaseline",
+      "input": {
+        "assessment_phase": "baseline"
+      },
+      "expected": [
+        "MAP_RESECTION_CONTEXT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_RESECTION_CONTEXT",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Confirmed highgrade and complete all-site resectability",
+      "input": {
+        "assessment_phase": "baseline",
+        "high_grade_osteosarcoma_confirmed": true,
+        "all_sites_completely_resectable": true
+      },
+      "expected": [],
+      "absent": [
+        "MAP_RESECTION_CONTEXT"
+      ],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Baseline significant heart disease excluded",
+      "input": {
+        "baseline_significant_heart_disease": true
+      },
+      "expected": [
+        "MAP_BASELINE_HEART_EXCLUSION"
+      ],
+      "absent": [],
+      "actual": [
+        "MAP_BASELINE_HEART_EXCLUSION",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "contraindicated",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Missing phase explicit review",
+      "input": {
+        "anc": 0.5,
+        "platelets": 60
+      },
+      "expected": [
+        "MAP_PHASE_REQUIRED",
+        "COUNTS_PHASE_UNKNOWN_REVIEW"
+      ],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY",
+        "COUNTS_MTX_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "COUNTS_PHASE_UNKNOWN_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Surgery is separate",
+      "input": {
+        "phase": "surgery"
+      },
+      "expected": [
+        "MAP_SURGERY_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_SURGERY_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis reference week1",
+      "input": {
+        "phase": "dox_cis",
+        "reference_week": 1
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_DOX_CIS"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis reference week6",
+      "input": {
+        "phase": "dox_cis",
+        "reference_week": 6
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_DOX_CIS"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis reference week12",
+      "input": {
+        "phase": "dox_cis",
+        "reference_week": 12
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_DOX_CIS"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis reference week17",
+      "input": {
+        "phase": "dox_cis",
+        "reference_week": 17
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_DOX_CIS"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis mismatched week11",
+      "input": {
+        "phase": "dox_cis",
+        "reference_week": 11
+      },
+      "expected": [
+        "WEEK_PHASE_DOX_CIS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "WEEK_PHASE_DOX_CIS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only reference week22",
+      "input": {
+        "phase": "dox_only",
+        "reference_week": 22
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_DOX_ONLY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only reference week26",
+      "input": {
+        "phase": "dox_only",
+        "reference_week": 26
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_DOX_ONLY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only mismatched week11",
+      "input": {
+        "phase": "dox_only",
+        "reference_week": 11
+      },
+      "expected": [
+        "WEEK_PHASE_DOX_ONLY"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "WEEK_PHASE_DOX_ONLY"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week4",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 4
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week5",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 5
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week9",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 9
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week10",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 10
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week15",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 15
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week16",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 16
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week20",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 20
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week21",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 21
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week24",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 24
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week25",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 25
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week28",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 28
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx reference week29",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 29
+      },
+      "expected": [],
+      "absent": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "hdmtx mismatched week11",
+      "input": {
+        "phase": "hdmtx",
+        "reference_week": 11
+      },
+      "expected": [
+        "WEEK_PHASE_HDMTX"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "WEEK_PHASE_HDMTX",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "AdditionalMTX still reviewed",
+      "input": {
+        "additional_preop_mtx": true,
+        "additional_preop_mtx_count": 2,
+        "additional_preop_mtx_plan_confirmed": true
+      },
+      "expected": [
+        "ADDITIONAL_PREOP_MTX_REVIEW"
+      ],
+      "absent": [
+        "ADDITIONAL_MTX_UNCONFIRMED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "ADDITIONAL_PREOP_MTX_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Additional third dose not routine",
+      "input": {
+        "additional_preop_mtx": true,
+        "additional_preop_mtx_count": 3,
+        "additional_preop_mtx_plan_confirmed": true
+      },
+      "expected": [
+        "ADDITIONAL_MTX_UNCONFIRMED"
+      ],
+      "absent": [],
+      "actual": [
+        "ADDITIONAL_MTX_UNCONFIRMED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "ADDITIONAL_PREOP_MTX_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Additional count/plan missing",
+      "input": {
+        "additional_preop_mtx": true
+      },
+      "expected": [
+        "ADDITIONAL_MTX_UNCONFIRMED"
+      ],
+      "absent": [],
+      "actual": [
+        "ADDITIONAL_MTX_UNCONFIRMED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "ADDITIONAL_PREOP_MTX_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis anc exact",
+      "input": {
+        "phase": "dox_cis",
+        "anc": 0.75
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis anc below",
+      "input": {
+        "phase": "dox_cis",
+        "anc": 0.749
+      },
+      "expected": [
+        "COUNTS_DOX_CIS_DELAY"
+      ],
+      "absent": [],
+      "actual": [
+        "COUNTS_DOX_CIS_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis platelets exact",
+      "input": {
+        "phase": "dox_cis",
+        "platelets": 75
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_cis platelets below",
+      "input": {
+        "phase": "dox_cis",
+        "platelets": 74.999
+      },
+      "expected": [
+        "COUNTS_DOX_CIS_DELAY"
+      ],
+      "absent": [],
+      "actual": [
+        "COUNTS_DOX_CIS_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only anc exact",
+      "input": {
+        "phase": "dox_only",
+        "anc": 0.75
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DOX_ONLY_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only anc below",
+      "input": {
+        "phase": "dox_only",
+        "anc": 0.749
+      },
+      "expected": [
+        "COUNTS_DOX_ONLY_DELAY"
+      ],
+      "absent": [],
+      "actual": [
+        "COUNTS_DOX_ONLY_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only platelets exact",
+      "input": {
+        "phase": "dox_only",
+        "platelets": 75
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DOX_ONLY_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "PARTIAL_PHASE_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "dox_only platelets below",
+      "input": {
+        "phase": "dox_only",
+        "platelets": 74.999
+      },
+      "expected": [
+        "COUNTS_DOX_ONLY_DELAY"
+      ],
+      "absent": [],
+      "actual": [
+        "COUNTS_DOX_ONLY_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX anc exact",
+      "input": {
+        "phase": "hdmtx",
+        "anc": 0.25
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_MTX_DELAY",
+        "COUNTS_DOX_CIS_DELAY",
+        "COUNTS_DOX_ONLY_DELAY"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX anc below",
+      "input": {
+        "phase": "hdmtx",
+        "anc": 0.249
+      },
+      "expected": [
+        "COUNTS_MTX_DELAY"
+      ],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "COUNTS_MTX_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX platelets exact",
+      "input": {
+        "phase": "hdmtx",
+        "platelets": 50
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_MTX_DELAY",
+        "COUNTS_DOX_CIS_DELAY",
+        "COUNTS_DOX_ONLY_DELAY"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX platelets below",
+      "input": {
+        "phase": "hdmtx",
+        "platelets": 49.999
+      },
+      "expected": [
+        "COUNTS_MTX_DELAY"
+      ],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "COUNTS_MTX_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX ANC0.5 platelets60 not DOXCIS delay",
+      "input": {
+        "phase": "hdmtx",
+        "anc": 0.5,
+        "platelets": 60
+      },
+      "expected": [],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY",
+        "COUNTS_DOX_ONLY_DELAY",
+        "COUNTS_MTX_DELAY"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescue must not be stopped by low counts",
+      "input": {
+        "phase": "rescue",
+        "anc": 0.1,
+        "platelets": 10
+      },
+      "expected": [
+        "RESCUE_PHASE_SPECIALIST"
+      ],
+      "absent": [
+        "COUNTS_DOX_CIS_DELAY",
+        "COUNTS_DOX_ONLY_DELAY",
+        "COUNTS_MTX_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Repeated delay exactly7 not >7",
+      "input": {
+        "repeated_count_delay": true,
+        "counts_delay_days": 7
+      },
+      "expected": [],
+      "absent": [
+        "REPEATED_DELAY_GCSF_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Repeated delay>7 beforeGCSF",
+      "input": {
+        "repeated_count_delay": true,
+        "counts_delay_days": 7.001
+      },
+      "expected": [
+        "REPEATED_DELAY_GCSF_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "REPEATED_DELAY_GCSF_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Delayed>7 despiteGCSF affectsCIS",
+      "input": {
+        "counts_delay_days": 8,
+        "gcsf_given_during_delay": true
+      },
+      "expected": [
+        "CIS_DELAY_DESPITE_GCSF_REDUCTION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_DELAY_DESPITE_GCSF_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Exactly7 despiteGCSF no automaticreduction",
+      "input": {
+        "counts_delay_days": 7,
+        "gcsf_given_during_delay": true
+      },
+      "expected": [],
+      "absent": [
+        "CIS_DELAY_DESPITE_GCSF_REDUCTION"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorFN grade2",
+      "input": {
+        "prior_fn_grade": 2
+      },
+      "expected": [],
+      "absent": [
+        "PRIOR_FN_GCSF_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorFN grade3",
+      "input": {
+        "prior_fn_grade": 3
+      },
+      "expected": [
+        "PRIOR_FN_GCSF_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "PRIOR_FN_GCSF_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorFN grade4",
+      "input": {
+        "prior_fn_grade": 4
+      },
+      "expected": [
+        "PRIOR_FN_GCSF_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "PRIOR_FN_GCSF_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "FurtherFN despiteGCSF onlyCIS",
+      "input": {
+        "fn_recurred_despite_gcsf": true
+      },
+      "expected": [
+        "CIS_FN_DESPITE_GCSF_REDUCTION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_FN_DESPITE_GCSF_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorCIS countreduction persists",
+      "input": {
+        "prior_cis_count_reduction": true,
+        "anc": 3,
+        "platelets": 200
+      },
+      "expected": [
+        "CIS_PRIOR_COUNT_REDUCTION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_PRIOR_COUNT_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorCIS reduction not reset",
+      "input": {
+        "prior_cis_count_reduction": true,
+        "proposed_cis_count_reescalation": true
+      },
+      "expected": [
+        "CIS_NO_COUNT_REESCALATION"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NO_COUNT_REESCALATION",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_PRIOR_COUNT_REDUCTION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin21.001",
+      "input": {
+        "bilirubin_umol_l": 21.001
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin21.999",
+      "input": {
+        "bilirubin_umol_l": 21.999
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin22",
+      "input": {
+        "bilirubin_umol_l": 22
+      },
+      "expected": [
+        "DOX_BILI22_35"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI22_35"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin35",
+      "input": {
+        "bilirubin_umol_l": 35
+      },
+      "expected": [
+        "DOX_BILI22_35"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI22_35"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin35.001",
+      "input": {
+        "bilirubin_umol_l": 35.001
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin35.999",
+      "input": {
+        "bilirubin_umol_l": 35.999
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin36",
+      "input": {
+        "bilirubin_umol_l": 36
+      },
+      "expected": [
+        "DOX_BILI36_52"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI36_52"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin52",
+      "input": {
+        "bilirubin_umol_l": 52
+      },
+      "expected": [
+        "DOX_BILI36_52"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI36_52"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin52.001",
+      "input": {
+        "bilirubin_umol_l": 52.001
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin52.999",
+      "input": {
+        "bilirubin_umol_l": 52.999
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin53",
+      "input": {
+        "bilirubin_umol_l": 53
+      },
+      "expected": [
+        "DOX_BILI53_86"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI53_86"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin86",
+      "input": {
+        "bilirubin_umol_l": 86
+      },
+      "expected": [
+        "DOX_BILI53_86"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SMPC_BILI_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI53_86"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin86.001",
+      "input": {
+        "bilirubin_umol_l": 86.001
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SMPC_BILI_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin87",
+      "input": {
+        "bilirubin_umol_l": 87
+      },
+      "expected": [
+        "DOX_BILI_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SMPC_BILI_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI_GAPS"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "DOX absolutebilirubin87.001",
+      "input": {
+        "bilirubin_umol_l": 87.001
+      },
+      "expected": [
+        "DOX_BILI_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_BILI_OMIT",
+        "MTX_SMPC_BILI_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Bilirubin21 fullreference row",
+      "input": {
+        "bilirubin_umol_l": 21
+      },
+      "expected": [],
+      "absent": [
+        "DOX_BILI_GAPS",
+        "DOX_BILI22_35"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "InitialLVEF49 not automatically permanent",
+      "input": {
+        "lvef_percent": 49
+      },
+      "expected": [
+        "DOX_CARDIAC_REPEAT"
+      ],
+      "absent": [
+        "DOX_CARDIAC_PERSISTENT_OMIT"
+      ],
+      "actual": [
+        "DOX_CARDIAC_REPEAT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "SF27.999 repeat",
+      "input": {
+        "shortening_fraction_percent": 27.999
+      },
+      "expected": [
+        "DOX_CARDIAC_REPEAT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_CARDIAC_REPEAT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "SF28 inclusive",
+      "input": {
+        "shortening_fraction_percent": 28
+      },
+      "expected": [],
+      "absent": [
+        "DOX_CARDIAC_REPEAT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Repeated cardiac dysfunction permanentDOXstop",
+      "input": {
+        "cardiac_repeat_still_abnormal": true
+      },
+      "expected": [
+        "DOX_CARDIAC_PERSISTENT_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_CARDIAC_PERSISTENT_OMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Prior permanent cardiac omission persists atnormalLVEF",
+      "input": {
+        "prior_doxo_cardiac_omission": true,
+        "lvef_percent": 65
+      },
+      "expected": [
+        "DOX_CARDIAC_PERSISTENT_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_CARDIAC_PERSISTENT_OMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CurrentDOXmucositis2",
+      "input": {
+        "doxo_current_mucositis_grade": 2
+      },
+      "expected": [],
+      "absent": [
+        "DOX_CURRENT_MUCOSITIS_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CurrentDOXmucositis3",
+      "input": {
+        "doxo_current_mucositis_grade": 3
+      },
+      "expected": [
+        "DOX_CURRENT_MUCOSITIS_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_CURRENT_MUCOSITIS_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CurrentDOXmucositis4",
+      "input": {
+        "doxo_current_mucositis_grade": 4
+      },
+      "expected": [
+        "DOX_CURRENT_MUCOSITIS_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_CURRENT_MUCOSITIS_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "First priorG3 not repeated pathway",
+      "input": {
+        "doxo_previous_mucositis_grade": 3,
+        "doxo_grade3_mucositis_occurrences": 1
+      },
+      "expected": [],
+      "absent": [
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorG3 missingoccurrence",
+      "input": {
+        "doxo_previous_mucositis_grade": 3
+      },
+      "expected": [
+        "DOX_G3_HISTORY_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_G3_HISTORY_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Severemucositis recovery missing {\"doxo_previous_mucositis_grade\":4}",
+      "input": {
+        "doxo_previous_mucositis_grade": 4
+      },
+      "expected": [
+        "DOX_MUCOSITIS_REDUCTION",
+        "DOX_MUCOSITIS_RECOVERY_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_MUCOSITIS_RECOVERY_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Severemucositis recovered {\"doxo_previous_mucositis_grade\":4}",
+      "input": {
+        "doxo_previous_mucositis_grade": 4,
+        "doxo_mucositis_resolved": true
+      },
+      "expected": [
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "absent": [
+        "DOX_MUCOSITIS_RECOVERY_REQUIRED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Severemucositis recovery missing {\"doxo_previous_mucositis_grade\":3,\"doxo_grade3_mucositis_occurrences\":2}",
+      "input": {
+        "doxo_previous_mucositis_grade": 3,
+        "doxo_grade3_mucositis_occurrences": 2
+      },
+      "expected": [
+        "DOX_MUCOSITIS_REDUCTION",
+        "DOX_MUCOSITIS_RECOVERY_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_MUCOSITIS_RECOVERY_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Severemucositis recovered {\"doxo_previous_mucositis_grade\":3,\"doxo_grade3_mucositis_occurrences\":2}",
+      "input": {
+        "doxo_previous_mucositis_grade": 3,
+        "doxo_grade3_mucositis_occurrences": 2,
+        "doxo_mucositis_resolved": true
+      },
+      "expected": [
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "absent": [
+        "DOX_MUCOSITIS_RECOVERY_REQUIRED"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_MUCOSITIS_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CIScurrentneuropathy1 persistent reduction",
+      "input": {
+        "cis_current_neuropathy_grade": 1
+      },
+      "expected": [
+        "CIS_NEURO_G1_REDUCTION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_NEURO_G1_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISpriorneuropathy1 survivescurrent0",
+      "input": {
+        "cis_current_neuropathy_grade": 0,
+        "cis_previous_neuropathy_grade": 1
+      },
+      "expected": [
+        "CIS_NEURO_G1_REDUCTION"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_NEURO_G1_REDUCTION"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISneuropathy2 allfuturedoses",
+      "input": {
+        "cis_current_neuropathy_grade": 2
+      },
+      "expected": [
+        "CIS_NEURO_G2_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEURO_G2_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISneuropathy3 allfuturedoses",
+      "input": {
+        "cis_current_neuropathy_grade": 3
+      },
+      "expected": [
+        "CIS_NEURO_G2_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEURO_G2_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISneuropathy4 allfuturedoses",
+      "input": {
+        "cis_current_neuropathy_grade": 4
+      },
+      "expected": [
+        "CIS_NEURO_G2_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEURO_G2_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISpriorG2 survivescurrent0",
+      "input": {
+        "cis_current_neuropathy_grade": 0,
+        "cis_previous_neuropathy_grade": 2
+      },
+      "expected": [
+        "CIS_NEURO_G2_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_NEURO_G2_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISrenal indexed_gfr_ml_min_1_73m2 exact",
+      "input": {
+        "indexed_gfr_ml_min_1_73m2": 70
+      },
+      "expected": [],
+      "absent": [
+        "CIS_RENAL_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISrenal indexed_gfr_ml_min_1_73m2 abnormal",
+      "input": {
+        "indexed_gfr_ml_min_1_73m2": 69.999
+      },
+      "expected": [
+        "CIS_RENAL_DELAY"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_INDEXED_RENAL_HOLD",
+        "CIS_RENAL_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISrenal serum_creatinine_ratio_to_baseline exact",
+      "input": {
+        "serum_creatinine_ratio_to_baseline": 1.5
+      },
+      "expected": [],
+      "absent": [
+        "CIS_RENAL_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISrenal serum_creatinine_ratio_to_baseline abnormal",
+      "input": {
+        "serum_creatinine_ratio_to_baseline": 1.501
+      },
+      "expected": [
+        "CIS_RENAL_DELAY"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_RENAL_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "delay",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CIS renal afteroneweek omitcurrentcourse",
+      "input": {
+        "cis_renal_not_improved_after_week": true
+      },
+      "expected": [
+        "CIS_RENAL_CURRENT_OMISSION"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_RENAL_CURRENT_OMISSION",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISrenal futureGFR70 restartreview",
+      "input": {
+        "prior_cis_renal_omission": true,
+        "indexed_gfr_ml_min_1_73m2": 70,
+        "serum_creatinine_ratio_to_baseline": 1
+      },
+      "expected": [
+        "CIS_RENAL_RESTART_REVIEW"
+      ],
+      "absent": [
+        "CIS_RENAL_DELAY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_RENAL_RESTART_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CISrenal prioromission recovery absent",
+      "input": {
+        "prior_cis_renal_omission": true
+      },
+      "expected": [
+        "CIS_RENAL_RESTART_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_RENAL_RESTART_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "HearingG2 missingfrequency",
+      "input": {
+        "cis_hearing_grade": 2
+      },
+      "expected": [
+        "CIS_HEARING_G2_DETAILS"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_HEARING_G2_DETAILS",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "HearingG2 exact2kHz stop",
+      "input": {
+        "cis_hearing_grade": 2,
+        "hearing_lowest_frequency_khz": 2
+      },
+      "expected": [
+        "CIS_HEARING_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_HEARING_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "HearingG2 lowerfrequency stop",
+      "input": {
+        "cis_hearing_grade": 2,
+        "hearing_lowest_frequency_khz": 1
+      },
+      "expected": [
+        "CIS_HEARING_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_HEARING_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "HearingG2 above2 review notsource stop",
+      "input": {
+        "cis_hearing_grade": 2,
+        "hearing_lowest_frequency_khz": 2.001
+      },
+      "expected": [
+        "CIS_HEARING_OTHER_REVIEW"
+      ],
+      "absent": [
+        "CIS_HEARING_STOP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_HEARING_OTHER_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "HearingG1 no automaticstop",
+      "input": {
+        "cis_hearing_grade": 1,
+        "hearing_lowest_frequency_khz": 1
+      },
+      "expected": [],
+      "absent": [
+        "CIS_HEARING_STOP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "PARTIAL_HEARING_LOWEST_FREQUENCY_KHZ_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Priorhearingstop persists",
+      "input": {
+        "prior_cis_hearing_discontinuation": true,
+        "cis_hearing_grade": 0
+      },
+      "expected": [
+        "CIS_HEARING_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "CIS_HEARING_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "permanently_discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "UnindexedCrCl49.999 belowNCCPgate",
+      "input": {
+        "crcl_ml_min": 49.999
+      },
+      "expected": [
+        "MTX_UNINDEXED_RENAL_HOLD",
+        "MTX_SMPC_RENAL_CONTRA"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_UNINDEXED_RENAL_HOLD",
+        "MTX_SMPC_RENAL_CONTRA",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "UnindexedCrCl50 meetsNCCPbutfailsSmPC",
+      "input": {
+        "crcl_ml_min": 50
+      },
+      "expected": [
+        "MTX_SMPC_RENAL_CONTRA"
+      ],
+      "absent": [
+        "MTX_UNINDEXED_RENAL_HOLD"
+      ],
+      "actual": [
+        "MTX_SMPC_RENAL_CONTRA",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "UnindexedCrCl59.999 SmPCcontra",
+      "input": {
+        "crcl_ml_min": 59.999
+      },
+      "expected": [
+        "MTX_SMPC_RENAL_CONTRA"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SMPC_RENAL_CONTRA",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "UnindexedCrCl60 exactnotSmPCcontra",
+      "input": {
+        "crcl_ml_min": 60
+      },
+      "expected": [],
+      "absent": [
+        "MTX_SMPC_RENAL_CONTRA"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Indexed69.999hold",
+      "input": {
+        "indexed_gfr_ml_min_1_73m2": 69.999
+      },
+      "expected": [
+        "MTX_INDEXED_RENAL_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_INDEXED_RENAL_HOLD",
+        "CIS_RENAL_DELAY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Indexed70 exact",
+      "input": {
+        "indexed_gfr_ml_min_1_73m2": 70
+      },
+      "expected": [],
+      "absent": [
+        "MTX_INDEXED_RENAL_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "CrCl80 cannot substitute missingindexedGFR",
+      "input": {
+        "phase": "hdmtx",
+        "crcl_ml_min": 80,
+        "mtx_renal_plan_reconciled": true
+      },
+      "expected": [
+        "MTX_RENAL_RECONCILIATION"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Indexed90 cannot substitute missingCrCl",
+      "input": {
+        "phase": "hdmtx",
+        "indexed_gfr_ml_min_1_73m2": 90,
+        "mtx_renal_plan_reconciled": true
+      },
+      "expected": [
+        "MTX_RENAL_RECONCILIATION"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Bothnormal stillrequire sourceplan",
+      "input": {
+        "phase": "hdmtx",
+        "crcl_ml_min": 90,
+        "indexed_gfr_ml_min_1_73m2": 90
+      },
+      "expected": [
+        "MTX_RENAL_RECONCILIATION"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Reconcilednormalvalues noautomaticdose",
+      "input": {
+        "phase": "hdmtx",
+        "crcl_ml_min": 90,
+        "indexed_gfr_ml_min_1_73m2": 90,
+        "mtx_renal_plan_reconciled": true
+      },
+      "expected": [
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "absent": [
+        "MTX_RENAL_RECONCILIATION"
+      ],
+      "actual": [
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorMTXrenaltoxicity requiresrecovery",
+      "input": {
+        "prior_mtx_renal_toxicity": true
+      },
+      "expected": [
+        "MTX_PRIOR_RENAL_RECOVERY"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_PRIOR_RENAL_RECOVERY",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "PriorMTXrenal recovered avoidsindefinitehold",
+      "input": {
+        "prior_mtx_renal_toxicity": true,
+        "mtx_renal_recovery_confirmed": true
+      },
+      "expected": [],
+      "absent": [
+        "MTX_PRIOR_RENAL_RECOVERY"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTXrenal notimprovedafterweek omitsdose",
+      "input": {
+        "mtx_renal_not_improved_after_week": true
+      },
+      "expected": [
+        "MTX_RENAL_WEEK_OMIT"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RENAL_WEEK_OMIT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "pH6.999 holdMTX notrescue",
+      "input": {
+        "phase": "rescue",
+        "urine_ph": 6.999
+      },
+      "expected": [
+        "MTX_PH_HOLD",
+        "RESCUE_PHASE_SPECIALIST"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_PH_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "pH7 meetsinclusivecriterion",
+      "input": {
+        "urine_ph": 7
+      },
+      "expected": [],
+      "absent": [
+        "MTX_PH_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "SupportplanmissingpreMTX",
+      "input": {
+        "phase": "hdmtx"
+      },
+      "expected": [
+        "MTX_SUPPORT_PLAN_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Allsupportfieldsconfirmed",
+      "input": {
+        "phase": "hdmtx",
+        "hydration_urine_output_adequate": true,
+        "mtx_support_and_rescue_plan_confirmed": true,
+        "urine_ph": 7
+      },
+      "expected": [],
+      "absent": [
+        "MTX_SUPPORT_PLAN_REQUIRED"
+      ],
+      "actual": [
+        "MTX_RENAL_RECONCILIATION",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MTX_RENAL_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "third_space_fluid",
+      "input": {
+        "third_space_fluid": true
+      },
+      "expected": [
+        "MTX_THIRD_SPACE_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_THIRD_SPACE_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "mtx_interaction_unresolved",
+      "input": {
+        "mtx_interaction_unresolved": true
+      },
+      "expected": [
+        "MTX_INTERACTION_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_INTERACTION_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "cis_nephrotoxic_medicine",
+      "input": {
+        "cis_nephrotoxic_medicine": true
+      },
+      "expected": [
+        "CIS_NEPHROTOXIC_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "CIS_NEPHROTOXIC_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX12000 source reference",
+      "input": {
+        "planned_mtx_mg_m2": 12000
+      },
+      "expected": [],
+      "absent": [
+        "MTX_DOSE_ABOVE_REFERENCE"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX12000.1 not automaticSmPCescalation",
+      "input": {
+        "planned_mtx_mg_m2": 12000.1
+      },
+      "expected": [
+        "MTX_DOSE_ABOVE_REFERENCE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_DOSE_ABOVE_REFERENCE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "UntimedMTXlevel",
+      "input": {
+        "mtx_level_umol_l": 5
+      },
+      "expected": [
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timewithoutlevel",
+      "input": {
+        "mtx_sample_hours_after_start": 24
+      },
+      "expected": [
+        "MTX_LEVEL_PAIR_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Wrong sampleanchor end",
+      "input": {
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 21,
+        "sample_clock_anchor": "end"
+      },
+      "expected": [
+        "MTX_CLOCK_REVIEW"
+      ],
+      "absent": [
+        "MTX_LEVEL_HIGH_24"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Wrong sampleanchor unknown",
+      "input": {
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 21,
+        "sample_clock_anchor": "unknown"
+      },
+      "expected": [
+        "MTX_CLOCK_REVIEW"
+      ],
+      "absent": [
+        "MTX_LEVEL_HIGH_24"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuebefore24 notlate",
+      "input": {
+        "hours_since_mtx_start_now": 23.999,
+        "folinic_rescue_started": false
+      },
+      "expected": [],
+      "absent": [
+        "MTX_RESCUE_LATE"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "PARTIAL_HOURS_SINCE_MTX_START_NOW_CONTEXT_REQUIRED",
+        "PARTIAL_FOLINIC_RESCUE_STARTED_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuedueat24 started undefined",
+      "input": {
+        "hours_since_mtx_start_now": 24
+      },
+      "expected": [
+        "MTX_RESCUE_LATE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuedueat24 started false",
+      "input": {
+        "hours_since_mtx_start_now": 24,
+        "folinic_rescue_started": false
+      },
+      "expected": [
+        "MTX_RESCUE_LATE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuestartedat24",
+      "input": {
+        "hours_since_mtx_start_now": 24,
+        "folinic_rescue_started": true
+      },
+      "expected": [],
+      "absent": [
+        "MTX_RESCUE_LATE"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Delayedclearance emergency",
+      "input": {
+        "mtx_clearance_delayed": true
+      },
+      "expected": [
+        "MTX_DELAYED_CLEARANCE_URGENT"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_DELAYED_CLEARANCE_URGENT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 24/undefined/undefined",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 24/undefined/false",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false,
+        "folinic_rescue_started": false
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 24/23/undefined",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false,
+        "hours_since_mtx_start_now": 23
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 24/23/false",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false,
+        "hours_since_mtx_start_now": 23,
+        "folinic_rescue_started": false
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 48/undefined/undefined",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 48,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 48/undefined/false",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 48,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false,
+        "folinic_rescue_started": false
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 48/23/undefined",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 48,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false,
+        "hours_since_mtx_start_now": 23
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Timed sample establishes rescue due 48/23/false",
+      "input": {
+        "phase": "rescue",
+        "assessment_phase": "on_treatment",
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 48,
+        "mtx_level_umol_l": 0.5,
+        "rescue_ongoing": false,
+        "hours_since_mtx_start_now": 23,
+        "folinic_rescue_started": false
+      },
+      "expected": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Sample before24 does not establish due rescue",
+      "input": {
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 23.999,
+        "folinic_rescue_started": false
+      },
+      "expected": [],
+      "absent": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "PARTIAL_FOLINIC_RESCUE_STARTED_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescue already started with coherent sample clock",
+      "input": {
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 24,
+        "hours_since_mtx_start_now": 24,
+        "folinic_rescue_started": true
+      },
+      "expected": [],
+      "absent": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "PARTIAL_SAMPLE_CLOCK_ANCHOR_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Started rescue cannot reconcile impossible clock",
+      "input": {
+        "sample_clock_anchor": "start",
+        "mtx_sample_hours_after_start": 48,
+        "hours_since_mtx_start_now": 23,
+        "folinic_rescue_started": true
+      },
+      "expected": [
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT"
+      ],
+      "absent": [
+        "MTX_SAMPLE_RESCUE_DUE"
+      ],
+      "actual": [
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX24 exactreference",
+      "input": {
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 20,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [
+        "MTX_LEVEL_HIGH_24"
+      ],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "MTX_RESCUE_BAND_BOUNDARY"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX24 abovereference",
+      "input": {
+        "mtx_sample_hours_after_start": 24,
+        "mtx_level_umol_l": 20.0001,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "MTX_LEVEL_HIGH_24"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_LEVEL_HIGH_24",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX48 exactreference",
+      "input": {
+        "mtx_sample_hours_after_start": 48,
+        "mtx_level_umol_l": 2,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [
+        "MTX_LEVEL_HIGH_48"
+      ],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "MTX_RESCUE_BAND_BOUNDARY"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX48 abovereference",
+      "input": {
+        "mtx_sample_hours_after_start": 48,
+        "mtx_level_umol_l": 2.0001,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "MTX_LEVEL_HIGH_48"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_LEVEL_HIGH_48",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX72 exactreference",
+      "input": {
+        "mtx_sample_hours_after_start": 72,
+        "mtx_level_umol_l": 0.2,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [
+        "MTX_LEVEL_HIGH_72"
+      ],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX72 abovereference",
+      "input": {
+        "mtx_sample_hours_after_start": 72,
+        "mtx_level_umol_l": 0.2001,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "MTX_LEVEL_HIGH_72"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_LEVEL_HIGH_72",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Overlappingrescueband2",
+      "input": {
+        "mtx_level_umol_l": 2
+      },
+      "expected": [
+        "MTX_RESCUE_BAND_BOUNDARY"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "MTX_RESCUE_BAND_BOUNDARY"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Overlappingrescueband20",
+      "input": {
+        "mtx_level_umol_l": 20
+      },
+      "expected": [
+        "MTX_RESCUE_BAND_BOUNDARY"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "MTX_RESCUE_BAND_BOUNDARY"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX100 exactnot>100",
+      "input": {
+        "mtx_level_umol_l": 100
+      },
+      "expected": [],
+      "absent": [
+        "MTX_LEVEL_OVER100"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTX100.001 highrange",
+      "input": {
+        "mtx_level_umol_l": 100.001
+      },
+      "expected": [
+        "MTX_LEVEL_OVER100"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_LEVEL_OVER100",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerise/time 50/24",
+      "input": {
+        "creatinine_rise_percent": 50,
+        "creatinine_sample_hours_after_start": 24
+      },
+      "expected": [],
+      "absent": [
+        "MTX_CREATININE50_AT24",
+        "MTX_CREATININE100_WITHIN24"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerise/time 50.001/24",
+      "input": {
+        "creatinine_rise_percent": 50.001,
+        "creatinine_sample_hours_after_start": 24
+      },
+      "expected": [
+        "MTX_CREATININE50_AT24"
+      ],
+      "absent": [
+        "MTX_CREATININE100_WITHIN24"
+      ],
+      "actual": [
+        "MTX_CREATININE50_AT24",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerise/time 100/24",
+      "input": {
+        "creatinine_rise_percent": 100,
+        "creatinine_sample_hours_after_start": 24
+      },
+      "expected": [
+        "MTX_CREATININE50_AT24"
+      ],
+      "absent": [
+        "MTX_CREATININE100_WITHIN24"
+      ],
+      "actual": [
+        "MTX_CREATININE50_AT24",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerise/time 100.001/24",
+      "input": {
+        "creatinine_rise_percent": 100.001,
+        "creatinine_sample_hours_after_start": 24
+      },
+      "expected": [
+        "MTX_CREATININE50_AT24",
+        "MTX_CREATININE100_WITHIN24"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_CREATININE50_AT24",
+        "MTX_CREATININE100_WITHIN24",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerise/time 101/23.9",
+      "input": {
+        "creatinine_rise_percent": 101,
+        "creatinine_sample_hours_after_start": 23.9
+      },
+      "expected": [
+        "MTX_CREATININE100_WITHIN24"
+      ],
+      "absent": [
+        "MTX_CREATININE50_AT24"
+      ],
+      "actual": [
+        "MTX_CREATININE100_WITHIN24",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerise/time 101/24.1",
+      "input": {
+        "creatinine_rise_percent": 101,
+        "creatinine_sample_hours_after_start": 24.1
+      },
+      "expected": [],
+      "absent": [
+        "MTX_CREATININE100_WITHIN24",
+        "MTX_CREATININE50_AT24"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Creatininerisewithouttime",
+      "input": {
+        "creatinine_rise_percent": 51
+      },
+      "expected": [
+        "MTX_CREATININE_TIME_MISSING"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_CREATININE_TIME_MISSING"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "96h priorrescuehistorymissing",
+      "input": {
+        "hours_since_mtx_start_now": 96,
+        "rescue_ongoing": true
+      },
+      "expected": [
+        "RESCUE96_HISTORY_REQUIRED"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "RESCUE96_HISTORY_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "95.999h no96historyrule",
+      "input": {
+        "hours_since_mtx_start_now": 95.999,
+        "rescue_ongoing": true
+      },
+      "expected": [],
+      "absent": [
+        "RESCUE96_HISTORY_REQUIRED"
+      ],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "96h deescalationblockedafterpriorincrease",
+      "input": {
+        "hours_since_mtx_start_now": 96,
+        "rescue_previously_escalated": true,
+        "rescue_deescalation_requested": true
+      },
+      "expected": [
+        "RESCUE96_NO_AUTO_DEESCALATION"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "RESCUE96_NO_AUTO_DEESCALATION"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuestopendpoint 0.0999 neverautomated",
+      "input": {
+        "rescue_discontinuation_requested": true,
+        "mtx_level_umol_l": 0.0999,
+        "mtx_sample_hours_after_start": 96,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "RESCUE_STOP_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "RESCUE_STOP_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuestopendpoint 0.1 neverautomated",
+      "input": {
+        "rescue_discontinuation_requested": true,
+        "mtx_level_umol_l": 0.1,
+        "mtx_sample_hours_after_start": 96,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "RESCUE_STOP_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "RESCUE_STOP_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuestopendpoint 0.1499 neverautomated",
+      "input": {
+        "rescue_discontinuation_requested": true,
+        "mtx_level_umol_l": 0.1499,
+        "mtx_sample_hours_after_start": 96,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "RESCUE_STOP_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "RESCUE_STOP_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuestopendpoint 0.15 neverautomated",
+      "input": {
+        "rescue_discontinuation_requested": true,
+        "mtx_level_umol_l": 0.15,
+        "mtx_sample_hours_after_start": 96,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "RESCUE_STOP_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "RESCUE_STOP_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Rescuestopendpoint 0.1501 neverautomated",
+      "input": {
+        "rescue_discontinuation_requested": true,
+        "mtx_level_umol_l": 0.1501,
+        "mtx_sample_hours_after_start": 96,
+        "sample_clock_anchor": "start"
+      },
+      "expected": [
+        "RESCUE_STOP_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "RESCUE_STOP_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Elevenrescue doses missinglevel notstop",
+      "input": {
+        "rescue_doses_given": 11
+      },
+      "expected": [
+        "RESCUE_FIXED_COUNT_NOT_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "RESCUE_FIXED_COUNT_NOT_STOP"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Elevenrescue doses level0.1 notstop",
+      "input": {
+        "rescue_doses_given": 11,
+        "mtx_level_umol_l": 0.1
+      },
+      "expected": [
+        "RESCUE_FIXED_COUNT_NOT_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "RESCUE_FIXED_COUNT_NOT_STOP"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Below0.1 stillnocalculatedstop",
+      "input": {
+        "rescue_doses_given": 11,
+        "mtx_level_umol_l": 0.0999
+      },
+      "expected": [
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "absent": [
+        "RESCUE_FIXED_COUNT_NOT_STOP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LEVEL_PAIR_REQUIRED",
+        "MTX_CLOCK_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Beyond120 continuesreview",
+      "input": {
+        "hours_since_mtx_start_now": 120.001,
+        "rescue_ongoing": true
+      },
+      "expected": [
+        "RESCUE_AFTER120_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "RESCUE96_HISTORY_REQUIRED",
+        "RESCUE_AFTER120_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Exactly120 notbeyond",
+      "input": {
+        "hours_since_mtx_start_now": 120,
+        "rescue_ongoing": true
+      },
+      "expected": [],
+      "absent": [
+        "RESCUE_AFTER120_REVIEW"
+      ],
+      "actual": [
+        "MTX_RESCUE_LATE",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "RESCUE96_HISTORY_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "post_mtx_mucositis_grade 2",
+      "input": {
+        "post_mtx_mucositis_grade": 2
+      },
+      "expected": [],
+      "absent": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "post_mtx_mucositis_grade 3",
+      "input": {
+        "post_mtx_mucositis_grade": 3
+      },
+      "expected": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "post_mtx_mucositis_grade 4",
+      "input": {
+        "post_mtx_mucositis_grade": 4
+      },
+      "expected": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "post_mtx_diarrhoea_grade 2",
+      "input": {
+        "post_mtx_diarrhoea_grade": 2
+      },
+      "expected": [],
+      "absent": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "post_mtx_diarrhoea_grade 3",
+      "input": {
+        "post_mtx_diarrhoea_grade": 3
+      },
+      "expected": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "post_mtx_diarrhoea_grade 4",
+      "input": {
+        "post_mtx_diarrhoea_grade": 4
+      },
+      "expected": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "SeverepostMTXexact7days not>1week",
+      "input": {
+        "post_mtx_mucositis_grade": 3,
+        "post_mtx_toxicity_days": 7
+      },
+      "expected": [],
+      "absent": [
+        "MTX_DAY29_SOURCE_REVIEW",
+        "MTX_DAY29_OMIT_THIS_DOSE"
+      ],
+      "actual": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Calendarweek29 notsourceDay29 proof",
+      "input": {
+        "reference_week": 29,
+        "post_mtx_mucositis_grade": 3,
+        "post_mtx_toxicity_days": 7.001
+      },
+      "expected": [
+        "MTX_DAY29_SOURCE_REVIEW"
+      ],
+      "absent": [
+        "MTX_DAY29_OMIT_THIS_DOSE"
+      ],
+      "actual": [
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_DAY29_SOURCE_REVIEW",
+        "PARTIAL_REFERENCE_WEEK_CONTEXT_REQUIRED"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "ConfirmedsourceDay29 omitonlythatdose",
+      "input": {
+        "post_mtx_mucositis_grade": 3,
+        "post_mtx_toxicity_days": 8,
+        "source_day29_context_confirmed": true
+      },
+      "expected": [
+        "MTX_DAY29_OMIT_THIS_DOSE"
+      ],
+      "absent": [
+        "MTX_DAY29_SOURCE_REVIEW"
+      ],
+      "actual": [
+        "MTX_DAY29_OMIT_THIS_DOSE",
+        "MTX_MUCOSITIS_DIARRHOEA_REVIEW",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "omit",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "NormalMTXLFTnoabnormalreview",
+      "input": {
+        "alt_uln_multiple": 1,
+        "bilirubin_uln_multiple": 1
+      },
+      "expected": [],
+      "absent": [
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "AbnormalLFTmapping alt_uln_multiple",
+      "input": {
+        "alt_uln_multiple": 1.001
+      },
+      "expected": [
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "AbnormalLFTmapping bilirubin_uln_multiple",
+      "input": {
+        "bilirubin_uln_multiple": 1.001
+      },
+      "expected": [
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "NonMTXbili1.25 exact",
+      "input": {
+        "mtx_liver_origin": "not_mtx",
+        "bilirubin_uln_multiple": 1.25
+      },
+      "expected": [],
+      "absent": [
+        "MTX_LFT_NONMTX_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LFT_SOURCE_REVIEW",
+        "PARTIAL_MTX_LIVER_ORIGIN_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "NonMTXbili1.2501 hold",
+      "input": {
+        "mtx_liver_origin": "not_mtx",
+        "bilirubin_uln_multiple": 1.2501
+      },
+      "expected": [
+        "MTX_LFT_NONMTX_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_LFT_NONMTX_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "NonMTXALT9.999 strictrecoveryboundary",
+      "input": {
+        "mtx_liver_origin": "not_mtx",
+        "alt_uln_multiple": 9.999
+      },
+      "expected": [],
+      "absent": [
+        "MTX_LFT_NONMTX_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LFT_SOURCE_REVIEW",
+        "PARTIAL_MTX_LIVER_ORIGIN_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "NonMTXALT10 not<10",
+      "input": {
+        "mtx_liver_origin": "not_mtx",
+        "alt_uln_multiple": 10
+      },
+      "expected": [
+        "MTX_LFT_NONMTX_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_LFT_NONMTX_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "MTX_LFT_SOURCE_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Persistenthyperbilirubinaemia 14",
+      "input": {
+        "mtx_hyperbilirubinaemia_confirmed": true,
+        "persistent_hyperbilirubinaemia_days": 14
+      },
+      "expected": [],
+      "absent": [
+        "MTX_PERSISTENT_BILI_STOP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Persistenthyperbilirubinaemia 21",
+      "input": {
+        "mtx_hyperbilirubinaemia_confirmed": true,
+        "persistent_hyperbilirubinaemia_days": 21
+      },
+      "expected": [],
+      "absent": [
+        "MTX_PERSISTENT_BILI_STOP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Persistenthyperbilirubinaemia 21.001",
+      "input": {
+        "mtx_hyperbilirubinaemia_confirmed": true,
+        "persistent_hyperbilirubinaemia_days": 21.001
+      },
+      "expected": [
+        "MTX_PERSISTENT_BILI_STOP"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_PERSISTENT_BILI_STOP",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED"
+      ],
+      "action": "discontinue",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Durationwithoutconfirmedhyperbilirubinaemia notstop",
+      "input": {
+        "persistent_hyperbilirubinaemia_days": 22
+      },
+      "expected": [],
+      "absent": [
+        "MTX_PERSISTENT_BILI_STOP"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "PARTIAL_PERSISTENT_HYPERBILIRUBINAEMIA_DAYS_CONTEXT_REQUIRED"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTXSmPCbili85.5 exact",
+      "input": {
+        "bilirubin_umol_l": 85.5
+      },
+      "expected": [],
+      "absent": [
+        "MTX_SMPC_BILI_HOLD"
+      ],
+      "actual": [
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI53_86"
+      ],
+      "action": "consultant_review",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "MTXSmPCbili85.501 hold",
+      "input": {
+        "bilirubin_umol_l": 85.501
+      },
+      "expected": [
+        "MTX_SMPC_BILI_HOLD"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SMPC_BILI_HOLD",
+        "ASSESSMENT_STAGE_REQUIRED",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_PHASE_REQUIRED",
+        "DOX_BILI53_86"
+      ],
+      "action": "withhold",
+      "complete": false,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Demo cannot clear LVEF50_SOURCE_BOUNDARY",
+      "input": {
+        "assessment_phase": "baseline",
+        "ecog": 0,
+        "hypersensitivity": false,
+        "pregnancy": false,
+        "breastfeeding": false,
+        "anc": 3,
+        "platelets": 200,
+        "acute_fn_or_sepsis": false,
+        "active_infection": false,
+        "bilirubin_umol_l": 10,
+        "lvef_percent": 50,
+        "symptomatic_cardiac_dysfunction": false,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 75,
+        "other_anthracycline_exposure": false,
+        "anthracycline_history_reconciled": false,
+        "restart_requested": false,
+        "restart_recovery_and_plan_confirmed": false,
+        "cycle_number": 1,
+        "crcl_ml_min": 80,
+        "haemodialysis": false,
+        "child_pugh_c": false,
+        "prior_fn": false,
+        "prior_anc_nadir": 3,
+        "prior_fn_recovered": false,
+        "doxo_fn_reduced_previously": false,
+        "proposed_doxo_reescalation": false,
+        "current_mucositis_grade": 0,
+        "prior_mucositis_grade": 0,
+        "mucositis_recovery_confirmed": false,
+        "current_neuropathy_grade": 0,
+        "prior_cis_neuropathy_omission": false,
+        "cis_neuropathy_restart_reviewed": false,
+        "hearing_or_tinnitus": false,
+        "electrolytes_or_hydration_unresolved": false
+      },
+      "expected": [
+        "LVEF50_SOURCE_BOUNDARY"
+      ],
+      "absent": [],
+      "actual": [
+        "LVEF50_SOURCE_BOUNDARY",
+        "DOX_EXPOSURE_RECONCILIATION"
+      ],
+      "action": "withhold",
+      "complete": true,
+      "passed": true
+    },
+    {
+      "code": "00420",
+      "name": "Demo cannot clear CIS_CRCL_DECIMAL_GAPS",
+      "input": {
+        "assessment_phase": "baseline",
+        "ecog": 0,
+        "hypersensitivity": false,
+        "pregnancy": false,
+        "breastfeeding": false,
+        "anc": 3,
+        "platelets": 200,
+        "acute_fn_or_sepsis": false,
+        "active_infection": false,
+        "bilirubin_umol_l": 10,
+        "lvef_percent": 60,
+        "symptomatic_cardiac_dysfunction": false,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 75,
+        "other_anthracycline_exposure": false,
+        "anthracycline_history_reconciled": false,
+        "restart_requested": false,
+        "restart_recovery_and_plan_confirmed": false,
+        "cycle_number": 1,
+        "crcl_ml_min": 49.5,
+        "haemodialysis": false,
+        "child_pugh_c": false,
+        "prior_fn": false,
+        "prior_anc_nadir": 3,
+        "prior_fn_recovered": false,
+        "doxo_fn_reduced_previously": false,
+        "proposed_doxo_reescalation": false,
+        "current_mucositis_grade": 0,
+        "prior_mucositis_grade": 0,
+        "mucositis_recovery_confirmed": false,
+        "current_neuropathy_grade": 0,
+        "prior_cis_neuropathy_omission": false,
+        "cis_neuropathy_restart_reviewed": false,
+        "hearing_or_tinnitus": false,
+        "electrolytes_or_hydration_unresolved": false
+      },
+      "expected": [
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "absent": [],
+      "actual": [
+        "DOX_EXPOSURE_RECONCILIATION",
+        "CIS_CRCL_DECIMAL_GAPS"
+      ],
+      "action": "consultant_review",
+      "complete": true,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Demo cannot clear MTX_SMPC_RENAL_CONTRA",
+      "input": {
+        "assessment_phase": "baseline",
+        "ecog": 0,
+        "hypersensitivity": false,
+        "pregnancy": false,
+        "breastfeeding": false,
+        "anc": 3,
+        "platelets": 200,
+        "acute_fn_or_sepsis": false,
+        "active_infection": false,
+        "bilirubin_umol_l": 10,
+        "lvef_percent": 60,
+        "symptomatic_cardiac_dysfunction": false,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 75,
+        "other_anthracycline_exposure": false,
+        "anthracycline_history_reconciled": false,
+        "restart_requested": false,
+        "restart_recovery_and_plan_confirmed": false,
+        "age_years": 20,
+        "high_grade_osteosarcoma_confirmed": false,
+        "craniofacial_site": false,
+        "all_sites_completely_resectable": false,
+        "phase": "hdmtx",
+        "reference_week": 1,
+        "additional_preop_mtx": false,
+        "additional_preop_mtx_count": 0,
+        "additional_preop_mtx_plan_confirmed": false,
+        "counts_delay_days": 0,
+        "repeated_count_delay": false,
+        "gcsf_given_during_delay": false,
+        "prior_fn_grade": 0,
+        "fn_recurred_despite_gcsf": false,
+        "prior_cis_count_reduction": false,
+        "proposed_cis_count_reescalation": false,
+        "doxo_current_mucositis_grade": 0,
+        "doxo_previous_mucositis_grade": 0,
+        "doxo_grade3_mucositis_occurrences": 0,
+        "doxo_mucositis_resolved": false,
+        "shortening_fraction_percent": 35,
+        "cardiac_repeat_still_abnormal": false,
+        "prior_doxo_cardiac_omission": false,
+        "cis_current_neuropathy_grade": 0,
+        "cis_previous_neuropathy_grade": 0,
+        "cis_hearing_grade": 0,
+        "hearing_lowest_frequency_khz": 8,
+        "prior_cis_hearing_discontinuation": false,
+        "indexed_gfr_ml_min_1_73m2": 90,
+        "crcl_ml_min": 55,
+        "serum_creatinine_ratio_to_baseline": 1,
+        "cis_renal_not_improved_after_week": false,
+        "prior_cis_renal_omission": false,
+        "mtx_renal_plan_reconciled": true,
+        "prior_mtx_renal_toxicity": false,
+        "mtx_renal_recovery_confirmed": false,
+        "mtx_renal_not_improved_after_week": false,
+        "urine_ph": 7.5,
+        "hydration_urine_output_adequate": false,
+        "mtx_support_and_rescue_plan_confirmed": false,
+        "third_space_fluid": false,
+        "mtx_interaction_unresolved": false,
+        "cis_nephrotoxic_medicine": false,
+        "hours_since_mtx_start_now": 0,
+        "mtx_level_umol_l": 0,
+        "mtx_sample_hours_after_start": 24,
+        "sample_clock_anchor": "start",
+        "folinic_rescue_started": false,
+        "mtx_clearance_delayed": false,
+        "creatinine_rise_percent": 0,
+        "creatinine_sample_hours_after_start": 24,
+        "rescue_ongoing": false,
+        "rescue_previously_escalated": false,
+        "rescue_deescalation_requested": false,
+        "rescue_discontinuation_requested": false,
+        "rescue_doses_given": 0,
+        "post_mtx_mucositis_grade": 0,
+        "post_mtx_diarrhoea_grade": 0,
+        "post_mtx_toxicity_days": 0,
+        "source_day29_context_confirmed": false,
+        "alt_uln_multiple": 1,
+        "bilirubin_uln_multiple": 1,
+        "mtx_liver_origin": "unknown",
+        "persistent_hyperbilirubinaemia_days": 0,
+        "mtx_hyperbilirubinaemia_confirmed": false,
+        "planned_mtx_mg_m2": 12000,
+        "baseline_significant_heart_disease": false
+      },
+      "expected": [
+        "MTX_SMPC_RENAL_CONTRA"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SMPC_RENAL_CONTRA",
+        "MTX_SUPPORT_PLAN_REQUIRED",
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_RESECTION_CONTEXT",
+        "WEEK_PHASE_HDMTX",
+        "MTX_RENAL_SOURCE_REVIEW",
+        "MTX_LEVEL_SPECIALIST_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": true,
+      "passed": true
+    },
+    {
+      "code": "00463",
+      "name": "Demo cannot clear RESCUE_STOP_REVIEW",
+      "input": {
+        "assessment_phase": "baseline",
+        "ecog": 0,
+        "hypersensitivity": false,
+        "pregnancy": false,
+        "breastfeeding": false,
+        "anc": 3,
+        "platelets": 200,
+        "acute_fn_or_sepsis": false,
+        "active_infection": false,
+        "bilirubin_umol_l": 10,
+        "lvef_percent": 60,
+        "symptomatic_cardiac_dysfunction": false,
+        "prior_doxorubicin_mg_m2": 0,
+        "planned_cumulative_doxorubicin_mg_m2": 75,
+        "other_anthracycline_exposure": false,
+        "anthracycline_history_reconciled": false,
+        "restart_requested": false,
+        "restart_recovery_and_plan_confirmed": false,
+        "age_years": 20,
+        "high_grade_osteosarcoma_confirmed": false,
+        "craniofacial_site": false,
+        "all_sites_completely_resectable": false,
+        "phase": "rescue",
+        "reference_week": 1,
+        "additional_preop_mtx": false,
+        "additional_preop_mtx_count": 0,
+        "additional_preop_mtx_plan_confirmed": false,
+        "counts_delay_days": 0,
+        "repeated_count_delay": false,
+        "gcsf_given_during_delay": false,
+        "prior_fn_grade": 0,
+        "fn_recurred_despite_gcsf": false,
+        "prior_cis_count_reduction": false,
+        "proposed_cis_count_reescalation": false,
+        "doxo_current_mucositis_grade": 0,
+        "doxo_previous_mucositis_grade": 0,
+        "doxo_grade3_mucositis_occurrences": 0,
+        "doxo_mucositis_resolved": false,
+        "shortening_fraction_percent": 35,
+        "cardiac_repeat_still_abnormal": false,
+        "prior_doxo_cardiac_omission": false,
+        "cis_current_neuropathy_grade": 0,
+        "cis_previous_neuropathy_grade": 0,
+        "cis_hearing_grade": 0,
+        "hearing_lowest_frequency_khz": 8,
+        "prior_cis_hearing_discontinuation": false,
+        "indexed_gfr_ml_min_1_73m2": 90,
+        "crcl_ml_min": 90,
+        "serum_creatinine_ratio_to_baseline": 1,
+        "cis_renal_not_improved_after_week": false,
+        "prior_cis_renal_omission": false,
+        "mtx_renal_plan_reconciled": false,
+        "prior_mtx_renal_toxicity": false,
+        "mtx_renal_recovery_confirmed": false,
+        "mtx_renal_not_improved_after_week": false,
+        "urine_ph": 7.5,
+        "hydration_urine_output_adequate": false,
+        "mtx_support_and_rescue_plan_confirmed": false,
+        "third_space_fluid": false,
+        "mtx_interaction_unresolved": false,
+        "cis_nephrotoxic_medicine": false,
+        "hours_since_mtx_start_now": 0,
+        "mtx_level_umol_l": 20,
+        "mtx_sample_hours_after_start": 24,
+        "sample_clock_anchor": "start",
+        "folinic_rescue_started": false,
+        "mtx_clearance_delayed": false,
+        "creatinine_rise_percent": 0,
+        "creatinine_sample_hours_after_start": 24,
+        "rescue_ongoing": false,
+        "rescue_previously_escalated": false,
+        "rescue_deescalation_requested": false,
+        "rescue_discontinuation_requested": true,
+        "rescue_doses_given": 0,
+        "post_mtx_mucositis_grade": 0,
+        "post_mtx_diarrhoea_grade": 0,
+        "post_mtx_toxicity_days": 0,
+        "source_day29_context_confirmed": false,
+        "alt_uln_multiple": 1,
+        "bilirubin_uln_multiple": 1,
+        "mtx_liver_origin": "unknown",
+        "persistent_hyperbilirubinaemia_days": 0,
+        "mtx_hyperbilirubinaemia_confirmed": false,
+        "planned_mtx_mg_m2": 12000,
+        "baseline_significant_heart_disease": false
+      },
+      "expected": [
+        "RESCUE_STOP_REVIEW"
+      ],
+      "absent": [],
+      "actual": [
+        "MTX_SAMPLE_RESCUE_DUE",
+        "MTX_SAMPLE_CURRENT_CLOCK_CONFLICT",
+        "DOX_EXPOSURE_RECONCILIATION",
+        "MAP_RESECTION_CONTEXT",
+        "RESCUE_PHASE_SPECIALIST",
+        "MTX_LEVEL_SPECIALIST_REVIEW",
+        "MTX_RESCUE_BAND_BOUNDARY",
+        "RESCUE_STOP_REVIEW"
+      ],
+      "action": "withhold",
+      "complete": true,
+      "passed": true
+    }
+  ]
+}

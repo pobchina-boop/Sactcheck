@@ -1,0 +1,26 @@
+{
+  "scope": "Exact lossless storage adapter only; no clinical/replay expectation changes",
+  "path": "tools/lib/sarcoma-v08464-transitions.cjs",
+  "before_snapshot": "validation/sarcoma-v08464/clinical-replay/packaging-transition/before-transitions.cjs",
+  "before_sha256": "bf661f5b17fb7f6f0572fa0c276e27e07d5b29312de7c6678008c36e1dd7df7b",
+  "after_sha256": "30607c4eed84113a2591f18c6e78717bdecce50c39a1373be70931e512baa605",
+  "edits": [
+    {
+      "before": "const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict');",
+      "after": "const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict'),zlib=require('node:zlib');"
+    },
+    {
+      "before": "function authenticate(root){",
+      "after": "// Only this exact raw evidence path has compressed storage. All historical manifests retain raw byte hashes.\nfunction evidenceBytes(root,relative){\n if(relative!=='compatibility/all-observation-deltas.json')return fs.readFileSync(path.join(root,base,relative));\n const mp=base+'/packaging-transition/compression-manifest.json';assert.equal(sha(path.join(root,mp)),'612287fbd93718174b476f484181abb37e315da1caaf9ae46646e9c0eb621011');const m=read(root,mp);\n assert.equal(m.virtual_relative_path,relative);assert.equal(m.encoding,'gzip');assert.equal(m.raw_bytes,39759020);assert.equal(m.raw_sha256,'5b00160f906930629ecdc5791fd648643bb0077ff0044cdca8ba3ab45a301653');assert.equal(m.stored_relative_path,relative+'.gz');\n assert(!fs.existsSync(path.join(root,base,relative)),'Oversized raw evidence must be materialized outside the repository');const encoded=fs.readFileSync(path.join(root,base,m.stored_relative_path));assert.equal(encoded.length,m.stored_bytes);assert.equal(crypto.createHash('sha256').update(encoded).digest('hex'),m.stored_sha256);\n const bytes=zlib.gunzipSync(encoded,{maxOutputLength:m.raw_bytes+1});assert.equal(bytes.length,m.raw_bytes);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),m.raw_sha256);return bytes;\n}\nfunction materializeEvidence(root,destination){\n destination=path.resolve(destination);assert(path.relative(path.resolve(root),destination).startsWith('..'+path.sep),'Materialize only outside the repository');assert(!fs.existsSync(destination),'Refusing to overwrite materialized evidence');authenticate(root);\n fs.cpSync(path.join(root,base,'compatibility'),destination,{recursive:true});const bytes=evidenceBytes(root,'compatibility/all-observation-deltas.json');fs.writeFileSync(path.join(destination,'all-observation-deltas.json'),bytes);fs.unlinkSync(path.join(destination,'all-observation-deltas.json.gz'));return {destination,raw_bytes:bytes.length,raw_sha256:crypto.createHash('sha256').update(bytes).digest('hex'),frozen_scripts_unchanged:true};\n}\nfunction authenticate(root){"
+    },
+    {
+      "before": "for(const f of m.files){const p=path.join(root,base,f.path);assert.equal(fs.statSync(p).size,f.bytes,'Archived size '+f.path);assert.equal(sha(p),f.sha256,'Archived source/review '+f.path);}",
+      "after": "for(const f of m.files){const bytes=evidenceBytes(root,f.path);assert.equal(bytes.length,f.bytes,'Archived raw size '+f.path);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),f.sha256,'Archived raw source/review '+f.path);}"
+    },
+    {
+      "before": "module.exports={verify,sourceChain,authenticate,edit,read,sha,base,manifestPath,codes};",
+      "after": "module.exports={verify,sourceChain,authenticate,evidenceBytes,materializeEvidence,edit,read,sha,base,manifestPath,codes};"
+    }
+  ],
+  "unchanged_replay_library_sha256": "cbf379d3fefd616e244a9deb5ccb97cf9fe8bf5ef736e7efb55bb7b51dc78537"
+}

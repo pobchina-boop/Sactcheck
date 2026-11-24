@@ -1,0 +1,638 @@
+{
+  "checked_utc": "2026-11-18T16:57:24.834Z",
+  "mode": "current",
+  "scope": "Separate retained-input supplement after original213-case freeze; not a rewrite or double count of those cases",
+  "script_sha256": "6f3eaf8446e97df99f8fc5244389078c37ff89356069b9ef40ae92a060cf098b",
+  "protocols": {
+    "00504": "05a03d4682987e348cbfc97ce9c443c6c07a70a2841f20739207d1835f21a77f",
+    "00754": "2e4b5b2b51beb85fd4ced302da4dd77a3b46e16bb6ebf7c0c391c5816de0bd72",
+    "00757": "34fc0fe99393187fc07685c8bef2382770a3228c234205b7e6eb2385315b08f6"
+  },
+  "total": 12,
+  "passed": 12,
+  "failed": 0,
+  "results": [
+    {
+      "code": "00504",
+      "field": "febrile_neutropenia",
+      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+      "value": false,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "febrile_neutropenia": false,
+        "acute_sepsis": false
+      },
+      "expected": "A negative retained field alone must not create an event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "proceed_with_caution",
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00504",
+      "field": "febrile_neutropenia",
+      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+      "value": true,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "febrile_neutropenia": true,
+        "acute_sepsis": false
+      },
+      "expected": "Conservative history/recovery or active-infection review; prior interval is not automatically current sepsis or a defined dose-reduction event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "PRIOR_FN_CONTEXT",
+            "type": "consultant_review",
+            "message": "Febrile neutropenia during the previous interval needs clarification of event severity, duration, occurrence, growth-factor support, dose history and current recovery. This historical yes/no field is not itself current sepsis and does not establish a source-specific reduction threshold."
+          }
+        ],
+        "components": [
+          {
+            "id": "irinotecan",
+            "action": "consultant_review"
+          },
+          {
+            "id": "temozolomide",
+            "action": "consultant_review"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00504",
+      "field": "active_infection",
+      "label": "Active infection requiring treatment",
+      "value": false,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "active_infection": false,
+        "acute_sepsis": false
+      },
+      "expected": "A negative retained field alone must not create an event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "proceed_with_caution",
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00504",
+      "field": "active_infection",
+      "label": "Active infection requiring treatment",
+      "value": true,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "active_infection": true,
+        "acute_sepsis": false
+      },
+      "expected": "Conservative history/recovery or active-infection review; prior interval is not automatically current sepsis or a defined dose-reduction event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "ACTIVE_INFECTION_REVIEW",
+            "type": "withhold",
+            "message": "An active infection requiring treatment needs clinician assessment and a documented treatment/recovery plan before further chemotherapy, even when current sepsis is not suspected. Normal current counts or an unchecked sepsis flag do not establish recovery."
+          }
+        ],
+        "components": [
+          {
+            "id": "irinotecan",
+            "action": "withhold"
+          },
+          {
+            "id": "temozolomide",
+            "action": "withhold"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00754",
+      "field": "febrile_neutropenia",
+      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+      "value": false,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "cycle_number": 3,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "treatment_phase": "ivado_cycles3_4",
+        "early_gcsf_schedule_confirmed": true,
+        "later_gcsf_review_confirmed": true,
+        "mesna_plan_confirmed": true,
+        "hydration_plan_confirmed": true,
+        "neuroassessment_completed": true,
+        "urine_assessment_completed": true,
+        "neuropathy_assessment_completed": true,
+        "bilirubin_umol_l": 10,
+        "crcl_ml_min": 80,
+        "febrile_neutropenia": false,
+        "acute_sepsis": false
+      },
+      "expected": "A negative retained field alone must not create an event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "IFO_PRODUCT_IDENTIFICATION_REQUIRED",
+            "type": "withhold",
+            "message": "Before the planned ifosfamide administration or restart, identify the actual supplied product and reconcile its current product information with NCCP. An unidentified product is not cleared by the regimen table."
+          },
+          {
+            "id": "IFO_PRODUCT_LABS_MISSING",
+            "type": "withhold",
+            "message": "Before planned ifosfamide, obtain actual serum creatinine and bilirubin in µmol/L plus AST, ALT and ALP with the applicable local ULNs. CrCl, an absolute AST alone or a partial panel cannot resolve the product restrictions."
+          },
+          {
+            "id": "IFO_PRODUCT_UNITS_UNVERIFIED",
+            "type": "withhold",
+            "message": "Verify the current laboratory units and actual local AST/ALT/ALP ULNs before further ifosfamide. An automatically populated laboratory profile is not verification. Do not equate CrCl with serum creatinine or assume a conversion from the printed alternative creatinine units."
+          }
+        ],
+        "components": [
+          {
+            "id": "ifosfamide",
+            "action": "withhold"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00754",
+      "field": "febrile_neutropenia",
+      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+      "value": true,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "cycle_number": 3,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "treatment_phase": "ivado_cycles3_4",
+        "early_gcsf_schedule_confirmed": true,
+        "later_gcsf_review_confirmed": true,
+        "mesna_plan_confirmed": true,
+        "hydration_plan_confirmed": true,
+        "neuroassessment_completed": true,
+        "urine_assessment_completed": true,
+        "neuropathy_assessment_completed": true,
+        "bilirubin_umol_l": 10,
+        "crcl_ml_min": 80,
+        "febrile_neutropenia": true,
+        "acute_sepsis": false
+      },
+      "expected": "Conservative history/recovery or active-infection review; prior interval is not automatically current sepsis or a defined dose-reduction event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "IFO_PRODUCT_IDENTIFICATION_REQUIRED",
+            "type": "withhold",
+            "message": "Before the planned ifosfamide administration or restart, identify the actual supplied product and reconcile its current product information with NCCP. An unidentified product is not cleared by the regimen table."
+          },
+          {
+            "id": "IFO_PRODUCT_LABS_MISSING",
+            "type": "withhold",
+            "message": "Before planned ifosfamide, obtain actual serum creatinine and bilirubin in µmol/L plus AST, ALT and ALP with the applicable local ULNs. CrCl, an absolute AST alone or a partial panel cannot resolve the product restrictions."
+          },
+          {
+            "id": "IFO_PRODUCT_UNITS_UNVERIFIED",
+            "type": "withhold",
+            "message": "Verify the current laboratory units and actual local AST/ALT/ALP ULNs before further ifosfamide. An automatically populated laboratory profile is not verification. Do not equate CrCl with serum creatinine or assume a conversion from the printed alternative creatinine units."
+          },
+          {
+            "id": "PRIOR_FN_CONTEXT",
+            "type": "consultant_review",
+            "message": "Febrile neutropenia during the previous interval needs clarification of event severity, duration, occurrence, growth-factor support, dose history and current recovery. This historical yes/no field is not itself current sepsis and does not establish a source-specific reduction threshold."
+          }
+        ],
+        "components": [
+          {
+            "id": "ifosfamide",
+            "action": "withhold"
+          },
+          {
+            "id": "dactinomycin",
+            "action": "consultant_review"
+          },
+          {
+            "id": "doxorubicin",
+            "action": "consultant_review"
+          },
+          {
+            "id": "vincristine",
+            "action": "consultant_review"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00754",
+      "field": "active_infection",
+      "label": "Active infection requiring treatment",
+      "value": false,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "cycle_number": 3,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "treatment_phase": "ivado_cycles3_4",
+        "early_gcsf_schedule_confirmed": true,
+        "later_gcsf_review_confirmed": true,
+        "mesna_plan_confirmed": true,
+        "hydration_plan_confirmed": true,
+        "neuroassessment_completed": true,
+        "urine_assessment_completed": true,
+        "neuropathy_assessment_completed": true,
+        "bilirubin_umol_l": 10,
+        "crcl_ml_min": 80,
+        "active_infection": false,
+        "acute_sepsis": false
+      },
+      "expected": "A negative retained field alone must not create an event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "IFO_PRODUCT_IDENTIFICATION_REQUIRED",
+            "type": "withhold",
+            "message": "Before the planned ifosfamide administration or restart, identify the actual supplied product and reconcile its current product information with NCCP. An unidentified product is not cleared by the regimen table."
+          },
+          {
+            "id": "IFO_PRODUCT_LABS_MISSING",
+            "type": "withhold",
+            "message": "Before planned ifosfamide, obtain actual serum creatinine and bilirubin in µmol/L plus AST, ALT and ALP with the applicable local ULNs. CrCl, an absolute AST alone or a partial panel cannot resolve the product restrictions."
+          },
+          {
+            "id": "IFO_PRODUCT_UNITS_UNVERIFIED",
+            "type": "withhold",
+            "message": "Verify the current laboratory units and actual local AST/ALT/ALP ULNs before further ifosfamide. An automatically populated laboratory profile is not verification. Do not equate CrCl with serum creatinine or assume a conversion from the printed alternative creatinine units."
+          }
+        ],
+        "components": [
+          {
+            "id": "ifosfamide",
+            "action": "withhold"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00754",
+      "field": "active_infection",
+      "label": "Active infection requiring treatment",
+      "value": true,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "cycle_number": 3,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "treatment_phase": "ivado_cycles3_4",
+        "early_gcsf_schedule_confirmed": true,
+        "later_gcsf_review_confirmed": true,
+        "mesna_plan_confirmed": true,
+        "hydration_plan_confirmed": true,
+        "neuroassessment_completed": true,
+        "urine_assessment_completed": true,
+        "neuropathy_assessment_completed": true,
+        "bilirubin_umol_l": 10,
+        "crcl_ml_min": 80,
+        "active_infection": true,
+        "acute_sepsis": false
+      },
+      "expected": "Conservative history/recovery or active-infection review; prior interval is not automatically current sepsis or a defined dose-reduction event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "ACTIVE_INFECTION_REVIEW",
+            "type": "withhold",
+            "message": "An active infection requiring treatment needs clinician assessment and a documented treatment/recovery plan before further chemotherapy, even when current sepsis is not suspected. Normal current counts or an unchecked sepsis flag do not establish recovery."
+          },
+          {
+            "id": "IFO_PRODUCT_IDENTIFICATION_REQUIRED",
+            "type": "withhold",
+            "message": "Before the planned ifosfamide administration or restart, identify the actual supplied product and reconcile its current product information with NCCP. An unidentified product is not cleared by the regimen table."
+          },
+          {
+            "id": "IFO_PRODUCT_LABS_MISSING",
+            "type": "withhold",
+            "message": "Before planned ifosfamide, obtain actual serum creatinine and bilirubin in µmol/L plus AST, ALT and ALP with the applicable local ULNs. CrCl, an absolute AST alone or a partial panel cannot resolve the product restrictions."
+          },
+          {
+            "id": "IFO_PRODUCT_UNITS_UNVERIFIED",
+            "type": "withhold",
+            "message": "Verify the current laboratory units and actual local AST/ALT/ALP ULNs before further ifosfamide. An automatically populated laboratory profile is not verification. Do not equate CrCl with serum creatinine or assume a conversion from the printed alternative creatinine units."
+          }
+        ],
+        "components": [
+          {
+            "id": "dactinomycin",
+            "action": "withhold"
+          },
+          {
+            "id": "doxorubicin",
+            "action": "withhold"
+          },
+          {
+            "id": "ifosfamide",
+            "action": "withhold"
+          },
+          {
+            "id": "vincristine",
+            "action": "withhold"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00757",
+      "field": "febrile_neutropenia",
+      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+      "value": false,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "neuropathy_assessment_completed": true,
+        "treatment_phase": "vit_cycles2_to12",
+        "bilirubin_umol_l": 10,
+        "febrile_neutropenia": false,
+        "acute_sepsis": false
+      },
+      "expected": "A negative retained field alone must not create an event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "proceed_with_caution",
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00757",
+      "field": "febrile_neutropenia",
+      "label": "Febrile neutropenia or neutropenic sepsis during the previous interval",
+      "value": true,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "neuropathy_assessment_completed": true,
+        "treatment_phase": "vit_cycles2_to12",
+        "bilirubin_umol_l": 10,
+        "febrile_neutropenia": true,
+        "acute_sepsis": false
+      },
+      "expected": "Conservative history/recovery or active-infection review; prior interval is not automatically current sepsis or a defined dose-reduction event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "consultant_review",
+        "findings": [
+          {
+            "id": "PRIOR_FN_CONTEXT",
+            "type": "consultant_review",
+            "message": "Febrile neutropenia during the previous interval needs clarification of event severity, duration, occurrence, growth-factor support, dose history and current recovery. This historical yes/no field is not itself current sepsis and does not establish a source-specific reduction threshold."
+          }
+        ],
+        "components": [
+          {
+            "id": "irinotecan",
+            "action": "consultant_review"
+          },
+          {
+            "id": "temozolomide",
+            "action": "consultant_review"
+          },
+          {
+            "id": "vincristine",
+            "action": "consultant_review"
+          }
+        ]
+      }
+    },
+    {
+      "code": "00757",
+      "field": "active_infection",
+      "label": "Active infection requiring treatment",
+      "value": false,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "neuropathy_assessment_completed": true,
+        "treatment_phase": "vit_cycles2_to12",
+        "bilirubin_umol_l": 10,
+        "active_infection": false,
+        "acute_sepsis": false
+      },
+      "expected": "A negative retained field alone must not create an event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "proceed_with_caution",
+        "findings": [],
+        "components": []
+      }
+    },
+    {
+      "code": "00757",
+      "field": "active_infection",
+      "label": "Active infection requiring treatment",
+      "value": true,
+      "input": {
+        "assessment_phase": "recovery",
+        "restart_requested": true,
+        "consultant_restart_plan_confirmed": true,
+        "adult_service_confirmed": true,
+        "age_years": 30,
+        "indication_confirmed": true,
+        "current_drug_dose_known": true,
+        "labs_reviewed": true,
+        "pjp_plan_confirmed": true,
+        "diarrhoea_plan_confirmed": true,
+        "offlabel_consent_confirmed": true,
+        "cycle_number": 2,
+        "cycle_day": 1,
+        "anc_x10e9_l": 3,
+        "platelets_x10e9_l": 200,
+        "neuropathy_assessment_completed": true,
+        "treatment_phase": "vit_cycles2_to12",
+        "bilirubin_umol_l": 10,
+        "active_infection": true,
+        "acute_sepsis": false
+      },
+      "expected": "Conservative history/recovery or active-infection review; prior interval is not automatically current sepsis or a defined dose-reduction event.",
+      "status": "passed",
+      "error": null,
+      "observed": {
+        "action": "withhold",
+        "findings": [
+          {
+            "id": "ACTIVE_INFECTION_REVIEW",
+            "type": "withhold",
+            "message": "An active infection requiring treatment needs clinician assessment and a documented treatment/recovery plan before further chemotherapy, even when current sepsis is not suspected. Normal current counts or an unchecked sepsis flag do not establish recovery."
+          }
+        ],
+        "components": [
+          {
+            "id": "irinotecan",
+            "action": "withhold"
+          },
+          {
+            "id": "temozolomide",
+            "action": "withhold"
+          },
+          {
+            "id": "vincristine",
+            "action": "withhold"
+          }
+        ]
+      }
+    }
+  ]
+}

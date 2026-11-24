@@ -1,0 +1,963 @@
+/**
+ * SACTCheck v0.75.1 - Regimen Workflow Engine
+ *
+ * Regimen properties are translated into clinic workflow outputs:
+ * assessment, consent, supportive medicines, extravasation guidance,
+ * patient information status and source verification.
+ *
+ * This layer does not alter deterministic treatment-assessment rules.
+ */
+(function(root,factory){
+  const api=factory(root);
+  if(typeof module==="object"&&module.exports) module.exports=api;
+  root.SACTCheckRegimenWorkflow=api;
+  if(root?.document) api.install();
+})(typeof globalThis!=="undefined"?globalThis:this,function(root){
+  "use strict";
+
+  const RELEASE=root.SACTCHECK_RELEASE||"0.78.0";
+  const WORKFLOW_DATA_RELEASE="0.78.0";
+
+  function patientAssets(){
+    if(root.SACTCheckPatientAssets) return root.SACTCheckPatientAssets;
+    if(typeof require==="function"){
+      try{return require("./patient-asset-registry-v0810.js");}catch(_){}
+    }
+    return null;
+  }
+  function nccpCodeFor(protocol){
+    return patientAssets()?.codeFor?.(protocol)||String(protocol?.metadata?.nccp_regimen_code||protocol?.nccp_regimen_code||"").trim().padStart(5,"0");
+  }
+  function dedicatedPatientPipeline(protocol){
+    const registry=patientAssets();
+    if(registry?.hasDedicated?.(protocol)) return registry.relativePath(protocol,"portal");
+    return null;
+  }
+  function openPatientPipeline(protocol){
+    const registry=patientAssets();
+    if(registry?.hasDedicated?.(protocol)) return registry.openPortal(protocol);
+    return root.SACTCheckPatientContent?.open?.(protocol,{tab:"print"});
+  }
+
+
+  const DATA_URL="data/regimen-workflow-v0750.json";
+  const PDF_URL=`js/supportive-care-pdf-v0750.js?app=${RELEASE}`;
+  let dataCache=null;
+  let dataPromise=null;
+  let pdfPromise=null;
+  let activeProtocol=null;
+  let activeManifest=null;
+  let panelRequest=0;
+  let panelOpener=null;
+  let backgroundObserver=null;
+  const backgroundInert=new Map();
+
+  function asArray(value){
+    if(value===undefined||value===null||value==="") return [];
+    return Array.isArray(value)?value:[value];
+  }
+  function esc(value){
+    return String(value??"")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+  function externalLinkIcon(){
+    return '<svg class="workflow-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3h7v7M21 3 10 14"/><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg>';
+  }
+  function normaliseDrug(value){
+    return String(value??"").toLowerCase()
+      .replace(/[®™]/g,"")
+      .replace(/\([^)]*\)/g," ")
+      .replace(/[_/–—-]+/g," ")
+      .replace(/\b(?:iv|po|sc|oral|intravenous|subcutaneous|infusion|infusional|bolus|tablets?|capsules?|mg|mcg)\b/g," ")
+      .replace(/[^a-z0-9]+/g," ")
+      .replace(/\s+/g," ")
+      .trim()
+      .replace(/\bnab paclitaxel\b/g,"nab paclitaxel")
+      .replace(/\b5 fluorouracil\b/g,"fluorouracil")
+      .replace(/^5\s*fu$/,"fluorouracil");
+  }
+  function displayDrug(value){
+    return String(value||"").replace(/[_-]+/g," ").replace(/\s+/g," ").trim();
+  }
+  function routeIsOral(route){
+    return /^(po|oral|by mouth)$/i.test(String(route||"").trim());
+  }
+  function protocolText(protocol){
+    try{return JSON.stringify(protocol||{}).toLowerCase();}
+    catch(_){return "";}
+  }
+
+  function knowledgeModule(){
+    return root?.SACTCheckRegimenKnowledgeBase
+      || root?.SACTCheckRegimenKnowledge
+      || root?.SACTCheckKnowledgeBase
+      || null;
+  }
+
+  function knowledgeProfile(protocol){
+    const module=knowledgeModule();
+    if(!module||!protocol) return null;
+    const resolvers=[module.profileForProtocol,module.getProfileForProtocol,module.getProfileForRegimen,module.getEvidenceProfile,module.getRegimenProfile,module.findRegimenProfile,module.getProfile,module.resolveProfile];
+    for(const resolver of resolvers){
+      if(typeof resolver!="function") continue;
+      try{
+        const profile=resolver.call(module,protocol);
+        if(profile&&typeof profile.then!=="function") return profile;
+      }catch(_){}
+    }
+    const checks=[module.hasProfile,module.isAvailableForProtocol,module.hasRegimenProfile,module.hasExpandedProfile];
+    for(const check of checks){
+      if(typeof check!="function") continue;
+      try{ if(check.call(module,protocol)) return {available:true}; }catch(_){}
+    }
+    return null;
+  }
+
+  function openKnowledgeProfile(protocol){
+    const module=knowledgeModule();
+    if(module){
+      const openers=[module.openProfile,module.openRegimenProfile,module.openEvidenceProfile,module.openRegimenKnowledge,module.openRegimenInformation,module.openKnowledgeProfile,module.openRegimen,module.showProfile,module.openForProtocol,module.open];
+      for(const opener of openers){
+        if(typeof opener!=="function") continue;
+        try{
+          const result=opener.call(module,protocol);
+          if(result!==false) return true;
+        }catch(_){}
+      }
+    }
+    const card=cardFor(protocol);
+    let trigger=card?.querySelector?.('[data-open-regimen-knowledge], [data-open-knowledge-profile], [data-regimen-knowledge], .regimen-knowledge-button');
+    if(!trigger&&card?.querySelectorAll){
+      trigger=[...card.querySelectorAll('button,a,[role="button"]')].find(node=>/regimen\s+(information|knowledge|evidence)|knowledge\s+(base|profile)|evidence\s+profile/i.test(node.textContent||""));
+    }
+    if(trigger){trigger.click();return true;}
+    return false;
+  }
+
+  function openConsentSupport(protocol){
+    const registry=patientAssets();
+    // The registry retains the historical asset key, but resolves it to the
+    // finished, regimen/context-specific form with print/download controls.
+    // Preserve its scope-selection route rather than guessing a PDF filename.
+    const form=registry?.runtimeUrl?.(protocol,"consent-draft");
+    if(form&&typeof root.open==="function"){
+      const viewer=root.open(form,"_blank");
+      if(viewer){try{viewer.opener=null;}catch(_){}return viewer;}
+      root.alert?.("The SACTCheck consent form was blocked. Allow this site's pop-up and try again.");
+      return false;
+    }
+    const builder=root?.SACTCheckRegimenConsentBuilder;
+    if(typeof builder?.generateConsentPdf==="function") return builder.generateConsentPdf(protocol);
+    if(typeof builder?.open==="function") return builder.open(protocol,{tab:"print"});
+    return null;
+  }
+
+  function administrationRows(protocol){
+    const rows=[];
+    asArray(protocol?.treatment_phases).forEach(phase=>{
+      asArray(phase?.administration).forEach(item=>{
+        const drug=item?.drug||item?.name||item?.medicine;
+        if(!drug) return;
+        rows.push({
+          drug:displayDrug(drug),
+          normalised:normaliseDrug(drug),
+          route:String(item?.route||item?.administration_route||item?.route_of_administration||""),
+          day:item?.day??null
+        });
+      });
+    });
+    if(rows.length) return rows;
+
+    const fallback=[];
+    asArray(protocol?.treatment?.components).forEach(item=>fallback.push(item?.drug||item?.name||item));
+    asArray(protocol?.regimen_components).forEach(item=>fallback.push(item?.drug||item?.name||item));
+    asArray(protocol?.metadata?.drugs).forEach(item=>fallback.push(item?.drug||item?.name||item));
+    const seen=new Set();
+    return fallback.filter(Boolean).map(drug=>({
+      drug:displayDrug(drug),normalised:normaliseDrug(drug),route:"",day:null
+    })).filter(row=>{
+      if(!row.normalised||seen.has(row.normalised)) return false;
+      seen.add(row.normalised); return true;
+    });
+  }
+
+  function componentNames(protocol){
+    const helper=root?.SACTCheckRegimenComponents;
+    const values=helper?.forProtocol?.(protocol);
+    if(Array.isArray(values)&&values.length){
+      return [...new Set(values.map(displayDrug).filter(Boolean))];
+    }
+    return [...new Set(administrationRows(protocol).map(row=>row.drug).filter(Boolean))];
+  }
+
+  function isAnthracyclineCyclophosphamide(protocol,components){
+    const n=components.map(normaliseDrug);
+    const hasAnth=n.some(x=>["doxorubicin","epirubicin","daunorubicin","idarubicin"].includes(x));
+    return hasAnth && n.includes("cyclophosphamide");
+  }
+
+  function isCarboplatinAuc4Plus(protocol){
+    const text=protocolText(protocol);
+    if(!text.includes("carboplatin")) return false;
+    return /auc\s*(?:>=|≥|greater than or equal to)?\s*[4-9](?:\.\d+)?/.test(text)
+      || /auc[_ -]?[4-9](?:\.\d+)?/.test(text);
+  }
+
+  function hasTdxd(components){
+    const n=components.map(normaliseDrug);
+    return n.some(x=>x.includes("trastuzumab deruxtecan")||x==="t dxd"||x.includes("enhertu"));
+  }
+
+  function planWithSources(planId,plan,data){
+    if(!plan) return null;
+    const localSourceId=plan.local_prescription_source_id||"";
+    return {
+      status:"available",
+      planId,
+      ...plan,
+      localPrescriptionSource:localSourceId?data?.sources?.[localSourceId]||null:null
+    };
+  }
+
+  function agentSupportForProtocol(protocol,data,activeMedicines){
+    const names=(activeMedicines||componentNames(protocol)).map(normaliseDrug);
+    const matches=[];
+    Object.entries(data?.local_agent_proformas||{}).forEach(([id,item])=>{
+      const agents=asArray(item?.match_agents).map(normaliseDrug);
+      if(agents.some(a=>names.some(n=>n===a||n.includes(a)||a.includes(n)))){
+        const sourceId=item.local_prescription_source_id||"";
+        matches.push({
+          id,
+          ...item,
+          localPrescriptionSource:sourceId?data?.sources?.[sourceId]||null:null
+        });
+      }
+    });
+    return matches;
+  }
+
+  function chooseAntiemeticPlan(protocol,data,riskRecord={}){
+    const level=String(riskRecord.level||riskRecord.baseLevel||"pending").toLowerCase();
+    const components=componentNames(protocol);
+
+    // NCCP 00642 has its own PRRT/amino-acid supportive-care instructions.
+    // A moderate CINV category is not sufficient to select its prescription.
+    // The authored phase sheet retains the specialist agent/dose decisions.
+    if(nccpCodeFor(protocol)==="00642"){
+      return {
+        status:"source_only",
+        planId:null,
+        label:"PRRT antiemetic and kidney protection plan",
+        message:"Use the authored PRRT supportive-care sheet and the nuclear-medicine service's prescription. A general moderate-risk chemotherapy script does not apply."
+      };
+    }
+
+    if(level==="phase_dependent" && !riskRecord.phaseResolved){
+      return {
+        status:"phase_review_required",
+        planId:null,
+        label:"Phase-dependent supportive care",
+        message:"Select or confirm the active treatment phase/day before generating supportive medicines."
+      };
+    }
+    if(level==="high"){
+      if(isAnthracyclineCyclophosphamide(protocol,components)){
+        return planWithSources("high_ac",data.antiemetic_plans.high_ac,data);
+      }
+      // Keep trastuzumab deruxtecan and carboplatin branches independent.
+      // A carboplatin regimen must never display trastuzumab-deruxtecan wording.
+      if(hasTdxd(components)){
+        return planWithSources("high_tdxd",data.antiemetic_plans.high_tdxd,data);
+      }
+      if(isCarboplatinAuc4Plus(protocol)){
+        return planWithSources("high_carboplatin",data.antiemetic_plans.high_carboplatin,data);
+      }
+      return planWithSources("high_standard",data.antiemetic_plans.high_standard,data);
+    }
+    if(level==="moderate") return planWithSources("moderate",data.antiemetic_plans.moderate,data);
+    if(level==="low") return planWithSources("low",data.antiemetic_plans.low,data);
+    if(level==="minimal") return planWithSources("minimal",data.antiemetic_plans.minimal,data);
+
+    if(level==="oral_moderate_high"||level==="oral_minimal_low"){
+      return {
+        status:"source_only",
+        planId:null,
+        label:riskRecord.label||"Oral SACT antiemetic support",
+        message:"Oral SACT requires a dedicated regimen/interaction review; use current NCCP guidance rather than a parenteral prescription template."
+      };
+    }
+    return {
+      status:"review_required",
+      planId:null,
+      label:riskRecord.label||"Supportive-care mapping requires review",
+      message:"No single prescribing template can be generated safely from the available regimen metadata."
+    };
+  }
+
+  function interactionOverrides(protocol,data,activeMedicines){
+    const components=(activeMedicines||componentNames(protocol)).map(normaliseDrug);
+    return asArray(data?.interaction_rules).filter(rule=>
+      asArray(rule.match_agents).some(agent=>components.includes(normaliseDrug(agent)))
+    ).map(rule=>({
+      ...rule,
+      source:data?.sources?.[rule.source_id]||null
+    }));
+  }
+
+  function resolveExtravasation(protocol,data){
+    const rules=data?.extravasation?.drugs||{};
+    const classes=data?.extravasation?.classes||{};
+    const rows=administrationRows(protocol);
+    const byDrug=new Map();
+
+    rows.forEach(row=>{
+      const key=row.normalised;
+      if(!key) return;
+      const rule=rules[key];
+      if(!rule) return;
+
+      // Do not show extravasation advice for a medicine encoded exclusively as oral.
+      if(routeIsOral(row.route)) return;
+
+      if(!byDrug.has(key)){
+        const cls=classes[rule.class]||{};
+        byDrug.set(key,{
+          drug:row.drug,
+          key,
+          classId:rule.class,
+          classLabel:cls.label||rule.class,
+          severity:Number(cls.severity||0),
+          colour:cls.colour||"grey",
+          generalAction:cls.general_action||"",
+          compress:rule.compress||"",
+          antidote:rule.antidote||"",
+          route:row.route||""
+        });
+      }
+    });
+
+    const agents=[...byDrug.values()].sort((a,b)=>b.severity-a.severity||a.drug.localeCompare(b.drug));
+    const highest=agents[0]||null;
+    const unknownParenteral=rows.filter(row=>!routeIsOral(row.route) && row.normalised && !rules[row.normalised])
+      .map(row=>row.drug);
+    return {
+      status:agents.length?"available":"not_applicable_or_unmapped",
+      agents,
+      highest,
+      unknownAgents:[...new Set(unknownParenteral)],
+      sourceClassification:data?.sources?.nccp_extravasation_classification||null,
+      sourceGuidance:data?.sources?.nccp_extravasation_guidance||null,
+      emergencySteps:[
+        "Stop and disconnect the infusion; inform the patient.",
+        "Leave vascular access in place initially and gently aspirate where appropriate; do not flush.",
+        "Identify the extravasated agent and notify the treating medical team.",
+        "Mark and document the affected area; use the drug-specific compress/antidote pathway and local policy.",
+        "Elevate the limb, provide analgesia if required and arrange follow-up."
+      ]
+    };
+  }
+
+  function supportPhaseChoices(protocol,data){
+    const code=nccpCodeFor(protocol),context=patientAssets()?.contextFor?.(protocol)||'';
+    const entry=data?.context_supportive_phase_selectors?.[code]?.[context]||data?.supportive_phase_selectors?.[code];
+    // Exact protocol binding: an assessment-profile alias is not a prescribing phase.
+    return entry?.protocol_id===protocol?.protocol_id && String(entry.source_version)===String(protocol?.metadata?.nccp_version)?entry.phases:[];
+  }
+
+  function buildManifest(protocol,data,riskRecord={},supportPhaseId=""){
+    if(!protocol) throw new Error("A protocol is required.");
+    const metadata=protocol.metadata||{};
+    const choices=supportPhaseChoices(protocol,data);
+    const phase=choices.find(item=>item.id===supportPhaseId);
+    // Never classify a selected phase using the whole regimen's drug list.
+    if(choices.length||riskRecord.baseLevel==="phase_dependent"||riskRecord.level==="phase_dependent"){
+      riskRecord={...riskRecord,baseLevel:"phase_dependent",level:"phase_dependent",phaseResolved:false};
+    }
+    let supportive=chooseAntiemeticPlan(protocol,data,riskRecord);
+    if(phase){
+      supportive=planWithSources(phase.plan_id,data.antiemetic_plans[phase.plan_id],data);
+      // Phase scripts use the national schedule, not a conflicting legacy local proforma.
+      const retainLocal=(/^(?:hn48_|hn49_(?:00514|00517|00903|00589|00591)_|hn50_(?:00615|00893)_)/.test(String(phase.plan_id)))&&supportive.preserve_local_adjunct_reference===true;
+      supportive={...supportive,local_prescription_items:retainLocal?supportive.local_prescription_items:[],localPrescriptionSource:retainLocal?supportive.localPrescriptionSource:null,
+        local_adjunct_note:retainLocal?supportive.local_adjunct_note:"",warnings:[...(supportive.warnings||[]),...phase.notes]};
+      riskRecord={...riskRecord,level:supportive.risk_level,label:supportive.label,phaseResolved:true,phaseKey:phase.id};
+    }
+    const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);
+    if(supportive) supportive.agentSupport=agentSupport;
+    const interactions=interactionOverrides(protocol,data,phase?.active_medicines);
+    const extra=resolveExtravasation(protocol,data);
+
+    return {
+      release:RELEASE,
+      protocolId:String(protocol.protocol_id||""),
+      nccpCode:String(metadata.nccp_regimen_code||""),
+      nccpVersion:String(metadata.nccp_version||""),
+      title:metadata.short_title||metadata.title||protocol.protocol_id||"SACT regimen",
+      indication:metadata.indication||"",
+      sourceUrl:metadata.source_url||"",
+      components:phase?.active_medicines||componentNames(protocol),
+      supportPhase:phase||null,
+      supportPhaseChoices:choices,
+      emetogenic:riskRecord,
+      supportiveCare:supportive,
+      interactionOverrides:interactions,
+      extravasation:extra,
+      modules:{
+        assessment:{status:"available"},
+        consent:{status:root?.SACTCheckRegimenConsentBuilder?"available":"available_when_loaded"},
+        knowledge:{status:knowledgeProfile(protocol)?"available":"content_check_required"},
+        supportiveCare:{status:supportive.status},
+        extravasation:{status:extra.status},
+        patientInformation:{status:"available",label:"Patient regimen hub / QR / Treatment Passport"},
+        evidence:{status:"available"}
+      }
+    };
+  }
+
+  async function load(){
+    if(dataCache) return dataCache;
+    if(dataPromise) return dataPromise;
+    if(typeof fetch!=="function") throw new Error("Workflow data cannot be loaded in this environment.");
+    dataPromise=fetch(`${DATA_URL}?v=${WORKFLOW_DATA_RELEASE}`,{cache:"no-store"})
+      .then(response=>{
+        if(!response.ok) throw new Error(`Workflow data HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(payload=>{
+        if(payload?.release!==WORKFLOW_DATA_RELEASE) throw new Error(`Expected workflow data ${WORKFLOW_DATA_RELEASE}.`);
+        dataCache=payload; return payload;
+      }).catch(error=>{dataPromise=null; throw error;});
+    return dataPromise;
+  }
+
+  async function resolve(protocol,options={}){
+    const data=await load();
+    const risk=root?.SACTCheckEmetogenicRisk?.get?.(protocol,options)||{
+      level:protocol?.supportive_care?.emetogenic_risk||protocol?.metadata?.emetogenic_risk||"pending",
+      label:"Emetogenic risk requires review"
+    };
+    return buildManifest(protocol,data,risk,options.supportPhase);
+  }
+
+  function ensureCss(){
+    if(!root?.document||root.document.querySelector('link[data-regimen-workflow-style]')) return;
+    const link=root.document.createElement("link");
+    link.rel="stylesheet";
+    link.href=`css/regimen-workflow-v0720.css?v=${RELEASE}`;
+    link.dataset.regimenWorkflowStyle="true";
+    root.document.head.appendChild(link);
+    if(!root.document.getElementById("workflowV0780Style")){
+      const style=root.document.createElement("style");
+      style.id="workflowV0780Style";
+      style.textContent=`.workflow-support-script{grid-column:1/-1;border-top:1px solid #dbe6ea;padding-top:10px;margin-top:4px}.workflow-rx-block{margin:7px 0}.workflow-rx-block>strong{display:block;font-size:.78rem;color:#37505d;margin-bottom:5px}.workflow-rx-pills{display:flex;flex-wrap:wrap;gap:5px}.workflow-rx-pill{font-size:.72rem;line-height:1.25;padding:5px 7px;border-radius:999px;background:#eef4f6;color:#193848;border:1px solid #d4e1e5}.workflow-rx-note,.workflow-rx-evidence{font-size:.74rem;line-height:1.4;color:#4c6069;margin-top:7px}.workflow-rx-evidence{padding:7px 8px;background:#f7fafb;border-left:3px solid #7a99a7;border-radius:4px}`;
+      root.document.head.appendChild(style);
+    }
+  }
+
+  async function ensurePdf(){
+    if(root?.SACTCheckSupportiveCarePdf?.release===RELEASE) return root.SACTCheckSupportiveCarePdf;
+    if(pdfPromise) return pdfPromise;
+    if(!root?.document) throw new Error("Supportive-care PDF exporter unavailable.");
+    pdfPromise=new Promise((resolve,reject)=>{
+      const existing=root.document.querySelector('script[data-supportive-care-pdf]');
+      existing?.remove();
+      const script=root.document.createElement("script");
+      script.src=PDF_URL;
+      script.defer=true;
+      script.dataset.supportiveCarePdf="true";
+      script.addEventListener("load",()=>{
+        if(root.SACTCheckSupportiveCarePdf?.release===RELEASE) resolve(root.SACTCheckSupportiveCarePdf);
+        else reject(new Error("Supportive-care PDF exporter did not initialise."));
+      },{once:true});
+      script.addEventListener("error",()=>reject(new Error("Supportive-care PDF exporter could not be loaded.")),{once:true});
+      root.document.head.appendChild(script);
+    }).catch(error=>{pdfPromise=null;throw error;});
+    return pdfPromise;
+  }
+
+  function openPdfPlaceholder(){
+    const viewer=root?.open?.("about:blank","_blank");
+    if(!viewer) return null;
+    try{
+      viewer.document.title="Preparing SACTCheck supportive-care PDF";
+      viewer.document.body.innerHTML='<div style="font-family:Arial,sans-serif;padding:32px;color:#12314a"><h2>Preparing supportive-care PDF...</h2><p>Use the browser PDF controls to print or download only if needed.</p></div>';
+    }catch(_){}
+    return viewer;
+  }
+
+  async function openSupportivePdf(protocol,options={}){
+    const phaseSelector=patientAssets()?.runtimeUrl?.(protocol,'supportive-care-selector');
+    if(phaseSelector){root.open?.(phaseSelector,'_blank','noopener');return phaseSelector;}
+    const dedicated=patientAssets()?.runtimeUrl?.(protocol,'supportive-care');
+    if(dedicated){root.open?.(dedicated,'_blank','noopener');return dedicated;}
+    const risk=root.SACTCheckEmetogenicRisk?.get?.(protocol)||{};
+    if(!options.supportPhase && (risk.baseLevel==="phase_dependent"||risk.level==="phase_dependent"||protocol?.supportive_care?.emetogenic_risk==="phase_dependent")){
+      return open(protocol,{focusSupport:true});
+    }
+    const viewer=openPdfPlaceholder();
+    try{
+      const [manifest,data]=await Promise.all([resolve(protocol,options),load()]);
+      if(manifest.supportiveCare.status!=="available"){
+        try{viewer?.close?.();}catch(_){}
+        if(manifest.supportiveCare.status==="phase_review_required") return open(protocol,{focusSupport:true});
+        root.alert?.(manifest.supportiveCare.message||"A single supportive-care template cannot be generated for this regimen.");
+        return null;
+      }
+      const pdf=await ensurePdf();
+      const payload={manifest,sources:data.sources,generatedAt:new Date().toISOString()};
+      return pdf.openInViewer(payload,viewer);
+    }catch(error){
+      try{viewer?.close?.();}catch(_){}
+      root.alert?.(`Supportive-care PDF could not be generated.\n\n${error.message}`);
+      return null;
+    }
+  }
+
+  function cardFor(protocol){
+    const id=String(protocol?.protocol_id||"");
+    return [...root.document.querySelectorAll(".regimen-card[data-json-protocol-id]")]
+      .find(card=>String(card.dataset.jsonProtocolId||"")===id)||null;
+  }
+
+  function focusInsidePanel(overlay){
+    overlay.querySelector(".workflow-close")?.focus?.({preventScroll:true});
+  }
+
+  function makeBackgroundInert(overlay){
+    const remember=node=>{
+      if(node===overlay||node.nodeType!==1||backgroundInert.has(node)) return;
+      backgroundInert.set(node,{attribute:node.getAttribute("inert"),value:node.inert});
+      node.inert=true;
+    };
+    [...root.document.body.children].forEach(remember);
+    if(!backgroundObserver&&root.MutationObserver){
+      backgroundObserver=new root.MutationObserver(records=>{
+        records.forEach(record=>[...record.addedNodes].forEach(remember));
+      });
+      backgroundObserver.observe(root.document.body,{childList:true});
+    }
+  }
+
+  function restoreBackground(){
+    backgroundObserver?.disconnect?.();
+    backgroundObserver=null;
+    backgroundInert.forEach((previous,node)=>{
+      node.inert=previous.value;
+      if(previous.attribute===null) node.removeAttribute("inert");
+      else node.setAttribute("inert",previous.attribute);
+    });
+    backgroundInert.clear();
+  }
+
+  function panelFocusable(overlay){
+    return [...overlay.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex]')]
+      .filter(node=>node.tabIndex>=0&&!node.matches(':disabled')&&!node.closest('[inert]')&&node.getClientRects().length);
+  }
+
+  function closePanel({restoreFocus=true}={}){
+    panelRequest++;
+    const overlay=root?.document?.getElementById("regimenWorkflowOverlay");
+    if(overlay) overlay.hidden=true;
+    root.document?.body?.classList?.remove("workflow-panel-open");
+    restoreBackground();
+    activeProtocol=null; activeManifest=null;
+    const opener=panelOpener;
+    panelOpener=null;
+    if(restoreFocus&&opener?.isConnected&&!opener.closest?.('[inert]')) opener.focus?.({preventScroll:true});
+  }
+
+  function moduleStatus(status){
+    if(status==="available") return '<span class="workflow-status available">Ready</span>';
+    if(status==="planned") return '<span class="workflow-status planned">Planned</span>';
+    if(status==="phase_review_required"||status==="review_required") return '<span class="workflow-status review">Review</span>';
+    if(status==="source_only") return '<span class="workflow-status source">Source-led</span>';
+    return '<span class="workflow-status muted">Check</span>';
+  }
+
+  function ensurePanel(){
+    if(!root?.document) return null;
+    let overlay=root.document.getElementById("regimenWorkflowOverlay");
+    if(overlay) return overlay;
+    overlay=root.document.createElement("div");
+    overlay.id="regimenWorkflowOverlay";
+    overlay.className="workflow-overlay";
+    overlay.hidden=true;
+    overlay.innerHTML=`
+      <div class="workflow-backdrop" data-close-workflow></div>
+      <aside class="workflow-panel" role="dialog" aria-modal="true" aria-labelledby="workflowPanelTitle">
+        <header class="workflow-panel-header">
+          <div class="workflow-panel-brand">
+            <img src="assets/branding/sactcheck-mark.svg" alt="">
+            <div><span>SACTCheck</span><strong>Regimen workflow</strong></div>
+          </div>
+          <button type="button" class="workflow-close" data-close-workflow aria-label="Close">×</button>
+        </header>
+        <div id="workflowPanelBody" class="workflow-panel-body"></div>
+      </aside>`;
+    root.document.body.appendChild(overlay);
+    overlay.querySelectorAll("[data-close-workflow]").forEach(el=>el.addEventListener("click",()=>closePanel()));
+    overlay.addEventListener("keydown",event=>{
+      if(event.key==="Escape"&&!overlay.hidden) closePanel();
+    });
+    root.document.addEventListener("keydown",event=>{
+      if(overlay.hidden) return;
+      if(event.key==="Escape"){
+        event.preventDefault();
+        event.stopPropagation();
+        closePanel();
+      }else if(event.key==="Tab"){
+        const items=panelFocusable(overlay);
+        const first=items[0],last=items[items.length-1];
+        const current=root.document.activeElement;
+        if(!items.length){event.preventDefault();focusInsidePanel(overlay);}
+        else if(!overlay.contains(current)||(event.shiftKey?current===first:current===last)){
+          event.preventDefault();
+          (event.shiftKey?last:first).focus();
+        }
+      }
+    },true);
+    root.document.addEventListener("focusin",event=>{
+      if(!overlay.hidden&&!overlay.contains?.(event.target)) focusInsidePanel(overlay);
+    });
+    return overlay;
+  }
+
+  function renderExtravasation(manifest){
+    const x=manifest.extravasation;
+    if(!x.agents.length){
+      return `<div class="workflow-empty">No mapped parenteral extravasation component was identified from the encoded regimen. Verify the official source/local policy where relevant.</div>`;
+    }
+    return `<div class="workflow-extra-list">${x.agents.map(item=>`
+      <div class="workflow-extra-row">
+        <div><strong>${esc(item.drug)}</strong><span class="workflow-extra-class ${esc(item.colour)}">${esc(item.classLabel)}</span></div>
+        <p><b>Compress:</b> ${esc(item.compress||"See guidance")} · <b>Antidote:</b> ${esc(item.antidote||"See guidance")}</p>
+      </div>`).join("")}</div>`;
+  }
+
+  function renderInteractions(manifest){
+    if(!manifest.interactionOverrides.length) return "";
+    return `<div class="workflow-alert"><strong>Regimen-specific supportive-care check</strong>${manifest.interactionOverrides.map(rule=>
+      `<p>${esc(rule.message)}</p>${rule.source?.url?`<a href="${esc(rule.source.url)}" target="_blank" rel="noopener noreferrer">Source ${externalLinkIcon()}</a>`:""}`
+    ).join("")}</div>`;
+  }
+
+  function medLine(items){
+    return asArray(items).map(item=>{
+      const bits=[item.medicine,item.dose,item.frequency,item.route].filter(Boolean);
+      return `<span class="workflow-rx-pill">${esc(bits.join(" · "))}</span>`;
+    }).join("");
+  }
+
+  function renderSupportiveScript(manifest){
+    const supportive=manifest.supportiveCare||{};
+    if(supportive.status!=="available") return `<div class="workflow-support-script"><p>${esc(supportive.message||"Confirm current supportive-care guidance.")}</p></div>`;
+    const local=asArray(supportive.local_prescription_items);
+    const adjunctNames=[...new Set(local.map(x=>x.medicine).filter(Boolean))];
+    const agent=asArray(supportive.agentSupport);
+    return `<div class="workflow-support-script">
+      <div class="workflow-rx-block"><strong>Selected-visit supportive medicines</strong><div class="workflow-rx-pills">${medLine(supportive.day1)}</div></div>
+      ${asArray(supportive.subsequent).length?`<div class="workflow-rx-block"><strong>Subsequent / rescue</strong><div class="workflow-rx-pills">${medLine(supportive.subsequent)}</div></div>`:""}
+      ${adjunctNames.length?`<div class="workflow-rx-note"><strong>Local-reference adjuncts retained:</strong> ${esc(adjunctNames.join(", "))}. These are not all antiemetics; verify the current local prescription.</div>`:""}
+      ${agent.length?`<div class="workflow-rx-note"><strong>Agent-specific support:</strong> ${agent.map(x=>esc(x.label)).join(" · ")}</div>`:""}
+      ${supportive.evidence_update?`<div class="workflow-rx-evidence"><strong>Evidence update:</strong> ${esc(supportive.evidence_update)}</div>`:""}
+      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}${asArray(supportive.local_reference?.items).filter(item=>item.source_clarification).map(item=>`<div class="workflow-rx-evidence workflow-local-source-clarification"><strong>${esc(item.medicine)} · supplied local reference</strong><p>${esc([item.dose,item.route,item.frequency].filter(Boolean).join(" · "))}</p><p>${esc(item.timing)} ${esc(item.directions)}</p><p>${esc(item.source_clarification)}</p></div>`).join("")}
+    </div>`;
+  }
+
+  function renderSupportPhaseSelector(manifest){
+    const choices=manifest.supportPhaseChoices||[];
+    if(!choices.length) return "";
+    return `<div class="workflow-support-script"><label for="workflowSupportPhase"><strong>Treatment phase / visit</strong></label>
+      <select id="workflowSupportPhase" style="display:block;width:100%;padding:12px;margin:8px 0" aria-describedby="workflowSupportPhaseHint">
+        <option value="">Choose the phase / visit...</option>
+        ${choices.map(phase=>`<option value="${esc(phase.id)}" ${manifest.supportPhase?.id===phase.id?"selected":""}>${esc(phase.label)}</option>`).join("")}
+      </select><p id="workflowSupportPhaseHint">Select the treatment being given. Each script applies only to that phase / visit; no dates are required.</p>
+      ${manifest.supportPhase?`<p><strong>Selected medicines:</strong> ${manifest.supportPhase.active_medicines.map(esc).join(", ")}</p><ul>${manifest.supportPhase.notes.map(note=>`<li>${esc(note)}</li>`).join("")}</ul>`:""}</div>`;
+  }
+
+  function renderPanel(manifest){
+    const body=root.document.getElementById("workflowPanelBody");
+    if(!body) return;
+    const risk=manifest.emetogenic||{};
+    const supportive=manifest.supportiveCare||{};
+    const extra=manifest.extravasation||{};
+    body.innerHTML=`
+      <section class="workflow-hero-card">
+        <span class="workflow-eyebrow">One regimen · one clinical workflow</span>
+        <h2 id="workflowPanelTitle">${esc(manifest.title)}</h2>
+        <p>${esc(manifest.nccpCode?`NCCP ${manifest.nccpCode}${manifest.nccpVersion?` · v${manifest.nccpVersion}`:""}`:"Regimen source")}</p>
+        <div class="workflow-component-line">${manifest.components.map(x=>`<span>${esc(x)}</span>`).join("")}</div>
+      </section>
+
+      <div class="workflow-module-grid">
+        <article class="workflow-module assessment">
+          <div class="workflow-module-icon">✓</div>
+          <div><span>Clinical</span><h3>Treatment assessment engine</h3><p>Open the existing structured NCCP assessment engine.</p></div>
+          ${moduleStatus("available")}
+          <button class="btn workflow-module-action" type="button" data-workflow-assess>Open assessment</button>
+        </article>
+
+        <article class="workflow-module consent">
+          <div class="workflow-module-icon">✎</div>
+          <div><span>Clinic workflow</span><h3>Consent generator</h3><p>Open the completed SACTCheck regimen form, ready for review, patient details and signatures.</p></div>
+          ${moduleStatus("review_required")}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-consent>Generate consent</button>
+          <small class="workflow-module-note">Content is awaiting consultant and oncology-pharmacy review. Supports discussion; it does not replace formal consent, the national consent form or clinical judgement.</small>
+        </article>
+
+        <article class="workflow-module knowledge">
+          <div class="workflow-module-icon">▤</div>
+          <div><span>Clinic workflow</span><h3>Knowledge base &amp; evidence</h3><p>Open the expanded regimen profile, including linked trials, outcomes and evidence context where available.</p></div>
+          ${moduleStatus(knowledgeProfile(activeProtocol)?"available":"content_check_required")}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-knowledge>Open regimen profile</button>
+          <small class="workflow-module-note">A profile marked for content check is still being expanded; confirm source details before relying on it.</small>
+        </article>
+
+        <article class="workflow-module supportive">
+          <div class="workflow-module-icon">Rx</div>
+          <div><span>Supportive care</span><h3>${esc(risk.label||supportive.label||"Antiemetic support")}</h3><p>${esc(supportive.label||supportive.message||"Regimen-derived supportive care")}</p></div>
+          ${moduleStatus(supportive.status)}
+          ${renderSupportPhaseSelector(manifest)}
+          ${renderSupportiveScript(manifest)}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open guidance":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
+          ${supportive.status==="phase_review_required"&&!manifest.supportPhaseChoices.length&&!patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?`<p>A verified phase-specific script is not yet available for this regimen. <a href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the NCCP regimen for phase/day guidance</a>.</p>`:""}
+          <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer"><span>NCCP antiemetic source</span>${externalLinkIcon()}</a>
+        </article>
+
+        <article class="workflow-module extravasation">
+          <div class="workflow-module-icon">IV</div>
+          <div><span>Administration safety</span><h3>Extravasation</h3><p>${extra.highest?`${esc(extra.highest.drug)} · ${esc(extra.highest.classLabel)}`:"Regimen-derived parenteral risk"}</p></div>
+          ${moduleStatus(extra.status==="available"?"available":"review_required")}
+          <div class="workflow-module-expanded">${renderExtravasation(manifest)}</div>
+          ${extra.sourceGuidance?.url?`<a class="workflow-source-link" href="${esc(extra.sourceGuidance.url)}" target="_blank" rel="noopener noreferrer"><span>NCCP extravasation guidance</span>${externalLinkIcon()}</a>`:""}
+        </article>
+
+        <article class="workflow-module patient">
+          <div class="workflow-module-icon">QR</div>
+          <details class="workflow-patient-disclosure">
+          <summary><span>Patient platform</span><span class="workflow-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="workflow-patient-actions">
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-patient-guide>Open patient platform</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-passport-card>Open Treatment Passport</button>
+          ${patientAssets()?.relativePath?.(activeProtocol,'knowledge')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'knowledge'))}" target="_blank" rel="noopener noreferrer">Complete patient reference + cycle timeline</a>`:''}
+          ${patientAssets()?.relativePath?.(activeProtocol,'longitudinal')?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'longitudinal'))}" target="_blank" rel="noopener noreferrer">Whole treatment journey · scans and monitoring</a>`:''}
+          ${patientAssets()?.definitionFor?.(activeProtocol)?.sactCard?`<a class="btn secondary workflow-module-action" href="${esc(patientAssets().runtimeUrl(activeProtocol,'sact-card'))}" target="_blank" rel="noopener noreferrer">Treatment / contact card</a>`:''}
+          </div>
+          </details>
+        </article>
+
+        <article class="workflow-module source">
+          <div class="workflow-module-icon" aria-hidden="true">${externalLinkIcon()}</div>
+          <details class="workflow-source-disclosure">
+          <summary><span>NCCP source</span><span class="workflow-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="workflow-source-actions">
+          ${manifest.sourceUrl?`<a class="btn secondary workflow-module-action" href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Official NCCP PDF</a>`:""}
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-nccp-tracker>Open NCCP tracker</button>
+          </div>
+          <small class="workflow-module-note">Review source updates and reconciliation status. The source register opens with this regimen selected.</small>
+          </details>
+        </article>
+      </div>
+      ${renderInteractions(manifest)}
+      <div class="workflow-boundary"><strong>Clinician-controlled workflow.</strong> SACTCheck surfaces regimen-derived tools and source-linked guidance. It does not prescribe, authorise treatment or replace the current NCCP regimen, local policy or independent clinical judgement.</div>
+    `;
+
+    body.querySelector("[data-workflow-assess]")?.addEventListener("click",()=>{
+      const card=cardFor(activeProtocol);
+      closePanel({restoreFocus:false});
+      card?.querySelector(".json-assessment-launch")?.click();
+    });
+    body.querySelector("[data-workflow-nccp-tracker]")?.addEventListener("click",()=>{
+      const tracker=root.SACTCheckNccpChangeTracker;
+      if(!tracker?.open){
+        root.alert?.("The NCCP tracker is still loading. Please try again in a moment.");
+        return;
+      }
+      const sourceQuery=manifest.nccpCode||"";
+      closePanel({restoreFocus:false});
+      tracker.open({sourceQuery});
+    });
+    body.querySelector("[data-workflow-consent]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      closePanel({restoreFocus:false});
+      openConsentSupport(protocol);
+    });
+    body.querySelector("[data-workflow-knowledge]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      closePanel({restoreFocus:false});
+      if(!openKnowledgeProfile(protocol)){
+        const message="The regimen knowledge profile could not be opened. The knowledge module may still be loading, or this regimen may not yet have an expanded profile.";
+        root.alert?.(message);
+      }
+    });
+    body.querySelector("[data-workflow-support]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      openSupportivePdf(protocol,{supportPhase:manifest.supportPhase?.id});
+    });
+    body.querySelector("#workflowSupportPhase")?.addEventListener("change",event=>{
+      open(activeProtocol,{supportPhase:event.target.value,focusSupport:true});
+    });
+    body.querySelector("[data-workflow-patient-guide]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      closePanel({restoreFocus:false});
+      openPatientPipeline(protocol);
+    });
+    body.querySelector("[data-workflow-passport-card]")?.addEventListener("click",()=>{
+      const protocol=activeProtocol;
+      const registry=patientAssets();
+      if(registry?.hasDedicated?.(protocol)) registry.openPassport(protocol);
+      else root.SACTCheckTreatmentPassportCard?.open?.(protocol);
+    });
+  }
+
+  async function open(protocol,options={}){
+    if(root.SACTCheckLibraryScope?.isVisible(protocol)===false){root.showScreen?.('libraryScreen');return false;}
+    ensureCss();
+    const overlay=ensurePanel();
+    if(!overlay||!protocol) return;
+    const opening=overlay.hidden;
+    if(opening) panelOpener=root.document.activeElement;
+    const request=++panelRequest;
+    activeProtocol=protocol;
+    root.__v0740ActiveProtocol=protocol; // Preserve context for workflow-linked services.
+    const body=root.document.getElementById("workflowPanelBody");
+    body.setAttribute?.("aria-busy","true");
+    body.innerHTML='<div class="workflow-loading"><h2 id="workflowPanelTitle">Regimen workflow</h2><p role="status">Building regimen workflow...</p></div>';
+    overlay.hidden=false;
+    root.document.body.classList.add("workflow-panel-open");
+    makeBackgroundInert(overlay);
+    // Keep initial focus on a stable control while the asynchronous body is replaced.
+    if(opening||!overlay.contains?.(root.document.activeElement)) focusInsidePanel(overlay);
+    try{
+      const manifest=await resolve(protocol,options);
+      if(request!==panelRequest) return;
+      activeManifest=manifest;
+      renderPanel(activeManifest);
+      body.removeAttribute?.("aria-busy");
+      if(options.focusSupport){
+        const target=body.querySelector("#workflowSupportPhase")||body.querySelector("[data-workflow-support]");
+        target?.scrollIntoView?.({block:"center"});
+        target?.focus?.();
+      }
+    }catch(error){
+      if(request!==panelRequest) return;
+      body.removeAttribute?.("aria-busy");
+      body.innerHTML=`<div class="workflow-error"><h2 id="workflowPanelTitle">Workflow could not be generated.</h2><p>${esc(error.message)}</p></div>`;
+    }
+  }
+
+  function addWorkflowButtons(){
+    const records=root?.SACTCheckProtocolLoader?.getLoadedProtocols?.()||root?.SACTCHECK_PROTOCOLS||[];
+    let added=0;
+    asArray(records).forEach(record=>{
+      const protocol=record?.protocol||record;
+      if(!protocol?.protocol_id) return;
+      const card=cardFor(protocol);
+      const actions=card?.querySelector(".card-actions");
+      if(!actions||actions.querySelector("[data-open-regimen-workflow]")) return;
+      const button=root.document.createElement("button");
+      button.type="button";
+      button.className="btn workflow-card-button";
+      button.dataset.openRegimenWorkflow=protocol.protocol_id;
+      button.innerHTML='<span aria-hidden="true">✦</span> Clinic workflow';
+      button.addEventListener("click",event=>{
+        event.preventDefault();event.stopPropagation();
+        const live=root.SACTCheckProtocolLoader?.getProtocolById?.(protocol.protocol_id)||protocol;
+        open(live);
+      });
+      const consent=actions.querySelector("[data-open-regimen-consent]");
+      if(consent) consent.insertAdjacentElement("beforebegin",button);
+      else actions.prepend(button);
+      added++;
+    });
+    return added;
+  }
+
+  function bindEmetogenicBadges(){
+    root.document.querySelectorAll(".regimen-card .emetogenic-badge").forEach(badge=>{
+      if(badge.dataset.workflowBound==="true") return;
+      badge.dataset.workflowBound="true";
+      badge.addEventListener("click",event=>{
+        const card=badge.closest(".regimen-card[data-json-protocol-id]");
+        const id=card?.dataset?.jsonProtocolId;
+        if(!id) return;
+        event.preventDefault();event.stopPropagation();
+        const protocol=root.SACTCheckProtocolLoader?.getProtocolById?.(id);
+        if(protocol) open(protocol);
+      });
+      badge.title="Open regimen-derived supportive-care workflow";
+    });
+  }
+
+  function removeUnusedRegimenImporter(){
+    root.document.querySelectorAll("#openProtocolImporter,#developerTools,[data-open-protocol-importer],.protocol-importer-launch,.add-regimen-button")
+      .forEach(el=>el.remove());
+    root.document.querySelectorAll("button,a").forEach(el=>{
+      const text=String(el.textContent||"").trim().toLowerCase();
+      const aria=String(el.getAttribute("aria-label")||"").toLowerCase();
+      if(text==="add regimen"||aria.includes("add regimen")) el.remove();
+    });
+  }
+
+  function applyBranding(){
+    // v0.75.1: the interface shell owns the homepage hero. The workflow engine
+    // must not inject a second logo or overwrite patient-facing hero copy.
+    root.document.querySelectorAll?.(".workflow-brand-lockup").forEach?.(x=>x.remove());
+    const meta=root.document.querySelector('meta[name="sactcheck-release"]');
+    if(meta) meta.setAttribute("content",RELEASE);
+    const headerVersion=root.document.querySelector(".header-version");
+    if(headerVersion) headerVersion.textContent=`v${RELEASE}`;
+  }
+
+  function refresh(){
+    ensureCss();
+    removeUnusedRegimenImporter();
+    applyBranding();
+    addWorkflowButtons();
+    bindEmetogenicBadges();
+  }
+
+  function install(){
+    if(!root?.document) return;
+    ensureCss();
+    ensurePanel();
+    // Start the small workflow-data fetch before regimen cards render so the
+    // supportive-care card does not arrive in a second visible wave.
+    try{ load().catch(()=>{}); }catch(_){}
+    if(root.document.documentElement.dataset.regimenWorkflowV0804Installed==="true"){
+      refresh();
+      return;
+    }
+    root.document.documentElement.dataset.regimenWorkflowV0804Installed="true";
+    const reassert=()=>root.setTimeout?.(refresh,0);
+    root.addEventListener?.("sactcheck:protocols-loaded",reassert);
+    root.addEventListener?.("sactcheck:v0700-source-reconciled",reassert);
+    root.addEventListener?.("sactcheck:v0701-source-reconciled",reassert);
+    root.addEventListener?.("sactcheck:engine-first-homepage-ready",reassert);
+    root.document.addEventListener?.("sactcheck:regimen-card-metadata-rendered",reassert);
+    if(root.document.readyState==="loading") root.document.addEventListener("DOMContentLoaded",refresh,{once:true});
+    else refresh();
+  }
+
+  return Object.freeze({
+    release:RELEASE,
+    dataRelease:WORKFLOW_DATA_RELEASE,
+    dataUrl:DATA_URL,
+    normaliseDrug,
+    administrationRows,
+    componentNames,
+    chooseAntiemeticPlan,
+    interactionOverrides,
+    resolveExtravasation,
+    hasKnowledgeProfile:protocol=>Boolean(knowledgeProfile(protocol)),
+    openKnowledgeProfile,
+    openConsentSupport,
+    buildManifest,
+    load,
+    resolve,
+    openSupportivePdf,
+    open,
+    install
+  });
+});

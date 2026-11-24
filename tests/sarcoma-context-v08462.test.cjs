@@ -1,0 +1,31 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),vm=require('node:vm');
+const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f)),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+let active='breast';globalThis.SACTCheckProtocolContext={activeTumourGroup:()=>active};
+const IDs=require('../js/protocol-id-migrations.js'),A=require('../js/patient-asset-registry-v0810.js'),K=require('../js/regimen-knowledge-base.js'),index=json('protocols/index.json').protocols;
+const protocol=c=>json(index.find(p=>p.path.includes('/'+c+'-')).path),contexts={'00228':'liposarcoma','00205':'sarcoma'};
+const currentCounts={'0.84.62':[278,311],'0.84.63':[283,316],'0.84.64':[292,328]},currentRelease=json('package.json').version;assert(currentCounts[currentRelease]);assert.equal(A.release,currentRelease);assert.equal(A.codes.length,currentCounts[currentRelease][0]);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,currentCounts[currentRelease][1]);
+for(const [oldId,newId]of [['nccp-00374-v4','nccp-00374-v4a'],['nccp-00554-v2','nccp-00554-v3']]){
+ assert.equal(IDs.canonicalId(oldId),newId);const c=IDs.codeInId(newId),p=protocol(c);assert.equal(p.protocol_id,newId);assert.equal(IDs.resolve(oldId,[p]),p);assert.equal(IDs.resolve(oldId,[p,p]),null);assert.equal(IDs.matches({protocol_id:oldId,nccp_regimen_code:'00228'},p),false);
+}
+assert.equal(IDs.canonicalId('nccp-00228-v8'),'nccp-00228-v8');assert.equal(IDs.matches('nccp-00228-v9',protocol('00228')),false);
+for(const [code,context]of Object.entries(contexts)){
+ const p=protocol(code),object={...p,patient_context:context};assert.equal(A.relativePath(p,'guide','sarcoma'),`patient/${code}/${context}/guide.pdf`);assert.equal(A.relativePath(p,'guide','breast'),`patient/${code}/guide.pdf`);assert.equal(A.relativePath(object,'guide'),`patient/${code}/${context}/guide.pdf`);assert.equal(A.relativePath(object,'guide','breast'),`patient/${code}/guide.pdf`);
+ for(const other of ['rcc','gist','unknown','colorectal'])assert.equal(A.relativePath(p,'guide',other),`patient/${code}/scope.html?asset=guide`);
+ active='';assert.equal(A.relativePath(p,'guide'),`patient/${code}/scope.html?asset=guide`);active='breast';
+ assert.equal(K.contextIdForProtocol(object),context);assert.equal(K.contextIdForProtocol(object,''),'');assert.equal(K.contextIdForProtocol(object,'breast'),'breast');assert.equal(K.contextIdForProtocol(p,'sarcoma'),context);
+ assert.deepEqual(A.bundleRoutes(code),[code,code+'/'+context]);assert.equal(A.relativePath(p,'unregistered-asset',context),null);
+}
+const baselinePath='validation/sarcoma-v08462/baseline-v61-working-files.json',contract=json('validation/sarcoma-v08462/breast-preservation-contract.json');assert.equal(sha(read(baselinePath)),contract.baseline_sha256);assert.equal(contract.baseline_sha256,'cfb11d986f28b5b130d0fcd08f9a14fa027fbda38099979a290dc245cf53563b');const baseline=json(baselinePath),protectedPaths=[];let protectedFiles=0;
+for(const [f,b]of Object.entries(baseline))if(['00228','00205'].some(c=>f===`data/patient-knowledge/${c}.json`||f.startsWith(`patient/${c}/`)||f.startsWith(`docs/patient/${c}/`))||f==='data/regimen-knowledge-base-v08421-addendum.json'){assert.equal(sha(read(f)),f==='data/regimen-knowledge-base-v08421-addendum.json'?require('../tools/lib/sarcoma-inherited-runtime.cjs').verifiedSuccessor(f,b.sha256):b.sha256,'Protected breast bytes changed: '+f);protectedFiles++;protectedPaths.push(f);}
+assert.deepEqual(protectedPaths.sort(),Object.keys(contract.files).sort());assert.equal(protectedFiles,contract.count);assert.equal(protectedFiles,77,'Exact frozen breast profiles/canonical/mirrors and source KB count');
+const redirect=read('404.html').toString().match(/<script>([\s\S]*?)<\/script>/)[1];for(const [code,context]of Object.entries(contexts))for(const [tail,target]of [['guide.html','guide.pdf'],['','']]){let result;vm.runInNewContext(redirect,{location:{pathname:`/docs/patient/${code}/${context}/${tail}`,replace:v=>result=v}});assert.equal(result,`/patient/${code}/${context}/${target}`);}
+async function main(){
+ const previousFetch=globalThis.fetch;globalThis.fetch=async url=>({ok:true,json:async()=>json(url)});
+ try{const payload=await K.load();let change;const target={innerHTML:'',querySelector:selector=>selector==='[data-regimen-info-context]'?{addEventListener:(_,fn)=>change=fn}:null},overlay={querySelector:selector=>selector==='[data-regimen-info-content]'?target:null,classList:{add(){},remove(){}}};globalThis.document={getElementById:id=>id==='regimenInformationOverlay'?overlay:null,body:{classList:{add(){},remove(){}}}};
+ const norm=s=>String(s).replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&#039;/g,"'").replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();
+ for(const [code,context]of Object.entries(contexts)){const p=protocol(code),base=json('data/regimen-knowledge-base-v08421-addendum.json').regimen_profiles.find(x=>x.protocol_id===p.protocol_id);assert(base);assert.deepEqual(payload.regimen_profiles.find(x=>x.protocol_id===p.protocol_id),base);const merged=K.regimenProfileForProtocol(p,payload);assert.deepEqual(merged.context_profiles.map(x=>x.context_id),['breast',context]);const {context_id,context_label,...preserved}=merged.context_profiles[0];assert.deepEqual(preserved,base);const scoped=merged.context_profiles[1];K.open({...p,patient_context:context});await Promise.resolve();assert(norm(target.innerHTML).includes(norm(scoped.clinical_summary)));assert(!norm(target.innerHTML).includes(norm(base.clinical_summary)));change({target:{value:'breast'}});assert(norm(target.innerHTML).includes(norm(base.clinical_summary)));assert(!norm(target.innerHTML).includes(norm(scoped.clinical_summary)));change({target:{value:''}});assert(!norm(target.innerHTML).includes(norm(base.clinical_summary)));assert(!norm(target.innerHTML).includes(norm(scoped.clinical_summary)));}
+ console.log(`Sarcoma v62 context and exact ID migration passed; ${protectedFiles} breast files unchanged; explicit context selection controls rendered knowledge.`);
+ }finally{globalThis.fetch=previousFetch;delete globalThis.document;}
+}
+main().catch(e=>{console.error(e);process.exitCode=1;});

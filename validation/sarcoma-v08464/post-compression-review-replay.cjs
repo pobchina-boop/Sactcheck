@@ -1,0 +1,7 @@
+'use strict';
+const fs=require('fs'),path=require('path'),os=require('os'),cp=require('child_process'),assert=require('assert/strict');
+const root=path.resolve(process.argv[2]||'Sactcheck'),base='validation/sarcoma-v08464/clinical-replay/packaging-transition/independent-review',temp=fs.mkdtempSync(path.join(os.tmpdir(),'sactcheck64-packaged-review-')),review=path.join(temp,'review');fs.mkdirSync(review);
+for(const rel of ['check-adapter.cjs','before-pins.json','original-source-security-failure/stdout.log']){const dst=path.join(review,rel);fs.mkdirSync(path.dirname(dst),{recursive:true});fs.copyFileSync(path.join(root,base,rel),dst);}
+const T=require(path.join(root,'tools/lib/sarcoma-v08464-transitions.cjs')),materialized=T.materializeEvidence(root,path.join(temp,'compatibility'));
+const result=cp.spawnSync(process.execPath,[path.join(review,'check-adapter.cjs'),root,path.join(materialized.destination,'all-observation-deltas.json')],{encoding:'utf8',timeout:60000,maxBuffer:1024*1024});assert.equal(result.status,0,result.stderr||result.stdout);
+const report=JSON.parse(fs.readFileSync(path.join(review,'independent-check-results.json')));assert.equal(report.passed,9);assert.equal(report.failed,0);console.log(JSON.stringify({status:'passed',script:'replay-packaged-storage-review.cjs',source:'three unchanged packaged review files plus authenticated external materialization',temporary_directory:temp,checks:9,clinical_cases_added:0,frozen_evidence_untouched:true,results:report},null,2));

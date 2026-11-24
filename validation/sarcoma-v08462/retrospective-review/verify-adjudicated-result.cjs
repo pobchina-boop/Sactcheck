@@ -1,0 +1,22 @@
+'use strict';
+// This validates an explicitly retained mismatch; it does NOT turn 81/82 into 82 passes.
+const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
+const home=__dirname,reportPath=path.resolve(home,process.argv[2]||'original-results.json');
+const report=JSON.parse(fs.readFileSync(reportPath)),original=require('./original-results.json'),decision=require('./adjudication.json');
+const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+assert.equal(report.cases_sha256,hash(fs.readFileSync(path.join(home,'cases.json'))));
+assert.equal(report.cases_sha256,original.cases_sha256,'Original expectations must remain unchanged');
+assert.equal(report.total,82);assert.equal(report.passed,81);assert.equal(report.failed,1);
+assert.deepEqual([...new Set(report.results.map(x=>x.code))].sort(),['00244','00325','00335','00511','00719']);
+assert.equal(new Set(report.results.map(x=>x.case_id)).size,82);
+const failures=report.results.filter(x=>x.status==='failed');
+assert.deepEqual(failures.map(x=>x.case_id),['00719-13']);
+assert.equal(failures[0].error,'Expected source topic visible: LVEF|ejection|cardiac');
+assert.equal(failures[0].observed.complete,false);assert.equal(failures[0].observed.coverageComplete,false);
+assert.equal(failures[0].observed.dose_model.hasQuantified,false);
+assert.equal(decision.original_case_status,'failed');assert.equal(decision.original_expectation_unchanged,true);
+assert.equal(decision.classification,'conservative_workflow_cardiac_review_cue_for_subsequent_refinement');
+assert.equal(decision.demonstrated_source_mandated_dose_action_defect,false);
+assert.equal(decision.application_changed,false);assert.equal(decision.clinical_approval,false);assert.equal(decision.pharmacy_approval,false);
+assert.equal(report.independent_clinical_approval,false);assert.equal(report.independent_pharmacy_approval,false);
+console.log(JSON.stringify({classification_gate:'passed',clinical_case_total:82,clinical_cases_passed:81,clinical_expectations_failed_and_retained:1,deferred_cue:'00719-13',clinical_approval:false,pharmacy_approval:false,report:reportPath},null,2));
