@@ -30,7 +30,7 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   if(isRedirect(html))return html;
   root=path.resolve(root);
   const t=target(file,root);
-  if(!t)return require('./ribociclib-patient-review-v08461.cjs').transform(file,html);
+  if(!t)return require('./enhertu-patient-review-v08462.cjs').transform(file,require('./ribociclib-patient-review-v08461.cjs').transform(file,html));
   const native = require('./build-durvalumab-patient-suites.cjs').renderFile(t.relative,root);
   if (native !== null) return native;
   const data=JSON.parse(fs.readFileSync(path.join(root,t.profileFile),'utf8'));
@@ -62,6 +62,7 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   if(t.name==='index.html')result=require('./ribociclib-patient-review-v08461.cjs').transform(file,result);
   if(data.suite_release==='0.84.61'&&data.code==='00335')result=require('./patient-pack-v08461.cjs').continuous(data,result);
   if (!t.relative.startsWith('docs/')) result = require('./durvalumab-symptom-entry.cjs').entry(t.route, t.name, result);
+  result = require('./enhertu-patient-review-v08462.cjs').transform(file, result);
   return result;
 }
 

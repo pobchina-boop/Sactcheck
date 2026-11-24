@@ -13,7 +13,7 @@
     "icd10": "C50",
     "source_document_pages": 6,
     "source_url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
-    "sactcheck_encoding_version": "0.84.21",
+    "sactcheck_encoding_version": "0.84.62",
     "treatment_setting": [
       "metastatic"
     ],
@@ -31,7 +31,7 @@
       "clinical_use_authorised": false,
       "official_catalogue_and_source_link_checked": true,
       "rule_level_source_reconciliation_status": "source_reconciled_pending_independent_clinical_and_pharmacy_validation",
-      "software_validation_record": "validation/targeted-breast-v0849/enhertu-source-cases-results.json"
+      "software_validation_record": "validation/enhertu-review-v08462/clinical-cases.json"
     },
     "emetogenic_risk": "high",
     "antiemetic_proforma_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
@@ -76,7 +76,56 @@
     "review_date": "2030-02-12",
     "full_suite_release": "0.84.21",
     "schedule_summary": "One infusion on Day 1 of a 21-day cycle. The next infusion is normally three weeks later. A delayed appointment is rescheduled by the team; patients do not calculate catch-up doses.",
-    "source_pdf_sha256": "822e5b568e1b8b2b618b7fa93cacdd485192fef3c5bfdff6005f1b22570b7c6a"
+    "source_pdf_sha256": "822e5b568e1b8b2b618b7fa93cacdd485192fef3c5bfdff6005f1b22570b7c6a",
+    "cardiac_review": {
+      "date": "2026-11-23",
+      "source": "NCCP 00776 v3b Table 3 page 4",
+      "calculation": "baseline_lvef_percent - lvef_percent",
+      "unit": "absolute percentage points",
+      "manual_delta_accepted": false,
+      "report": "validation/enhertu-review-v08462/clinical-cases.json",
+      "independent_clinical_pharmacy_authorisation": "pending"
+    },
+    "future_dose_policy": "resolve_all_active_holds",
+    "regimen_card": {
+      "schema_version": "1.0.0",
+      "contexts": [
+        {
+          "id": "00776a",
+          "indication_id": "00776a",
+          "intent": "advanced_disease",
+          "intent_label": "Advanced disease",
+          "cycle_length_days": 21,
+          "duration_type": "until_progression_or_toxicity",
+          "duration_text": "Until progression/toxicity"
+        },
+        {
+          "id": "00776b",
+          "indication_id": "00776b",
+          "intent": "advanced_disease",
+          "intent_label": "Advanced disease",
+          "cycle_length_days": 21,
+          "duration_type": "until_progression_or_toxicity",
+          "duration_text": "Until progression/toxicity"
+        }
+      ],
+      "display": {
+        "intent": "Advanced disease",
+        "duration": "Until progression/toxicity",
+        "cycle_interval": "q21d"
+      },
+      "provenance": {
+        "method": "v08462_Enhertu_NCCP_source_mapping",
+        "reviewed": false,
+        "unresolved": [],
+        "source": "https://assets.hse.ie/media/documents/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+        "source_sha256": "822e5b568e1b8b2b618b7fa93cacdd485192fef3c5bfdff6005f1b22570b7c6a",
+        "source_version": "3b",
+        "source_page": 1,
+        "checked_date": "2026-11-24",
+        "note": "Both 00776a and 00776b treat unresectable or metastatic breast cancer. Adjuvant chemotherapy in 00776b is prior-treatment eligibility history, not the intent of this regimen. Day 1 every 21 days until disease progression or unacceptable toxicity; no fixed maximum cycles. Independent clinical and oncology-pharmacy authorisation remains pending."
+      }
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -226,18 +275,29 @@
       "step": 1,
       "unit": "%",
       "demo_value": 55,
-      "input_role": "decision"
+      "input_role": "decision",
+      "assessment_guidance": "Enter the measured current left ventricular ejection fraction (LVEF). The decrease from the verified baseline is calculated automatically in absolute percentage points, not relative percent. Missing or invalid measurements cannot produce a calculated decrease."
     },
     "lvef_drop_points": {
-      "label": "Absolute LVEF decrease from baseline (percentage points)",
+      "label": "Calculated LVEF decrease from baseline",
       "type": "number",
       "required": false,
-      "min": 0,
+      "min": -100,
       "max": 100,
-      "step": 1,
+      "step": "any",
       "unit": "percentage points",
       "demo_value": 0,
-      "input_role": "decision"
+      "input_role": "decision",
+      "derived_value": {
+        "operation": "difference",
+        "fields": [
+          "baseline_lvef_percent",
+          "lvef_percent"
+        ]
+      },
+      "ui_derived_from": "lvef_percent",
+      "show_calculation": true,
+      "assessment_guidance": "Calculated as baseline LVEF minus current LVEF in absolute percentage points. A negative result is an increase. Both verified measurements are required; a manually supplied decrease is ignored."
     },
     "symptomatic_chf": {
       "label": "Symptomatic congestive heart failure",
@@ -405,7 +465,8 @@
       "step": 1,
       "unit": "%",
       "input_role": "decision",
-      "demo_value": 60
+      "demo_value": 60,
+      "assessment_guidance": "Enter the verified pretreatment LVEF. This is the fixed reference for treatment-related change, not the previous visit’s LVEF. The starting eligibility threshold is 50%; ongoing decisions use the current LVEF and calculated change."
     },
     "her2_status": {
       "label": "Validated HER2 category",
@@ -530,7 +591,8 @@
           "label": "Not recovered to within 10 points of baseline"
         }
       ],
-      "demo_value": "recovered"
+      "demo_value": "recovered",
+      "assessment_guidance": "Use only after the initial 40–45% LVEF with a 10–20-point decrease has led to interruption and a repeat assessment within 3 weeks. Enter the current repeat measurement and original baseline. Recovery means an absolute decrease of no more than 10 percentage points. Conflicting or missing measurements require review."
     },
     "further_dose_reduction_required": {
       "label": "A further dose reduction is clinically required",
@@ -557,6 +619,35 @@
       "input_role": "decision",
       "demo_value": 0.8,
       "assessment_guidance": "Use the measured bilirubin and laboratory ULN; the interface calculates the multiple. EMA has limited data above1.5×ULN, irrespective of AST."
+    },
+    "cycle_number": {
+      "label": "Cycle number",
+      "type": "number",
+      "required": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "always_show": true,
+      "assessment_guidance": "Document the current 21-day treatment cycle for the clinical handover. This field does not calculate or authorise a dose.",
+      "demo_value": 1
+    },
+    "day_number": {
+      "label": "Planned treatment day",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 1,
+          "label": "Day 1 · Enhertu infusion"
+        }
+      ],
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "always_show": true,
+      "assessment_guidance": "Enhertu is scheduled on Day 1 of each 21-day cycle. Delays and the revised appointment are confirmed by the treating team.",
+      "demo_value": 1
     }
   },
   "required_inputs": [],
@@ -1009,7 +1100,7 @@
           "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
           "source_id": "nccp-00776",
-          "checked_date": "2026-10-20"
+          "checked_date": "2026-11-23"
         },
         "explanation": "LVEF 40-45% with a 10-20 point fall: interrupt and repeat within 3 weeks; discontinue if not recovered to within 10 points of baseline.",
         "when": {
@@ -1033,6 +1124,19 @@
               "field": "lvef_drop_points",
               "operator": "<=",
               "value": 20
+            },
+            {
+              "any": [
+                {
+                  "field": "lvef_40_45_recheck",
+                  "operator": "missing"
+                },
+                {
+                  "field": "lvef_40_45_recheck",
+                  "operator": "!=",
+                  "value": "recovered"
+                }
+              ]
             }
           ]
         }
@@ -1344,9 +1448,26 @@
         "when": {
           "any": [
             {
-              "field": "baseline_lvef_percent",
-              "operator": "<",
-              "value": 50
+              "all": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "any": [
+                    {
+                      "field": "assessment_stage",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "assessment_stage",
+                      "operator": "==",
+                      "value": "baseline"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "all": [
@@ -1377,7 +1498,7 @@
           "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 2,
           "source_id": "nccp-00776",
-          "checked_date": "2026-10-20"
+          "checked_date": "2026-11-23"
         }
       },
       {
@@ -1406,47 +1527,80 @@
       {
         "rule_id": "LVEF_RECHECK_NOT_RECOVERED",
         "when": {
-          "field": "lvef_40_45_recheck",
-          "operator": "==",
-          "value": "not_recovered"
+          "all": [
+            {
+              "field": "lvef_40_45_recheck",
+              "operator": "==",
+              "value": "not_recovered"
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">",
+              "value": 10
+            }
+          ]
         },
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "After initial LVEF 40–45% with10–20-point fall, repeat within 3 weeks has not recovered to within 10 points of baseline: permanently discontinue."
+          "recommendation": "After initial LVEF 40–45% with 10–20-point fall, repeat within 3 weeks has not recovered to within 10 points of baseline: permanently discontinue."
         },
-        "explanation": "After initial LVEF 40–45% with10–20-point fall, repeat within 3 weeks has not recovered to within 10 points of baseline: permanently discontinue.",
+        "explanation": "After initial LVEF 40–45% with 10–20-point fall, repeat within 3 weeks has not recovered to within 10 points of baseline: permanently discontinue.",
         "source": {
           "document": "NCCP00776 v3b (21 May 2026)",
           "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
           "source_id": "nccp-00776",
-          "checked_date": "2026-10-20"
+          "checked_date": "2026-11-23"
         }
       },
       {
         "rule_id": "LVEF_RECHECK_RECOVERED",
         "when": {
-          "field": "lvef_40_45_recheck",
-          "operator": "==",
-          "value": "recovered"
+          "all": [
+            {
+              "field": "lvef_40_45_recheck",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "lvef_percent",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": "<=",
+              "value": 10
+            }
+          ]
         },
         "action": {
           "type": "proceed_with_caution",
           "components": [
             "trastuzumab deruxtecan"
           ],
-          "recommendation": "After the specified initial LVEF 40–45%/10–20-point decline and treatment interruption, recovery to within 10 points permits same-dose resumption following clinical review. This pathway does not override confirmed severe dysfunction or symptomatic CHF."
+          "recommendation": "After the specified initial LVEF 40–45% / 10–20-point decline and treatment interruption, the repeat measurement has recovered to within 10 absolute percentage points of baseline (including exactly 10). Same-dose resumption may be considered following clinical review. This does not override a current LVEF below 40%, confirmed severe dysfunction, symptomatic heart failure or another hold/stop criterion."
         },
-        "explanation": "After the specified initial LVEF 40–45%/10–20-point decline and treatment interruption, recovery to within 10 points permits same-dose resumption following clinical review. This pathway does not override confirmed severe dysfunction or symptomatic CHF.",
+        "explanation": "After the specified initial LVEF 40–45% / 10–20-point decline and treatment interruption, the repeat measurement has recovered to within 10 absolute percentage points of baseline (including exactly 10). Same-dose resumption may be considered following clinical review. This does not override a current LVEF below 40%, confirmed severe dysfunction, symptomatic heart failure or another hold/stop criterion.",
         "source": {
           "document": "NCCP00776 v3b (21 May 2026)",
           "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
           "page": 4,
           "source_id": "nccp-00776",
-          "checked_date": "2026-10-20"
+          "checked_date": "2026-11-23"
         }
       },
       {
@@ -1814,6 +1968,214 @@
           "section": "4.2",
           "source_id": "ema-enhertu",
           "checked_date": "2026-10-20"
+        }
+      },
+      {
+        "rule_id": "LVEF_BASELINE_OUTSIDE_ELIGIBILITY_ONGOING",
+        "when": {
+          "all": [
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "ongoing"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Recorded pretreatment LVEF was below the NCCP starting eligibility threshold of 50%. Reconcile the specialist decision to initiate treatment. During-treatment holds and stops are determined separately by current function, change from baseline and symptoms."
+        },
+        "explanation": "Recorded pretreatment LVEF was below the NCCP starting eligibility threshold of 50%. Reconcile the specialist decision to initiate treatment. During-treatment holds and stops are determined separately by current function, change from baseline and symptoms.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 2,
+          "source_id": "nccp-00776",
+          "checked_date": "2026-11-23"
+        }
+      },
+      {
+        "rule_id": "LVEF_BASELINE_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_percent",
+              "operator": "exists"
+            },
+            {
+              "field": "baseline_lvef_percent",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "==",
+                  "value": "ongoing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "The current LVEF is recorded, but the pretreatment LVEF is missing. Retrieve the verified baseline to calculate the absolute change and complete the cardiac pathway before a treatment decision. A normal-looking current value cannot exclude a greater-than-20-point fall; missing values are not treated as normal."
+        },
+        "explanation": "The current LVEF is recorded, but the pretreatment LVEF is missing. Retrieve the verified baseline to calculate the absolute change and complete the cardiac pathway before a treatment decision. A normal-looking current value cannot exclude a greater-than-20-point fall; missing values are not treated as normal.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "source_id": "nccp-00776",
+          "checked_date": "2026-11-23"
+        }
+      },
+      {
+        "rule_id": "LVEF_RECHECK_RECOVERY_CONFLICT",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_40_45_recheck",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "field": "lvef_drop_points",
+              "operator": ">",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "Recovery was selected, but the verified repeat LVEF remains more than 10 absolute percentage points below baseline. Maintain interruption and reconcile the measurements and repeat-assessment history. If a qualifying repeat confirms failure to recover, the NCCP pathway requires permanent discontinuation; do not infer confirmation from contradictory entries."
+        },
+        "explanation": "Recovery was selected, but the verified repeat LVEF remains more than 10 absolute percentage points below baseline. Maintain interruption and reconcile the measurements and repeat-assessment history. If a qualifying repeat confirms failure to recover, the NCCP pathway requires permanent discontinuation; do not infer confirmation from contradictory entries.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "source_id": "nccp-00776",
+          "checked_date": "2026-11-23"
+        }
+      },
+      {
+        "rule_id": "LVEF_RECHECK_RECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_40_45_recheck",
+              "operator": "==",
+              "value": "recovered"
+            },
+            {
+              "any": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "missing"
+                },
+                {
+                  "field": "lvef_percent",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "!=",
+                  "value": "ongoing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "A recovered cardiac recheck was selected without the required during-treatment stage and verified baseline/current measurements. Confirm the repeat assessment and calculate the absolute change before considering same-dose resumption. The selected recovery label alone does not establish recovery."
+        },
+        "explanation": "A recovered cardiac recheck was selected without the required during-treatment stage and verified baseline/current measurements. Confirm the repeat assessment and calculate the absolute change before considering same-dose resumption. The selected recovery label alone does not establish recovery.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "source_id": "nccp-00776",
+          "checked_date": "2026-11-23"
+        }
+      },
+      {
+        "rule_id": "LVEF_RECHECK_NONRECOVERY_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "lvef_40_45_recheck",
+              "operator": "==",
+              "value": "not_recovered"
+            },
+            {
+              "any": [
+                {
+                  "field": "baseline_lvef_percent",
+                  "operator": "missing"
+                },
+                {
+                  "field": "lvef_percent",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "missing"
+                },
+                {
+                  "field": "assessment_stage",
+                  "operator": "!=",
+                  "value": "ongoing"
+                },
+                {
+                  "field": "lvef_drop_points",
+                  "operator": "<=",
+                  "value": 10
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trastuzumab deruxtecan"
+          ],
+          "recommendation": "The non-recovered recheck label is incomplete or inconsistent with the current/baseline measurements. Reconcile the repeat-assessment history and measurements before assigning permanent discontinuation. Any independently demonstrated hold or stop criterion remains actionable."
+        },
+        "explanation": "The non-recovered recheck label is incomplete or inconsistent with the current/baseline measurements. Reconcile the repeat-assessment history and measurements before assigning permanent discontinuation. Any independently demonstrated hold or stop criterion remains actionable.",
+        "source": {
+          "document": "NCCP00776 v3b (21 May 2026)",
+          "url": "https://healthservice.hse.ie/documents/6661/Trastuzumab_776_Deruxtecan_5.4mg_Therapy.pdf",
+          "page": 4,
+          "source_id": "nccp-00776",
+          "checked_date": "2026-11-23"
         }
       }
     ]

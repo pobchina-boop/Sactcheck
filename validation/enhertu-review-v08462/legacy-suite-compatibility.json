@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-24",
+  "base_commit": "f3b923b247b5663b2bd90b2ffb352fccc5a347ea",
+  "scope": [
+    "00776"
+  ],
+  "reason": "The immutable v0.84.9 source index records the original 42-rule schema. The approved cardiac/history repair has 47 rules. The old test incorrectly compared that historical count directly with the evolved schema. A scoped authenticated helper now verifies both old and new source-index/schema pairs and accepts only the exact reviewed current protocol; every other legacy assertion remains.",
+  "failed_complete_gate": {
+    "path": "full-ci-03/status.json",
+    "status": "failed",
+    "exit_code": 1,
+    "assertion": "42 !== 47 in tests/full-suite-v0849.test.cjs",
+    "log_sha256": "b3f973bd7c3025f8ceb523fc1396c7e860f495ecc1aedbc07711f51cb729eb4c",
+    "preceding_clinical_replay": "136/136 Enhertu source-derived scenarios passed"
+  },
+  "historical_schema": {
+    "path": "protocols/breast/00776-trastuzumab-deruxtecan.json",
+    "sha256": "e573d135833022d61150d0172d56585143150dcbde34a1b035c871372426a439",
+    "rules": 42,
+    "authenticated_from_git": "f3b923b247b5663b2bd90b2ffb352fccc5a347ea"
+  },
+  "reviewed_schema": {
+    "path": "protocols/breast/00776-trastuzumab-deruxtecan.json",
+    "sha256": "0d7886c898c4554c11f5c2bcc8376257c80b3c78afee3867777ce8ca091733ad",
+    "rules": 47,
+    "added_rule_ids": [
+      "LVEF_BASELINE_OUTSIDE_ELIGIBILITY_ONGOING",
+      "LVEF_BASELINE_REQUIRED",
+      "LVEF_RECHECK_NONRECOVERY_CONTEXT",
+      "LVEF_RECHECK_RECOVERY_CONFLICT",
+      "LVEF_RECHECK_RECOVERY_CONTEXT"
+    ],
+    "removed_rule_ids": []
+  },
+  "historical_source_index": {
+    "path": "data/targeted-breast-v0849-source-index.json",
+    "sha256": "896f21d7632b90057553b6de9e7360325432e9d7d6295f8b84cf9c4916af4d6c",
+    "unchanged": true,
+    "recorded_rules": 42
+  },
+  "legacy_test": {
+    "path": "tests/full-suite-v0849.test.cjs",
+    "before_sha256": "4e0394be09956d1ed5e97e1142908a8dae5dd785433b0106a112c3c7b815f4f6",
+    "after_sha256": "499891521eab8da4d66d8499f6f567f4b02dd31684c2f1e4aea93d94f6503b66"
+  },
+  "guard_checks": [
+    "Old schema hash is authenticated from the fetched baseline Git object",
+    "Historical source index must remain byte-identical to its baseline Git object",
+    "Current schema and current source index must match their pinned review hashes",
+    "Supplied protocol must deep-equal the exact reviewed current schema",
+    "Wrong regimen or altered rule list is explicitly rejected by regression tests"
+  ],
+  "required_acceptance": [
+    "npm run test:targeted-breast",
+    "node tests/full-suite-v08421.test.cjs",
+    "Complete exact-assembly test:ci"
+  ],
+  "patient_assets": "No HTML/PDF or clinical schema bytes changed for this fixture repair.",
+  "visible_register_correction": {
+    "baseline_sha256": "c0bb5f93bcbf6cc44c474b10f0f5d7d8e20620fa1b96d795a4db3e58adee777f",
+    "updated_sha256": "59141fa338e14add464bf91a164d2e199d10d4d898597d585b5dd667f5cb8444",
+    "regimen": "00776",
+    "rules": {
+      "before": 42,
+      "after": 47
+    },
+    "inputs": {
+      "before": 37,
+      "after": 39
+    },
+    "all_other_records_unchanged": true,
+    "formal_approval_flags_unchanged": true,
+    "only_two_numeric_byte_substitutions": true
+  },
+  "current_count_field_audit": {
+    "status": "reviewed",
+    "current_clinical_counts": {
+      "rules": 47,
+      "inputs": 39
+    },
+    "located_00776_count_fields": [
+      {
+        "file": "data/breast-completion-v08421-source-index.json",
+        "path": "regimens.00776.rule_count",
+        "value": 47
+      },
+      {
+        "file": "data/clinical-validation-register-v0630.json",
+        "path": "protocols.66.rule_count",
+        "value": 47
+      },
+      {
+        "file": "data/clinical-validation-register-v0630.json",
+        "path": "protocols.66.input_count",
+        "value": 39
+      },
+      {
+        "file": "data/targeted-breast-v0849-source-index.json",
+        "path": "regimens.00776.rule_count",
+        "value": 42
+      }
+    ],
+    "historical_42_rule_index": "data/targeted-breast-v0849-source-index.json remains intentionally immutable and authenticated against Git",
+    "visible_register": "00776 corrected to 47 rules / 39 inputs; all other bytes unchanged",
+    "authoring_clinical": "Narrative educational content; no duplicated rule/input count or separately generated schema is stored there",
+    "protocol_index": "Identity/path only; contains no rule/input count field",
+    "catalogue_bundle": "Exact current 00776 schema equality and unchanged 377 other entries covered by clinical regression"
+  },
+  "interrupted_revalidation": {
+    "path": "full-ci-04/status.json",
+    "status": "interrupted_for_known_metadata_fix",
+    "observed_execution_exit_code": 130,
+    "reason": "Stopped owned runner to correct the two visible register counts before testing a final exact assembly. No pass inferred."
+  }
+}
