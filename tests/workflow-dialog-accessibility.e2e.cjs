@@ -119,14 +119,13 @@ async function backgroundRestored(page){
       await backgroundRestored(page);
 
       await opener.click();
-      const consentPromise=page.waitForEvent('popup');
-      await page.locator('[data-workflow-consent]').click();
-      const consent=await consentPromise;
-      await consent.waitForLoadState();
-      assert.match(consent.url(),/patient\/00568\/consent-form\.html/,'Consent must retain the regimen-specific destination');
+      const [consent]=await Promise.all([page.waitForEvent('download'),page.locator('[data-workflow-consent]').click()]);
+      assert.equal(consent.suggestedFilename(),'SACTCheck-consent-00568.pdf');
+      const expected=fs.readFileSync(path.join(root,'patient/00568/consent-form.pdf'));
+      assert(fs.readFileSync(await consent.path()).equals(expected),'Consent download matches the regimen-specific form');
       assert(await overlay.isHidden(),'Consent must open after workflow closes');
       await backgroundRestored(page);
-      await consent.close();
+
 
       await opener.click();
       await page.locator('.workflow-patient-disclosure summary').click();
