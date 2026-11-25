@@ -6,6 +6,8 @@ const vm = require('vm');
 const root = path.resolve(__dirname, '..');
 const SARCOMA60=require('./helpers/sarcoma-inputs-v08460.cjs');
 const GIST61=require('./helpers/gist-inputs-v08461.cjs');
+const SARCOMA62=require('./helpers/sarcoma-inputs-v08462.cjs');
+const IFOSPAIR62=require('./helpers/ifosfamide-pair-v08462.cjs');
 const expectedCodes = [
  '00511','00420','00391','00392','00500','00228','00501','00675','00747','00596','00680','00504','00754',
  '00335','00463','00100','00445','00205','00462','00244','00325','00719','00374','00554','00757'
@@ -74,7 +76,8 @@ for(const {data} of sarcoma){
  const oralV34=code==='00244'&&m.sactcheck_encoding_version==='0.84.34';
  const sarcomaV60=SARCOMA60.applies(data);if(sarcomaV60)SARCOMA60.validate(data);
  const gistV61=GIST61.applies(data);if(gistV61)GIST61.validate(data);
- assert(sarcomaV60 || gistV61 || oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
+ const sarcomaV62=SARCOMA62.applies(data);if(sarcomaV62)SARCOMA62.validate(data);
+ assert(sarcomaV60 || gistV61 || sarcomaV62 || oralV34 || (["00212", "00215", "00203", "00205", "00207", "00209", "00210", "00213", "00216", "00225", "00226", "00227", "00228", "00272", "00285", "00321", "00322", "00328", "00330", "00331", "00414", "00446", "00447", "00448", "00449", "00525", "00568", "00585", "00586", "00588", "00619", "00621", "00623", "00692", "00732", "00733", "00776", "00794", "00892", "00936"].includes(code) && m.sactcheck_encoding_version==='0.84.21') || ['0.41.0','0.43.0','0.44.0','0.45.0','0.45.1','0.46.0','0.47.0','0.59.0','0.84.1'].includes(m.sactcheck_encoding_version),`${code} lacks a supported Sarcoma/Gynaecology reconciliation encoding marker.`);
  assert.strictEqual(m.partial_assessment_supported,true,`${code} lacks single-entry support.`);
  assert(/^https:\/\/(healthservice\.hse\.ie\/documents\/|www\.hse\.ie\/eng\/services\/list\/5\/cancer\/profinfo\/chemoprotocols\/)/.test(m.source_url||''),`${code} lacks an official HSE/NCCP PDF link.`);
  assert(m.sarcoma_subgroup,`${code} lacks Sarcoma subgroup.`);
@@ -116,10 +119,10 @@ for(const {data} of sarcoma){
   if(trueGradeField(field,definition)){
    ctcaeFields++;
    assert.strictEqual(definition.type,'select',`${code}/${field} CTCAE input must be select.`);
-   if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}else if(oralV34){assert.equal(definition.grading_source_url,m.source_url);assert.equal(definition.ctcae_version,field==='hypertension_grade'?'4.03':undefined);assert(definition.grading_source_label&&definition.source_grading_note);assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else if(code==='00205'&&['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field)){assert.equal(definition.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
+   if(IFOSPAIR62.grade(data,field,definition,CTCAE)){}else if(sarcomaV62){SARCOMA62.validateGrade(data,field,definition,CTCAE);}else if(gistV61){GIST61.validateGrade(data,field,definition,CTCAE);}else if(oralV34){assert.equal(definition.grading_source_url,m.source_url);assert.equal(definition.ctcae_version,field==='hypertension_grade'?'4.03':undefined);assert(definition.grading_source_label&&definition.source_grading_note);assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else if(code==='00205'&&['mucositis_grade','stomatitis_grade','ppe_grade'].includes(field)){assert.equal(definition.grading_source_label,'NCCP 00205 / Caelyx NCI-CTC source table');assert(CTCAE.guide({...definition,id:field}).sourceSpecific);}else assert.strictEqual(definition.ctcae_version,'5.0',`${code}/${field} lacks CTCAE v5.0.`);
    assert(definition.assessment_guidance,`${code}/${field} lacks assessment guidance.`);
    const grades=new Set((definition.options||[]).map(item=>Number(item.value)));
-   const expectedGrades=gistV61?GIST61.ranges[code][field]:(oralV34&&field==='hfsr_grade'?[0,1,2,3]:[0,1,2,3,4]);
+   const expectedGrades=sarcomaV62?SARCOMA62.ranges[code][field]:gistV61?GIST61.ranges[code][field]:(oralV34&&field==='hfsr_grade'?[0,1,2,3]:[0,1,2,3,4]);
    if(oralV34&&field==='hfsr_grade')assert(!grades.has(4),'NCCP HFSR table has no grade4 dose pathway');
    expectedGrades.forEach(g=>assert(grades.has(g),`${code}/${field} lacks Grade ${g}.`));
    const guide=CTCAE.guide({...definition,id:field});assert(guide?.grades?.length>=expectedGrades.length,`${code}/${field} lacks beside-control grading guide.`);

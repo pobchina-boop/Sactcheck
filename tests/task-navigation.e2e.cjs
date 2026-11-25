@@ -63,6 +63,30 @@ async function homeJourney(page,url,width){
 }
 async function patientJourney(page,url,width){
  await page.goto(url+'/patient/00555/');
+ if (await page.locator('main.po45-shell').count()) {
+  await retainedClinicalContent(page,'main.po45-shell>section');
+  const overview=page.locator('main.po45-shell');
+  assert.equal(await overview.locator(':scope > section.po45-panel').count(),3,'all three patient pack panels are present');
+  assert(await page.locator('#urgent').isVisible(),'urgent contact advice remains visible');
+  assert(await overview.locator('img[src*="anatomy"]').isVisible(),'regimen anatomy remains visible');
+  for(const href of ['guide.pdf','handbook.pdf','knowledge.pdf']) {
+   const link=overview.locator('a[href="'+href+'"]').first();
+   assert(await link.isVisible(),href+' is accessible from the overview');
+   const response=await page.request.get(new URL(href,page.url()).href);
+   assert(response.ok() && (await response.body()).subarray(0,5).toString()==='%PDF-',href+' downloads a PDF');
+  }
+  await capture(page,`patient-${width}`);
+  await page.emulateMedia({media:'print'});
+  for(const panel of await overview.locator(':scope > section.po45-panel').all()) assert(await panel.isVisible(),'all overview panels print');
+  await page.emulateMedia({media:'screen'});
+  const tests=overview.getByRole('link',{name:'My complete schedule and checks',exact:true});
+  await tests.click();
+  assert(page.url().endsWith('knowledge.html#monitoring-schedule') && await page.locator('#monitoring-schedule').isVisible(),'monitoring opens the complete schedule');
+  await page.goBack();
+  const reference=page.getByRole('link',{name:'Understand my treatment',exact:true});
+  await reference.click();
+  assert(page.url().endsWith('knowledge.html#medicines') && await page.locator('#medicines').isVisible(),'treatment opens the medicines section');
+ } else {
  await retainedClinicalContent(page,'[data-patient-panel]');
  assert(await topOf(page,'.pt-tabs')<450,'named patient sections appear beside the title');
  const reference=page.getByRole('link',{name:'Understand my treatment',exact:true});
@@ -79,6 +103,7 @@ async function patientJourney(page,url,width){
  assert.equal(await page.locator('[data-patient-panel][hidden]').count(),0,'all panels are printable');
  assert(await page.locator('.hcc-anatomy img').isVisible(),'anatomical illustration remains printable');
  await page.emulateMedia({media:'screen'});await page.evaluate(()=>dispatchEvent(new Event('afterprint')));await noOverflow(page,'patient');
+ }
  await page.goto(url+'/patient/00555/knowledge.html');
  await retainedClinicalContent(page,'main[data-patient-knowledge]>section');
  const topics=page.locator('main>details.pk-section').filter({has:page.locator('.pk-contents')});
