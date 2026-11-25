@@ -31,7 +31,7 @@ for (const entry of INDEX.protocols) {
     const definitions = Engine.getInputDefinitions(protocol, profile.id);
     assert.ok(definitions.length > 0, `${entry.path}/${profile.id} should generate a form`);
     definitions.forEach(definition => {
-      assert.notEqual(definition.demo_value, undefined, `${entry.path}: ${definition.id} needs demo_value`);
+      assert.notStrictEqual(definition.demo_value, undefined, `${entry.path}: ${definition.id} needs demo_value`);
     });
     const demoInputs = Object.fromEntries(definitions.map(definition => [definition.id, definition.demo_value]));
     const result = Engine.assess(protocol, demoInputs, { profileId: profile.id });

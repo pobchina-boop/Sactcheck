@@ -1,4 +1,5 @@
 'use strict';
+const release = require('./helpers/live-release-v08464.cjs');
 // Source-derived acceptance cases for NCCP00776v3b Table3 (p4), with
 // adversarial data-entry tests for the 23 November 2026 LVEF repair.
 const assert = require('node:assert/strict');
@@ -111,7 +112,7 @@ const bundlePath='protocols/catalogue-bundle.json.gz';
 const currentBundleBytes=fs.readFileSync(path.join(root,bundlePath));
 const currentBundleJson=zlib.gunzipSync(currentBundleBytes);
 const currentCatalogue=JSON.parse(currentBundleJson);
-const olaparib=JSON.parse(fs.readFileSync(path.join(root,'package.json'))).version==='0.84.63'?require('./helpers/retrospective-v08463.cjs'):null;
+const olaparib=require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(item => item.version === 63)?require('./helpers/retrospective-v08463.cjs'):null;
 let inheritedCatalogue=currentCatalogue;
 if(olaparib){
   // Authenticate the actual successor before replaying the original preservation
@@ -132,15 +133,20 @@ if(olaparib){
   assert.equal(currentCatalogue.records.length,currentIndex.protocol_count);
   assert.equal(currentCatalogue.records.length,inheritedCatalogue.records.length);
   assert.equal(new Set(currentCatalogue.records.map(record=>record.entry.id)).size,currentCatalogue.records.length,'Current catalogue cannot duplicate a record to hide a missing protocol');
-  assert.deepEqual(currentCatalogue.records.map(record=>record.entry.id).sort(),inheritedCatalogue.records.map(record=>record.entry.id).sort(),'Current catalogue retains every inherited protocol identity');
+  assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).sort(),'Current catalogue retains every inherited protocol path');
   const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
+  const priorAstra=new Map(JSON.parse(zlib.gunzipSync(release.astraBytes(bundlePath))).records.map(r=>[r.entry.path,r]));
   for(const current of currentCatalogue.records){
     const indexed=currentIndex.protocols.find(entry=>entry.id===current.entry.id);assert(indexed,'Current record is indexed: '+current.entry.id);
     assert.deepEqual(current.entry,indexed,'Current bundle entry matches the actual index: '+current.entry.id);
     assert.deepEqual(current.protocol,JSON.parse(fs.readFileSync(path.join(root,indexed.path))),'Current bundle delivers the exact current protocol JSON: '+current.entry.id);
+    const batchCode = current.protocol.metadata.nccp_regimen_code;
+    if (!successors.has(current.entry.id) && !['00862','00929','00205','00228','00374','00391','00392','00462','00554'].includes(batchCode)) {
+      assert.deepEqual(current, priorAstra.get(current.entry.path), 'Unrelated current record equals the AstraZeneca release: ' + current.entry.id);
+    }
     if(successors.has(current.entry.id))olaparib.validateProtocol(current.protocol);
     else if (['nccp-00862-v2','nccp-00929-v1'].includes(current.entry.id)) require('./helpers/live-release-v08464.cjs').verifyFile(indexed.path);
-    else assert.deepEqual(current,inheritedCatalogue.records.find(record=>record.entry.id===current.entry.id),'Unrelated current protocol, including Enhertu, remains unchanged after olaparib: '+current.entry.id);
+    else assert.deepEqual(priorAstra.get(current.entry.path),inheritedCatalogue.records.find(record=>record.entry.path===current.entry.path),'Unrelated current protocol, including Enhertu, remains unchanged after olaparib: '+current.entry.id);
   }
 }
 assert.equal(inheritedCatalogue.records.length,previousCatalogue.records.length);

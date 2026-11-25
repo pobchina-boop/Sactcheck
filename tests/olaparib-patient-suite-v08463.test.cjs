@@ -21,9 +21,9 @@ const expectedSources={
 };
 const added = require('./helpers/gynaecology-00862-00929.cjs').NEW_ROUTES;
 for (const code of added) assert.deepEqual(registry.bundleRoutes(code),[code]);
-const priorCodes = registry.codes.filter(code => !added.includes(code));
-assert.equal(priorCodes.length,279);
-assert.equal(priorCodes.flatMap(c=>registry.bundleRoutes(c)).length,313);
+const addedRoutes = require('./helpers/retrospective-v08464.cjs').NEW_ROUTES;
+assert.equal(registry.codes.length,279 + added.length + addedRoutes.filter(route=>!route.includes('/')).length);
+assert.equal(registry.codes.flatMap(c=>registry.bundleRoutes(c)).length,313 + added.length + addedRoutes.length);
 const results=[];
 for(const route of review.ROUTES){
  const d=review.profile(route),prefix='patient/'+route+'/';

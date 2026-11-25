@@ -43,5 +43,5 @@ function assertProfiles(names,checkRegistry){
  }
  checkRegistry([...codes,...contextual]);
 }
-function getInventoryMigrations(){const extra=require('./deployment-repair-v08461.cjs');extra.verify();return [...getMigrations(),extra.inventory(),require('./live-release-v08464.cjs').gynaecologyInventory()];}
+function getInventoryMigrations(){const extra=require('./deployment-repair-v08461.cjs');extra.verify();return [...getMigrations(),extra.inventory(),require('./live-release-v08464.cjs').gynaecologyInventory(),require('./live-release-v08464.cjs').sarcomaInventory()];}
 module.exports={getMigrations,getInventoryMigrations,assertCoverage,assertProfiles};

@@ -290,7 +290,7 @@
 
   function buildModel(options = {}) {
     const result = options.result || {};
-    const protocol = options.protocol || {};
+    const protocol = globalThis.SACTCheckAssessmentEngine?.protocolForIndication?.(options.protocol, result.inputs) || options.protocol || {};
     const metadata = protocol.metadata || {};
     const rowData = findingRows(result, options.labCalculations || {});
     const hormoneRows=(result.endocrineContext?.rows||[]).map(r=>({...r,criterion:`${r.criterion}. ${r.interpretation} ${result.endocrineContext.referenceLabel}. ${r.sourceLabel||"Source"}: ${r.source}`}));

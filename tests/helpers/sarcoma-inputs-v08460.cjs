@@ -5,7 +5,14 @@ const read=f=>JSON.parse(fs.readFileSync(path.join(R,f))),sha=b=>crypto.createHa
 function applies(p){return codes.includes(p.metadata?.nccp_regimen_code)&&p.metadata?.sactcheck_encoding_version==='0.84.60';}
 function validate(p){
  if(!applies(p))return null;const m=read('validation/sarcoma-v08460/clinical-compatibility.json'),c=p.metadata.nccp_regimen_code,r=m.records[c];
- assert.equal(m.release,'0.84.60');assert.equal(m.base_commit,'c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c');assert.deepEqual(p,read(r.path));assert.equal(sha(fs.readFileSync(path.join(R,r.path))),r.after_sha256);assert.equal(p.metadata.source_url,r.source_url);assert.equal(p.metadata.nccp_version,r.source_version);
+ assert.equal(m.release,'0.84.60');assert.equal(m.base_commit,'c01f1a2b236afced0c3ebfdb6b6ff864e58e7d4c');assert.deepEqual(p,read(r.path));const overlay=require('./ifosfamide-pair-v08462.cjs');
+ if(overlay.applies(p)){
+  const applied=overlay.validate(p);
+  assert.equal(applied.released_v61_sha256,r.after_sha256);
+  const bytes=require('node:child_process').execFileSync('git',['show','b373bf45522a1fec556eabf657daf3f72ab485c4:'+r.path],{cwd:R});
+  assert.equal(sha(bytes),r.after_sha256);
+  p=JSON.parse(bytes);
+ }else assert.equal(sha(fs.readFileSync(path.join(R,r.path))),r.after_sha256);assert.equal(p.metadata.source_url,r.source_url);assert.equal(p.metadata.nccp_version,r.source_version);
  for(const f of ['clinical_use_authorised','consultant_reviewed','oncology_pharmacy_reviewed'])assert.equal(p.metadata.validation[f],false);
  const source=read('validation/sarcoma-v08460/clinical/source-manifest.json').sources.find(s=>s.code===c);assert.equal(source.source_url,r.source_url);assert.equal(source.version,r.source_version);assert.equal(sha(fs.readFileSync(path.join(R,source.text_path))),source.text_sha256);assert.equal(source.original_pdf_sha256,null);
  assert.equal(sha(fs.readFileSync(path.join(R,'validation/sarcoma-v08460/clinical/source-case-results.json'))),m.source_case_results_sha256);

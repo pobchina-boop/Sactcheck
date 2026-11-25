@@ -681,7 +681,7 @@
       ${adjunctNames.length?`<div class="workflow-rx-note"><strong>Local-reference adjuncts retained:</strong> ${esc(adjunctNames.join(", "))}. These are not all antiemetics; verify the current local prescription.</div>`:""}
       ${agent.length?`<div class="workflow-rx-note"><strong>Agent-specific support:</strong> ${agent.map(x=>esc(x.label)).join(" · ")}</div>`:""}
       ${supportive.evidence_update?`<div class="workflow-rx-evidence"><strong>Evidence update:</strong> ${esc(supportive.evidence_update)}</div>`:""}
-      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}
+      ${supportive.local_adjunct_note?`<div class="workflow-rx-evidence">${esc(supportive.local_adjunct_note)}</div>`:""}${asArray(supportive.local_reference?.items).filter(item=>item.source_clarification).map(item=>`<div class="workflow-rx-evidence workflow-local-source-clarification"><strong>${esc(item.medicine)} · supplied local reference</strong><p>${esc([item.dose,item.route,item.frequency].filter(Boolean).join(" · "))}</p><p>${esc(item.timing)} ${esc(item.directions)}</p><p>${esc(item.source_clarification)}</p></div>`).join("")}
     </div>`;
   }
 
