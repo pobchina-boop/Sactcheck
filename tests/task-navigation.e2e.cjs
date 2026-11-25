@@ -108,9 +108,9 @@ async function patientJourney(page,url,width){
  await retainedClinicalContent(page,'main[data-patient-knowledge]>section');
  const topics=page.locator('main>details.pk-section').filter({has:page.locator('.pk-contents')});
  assert.equal(await topics.getAttribute('open'),null,'topic navigation initially compact');
- const afterUrgent=await topOf(page,'#urgent');
+ const urgentTop=await topOf(page,'#urgent');
  const topicTop=await topics.evaluate(n=>n.getBoundingClientRect().top);
- assert(afterUrgent <= topicTop && topicTop < await topOf(page,'#medicines'),'urgent advice and topic navigation precede the medicines section');
+ assert(topicTop <= urgentTop && urgentTop < await topOf(page,'#medicines'),'topic navigation leads directly into urgent advice before the medicines section');
  assert(await page.locator('#urgent').isVisible(),'reference urgent advice remains expanded');
  await capture(page,`knowledge-${width}`);
  const toggle=page.locator('.oncowiki-detail-controls button');await toggle.click();
