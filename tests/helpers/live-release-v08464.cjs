@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '../..');
 const manifest = 'validation/sarcoma-batch-1/production-files.json';
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const raw = fs.readFileSync(path.join(root, manifest));
-assert.equal(sha(raw), '9b9425447eb0e03698d6df413961d79ee3c98211eda53ed21b2505aef97e79a6');
+assert.equal(sha(raw), '24e1342ff15c29873f2fd546ce3e6753b0d5c5f7859f6d8adf4ef12cfa7b7479');
 const {base,files} = JSON.parse(raw);
 assert.equal(base, '68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7');
 const historical = (ref,file) => cp.execFileSync('git',['show',ref+':'+file],{cwd:root,maxBuffer:64*1024*1024});
@@ -43,6 +43,7 @@ function archived(file,revision) {
 const astraBytes = file => files[file] ? archived(file,'51bded8c59210c052873b577af444f07579fd44f') : prior.astraBytes(file);
 const approvedJson = file => files[file] ? JSON.parse(archived(file,base)) : prior.approvedJson(file);
 function owns(file) {
+  if (file===manifest) return true;
   if (!files[file]) return prior.owns(file);
   verifyFile(file); return true;
 }
@@ -59,5 +60,5 @@ function sarcomaInventory() {
     verifyFile(file); return true;
   }}};
 }
-const addition = file => files[file]?.before === null || prior.addition(file);
+const addition = file => file===manifest || files[file]?.before === null || prior.addition(file);
 module.exports = {...prior,verifyFile,isCurrent,expected,astraBytes,astraJson:f=>JSON.parse(astraBytes(f)),approvedJson,owns,addition,gynaecologyInventory,sarcomaInventory};

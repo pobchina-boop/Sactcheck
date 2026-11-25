@@ -18,6 +18,8 @@ enhertuRegister.rule_count=clinical.rule_engine.rules.length;enhertuRegister.inp
 const inheritedRegister=successor.baselineJson(registerPath);
 assert.deepEqual(inheritedRegister,reviewedRegister,'The inherited Enhertu register changed only reviewed00776 rule/input counts; all other rows and approval flags remained unchanged');
 assert.equal(currentRegister.protocols.length,inheritedRegister.protocols.length);
+const sarcomaRegister = JSON.parse(require('node:child_process').execFileSync('git',
+ ['show','9049a163d44c9de14639e431f1cd8e6c11b9a0b4:'+registerPath],{cwd:review.ROOT,maxBuffer:32*1024*1024}));
 for(const row of currentRegister.protocols){
  const old=inheritedRegister.protocols.find(item=>item.nccp_code===row.nccp_code);assert(old);
  if(['00862','00929'].includes(row.nccp_code)) {
@@ -27,6 +29,8 @@ for(const row of currentRegister.protocols){
   assert.equal(row.input_count,Object.keys(protocol.input_definitions).length);
   assert.equal(row.formal_consultant_reviewed,false);
   assert.equal(row.formal_pharmacy_reviewed,false);
+ } else if(['00374','00391','00392','00462','00554'].includes(row.nccp_code)) {
+   assert.deepEqual(row,sarcomaRegister.protocols.find(entry=>entry.nccp_code===row.nccp_code),'Reviewed sarcoma register '+row.nccp_code);
  } else if(!successor.CODES.includes(row.nccp_code))assert.deepEqual(row,old,'Unrelated clinical register row remains unchanged: '+row.nccp_code);
  else{
   const protocol=JSON.parse(fs.readFileSync(path.join(review.ROOT,successor.PROTOCOLS[row.nccp_code])));successor.validateProtocol(protocol);

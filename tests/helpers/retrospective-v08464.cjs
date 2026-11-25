@@ -28,4 +28,11 @@ function expectedHash(file, previous) {
 function expectedBytes(file, previous) {
   return reviewed.files[file]?.after_bytes ?? previous;
 }
-module.exports = { RECORD, NEW_ROUTES, createMigration, expectedHash, expectedBytes };
+const priorInventory = require('./gynaecology-00862-00929.cjs').inventory;
+const inventory = {
+  codes: priorInventory.codes + NEW_ROUTES.filter(route => !route.includes('/')).length,
+  routes: priorInventory.routes + NEW_ROUTES.length,
+  visualRoutes: priorInventory.visualRoutes + NEW_ROUTES.length
+};
+function approvedPath(file) { return Object.hasOwn(reviewed.files,file); }
+module.exports = { inventory, approvedPath, RECORD, NEW_ROUTES, createMigration, expectedHash, expectedBytes };

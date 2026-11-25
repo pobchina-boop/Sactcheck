@@ -21,6 +21,8 @@ function registry(codes,prior){
   assert.equal(new Set(expected).size,279);
   const gynaecology = require('./gynaecology-00862-00929.cjs').NEW_ROUTES;
   assert.deepEqual(gynaecology,['00862','00929']);
-  assert.deepEqual([...codes].sort(),[...expected,...gynaecology].sort(),'All 279 prior registry entries and both reviewed gynaecology roots');
+  const sarcoma = require('./retrospective-v08464.cjs').NEW_ROUTES;
+  assert.deepEqual(sarcoma,['00374','00228/liposarcoma','00205/sarcoma','00462','00554']);
+  assert.deepEqual([...codes].sort(),[...expected,...gynaecology,...sarcoma.filter(route=>!route.includes('/'))].sort(),'Every released root is present exactly once');
 }
 module.exports={registry,added};
