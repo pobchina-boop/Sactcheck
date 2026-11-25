@@ -75,14 +75,27 @@ assert(shapes.size > 0, 'At least one generated consent aid must be tested');
           text: sheet.textContent.replace(/\s+/g, ' ').trim(),
           signatures: sheet.querySelectorAll('.sign-line').length,
           gridColumns: getComputedStyle(sheet.querySelector('.agent-grid')).gridTemplateColumns.split(' ').length,
+          printColumnCount: getComputedStyle(sheet.querySelector('.agent-grid')).columnCount,
+          flowingConsent: Boolean(document.querySelector('link[href*="consent-core-v08455.css"]')),
           agents: sheet.querySelectorAll('.agent').length,
           ticks: [...sheet.querySelectorAll('.tick')].map(el => parseFloat(getComputedStyle(el).fontSize)),
           captions: [...sheet.querySelectorAll('.footer,.footer b,.sign-line,.field')].map(el => getComputedStyle(el).color.match(/[\d.]+/g).map(Number))
         }));
-        assert(Math.abs(print.width - 210 * 96 / 25.4) < 1, `${code}: original A4 print width is preserved`);
+        // The current multipage consent sets A4 on @page and flows inside its margins.
+        // Emulated print media alone leaves the viewport at its mobile or desktop width.
+        const pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true });
+        const boxes = [...pdf.toString('latin1').matchAll(/\/MediaBox\s*\[\s*0\s+0\s+([\d.]+)\s+([\d.]+)\s*\]/g)];
+        assert(boxes.length > 0, `${code}: identify the printed page dimensions`);
+        for (const box of boxes) {
+          assert(Math.abs(Number(box[1]) - 210 * 72 / 25.4) < 2 && Math.abs(Number(box[2]) - 297 * 72 / 25.4) < 2,
+            `${code}: every printed consent page must be A4 portrait`);
+        }
+        if (!print.flowingConsent) assert(Math.abs(print.width - 210 * 96 / 25.4) < 1, `${code}: fixed A4 sheet width`);
         assert.equal(print.text, screen.text, `${code}: screen reflow must preserve all print text`);
         assert.equal(print.signatures, screen.signatures, `${code}: print retains every signature field`);
-        assert.equal(print.gridColumns, printColumns.get(code), `${code}: preserve original printed risk-column layout`);
+        assert.equal(print.agents, screen.agents.length, `${code}: every agent remains available in print`);
+        if (print.flowingConsent) assert.equal(print.printColumnCount, '2', `${code}: retain both flowing print columns`);
+        else assert.equal(print.gridColumns, printColumns.get(code), `${code}: preserve original printed risk-column layout`);
         assert(print.ticks.every(size => size < 16), `${code}: screen typography must not change A4 print geometry`);
         for (const color of print.captions) assert(contrast(color, [255, 255, 255]) >= 4.5, `${code}: print footer/signatures must also meet 4.5:1`);
         await page.emulateMedia({ media: 'screen' });
