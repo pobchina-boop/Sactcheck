@@ -51865,6 +51865,531 @@ const definitions={
         "url": "https://www.cancer.gov/pediatric-adult-rare-tumor/rare-tumors/rare-soft-tissue-tumors/desmoid-tumor"
       }
     ]
+  },
+  "00596": {
+    "code": "00596",
+    "title": "Ifosfamide and etoposide for Ewing sarcoma or osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Relapsed Ewing sarcoma, or treatment of osteosarcoma under the national source indication",
+    "summary": "Etoposide 100 mg/m² is infused over 60 minutes, followed by ifosfamide 1,800 mg/m² over 60 minutes, on each of days 1–5. Courses repeat every 21 days for up to seven cycles while benefit and tolerability justify treatment. Mesna is given before each ifosfamide infusion and at 4 and 8 hours measured from its START.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Etoposide then ifosfamide on days 1–5; repeat every 21 days, up to 7 cycles",
+        "when": "Etoposide then ifosfamide on days 1–5; repeat every 21 days, up to 7 cycles",
+        "why": "The two medicines damage tumour genetic material through different mechanisms to help control sarcoma. The intended role, chance of benefit and how this fits with surgery, radiotherapy or trials depend on the diagnosis and previous treatment.",
+        "clinical": "Etoposide 100 mg/m² is infused over 60 minutes, followed by ifosfamide 1,800 mg/m² over 60 minutes, on each of days 1–5. Courses repeat every 21 days for up to seven cycles while benefit and tolerability justify treatment. Mesna is given before each ifosfamide infusion and at 4 and 8 hours measured from its START.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Any new confusion or unusual sleepiness, blood in urine, low urine output or infusion-related faintness needs immediate assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00596, version 2",
+        "url": "https://healthservice.hse.ie/documents/6747/596_v2_Ifosfamide_Etoposide_IE_Therapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Historical phase II ifosfamide/etoposide study in recurrent tumours of children and young adults",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/3114435/"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "Health Products Regulatory Authority: ifosfamide product information",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "Health Products Regulatory Authority: etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      }
+    ]
+  },
+  "00100": {
+    "code": "00100",
+    "title": "Mifamurtide after osteosarcoma surgery: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-grade, resectable, nonmetastatic osteosarcoma after macroscopically complete resection, alongside postoperative multi-agent chemotherapy; national age eligibility 2–30 years",
+    "summary": "Mifamurtide 2 mg/m² is infused over 1 hour after complete resection and surgical recovery. Give two infusions each week for the first 12 weeks, at least 3 days apart, then one infusion weekly for another 24 weeks: 48 infusions over 36 weeks. This timetable runs separately from the chemotherapy calendar. The specialist team confirms the actual postoperative start and any delays.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Weeks 1–12: two infusions each week",
+        "when": "Weeks 1–12: two infusions each week",
+        "why": "Mifamurtide stimulates innate immune cells to help act against remaining osteosarcoma cells after complete surgery. It is an additional postoperative treatment discussed with the patient and family, alongside chemotherapy.",
+        "clinical": "At least three days between the two weekly infusions: 24 infusions in this phase.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Do not wait eight hours to seek advice for fever or sudden illness. Severe wheeze, breathing difficulty, chest pain or faintness needs urgent assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Weeks 13–36: one infusion each week",
+        "when": "Weeks 13–36: one infusion each week",
+        "why": "Mifamurtide stimulates innate immune cells to help act against remaining osteosarcoma cells after complete surgery. It is an additional postoperative treatment discussed with the patient and family, alongside chemotherapy.",
+        "clinical": "Another 24 infusions, for 48 total over 36 weeks. The clock is independent of chemotherapy.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Do not wait eight hours to seek advice for fever or sudden illness. Severe wheeze, breathing difficulty, chest pain or faintness needs urgent assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00100, version 6",
+        "url": "https://healthservice.hse.ie/documents/6722/100_Mifamurtide.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Randomised factorial trial of mifamurtide in resectable nonmetastatic osteosarcoma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18235123/"
+      },
+      {
+        "id": "mifamurtide-pi",
+        "title": "European Medicines Agency: Mepact product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/mepact-epar-product-information_en.pdf"
+      },
+      {
+        "id": "nci-bone",
+        "title": "National Cancer Institute: surgery, chemotherapy and selected radiotherapy in osteosarcoma",
+        "url": "https://www.cancer.gov/types/bone/hp/osteosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00420": {
+    "code": "00420",
+    "title": "Doxorubicin and cisplatin for osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Chemotherapy before and after surgery for osteosarcoma",
+    "summary": "Doxorubicin 25 mg/m² is given on days 1, 2 and 3; cisplatin 100 mg/m² on day 1. The reference course contains six 21-day cycles, usually three before surgery and three afterwards, with pathology review. Treatment dates and doses depend on recovery and the specialist plan.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Doxorubicin days 1–3 and cisplatin day 1; six 21-day cycles",
+        "when": "Doxorubicin days 1–3 and cisplatin day 1; six 21-day cycles",
+        "why": "Chemotherapy treats osteosarcoma cells throughout the body, including cells too small to see on scans, alongside surgery intended to remove the visible cancer.",
+        "clinical": "Doxorubicin 25 mg/m² is given on days 1, 2 and 3; cisplatin 100 mg/m² on day 1. The reference course contains six 21-day cycles, usually three before surgery and three afterwards, with pathology review. Treatment dates and doses depend on recovery and the specialist plan.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Report new hearing loss, reduced urine, persistent vomiting, chest symptoms or painful infusion sites urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00420, version 4",
+        "url": "https://healthservice.hse.ie/documents/6733/420_V4_DOX25CIS100.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "European Osteosarcoma Intergroup historical randomised comparison",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9314869/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "Health Products Regulatory Authority: doxorubicin product information",
+        "url": "https://assets.hpra.ie/products/Human/27561/Licence_PA2315-083-001_20022024123027.pdf"
+      },
+      {
+        "id": "cisplatin-pi",
+        "title": "Health Products Regulatory Authority: cisplatin product information",
+        "url": "https://assets.hpra.ie/products/Human/22078/Licence_PA0822-199-001_18032025120043.pdf"
+      },
+      {
+        "id": "nci-bone",
+        "title": "National Cancer Institute: surgery, chemotherapy and selected radiotherapy in osteosarcoma",
+        "url": "https://www.cancer.gov/types/bone/hp/osteosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00463": {
+    "code": "00463",
+    "title": "Methotrexate, doxorubicin and cisplatin for osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-grade osteosarcoma of an extremity or axial skeleton, excluding craniofacial sites, with all disease sites amenable to complete surgical resection; national eligibility age 40 years or younger",
+    "summary": "The reference plan is not a repeating 21-day cycle. Before surgery, doxorubicin 37.5 mg/m² and cisplatin 60 mg/m² are each given on days 1 and 2 of weeks 1 and 6; methotrexate 12 g/m² is given on day 1 of weeks 4, 5, 9 and 10. Surgery is planned for reference week 11. Afterwards, doxorubicin is given on days 1 and 2 of weeks 12, 17, 22 and 26; cisplatin on days 1 and 2 of weeks 12 and 17; methotrexate on day 1 of weeks 15, 16, 20, 21, 24, 25, 28 and 29. Actual dates depend on surgery, recovery, drug clearance and safety review.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before surgery: weeks 1–10",
+        "when": "Before surgery: weeks 1–10",
+        "why": "The three medicines act through different mechanisms against osteosarcoma throughout the body. Surgery removes the visible tumour, and chemotherapy before and after surgery aims to reduce recurrence risk.",
+        "clinical": "Doxorubicin and cisplatin on days 1–2 of weeks 1 and 6; methotrexate in weeks 4, 5, 9 and 10.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Reduced urine, severe mouth ulcers or diarrhoea, new neurological symptoms or delayed methotrexate clearance needs urgent specialist assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Surgery: reference week 11",
+        "when": "Surgery: reference week 11",
+        "why": "The three medicines act through different mechanisms against osteosarcoma throughout the body. Surgery removes the visible tumour, and chemotherapy before and after surgery aims to reduce recurrence risk.",
+        "clinical": "Actual timing depends on the operation and recovery. Additional preoperative methotrexate is only a separate consultant decision.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Reduced urine, severe mouth ulcers or diarrhoea, new neurological symptoms or delayed methotrexate clearance needs urgent specialist assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "After surgery: weeks 12–29",
+        "when": "After surgery: weeks 12–29",
+        "why": "The three medicines act through different mechanisms against osteosarcoma throughout the body. Surgery removes the visible tumour, and chemotherapy before and after surgery aims to reduce recurrence risk.",
+        "clinical": "Doxorubicin in weeks 12, 17, 22 and 26; cisplatin in weeks 12 and 17; methotrexate in weeks 15, 16, 20, 21, 24, 25, 28 and 29.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Reduced urine, severe mouth ulcers or diarrhoea, new neurological symptoms or delayed methotrexate clearance needs urgent specialist assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00463, version 4",
+        "url": "https://healthservice.hse.ie/documents/6736/463_v4_MAP.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EURAMOS-1: preoperative platform and randomised methotrexate, doxorubicin and cisplatin plus ifosfamide and etoposide versus methotrexate, doxorubicin and cisplatin in poor responders",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27569442/"
+      },
+      {
+        "id": "methotrexate-pi",
+        "title": "Health Products Regulatory Authority: methotrexate product information",
+        "url": "https://assets.hpra.ie/products/Human/22092/Licence_PA0822-206-007_11092026121412.pdf"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "Health Products Regulatory Authority: doxorubicin product information",
+        "url": "https://assets.hpra.ie/products/Human/27561/Licence_PA2315-083-001_20022024123027.pdf"
+      },
+      {
+        "id": "cisplatin-pi",
+        "title": "Health Products Regulatory Authority: cisplatin product information",
+        "url": "https://assets.hpra.ie/products/Human/22078/Licence_PA0822-199-001_18032025120043.pdf"
+      },
+      {
+        "id": "euramos_prerandomisation2015",
+        "title": "EURAMOS-1 pre-randomisation treatment",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25421877/"
+      },
+      {
+        "id": "nci-bone",
+        "title": "National Cancer Institute: surgery, chemotherapy and selected radiotherapy in osteosarcoma",
+        "url": "https://www.cancer.gov/types/bone/hp/osteosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00680": {
+    "code": "00680",
+    "title": "High-dose ifosfamide for recurrent Ewing sarcoma or relapsed osteosarcoma: treatment and checks",
+    "release": "0.84.63",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Recurrent or primary refractory Ewing sarcoma, or relapsed osteosarcoma",
+    "summary": "Ifosfamide 3,000 mg/m² is infused over 24 hours on each of days 1–5, giving five consecutive 24-hour infusions. Repeat every 21 days for a maximum of four cycles unless progression or unacceptable toxicity stops treatment sooner. Mesna starts before the first infusion, continues throughout the five-day treatment and includes a final dose on day 6 after the last ifosfamide infusion.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Safety tests and symptoms",
+        "cells": [
+          "Complete the regimen-specific starting tests.",
+          "Follow the timings in the individual test cards.",
+          "Report new symptoms immediately; additional tests may be needed.",
+          "Continue follow-up of abnormal tests or lasting effects."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm treatment, protective medicines and access.",
+          "Record actual doses, support and any holds.",
+          "Keep the written support and urgent-contact plan.",
+          "Agree remaining medicines and line-care needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      },
+      {
+        "label": "Tumour review and next steps",
+        "cells": [
+          "Agree treatment intent and disease assessment.",
+          "Use the specialist surgery and response-review plan.",
+          "Report changes in symptoms or function.",
+          "Agree the next phase, rehabilitation and follow-up."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The national regimen, product information and individual clinical plan may require different tests. Your treating team writes the actual dates and reviews results before treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Five consecutive 24-hour ifosfamide infusions; every 21 days, maximum 4 cycles",
+        "when": "Five consecutive 24-hour ifosfamide infusions; every 21 days, maximum 4 cycles",
+        "why": "High-dose ifosfamide aims to control previously treated sarcoma and can sometimes make further local treatment possible. The specialist team weighs potential tumour shrinkage against substantial bone-marrow, brain, kidney and bladder risks.",
+        "clinical": "Ifosfamide 3,000 mg/m² is infused over 24 hours on each of days 1–5, giving five consecutive 24-hour infusions. Repeat every 21 days for a maximum of four cycles unless progression or unacceptable toxicity stops treatment sooner. Mesna starts before the first infusion, continues throughout the five-day treatment and includes a final dose on day 6 after the last ifosfamide infusion.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Any change in alertness, confusion, hallucinations, seizures, blood in urine or reduced urine requires immediate assessment.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00680, version 2",
+        "url": "https://healthservice.hse.ie/documents/6767/680_v2_Ifosfamide_highdose.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "High-dose ifosfamide cohorts in Ewing sarcoma and relapsed osteosarcoma",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19142994/"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "Health Products Regulatory Authority: ifosfamide product information",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "palmerini2020",
+        "title": "High-dose ifosfamide in relapsed unresectable osteosarcoma",
+        "url": "https://www.mdpi.com/2073-4409/9/11/2389"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
