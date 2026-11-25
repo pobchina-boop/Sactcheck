@@ -771,6 +771,31 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "original_pld_mg_m2": {
+      "label": "Original prescribed PLD dose (confirm against prescription)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "unit": "mg/m²",
+      "demo_value": null,
+      "input_role": "decision"
+    },
+    "current_to_original_pld_ratio": {
+      "type": "number",
+      "label": "Current to original prescribed PLD dose ratio",
+      "required": false,
+      "visible": false,
+      "ui_derived_from": "original_pld_mg_m2",
+      "derived_value": {
+        "operation": "ratio",
+        "fields": [
+          "current_pld_mg_m2",
+          "original_pld_mg_m2"
+        ]
+      },
+      "demo_value": null
     }
   },
   "required_inputs": [],
@@ -1337,7 +1362,8 @@
           "recommendation": "Hepatic 75% of ORIGINAL dose and a separate 25% toxicity-reduction/alternative pathway both apply. Do not multiply percentages or choose a new numerical dose automatically; reconcile current/original dose and all causes.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true,
-          "block_numeric_dose": true
+          "block_numeric_dose": true,
+          "original_dose_field": "original_pld_mg_m2"
         },
         "source": {
           "document": "NCCP 00205 Version8",
@@ -1474,7 +1500,8 @@
           "recommendation": "Hepatic 50% of ORIGINAL dose and a separate 25% toxicity-reduction/alternative pathway both apply. Do not multiply percentages or choose a new numerical dose automatically; reconcile current/original dose and all causes.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true,
-          "block_numeric_dose": true
+          "block_numeric_dose": true,
+          "original_dose_field": "original_pld_mg_m2"
         },
         "source": {
           "document": "NCCP 00205 Version8",
@@ -1583,9 +1610,9 @@
               ]
             },
             {
-              "field": "current_pld_mg_m2",
+              "field": "current_to_original_pld_ratio",
               "operator": "<",
-              "value": 37.5
+              "value": 0.75
             }
           ]
         },
@@ -1594,18 +1621,19 @@
           "components": [
             "pegylated_liposomal_doxorubicin"
           ],
-          "message": "Table 2 specifies 75% of ORIGINAL dose, but current PLD dose is already below the 37.5 mg/m² protocol reference. Do not increase it automatically; Consultant/pharmacy must reconcile dose history.",
-          "recommendation": "Table 2 specifies 75% of ORIGINAL dose, but current PLD dose is already below the 37.5 mg/m² protocol reference. Do not increase it automatically; Consultant/pharmacy must reconcile dose history.",
+          "message": "The current prescription is below the NCCP Table 2 percentage of the original dose. Review dose history before any increase.",
+          "recommendation": "The current prescription is below the NCCP Table 2 percentage of the original dose. Review dose history before any increase.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true,
-          "block_numeric_dose": true
+          "block_numeric_dose": true,
+          "original_dose_field": "original_pld_mg_m2"
         },
         "source": {
           "document": "NCCP 00205 Version8",
           "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
           "page": "3 Table2"
         },
-        "explanation": "Table 2 specifies 75% of ORIGINAL dose, but current PLD dose is already below the 37.5 mg/m² protocol reference. Do not increase it automatically; Consultant/pharmacy must reconcile dose history."
+        "explanation": "The current prescription is below the NCCP Table 2 percentage of the original dose. Review dose history before any increase."
       },
       {
         "id": "PLD_HEP_CURRENT_LOWER_51_86",
@@ -1661,9 +1689,9 @@
               ]
             },
             {
-              "field": "current_pld_mg_m2",
+              "field": "current_to_original_pld_ratio",
               "operator": "<",
-              "value": 25
+              "value": 0.5
             }
           ]
         },
@@ -1672,18 +1700,19 @@
           "components": [
             "pegylated_liposomal_doxorubicin"
           ],
-          "message": "Table 2 specifies 50% of ORIGINAL dose, but current PLD dose is already below the 25 mg/m² protocol reference. Do not increase it automatically; Consultant/pharmacy must reconcile dose history.",
-          "recommendation": "Table 2 specifies 50% of ORIGINAL dose, but current PLD dose is already below the 25 mg/m² protocol reference. Do not increase it automatically; Consultant/pharmacy must reconcile dose history.",
+          "message": "The current prescription is below the NCCP Table 2 percentage of the original dose. Review dose history before any increase.",
+          "recommendation": "The current prescription is below the NCCP Table 2 percentage of the original dose. Review dose history before any increase.",
           "dose_calculation": "specialist_review",
           "show_in_dose_actions": true,
-          "block_numeric_dose": true
+          "block_numeric_dose": true,
+          "original_dose_field": "original_pld_mg_m2"
         },
         "source": {
           "document": "NCCP 00205 Version8",
           "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
           "page": "3 Table2"
         },
-        "explanation": "Table 2 specifies 50% of ORIGINAL dose, but current PLD dose is already below the 25 mg/m² protocol reference. Do not increase it automatically; Consultant/pharmacy must reconcile dose history."
+        "explanation": "The current prescription is below the NCCP Table 2 percentage of the original dose. Review dose history before any increase."
       },
       {
         "id": "PLD_CUMULATIVE_ECHO_DUE",
@@ -2138,9 +2167,9 @@
                   "operator": "missing"
                 },
                 {
-                  "field": "current_pld_mg_m2",
+                  "field": "current_to_original_pld_ratio",
                   "operator": ">=",
-                  "value": 37.5
+                  "value": 0.75
                 }
               ]
             },
@@ -2235,6 +2264,11 @@
                   ]
                 }
               ]
+            },
+            {
+              "field": "original_pld_mg_m2",
+              "operator": ">",
+              "value": 0
             }
           ]
         },
@@ -2243,11 +2277,12 @@
           "components": [
             "pegylated_liposomal_doxorubicin"
           ],
-          "message": "Bilirubin band 20–50 µmol/L: 75% of ORIGINAL PLD dose under NCCP Table 2. The 50 mg/m² protocol reference gives 37.5 mg/m²; confirm original/current prescribed dose and other applicable modifications.",
-          "recommendation": "Bilirubin band 20–50 µmol/L: 75% of ORIGINAL PLD dose under NCCP Table 2. The 50 mg/m² protocol reference gives 37.5 mg/m²; confirm original/current prescribed dose and other applicable modifications.",
+          "message": "NCCP Table 2 specifies 75% of the original prescribed PLD dose. Check other applicable toxicity modifications.",
+          "recommendation": "NCCP Table 2 specifies 75% of the original prescribed PLD dose. Check other applicable toxicity modifications.",
           "component_changes": {
             "pegylated_liposomal_doxorubicin": {
-              "dose_percent_of_original": 75
+              "dose_percent_of_original": 75,
+              "original_dose_field": "original_pld_mg_m2"
             }
           }
         },
@@ -2256,7 +2291,7 @@
           "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
           "page": "3 Table2"
         },
-        "explanation": "Bilirubin band 20–50 µmol/L: 75% of ORIGINAL PLD dose under NCCP Table 2. The 50 mg/m² protocol reference gives 37.5 mg/m²; confirm original/current prescribed dose and other applicable modifications."
+        "explanation": "NCCP Table 2 specifies 75% of the original prescribed PLD dose. Check other applicable toxicity modifications."
       },
       {
         "id": "OF590_00205_PLD_BILI_51_86",
@@ -2318,9 +2353,9 @@
                   "operator": "missing"
                 },
                 {
-                  "field": "current_pld_mg_m2",
+                  "field": "current_to_original_pld_ratio",
                   "operator": ">=",
-                  "value": 25
+                  "value": 0.5
                 }
               ]
             },
@@ -2415,6 +2450,11 @@
                   ]
                 }
               ]
+            },
+            {
+              "field": "original_pld_mg_m2",
+              "operator": ">",
+              "value": 0
             }
           ]
         },
@@ -2423,11 +2463,12 @@
           "components": [
             "pegylated_liposomal_doxorubicin"
           ],
-          "message": "Bilirubin band 51–86 µmol/L: 50% of ORIGINAL PLD dose under NCCP Table 2. The 50 mg/m² protocol reference gives 25 mg/m²; confirm original/current prescribed dose and other applicable modifications.",
-          "recommendation": "Bilirubin band 51–86 µmol/L: 50% of ORIGINAL PLD dose under NCCP Table 2. The 50 mg/m² protocol reference gives 25 mg/m²; confirm original/current prescribed dose and other applicable modifications.",
+          "message": "NCCP Table 2 specifies 50% of the original prescribed PLD dose. Check other applicable toxicity modifications.",
+          "recommendation": "NCCP Table 2 specifies 50% of the original prescribed PLD dose. Check other applicable toxicity modifications.",
           "component_changes": {
             "pegylated_liposomal_doxorubicin": {
-              "dose_percent_of_original": 50
+              "dose_percent_of_original": 50,
+              "original_dose_field": "original_pld_mg_m2"
             }
           }
         },
@@ -2436,7 +2477,7 @@
           "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
           "page": "3 Table2"
         },
-        "explanation": "Bilirubin band 51–86 µmol/L: 50% of ORIGINAL PLD dose under NCCP Table 2. The 50 mg/m² protocol reference gives 25 mg/m²; confirm original/current prescribed dose and other applicable modifications."
+        "explanation": "NCCP Table 2 specifies 50% of the original prescribed PLD dose. Check other applicable toxicity modifications."
       },
       {
         "id": "PLD_HEP_GAP",
@@ -3779,6 +3820,180 @@
           "page": "8–9 section4.4"
         },
         "explanation": "Interrupt PLD and promptly investigate suspected interstitial lung disease, including worsening breathlessness/dry cough/fever."
+      },
+      {
+        "id": "PLD_HEP_ORIGINAL_REQUIRED_20_50",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "bilirubin_umol_l",
+                          "operator": ">=",
+                          "value": 20
+                        },
+                        {
+                          "field": "bilirubin_umol_l",
+                          "operator": "<=",
+                          "value": 50
+                        }
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "pld_bilirubin_band",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "pld_bilirubin_band",
+                          "operator": "==",
+                          "value": "20_50"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "pld_bilirubin_band",
+                      "operator": "==",
+                      "value": "20_50"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "original_pld_mg_m2",
+                  "operator": "missing"
+                },
+                {
+                  "field": "original_pld_mg_m2",
+                  "operator": "<=",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated_liposomal_doxorubicin"
+          ],
+          "message": "Confirm the original prescribed PLD dose in mg/m² before calculating the NCCP Table 2 adjustment.",
+          "recommendation": "Confirm the original prescribed PLD dose in mg/m² before calculating the NCCP Table 2 adjustment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "original_dose_field": "original_pld_mg_m2"
+        },
+        "source": {
+          "document": "NCCP 00205 Version8",
+          "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
+          "page": "3 Table2"
+        },
+        "explanation": "Confirm the original prescribed PLD dose in mg/m² before calculating the NCCP Table 2 adjustment."
+      },
+      {
+        "id": "PLD_HEP_ORIGINAL_REQUIRED_51_86",
+        "priority": 30,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "all": [
+                        {
+                          "field": "bilirubin_umol_l",
+                          "operator": ">=",
+                          "value": 51
+                        },
+                        {
+                          "field": "bilirubin_umol_l",
+                          "operator": "<=",
+                          "value": 86
+                        }
+                      ]
+                    },
+                    {
+                      "any": [
+                        {
+                          "field": "pld_bilirubin_band",
+                          "operator": "missing"
+                        },
+                        {
+                          "field": "pld_bilirubin_band",
+                          "operator": "==",
+                          "value": "51_86"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": "missing"
+                    },
+                    {
+                      "field": "pld_bilirubin_band",
+                      "operator": "==",
+                      "value": "51_86"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "original_pld_mg_m2",
+                  "operator": "missing"
+                },
+                {
+                  "field": "original_pld_mg_m2",
+                  "operator": "<=",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated_liposomal_doxorubicin"
+          ],
+          "message": "Confirm the original prescribed PLD dose in mg/m² before calculating the NCCP Table 2 adjustment.",
+          "recommendation": "Confirm the original prescribed PLD dose in mg/m² before calculating the NCCP Table 2 adjustment.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "original_dose_field": "original_pld_mg_m2"
+        },
+        "source": {
+          "document": "NCCP 00205 Version8",
+          "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf",
+          "page": "3 Table2"
+        },
+        "explanation": "Confirm the original prescribed PLD dose in mg/m² before calculating the NCCP Table 2 adjustment."
       }
     ]
   },

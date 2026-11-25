@@ -23,6 +23,6 @@ function registry(codes,prior){
   assert.deepEqual(gynaecology,['00862','00929']);
   const sarcoma = require('./retrospective-v08464.cjs').NEW_ROUTES;
   assert.deepEqual(sarcoma,['00374','00228/liposarcoma','00205/sarcoma','00462','00554']);
-  assert.deepEqual([...codes].sort(),[...expected,...gynaecology,...sarcoma.filter(route=>!route.includes('/'))].sort(),'Every released root is present exactly once');
+  assert.deepEqual([...codes].sort(),[...expected,...gynaecology,...sarcoma.filter(route=>!route.includes('/')),...require('./remaining-sarcoma-patient-files.cjs').NEW_ROUTES].sort(),'Every released root is present exactly once');
 }
 module.exports={registry,added};

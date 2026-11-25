@@ -7,6 +7,10 @@ const root = path.resolve(__dirname, '..');
 const {isRenalMeasurement}=require('./helpers/renal-field-semantics-v08460.cjs');
 const SARCOMA60=require('./helpers/sarcoma-inputs-v08460.cjs');
 const GIST61=require('./helpers/gist-inputs-v08461.cjs');
+const SARCOMA62=require('./helpers/sarcoma-inputs-v08462.cjs');
+const SARCOMA63=require('./helpers/sarcoma-inputs-v08463.cjs');
+const SARCOMA64=require('./helpers/sarcoma-inputs-v08464.cjs');
+const IFOSPAIR62=require('./helpers/ifosfamide-pair-v08462.cjs');
 // Positive measurements and negative reference/age qualifiers guard semantic classification.
 for(const [field,definition,expected]of [
  ['creatinine_percent_of_gfr_baseline',{label:'Creatinine as percentage of value at measured GFR',unit:'%'},false],
@@ -179,7 +183,9 @@ for (const { file, data } of protocols) {
   assert(supportive.mapping_source_url, `${code} lacks antiemetic source link`);
   assert(supportive.mapping_basis, `${code} lacks antiemetic mapping basis`);
   assert(supportive.validation_status, `${code} lacks supportive-care validation status`);
-  if (supportive.emetogenic_risk === 'variable') variableRisk += 1;
+  if (SARCOMA64.applies(data)) {
+    SARCOMA64.validateSupport(data,riskMap);
+  } else if (supportive.emetogenic_risk === 'variable') variableRisk += 1;
   else if (supportive.emetogenic_risk === 'phase_dependent') {
     assert(Object.keys(supportive.phase_profiles || {}).length >= 2, `${code} phase-dependent risk lacks phase profiles`);
     assert(!supportive.supportive_medications_pdf_url, `${code} phase-dependent regimen has a misleading static supportive-care link`);
@@ -201,7 +207,7 @@ for (const { file, data } of protocols) {
   const definitions = data.input_definitions || {};
   const rules = data.rule_engine?.rules || [];
   for (const [field, def] of Object.entries(definitions)) {
-    const sourceGrade = require('./helpers/gu-inputs-v08458.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08457.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08456.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').grade(data,field,def) || SKIN42Inputs.grade(data, field, def) || SKIN40Inputs.grade(data, field, def) || NEURO39Inputs.grade(data, field, def) || NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
+    const sourceGrade = IFOSPAIR62.grade(data,field,def,ctcae) || require('./helpers/gu-inputs-v08458.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08457.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08456.cjs').grade(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').grade(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').grade(data,field,def) || SKIN42Inputs.grade(data, field, def) || SKIN40Inputs.grade(data, field, def) || NEURO39Inputs.grade(data, field, def) || NEURO38Inputs.grade(data, field, def) || NET37Inputs.sourceGrade(data, field, def);
     const bevacizumabGrade = code === '00746' && ['hypertension_grade','haemorrhage_grade','venous_thromboembolism_grade','fistula_grade'].includes(field);
     if (bevacizumabGrade) {
       assert.equal(def.grading_source_url, metadata.source_url);
@@ -217,21 +223,11 @@ for (const { file, data } of protocols) {
     if (!bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
-      const product = require('./helpers/ifosfamide-pair-v08462.cjs');
-      if (product.grade(data,field,def,ctcae)) continue;
-      const sarcomaGrades = require('../validation/sarcoma-v08462/clinical-compatibility.json');
-      if (metadata.sactcheck_encoding_version === '0.84.62' && sarcomaGrades.ranges[code]?.[field]) {
-        const expected = sarcomaGrades.ranges[code][field];
-        const digest = require('node:crypto').createHash('sha256').update(JSON.stringify(def)).digest('hex');
-        assert.equal(digest,sarcomaGrades.records[code].grade_definitions_sha256[field],code+'/'+field+' reviewed grading definition');
-        assert.equal(metadata.source_url,sarcomaGrades.records[code].source_url);
-        assert.deepEqual(def.options.map(option=>Number(option.value)),expected);
-        const guide = ctcae.guide({...def,id:field});
-        for (const grade of expected) assert(guide.grades.find(row=>Number(row.grade)===grade)?.description);
-        continue;
-      }
       const headNeckV45Source = HEADNECK45.applies(data);
       const gistV61=GIST61.applies(data);
+      const sarcomaV62=SARCOMA62.applies(data);
+      const sarcomaV63=SARCOMA63.applies(data);
+      const sarcomaV64=SARCOMA64.applies(data);
       const sourceDiarrhoea = ['00216','00586','00623'].includes(code) && ['diarrhoea_grade','diarrhoea_highest_grade'].includes(field);
       const folfoxSourceDiarrhoea = (['00447','00733'].includes(code) && ['diarrhoea_current_grade','diarrhoea_grade','diarrhoea_highest_grade'].includes(field)) || (code==='00791' && ['diarrhoea_grade','diarrhoea_highest_grade','mucositis_grade','stomatitis_highest_grade'].includes(field));
       const everolimusSource = code === '00322';
@@ -250,7 +246,13 @@ for (const { file, data } of protocols) {
       const lungV29Source=metadata.sactcheck_encoding_version==='0.84.29'&&['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code);
       const lungV28Source=metadata.sactcheck_encoding_version==='0.84.28'&&['00281','00310','00304','00339','00343','00317','00318','00271','00280','00621'].includes(code);
       const lungV27Source=metadata.sactcheck_encoding_version==='0.84.27'&&['00483','00484','00712','00792','00849','00713','00714','00568','00569','00579'].includes(code);
-      if(code==='00926'){
+      if(sarcomaV64) {
+        SARCOMA64.validateGrade(data,field,def,ctcae);
+      }else if(sarcomaV63) {
+        SARCOMA63.validateGrade(data,field,def,ctcae);
+      }else if(sarcomaV62) {
+        SARCOMA62.validateGrade(data,field,def,ctcae);
+      }else if(code==='00926'){
         assert.equal(def.ctcae_version, '4.03');
         assert.match(def.grading_source_label, /Table 2.*CTCAE v4.03/);
         assert.equal(def.grading_source_url, metadata.source_url);
@@ -312,13 +314,13 @@ for (const { file, data } of protocols) {
       if(palbociclibSource){assert.equal(def.grading_source_label,'NCCP 00414 / CTCAE v4.0');assert.match(def.grading_source_url,/cancer.gov.*ctcae-v403/);assert(def.options.every(x=>x.description));}
       if(folfoxSourceDiarrhoea) assert.match(def.assessment_guidance,/NCCP.*[Tt]able 6/);
       if(sourceDiarrhoea) { assert.match(def.ctcae_source_url,/healthservice.hse.ie/); assert.match(def.assessment_guidance,/legacy|NCCP/i); }
-      if(!gistV61 && !headNeckV45Source && !antibodyV34Source && !oralV34Source && !pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
+      if(!sarcomaV64 && !sarcomaV63 && !sarcomaV62 && !gistV61 && !headNeckV45Source && !antibodyV34Source && !oralV34Source && !pldSource && !newSourceGrade && !lungSource && !targetedV24Source && !targetedV25Source && !lungV26Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source) assert(def.ctcae_category, `${code}/${field} lacks a toxicity-specific CTCAE category`);
       assert(def.assessment_guidance, `${code}/${field} lacks practical assessment guidance`);
       const grades = new Set((def.options || []).map(option => Number(option.value)));
       const net37Hfs = NET37Inputs.handFoot(data, field, def);
       const sourceHfs = net37Hfs || (code==='00890' && field==='ppes_grade') || (oralV34Source&&code==='00244'&&field==='hfsr_grade') || (['00555','00783','00691'].includes(code)&&['hand_foot_grade','hand_foot_worst_grade'].includes(field)) || (['00216','00586','00623','00505'].includes(code) && ['hand_foot_syndrome_grade','hand_foot_highest_grade'].includes(field)) || (code === '00217' && field === 'hand_foot_grade');
       const sourceNausea = code === '00794' && field === 'nausea_grade';
-      const expectedGrades = gistV61 ? GIST61.ranges[code][field] : code==='00702'&&field==='hyperuricaemia_grade' ? [0,1,3,4] : code==='00947' && field.endsWith('_event_peak_grade') ? [2,3,4] : sourceNausea ? [0,1,2,3] : ['00322','00588','00746'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
+      const expectedGrades = sarcomaV64 ? SARCOMA64.ranges[code][field] : sarcomaV63 ? SARCOMA63.ranges[code][field] : sarcomaV62 ? SARCOMA62.ranges[code][field] : gistV61 ? GIST61.ranges[code][field] : code==='00702'&&field==='hyperuricaemia_grade' ? [0,1,3,4] : code==='00947' && field.endsWith('_event_peak_grade') ? [2,3,4] : sourceNausea ? [0,1,2,3] : ['00322','00588','00746'].includes(code) && field === 'febrile_neutropenia_grade' ? [0,3,4] : sourceHfs ? [0,1,2,3] : [0,1,2,3,4];
       if (everolimusSource) {
         assert.equal(def.grading_source_label, 'NCCP 00322 / NCI CTCAE v3.0');
         assert.match(def.grading_source_url, /cancer.gov.*ctcae-v3/);
@@ -338,7 +340,7 @@ for (const { file, data } of protocols) {
       guide.grades.forEach(item => assert(item.description, `${code}/${field} Grade ${item.grade} has no explanation`));
       if((code==='00505'&&require('./helpers/captem-grading-v08437.cjs').sourceFields.has(field))||(code==='00216'&&require('./helpers/capecitabine-grading-v08436.cjs').sourceFields.has(field))||code==='00692'||antibodyV34Source||oralV34Source||lungSource||targetedV24Source||targetedV25Source)assert(guide.sourceSpecific, 'Source-specific grading must override generic descriptors');
       const fieldText = `${field} ${def.label || ''}`.toLowerCase();
-      if(!gistV61&&!headNeckV45Source&&!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
+      if(!sarcomaV64&&!sarcomaV63&&!sarcomaV62&&!gistV61&&!headNeckV45Source&&!antibodyV34Source&&!oralV34Source&&!lungSource&&!targetedV24Source && !targetedV25Source && !lungV27Source && !lungV28Source && !lungV29Source && !lungV30Source){
       if (/non[-_ ]?ha?em|non[-_ ]?hemat|non[-_ ]?haemat/.test(fieldText)) {
         assert.equal(def.ctcae_category, 'other_nonhaematological', `${code}/${field} is incorrectly classified as haematological`);
       }
@@ -368,15 +370,14 @@ for (const { file, data } of protocols) {
     }
     // These fields qualify the age/reuse of a GFR estimate; they are not GFR measurements.
     if(['00705','00310','00849','00430','00251','00261','00318','00579','00713','00689','00908','00271','00280','00319'].includes(code) && ['isotope_creatinine_percent_baseline','creatinine_sample_age_hours','creatinine_age_hours','creatinine_percent_of_isotope_baseline','creatinine_percent_reference','serum_creatinine_percent_isotope_baseline'].includes(field)){assert.equal(def.type,'number');continue;}
-    if ((require('./helpers/gu-inputs-v08458.cjs').numericRenal(data,field,def) || require('./helpers/prostate-inputs-v08457.cjs').numericRenal(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').numericRenal(data,field,def) || HEADNECK47Inputs.numericRenal(data, field, def) || SKIN42Inputs.numericRenal(data, field, def) || SKIN40Inputs.numericRenal(data, field, def) || NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
-    if(['00391','00392'].includes(code) && field==='serum_creatinine_umol_l'){
+    if(['00391','00392','00596','00680'].includes(code) && field==='serum_creatinine_umol_l'){
       assert.equal(def.type,'number');assert.equal(def.unit,'µmol/L');assert.equal(def.required,false);
       assert.match(def.label,/serum creatinine.*not CrCl or eGFR/i);
       assert(rules.some(rule=>(rule.id||rule.rule_id)==='IFO_PRODUCT_SERUM_CREATININE_UMOL_L'));
       continue;
     }
-    if(metadata.sactcheck_encoding_version==='0.84.62' && field==='crcl_ml_min' && ['00374','00554','00205','00462'].includes(code)) {
-      assert(rules.filter(rule=>collectComparisons([rule],field,[]).length).every(rule=>rule.source?.url===metadata.source_url && rule.source?.page), code+' source-linked renal criteria');
+    if(SARCOMA62.applies(data) && field==='crcl_ml_min' && ['00374','00554','00205','00462'].includes(code)) {
+      SARCOMA62.validate(data);
       assert.equal(def.type,'number');assert.equal(def.unit,'mL/min');assert.equal(def.required,false);
       if(['00374','00554'].includes(code)) {
         const values=[...new Set(collectComparisons(rules,field,[]))].sort((a,b)=>a-b);
@@ -387,7 +388,8 @@ for (const { file, data } of protocols) {
       }
       continue;
     }
-    if(SARCOMA60.numericRenal(data,field,def))continue;
+    if ((require('./helpers/gu-inputs-v08458.cjs').numericRenal(data,field,def) || require('./helpers/prostate-inputs-v08457.cjs').numericRenal(data,field,def) || require('./helpers/prostate-inputs-v08451.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08450.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08449.cjs').numericRenal(data,field,def) || require('./helpers/head-neck-inputs-v08448.cjs').numericRenal(data,field,def) || HEADNECK47Inputs.numericRenal(data, field, def) || SKIN42Inputs.numericRenal(data, field, def) || SKIN40Inputs.numericRenal(data, field, def) || NEURO39Inputs.numericRenal(data, field, def) || NEURO38Inputs.numericRenal(data, field, def) || NET37Inputs.numericRenal(data, field, def))) continue;
+    if(SARCOMA60.numericRenal(data,field,def)||SARCOMA63.numericRenal(data,field,def)||SARCOMA64.numericRenal(data,field,def))continue;
     if (!isRenalMeasurement(field,def)) continue;
     if (!['number', 'select'].includes(def.type)) continue;
     const comparisons = collectComparisons(rules, field).filter(value => Number.isFinite(Number(value)));

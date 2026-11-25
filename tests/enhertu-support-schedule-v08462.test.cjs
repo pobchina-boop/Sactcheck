@@ -37,7 +37,7 @@ assert.match(target[0].medicines.find(m => m.name === 'Ondansetron').note, /8 mg
 const otherRegimens = value => {
   const copy = structuredClone(value); delete copy.regimens['00776']; return copy;
 };
-const olaparib = json('package.json').version === '0.84.63' ? require('./helpers/retrospective-v08463.cjs') : null;
+const olaparib = ['0.84.63','0.84.64'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
 const inheritedPhase = olaparib ? olaparib.baselineJson('data/phase-support-v0838.json') : phase;
 assert.deepEqual(otherRegimens(inheritedPhase), otherRegimens(JSON.parse(old('data/phase-support-v0838.json'))), 'All other live support plans and registry metadata are unchanged in the authenticated Enhertu state');
 if (olaparib) {
@@ -46,7 +46,7 @@ if (olaparib) {
     for (const code of ['00588', '00746', '00862', '00929']) delete copy.regimens[code];
     return copy;
   };
-  assert.deepEqual(withoutOlaparib(phase), withoutOlaparib(inheritedPhase), 'Only the four authenticated successor support plans may succeed the Enhertu state; every other plan and all registry metadata remain exact');
+  assert.deepEqual(withoutOlaparib(require('./helpers/live-release-v08464.cjs').approvedJson('data/phase-support-v0838.json')), withoutOlaparib(inheritedPhase), 'Only the four authenticated successor support plans may succeed the Enhertu state; every other plan and all registry metadata remain exact');
   for (const code of ['00588', '00746', '00862', '00929']) {
     assert(Array.isArray(phase.regimens[code]) && phase.regimens[code].length, code + ' keeps an explicit current support plan');
     assert.notDeepEqual(phase.regimens[code], inheritedPhase.regimens[code], code + ' has an explicit reviewed support transition');

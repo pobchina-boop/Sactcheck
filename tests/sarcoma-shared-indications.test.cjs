@@ -27,7 +27,7 @@ for (const { protocol, sarcoma, input, breastDose } of cases) {
     assert.deepEqual(model, Dose.buildModificationModel(selected, result), 'Dose display uses assessed indication');
     const args = { result, protocol, assessmentId: 'batch1-test' };
     assert.deepEqual(Output.buildModel(args), Output.buildModel({...args,protocol:selected}), 'Export uses assessed indication');
-    if (indication === sarcoma || selected === protocol.assessment_by_indication['00205a']) {
+    if (indication === sarcoma || protocol === cases[1].protocol) {
       assert.equal(result.actionType, 'consultant_review');
       assert(!model.rows.some(row => row.protocolDose === breastDose));
     } else {
@@ -39,7 +39,7 @@ for (const { protocol, sarcoma, input, breastDose } of cases) {
 console.log('Shared sarcoma, breast, gynaecology and legacy selections retain their expected assessment, displayed dose and export.');
 
 const pld = cases[1].protocol;
-for (const indication_id of ['00205a', undefined]) {
+for (const indication_id of ['00205a', '00205b', '00205d', undefined]) {
   for (const [bilirubin_umol_l, original_pld_mg_m2, current_pld_mg_m2, dose] of [
     [20,40,40,30], [50,40,30,30], [51,40,40,20], [86,40,20,20],
     [51,50,50,25], [20,50,50,37.5], [51,40,19,null], [50,40,29,null],
@@ -62,4 +62,13 @@ for (const indication_id of ['00205a', undefined]) {
     }
   }
 }
-console.log('00205 breast Table 2 checks passed for both source bands, missing original doses, lower current prescriptions, boundaries and exports.');
+console.log('00205 breast, ovarian and endometrial Table 2 checks passed for both source bands, missing original doses, lower current prescriptions, boundaries and exports.');
+
+// The separate sarcoma assessment requires specialist review at these source boundaries.
+for (const bilirubin_umol_l of [20,50,51,86]) {
+  const inputs = {indication_id:'00205c',bilirubin_umol_l,original_pld_mg_m2:40,current_pld_mg_m2:40};
+  const result = Engine.assess(pld, inputs);
+  assert.equal(result.actionType,'consultant_review');
+  const rows = Dose.buildModificationModel(pld,result).rows;
+  assert(rows.length && rows.every(row=>!/^\d+(?:\.\d+)? mg\/m²$/.test(row.protocolDose)));
+}

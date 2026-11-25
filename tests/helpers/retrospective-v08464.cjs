@@ -29,10 +29,11 @@ function expectedBytes(file, previous) {
   return reviewed.files[file]?.after_bytes ?? previous;
 }
 const priorInventory = require('./gynaecology-00862-00929.cjs').inventory;
+const releaseRoutes = [...NEW_ROUTES,...require('./remaining-sarcoma-patient-files.cjs').NEW_ROUTES];
 const inventory = {
-  codes: priorInventory.codes + NEW_ROUTES.filter(route => !route.includes('/')).length,
-  routes: priorInventory.routes + NEW_ROUTES.length,
-  visualRoutes: priorInventory.visualRoutes + NEW_ROUTES.length
+  codes: priorInventory.codes + releaseRoutes.filter(route => !route.includes('/')).length,
+  routes: priorInventory.routes + releaseRoutes.length,
+  visualRoutes: priorInventory.visualRoutes + releaseRoutes.length
 };
 function approvedPath(file) { return Object.hasOwn(reviewed.files,file); }
-module.exports = { inventory, approvedPath, RECORD, NEW_ROUTES, createMigration, expectedHash, expectedBytes };
+module.exports = { releaseRoutes, inventory, approvedPath, RECORD, NEW_ROUTES, createMigration, expectedHash, expectedBytes };

@@ -14,7 +14,9 @@ function validate(p) {
  if (!applies(p)) return null;
  const code=p.metadata.nccp_regimen_code, entry=manifest.records[code];
  assert(codes.includes(code) && entry,code+' reviewed source');
- assert.deepEqual(p,JSON.parse(archived(entry.path)),code+' exact reviewed clinical rules and inputs');
+ const reviewed=JSON.parse(archived(entry.path));
+ const indication={ '00205':'00205c', '00228':'00228b' }[code];
+ assert.deepEqual(p,indication ? reviewed.assessment_by_indication[indication] : reviewed,code+' exact reviewed clinical rules and inputs');
  assert.equal(p.metadata.source_url,entry.source_url);
  assert.equal(String(p.metadata.nccp_version),entry.source_version);
  for(const flag of ['clinical_use_authorised','consultant_reviewed','oncology_pharmacy_reviewed']) assert.equal(p.metadata.validation[flag],false);

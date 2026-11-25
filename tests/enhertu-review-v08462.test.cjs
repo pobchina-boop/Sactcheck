@@ -135,13 +135,14 @@ if(olaparib){
   assert.equal(new Set(currentCatalogue.records.map(record=>record.entry.id)).size,currentCatalogue.records.length,'Current catalogue cannot duplicate a record to hide a missing protocol');
   assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).sort(),'Current catalogue retains every inherited protocol path');
   const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
+  const sarcomaCodes = require('./helpers/retrospective-v08464.cjs').releaseRoutes.map(route=>route.split('/')[0]);
   const priorAstra=new Map(JSON.parse(zlib.gunzipSync(release.astraBytes(bundlePath))).records.map(r=>[r.entry.path,r]));
   for(const current of currentCatalogue.records){
     const indexed=currentIndex.protocols.find(entry=>entry.id===current.entry.id);assert(indexed,'Current record is indexed: '+current.entry.id);
     assert.deepEqual(current.entry,indexed,'Current bundle entry matches the actual index: '+current.entry.id);
     assert.deepEqual(current.protocol,JSON.parse(fs.readFileSync(path.join(root,indexed.path))),'Current bundle delivers the exact current protocol JSON: '+current.entry.id);
     const batchCode = current.protocol.metadata.nccp_regimen_code;
-    if (!successors.has(current.entry.id) && !['00862','00929','00205','00228','00374','00391','00392','00462','00554'].includes(batchCode)) {
+    if (!successors.has(current.entry.id) && !['00862','00929','00391','00392',...sarcomaCodes].includes(batchCode)) {
       assert.deepEqual(current, priorAstra.get(current.entry.path), 'Unrelated current record equals the AstraZeneca release: ' + current.entry.id);
     }
     if(successors.has(current.entry.id))olaparib.validateProtocol(current.protocol);
