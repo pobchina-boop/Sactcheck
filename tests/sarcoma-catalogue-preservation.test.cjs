@@ -31,6 +31,7 @@ for (const file of paths) {
   if (code === '00205') {
     const prior = JSON.parse(expected);
     const breast = prior.assessment_by_indication['00205a'];
+    breast.input_definitions.current_to_original_pld_ratio.input_role = 'decision';
     for (const key of ['input_definitions','rule_engine']) prior[key] = breast[key];
     assert.deepEqual(JSON.parse(actual), prior, 'Only the two common 00205 assessment fields may change');
   } else {

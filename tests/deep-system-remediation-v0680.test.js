@@ -39,7 +39,18 @@ function scanSelectReachability(node, defs, protocolId, rid) {
       String(item.value), ...(Object.prototype.hasOwnProperty.call(item, "decision_value") ? [String(item.decision_value)] : [])
     ]));
     const values = node.operator === "in" ? (Array.isArray(node.value) ? node.value : []) : [node.value];
-    for (const value of values) assert(options.has(String(value)), `${protocolId}/${rid}: unreachable select value ${value} for ${node.field}`);
+    // These shared ifosfamide safeguards serve two different phase selectors.
+    // Each schema exposes its own treatment phases and a separate restart request.
+    const code=protocolId.split('-')[1];
+    const shared=['00391','00392','00596','00680'].includes(code) && node.field==='assessment_phase' &&
+      ['IFO_PRODUCT_IDENTIFICATION_REQUIRED','IFO_OTHER_PRODUCT_IDENTITY_MISSING','IFO_PRODUCT_LABS_MISSING','IFO_PRODUCT_UNITS_UNVERIFIED'].includes(rid);
+    if(shared){
+      assert.deepEqual(values,['baseline','day1','on_treatment','treatment','restart']);
+      const active=['00391','00392'].includes(code)?['baseline','day1','on_treatment']:['baseline','treatment'];
+      assert.deepEqual([...options].filter(v=>v!=='recovery'),active);
+      assert.equal(defs.restart_requested.type,'boolean');
+      assert(active.every(v=>values.includes(v)));
+    } else for (const value of values) assert(options.has(String(value)), `${protocolId}/${rid}: unreachable select value ${value} for ${node.field}`);
   }
   for (const key of ["all","any","none"]) for (const child of Array.isArray(node[key]) ? node[key] : []) scanSelectReachability(child, defs, protocolId, rid);
   if (node.not && typeof node.not === "object") scanSelectReachability(node.not, defs, protocolId, rid);

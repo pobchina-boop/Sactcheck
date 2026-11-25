@@ -77,6 +77,11 @@ for (const row of require('../protocols/index.json').protocols) {
           assert.equal(definition.derived_value.fields.length,2);
           for(const field of definition.derived_value.fields)assert(presented.some(d=>d.id===field&&d.type==='number'),'Calculated field requires visible numeric operands');
           assert.equal(Engine.assess(p,{[definition.id]:99}).inputs[definition.id],null,'Supplied calculated values cannot replace missing operands');
+        }else if(definition.legacy_api_only && p.metadata.nccp_regimen_code==='00100'){
+          assert.equal(definition.id,'macroscopically_complete_resection');
+          assert.equal(source.id,'complete_resection_confirmed');
+          assert.equal(definition.visible,false);
+          assert.match(definition.assessment_guidance,/no automatic inverse/i);
         }else if(source?.derived_actual_fields){
           const matching=Object.entries(source.derived_actual_fields).filter(([,target])=>target===definition.id);
           assert.equal(matching.length,1,'Hidden absolute input has one explicit analyte mapping');

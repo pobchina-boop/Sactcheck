@@ -79,8 +79,15 @@ assert.equal(auditedPhases[1].components.length,1);
 assert.equal(auditedPhases[1].components[0].id,'dostarlimab');
 assert.equal(auditedPhases[1].cycleLength,42);
 assert.match(auditedPhases[1].intervalLabel,/3 weeks after cycle 6/);
-assert.strictEqual(usefulCoverage, 255+1+1+1);
-assert.strictEqual(scheduleCoverage, 255+1+1+1);
+const newSarcomaSchedules = ['00100','00462','00504','00596','00680','00754','00757'];
+for (const code of newSarcomaSchedules) {
+  const row = catalogue.protocols.find(p => p.path.includes('/'+code+'-'));
+  const previous = JSON.parse(require('node:child_process').execFileSync('git',['show','68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7:'+row.path],{cwd:root}));
+  assert.equal(DoseSchedule.hasData(previous),false);
+  assert(DoseSchedule.buildModel(require(path.join(root,row.path))).phases.length);
+}
+assert.strictEqual(usefulCoverage, 258+newSarcomaSchedules.length);
+assert.strictEqual(scheduleCoverage, 258+newSarcomaSchedules.length);
 assert.strictEqual(doseLevelCoverage, 67);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.

@@ -66,6 +66,7 @@ assert.deepStrictEqual(Object.values(net37.records).flatMap(x=>x.replaced_legacy
 for (const item of register.records) {
   const p = protocol(item.nccp_code);
   const m = p.metadata || {};
+  const sarcoma=require('../tools/lib/sarcoma-organ-migrations.cjs')(p);
   const migration61=require('./helpers/gist-organ-compatibility-v08461.cjs').validate(p);
   const migration60=['00501','00511'].includes(item.nccp_code)?require('./helpers/sarcoma-inputs-v08460.cjs').validate(p):null;
   if(migration60){
@@ -99,8 +100,8 @@ for (const item of register.records) {
   assert.strictEqual(rec.consultant_reviewed, false);
   assert.strictEqual(rec.oncology_pharmacy_reviewed, false);
   assert.strictEqual(rec.clinical_use_authorised, false);
-  assert.strictEqual(m.encoding_maturity.level, migration61 ? migration61.maturity : migration60 ? 'source_reconciled_pending_independent_review' : migration50 ? migration50.maturity : migration45 ? migration45.maturity : migration37 ? migration37.maturity : migration36 ? migration36.maturity : migration35 ? migration35.maturity : migration34 ? migration34.maturity : (migration30||migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
-  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, migration61?migration61.status:migration60?'source_content_reconciled_pending_independent_clinical_and_oncology_pharmacy_review':migration50?migration50.status:migration45?migration45.status:migration37?migration37.status:migration36?migration36.status:migration35?migration35.status:migration34?migration34.status:migration33?migration33.status:migration32?'source_reconciled_v08432_independent_review_pending':migration30?'source_reconciled_v08430_independent_review_pending':m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
+  assert.strictEqual(m.encoding_maturity.level, sarcoma ? sarcoma.maturity : migration61 ? migration61.maturity : migration60 ? 'source_reconciled_pending_independent_review' : migration50 ? migration50.maturity : migration45 ? migration45.maturity : migration37 ? migration37.maturity : migration36 ? migration36.maturity : migration35 ? migration35.maturity : migration34 ? migration34.maturity : (migration30||migration29||v08422||migration24||migration25||migration26) ? 'source_reconciled_pending_independent_review' : 'source_reconciled_rule_encoding');
+  assert.strictEqual(m.validation.rule_level_source_reconciliation_status, sarcoma?sarcoma.status:migration61?migration61.status:migration60?'source_content_reconciled_pending_independent_clinical_and_oncology_pharmacy_review':migration50?migration50.status:migration45?migration45.status:migration37?migration37.status:migration36?migration36.status:migration35?migration35.status:migration34?migration34.status:migration33?migration33.status:migration32?'source_reconciled_v08432_independent_review_pending':migration30?'source_reconciled_v08430_independent_review_pending':m.sactcheck_encoding_version==='0.84.29'?'source_reconciled_v08429_independent_review_pending':m.sactcheck_encoding_version==='0.84.28'?'source_reconciled_v08428_independent_review_pending':migration26?'source_reconciled_v08426_independent_review_pending':migration25?'source_reconciled_v08425_independent_review_pending':migration24?'source_reconciled_v08424_independent_review_pending':v08422 ? 'source_reconciled_pending_independent_clinical_and_pharmacy_review' : item.nccp_code === '00205' ? 'full_source_audit_v0841_pending_independent_validation' : superseded ? 'source_mapped_with_declared_conflicts_pending_independent_clinical_review' : 'source_reconciled_organ_function_v0590');
   for (const [field, def] of Object.entries(p.input_definitions || {})) {
     if (/renal|crcl|gfr|dialysis|hepatic|bilirubin|bili|ast|alt|child_pugh|alp/i.test(`${field} ${def.label || ''}`)) {
       assert.strictEqual(def.required, false, `${item.nccp_code}/${field} must remain optional for independent partial assessment`);
@@ -108,7 +109,8 @@ for (const item of register.records) {
     }
   }
   const releaseRules = (p.rule_engine?.rules || []).filter(r => String(r.id || r.rule_id || '').startsWith('OF590_'));
-  if(migration61){assert.deepStrictEqual(releaseRules,[],'v61 exact source-verified organ replacements');}
+  if(sarcoma){assert.deepStrictEqual(releaseRules,[]);}
+  else if(migration61){assert.deepStrictEqual(releaseRules,[],'v61 exact source-verified organ replacements');}
   else if(migration60){assert.deepStrictEqual(releaseRules,[],'v60 replaces the explicitly reviewed historical rules');}
   else if(migration50){assert.deepStrictEqual(releaseRules.map(r=>r.id||r.rule_id),migration50.retained_legacy_organ_rule_ids);}
   else if(migration45){assert.deepStrictEqual(releaseRules.map(r=>r.id||r.rule_id),migration45.retained_legacy_organ_rule_ids);}
@@ -195,6 +197,9 @@ for (const p of allProtocols) {
     if (!ruleId.startsWith('OF590_')) continue;
     triggerableRuleCount += 1;
     const values = witnessForCondition(rule.when || rule.condition, p.input_definitions || {});
+    if (p.metadata.nccp_regimen_code==='00205') {
+      Object.assign(values,{original_pld_mg_m2:40,current_pld_mg_m2:40,bilirubin_umol_l:ruleId.endsWith('20_50')?20:51});
+    }
     const result = Engine.assess(p, values, { profileId: 'default' });
     assert(
       result.findings.some(finding => finding.ruleId === ruleId),
@@ -202,10 +207,10 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 178, 'Five fluorouracil/oxaliplatin legacy rules are superseded by v32 boundary and source cases. Six nintedanib/docetaxel legacy rules are superseded by v30 source cases. Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. Five obsolete NCCP00791 fluorouracil organ rules are replaced by v33 source cases. Four fruquintinib legacy rules are replaced by v35 source and dose-history cases, with the exact removed IDs and original PDF/JSON hashes retained. Ten CAPTEM/PRRT legacy rules are superseded by the v37 source cases with exact original IDs and hashes; three everolimus legacy IDs remain with dose-history guards. Three sorafenib legacy rules are replaced by the v50 current-source numeric renal and Child–Pugh rules with exact before-ID proof. Nine gemcitabine/docetaxel and dacarbazine legacy rules are replaced by the v60 source contracts with exact before-ID proof. Three imatinib/sunitinib legacy rules are replaced by the v61 source contracts with exact before-ID proof. All 178 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
+assert.strictEqual(triggerableRuleCount, 178-3-2, 'Five fluorouracil/oxaliplatin legacy rules are superseded by v32 boundary and source cases. Six nintedanib/docetaxel legacy rules are superseded by v30 source cases. Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. Five obsolete NCCP00791 fluorouracil organ rules are replaced by v33 source cases. Four fruquintinib legacy rules are replaced by v35 source and dose-history cases, with the exact removed IDs and original PDF/JSON hashes retained. Ten CAPTEM/PRRT legacy rules are superseded by the v37 source cases with exact original IDs and hashes; three everolimus legacy IDs remain with dose-history guards. Three sorafenib legacy rules are replaced by the v50 current-source numeric renal and Child–Pugh rules with exact before-ID proof. Nine gemcitabine/docetaxel and dacarbazine legacy rules are replaced by the v60 source contracts with exact before-ID proof. Three imatinib/sunitinib legacy rules are replaced by the v61 source contracts with exact before-ID proof. Three PLD and two ifosfamide rules have source-specific successors. All 173 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
 
 // Sentinel source pathways and single-value partial assessments.
-let result = assess('00205', { pld_bilirubin_band: '51_86' });
+let result = assess('00205', { bilirubin_umol_l:51, original_pld_mg_m2:40, current_pld_mg_m2:40 });
 assert.strictEqual(result.actionType, 'dose_reduce');
 assert(result.findings.some(f => String(f.ruleId || '').includes('PLD_BILI_51_86')));
 

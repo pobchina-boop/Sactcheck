@@ -7,3 +7,8 @@ const releases = {
 module.exports = function sarcomaTemplateReleases(code) {
   return Object.keys(releases).filter(release => releases[release].has(code));
 };
+
+const monitoringMaps = new Set(['00420','00463','00100','00596','00680','00675','00747','00504','00754','00757']);
+module.exports.usesAuthoredMonitoringMap = profile => monitoringMaps.has(profile.code)
+  && ['0.84.63','0.84.64'].includes(profile.suite_release)
+  && Array.isArray(profile.monitoring_schedule?.rows) && profile.monitoring_schedule.rows.length > 0;

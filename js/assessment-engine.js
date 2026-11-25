@@ -306,8 +306,10 @@
       expanded = false;
       fields.slice().forEach(field => {
         const definition = explicitDefinitions.get(field) || {};
-        // Opt-in arithmetic operands belong to the form even if no rule names them directly.
-        asArray(definition.derived_value?.fields).forEach(dependency => {
+        // Raw lab controls and arithmetic operands may supply a rule without being named by it.
+        const dependencies = [...asArray(definition.derived_value?.fields)];
+        if (definition.ui_derived_from) dependencies.push(definition.ui_derived_from);
+        dependencies.forEach(dependency => {
           if (!fields.includes(dependency) && explicitDefinitions.has(dependency)) {
             fields.push(dependency);
             expanded = true;
