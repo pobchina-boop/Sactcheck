@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '../..');
 const manifest = 'validation/sarcoma-batch-1/production-files.json';
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const raw = fs.readFileSync(path.join(root, manifest));
-assert.equal(sha(raw), '24e1342ff15c29873f2fd546ce3e6753b0d5c5f7859f6d8adf4ef12cfa7b7479');
+assert.equal(sha(raw), 'bf320f783dfe89bc6f40831f127078a70911654ba051f229d994fbc973cc0962');
 const {base,files} = JSON.parse(raw);
 assert.equal(base, '68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7');
 const historical = (ref,file) => cp.execFileSync('git',['show',ref+':'+file],{cwd:root,maxBuffer:64*1024*1024});
