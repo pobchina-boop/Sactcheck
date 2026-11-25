@@ -23,7 +23,10 @@ const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
         assert(response.ok(),route);
         const h=page.locator('h1').first();await h.waitFor();const heading=(await h.innerText()).trim();assert(heading);
         const metrics=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
-        assert(metrics.document<=metrics.viewport+1,JSON.stringify({route,width,metrics}));
+        if(metrics.document>metrics.viewport+1) {
+          const overflowing=await page.evaluate(()=>[...document.querySelectorAll('main *')].filter(n=>n.getBoundingClientRect().right>innerWidth+1).slice(0,16).map(n=>[n.tagName,n.className?.baseVal||n.className,n.getBoundingClientRect().width,n.textContent.slice(0,70)]));
+          console.error('Horizontal overflow', JSON.stringify({route,width,metrics,overflowing}));process.exitCode=1;
+        }
         const link=page.locator('a[href="guide.pdf"][download]').first();
         const [download]=await Promise.all([page.waitForEvent('download'),link.click()]);
         const file=await download.path();
