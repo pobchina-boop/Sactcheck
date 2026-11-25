@@ -305,6 +305,7 @@
   function interactionOverrides(protocol,data,activeMedicines){
     const components=(activeMedicines||componentNames(protocol)).map(normaliseDrug);
     const matched = asArray(data?.interaction_rules).filter(rule=>
+      (!rule.match_protocol || rule.match_protocol === protocol?.protocol_id) &&
       asArray(rule.match_agents).some(agent=>components.includes(normaliseDrug(agent)))
     ).map(rule=>({
       ...rule,
@@ -406,7 +407,7 @@
     const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);
     if(supportive) supportive.agentSupport=agentSupport;
     const interactions=interactionOverrides(protocol,data,phase?.active_medicines);
-    const extra=resolveExtravasation(protocol,data,metadata.nccp_regimen_code==="00929" ? phase?.active_medicines : undefined);
+    const extra=resolveExtravasation(protocol,data,["00929","00303","00306","00308","00624","00819"].includes(metadata.nccp_regimen_code) ? phase?.active_medicines : undefined);
 
     return {
       release:RELEASE,

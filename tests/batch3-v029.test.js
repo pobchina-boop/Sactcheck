@@ -83,7 +83,12 @@ result = assess("00306", { pneumonitis_grade: 2 });
 assert.strictEqual(result.actionType, "discontinue", "Grade ≥2 pneumonitis should discontinue gemcitabine");
 
 result = assess("00624", { anc: 0.8 });
-assert.strictEqual(result.actionType, "dose_reduce_one_level", "NCCP 00624 ANC <1.0 should reduce both drugs one level");
+assert.strictEqual(result.actionType, "consultant_review", "00624 requires clinical interpretation of the NCCP Table 2 grade label before a dose reduction.");
+assert(!result.findings.some(f=>f.actionType==="dose_reduce_one_level"));
+result = assess("00624", { anc: 0.8, table2_neutropenia_review_confirmed: true });
+const confirmedReduction = result.findings.find(f=>f.ruleId==="TABLE2_CONFIRMED_NEUTROPENIA");
+assert.equal(confirmedReduction.actionType,"dose_reduce_one_level");
+assert.deepEqual(confirmedReduction.action.components,["carboplatin","pegylated liposomal doxorubicin"]);
 result = assess("00624", { gfr_ml_min: 20 });
 assert.strictEqual(result.actionType, "contraindicated", "NCCP 00624 carboplatin should not be administered at GFR ≤20");
 result = assess("00624", { ppe_grade: 3, toxicity_assessment_week: "week6" });

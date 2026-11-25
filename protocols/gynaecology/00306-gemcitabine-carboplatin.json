@@ -20,9 +20,9 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.43.0",
+    "sactcheck_encoding_version": "0.84.65",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-25",
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
     "treatment_class": [
@@ -73,7 +73,49 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00306-v7"
+    "canonical_protocol_id": "nccp-00306-v7",
+    "source_pdf_sha256": "11f27a8c13e27f26d934216c96bb1d27f0abd42fad5df46e23b12619b925f2f6",
+    "regimen_card": {
+      "schema_version": "1.0.0",
+      "contexts": [
+        {
+          "id": "relapsed_ovarian",
+          "indication_id": "relapsed_ovarian",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Gemcitabine on days 1 and 8 and carboplatin on day 1 every 21 days",
+          "duration_type": "phased_course",
+          "duration_text": "Until progression or unacceptable toxicity"
+        },
+        {
+          "id": "relapsed_fallopian_tube",
+          "indication_id": "relapsed_fallopian_tube",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Gemcitabine on days 1 and 8 and carboplatin on day 1 every 21 days",
+          "duration_type": "phased_course",
+          "duration_text": "Until progression or unacceptable toxicity"
+        },
+        {
+          "id": "relapsed_primary_peritoneal",
+          "indication_id": "relapsed_primary_peritoneal",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Gemcitabine on days 1 and 8 and carboplatin on day 1 every 21 days",
+          "duration_type": "phased_course",
+          "duration_text": "Until progression or unacceptable toxicity"
+        }
+      ],
+      "provenance": {
+        "method": "NCCP source mapping",
+        "reviewed": false,
+        "source": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf",
+        "source_sha256": "11f27a8c13e27f26d934216c96bb1d27f0abd42fad5df46e23b12619b925f2f6",
+        "source_pages": [
+          1,
+          2
+        ],
+        "checked_date": "2026-11-25"
+      }
+    },
+    "source_review_date_note": "The PDF footer reports the last review on 23 March 2021. Version 7 changed the review schedule to as required on 20 May 2026."
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -210,7 +252,7 @@
       "min": 0,
       "max": 50,
       "step": 0.01,
-      "demo_value": 2.0,
+      "demo_value": 2,
       "ui_section": "labs",
       "unit": "×10⁹/L",
       "input_role": "decision"
@@ -292,7 +334,7 @@
       "input_role": "decision"
     },
     "nonhaem_toxicity_grade": {
-      "label": "Other non-haematologic toxicity grade",
+      "label": "Other non-haematological toxicity grade (exclude nausea and vomiting)",
       "type": "select",
       "required": false,
       "options": [
@@ -437,6 +479,13 @@
       "demo_value": false,
       "ui_section": "clinical",
       "input_role": "decision"
+    },
+    "restart_after_day8_omission": {
+      "label": "Starting a new cycle after omission of the previous day 8 dose",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -476,7 +525,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Relevant hypersensitivity is an exclusion."
       },
@@ -495,7 +545,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Pregnancy/breastfeeding requires urgent specialist review."
       },
@@ -514,7 +565,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Clinically significant infection requires review."
       },
@@ -539,6 +591,11 @@
                 "value": 100
               }
             ]
+          },
+          {
+            "field": "restart_after_day8_omission",
+            "operator": "==",
+            "value": false
           }
         ],
         "action": {
@@ -551,7 +608,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Day 1 requires ANC >1.5 and platelets >100."
       },
@@ -587,7 +645,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Day-8 severe cytopenia requires omission."
       },
@@ -611,7 +670,7 @@
                   {
                     "field": "anc",
                     "operator": "<=",
-                    "value": 1.0
+                    "value": 1
                   }
                 ]
               },
@@ -630,6 +689,16 @@
                 ]
               }
             ]
+          },
+          {
+            "field": "anc",
+            "operator": ">=",
+            "value": 0.5
+          },
+          {
+            "field": "platelets",
+            "operator": ">=",
+            "value": 50
           }
         ],
         "action": {
@@ -641,7 +710,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Day-8 intermediate cytopenia requires 75% dosing."
       },
@@ -653,61 +723,81 @@
         "action": {
           "type": "dose_reduce",
           "components": [
-            "gemcitabine",
-            "carboplatin"
+            "gemcitabine"
           ],
-          "recommendation": "For subsequent cycles, reduce gemcitabine and carboplatin to 75% / the protocol-specified reduced dose after the selected severe haematologic event."
+          "recommendation": "After a qualifying Table 2 event, reduce gemcitabine to 75% of the original course-starting dose in subsequent cycles."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
-        "explanation": "Severe prior-cycle haematologic toxicity requires a subsequent-cycle reduction."
+        "explanation": "After a qualifying Table 2 event, reduce gemcitabine to 75% of the original course-starting dose in subsequent cycles."
       },
       {
-        "rule_id": "CARBOPLATIN_GFR_20_OR_LESS",
-        "field": "gfr_ml_min",
-        "operator": "<=",
-        "value": 20,
+        "id": "CARBOPLATIN_GFR_20_OR_LESS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "field": "gfr_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
         "action": {
           "type": "contraindicated",
           "components": [
             "carboplatin"
           ],
-          "recommendation": "Do not administer carboplatin at GFR ≤20 mL/min."
+          "message": "Do not administer carboplatin at GFR ≤20 mL/min."
         },
+        "explanation": "Do not administer carboplatin at GFR ≤20 mL/min.",
         "source": {
+          "document": "NCCP 00306 v7",
           "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Carboplatin should not be administered at GFR ≤20."
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
+        }
       },
       {
-        "rule_id": "CARBOPLATIN_GFR_20_TO_30",
-        "all": [
-          {
-            "field": "gfr_ml_min",
-            "operator": ">",
-            "value": 20
-          },
-          {
-            "field": "gfr_ml_min",
-            "operator": "<=",
-            "value": 30
-          }
-        ],
+        "id": "CARBOPLATIN_GFR_20_TO_30",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "field": "gfr_ml_min",
+              "operator": ">",
+              "value": 20
+            },
+            {
+              "field": "gfr_ml_min",
+              "operator": "<=",
+              "value": 30
+            }
+          ]
+        },
         "action": {
           "type": "consultant_review",
           "components": [
             "carboplatin"
           ],
-          "recommendation": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required."
+          "message": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required."
         },
+        "explanation": "Use carboplatin with extreme caution at GFR 20–30 mL/min; consultant and pharmacy review required.",
         "source": {
+          "document": "NCCP 00306 v7",
           "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe renal impairment requires extreme caution."
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
+        }
       },
       {
         "rule_id": "GEMCITABINE_BILIRUBIN_27_PLUS",
@@ -723,7 +813,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Hepatic impairment requires an individualised NCCP option."
       },
@@ -742,7 +833,8 @@
         },
         "source": {
           "page": 6,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Grade 3 or greater non-haematologic toxicity requires withholding and review."
       },
@@ -760,7 +852,8 @@
         },
         "source": {
           "page": 7,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Clinically significant pneumonitis requires gemcitabine discontinuation."
       },
@@ -778,7 +871,8 @@
         },
         "source": {
           "page": 7,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Confirmed SCAR requires permanent discontinuation."
       },
@@ -796,7 +890,8 @@
         },
         "source": {
           "page": 7,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Suspected SCAR requires immediate withholding and assessment."
       },
@@ -814,9 +909,135 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
         },
         "explanation": "Haemodialysis timing requires pharmacy confirmation."
+      },
+      {
+        "id": "POST_OMISSION_RESTART",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "field": "restart_after_day8_omission",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "message": "After day 8 omission, delay restart until ANC ≥1.5 and platelets ≥100 ×10⁹/L."
+        },
+        "explanation": "After day 8 omission, delay restart until ANC ≥1.5 and platelets ≥100 ×10⁹/L.",
+        "source": {
+          "document": "NCCP 00306 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
+        }
+      },
+      {
+        "id": "DAY1_UNIVERSAL_LOW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "message": "Counts are below both day 1 thresholds. Delay and reassess."
+        },
+        "explanation": "Counts are below both day 1 thresholds. Delay and reassess.",
+        "source": {
+          "document": "NCCP 00306 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
+        }
+      },
+      {
+        "id": "DAY1_EQUALITY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "==",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "==",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "message": "At equality verify prior day 8 omission. The ordinary new-cycle threshold uses >, while the post-omission restart note uses ≥."
+        },
+        "explanation": "At equality verify prior day 8 omission. The ordinary new-cycle threshold uses >, while the post-omission restart note uses ≥.",
+        "source": {
+          "document": "NCCP 00306 v7",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
+        }
       }
     ]
   },
@@ -825,15 +1046,26 @@
     "coverage_gap": "One or more optional clinical domains were not assessed. Missing values have not been interpreted as normal."
   },
   "supportive_care": {
-    "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Carboplatin AUC 4; NCCP V6 classifies AUC >=4 as high and AUC <4 as moderate.",
+    "mapping_basis": "NCCP 00306 component emetogenic classifications and active treatment day.",
     "mapping_confidence": "high",
     "validation_status": "pending_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "phase_specific_plan": "patient/00306/supportive-care.html",
+    "phase_profiles": {
+      "day1": {
+        "level": "high",
+        "script_id": "high_carboplatin"
+      },
+      "day8": {
+        "level": "low",
+        "script_id": "low"
+      }
+    },
+    "source_url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
   }
 }

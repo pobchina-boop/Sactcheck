@@ -28,7 +28,13 @@ for (const file of paths) {
   const reference = integratedCodes.has(code) ? reviewed : published;
   const expected = git('show', reference + ':' + file);
   const actual = fs.readFileSync(path.join(root,file));
-  if (code === '00205') {
+  if (['00303','00306','00308','00624','00819'].includes(code)) {
+    const release = require('./helpers/live-release-v08464.cjs');
+    const transition = release.gynae65Inventory().record.files[file];
+    assert(expected.equals(git('show',release.gynae65Inventory().record.base+':'+file)),file+' predecessor');
+    assert.equal(require('node:crypto').createHash('sha256').update(expected).digest('hex'),transition.before,file);
+    release.verifyFile(file);
+  } else if (code === '00205') {
     const prior = JSON.parse(expected);
     const breast = prior.assessment_by_indication['00205a'];
     breast.input_definitions.current_to_original_pld_ratio.input_role = 'decision';

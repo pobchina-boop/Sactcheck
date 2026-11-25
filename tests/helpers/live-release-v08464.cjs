@@ -4,64 +4,65 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const cp = require('node:child_process');
-const prior = require('./gynaecology-release-checkpoint.cjs');
+const prior = require('./sarcoma-release-checkpoint.cjs');
 const root = path.resolve(__dirname, '../..');
-const manifest = 'validation/sarcoma-integration/production-files.json';
-const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
-const raw = fs.readFileSync(path.join(root, manifest));
-assert.equal(sha(raw), '119759af5d49a61d393b424173616aa6d314afc2278e38b0a04676dea15d96d2');
-const {base,files,review_commit,first_batch_sha256} = JSON.parse(raw);
-assert.equal(review_commit,'5b063b3f390cfe9a5a324c4615a3fba3a6eb8878');
-assert.equal(first_batch_sha256,'7453862c52edc4651b1137f2dea73ebe5e3a324769a093dc070b170e2eadf898');
-assert.equal(sha(fs.readFileSync(path.join(root,'validation/sarcoma-batch-1/production-files.json'))),first_batch_sha256);
-assert.equal(base, '68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7');
-const historical = (ref,file) => cp.execFileSync('git',['show',ref+':'+file],{cwd:root,maxBuffer:64*1024*1024});
-assert(fs.readFileSync(require.resolve('./gynaecology-release-checkpoint.cjs')).equals(historical(base,'tests/helpers/live-release-v08464.cjs')));
+const base = 'eb2bf4aa5b0e7a2de3b50c386517b68d1e059d7d';
+const filename = 'validation/gynae-v08465/production-transition.json';
+const hash = b => crypto.createHash('sha256').update(b).digest('hex');
+const raw = fs.readFileSync(path.join(root,filename));
+assert.equal(hash(raw),'5358334d6e574e4003e1b2be9192ebffb092cdabdeaafe019b0813259697e4f9');
+const record = JSON.parse(raw);
+assert.equal(record.base,base);
+const files = record.files;
+const historic = (revision,file) => cp.execFileSync('git',['show',revision+':'+file],{cwd:root,maxBuffer:64*1024*1024});
+assert(fs.readFileSync(require.resolve('./sarcoma-release-checkpoint.cjs')).equals(historic(base,'tests/helpers/live-release-v08464.cjs')));
 function verifyFile(file) {
-  if (!files[file]) return prior.verifyFile(file);
-  const current = fs.readFileSync(path.join(root,file));
-  assert.equal(sha(current), files[file].after, file+' sarcoma release bytes');
-  assert.equal(current.length, files[file].after_bytes, file+' sarcoma release size');
+  const transition = files[file];
+  if (!transition) return prior.verifyFile(file);
+  const value = fs.readFileSync(path.join(root,file));
+  assert.equal(value.length,transition.after_bytes,file);
+  assert.equal(hash(value),transition.after,file);
 }
 function isCurrent(file,digest,size) {
-  const e = files[file];
-  return e ? e.after === digest && (size === undefined || e.after_bytes === size) : prior.isCurrent(file,digest,size);
+  const entry=files[file];
+  return entry ? digest===entry.after && (size===undefined || entry.after_bytes===size) : prior.isCurrent(file,digest,size);
 }
 function expected(file,digest,size) {
-  const e = files[file];
-  if (!e) return prior.expected(file,digest,size);
+  const entry=files[file];
+  if (!entry) return prior.expected(file,digest,size);
   if (!isCurrent(file,digest,size)) {
-    const before = prior.expected(file,digest,size);
-    assert.equal(before.sha256,e.before,file+' predecessor digest');
-    if (before.bytes !== undefined) assert.equal(before.bytes,e.before_bytes,file+' predecessor size');
+    const old=prior.expected(file,digest,size);
+    assert.equal(old.sha256,entry.before,file+' predecessor');
+    if(old.bytes!==undefined)assert.equal(old.bytes,entry.before_bytes,file+' predecessor size');
   }
-  return {sha256:e.after,bytes:e.after_bytes};
+  return {sha256:entry.after,bytes:entry.after_bytes};
 }
-function archived(file,revision) {
+function archive(file,revision) {
   verifyFile(file);
-  const before = historical(base,file);
-  assert.equal(sha(before),files[file].before,file+' published predecessor');
-  return revision===base ? before : historical(revision,file);
+  assert.equal(hash(historic(base,file)),files[file].before,file+' published predecessor');
+  return historic(revision,file);
 }
-const astraBytes = file => files[file] ? archived(file,'51bded8c59210c052873b577af444f07579fd44f') : prior.astraBytes(file);
-const approvedJson = file => files[file] ? JSON.parse(archived(file,base)) : prior.approvedJson(file);
+const astraBytes = file => files[file] ? archive(file,'51bded8c59210c052873b577af444f07579fd44f') : prior.astraBytes(file);
+function approvedJson(file) {
+  if (!files[file]) return prior.approvedJson(file);
+  const prev=prior.sarcomaInventory();
+  // Replay the same archived stage exposed by the preceding sarcoma helper.
+  const revision=prev.record.files[file] ? '68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7' : base;
+  return JSON.parse(archive(file,revision));
+}
 function owns(file) {
-  if (file===manifest) return true;
+  if (file===filename || file==='tests/helpers/sarcoma-release-checkpoint.cjs') return true;
   if (!files[file]) return prior.owns(file);
   verifyFile(file); return true;
 }
-function gynaecologyInventory() {
-  const gsk = prior.gynaecologyInventory();
-  return {...gsk,helper:{approvedPath(file) {
-    if (gsk.record.files[file] && files[file]) { verifyFile(file); return true; }
-    return gsk.helper.approvedPath(file);
+const addition = file => file===filename || file==='tests/helpers/sarcoma-release-checkpoint.cjs' || files[file]?.before===null || prior.addition(file);
+function checkedInventory(inventory) {
+  return {...inventory,helper:{approvedPath(file) {
+    if (files[file] && inventory.record.files[file]) {verifyFile(file); return true;}
+    return inventory.helper.approvedPath(file);
   }}};
 }
-function sarcomaInventory() {
-  return {version:64,record:{files},helper:{approvedPath(file) {
-    if (!files[file]) return false;
-    verifyFile(file); return true;
-  }}};
-}
-const addition = file => file===manifest || files[file]?.before === null || prior.addition(file);
-module.exports = {...prior,verifyFile,isCurrent,expected,astraBytes,astraJson:f=>JSON.parse(astraBytes(f)),approvedJson,owns,addition,gynaecologyInventory,sarcomaInventory};
+const gynaecologyInventory = () => checkedInventory(prior.gynaecologyInventory());
+const sarcomaInventory = () => checkedInventory(prior.sarcomaInventory());
+const gynae65Inventory = () => ({version:65,record,helper:{approvedPath:file => !!files[file] && owns(file)}});
+module.exports = {...prior,verifyFile,expected,isCurrent,astraBytes,astraJson:file=>JSON.parse(astraBytes(file)),approvedJson,addition,owns,gynaecologyInventory,sarcomaInventory,gynae65Inventory};

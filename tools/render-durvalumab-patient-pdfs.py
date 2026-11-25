@@ -9,6 +9,7 @@ from weasyprint import HTML
 
 ROOT = Path(__file__).resolve().parents[1]
 ROUTES = ('00897', '00926', '00953')
+GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819')
 DOCS = {
     'guide': 'guide', 'sactcard': 'sactcard', 'knowledge': 'knowledge-print',
     'handbook': 'handbook-print', 'passport': 'passport', 'consent-form': 'consent-form',
@@ -32,7 +33,7 @@ def render_route(code):
         source = folder / (html + '.html')
         pdf = folder / (name + '.pdf')
         data = HTML(filename=str(source)).write_pdf()
-        if code in ('00862', '00929') and name in {'handbook', 'knowledge'}:
+        if (code in GYNAE and name in {'handbook', 'knowledge'}) or (code == '00953' and name == 'handbook'):
             # Both references retain the full-size anatomy. The handbook also includes the wallet card.
             with fitz.open(stream=data, filetype='pdf') as book, fitz.open(folder / 'guide.pdf') as guide:
                 book.insert_pdf(guide, from_page=1, to_page=2 if name == 'handbook' else 1)
@@ -52,6 +53,6 @@ if __name__ == '__main__':
     parser.add_argument('codes', nargs='*')
     args = parser.parse_args()
     for route in args.codes or ROUTES:
-        if route not in (*ROUTES, '00862', '00929'):
+        if route not in (*ROUTES, *GYNAE):
             parser.error('Unknown combination: ' + route)
         render_route(route)

@@ -158,10 +158,16 @@ async function backgroundRestored(page){
       assert(await overlay.isVisible(),'A support document in a new tab must preserve the workflow');
       await page.locator('.workflow-patient-disclosure summary').click();
       const passportPromise=page.waitForEvent('popup');
+      const passportResponse=page.context().waitForEvent('response',{
+        predicate:response=>new URL(response.url()).pathname==='/patient/00568/passport.pdf'
+      });
       await page.locator('[data-workflow-passport-card]').click();
       const passport=await passportPromise;
-      await passport.waitForLoadState();
-      assert.match(passport.url(),/patient\/00568\/.*passport/i,'Passport must retain its regimen-specific destination');
+      const pdf=await passportResponse;
+      assert.equal(pdf.status(),200);
+      assert.match(pdf.headers()['content-type'],/application\/pdf/i);
+      const resource=await page.request.get(pdf.url());
+      assert((await resource.body()).equals(fs.readFileSync(path.join(root,'patient/00568/passport.pdf'))));
       await passport.close();
       await page.locator('[data-workflow-assess]').click();
       await page.locator('#jsonAssessmentScreen').waitFor({state:'visible'});

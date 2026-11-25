@@ -5,7 +5,8 @@ const path = require('node:path');
 const {render} = require('./patient-pack-v08461.cjs');
 const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
-const gynaecology = new Set(['00862', '00929']);
+const gynaeBatch = new Set(['00303','00306','00308','00624','00819']);
+const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
 const codes = new Set([...gynaecology, '00897', '00926', '00953']);
 const esc = value => String(value ?? '').replace(/[<>&"']/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[s]));
 const link = (href,text) => '<a href="'+esc(href)+'">'+esc(text)+'</a>';
@@ -76,6 +77,16 @@ function renderPages(code, root = projectRoot) {
   }
   for(const name of ['supportive-care.html','supportive-care-overview.html'])files[name]=files[name].replace('</main>','<div class="no-print">'+section('phase-support','Choose the current phase',refs.join(''))+'</div>'+'</main>');
  }
+ if (gynaeBatch.has(code)) {
+  const phaseSheets=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-v0838.json'),'utf8')).regimens[code];
+  for (const phase of phaseSheets) {
+   const rows=phase.medicines.map(m=>[m.name,m.dose,m.timing,m.note||'']);
+   const pills=rows.length?table(['Medicine','Dose in reference plan','When','Additional instructions'],rows):'<p>No routine preventive anti-sickness medicine is specified. Follow the individually prescribed plan.</p>';
+   const entry=section('written-plan-'+phase.id,'Support medicines for this visit','<p>Ask your team to confirm your signed prescription. The day numbers on a support prescription are counted from this visit.</p>'+pills+list(phase.additional_support));
+   const key='support-'+phase.id+'.html';
+   files[key]=files[key].replace('</main>',entry+'</main>');
+  }
+ }
  const timing=table(['Phase','When','What changes'],d.phases.map(p=>[p.short,p.cycles.join(' · '),p.detail]));
  const consentA=sheet(purpose+section('purpose','Treatment discussion','<p>'+esc(d.indication_text)+'</p>'+timing)+section('benefit','Possible benefit, alternatives and your priorities',evidence+'<p>'+esc(d.consent_support)+'</p><p>Other options discussed and what matters most to me</p>'+writing(2)));
  const consentB=sheet(section('risks','Important risks we discussed',list(d.serious_effects.map(e=>e.title+' — '+e.text)))+section('understanding','Understanding and next steps','<p>'+esc(d.teachback)+'</p><p>Questions, individual risks and decisions recorded by the clinician</p>'+writing(2)+'<p>Patient / representative __________________  Clinician __________________  Date __________</p><p>This discussion aid accompanies your hospital’s formal consent process.</p>'));
@@ -93,10 +104,11 @@ function renderPages(code, root = projectRoot) {
   const agentRisks = section('risks-by-medicine','Risks to discuss for each medicine',paragraphs(d.agents.map(a => ({title:a.name,text:a.risks.join(', ')+'. '+a.watch}))));
   const consentWithAgents = files['consent-form.html'].replace('<section id="understanding">',agentRisks+'<section id="understanding">');
   files['consent-form.html'] = files['consent.html'] = consentWithAgents;
-  const phaseSheets = d.phases.map(p => sheet(section('support-'+p.id, p.short+' · supportive care', paragraphs(d.phase_support[p.id])))).join('');
+  const phaseSheets = d.phases.map(p => sheet(section('support-'+p.id, p.short+' · supportive care', paragraphs(d.phase_support[p.id])+(gynaeBatch.has(code)?(files['support-'+p.id+'.html'].match(/<section id="written-plan-[\s\S]*?<\/section>/)||[''])[0]:'')))).join('');
   files['handbook-print.html'] = files['handbook-print.html'].replace('</main>', phaseSheets+'</main>');
   for (const name of Object.keys(files)) {
    files[name]=files[name].replace(/<a href="([^"]+\.pdf)"(?! download)/g,'<a download href="$1"');
+   if(gynaeBatch.has(code) && code !== '00819') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
    if(code==='00862') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry this card and your latest prescription.').replaceAll('My cycle record','My review record');
   }
  }

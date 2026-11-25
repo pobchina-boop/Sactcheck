@@ -34,6 +34,13 @@ const dualImmuneV35 = {
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 // NCCP 00746 v2 distinguishes oral olaparib and bevacizumab on page 9.
 const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate'};
+const gynaePhases = {
+  '00303':{level:'high',phases:{combination:'high'}},
+  '00306':{level:'phase_dependent',phases:{day1:'high',day8:'low'}},
+  '00308':{level:'phase_dependent',phases:{day1:'high',weekly:'low'}},
+  '00624':{level:'high',phases:{combination:'high'}},
+  '00819':{level:'minimal',phases:{initial:'minimal',continuation:'minimal'}}
+};
 const familyPhases = {
  '00929':{combination:'high',maintenance:'minimal'},
  '00897':{induction_day1:'high',induction_day8:'high',maintenance:'minimal'},
@@ -148,6 +155,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
     "00945": "low",
     "00431": "low",
     "00319": "phase_dependent", // v29: day1 carboplatin versus oral etoposide days2–3
+    "00306": "phase_dependent", // Day 1 combination and day 8 gemcitabine
+    "00308": "phase_dependent", // Day 1 combination and weekly paclitaxel
     "00614": "phase_dependent", // v29: treatment day and prescribed vinorelbine route
     "00340": "oral_moderate_high" // NCCP00340 v4 p6; source-derived v0.84.25 audit
   };
@@ -252,9 +261,9 @@ for (const record of index.protocols || []) {
       ? correctionByPath[relative]
       : (baseline.emetogenic_risk ?? null));
     const auditedPhases = md.nccp_regimen_code==='00486'?{oxaliplatin_days:'moderate',fluorouracil:'low'}:familyPhases[md.nccp_regimen_code];
-    assert.strictEqual(sc.emetogenic_risk ?? null, auditedPhases ? 'phase_dependent' : expectedRisk, `${relative} emetogenic risk changed outside approved source reconciliation`);
+    assert.strictEqual(sc.emetogenic_risk ?? null, gynaePhases[md.nccp_regimen_code]?.level ?? (auditedPhases ? 'phase_dependent' : expectedRisk), `${relative} emetogenic risk changed outside approved source reconciliation`);
     const phaseLevels = Object.fromEntries(Object.entries(sc.phase_profiles || {}).map(([k, v]) => [k, v?.emetogenic_risk ?? v?.level]));
-    assert.deepStrictEqual(phaseLevels, md.nccp_regimen_code==='00463'?{doxorubicin_cisplatin_phase:'high',high_dose_methotrexate_phase:'moderate',doxorubicin_only_phase:'moderate'}:['00309','00419'].includes(md.nccp_regimen_code)?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
+    assert.deepStrictEqual(phaseLevels, gynaePhases[md.nccp_regimen_code] ? gynaePhases[md.nccp_regimen_code].phases : md.nccp_regimen_code==='00463'?{doxorubicin_cisplatin_phase:'high',high_dose_methotrexate_phase:'moderate',doxorubicin_only_phase:'moderate'}:['00309','00419'].includes(md.nccp_regimen_code)?{}:['00377','00378','00381','00430','00749'].includes(md.nccp_regimen_code)?{combination:md.nccp_regimen_code==='00377'?'oral_moderate_high':md.nccp_regimen_code==='00749'?'low':'moderate'}:auditedPhases || baseline.phase_levels || {}, `${relative} phase risk classification changed`);
   }
   for (const [label, url] of [["supportive", sc.supportive_medications_pdf_url], ["metadata", md.antiemetic_proforma_url]]) {
     if (!url) continue;

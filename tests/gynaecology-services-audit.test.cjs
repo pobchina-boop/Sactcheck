@@ -32,6 +32,26 @@ for(const file of ['js/regimen-consent-builder-v0710.js','js/regimen-knowledge-b
 async function check() {
   const kb = browser.SACTCheckRegimenKnowledgeBase;
   const payload = await kb.load();
+  for (const ref of json('validation/gynae-v08465/sources.json').filter(row=>row.role==='new')) {
+    const p=json(ref.protocol);
+    const profile=kb.regimenProfileForProtocol(p,payload);
+    assert.equal(profile.protocol_id,p.protocol_id);
+    const trials=kb.evidenceForProtocol(p,payload);
+    const sourceTrial=json('data/regimen-knowledge-gynae-v08465.json').evidence_records.find(row=>row.protocol_id===p.protocol_id);
+    assert(trials.some(row=>row.trial_acronym===sourceTrial.trial_acronym && row.primary_endpoint));
+    assert(kb.open(p));
+    await new Promise(resolve=>setImmediate(resolve));
+    for(const term of ['Longitudinal monitoring schedule',sourceTrial.trial_acronym,'data-treatment-journey']){
+      assert(knowledgeBody.innerHTML.includes(term),ref.code+' clinician display missing '+term);
+    }
+    await browser.SACTCheckRegimenConsentBuilder.openPatientSupport(p);
+    const consentSources=[...body.innerHTML.matchAll(/class="patient-risk-source">([^<]+)/g)].map(match=>match[1].toLowerCase());
+    for(const agent of json('data/patient-knowledge/'+ref.code+'.json').agents){
+      const key=agent.id==='pegylated_liposomal_doxorubicin'?'doxorubicin':agent.id;
+      assert(consentSources.some(label=>label.includes(key)),ref.code+' consent source '+key+' / '+consentSources);
+    }
+    console.log(ref.code+' clinician knowledge, evidence, monitoring, journey and component-attributed consent verified.');
+  }
   for (const code of ['00862','00929']) {
     const oral = code === '00862';
     const file = 'protocols/gynaecology/'+fs.readdirSync(path.join(root,'protocols/gynaecology')).find(n=>n.startsWith(code));

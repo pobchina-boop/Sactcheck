@@ -1,11 +1,12 @@
 'use strict';
+const gynae65 = require('./helpers/retrospective-v08465.cjs').inventory;
 const gskRoots = require('./helpers/gynaecology-00862-00929.cjs').NEW_ROUTES.length;
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),json=f=>JSON.parse(read(f));
 const A=require('../js/patient-asset-registry-v0810.js'),K=require('../js/regimen-knowledge-base.js'),IDs=require('../js/protocol-id-migrations.js'),pack=require('../tools/patient-pack-sarcoma-v08463.cjs');
 const referenceCourse=require('../tools/reference-course-v08463.cjs');
 const codes=['00420','00463','00100','00596','00680'],index=json('protocols/index.json').protocols;
-const release=json('package.json').version,counts={'0.84.63':[283,316],'0.84.64':[(292+gskRoots),(328+gskRoots)]};assert(counts[release]);assert.equal(A.release,release);assert.equal(A.codes.length,counts[release][0]);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,counts[release][1]);
+const release=json('package.json').version,counts={'0.84.63':[283,316],'0.84.65':[gynae65.codes,gynae65.routes],'0.84.64':[(292+gskRoots),(328+gskRoots)]};assert(counts[release]);assert.equal(A.release,release);assert.equal(A.codes.length,counts[release][0]);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,counts[release][1]);
 const script=read('404.html').match(/<script>([\s\S]*?)<\/script>/)[1];
 for(const code of codes){
  const entry=index.find(x=>x.path.includes('/'+code+'-'));assert(entry);const p=json(entry.path),d=json('data/patient-knowledge/'+code+'.json');

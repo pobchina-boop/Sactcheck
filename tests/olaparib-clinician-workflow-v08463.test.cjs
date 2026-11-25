@@ -125,6 +125,17 @@ for(const p of [mono,combo]){
   vm.createContext(oldContext);vm.runInContext(execFileSync('git',['show','159532b7cd04238588804a504fff5427ce24a057:js/regimen-consent-builder-v0710.js'],{cwd:root,encoding:'utf8'}),oldContext);
   let unchangedComponentLists=0;
   for(const row of json('protocols/index.json').protocols){const p=json(row.path);if(['00588','00746'].includes(p.metadata.nccp_regimen_code))continue;
+    const reviewedGynae = {
+      '00303':['Paclitaxel','Carboplatin'],
+      '00306':['Gemcitabine','Carboplatin'],
+      '00308':['Carboplatin','Paclitaxel'],
+      '00624':['Pegylated Liposomal Doxorubicin','Carboplatin'],
+      '00819':['Dostarlimab']
+    }[p.metadata.nccp_regimen_code];
+    if (reviewedGynae) {
+      assert.deepEqual(plain(c.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)),reviewedGynae);
+      continue;
+    }
     if(['00862','00929'].includes(p.metadata.nccp_regimen_code)){
       const expected=p.metadata.nccp_regimen_code==='00862'?['Niraparib Tablets']:['Dostarlimab','Paclitaxel','Carboplatin'];
       assert.deepEqual(plain(c.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)),expected);

@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.64';
+  const RELEASE='0.84.65';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00303':{"title":"Paclitaxel and carboplatin every three weeks","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00306':{"title":"Gemcitabine and carboplatin","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00308':{"title":"Weekly paclitaxel with three-weekly carboplatin","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00624':{"title":"Liposomal doxorubicin and carboplatin","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00819':{"title":"Dostarlimab (Jemperli) alone","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00675':{"title": "IE/VAC: alternating two-weekly phases", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00747':{"title": "IE/VAC: alternating three-weekly phases", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00504':{"title": "Irinotecan and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},

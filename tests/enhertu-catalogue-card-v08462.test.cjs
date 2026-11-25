@@ -31,7 +31,7 @@ const override = overrides.protocols[id];
 // The v63 successor is limited to the two source-reviewed olaparib records.
 // Authenticate its actual bytes before reading the inherited Enhertu state;
 // the original 377-record preservation assertions still run against that state.
-const olaparib = ['0.84.63','0.84.64'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
+const olaparib = ['0.84.63','0.84.64','0.84.65'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
 const inheritedSidecar = olaparib ? olaparib.baselineJson(sidecarPath) : sidecar;
 const inheritedOverrides = olaparib ? olaparib.baselineJson(overridesPath) : overrides;
 const inheritedReport = olaparib ? olaparib.baselineBytes(reportPath) : read(reportPath);
@@ -99,7 +99,7 @@ if (olaparib) {
     for (const successor of successors) delete copy.protocols[successor];
     return copy;
   };
-  assert.deepEqual(withoutOlaparibOverrides(overrides), withoutOlaparibOverrides(inheritedOverrides), 'Only the two named olaparib overrides may be added after Enhertu');
+  assert.deepEqual(withoutOlaparibOverrides(require('./helpers/live-release-v08464.cjs').approvedJson(overridesPath)), withoutOlaparibOverrides(inheritedOverrides), 'Only the two named olaparib overrides may be added after Enhertu');
   const withoutOlaparibRows = bytes => bytes.toString().split('\n').filter(line => ![...successors].some(successor => line.includes(',' + successor + ',')));
   assert.deepEqual(withoutOlaparibRows((require('./helpers/live-release-v08464.cjs').verifyFile(reportPath), cp.execFileSync('git',['show','68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7:'+reportPath],{cwd:root}))), withoutOlaparibRows(inheritedReport), 'All 374 unrelated CSV rows, including Enhertu, remain byte-identical after olaparib');
   for (const file of ['protocols/shared/00588-olaparib-tablet-monotherapy.json', 'protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json']) olaparib.validateProtocol(json(file));

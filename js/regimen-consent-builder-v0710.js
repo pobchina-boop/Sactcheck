@@ -94,7 +94,7 @@
     const helper=root?.SACTCheckRegimenComponents;
     if(helper?.componentsForProtocol){
       try{ add(helper.componentsForProtocol(protocol)); }catch(_){}
-    }else if(["00588","00746","00862","00929"].includes(protocolCode(protocol))&&helper?.forProtocol){
+    }else if(["00588","00746","00862","00929","00303","00306","00308","00624","00819"].includes(protocolCode(protocol))&&helper?.forProtocol){
       // These reviewed schemas store medicines in structured treatment fields.
       // The current shared component module exports forProtocol; retain the
       // historical resolution path unchanged for every other regimen.
@@ -137,7 +137,9 @@
   }
 
   function profileMatchesForProtocol(protocol,riskContent){
-    const index=buildAliasIndex(riskContent);
+    const allProfiles=buildAliasIndex(riskContent);
+    const scoped=allProfiles.filter(row=>row.profile.regimen_codes?.includes(protocolCode(protocol)));
+    const index=[...scoped,...allProfiles.filter(row=>!row.profile.regimen_codes)];
     const comps=componentsForProtocol(protocol);
     const out=[];
     const seen=new Set();
@@ -145,7 +147,7 @@
       const n=normalise(component);
       let best=null;
       for(const row of index){
-        if(row.aliases.some(a=>a===n||n.includes(a)||a.includes(n))){
+        if(row.profile.regimen_codes ? row.aliases.includes(n) : row.aliases.some(a=>a===n||n.includes(a)||a.includes(n))){
           best=row; break;
         }
       }

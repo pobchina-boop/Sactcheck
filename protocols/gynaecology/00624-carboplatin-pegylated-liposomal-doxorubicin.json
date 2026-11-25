@@ -22,9 +22,9 @@
       "legacy_card_id": "openPldCarbo",
       "switch_to_generic_assessment": true
     },
-    "sactcheck_encoding_version": "0.43.0",
+    "sactcheck_encoding_version": "0.84.65",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-25",
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
     "treatment_class": [
@@ -75,7 +75,48 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00624-v3"
+    "canonical_protocol_id": "nccp-00624-v3",
+    "source_pdf_sha256": "d1ff165d450374e499f9ea2389baf4b72a83c41c001cd0e61ef9622eb0c6352d",
+    "regimen_card": {
+      "schema_version": "1.0.0",
+      "contexts": [
+        {
+          "id": "00624-gyn",
+          "indication_id": "00624-gyn",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Day 1 every 28 days",
+          "duration_type": "phased_course",
+          "duration_text": "6 cycles, with additional cycles permitted for responding or stable disease. Stop earlier for progression or unacceptable toxicity."
+        },
+        {
+          "id": "00624b",
+          "indication_id": "00624b",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Day 1 every 28 days",
+          "duration_type": "phased_course",
+          "duration_text": "6 cycles, with additional cycles permitted for responding or stable disease. Stop earlier for progression or unacceptable toxicity."
+        },
+        {
+          "id": "00624c",
+          "indication_id": "00624c",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Day 1 every 28 days",
+          "duration_type": "phased_course",
+          "duration_text": "6 cycles, with additional cycles permitted for responding or stable disease. Stop earlier for progression or unacceptable toxicity."
+        }
+      ],
+      "provenance": {
+        "method": "NCCP source mapping",
+        "reviewed": false,
+        "source": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf",
+        "source_sha256": "d1ff165d450374e499f9ea2389baf4b72a83c41c001cd0e61ef9622eb0c6352d",
+        "source_pages": [
+          1,
+          2
+        ],
+        "checked_date": "2026-11-25"
+      }
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist.",
@@ -85,14 +126,19 @@
   },
   "indications": [
     {
-      "indication_id": "platinum_sensitive_relapsed_gyn",
-      "code": "00624a-c",
-      "description": "Platinum-sensitive relapsed/recurrent ovarian, primary peritoneal or fallopian tube cancer."
-    },
-    {
       "indication_id": "00624-gyn",
       "code": "00624a",
-      "description": "Platinum-sensitive relapsed ovarian, fallopian tube or primary peritoneal cancer."
+      "description": "Platinum-sensitive recurrent ovarian cancer"
+    },
+    {
+      "indication_id": "00624b",
+      "code": "00624b",
+      "description": "Platinum-sensitive recurrent primary peritoneal cancer"
+    },
+    {
+      "indication_id": "00624c",
+      "code": "00624c",
+      "description": "Platinum-sensitive recurrent fallopian tube cancer"
     }
   ],
   "treatment_phases": [
@@ -480,7 +526,7 @@
       "input_role": "decision"
     },
     "hypersensitivity": {
-      "label": "Relevant carboplatin or PLD hypersensitivity",
+      "label": "Hypersensitivity to either drug, peanut, soya or excipients",
       "type": "boolean",
       "required": false,
       "demo_value": false,
@@ -494,6 +540,64 @@
       "demo_value": false,
       "ui_section": "clinical",
       "input_role": "decision"
+    },
+    "preexisting_neuropathy_grade": {
+      "label": "Pre-existing peripheral neuropathy grade before starting treatment",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only and intervention generally not indicated."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; minimal, local or non-invasive intervention may be indicated; may limit instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant but not immediately life-threatening; hospital care may be indicated; limits self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess baseline motor and sensory function using the applicable CTCAE neuropathy term. NCCP 00624 excludes pre-existing neuropathy above grade 1.",
+      "input_role": "decision"
+    },
+    "cardiomyopathy_or_chf": {
+      "label": "Pre-existing cardiomyopathy or congestive heart failure",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "table2_neutropenia_review_confirmed": {
+      "label": "Treating team confirmed application of NCCP Table 2 neutropenia reduction to this episode",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "assessment_guidance": "Table 2 describes ANC below 1.0 × 10⁹/L as grade 4. Confirm the event, timing and intended dose-level change with the treating team before applying the table. A count alone does not establish a CTCAE grade."
     }
   },
   "required_inputs": [],
@@ -533,7 +637,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Relevant hypersensitivity is an exclusion."
       },
@@ -552,7 +657,8 @@
         },
         "source": {
           "page": 3,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Pregnancy/breastfeeding requires urgent review."
       },
@@ -560,20 +666,21 @@
         "rule_id": "GRADE4_NEUTROPENIA",
         "field": "anc",
         "operator": "<",
-        "value": 1.0,
+        "value": 1,
         "action": {
-          "type": "dose_reduce_one_level",
+          "type": "consultant_review",
           "components": [
             "carboplatin",
             "pegylated liposomal doxorubicin"
           ],
-          "recommendation": "Reduce both PLD and carboplatin by one dose level after grade 4 neutropenia."
+          "recommendation": "ANC is below 1.0 × 10⁹/L. NCCP Table 2 uses this threshold under its grade 4 heading. Confirm the episode, CTCAE grade and intended dose-level change with the treating team."
         },
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
+          "page": 4,
+          "document": "NCCP 00624 v3, Table 2",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
-        "explanation": "Grade 4 neutropenia requires one-level reduction."
+        "explanation": "ANC is below 1.0 × 10⁹/L. NCCP Table 2 uses this threshold under its grade 4 heading. Confirm the episode, CTCAE grade and intended dose-level change with the treating team."
       },
       {
         "rule_id": "FN_OR_SEVERE_BLEEDING",
@@ -590,7 +697,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Febrile neutropenia or severe bleeding requires dose reduction."
       },
@@ -609,7 +717,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Prolonged cytopenia requires delay."
       },
@@ -625,6 +734,11 @@
             "field": "recovered_after_14_day_delay",
             "operator": "==",
             "value": false
+          },
+          {
+            "field": "current_pld_dose_level",
+            "operator": "==",
+            "value": "25"
           }
         ],
         "action": {
@@ -636,7 +750,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Failure to recover after reduction may require stopping PLD."
       },
@@ -654,7 +769,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Carboplatin is not recommended at GFR ≤20."
       },
@@ -681,54 +797,75 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Severe renal impairment requires extreme caution."
       },
       {
-        "rule_id": "PLD_BILIRUBIN_20_51",
-        "all": [
-          {
-            "field": "bilirubin_micromol_l",
-            "operator": ">=",
-            "value": 20
-          },
-          {
-            "field": "bilirubin_micromol_l",
-            "operator": "<=",
-            "value": 51
-          }
-        ],
+        "id": "PLD_BILIRUBIN_20_51",
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "bilirubin_micromol_l",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "bilirubin_micromol_l",
+              "operator": "<=",
+              "value": 51
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
             "pegylated liposomal doxorubicin"
           ],
-          "recommendation": "Give PLD at 75% for bilirubin 20–51 µmol/L."
+          "message": "Give PLD at 75% for bilirubin 20–51 µmol/L."
         },
+        "explanation": "Give PLD at 75% for bilirubin 20–51 µmol/L.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Moderate hyperbilirubinaemia requires PLD reduction."
+          "document": "NCCP 00624 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
       },
       {
-        "rule_id": "PLD_BILIRUBIN_OVER_51",
-        "field": "bilirubin_micromol_l",
-        "operator": ">",
-        "value": 51,
+        "id": "PLD_BILIRUBIN_OVER_51",
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "bilirubin_micromol_l",
+              "operator": ">",
+              "value": 51
+            }
+          ]
+        },
         "action": {
           "type": "dose_reduce",
           "components": [
             "pegylated liposomal doxorubicin"
           ],
-          "recommendation": "Give PLD at 50% for cycle 1 when bilirubin >51 µmol/L; re-escalation may be considered if tolerated."
+          "message": "Give PLD at 50% for cycle 1 when bilirubin >51 µmol/L; re-escalation may be considered if tolerated."
         },
+        "explanation": "Give PLD at 50% for cycle 1 when bilirubin >51 µmol/L; re-escalation may be considered if tolerated.",
         "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe hyperbilirubinaemia requires a larger initial PLD reduction."
+          "document": "NCCP 00624 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
       },
       {
         "rule_id": "PPE_G2_WEEK4_5",
@@ -756,7 +893,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Grade 2 PPE at week 4 or 5 requires delay."
       },
@@ -783,7 +921,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Persistent grade 2 PPE at week 6 requires reduction."
       },
@@ -813,7 +952,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Grade 3–4 PPE at week 4 or 5 requires delay."
       },
@@ -840,7 +980,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Persistent severe PPE requires discontinuation."
       },
@@ -870,7 +1011,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Grade 2 stomatitis at week 4 or 5 requires delay."
       },
@@ -897,7 +1039,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Persistent grade 2 stomatitis requires reduction or discontinuation review."
       },
@@ -924,7 +1067,8 @@
         },
         "source": {
           "page": 5,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Persistent severe stomatitis requires discontinuation."
       },
@@ -942,7 +1086,8 @@
         },
         "source": {
           "page": 4,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Cardiac risk requires consultant review."
       },
@@ -961,9 +1106,271 @@
         },
         "source": {
           "page": 7,
-          "document": "Current mapped NCCP source"
+          "document": "Current mapped NCCP source",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
         },
         "explanation": "Severe infusion reaction requires interruption and review."
+      },
+      {
+        "id": "BASELINE_EXCLUSIONS",
+        "when": {
+          "any": [
+            {
+              "field": "preexisting_neuropathy_grade",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "cardiomyopathy_or_chf",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pegylated liposomal doxorubicin",
+            "carboplatin"
+          ],
+          "message": "Source exclusion. Obtain consultant review before treatment."
+        },
+        "explanation": "Source exclusion. Obtain consultant review before treatment.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "PLD_LATER_HEPATIC",
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "bilirubin_micromol_l",
+              "operator": ">=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Review original dose, previous tolerance and liver-test trend. Table 3 permits staged escalation after hepatic starting reduction. Table 2 prohibits re-escalation after haematological reduction."
+        },
+        "explanation": "Review original dose, previous tolerance and liver-test trend. Table 3 permits staged escalation after hepatic starting reduction. Table 2 prohibits re-escalation after haematological reduction.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "PPE_G1_HISTORY",
+        "when": {
+          "all": [
+            {
+              "field": "ppe_grade",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "toxicity_assessment_week",
+              "operator": "in",
+              "value": [
+                "week4",
+                "week5"
+              ]
+            },
+            {
+              "field": "prior_grade3_4_ppe_or_stomatitis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Delay liposomal doxorubicin one week and reassess after prior grade 3–4 skin toxicity or stomatitis."
+        },
+        "explanation": "Delay liposomal doxorubicin one week and reassess after prior grade 3–4 skin toxicity or stomatitis.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "PPE_G1_WEEK6",
+        "when": {
+          "all": [
+            {
+              "field": "ppe_grade",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "toxicity_assessment_week",
+              "operator": "==",
+              "value": "week6"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Week 6 grade 1 toxicity: review 25% reduction; for stomatitis the consultant may consider discontinuation."
+        },
+        "explanation": "Week 6 grade 1 toxicity: review 25% reduction; for stomatitis the consultant may consider discontinuation.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "STOMATITIS_G1_HISTORY",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_grade",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "toxicity_assessment_week",
+              "operator": "in",
+              "value": [
+                "week4",
+                "week5"
+              ]
+            },
+            {
+              "field": "prior_grade3_4_ppe_or_stomatitis",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Delay liposomal doxorubicin one week and reassess after prior grade 3–4 skin toxicity or stomatitis."
+        },
+        "explanation": "Delay liposomal doxorubicin one week and reassess after prior grade 3–4 skin toxicity or stomatitis.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "STOMATITIS_G1_WEEK6",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_grade",
+              "operator": "==",
+              "value": 1
+            },
+            {
+              "field": "toxicity_assessment_week",
+              "operator": "==",
+              "value": "week6"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Week 6 grade 1 toxicity: review 25% reduction; for stomatitis the consultant may consider discontinuation."
+        },
+        "explanation": "Week 6 grade 1 toxicity: review 25% reduction; for stomatitis the consultant may consider discontinuation.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "STOMATITIS_G3_4_WEEK4_5",
+        "when": {
+          "all": [
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "toxicity_assessment_week",
+              "operator": "in",
+              "value": [
+                "week4",
+                "week5"
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "delay",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Delay liposomal doxorubicin one week and reassess."
+        },
+        "explanation": "Delay liposomal doxorubicin one week and reassess.",
+        "source": {
+          "document": "NCCP 00624 v3",
+          "page": 5,
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
+      },
+      {
+        "id": "TABLE2_CONFIRMED_NEUTROPENIA",
+        "when": {
+          "all": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "table2_neutropenia_review_confirmed",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce_one_level",
+          "components": [
+            "carboplatin",
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "The treating team has confirmed application of the Table 2 neutropenia rule. Reduce both agents by one dose level using Table 1."
+        },
+        "explanation": "The treating team has confirmed application of the Table 2 neutropenia rule. Reduce both agents by one dose level using Table 1.",
+        "source": {
+          "page": 4,
+          "document": "NCCP 00624 v3, Table 2",
+          "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+        }
       }
     ]
   },
@@ -973,14 +1380,21 @@
   },
   "supportive_care": {
     "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
+    "script_id": "high_carboplatin",
     "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Carboplatin AUC 5; NCCP V6 classifies AUC >=4 as high and AUC <4 as moderate.",
+    "mapping_basis": "NCCP 00624 component emetogenic classifications and active treatment day.",
     "mapping_confidence": "high",
     "validation_status": "pending_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk",
+    "phase_specific_plan": "patient/00624/supportive-care.html",
+    "phase_profiles": {
+      "combination": {
+        "level": "high",
+        "script_id": "high_carboplatin"
+      }
+    },
+    "source_url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
   }
 }

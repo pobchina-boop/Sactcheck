@@ -36,10 +36,10 @@ function contrast(foreground, background) {
   const rows = [], failures = [];
   try {
     for (const width of [390, 1440]) {
-      const page = await browser.newPage({ viewport: { width, height: 900 } });
       const errors = [];
-      page.on('pageerror', error => errors.push(error.message));
       for (const code of codes) {
+        const page = await browser.newPage({ viewport: { width, height: 900 } });
+        page.on('pageerror', error => errors.push(error.message));
         await page.goto(`${server.url}/patient/${code}/knowledge.html`, { waitUntil: 'load' });
         const panel = page.locator('.pt-personal-plan');
         await panel.waitFor({ state: 'visible' });
@@ -74,9 +74,9 @@ function contrast(foreground, background) {
         if (evidence && ['00555', '00660'].includes(code)) {
           await page.screenshot({ path: path.join(evidence, `${code}-${width}-knowledge.png`) });
         }
+        await page.close();
       }
       assert.deepEqual(errors, [], 'Personal-plan pages must not raise browser errors');
-      await page.close();
     }
     if (evidence) fs.writeFileSync(path.join(evidence, 'contrast-results.json'), JSON.stringify({ rows, failures }, null, 2) + '\n');
     assert.deepEqual(failures, [], 'Every personal-plan text color must meet 4.5:1 on screen and in print');

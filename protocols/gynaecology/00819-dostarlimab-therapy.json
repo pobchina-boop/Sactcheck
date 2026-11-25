@@ -14,9 +14,9 @@
     "short_title": "Dostarlimab Therapy",
     "indication": "dMMR/MSI-H recurrent or advanced endometrial cancer progressing on or after platinum-containing therapy.",
     "source_url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 6,
+    "sactcheck_encoding_version": "0.84.65",
+    "source_checked_date": "2026-11-25",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "endometrial_immunotherapy",
@@ -74,7 +74,34 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00819-v2"
+    "canonical_protocol_id": "nccp-00819-v2",
+    "source_pdf_sha256": "9b6d81b5883839b5ac94ffbac31c8b40083e8fe8b4e41811006a9d57e5276534",
+    "published_date": "2024-06-14",
+    "review_date": "2030-08-11",
+    "regimen_card": {
+      "schema_version": "1.0.0",
+      "contexts": [
+        {
+          "id": "00819-gyn",
+          "indication_id": "00819-gyn",
+          "intent": "advanced_disease",
+          "source_schedule_interval_label": "Every 3 weeks for four doses. Give dose 5 three weeks after dose 4, then every 6 weeks.",
+          "duration_type": "phased_course",
+          "duration_text": "Continue until progression or unacceptable toxicity"
+        }
+      ],
+      "provenance": {
+        "method": "NCCP source mapping",
+        "reviewed": false,
+        "source": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf",
+        "source_sha256": "9b6d81b5883839b5ac94ffbac31c8b40083e8fe8b4e41811006a9d57e5276534",
+        "source_pages": [
+          1,
+          2
+        ],
+        "checked_date": "2026-11-25"
+      }
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -90,7 +117,7 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Dostarlimab Therapy",
+    "schedule_summary": "500 mg IV every 21 days for four cycles. Cycle 5 is 1000 mg three weeks after cycle 4, then 1000 mg every six weeks.",
     "drugs": [
       "dostarlimab"
     ]
@@ -290,7 +317,7 @@
       "input_role": "decision"
     },
     "pneumonitis_grade": {
-      "label": "Immune-mediated pneumonitis grade",
+      "label": "Clinician-assessed immune-mediated pneumonitis grade",
       "type": "select",
       "required": false,
       "options": [
@@ -333,7 +360,7 @@
       "input_role": "decision"
     },
     "diarrhoea_colitis_grade": {
-      "label": "Immune-mediated diarrhoea/colitis grade",
+      "label": "Clinician-assessed immune-mediated colitis grade",
       "type": "select",
       "required": false,
       "options": [
@@ -493,6 +520,194 @@
       "unit": "mmol/L",
       "ui_section": "immunotherapy_bloods",
       "input_role": "context"
+    },
+    "dmmr_msi_confirmed": {
+      "label": "Validated tumour test confirms dMMR/MSI-H",
+      "type": "boolean",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "pregnancy_or_breastfeeding": {
+      "label": "Pregnant or breastfeeding",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "pneumonitis_recurrence": {
+      "type": "boolean",
+      "label": "Recurrent grade 2 immune pneumonitis",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "visible_when": {
+        "field": "pneumonitis_grade",
+        "operator": "==",
+        "value": 2
+      }
+    },
+    "immune_event": {
+      "label": "Clinician-attributed immune or infusion event",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "none",
+          "label": "No event selected"
+        },
+        {
+          "value": "nephritis",
+          "label": "Immune nephritis"
+        },
+        {
+          "value": "hepatitis",
+          "label": "Immune hepatitis (usual baseline)"
+        },
+        {
+          "value": "liver_exception",
+          "label": "Liver metastases with grade 2 AST/ALT at baseline"
+        },
+        {
+          "value": "diabetes",
+          "label": "Type 1 diabetes with hyperglycaemia"
+        },
+        {
+          "value": "adrenal",
+          "label": "Hypophysitis or adrenal insufficiency"
+        },
+        {
+          "value": "thyroid",
+          "label": "Hyperthyroidism or hypothyroidism"
+        },
+        {
+          "value": "myocarditis",
+          "label": "Myocarditis"
+        },
+        {
+          "value": "neurological",
+          "label": "Severe neurological immune toxicity"
+        },
+        {
+          "value": "other",
+          "label": "Other immune-mediated adverse reaction"
+        },
+        {
+          "value": "infusion",
+          "label": "Dostarlimab infusion reaction"
+        }
+      ],
+      "demo_value": "none",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "immune_event_grade": {
+      "label": "Clinician-assessed event-specific grade (CTCAE v5.0, NCCP 00819 Table 2)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "ctcae_version": "5.0",
+      "ctcae_category": "other_nonhaematological",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "NCCP 00819 Table 2 cites CTCAE v5.0. Select the event-specific CTCAE term and its applicable grade. General severity labels alone do not establish the diagnosis or grade. Grade 0 records absence of the event."
+    },
+    "liver_exception_confirmed": {
+      "label": "Liver metastases and baseline grade 2 AST/ALT: rise of at least 50% from baseline sustained for at least one week",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "endocrine_refractory": {
+      "label": "Adrenal insufficiency or hypophysitis recurring/worsening on adequate hormonal therapy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "severe_skin_status": {
+      "label": "Exfoliative skin reaction (SJS, TEN or DRESS)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "absent",
+          "label": "No suspected reaction"
+        },
+        {
+          "value": "suspected",
+          "label": "Suspected"
+        },
+        {
+          "value": "confirmed",
+          "label": "Confirmed"
+        }
+      ],
+      "demo_value": "absent",
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "immune_recurrence": {
+      "label": "Recurrent grade 3/4 immune toxicity after resolution to grade 0/1 (exclude pneumonitis and infusion reactions)",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "infusion_recurrent": {
+      "label": "Recurrent grade 2 dostarlimab infusion reaction despite adequate premedication",
+      "type": "boolean",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision",
+      "ui_section": "clinical"
+    },
+    "interval_dose4_to_5": {
+      "label": "Days since dose 4 if giving first 1000 mg dose",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 365,
+      "step": 1,
+      "demo_value": 21,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -526,24 +741,24 @@
     "rules": [
       {
         "id": "ECOG_3",
-        "priority": 8,
         "when": {
           "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "operator": ">",
+          "value": 2
         },
         "action": {
-          "type": "consultant_review",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Outside NCCP ECOG eligibility of 0–2. Review with the treating consultant."
         },
+        "explanation": "Outside NCCP ECOG eligibility of 0–2. Review with the treating consultant.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "document": "NCCP 00819 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
       },
       {
         "id": "NONHAEM_G3",
@@ -562,7 +777,8 @@
         },
         "source": {
           "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
         "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
       },
@@ -583,7 +799,8 @@
         },
         "source": {
           "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "page": "Dose modifications",
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
         "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
       },
@@ -592,21 +809,22 @@
         "priority": 10,
         "when": {
           "field": "pneumonitis_grade",
-          "operator": ">=",
+          "operator": "==",
           "value": 2
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
-          "message": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+          "message": "Withhold dostarlimab for grade 2 immune pneumonitis. Review for restart after recovery to grade 0 or 1. Recurrent grade 2 requires permanent discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
-        "explanation": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+        "explanation": "Withhold dostarlimab for grade 2 immune pneumonitis. Review for restart after recovery to grade 0 or 1. Recurrent grade 2 requires permanent discontinuation."
       },
       {
         "id": "ICI_PNEUM_G3",
@@ -619,13 +837,14 @@
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
         "explanation": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
       },
@@ -634,21 +853,25 @@
         "priority": 9,
         "when": {
           "field": "diarrhoea_colitis_grade",
-          "operator": ">=",
-          "value": 2
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
-          "message": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
+          "message": "Withhold dostarlimab for immune colitis grade 2 or 3. Reassess for restart after recovery to grade 0 or 1, including any previous severe episode."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
-        "explanation": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
+        "explanation": "Withhold dostarlimab for immune colitis grade 2 or 3. Reassess for restart after recovery to grade 0 or 1, including any previous severe episode."
       },
       {
         "id": "ICI_HEP_G2",
@@ -661,13 +884,14 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
         "explanation": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
       },
@@ -675,22 +899,32 @@
         "id": "ICI_HEP_G3",
         "priority": 10,
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
+          "any": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 5
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 3
+            }
+          ]
         },
         "action": {
-          "type": "permanently_discontinue",
+          "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
-          "message": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+          "message": "Withhold dostarlimab and urgently assess possible immune hepatitis. Confirm attribution, baseline liver involvement and the Table 2 exception before a permanent discontinuation decision."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
-        "explanation": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+        "explanation": "Withhold dostarlimab and urgently assess possible immune hepatitis. Confirm attribution, baseline liver involvement and the Table 2 exception before a permanent discontinuation decision."
       },
       {
         "id": "ICI_BILI",
@@ -703,13 +937,14 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
         "explanation": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
       },
@@ -724,15 +959,660 @@
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "dostarlimab"
           ],
           "message": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
         },
         "explanation": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
+      },
+      {
+        "id": "BIOMARKER",
+        "when": {
+          "field": "dmmr_msi_confirmed",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Confirm the required tumour biomarker before initiation."
+        },
+        "explanation": "Confirm the required tumour biomarker before initiation.",
+        "source": {
+          "document": "NCCP 00819 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "PREGNANCY",
+        "when": {
+          "field": "pregnancy_or_breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Excluded by the regimen. Obtain specialist review."
+        },
+        "explanation": "Excluded by the regimen. Obtain specialist review.",
+        "source": {
+          "document": "NCCP 00819 v2",
+          "page": 2,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "ICI_PNEUM_RECURRENCE",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "pneumonitis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "pneumonitis_recurrence",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Discontinue dostarlimab permanently for recurrent grade 2 immune pneumonitis."
+        },
+        "explanation": "Discontinue dostarlimab permanently for recurrent grade 2 immune pneumonitis.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "ICI_COLITIS_G4",
+        "priority": 7,
+        "when": {
+          "field": "diarrhoea_colitis_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Discontinue dostarlimab permanently for grade 4 immune colitis."
+        },
+        "explanation": "Discontinue dostarlimab permanently for grade 4 immune colitis.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "NEPHRITIS_2",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "nephritis"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": "==",
+              "value": "2"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Withhold dostarlimab. Consider restart only after immune nephritis improves to grade 0 or 1."
+        },
+        "explanation": "Withhold dostarlimab. Consider restart only after immune nephritis improves to grade 0 or 1.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "NEPHRITIS_34",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "nephritis"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": ">=",
+              "value": "3"
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab for grade 3 or 4 immune nephritis."
+        },
+        "explanation": "Permanently discontinue dostarlimab for grade 3 or 4 immune nephritis.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "IMMUNE_HEPATITIS_SEVERE",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "hepatitis"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": ">=",
+              "value": "3"
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab for confirmed severe immune hepatitis meeting the usual-baseline criteria."
+        },
+        "explanation": "Permanently discontinue dostarlimab for confirmed severe immune hepatitis meeting the usual-baseline criteria.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "HEPATITIS_EXCEPTION",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "liver_exception"
+              ]
+            },
+            {
+              "field": "liver_exception_confirmed",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Discontinue dostarlimab after confirmation of the sustained increase from baseline specified for liver metastases."
+        },
+        "explanation": "Discontinue dostarlimab after confirmation of the sustained increase from baseline specified for liver metastases.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "DIABETES_34",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "diabetes"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": ">=",
+              "value": "3"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Withhold dostarlimab pending appropriate treatment and clinical and metabolic stability."
+        },
+        "explanation": "Withhold dostarlimab pending appropriate treatment and clinical and metabolic stability.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "ADRENAL_234",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "adrenal"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": ">=",
+              "value": "2"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Withhold dostarlimab. Treat endocrine toxicity and review after recovery to grade 0 or 1."
+        },
+        "explanation": "Withhold dostarlimab. Treat endocrine toxicity and review after recovery to grade 0 or 1.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "ADRENAL_RECURRENT",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "adrenal"
+              ]
+            },
+            {
+              "field": "endocrine_refractory",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Discontinue dostarlimab permanently for recurrent or worsening disease on adequate hormonal treatment."
+        },
+        "explanation": "Discontinue dostarlimab permanently for recurrent or worsening disease on adequate hormonal treatment.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "THYROID_34",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "thyroid"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": ">=",
+              "value": "3"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Withhold dostarlimab for severe thyroid toxicity and review after recovery to grade 0 or 1."
+        },
+        "explanation": "Withhold dostarlimab for severe thyroid toxicity and review after recovery to grade 0 or 1.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "CARDIAC_NEURO",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "myocarditis",
+                "neurological"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": ">=",
+              "value": "2"
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab and urgently manage the confirmed cardiac or severe neurological event."
+        },
+        "explanation": "Permanently discontinue dostarlimab and urgently manage the confirmed cardiac or severe neurological event.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "SKIN_SUSPECTED",
+        "priority": 7,
+        "when": {
+          "field": "severe_skin_status",
+          "operator": "==",
+          "value": "suspected"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Withhold dostarlimab at any grade. Obtain urgent specialist assessment. Restart requires exclusion of the severe reaction and recovery to grade 0 or 1."
+        },
+        "explanation": "Withhold dostarlimab at any grade. Obtain urgent specialist assessment. Restart requires exclusion of the severe reaction and recovery to grade 0 or 1.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "SKIN_CONFIRMED",
+        "priority": 7,
+        "when": {
+          "field": "severe_skin_status",
+          "operator": "==",
+          "value": "confirmed"
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab for confirmed severe exfoliative skin toxicity."
+        },
+        "explanation": "Permanently discontinue dostarlimab for confirmed severe exfoliative skin toxicity.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 3,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "OTHER_IMMUNE_3",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "other"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": "==",
+              "value": "3"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Withhold dostarlimab and review after recovery to grade 0 or 1."
+        },
+        "explanation": "Withhold dostarlimab and review after recovery to grade 0 or 1.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "OTHER_IMMUNE_4",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "other"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": "==",
+              "value": "4"
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab for grade 4 immune toxicity in the other-reactions category."
+        },
+        "explanation": "Permanently discontinue dostarlimab for grade 4 immune toxicity in the other-reactions category.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "IMMUNE_RECURRENT_34",
+        "priority": 7,
+        "when": {
+          "field": "immune_recurrence",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab for recurrent severe immune toxicity after prior recovery."
+        },
+        "explanation": "Permanently discontinue dostarlimab for recurrent severe immune toxicity after prior recovery.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "INFUSION_2",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "infusion"
+              ]
+            },
+            {
+              "field": "immune_event_grade",
+              "operator": "==",
+              "value": "2"
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Stop dostarlimab and treat the reaction. Apply the Table 2 timing, reduced infusion rate and premedication conditions before clinician-directed restart."
+        },
+        "explanation": "Stop dostarlimab and treat the reaction. Apply the Table 2 timing, reduced infusion rate and premedication conditions before clinician-directed restart.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "INFUSION_STOP",
+        "priority": 7,
+        "when": {
+          "all": [
+            {
+              "field": "immune_event",
+              "operator": "in",
+              "value": [
+                "infusion"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "immune_event_grade",
+                  "operator": ">=",
+                  "value": "3"
+                },
+                {
+                  "all": [
+                    {
+                      "field": "immune_event_grade",
+                      "operator": "==",
+                      "value": "2"
+                    },
+                    {
+                      "field": "infusion_recurrent",
+                      "operator": "==",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "Permanently discontinue dostarlimab for severe infusion reaction or recurrent grade 2 despite adequate premedication."
+        },
+        "explanation": "Permanently discontinue dostarlimab for severe infusion reaction or recurrent grade 2 despite adequate premedication.",
+        "source": {
+          "document": "NCCP 00819 v2 · Table 2",
+          "page": 4,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
+      },
+      {
+        "id": "EARLY_TRANSITION",
+        "when": {
+          "field": "interval_dose4_to_5",
+          "operator": "<",
+          "value": 21
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dostarlimab"
+          ],
+          "message": "The first 1000 mg dose is due three weeks after the fourth 500 mg dose."
+        },
+        "explanation": "The first 1000 mg dose is due three weeks after the fourth 500 mg dose.",
+        "source": {
+          "document": "NCCP 00819 v2",
+          "page": 1,
+          "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+        }
       }
     ]
   },
@@ -748,12 +1628,67 @@
   ],
   "supportive_care": {
     "emetogenic_risk": "minimal",
-    "script_id": "nccp-minimal-no-routine-prophylaxis",
-    "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
+    "script_id": "minimal",
+    "mapping_basis": "NCCP 00819 component emetogenic classifications and active treatment day.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance"
-  }
+    "supportive_medications_label": "NCCP antiemetic guidance",
+    "phase_specific_plan": "patient/00819/supportive-care.html",
+    "phase_profiles": {
+      "initial": {
+        "level": "minimal",
+        "script_id": "minimal"
+      },
+      "continuation": {
+        "level": "minimal",
+        "script_id": "minimal"
+      }
+    },
+    "source_url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "initial",
+      "cycle_length_days": 21,
+      "cycles": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "dostarlimab",
+          "dose": {
+            "value": 500,
+            "unit": "mg"
+          },
+          "route": "IV infusion",
+          "duration_minutes": 30
+        }
+      ]
+    },
+    {
+      "phase_id": "continuation",
+      "cycle_length_days": 42,
+      "cycles": [],
+      "description": "First 1000 mg infusion 21 days after fourth 500 mg infusion.",
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "dostarlimab",
+          "dose": {
+            "value": 1000,
+            "unit": "mg"
+          },
+          "route": "IV infusion",
+          "duration_minutes": 30
+        }
+      ]
+    }
+  ]
 }

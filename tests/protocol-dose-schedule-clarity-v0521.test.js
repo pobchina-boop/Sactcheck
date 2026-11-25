@@ -86,8 +86,16 @@ for (const code of newSarcomaSchedules) {
   assert.equal(DoseSchedule.hasData(previous),false);
   assert(DoseSchedule.buildModel(require(path.join(root,row.path))).phases.length);
 }
-assert.strictEqual(usefulCoverage, 258+newSarcomaSchedules.length);
-assert.strictEqual(scheduleCoverage, 258+newSarcomaSchedules.length);
+const gynaeSchedules = ['00308','00819'];
+for (const code of gynaeSchedules) {
+  const row = catalogue.protocols.find(entry=>entry.path.includes('/'+code+'-'));
+  const previous=JSON.parse(require('node:child_process').execFileSync('git',['show','eb2bf4aa5b0e7a2de3b50c386517b68d1e059d7d:'+row.path],{cwd:root}));
+  assert.equal(DoseSchedule.hasData(previous),false);
+  const model=DoseSchedule.buildModel(require(path.join(root,row.path)));
+  assert.deepEqual(Array.from(model.phases,phase=>phase.cycleLength),code==='00308'?[21]:[21,42]);
+}
+assert.strictEqual(usefulCoverage,258+newSarcomaSchedules.length+gynaeSchedules.length);
+assert.strictEqual(scheduleCoverage,258+newSarcomaSchedules.length+gynaeSchedules.length);
 assert.strictEqual(doseLevelCoverage, 67);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.

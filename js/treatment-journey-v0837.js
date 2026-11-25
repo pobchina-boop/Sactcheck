@@ -53155,6 +53155,386 @@ const definitions={
         "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
       }
     ]
+  },
+  "00303": {
+    "code": "00303",
+    "release": "0.84.65",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Paclitaxel and carboplatin every three weeks",
+    "setting": "Ovarian, fallopian tube, peritoneal and selected other cancers",
+    "summary": "Both infusions every 21 days, for six planned cycles unless treatment ends earlier.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment and monitoring",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Fever, shaking chills, unusual bleeding or sudden illness? Call the oncology unit now.",
+        "cells": [
+          "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. Hearing and nerve checks when indicated.",
+          "Paclitaxel runs first over about three hours, then carboplatin over about half an hour. Allow time for premedicines and checks.",
+          "Full blood count, kidney and liver tests.",
+          "Both infusions every 21 days, for six planned cycles unless treatment ends earlier."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. Hearing and nerve checks when indicated.",
+        "when": "Before starting",
+        "why": "Confirm which checks are booked before your first infusion.",
+        "clinical": "NCCP 00303",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Full blood count, kidney and liver tests.",
+        "when": "Before each cycle",
+        "why": "Report any numbness, weakness or loss of balance.",
+        "clinical": "NCCP 00303",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The NCCP lists high-risk early or advanced ovarian cancer, fallopian tube and primary peritoneal cancers, and selected advanced or recurrent endometrial, cervical or unknown-primary cancers. Ask which indication applies to you."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00303 v6",
+        "url": "https://healthservice.hse.ie/documents/6709/303_V6_CARBOplatin_AUC5-7.5_PACLitaxel_175.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG-158 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12860964/"
+      }
+    ]
+  },
+  "00306": {
+    "code": "00306",
+    "release": "0.84.65",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Gemcitabine and carboplatin",
+    "setting": "Relapsed ovarian, fallopian tube or primary peritoneal cancer",
+    "summary": "Gemcitabine then carboplatin, both into a vein. Gemcitabine alone. The next cycle is planned three weeks after day 1 while treatment remains helpful and tolerable.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment and monitoring",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Fever, shaking chills, unusual bleeding or sudden illness? Call the oncology unit now.",
+        "cells": [
+          "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. A hearing test may be needed.",
+          "Each infusion usually takes about half an hour. Blood counts on day 8 can lead to a smaller gemcitabine dose or an omitted visit. An omitted dose is not made up in that cycle.",
+          "Blood count, kidney and liver tests. Blood count and kidney tests.",
+          "Gemcitabine then carboplatin, both into a vein. Gemcitabine alone. The next cycle is planned three weeks after day 1 while treatment remains helpful and tolerable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. A hearing test may be needed.",
+        "when": "Before starting",
+        "why": "Confirm which checks are booked before your first infusion.",
+        "clinical": "NCCP 00306",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood count, kidney and liver tests.",
+        "when": "Day 1",
+        "why": "These help your team decide whether the next cycle can begin.",
+        "clinical": "NCCP 00306",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood count and kidney tests.",
+        "when": "Day 8",
+        "why": "The day 8 decision concerns gemcitabine alone.",
+        "clinical": "NCCP 00306",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This combination is used when one of these cancers returns after at least six months without recurrence following first-line platinum treatment."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00306 v7",
+        "url": "https://healthservice.hse.ie/documents/6710/306_Gem_CARBOAUC_4_.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "AGO-OVAR / NCIC / EORTC trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16966687/"
+      }
+    ]
+  },
+  "00308": {
+    "code": "00308",
+    "release": "0.84.65",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Weekly paclitaxel with three-weekly carboplatin",
+    "setting": "Ovarian, fallopian tube and primary peritoneal cancer",
+    "summary": "Paclitaxel and carboplatin together. Paclitaxel alone on both visits. Repeat the cycle every 21 days. The planned course is 3–6 cycles after surgery or six in advanced disease, if suitable.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment and monitoring",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Fever, shaking chills, unusual bleeding or sudden illness? Call the oncology unit now.",
+        "cells": [
+          "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. Nerve and hearing assessments if indicated.",
+          "Paclitaxel runs over about an hour each week. Carboplatin follows it on day 1 only. You still attend on days 8 and 15.",
+          "Full blood count with differential, kidney and liver tests.",
+          "Paclitaxel and carboplatin together. Paclitaxel alone on both visits. Repeat the cycle every 21 days. The planned course is 3–6 cycles after surgery or six in advanced disease, if suitable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. Nerve and hearing assessments if indicated.",
+        "when": "Before starting",
+        "why": "Confirm which checks are booked before your first infusion.",
+        "clinical": "NCCP 00308",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Full blood count with differential, kidney and liver tests.",
+        "when": "Every week",
+        "why": "Report changes in walking, grip or sensation before paclitaxel.",
+        "clinical": "NCCP 00308",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This schedule can be used after surgery for selected high-risk early ovarian cancers, or for advanced ovarian, fallopian tube or primary peritoneal cancer."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00308 v7",
+        "url": "https://healthservice.hse.ie/documents/6712/308_V7_CARBOplatin_AUC6_PACLitaxel80.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG-0262 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26933849/"
+      }
+    ]
+  },
+  "00624": {
+    "code": "00624",
+    "release": "0.84.65",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Liposomal doxorubicin and carboplatin",
+    "setting": "Platinum-sensitive relapsed ovarian, fallopian tube or primary peritoneal cancer",
+    "summary": "Both medicines every four weeks, usually for six cycles. Extra cycles may be considered if the cancer shrinks or stays stable.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment and monitoring",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Fever, shaking chills, unusual bleeding or sudden illness? Call the oncology unit now.",
+        "cells": [
+          "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. A heart tracing and a heart pumping-function scan are also needed.",
+          "Liposomal doxorubicin is given first, slowly at the start to watch for a reaction. Carboplatin follows. Report burning, swelling or pain around your drip immediately.",
+          "Blood count, kidney and liver tests. Heart tracing and repeat pumping-function scan when indicated.",
+          "Both medicines every four weeks, usually for six cycles. Extra cycles may be considered if the cancer shrinks or stays stable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, and a kidney filtration assessment for carboplatin dosing. A heart tracing and a heart pumping-function scan are also needed.",
+        "when": "Before starting",
+        "why": "Confirm which checks are booked before your first infusion.",
+        "clinical": "NCCP 00624",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood count, kidney and liver tests.",
+        "when": "Before each cycle",
+        "why": "Report mouth ulcers, hand or foot pain and any swelling or breathlessness.",
+        "clinical": "NCCP 00624",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Heart tracing and repeat pumping-function scan when indicated.",
+        "when": "During treatment",
+        "why": "Your team considers symptoms and total anthracycline exposure.",
+        "clinical": "NCCP 00624",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This combination uses the pegylated liposomal formulation of doxorubicin with carboplatin for cancer that has returned and is considered sensitive to platinum."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00624 v3",
+        "url": "https://healthservice.hse.ie/documents/6685/624_V3_Carbo_AUC5_pegylated_dox_30.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "CALYPSO trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20498395/"
+      }
+    ]
+  },
+  "00819": {
+    "code": "00819",
+    "release": "0.84.65",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Dostarlimab (Jemperli) alone",
+    "setting": "Previously treated dMMR or MSI-high endometrial cancer",
+    "summary": "One infusion every three weeks for four doses. Dose 5 is three weeks after dose 4. After dose 5 the interval is six weeks, while treatment remains suitable.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment and monitoring",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Call urgently for new cough, breathlessness, diarrhoea, severe weakness or a blistering rash.",
+        "cells": [
+          "Blood counts, kidney and liver tests, glucose, thyroid tests, and hepatitis B and C screening.",
+          "Dostarlimab goes into a vein over about 30 minutes. Only dostarlimab is used on this pathway. Keep the immunotherapy alert card with you after treatment too.",
+          "Blood count, kidney and liver tests and glucose. Thyroid blood tests.",
+          "One infusion every three weeks for four doses. Dose 5 is three weeks after dose 4. After dose 5 the interval is six weeks, while treatment remains suitable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, glucose, thyroid tests, and hepatitis B and C screening.",
+        "when": "Before starting",
+        "why": "Confirm which checks are booked before your first infusion.",
+        "clinical": "NCCP 00819",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood count, kidney and liver tests and glucose.",
+        "when": "Before each dose",
+        "why": "These can reveal immune inflammation before you feel unwell.",
+        "clinical": "NCCP 00819",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Thyroid blood tests.",
+        "when": "Every 3–6 weeks",
+        "why": "Report extreme tiredness, dizziness or unusual thirst between visits.",
+        "clinical": "NCCP 00819",
+        "action": "Confirm arrangements with the treating team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "This immunotherapy is for advanced or recurrent womb cancer that progressed during or after platinum treatment and has a tumour test showing mismatch repair deficiency or high microsatellite instability."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00819 v2",
+        "url": "https://healthservice.hse.ie/documents/6430/819_V2_Dostarlimab_Therapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GARNET trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37363992/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

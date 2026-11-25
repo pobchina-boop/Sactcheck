@@ -135,6 +135,7 @@ if(olaparib){
   assert.equal(new Set(currentCatalogue.records.map(record=>record.entry.id)).size,currentCatalogue.records.length,'Current catalogue cannot duplicate a record to hide a missing protocol');
   assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).sort(),'Current catalogue retains every inherited protocol path');
   const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
+  const gynaeCodes = require('./helpers/retrospective-v08465.cjs').NEW_ROUTES;
   const sarcomaCodes = require('./helpers/retrospective-v08464.cjs').releaseRoutes.map(route=>route.split('/')[0]);
   const priorAstra=new Map(JSON.parse(zlib.gunzipSync(release.astraBytes(bundlePath))).records.map(r=>[r.entry.path,r]));
   for(const current of currentCatalogue.records){
@@ -142,10 +143,11 @@ if(olaparib){
     assert.deepEqual(current.entry,indexed,'Current bundle entry matches the actual index: '+current.entry.id);
     assert.deepEqual(current.protocol,JSON.parse(fs.readFileSync(path.join(root,indexed.path))),'Current bundle delivers the exact current protocol JSON: '+current.entry.id);
     const batchCode = current.protocol.metadata.nccp_regimen_code;
-    if (!successors.has(current.entry.id) && !['00862','00929','00391','00392',...sarcomaCodes].includes(batchCode)) {
+    if (!successors.has(current.entry.id) && !['00862','00929','00391','00392',...sarcomaCodes,...gynaeCodes].includes(batchCode)) {
       assert.deepEqual(current, priorAstra.get(current.entry.path), 'Unrelated current record equals the AstraZeneca release: ' + current.entry.id);
     }
-    if(successors.has(current.entry.id))olaparib.validateProtocol(current.protocol);
+    if(gynaeCodes.includes(batchCode))release.verifyFile(indexed.path);
+    else if(successors.has(current.entry.id))olaparib.validateProtocol(current.protocol);
     else if (['nccp-00862-v2','nccp-00929-v1'].includes(current.entry.id)) require('./helpers/live-release-v08464.cjs').verifyFile(indexed.path);
     else assert.deepEqual(priorAstra.get(current.entry.path),inheritedCatalogue.records.find(record=>record.entry.path===current.entry.path),'Unrelated current protocol, including Enhertu, remains unchanged after olaparib: '+current.entry.id);
   }
