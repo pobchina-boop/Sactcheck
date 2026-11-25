@@ -889,11 +889,15 @@
 
   function addWorkflowButtons(){
     const records=root?.SACTCheckProtocolLoader?.getLoadedProtocols?.()||root?.SACTCHECK_PROTOCOLS||[];
+    const cards=new Map();
+    root.document.querySelectorAll(".regimen-card[data-json-protocol-id]").forEach(card=>{
+      if(!cards.has(card.dataset.jsonProtocolId)) cards.set(card.dataset.jsonProtocolId,card);
+    });
     let added=0;
     asArray(records).forEach(record=>{
       const protocol=record?.protocol||record;
       if(!protocol?.protocol_id) return;
-      const card=cardFor(protocol);
+      const card=cards.get(protocol.protocol_id);
       const actions=card?.querySelector(".card-actions");
       if(!actions||actions.querySelector("[data-open-regimen-workflow]")) return;
       const button=root.document.createElement("button");

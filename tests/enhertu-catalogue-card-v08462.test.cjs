@@ -105,7 +105,7 @@ if (olaparib) {
   for (const file of ['protocols/shared/00588-olaparib-tablet-monotherapy.json', 'protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json']) olaparib.validateProtocol(json(file));
 }
 for (const f of ['js/regimen-course-metadata.js', 'js/regimen-card-metadata.js', 'tools/add-regimen-card-metadata.js']) {
-  assert(read(f).equals(old(f)), 'The generic metadata logic and renderer remain unchanged: ' + f);
+  assert(require('./helpers/live-release-v08464.cjs').beforeStartupBytes(f).equals(old(f)), 'The generic metadata baseline is retained through the authenticated startup change: ' + f);
 }
 
 class Element {

@@ -123,13 +123,18 @@
   function installLoadStatus(){
     if(!root.document||root.document.getElementById('sactRuntimeLoadStatus')) return;
     const el=root.document.createElement('div');
-    el.id='sactRuntimeLoadStatus';el.setAttribute('role','status');el.setAttribute('aria-live','polite');
-    el.style.cssText='position:fixed;right:14px;bottom:14px;z-index:9999;max-width:300px;padding:9px 11px;border-radius:9px;background:#12314a;color:white;font:600 12px/1.35 Arial,sans-serif;box-shadow:0 4px 18px #0003;display:none';
-    el.textContent='Loading regimen library…';root.document.body.appendChild(el);
-    const first=root.setTimeout?.(()=>{el.style.display='block';},1400);
-    const slow=root.setTimeout?.(()=>{el.textContent='Regimen library is taking longer than usual. SACTCheck is retrying slow files; previously cached data is reused automatically.';el.style.display='block';},9000);
+    el.id='sactRuntimeLoadStatus';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.setAttribute('aria-atomic','true');
+    el.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;width:360px;max-width:calc(100vw - 32px);padding:22px 24px;border-radius:16px;background:#12314a;color:white;font:400 15px/1.5 Arial,sans-serif;text-align:center;box-shadow:0 12px 40px #0003;pointer-events:none;display:none';
+    const heading=root.document.createElement('strong');
+    heading.style.cssText='display:block;font-size:18px;margin-bottom:8px';
+    heading.textContent='Loading the regimen library…';
+    const message=root.document.createElement('span');
+    message.textContent='Cancer treatment is complex. Give us a moment to get our protocols in order.';
+    el.append(heading,message);root.document.body.appendChild(el);
+    const first=root.setTimeout?.(()=>{el.style.display='block';},400);
+    const slow=root.setTimeout?.(()=>{heading.textContent='Still getting things ready…';message.textContent='This is taking longer than usual. Thanks for bearing with us.';el.style.display='block';},9000);
     root.addEventListener?.('sactcheck:protocols-load-failed',()=>{if(first)root.clearTimeout?.(first);if(slow)root.clearTimeout?.(slow);el.remove();},{once:true});
-    root.addEventListener?.('sactcheck:protocols-loaded',()=>{if(first)root.clearTimeout?.(first);if(slow)root.clearTimeout?.(slow);el.textContent='Regimen library ready';root.setTimeout?.(()=>el.remove(),700);},{once:true});
+    root.addEventListener?.('sactcheck:protocols-loaded',()=>{if(first)root.clearTimeout?.(first);if(slow)root.clearTimeout?.(slow);el.remove();},{once:true});
   }
 
   function boot(){

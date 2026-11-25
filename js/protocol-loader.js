@@ -815,6 +815,8 @@
     validateProtocol: protocolValidation,
     launchProtocol,
     getProtocolById(id) {
+      const direct = protocolsById.get(id);
+      if (direct && (!window.SACTCheckProtocolIds?.canonicalId || window.SACTCheckProtocolIds.canonicalId(id) === id)) return direct;
       return window.SACTCheckProtocolIds?.resolve(id, protocolsById.values()) || protocolsById.get(id) || null;
     },
     getLoadedProtocols() {

@@ -13,6 +13,8 @@
   if(!root?.document||root.SACTCheckUIStabilityV0810) return;
   const RELEASE=root.SACTCHECK_RELEASE||'0.81.9';
   let scheduled=false;
+  const pendingCards=new Set();
+  let recoveryTimer=null;
 
   function ensureCss(){
     if(root.document.getElementById('uiStabilityV0810Style')) return;
@@ -110,8 +112,8 @@
   function hydrateCard(card){
     if(!card) return;
     placeholder(card);
-    try{root.SACTCheckInterface?.decorateCards?.();}catch(_){ }
-    try{root.SACTCheckAntiemeticPrintV0810?.decorate?.();}catch(_){ }
+    // hydrateAll has already decorated the complete catalogue once. Repeating
+    // those whole-catalogue passes for every card makes startup quadratic.
     streamlineCardActions(card);
     const state=capabilityState(card);
     if(complete(state)){
@@ -121,15 +123,22 @@
     }
     if(!card.dataset.sactHydrationStarted){
       card.dataset.sactHydrationStarted=String(Date.now());
-      root.setTimeout?.(()=>{
-        if(card.dataset.sactCardReady==='true') return;
+      pendingCards.add(card);
+      if(recoveryTimer!==null) return;
+      recoveryTimer=root.setTimeout?.(()=>{
+        recoveryTimer=null;
+        const cards=[...pendingCards].filter(item=>item.isConnected!==false&&item.dataset.sactCardReady!=='true');
+        pendingCards.clear();
+        if(!cards.length) return;
         try{root.SACTCheckInterface?.decorateCards?.();}catch(_){ }
         try{root.SACTCheckAntiemeticPrintV0810?.decorate?.();}catch(_){ }
-        streamlineCardActions(card);
-        const finalState=capabilityState(card);
-        card.dataset.sactCardReady=complete(finalState)?'true':'degraded';
-        card.dataset.sactCardCapabilities=Object.entries(finalState).filter(([k,v])=>!v&&k!=='regimenInfo').map(([k])=>k).join(',');
-        card.querySelector('.sact-card-action-placeholder')?.remove();
+        cards.forEach(item=>{
+          streamlineCardActions(item);
+          const finalState=capabilityState(item);
+          item.dataset.sactCardReady=complete(finalState)?'true':'degraded';
+          item.dataset.sactCardCapabilities=Object.entries(finalState).filter(([k,v])=>!v&&k!=='regimenInfo').map(([k])=>k).join(',');
+          item.querySelector('.sact-card-action-placeholder')?.remove();
+        });
       },900);
     }
   }
@@ -138,7 +147,7 @@
     ensureSustainabilityAnchor();
     try{root.SACTCheckInterface?.decorateCards?.();}catch(_){ }
     try{root.SACTCheckAntiemeticPrintV0810?.decorate?.();}catch(_){ }
-    root.document.querySelectorAll('.regimen-card[data-json-protocol-id]').forEach(card=>{streamlineCardActions(card);hydrateCard(card);});
+    root.document.querySelectorAll('.regimen-card[data-json-protocol-id]').forEach(hydrateCard);
     ensureWorkflowSustainability();
   }
   function schedule(){

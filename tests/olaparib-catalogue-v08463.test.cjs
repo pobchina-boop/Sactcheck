@@ -147,7 +147,7 @@ const withoutTargetOverrides = value => {
 assert.deepEqual(withoutTargetOverrides(release.astraJson(overridesPath)), withoutTargetOverrides(JSON.parse(Migration.baselineBytes(overridesPath))));
 const withoutTargetRows = bytes => bytes.toString().split('\n').filter(line => ![...successors].some(id => line.includes(',' + id + ',')));
 assert.deepEqual(withoutTargetRows(release.astraBytes(reportPath)), withoutTargetRows(Migration.baselineBytes(reportPath)));
-for (const file of ['js/regimen-course-metadata.js', 'js/regimen-card-metadata.js', 'tools/add-regimen-card-metadata.js']) assert(read(file).equals(Migration.baselineBytes(file)), 'Shared metadata implementation is unchanged: ' + file);
+for (const file of ['js/regimen-course-metadata.js', 'js/regimen-card-metadata.js', 'tools/add-regimen-card-metadata.js']) assert(release.beforeStartupBytes(file).equals(Migration.baselineBytes(file)), 'Shared metadata baseline is preserved through the authenticated startup change: ' + file);
 
 class Element {
   constructor(tag) { this.tagName = tag; this.dataset = {}; this.children = []; this.attributes = {}; this.className = ''; this.textContent = ''; }

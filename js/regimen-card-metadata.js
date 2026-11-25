@@ -133,11 +133,10 @@
     return launch?.closest?.(".regimen-card") || null;
   }
 
-  function findCard(entry, protocol) {
+  function findCard(entry, protocol, lookup) {
     const id = Metadata.cleanText(protocol?.protocol_id || entry?.id);
     if (id) {
-      const direct = [...document.querySelectorAll("[data-protocol-id], [data-json-protocol-id]")]
-        .find(element => element.dataset.protocolId === id || element.dataset.jsonProtocolId === id);
+      const direct = lookup.byId.get(id);
       if (direct) return direct.closest?.(".regimen-card") || direct;
     }
 
@@ -146,12 +145,8 @@
 
     const code = codeFromProtocol(protocol);
     if (!code) return null;
-    const cards = [...document.querySelectorAll(config().cardSelector)];
-    return cards.find(card => {
-      const dataset = String(card.dataset?.name || "");
-      const text = String(card.textContent || "");
-      return dataset.split(/\s+/).includes(code) || new RegExp(`\\bNCCP\\s+${code}\\b`, "i").test(text);
-    }) || null;
+    const pattern = new RegExp(`\\bNCCP\\s+${code}\\b`, "i");
+    return lookup.cards.find(item => item.tokens.has(code) || pattern.test(item.text))?.card || null;
   }
 
   function contextTooltip(summary) {
@@ -221,8 +216,19 @@
 
   function renderAll() {
     let rendered = 0;
+    // Build the DOM lookup once per pass, rather than searching the whole page
+    // again for each protocol. Rebuild each time so newly inserted cards work.
+    const lookup = { byId: new Map(), cards: [] };
+    document.querySelectorAll("[data-protocol-id], [data-json-protocol-id]").forEach(element => {
+      for (const id of [element.dataset.protocolId, element.dataset.jsonProtocolId]) {
+        if (id && !lookup.byId.has(id)) lookup.byId.set(id, element);
+      }
+    });
+    lookup.cards = [...document.querySelectorAll(config().cardSelector)].map(card => ({
+      card, tokens: new Set(String(card.dataset?.name || "").split(/\s+/)), text: String(card.textContent || "")
+    }));
     state.protocols.forEach(({ entry, protocol }) => {
-      const card = findCard(entry, protocol);
+      const card = findCard(entry, protocol, lookup);
       if (renderCard(card, protocol)) rendered += 1;
     });
     document.dispatchEvent(new CustomEvent("sactcheck:regimen-card-metadata-rendered", {
