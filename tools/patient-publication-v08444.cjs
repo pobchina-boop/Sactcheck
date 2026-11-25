@@ -64,6 +64,7 @@ function decorateGenerated(file,html,root=ROOT,options={}) {
   if (!t.relative.startsWith('docs/')) result = require('./durvalumab-symptom-entry.cjs').entry(t.route, t.name, result);
   result = require('./enhertu-patient-review-v08462.cjs').transform(file, result);
   result = require('./olaparib-patient-review-v08463.cjs').transform(file, result);
+  if(data.suite_release==='0.84.63'&&['00463','00100'].includes(data.code))result=require('./patient-pack-sarcoma-v08463.cjs').continuous(data,result);
   return result;
 }
 
