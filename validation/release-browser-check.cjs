@@ -42,7 +42,7 @@ const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
         assert.deepEqual(errors,[],route);rows.push({route,width,heading,metrics,guide:download.suggestedFilename()});
         await page.close();
       }
-      for (const [code, indications] of [['00228',['00228b','00228a']],['00205',['00205c','00205a']]]) {
+      for (const [code, indications] of [['00228',['00228b','00228a']],['00205',['00205c','00205a','00205b','00205d']]]) {
         const clinic=await context.newPage();
         const filename=fs.readdirSync(path.join(root,'protocols/breast')).find(x=>x.startsWith(code+'-'));
         const record=require(path.join(root,'protocols/breast',filename));
@@ -63,7 +63,7 @@ const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
           await clinic.getByRole('button',{name:'Run assessment engine',exact:true}).click();
           await clinic.locator('#jsonResult').waitFor({state:'attached'});
           assert.equal(await selector.inputValue(),indication);
-          if(indication==='00205a'){
+          if(['00205a','00205b','00205d'].includes(indication)){
             async function fillField(name,value){
               const field=clinic.locator('#jsonInput_'+name);
               await field.evaluate(e=>{for(let p=e.parentElement;p;p=p.parentElement) if(p.tagName==='DETAILS')p.open=true;});
