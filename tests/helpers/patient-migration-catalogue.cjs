@@ -13,6 +13,9 @@ function getMigrations(){
  const gynaecology = require('./gynaecology-00862-00929.cjs');
  gynaecology.verify();
  cached.push({version: 63, helper: gynaecology, record: gynaecology.record});
+ const sarcoma = require('./remaining-sarcoma-patient-files.cjs');
+ sarcoma.verify();
+ cached.push({version:64, helper:sarcoma, record:sarcoma.record});
  cached.sort((a,b) => a.version-b.version);
  return cached;
 }
