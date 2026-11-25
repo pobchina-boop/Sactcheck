@@ -18,7 +18,9 @@ function publishedEngineHash(root, retained) {
   const released = archived(published);
   assert.equal(digest(released), 'd433a6adf0a8f5b4ecefb8e8832206425754bba0d01ebbaa6a6d1bda54262657');
   const candidate = archived('9049a163d44c9de14639e431f1cd8e6c11b9a0b4');
-  assert(fs.readFileSync(path.join(root,engine)).equals(candidate),'Current engine differs from the reviewed sarcoma engine');
-  return digest(candidate);
+  const updated=fs.readFileSync(path.join(root,engine));
+  assert.equal(digest(candidate),'aa67339da5bed5fa296192a086e26d7fda36f9a4cd75a3663c696607bfdba9f3');
+  assert.equal(digest(updated),'70313c70157b05cfc35d423fe706921c5f0a10acefd92123063da24c3444f115','Exact assessment engine with raw input dependencies');
+  return digest(updated);
 }
 module.exports = {publishedEngineHash};

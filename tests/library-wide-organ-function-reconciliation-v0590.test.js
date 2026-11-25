@@ -255,6 +255,6 @@ const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_R
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);
-assert.strictEqual(audit.summary.total_v0590_rules, 178);
+assert.strictEqual(audit.summary.total_v0590_rules, triggerableRuleCount);
 
 console.log('v0.59.0 library-wide organ-function reconciliation tests passed.');

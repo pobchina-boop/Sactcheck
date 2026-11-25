@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '../..');
 const manifest = 'validation/sarcoma-integration/production-files.json';
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const raw = fs.readFileSync(path.join(root, manifest));
-assert.equal(sha(raw), 'a4ee01cbefb2ec224a876320a8d4b0e767e7137da90c56a91db821685e2e5a6b');
+assert.equal(sha(raw), '45f4deb77ae410cc508e91d99bdc6dc0326188e10608fd454d27553485d854a6');
 const {base,files,review_commit,first_batch_sha256} = JSON.parse(raw);
 assert.equal(review_commit,'5b063b3f390cfe9a5a324c4615a3fba3a6eb8878');
 assert.equal(first_batch_sha256,'7453862c52edc4651b1137f2dea73ebe5e3a324769a093dc070b170e2eadf898');

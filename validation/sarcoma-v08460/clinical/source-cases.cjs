@@ -29,7 +29,11 @@ for(const code of codes){
     ['Normal counts omit organ function and toxicity',{assessment_phase:'day1',anc:3,platelets:200},['crcl_ml_min','hypersensitivity']]
   ])test(code,name+' remains a partial assessment',input,[],[],r=>{assert.equal(r.complete,false);assert.equal(r.coverageComplete,false);assert.equal(r.partialAssessment,true);const unassessed=r.unassessed.map(x=>x.id);for(const f of needed)assert(unassessed.includes(f),f+' must remain unassessed');assert.match(r.recommendation,/not.*overall|not.*clearance|context|unassessed|not assessed/i);});
   for(const rule of ps[code].rule_engine.rules){
-    assert.equal(rule.source.url,ps[code].metadata.source_url);
+    if(['00391','00392'].includes(code) && rule.source.url!==ps[code].metadata.source_url){
+      assert(require(path.join(root,'tests/helpers/ifosfamide-pair-v08462.cjs')).validate(ps[code]));
+      assert.equal(new URL(rule.source.url).hostname,'assets.hpra.ie');
+      assert(rule.source.page || rule.source.section);
+    } else assert.equal(rule.source.url,ps[code].metadata.source_url);
     assert.equal(rule.source.checked_date,'2026-11-18');
     assert.equal(rule.action.block_numeric_dose,true);
   }

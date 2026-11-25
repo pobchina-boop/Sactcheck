@@ -75,7 +75,20 @@ for (const row of require('../protocols/index.json').protocols) {
     const defs=E.getInputDefinitions(p,profile.id);
     const demos=Object.fromEntries(defs.filter(d=>d.demo_value!==undefined).map(d=>[d.id,d.demo_value]));
     for (const input of [{},demos,{anc_x10e9_l:.7},{platelets_x10e9_l:70}]) {
-      assert.deepEqual(clean(E.assess(p,input,{profileId:profile.id})),clean(old.assess(E.protocolForIndication(p,input),input,{profileId:profile.id})),row.path+' '+profile.id);
+      const current=clean(E.assess(p,input,{profileId:profile.id}));
+      const previous=clean(old.assess(E.protocolForIndication(p,input),input,{profileId:profile.id}));
+      if(p.metadata.nccp_regimen_code==='00754'){
+        const id='bilirubin_uln_multiple';
+        const control=current.definitions.filter(d=>d.id===id);
+        assert.equal(control.length,1);
+        assert.deepEqual(control[0].derived_actual_fields,{bilirubin:'bilirubin_umol_l'});
+        assert.equal(current.inputs[id],null);
+        assert.equal(current.displayInputs[id],'Not entered');
+        current.definitions=current.definitions.filter(d=>d.id!==id);
+        delete current.inputs[id];
+        delete current.displayInputs[id];
+      }
+      assert.deepEqual(current,previous,row.path+' '+profile.id);
       comparisons++;
     }
   }

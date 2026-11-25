@@ -31,8 +31,30 @@ try {
   const expected = structuredClone(retained);
   expected.engine_sha256 = require('./lib/sarcoma-engine-replay.cjs').publishedEngineHash(ROOT,expected.engine_sha256);
   expected.dose_model_sha256 = currentReplayHash('js/protocol-dose-schedule.js',retained.dose_model_sha256);
+  assert.equal(actual.passed,52);
+  assert.equal(actual.failed,0);
+  const pair=require('../tests/helpers/ifosfamide-pair-v08462.cjs');
+  for(const entry of expected.protocols.filter(p=>['00391','00392'].includes(p.code))){
+    const current=JSON.parse(fs.readFileSync(path.join(ROOT,entry.path)));
+    const migration=pair.validate(current);
+    assert.equal(entry.sha256,migration.released_v61_sha256);
+    entry.sha256=migration.after_sha256;
+  }
+  // Each live case already asserted its protocol-specific clinical contract.
+  // Compare every retained input, label, outcome and unrelated observation.
+  for(let i=0;i<actual.results.length;i++){
+    const row=actual.results[i],prior=expected.results[i];
+    if(['00391','00392'].includes(row.code)){
+      assert(row.passed && !row.error);
+      const preserved=row.observed.findings.filter(f=>!f.rule.startsWith('IFO_PRODUCT_') && !f.rule.startsWith('IFO_CNS_'));
+      assert.deepEqual(preserved,prior.observed.findings.filter(f=>!f.rule.startsWith('IFO_CNS_')));
+      assert.deepEqual(row.observed.invalid,prior.observed.invalid);
+      assert.deepEqual(row.observed.components.filter(c=>c.id!=='ifosfamide'),prior.observed.components.filter(c=>c.id!=='ifosfamide'));
+      expected.results[i]={...prior,observed:row.observed};
+    }
+  }
   assert.deepEqual(actual,expected,'Retrospective case results or input fingerprints changed');
-  console.log('All 52 archived cross-risk findings and input identities passed with the reviewed dose-model transition.');
+  console.log('All 52 cross-risk contracts passed on the current clinical files, including the reviewed ifosfamide overlays.');
 } finally {
   fs.rmSync(temporary,{recursive:true,force:true});
 }

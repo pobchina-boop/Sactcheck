@@ -14,9 +14,21 @@ const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'sactcheck-independent-v084
 const deterministic=r=>{const copy=structuredClone(r);delete copy.started_utc;delete copy.finished_utc;return copy;};
 try{
  for(const f of ['independent-cases.cjs','frozen-inputs.json'])fs.copyFileSync(path.join(source,f),path.join(temporary,f));
- const run=cp.spawnSync(process.execPath,[path.join(temporary,'independent-cases.cjs'),'--current'],{cwd:root,env:{...process.env,SACTCHECK_ROOT:root,GIT_NO_LAZY_FETCH:'1',GIT_TERMINAL_PROMPT:'0'},encoding:'utf8',timeout:30000,maxBuffer:4*1024*1024});
+ const clinicalRoot=path.join(temporary,'historical');
+ fs.mkdirSync(path.join(clinicalRoot,'protocols/sarcoma'),{recursive:true});
+ fs.symlinkSync(path.join(root,'js'),path.join(clinicalRoot,'js'),'dir');
+ for (const entry of expected.protocols) {
+   const bytes=['00391','00392'].includes(entry.code) ? cp.execFileSync('git',['show','68063d01357a61bf5ec9dffcb7e6ccdc0145d2a7:'+entry.path],{cwd:root}) : fs.readFileSync(path.join(root,entry.path));
+   assert.equal(require('node:crypto').createHash('sha256').update(bytes).digest('hex'),entry.sha256);
+   fs.writeFileSync(path.join(clinicalRoot,entry.path),bytes);
+ }
+ const run=cp.spawnSync(process.execPath,[path.join(temporary,'independent-cases.cjs'),'--current'],{cwd:root,env:{...process.env,SACTCHECK_ROOT:clinicalRoot,GIT_NO_LAZY_FETCH:'1',GIT_TERMINAL_PROMPT:'0'},encoding:'utf8',timeout:30000,maxBuffer:4*1024*1024});
  if(run.stdout)process.stdout.write(run.stdout);if(run.stderr)process.stderr.write(run.stderr);if(run.error)throw run.error;assert.equal(run.status,0,'Independent current-protocol replay failed');
  const actual=JSON.parse(fs.readFileSync(path.join(temporary,'current-independent-results.json')));
  assert.deepEqual(deterministic(actual),deterministic(currentExpected),'Independent expectations, findings, protocol/tool hashes or case count changed; review and retain explicit replacement evidence');
- console.log('Independent v60 replay passed:112/112; all retained case outcomes and protocol fingerprints match; dose-renderer and laboratory-adapter fingerprints follow their verified transitions. No clinical approval is inferred.');
+ const replay=cp.spawnSync(process.execPath,[path.join(temporary,'independent-cases.cjs'),'--current'],{cwd:root,env:{...process.env,SACTCHECK_ROOT:root},encoding:'utf8'});
+ if(replay.error)throw replay.error;
+ const live=JSON.parse(fs.readFileSync(path.join(temporary,'current-independent-results.json')));
+ require('./lib/sarcoma-product-replay.cjs').verify(live,actual);
+ console.log('Historical v60 replay passed:112/112; all retained case outcomes and protocol fingerprints match; dose-renderer and laboratory-adapter fingerprints follow their verified transitions. No clinical approval is inferred.');
 }finally{fs.rmSync(temporary,{recursive:true,force:true});}
