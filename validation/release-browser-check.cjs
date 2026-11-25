@@ -85,6 +85,25 @@ const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
         }
         await clinic.close();
       }
+      {
+        const clinic=await context.newPage();
+        const record=require(path.join(root,'protocols/sarcoma/00754-ifosfamide-vincristine-doxorubicin-and-dactinomycin-ivado-therapy.json'));
+        await clinic.goto(server.url+'/');
+        await clinic.locator('#regimenSearch').fill('00754');
+        await clinic.locator('[data-json-protocol-id="'+record.protocol_id+'"]').first().waitFor();
+        await clinic.evaluate(id=>window.SACTCheckProtocolLoader.launchProtocol(id),record.protocol_id);
+        const raw=clinic.locator('[data-lab-target="bilirubin_uln_multiple"][data-lab-analyte="bilirubin"]');
+        await raw.waitFor({state:'attached'});
+        await raw.evaluate(e=>{for(let p=e.parentElement;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;});
+        await raw.fill('52');
+        await clinic.getByRole('button',{name:'Run assessment engine',exact:true}).click();
+        const result=await clinic.locator('#jsonResult').innerText();
+        assert.match(result,/doxorubicin/i);
+        assert.match(result,/bilirubin/i);
+        assert.match(result,/52/);
+        rows.push({code:'00754',width,raw_bilirubin:52});
+        await clinic.close();
+      }
       for (const [code,id] of [['00588','nccp-00588-v5b'],['00746','nccp-00746-v2']]) {
         const clinic=await context.newPage();
         await clinic.goto(server.url+'/');
