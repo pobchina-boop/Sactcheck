@@ -17,6 +17,11 @@
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00675':{"title": "IE/VAC: alternating two-weekly phases", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00747':{"title": "IE/VAC: alternating three-weekly phases", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00504':{"title": "Irinotecan and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00754':{"title": "IVADo: ifosfamide, vincristine, doxorubicin and dactinomycin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00757':{"title": "VIT: vincristine, irinotecan and temozolomide", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00420':{"title": "Doxorubicin and cisplatin: osteosarcoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00463':{"title": "MAP: surgery-linked osteosarcoma reference course", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00100':{"title": "Mifamurtide: 36-week reference course", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},

@@ -52390,6 +52390,771 @@ const definitions={
         "url": "https://www.mdpi.com/2073-4409/9/11/2389"
       }
     ]
+  },
+  "00754": {
+    "code": "00754",
+    "title": "Ifosfamide, vincristine, dactinomycin and doxorubicin: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "High-risk or very-high-risk rhabdomyosarcoma in people younger than 40 years",
+    "summary": "Nine cycles are planned every 21 days. In cycles 1–2, vincristine is given on days 1, 8 and 15; doxorubicin on days 1 and 2; dactinomycin on day 1; and ifosfamide on days 1 and 2. In cycles 3–4, vincristine is given only on day 1, with the other three drugs on the same days as before. In cycles 5–9, doxorubicin is omitted; day-1 vincristine/dactinomycin and day-1/2 ifosfamide continue. Use the correct phase chart for your actual cycle.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "9 cycles every 21 days · three different phases",
+        "why": "Treat rhabdomyosarcoma throughout the body as part of an individual specialist plan that also addresses local tumour control. The team explains why this combination is selected for your risk group and priorities.",
+        "clinical": "Nine cycles are planned every 21 days. In cycles 1–2, vincristine is given on days 1, 8 and 15; doxorubicin on days 1 and 2; dactinomycin on day 1; and ifosfamide on days 1 and 2. In cycles 3–4, vincristine is given only on day 1, with the other three drugs on the same days as before. In cycles 5–9, doxorubicin is omitted; day-1 vincristine/dactinomycin and day-1/2 ifosfamide continue. Use the correct phase chart for your actual cycle.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. New confusion, unusual drowsiness or seizures, blood in urine, very little urine, severe constipation, new weakness or breathlessness requires urgent assessment. Report infusion-site burning immediately.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00754 v3 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6781/754_IVADo.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EpSSG RMS2005: adding doxorubicin to ifosfamide, vincristine and dactinomycin",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29941280/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      },
+      {
+        "id": "ifosfamide-mitoxana",
+        "title": "HPRA Mitoxana product information: supplied-product reconciliation required",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00675": {
+    "code": "00675",
+    "title": "Alternating ifosfamide/etoposide and vincristine/doxorubicin/cyclophosphamide · every 2 weeks: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adolescents and young adults with newly diagnosed Ewing-family sarcoma, or the separately listed rhabdomyosarcoma/desmoplastic intra-abdominal small round blue cell tumour indication",
+    "summary": "There are 14 alternating administrations, planned every 14 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "14 alternating administrations · usually every 14 days",
+        "why": "Treat cancer throughout the body as part of a specialist plan that also addresses local tumour control. The intended benefit depends on the exact tumour, disease extent and treatment aim.",
+        "clinical": "There are 14 alternating administrations, planned every 14 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Confusion or unusual drowsiness during ifosfamide, blood in urine, reduced urine, severe constipation, new weakness or heart symptoms needs urgent assessment. Doxorubicin can colour urine red for one or two days; do not dismiss painful urination, clots or suspected blood as harmless colour.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00675 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6766/675_v2_IE_VAC_Two_weekly.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Interval-compressed versus three-weekly chemotherapy in localised Ewing sarcoma",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494838/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      },
+      {
+        "id": "ifosfamide-mitoxana",
+        "title": "HPRA Mitoxana product information: supplied-product reconciliation required",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00747": {
+    "code": "00747",
+    "title": "Alternating ifosfamide/etoposide and vincristine/doxorubicin/cyclophosphamide · every 3 weeks: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults with newly diagnosed Ewing-family sarcoma, or the separately listed rhabdomyosarcoma/desmoplastic intra-abdominal small round blue cell tumour indication",
+    "summary": "There are 14 alternating administrations, planned every 21 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "14 alternating administrations · usually every 21 days",
+        "why": "Treat cancer throughout the body as part of a specialist plan that also addresses local tumour control. The intended benefit depends on the exact tumour, disease extent and treatment aim.",
+        "clinical": "There are 14 alternating administrations, planned every 21 days after recovery, not 14 pairs. Ifosfamide and etoposide are given on days 1–5 in cycles 1, 3, 5, 7, 9, 11 and 13. Vincristine, doxorubicin and cyclophosphamide are given on day 1 in cycles 2, 4, 6, 8 and 10. Cycles 12 and 14 contain vincristine and cyclophosphamide with no doxorubicin; dactinomycin may be added only if the consultant selects it. Surgery, radiotherapy, toxicity or delayed recovery may change the sequence or dates.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Confusion or unusual drowsiness during ifosfamide, blood in urine, reduced urine, severe constipation, new weakness or heart symptoms needs urgent assessment. Doxorubicin can colour urine red for one or two days; do not dismiss painful urination, clots or suspected blood as harmless colour.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00747 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6779/747_v2_IE_VAC_three_weekly.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Interval-compressed versus three-weekly chemotherapy in localised Ewing sarcoma",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494838/"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      },
+      {
+        "id": "ifosfamide-mitoxana",
+        "title": "HPRA Mitoxana product information: supplied-product reconciliation required",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      }
+    ]
+  },
+  "00757": {
+    "code": "00757",
+    "title": "Vincristine, irinotecan and temozolomide: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Relapsed or refractory rhabdomyosarcoma",
+    "summary": "Irinotecan 50 mg/m² is given intravenously on days 1–5 of each 21-day cycle. Temozolomide is taken by mouth on days 1–5: 125 mg/m² in cycle 1. Only the treating team may select 150 mg/m² from cycle 2 after toxicity review. Vincristine 1.5 mg/m², maximum 2 mg, is given on days 1 and 8. The national plan specifies 12 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Days 1–5 and day 8 vincristine · every 21 days · 12 planned cycles",
+        "why": "Aim to shrink or control cancer and help symptoms after previous treatment. Your specialist explains the realistic benefit, uncertainty and alternatives for your particular disease.",
+        "clinical": "Irinotecan 50 mg/m² is given intravenously on days 1–5 of each 21-day cycle. Temozolomide is taken by mouth on days 1–5: 125 mg/m² in cycle 1. Only the treating team may select 150 mg/m² from cycle 2 after toxicity review. Vincristine 1.5 mg/m², maximum 2 mg, is given on days 1 and 8. The national plan specifies 12 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Irinotecan can cause two different bowel problems. Cramping, sweating and diarrhoea during or shortly after infusion can be an acute cholinergic reaction: tell the nurse immediately; prescribed atropine may be used. Delayed diarrhoea begins more than 24 hours later and can cause dangerous dehydration or infection. Contact oncology at the first loose stool and follow the written anti-diarrhoeal and rehydration prescription. Fever, severe pain, blood, faintness, very little urine or inability to drink needs immediate assessment; never wait for a time threshold when seriously unwell. Report a new cough, breathlessness, jaundice, severe rash or marked weakness urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00757 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6784/757_v2_VIT.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Randomised vincristine/irinotecan with or without temozolomide in relapsed rhabdomyosarcoma",
+        "url": "https://ascopubs.org/doi/abs/10.1200/JCO.21.00124"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      }
+    ]
+  },
+  "00504": {
+    "code": "00504",
+    "title": "Irinotecan and temozolomide: treatment and checks",
+    "release": "0.84.64",
+    "checked": "2026-11-18",
+    "status": "Source-reconciled feasibility draft; independent clinician, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Relapsed or refractory Ewing sarcoma",
+    "summary": "Irinotecan 50 mg/m² intravenously and temozolomide 100 mg/m² by mouth are given on days 1–5 of each 21-day cycle. The national plan specifies 6 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "Between visits",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Tests and symptoms",
+        "cells": [
+          "Complete the baseline test plan.",
+          "Use the test-specific timing in the named cards.",
+          "Report symptoms promptly; extra tests may be needed.",
+          "Follow abnormal results and lasting effects until a plan is agreed."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Medicines and practical care",
+        "cells": [
+          "Confirm the phase, medicines, protection and contacts.",
+          "Record actual doses, administration number and any hold.",
+          "Follow the current support and contact plan.",
+          "Agree continuing support and line-care or removal needs."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      },
+      {
+        "label": "Tumour and local-treatment review",
+        "cells": [
+          "Agree the treatment aim and baseline assessment.",
+          "Review benefit and local treatment at specialist-set dates.",
+          "Report changing tumour-related symptoms.",
+          "Agree the next treatment or follow-up plan."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Safety monitoring is separate from scans and tumour-response review. The exact sequence can change after toxicity or local treatment."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Treatment review",
+        "when": "Days 1–5 · every 21 days · 6 planned cycles",
+        "why": "Aim to shrink or control cancer and help symptoms after previous treatment. Your specialist explains the realistic benefit, uncertainty and alternatives for your particular disease.",
+        "clinical": "Irinotecan 50 mg/m² intravenously and temozolomide 100 mg/m² by mouth are given on days 1–5 of each 21-day cycle. The national plan specifies 6 cycles unless progression, toxicity or the specialist plan changes treatment. Take temozolomide fasting, swallowed whole with water, at least one hour before irinotecan. If you vomit after temozolomide, do not take an extra dose.",
+        "action": "Call oncology immediately for fever, shaking chills, suddenly feeling unwell, unusual bleeding, new breathlessness, very little urine, severe rash or vomiting that prevents drinking. Follow your hospital’s temperature and contact instructions. Severe breathing difficulty, chest pain, collapse or seizures: call 112/999. Irinotecan can cause two different bowel problems. Cramping, sweating and diarrhoea during or shortly after infusion can be an acute cholinergic reaction: tell the nurse immediately; prescribed atropine may be used. Delayed diarrhoea begins more than 24 hours later and can cause dangerous dehydration or infection. Contact oncology at the first loose stool and follow the written anti-diarrhoeal and rehydration prescription. Fever, severe pain, blood, faintness, very little urine or inability to drink needs immediate assessment; never wait for a time threshold when seriously unwell. Report a new cough, breathlessness, jaundice, severe rash or marked weakness urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "National Cancer Control Programme 00504 v2 · official regimen",
+        "url": "https://healthservice.hse.ie/documents/6740/504_v2_Irinotecan_and_Temozolomide_Therapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "rEECur interim irinotecan/temozolomide report and adult-containing retrospective Ewing series",
+        "url": "https://doi.org/10.1200/JCO.2020.38.15_suppl.11502"
+      },
+      {
+        "id": "doxorubicin-pi",
+        "title": "HPRA doxorubicin product information, February 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/29006/Licence_PA22766-004-001_01022023144327.pdf"
+      },
+      {
+        "id": "ifosfamide-pi",
+        "title": "HPRA Mitoxana product information, September 2023; retained current-link verification",
+        "url": "https://assets.hpra.ie/products/Human/15731/Licence_PA2299-028-001_11092023124600.pdf"
+      },
+      {
+        "id": "etoposide-pi",
+        "title": "HPRA etoposide product information, November 2025",
+        "url": "https://assets.hpra.ie/products/Human/28093/Licence_PA2059-036-001_14112025143401.pdf"
+      },
+      {
+        "id": "vincristine-pi",
+        "title": "Pfizer Irish vincristine product information, revision August 2026",
+        "url": "https://medicines.ie/medicines/vincristine-sulfate-1-mg-ml-solution-for-injection-or-infusion~A0003070/spc"
+      },
+      {
+        "id": "cyclophosphamide-pi",
+        "title": "HPRA Cyclophosphamide Seacross 500 mg product information, January 2026",
+        "url": "https://assets.hpra.ie/products/Human/40371/Licence_PA22766-013-002_07012026161806.pdf"
+      },
+      {
+        "id": "dactinomycin-pi",
+        "title": "UK manufacturer dactinomycin product information, revised September 2025; supplied Irish product requires reconciliation",
+        "url": "https://www.medicines.org.uk/emc/product/5360/smpc"
+      },
+      {
+        "id": "irinotecan-pi",
+        "title": "HPRA irinotecan product information, October 2025; retained primary text",
+        "url": "https://assets.hpra.ie/products/Human/28074/Licence_PA2059-044-001_02102025132406.pdf"
+      },
+      {
+        "id": "irinotecan-supporting-pi",
+        "title": "HPRA irinotecan product information, March 2021; supplementary respiratory/cholinergic safety evidence, not current dosing authority",
+        "url": "https://assets.hpra.ie/products/Human/30195/Licence_PA0577-234-001_11032021144000.pdf"
+      },
+      {
+        "id": "temozolomide-pi",
+        "title": "EMA Temodal product information; current indexed official safety text, full PDF follow-up rate-limited",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/temodal-epar-product-information_en.pdf"
+      },
+      {
+        "id": "temozolomide-manufacturer",
+        "title": "Manufacturer Temodal capsule SmPC, readable supplementary safety text",
+        "url": "https://www.medicines.org.uk/emc/product/1463/smpc"
+      },
+      {
+        "id": "temozolomide-overview",
+        "title": "EMA Temodal overview and product-information index",
+        "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/temodal"
+      },
+      {
+        "id": "nci-ewing",
+        "title": "National Cancer Institute: Ewing sarcoma treatment context",
+        "url": "https://www.cancer.gov/types/bone/hp/ewing-treatment-pdq"
+      },
+      {
+        "id": "nci-rms",
+        "title": "National Cancer Institute: rhabdomyosarcoma treatment context",
+        "url": "https://www.cancer.gov/types/soft-tissue-sarcoma/hp/rhabdomyosarcoma-treatment-pdq"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
