@@ -5,7 +5,7 @@ const path=require('node:path');
 const crypto=require('node:crypto');
 const {chromium}=require(process.env.SACT_PLAYWRIGHT_MODULE);
 const root=process.cwd(),site=path.join(root,'_site'),output=process.env.SACT_EVIDENCE;
-const routes=['00588','00588/prostate','00588/ovarian_first_line','00588/ovarian_relapsed','00588/pancreatic','00746',...require(path.join(root,'validation/sarcoma-batch-1/patient-assets.json')).routes,'00947'];
+const routes=['00588','00588/prostate','00588/ovarian_first_line','00588/ovarian_relapsed','00588/pancreatic','00746',...require(path.join(root,'validation/sarcoma-batch-1/patient-assets.json')).routes,...require(path.join(root,'validation/sarcoma-integration/remaining-patient-files.json')).routes,'00947','00862','00929'];
 const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
 (async()=>{
   const server=await require(path.join(root,'tools/local-site-server.cjs')).serve(site);
