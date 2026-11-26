@@ -19,7 +19,8 @@ async function run() {
   const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH});
   try {
     for (const width of [390, 1440]) {
-      const page = await browser.newPage({viewport:{width, height:1000}, reducedMotion:'reduce'});
+      const context = await browser.newContext({viewport:{width, height:1000}, reducedMotion:'reduce'});
+      const page = await context.newPage();
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto(server.url);
@@ -39,7 +40,7 @@ async function run() {
           await checkDownload(page, page.locator('[data-workflow-support]'), path.join(dir, filename), 'SACTCheck-' + code + '-' + filename);
         }
         await page.locator('#regimenWorkflowOverlay .workflow-close').click();
-        const portal = await page.context().newPage();
+        const portal = await context.newPage();
         const response = await portal.goto(server.url + '/patient/' + code + '/');
         assert.equal(response.status(), 200);
         assert.equal(await portal.locator('link[rel=canonical]').getAttribute('href'), 'https://sactcheck.com/patient/' + code + '/');
@@ -47,7 +48,7 @@ async function run() {
         console.log('Passed portal, consent and all prescription downloads', width, code);
       }
       assert.deepEqual(errors, []);
-      await page.close();
+      await context.close();
     }
   } finally {
     await browser.close();
