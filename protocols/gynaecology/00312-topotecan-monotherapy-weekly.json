@@ -15,8 +15,8 @@
     "indication": "Metastatic ovarian, fallopian tube or primary peritoneal cancer after failure of prior therapy.",
     "source_url": "https://healthservice.hse.ie/documents/6715/312__V5_Topotecan_Monotherapy_weekly.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.84.69",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "ovarian_later_line",
@@ -90,7 +90,7 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Topotecan Monotherapy – Weekly",
+    "schedule_summary": "Topotecan is given over 30 minutes on three weekly visits in a 28-day cycle. Day 22 is a rest day. Blood results determine whether each dose can go ahead.",
     "drugs": [
       "topotecan"
     ]
@@ -317,6 +317,37 @@
         "exact_value_required": false
       },
       "input_role": "decision"
+    },
+    "prolonged_neutropenia": {
+      "type": "boolean",
+      "label": "ANC below 0.5 for at least seven days or neutropenia with infection",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "type": "number",
+      "label": "Total bilirubin",
+      "unit": "µmol/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 10,
+      "input_role": "decision"
+    },
+    "confirmed_ild": {
+      "type": "boolean",
+      "label": "Confirmed interstitial lung disease",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "nonhaem_other_than_nausea": {
+      "type": "boolean",
+      "label": "Grade refers to a non-haematological toxicity other than nausea",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -350,7 +381,7 @@
     "rules": [
       {
         "id": "ECOG_3",
-        "priority": 8,
+        "priority": 9,
         "when": {
           "field": "ecog",
           "operator": ">=",
@@ -364,118 +395,113 @@
           "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
         },
         "source": {
-          "document": "Current official NCCP regimen",
+          "document": "NCCP 00312 v5",
           "page": "Dose modifications"
         },
         "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
       },
       {
-        "id": "NONHAEM_G3",
+        "id": "BASELINE_ANC",
         "priority": 9,
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "anc",
+              "operator": "<=",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "topotecan"
+          ],
+          "message": "First treatment requires ANC above 1.5. Review eligibility before starting."
+        },
+        "source": {
+          "document": "NCCP 00312 v5",
+          "page": "Eligibility"
+        },
+        "explanation": "First treatment requires ANC above 1.5. Review eligibility before starting."
+      },
+      {
+        "id": "WEEKLY_COUNTS",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            },
+            {
+              "field": "haemoglobin",
+              "operator": "<",
+              "value": 9
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "topotecan"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
+          "message": "Delay until recovery. Check haemoglobin after transfusion if required."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00312 v5",
+          "page": "Table 1"
         },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
+        "explanation": "Delay until recovery. Check haemoglobin after transfusion if required."
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
+        "id": "SEVERE_COUNTS",
         "priority": 9,
         "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
+          "any": [
+            {
+              "field": "prolonged_neutropenia",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 25
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "topotecan"
           ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+          "message": "Assess urgently if unwell. Consider a subsequent reduction or count support after recovery."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00312 v5",
+          "page": "Table 1"
         },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+        "explanation": "Assess urgently if unwell. Consider a subsequent reduction or count support after recovery."
       },
       {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "TOPO_RENAL",
+        "id": "RENAL_20_39",
         "priority": 9,
         "when": {
           "field": "topotecan_renal_band",
@@ -487,37 +513,127 @@
           "components": [
             "topotecan"
           ],
-          "message": "CrCl 20–39 mL/min requires the source-specific topotecan dose reduction."
+          "message": "Use 50% of the original dose at CrCl 20–39."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00312 v5",
+          "page": "Table 2"
         },
-        "explanation": "CrCl 20–39 mL/min requires the source-specific topotecan dose reduction."
+        "explanation": "Use 50% of the original dose at CrCl 20–39."
       },
       {
-        "id": "TOPO_RENAL_LOW",
-        "priority": 10,
+        "id": "RENAL_lt20",
+        "priority": 9,
         "when": {
           "field": "topotecan_renal_band",
-          "operator": "in",
-          "value": [
-            "lt20",
-            "dialysis"
-          ]
+          "operator": "==",
+          "value": "lt20"
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "topotecan"
           ],
-          "message": "CrCl <20 mL/min/dialysis: do not administer without specialist source-directed advice."
+          "message": "Below 20, use is not recommended. Only if unavoidable, consult the source about 25% of the original dose."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00312 v5",
+          "page": "Table 2"
         },
-        "explanation": "CrCl <20 mL/min/dialysis: do not administer without specialist source-directed advice."
+        "explanation": "Below 20, use is not recommended. Only if unavoidable, consult the source about 25% of the original dose."
+      },
+      {
+        "id": "RENAL_dialysis",
+        "priority": 9,
+        "when": {
+          "field": "topotecan_renal_band",
+          "operator": "==",
+          "value": "dialysis"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "topotecan"
+          ],
+          "message": "Discuss dialysis-specific management with the consultant and pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00312 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Discuss dialysis-specific management with the consultant and pharmacy."
+      },
+      {
+        "id": "BILI",
+        "priority": 9,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 171
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "topotecan"
+          ],
+          "message": "Topotecan is not recommended when bilirubin exceeds 171 µmol/L."
+        },
+        "source": {
+          "document": "NCCP 00312 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Topotecan is not recommended when bilirubin exceeds 171 µmol/L."
+      },
+      {
+        "id": "ILD",
+        "priority": 9,
+        "when": {
+          "field": "confirmed_ild",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "topotecan"
+          ],
+          "message": "Discontinue topotecan for confirmed interstitial lung disease."
+        },
+        "source": {
+          "document": "NCCP 00312 v5",
+          "page": "Table 3"
+        },
+        "explanation": "Discontinue topotecan for confirmed interstitial lung disease."
+      },
+      {
+        "id": "NON_HAEM",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "non_haematological_toxicity_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "field": "nonhaem_other_than_nausea",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "topotecan"
+          ],
+          "message": "Decrease dose by 25% after consultant review. Nausea is excluded from this rule."
+        },
+        "source": {
+          "document": "NCCP 00312 v5",
+          "page": "Table 3"
+        },
+        "explanation": "Decrease dose by 25% after consultant review. Nausea is excluded from this rule."
       }
     ]
   },
@@ -533,12 +649,53 @@
   ],
   "supportive_care": {
     "emetogenic_risk": "low",
-    "script_id": "nccp-parenteral-low",
+    "script_id": "nccp-v8-low-v08418",
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "prescription_index": "patient/00312/antiemetic-weekly.pdf",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
-  }
+    "phase_profiles": {
+      "weekly": {
+        "label": "Days 1, 8 and 15",
+        "level": "low",
+        "script_id": "nccp-v8-low-v08418",
+        "prescription": "patient/00312/antiemetic-weekly.pdf"
+      }
+    },
+    "phase_specific_plan": "patient/00312/antiemetic-prescriptions.html",
+    "source_url": "https://healthservice.hse.ie/documents/6715/312__V5_Topotecan_Monotherapy_weekly.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "weekly",
+      "cycle_length_days": 28,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "topotecan",
+          "dose": {
+            "value": 4,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV infusion",
+          "note": "30 minutes. No day 22 dose.",
+          "order": 1
+        }
+      ],
+      "notes": [
+        "Topotecan is given over 30 minutes on three weekly visits in a 28-day cycle. Day 22 is a rest day. Blood results determine whether each dose can go ahead."
+      ],
+      "active_drugs": [
+        "topotecan"
+      ]
+    }
+  ]
 }

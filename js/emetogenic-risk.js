@@ -96,8 +96,9 @@
     const nationalGuidanceUrl = /haem|lymph|myeloma|leuka/.test(tumourContext)
       ? mapping.source?.haemato_oncology_antiemetic_guidance_url
       : mapping.source?.medical_oncology_antiemetic_guidance_url;
-    const baseUrl = nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
-    const anchor = metadata.antiemetic_proforma_anchor || null;
+    const prescription = supportive.prescription_index ? (phase.prescription || supportive.prescription_index) : null;
+    const baseUrl = prescription || nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
+    const anchor = prescription ? null : metadata.antiemetic_proforma_anchor || null;
     const unresolvedPhase = baseLevel === "phase_dependent" && !phase.phaseResolved;
     const phaseProfiles = phase.phaseProfiles || supportive.phase_profiles || record.phase_profiles || {};
 
@@ -125,7 +126,7 @@
       proformaUrl: baseUrl ? `${baseUrl}${anchor ? `#${anchor}` : ""}` : null,
       proformaAnchor: anchor,
       summary,
-      subsequentDays: script.subsequent_days || null,
+      subsequentDays: prescription ? "Follow the dated regimen and visit-specific antiemetic prescription." : script.subsequent_days || null,
       breakthrough: mapping.breakthrough || null,
       mappingBasis: supportive.mapping_basis || record.mapping_basis || null,
       mappingConfidence: supportive.mapping_confidence || record.mapping_confidence || null,
@@ -145,7 +146,8 @@
   function badge(protocol, options = {}) {
     const risk = get(protocol, options);
     const tag = risk.proformaUrl ? "a" : "span";
-    const href = risk.proformaUrl ? ` href="${risk.proformaUrl}" target="_blank" rel="noopener noreferrer"` : "";
+    const download = protocol?.supportive_care?.prescription_index && risk.proformaUrl?.endsWith(".pdf");
+    const href = risk.proformaUrl ? ` href="${risk.proformaUrl}" ${download ? "download" : 'target="_blank" rel="noopener noreferrer"'}` : "";
     const title = ` title="${String(risk.warning || risk.mappingBasis || "Supportive-care mapping").replace(/"/g, "&quot;")}"`;
     return `<${tag} class="badge emetogenic-badge ${risk.className}"${href}${title}><span class="emetogenic-dot" aria-hidden="true"></span>${risk.label}</${tag}>`;
   }

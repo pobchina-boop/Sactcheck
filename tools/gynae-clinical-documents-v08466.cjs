@@ -60,14 +60,37 @@ sections.cisplatin = [
  ['Kidneys and hearing','Fluids and blood tests help protect the kidneys. Report reduced urine, ringing or hearing loss promptly. Hearing changes can persist.'],
  ['Nerves, nausea and low counts','Report numbness, persistent vomiting or bleeding. Call urgently for fever or chills.']
 ];
-const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499']);
+Object.assign(sections, {
+  trabectedin: [
+    ['Muscles and kidneys', 'Severe muscle pain, weakness or dark urine can signal muscle breakdown. Call the oncology unit urgently.'],
+    ['Liver and blood counts', 'Attend blood tests. Call urgently for jaundice, fever or chills. The prescribed steroid also helps protect your liver.'],
+    ['Heart and infusion site', 'Report swelling or new breathlessness. Tell the nurse at once if the line stings, hurts or leaks.']
+  ],
+  bleomycin: [
+    ['Lung inflammation and scarring', 'Contact oncology urgently for new dry cough or breathlessness during or after treatment. Tell anaesthetists if you have ever had bleomycin.'],
+    ['Fever, skin or infusion reaction', 'Chills, rash and fever can occur. Call about any fever. Tell the nurse immediately about wheeze, swelling or faintness.']
+  ],
+  etoposide: [
+    ['Low counts and infection', 'Phone urgently for fever, chills, unexpected bleeding or marked breathlessness. Hair loss is common.'],
+    ['Infusion reactions and late effects', 'Tell the nurse immediately about flushing, dizziness or breathlessness. There is a small long-term risk of treatment-related leukaemia.']
+  ],
+  methotrexate: [
+    ['Mouth, stomach and bone marrow', 'Report painful ulcers, vomiting or difficulty drinking. Fever, chills or unexplained bleeding require an urgent call.'],
+    ['Liver, kidneys and interactions', 'Attend your blood tests. Check new prescriptions and non-prescription medicines with oncology or pharmacy before taking them.']
+  ]
+});
+const folinicRescue = [
+  ['Timing of rescue', 'This medicine protects healthy cells after methotrexate. Take it exactly 24 hours after each injection. Ring the unit immediately for a missed, late or vomited tablet.'],
+  ['Allergy', 'Seek emergency help for facial swelling, wheeze or difficulty breathing after a dose.']
+];
+const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246']);
 const h = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const table=(headers,rows)=>'<table><thead><tr>'+headers.map(x=>'<th scope="col">'+h(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+h(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 const header=(p,name)=>'<header><div class="brand">SACT<span>Check</span></div><div class="reference">NCCP '+h(p.code)+' · v'+h(p.protocol_version)+'</div></header><h1>'+h(name)+'</h1><p class="regimen">'+h(p.title)+'</p>';
 const fields='<div class="fields"><span>Patient name</span><span>Date of birth</span><span>Hospital / MRN</span></div>';
 const page=(p,title,file,body)=>'<!doctype html><html lang="en-IE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+h(title)+' · NCCP '+h(p.code)+'</title><link rel="stylesheet" href="../../assets/gynae-clinical-documents.css"></head><body><nav><a href="./">Patient portal</a> <a href="'+h(file)+'" download>Download PDF</a></nav><main>'+body+'</main></body></html>\n';
 function consent(p){
- const groups=p.agents.map(a=>{const rows=sections[a.id];if(!rows)throw Error('Missing material risks for '+a.id);return '<section class="agent"><h3>'+h(a.name)+'</h3>'+table(['Effect to discuss','What to look for and when to get help'],rows)+'</section>';});
+ const groups=p.agents.map(a=>{const rows=p.code==='00246' && a.id==='folinic acid' ? folinicRescue : sections[a.id];if(!rows)throw Error('Missing material risks for '+a.id);return '<section class="agent"><h3>'+h(a.name)+'</h3>'+table(['Effect to discuss','What to look for and when to get help'],rows)+'</section>';});
  const a=header(p,'Consent to systemic anti-cancer treatment')+fields+'<h2>Treatment and purpose</h2><p>'+h(p.purpose)+' '+h(p.indication_text)+'</p><p><b>Treatment schedule.</b> '+h(p.schedule_summary)+'</p><h2 class="riskhead">Regimen-specific side effects</h2>'+groups.join('');
  const b=header(p,'Treatment discussion and decision')+'<h2>Benefits, alternatives and individual risks</h2><p>'+h(p.evidence.interpretation)+' '+h(p.evidence.limitations)+'</p><p>Discuss other treatment options, symptom-focused care, fertility, contraception and the effects that matter most to you. You can ask for more time and change your decision.</p><p><b>Options discussed, personal risks and questions</b></p><div class="lines"></div><p><b>Urgent contact</b> '+h(p.urgent_extra)+' Emergency services: 112 or 999.</p><h2>Decision and signatures</h2><p>I have discussed the purpose, likely benefits, material risks and alternatives, and have had the opportunity to ask questions.</p><p>Decision: □ I agree to treatment &nbsp; □ I would like more time &nbsp; □ I decline</p><div class="fields"><span>Patient / representative</span><span>Date</span></div><div class="fields"><span>Clinician and registration number</span><span>Signature / date</span></div><footer>SACTCheck feasibility build · Use with the hospital consent process. Source: NCCP '+h(p.code)+' v'+h(p.protocol_version)+'.</footer>';
  return page(p,'Regimen-specific consent','consent-form.pdf','<article'+(p.code==='00811'?' class="four-agents"':'')+'>'+a+'</article><article>'+b+'</article>');
@@ -79,6 +102,14 @@ function rx(p,phase){
   const body = header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>FLOT infusion · cycles 1–8</strong><span>MODERATE EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies and reactions</span></div><h2>Day unit</h2>'+table(['Medicine','Dose and route','Directions'],[rows[0]])+'<h2>Scheduled steroid · one combined plan</h2>'+table(['Medicine','Dose and route','Directions'],rows.slice(1,3))+'<p class="note">Confirm at least three steroid doses before docetaxel. If missed, contact the consultant. Record the total steroid dose before signing.</p><h2>Take home · as needed</h2>'+table(['Medicine','Dose and route','Directions'],[rows[3]])+'<p class="note">'+h(phase.medicines[3].note)+'</p><div class="fields"><span>Duration / quantity</span><span>Prescriber amendments</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · NCCP 00344 v9 and NCIS Medical Oncology v8 · Requires signature.</footer>';
   return page(p,'Antiemetic prescription','antiemetic-flot.pdf','<article>'+body+'</article>');
  }
+ if ((p.code === '00300' && phase.id !== 'bleomycin') || p.code === '00375') {
+   const multi=p.code==='00300';
+   const rows=phase.medicines.map(m=>[m.name,m.dose.replace(/\bPO\b/g,'by mouth'),m.timing.replace(/\bOD\b/g,'Once daily').replace(/\bTDS\b/g,'Up to three times daily').replace(/\bPRN\b/g,'as needed')]);
+   const warning=multi ? 'One prescription covers days 1–7. Check today’s cycle day before giving a dose. Do not restart the course on days 2–5. Review sedation and rescue antiemetic choice.' : 'Day 1 dexamethasone includes the trabectedin premedication. Document one total steroid dose. Space metoclopramide at least six hours apart. Maximum 30 mg or 0.5 mg/kg per day, whichever is lower, for up to five days.';
+   const source=multi?'NCIS Medical Oncology v8 pp4–5 and MASCC/ESMO multiday guidance':'NCIS Medical Oncology v8 and NCCP 00375';
+   const body=header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>'+h(multi?'BEP · five-day cisplatin block':phase.label)+'</strong><span>'+h(level.toUpperCase())+' EMETIC RISK</span></div><div class="fields"><span>Cycle start / date</span><span>Allergies</span></div>'+table(['Medicine','Dose and route','Directions'],rows)+'<p class="note">'+h(warning)+'</p><div class="fields"><span>Individual rescue prescription / quantity</span><span>Amendments</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · '+h(source)+' · Requires prescriber review and signature.</footer>';
+   return page(p,'Antiemetic prescription','antiemetic-'+phase.id+'.pdf','<article>'+body+'</article>');
+ }
  if(![high,low,level==='minimal'].some(Boolean))throw Error('Unhandled antiemetic plan '+level);
  const taxane=phase.active_medicines.some(x=>/paclitaxel/i.test(x));
  const rows=phase.medicines.map(m=>[m.name,m.dose.replace(/\bPO\b/g,'by mouth'),m.timing.replace(/\bOD\b/g,'Once daily').replace(/\bTDS\b/g,'Three times daily').replace(/\bPRN\b/g,'as needed')]);
@@ -89,7 +120,7 @@ function rx(p,phase){
  else{
   meds='<h2>Day unit · treatment day</h2>'+table(['Medicine','Dose and route','Directions'],day1);
   if(taxane&&high)meds+='<p class="note">Reconcile dexamethasone with the paclitaxel premedication before signing. Record one total dose.</p>';
-  if(p.code==='00799')meds+='<p class="note">Olanzapine can cause sedation. Review concurrent metoclopramide because of increased risk of extrapyramidal effects.</p>';
+  if(p.code==='00799'||(p.code==='00676' && phase.id==='radiation'))meds+='<p class="note">Olanzapine can cause sedation. Review concurrent metoclopramide because of increased risk of extrapyramidal effects.</p>';
   if(later.length)meds+='<h2>Take home · scheduled</h2>'+table(['Medicine','Dose and route','Directions'],later);
   const metoclopramide=rows.find(row=>row[0]==='Metoclopramide');
   if (!metoclopramide) throw Error('Missing subsequent antiemetic for '+p.code+' / '+phase.id);

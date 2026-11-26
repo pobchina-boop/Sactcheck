@@ -10,7 +10,7 @@ from weasyprint import HTML
 ROOT = Path(__file__).resolve().parents[1]
 ROUTES = ('00897', '00926', '00953')
 ILLUSTRATED_GI = ('00344',)
-GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819', '00620', '00716', '00769', '00771', '00772','00817','00811','00799','00766','00499')
+GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819', '00620', '00716', '00769', '00771', '00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246')
 DOCS = {
     'guide': 'guide', 'sactcard': 'sactcard', 'knowledge': 'knowledge-print',
     'handbook': 'handbook-print', 'passport': 'passport', 'consent-form': 'consent-form',

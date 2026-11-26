@@ -135,7 +135,7 @@ if(olaparib){
   assert.equal(new Set(currentCatalogue.records.map(record=>record.entry.id)).size,currentCatalogue.records.length,'Current catalogue cannot duplicate a record to hide a missing protocol');
   assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).sort(),'Current catalogue retains every inherited protocol path');
   const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
-  const gynaeCodes = [...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES, ...require('./helpers/retrospective-v08467.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES];
+  const gynaeCodes = [...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES, ...require('./helpers/retrospective-v08467.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES];
   const sarcomaCodes = require('./helpers/retrospective-v08464.cjs').releaseRoutes.map(route=>route.split('/')[0]);
   const priorAstra=new Map(JSON.parse(zlib.gunzipSync(release.astraBytes(bundlePath))).records.map(r=>[r.entry.path,r]));
   for(const current of currentCatalogue.records){

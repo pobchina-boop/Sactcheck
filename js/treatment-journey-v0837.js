@@ -54538,6 +54538,389 @@ const definitions={
         "url": "https://pubmed.ncbi.nlm.nih.gov/26271155/"
       }
     ]
+  },
+  "00312": {
+    "code": "00312",
+    "release": "0.84.69",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Weekly topotecan",
+    "setting": "Ovarian, fallopian tube or primary peritoneal cancer",
+    "summary": "Topotecan is given over 30 minutes on three weekly visits in a 28-day cycle. Day 22 is a rest day. Blood results determine whether each dose can go ahead.",
+    "stages": [
+      "Days 1, 8 and 15"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Infusions on days 1, 8 and 15, followed by a week off.",
+        "cells": [
+          "Topotecan is given over 30 minutes on three weekly visits in a 28-day cycle. Day 22 is a rest day. Blood results determine whether each dose can go ahead."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function, prior marrow treatment and infection.",
+        "when": "Before starting",
+        "why": "Ask which blood results are needed before the first infusion.",
+        "clinical": "NCCP 00312",
+        "action": "Ask which blood results are needed before the first infusion.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Neutrophils, platelets and haemoglobin decide whether the infusion proceeds.",
+        "when": "Before each weekly dose",
+        "why": "Confirm your day 8 and day 15 blood appointments.",
+        "clinical": "NCCP 00312",
+        "action": "Confirm your day 8 and day 15 blood appointments.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Report fever, breathlessness, bruising or bleeding.",
+        "when": "Between doses",
+        "why": "Contact the unit urgently for fever or a new cough affecting your breathing.",
+        "clinical": "NCCP 00312",
+        "action": "Contact the unit urgently for fever or a new cough affecting your breathing.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Metastatic disease after prior therapy.",
+      "Call your oncology unit urgently for fever, shivering or sudden illness. A new cough, shortness of breath or unexpected bleeding also needs urgent assessment."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00312 v5",
+        "url": "https://healthservice.hse.ie/documents/6715/312__V5_Topotecan_Monotherapy_weekly.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "TOWER",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21115872/"
+      }
+    ]
+  },
+  "00375": {
+    "code": "00375",
+    "release": "0.84.69",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pegylated liposomal doxorubicin and trabectedin",
+    "setting": "Relapsed ovarian cancer",
+    "summary": "You receive a steroid before pegylated liposomal doxorubicin, followed by trabectedin over three hours. Your team normally recommends a central line. Treatment repeats every 21 days while it helps and remains tolerable.",
+    "stages": [
+      "Day 1 · two infusions"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Two infusions on day 1 every three weeks.",
+        "cells": [
+          "You receive a steroid before pegylated liposomal doxorubicin, followed by trabectedin over three hours. Your team normally recommends a central line. Treatment repeats every 21 days while it helps and remains tolerable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, bilirubin, liver enzymes, albumin, kidney function, creatine kinase and heart function.",
+        "when": "Before starting",
+        "why": "Bring details of earlier anthracyclines and heart problems.",
+        "clinical": "NCCP 00375",
+        "action": "Bring details of earlier anthracyclines and heart problems.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Check creatine kinase weekly for the first two cycles. Blood count, kidney and liver tests are checked before each cycle.",
+        "when": "First two cycles",
+        "why": "Ask for the dates of blood tests between infusions.",
+        "clinical": "NCCP 00375",
+        "action": "Ask for the dates of blood tests between infusions.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Check creatine kinase at least once between later cycles. ECG and heart assessment by ECHO or MUGA are part of monitoring. ECHO or MUGA is due before every cycle.",
+        "when": "Before later cycles",
+        "why": "Report muscle pain with weakness or dark urine urgently.",
+        "clinical": "NCCP 00375",
+        "action": "Report muscle pain with weakness or dark urine urgently.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Relapsed platinum-sensitive ovarian cancer.",
+      "Call your oncology unit urgently for fever, shivering or sudden illness. Call urgently for severe muscle pain, weakness or dark urine."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00375 v6a",
+        "url": "https://healthservice.hse.ie/documents/6818/375_Trabectedin_and_PLD_therapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "OVA-301",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20516432/"
+      }
+    ]
+  },
+  "00676": {
+    "code": "00676",
+    "release": "0.84.69",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Cisplatin chemoradiation, then paclitaxel and carboplatin",
+    "setting": "High-risk endometrial cancer after surgery",
+    "summary": "Usually start 4–6 weeks after surgery. Cisplatin is given before radiation on two treatment days three weeks apart. Ring both teams if radiation is cancelled. Cisplatin is only given on a radiation day. Within three weeks of finishing radiation, start paclitaxel then carboplatin AUC 5, every three weeks for four cycles. Bring your steroid premedication instructions.",
+    "stages": [
+      "During pelvic radiotherapy",
+      "After radiotherapy"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Two cisplatin visits during radiotherapy, then four chemotherapy cycles.",
+        "cells": [
+          "Usually start 4–6 weeks after surgery. Cisplatin is given before radiation on two treatment days three weeks apart. Ring both teams if radiation is cancelled. Cisplatin is only given on a radiation day.",
+          "Within three weeks of finishing radiation, start paclitaxel then carboplatin AUC 5, every three weeks for four cycles. Bring your steroid premedication instructions."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function, magnesium and other salts, neuropathy, hearing and fitness.",
+        "when": "Before the first phase",
+        "why": "Confirm the radiotherapy appointment before travelling.",
+        "clinical": "NCCP 00676",
+        "action": "Confirm the radiotherapy appointment before travelling.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Check recovery, renal function, electrolytes and that radiotherapy will proceed that day.",
+        "when": "During chemoradiation",
+        "why": "Report diarrhoea, reduced urine, tinnitus or new hearing loss.",
+        "clinical": "NCCP 00676",
+        "action": "Report diarrhoea, reduced urine, tinnitus or new hearing loss.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Recheck counts, renal function for carboplatin, liver function, neuropathy and infusion allergy.",
+        "when": "Before paclitaxel and carboplatin",
+        "why": "Show the team any difficulties with walking, buttons or balance.",
+        "clinical": "NCCP 00676",
+        "action": "Show the team any difficulties with walking, buttons or balance.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Adjuvant treatment after surgery for high-risk stage I–III endometrial carcinoma.",
+      "Call your oncology unit urgently for fever, shivering or sudden illness. Report persistent vomiting, reduced urine or severe diarrhoea promptly."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00676 v3",
+        "url": "https://healthservice.hse.ie/documents/6673/676_v3_Cisplatin_50mgm2_with_RT_Pacli_Carbo.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "PORTEC-3",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31345626/"
+      }
+    ]
+  },
+  "00300": {
+    "code": "00300",
+    "release": "0.84.69",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "BEP · bleomycin, etoposide and cisplatin",
+    "setting": "Ovarian dysgerminoma and other germ-cell tumours",
+    "summary": "Bleomycin, etoposide and cisplatin are given on day 1. IV fluids and an anti-sickness plan cover the five-day cisplatin block. Return on each of days 2, 3, 4 and 5 for etoposide, cisplatin and fluids. Keep using the same dated anti-sickness prescription for this block. Bleomycin alone on days 8 and 15. The cycle repeats every 21 days. The consultant confirms your total number of cycles based on diagnosis and risk.",
+    "stages": [
+      "Day 1 · all three medicines",
+      "Days 2–5 · etoposide and cisplatin",
+      "Days 8 and 15 · bleomycin"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Five consecutive infusion days, then bleomycin on days 8 and 15.",
+        "cells": [
+          "Bleomycin, etoposide and cisplatin are given on day 1. IV fluids and an anti-sickness plan cover the five-day cisplatin block.",
+          "Return on each of days 2, 3, 4 and 5 for etoposide, cisplatin and fluids. Keep using the same dated anti-sickness prescription for this block.",
+          "Bleomycin alone on days 8 and 15. The cycle repeats every 21 days. The consultant confirms your total number of cycles based on diagnosis and risk."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, renal and liver function, germ-cell markers, chest assessment, lung function and hearing as indicated.",
+        "when": "Before day 1",
+        "why": "Ask about fertility preservation before the first dose.",
+        "clinical": "NCCP 00300",
+        "action": "Ask about fertility preservation before the first dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review counts and tumour markers, renal and liver profile, chest X-ray and cumulative bleomycin.",
+        "when": "Before each cycle",
+        "why": "Tell the team about any cough or change in exercise tolerance before the next dose.",
+        "clinical": "NCCP 00300",
+        "action": "Tell the team about any cough or change in exercise tolerance before the next dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Review hydration, urine output, magnesium and other salts, hearing and nerve symptoms.",
+        "when": "During infusions",
+        "why": "Tell the nurse promptly about chills, rash, swelling or trouble breathing.",
+        "clinical": "NCCP 00300",
+        "action": "Tell the nurse promptly about chills, rash, swelling or trouble breathing.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Includes advanced or metastatic ovarian dysgerminoma (00300c). Testicular and extragonadal indications have separate NCCP codes under the same protocol.",
+      "Call your oncology unit urgently for fever, shivering or sudden illness. Report new dry cough or breathlessness immediately, even after the last dose."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00300 v7b",
+        "url": "https://healthservice.hse.ie/documents/6706/300_V7b_BEP.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Gynaecologic Oncology Group ovarian germ-cell study",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7512129/"
+      }
+    ]
+  },
+  "00246": {
+    "code": "00246",
+    "release": "0.84.69",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Methotrexate with folinic acid rescue",
+    "setting": "Low-risk gestational trophoblastic neoplasia",
+    "summary": "Methotrexate 50 mg is given into a muscle on days 1, 3, 5 and 7. Write down the actual time of each injection. A new cycle starts every 14 days. Take folinic acid 15 mg by mouth exactly 24 hours after each injection. Contact the unit immediately if a tablet is late, missed or vomited. Ask the team what to do before taking another dose.",
+    "stages": [
+      "Days 1, 3, 5 and 7 · injection",
+      "Days 2, 4, 6 and 8 · rescue tablet"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Four injections on alternate days, each followed 24 hours later by a rescue tablet.",
+        "cells": [
+          "Methotrexate 50 mg is given into a muscle on days 1, 3, 5 and 7. Write down the actual time of each injection. A new cycle starts every 14 days.",
+          "Take folinic acid 15 mg by mouth exactly 24 hours after each injection. Contact the unit immediately if a tablet is late, missed or vomited. Ask the team what to do before taking another dose."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Specialist staging and FIGO risk score, serum hCG, blood count, kidney and liver function.",
+        "when": "Before starting",
+        "why": "Bring all medicines including painkillers, supplements and antibiotics for an interaction check.",
+        "clinical": "NCCP 00246",
+        "action": "Bring all medicines including painkillers, supplements and antibiotics for an interaction check.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Measure serum hCG and review the trend alongside blood count, kidney and liver tests.",
+        "when": "Day 1 each cycle",
+        "why": "Ask what your latest result means and when your next sample is due.",
+        "clinical": "NCCP 00246",
+        "action": "Ask what your latest result means and when your next sample is due.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Three further treatment cycles consolidate the response. The specialist team then arranges long-term hCG surveillance.",
+        "when": "After normal hCG",
+        "why": "Ask for a written blood-test calendar and individual advice about contraception and future pregnancy.",
+        "clinical": "NCCP 00246",
+        "action": "Ask for a written blood-test calendar and individual advice about contraception and future pregnancy.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Low-risk gestational trophoblastic neoplasia (FIGO score 6 or less).",
+      "Call your oncology unit urgently for fever, shivering or sudden illness. Call immediately if a rescue tablet is missed, vomited or late."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00246 v5",
+        "url": "https://healthservice.hse.ie/documents/6349/246_Methotrexate_Charing_Cross.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Charing Cross low-risk cohort",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11919242/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

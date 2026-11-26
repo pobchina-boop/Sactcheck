@@ -1,11 +1,11 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00375-v6",
+  "protocol_id": "nccp-00375-v6a",
   "file_name": "00375-trabectedin-and-pegylated-liposomal-doxorubicin-therapy.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00375",
-    "nccp_version": "6",
+    "nccp_version": "6a",
     "tumour_group": "Gynaecology",
     "tumour_groups": [
       "Gynaecology"
@@ -15,8 +15,8 @@
     "indication": "Relapsed platinum-sensitive ovarian cancer.",
     "source_url": "https://healthservice.hse.ie/documents/6818/375_Trabectedin_and_PLD_therapy.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.84.69",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "ovarian_platinum_sensitive",
@@ -34,8 +34,8 @@
       "enabled": true
     },
     "drugs": [
-      "trabectedin",
-      "pegylated liposomal doxorubicin"
+      "pegylated liposomal doxorubicin",
+      "trabectedin"
     ],
     "common_trade_names": [
       "Yondelis",
@@ -76,7 +76,7 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00375-v6"
+    "canonical_protocol_id": "nccp-00375-v6a"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -92,10 +92,10 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Trabectedin and Pegylated Liposomal Doxorubicin Therapy",
+    "schedule_summary": "You receive a steroid before pegylated liposomal doxorubicin, followed by trabectedin over three hours. Your team normally recommends a central line. Treatment repeats every 21 days while it helps and remains tolerable.",
     "drugs": [
-      "trabectedin",
-      "pegylated liposomal doxorubicin"
+      "pegylated liposomal doxorubicin",
+      "trabectedin"
     ]
   },
   "input_definitions": {
@@ -412,6 +412,86 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "albumin_g_l": {
+      "type": "number",
+      "label": "Albumin",
+      "unit": "g/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 40,
+      "input_role": "decision"
+    },
+    "alk_phos_uln": {
+      "type": "number",
+      "label": "Alkaline phosphatase / local ULN",
+      "unit": "×ULN",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "type": "number",
+      "label": "Creatinine clearance",
+      "unit": "mL/min",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6818/375_Trabectedin_and_PLD_therapy.pdf",
+        "reason": "Trabectedin requires clearance of at least 60 mL/min or serum creatinine at most 132.6 µmol/L. Both measures can be entered."
+      }
+    },
+    "creatinine_umol_l": {
+      "type": "number",
+      "label": "Serum creatinine",
+      "unit": "µmol/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 80,
+      "input_role": "decision"
+    },
+    "prior_dose_event": {
+      "type": "boolean",
+      "label": "Between cycles: ANC <0.5 for >5 days or with fever/infection, platelets <25, bilirubin >ULN, ALP >2.5×ULN, AST/ALT >5×ULN, or another grade 3–4 toxicity",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "type": "number",
+      "label": "Total bilirubin for PLD dose band",
+      "unit": "µmol/L",
+      "min": 0,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 12
+    },
+    "pld_cumulative_including_planned": {
+      "type": "number",
+      "label": "Lifetime PLD including proposed dose",
+      "unit": "mg/m²",
+      "min": 0,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 30
+    },
+    "confirmed_cardiac_stop": {
+      "type": "boolean",
+      "label": "Trabectedin cardiac discontinuation criterion confirmed against source",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -445,7 +525,7 @@
     "rules": [
       {
         "id": "ECOG_3",
-        "priority": 8,
+        "priority": 9,
         "when": {
           "field": "ecog",
           "operator": ">=",
@@ -459,178 +539,10 @@
           "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
         },
         "source": {
-          "document": "Current official NCCP regimen",
+          "document": "NCCP 00375 v6a",
           "page": "Dose modifications"
         },
         "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "PLD_PPE_G2",
-        "priority": 9,
-        "when": {
-          "field": "ppe_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade 2 or worse PPE requires PLD interruption until recovery and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse PPE requires PLD interruption until recovery and dose modification."
-      },
-      {
-        "id": "PLD_STOM_G2",
-        "priority": 9,
-        "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade 2 or worse stomatitis requires PLD interruption until recovery and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse stomatitis requires PLD interruption until recovery and dose modification."
-      },
-      {
-        "id": "PLD_LVEF",
-        "priority": 9,
-        "when": {
-          "field": "lvef_percent",
-          "operator": "<",
-          "value": 50
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "LVEF below 50% requires cardiac review before further anthracycline exposure."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "LVEF below 50% requires cardiac review before further anthracycline exposure."
       },
       {
         "id": "PLD_CUM",
@@ -648,16 +560,100 @@
           "message": "Review cumulative anthracycline exposure and cardiac risk."
         },
         "source": {
-          "document": "Current official NCCP regimen",
+          "document": "NCCP 00375 v6a",
           "page": "Dose modifications"
         },
         "explanation": "Review cumulative anthracycline exposure and cardiac risk."
       },
       {
-        "id": "TRAB_CK",
-        "priority": 10,
+        "id": "ENTRY_anc",
+        "priority": 9,
         "when": {
-          "field": "ck_uln_multiple",
+          "field": "anc",
+          "operator": "<",
+          "value": 1.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+      },
+      {
+        "id": "ENTRY_platelets",
+        "priority": 9,
+        "when": {
+          "field": "platelets",
+          "operator": "<",
+          "value": 100
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+      },
+      {
+        "id": "ENTRY_haemoglobin",
+        "priority": 9,
+        "when": {
+          "field": "haemoglobin",
+          "operator": "<",
+          "value": 9
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+      },
+      {
+        "id": "ENTRY_albumin_g_l",
+        "priority": 9,
+        "when": {
+          "field": "albumin_g_l",
+          "operator": "<",
+          "value": 25
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+      },
+      {
+        "id": "ENTRY_alk_phos_uln",
+        "priority": 9,
+        "when": {
+          "field": "alk_phos_uln",
           "operator": ">",
           "value": 2.5
         },
@@ -666,16 +662,37 @@
           "components": [
             "trabectedin"
           ],
-          "message": "CK >2.5 ×ULN requires withholding trabectedin and assessment for muscle injury/rhabdomyolysis."
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
         },
-        "explanation": "CK >2.5 ×ULN requires withholding trabectedin and assessment for muscle injury/rhabdomyolysis."
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
       },
       {
-        "id": "TRAB_LFT",
+        "id": "ENTRY_bilirubin_uln_multiple",
+        "priority": 9,
+        "when": {
+          "field": "bilirubin_uln_multiple",
+          "operator": ">",
+          "value": 1
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+      },
+      {
+        "id": "ENTRY_alt_ast_uln_multiple",
         "priority": 9,
         "when": {
           "field": "alt_ast_uln_multiple",
@@ -687,16 +704,135 @@
           "components": [
             "trabectedin"
           ],
-          "message": "Significant transaminase elevation requires the trabectedin hepatic withholding pathway."
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
         },
-        "explanation": "Significant transaminase elevation requires the trabectedin hepatic withholding pathway."
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
       },
       {
-        "id": "TRAB_DEX",
+        "id": "ENTRY_ck_uln_multiple",
+        "priority": 9,
+        "when": {
+          "field": "ck_uln_multiple",
+          "operator": ">",
+          "value": 2.5
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Pretreatment criterion is unmet. Hold trabectedin, reassess within three weeks and review persistent abnormalities."
+      },
+      {
+        "id": "RENAL_BOTH",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            },
+            {
+              "field": "creatinine_umol_l",
+              "operator": ">",
+              "value": 132.6
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Neither renal entry criterion is met. Hold trabectedin and reassess."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Neither renal entry criterion is met. Hold trabectedin and reassess."
+      },
+      {
+        "id": "RENAL_PARTIAL",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                },
+                {
+                  "field": "creatinine_umol_l",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "creatinine_umol_l",
+                  "operator": ">",
+                  "value": 132.6
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Enter the other renal measure to assess the alternative entry criterion."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 1"
+        },
+        "explanation": "Enter the other renal measure to assess the alternative entry criterion."
+      },
+      {
+        "id": "PAIR_REDUCTION",
+        "priority": 9,
+        "when": {
+          "field": "prior_dose_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "trabectedin",
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Reduce one level for subsequent cycles. Trabectedin / PLD levels in mg/m² are 1.1 / 30, 0.9 / 25, then 0.75 / 20. Do not re-escalate."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Tables 2–3"
+        },
+        "explanation": "Reduce one level for subsequent cycles. Trabectedin / PLD levels in mg/m² are 1.1 / 30, 0.9 / 25, then 0.75 / 20. Do not re-escalate."
+      },
+      {
+        "id": "PREMED",
         "priority": 9,
         "when": {
           "field": "dexamethasone_premed_confirmed",
@@ -706,15 +842,199 @@
         "action": {
           "type": "withhold",
           "components": [
-            "trabectedin"
+            "trabectedin",
+            "pegylated liposomal doxorubicin"
           ],
-          "message": "Do not administer trabectedin until dexamethasone premedication is confirmed."
+          "message": "Confirm corticosteroid before PLD, e.g. dexamethasone 20 mg IV 30 minutes before PLD."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00375 v6a",
+          "page": "Premedications"
         },
-        "explanation": "Do not administer trabectedin until dexamethasone premedication is confirmed."
+        "explanation": "Confirm corticosteroid before PLD, e.g. dexamethasone 20 mg IV 30 minutes before PLD."
+      },
+      {
+        "id": "PLD_REVIEW",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "field": "ppe_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Assess timing, severity and recovery before giving PLD. Review the PLD toxicity recommendations with pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Adverse effects"
+        },
+        "explanation": "Assess timing, severity and recovery before giving PLD. Review the PLD toxicity recommendations with pharmacy."
+      },
+      {
+        "id": "PLD_BILI_20",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 20
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Table 4 gives 75% of the original PLD dose. Check the separate trabectedin entry criteria before proceeding."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 4"
+        },
+        "explanation": "Table 4 gives 75% of the original PLD dose. Check the separate trabectedin entry criteria before proceeding."
+      },
+      {
+        "id": "PLD_BILI_51",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 51
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<=",
+              "value": 86
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Table 4 gives 50% of the original PLD dose. Check the separate trabectedin entry criteria before proceeding."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 4"
+        },
+        "explanation": "Table 4 gives 50% of the original PLD dose. Check the separate trabectedin entry criteria before proceeding."
+      },
+      {
+        "id": "PLD_BILI_GAP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 50
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "<",
+              "value": 51
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "This bilirubin result lies between the printed PLD dose bands. Obtain a prescribing decision."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 4"
+        },
+        "explanation": "This bilirubin result lies between the printed PLD dose bands. Obtain a prescribing decision."
+      },
+      {
+        "id": "PLD_BILI_STOP",
+        "priority": 10,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 86
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "PLD is not recommended above 86 µmol/L."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Table 4"
+        },
+        "explanation": "PLD is not recommended above 86 µmol/L."
+      },
+      {
+        "id": "PLD_MAX",
+        "priority": 10,
+        "when": {
+          "field": "pld_cumulative_including_planned",
+          "operator": ">",
+          "value": 450
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Proposed exposure exceeds the stated PLD lifetime dose of 450 mg/m². Check cumulative anthracyclines and review."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Treatment"
+        },
+        "explanation": "Proposed exposure exceeds the stated PLD lifetime dose of 450 mg/m². Check cumulative anthracyclines and review."
+      },
+      {
+        "id": "TRAB_CARDIAC",
+        "priority": 10,
+        "when": {
+          "field": "confirmed_cardiac_stop",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "trabectedin"
+          ],
+          "message": "Discontinue trabectedin for the confirmed source-defined cardiac criterion. Discuss the combination and subsequent management."
+        },
+        "source": {
+          "document": "NCCP 00375 v6a",
+          "page": "Cardiac dysfunction"
+        },
+        "explanation": "Discontinue trabectedin for the confirmed source-defined cardiac criterion. Discuss the combination and subsequent management."
       }
     ]
   },
@@ -735,7 +1055,64 @@
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "prescription_index": "patient/00375/antiemetic-combination.pdf",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+    "phase_profiles": {
+      "combination": {
+        "label": "Day 1 · two infusions",
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate",
+        "prescription": "patient/00375/antiemetic-combination.pdf"
+      }
+    },
+    "phase_specific_plan": "patient/00375/antiemetic-prescriptions.html",
+    "source_url": "https://healthservice.hse.ie/documents/6818/375_Trabectedin_and_PLD_therapy.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "pegylated liposomal doxorubicin",
+          "dose": {
+            "value": 30,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Give first, following corticosteroid premedication.",
+          "order": 1
+        },
+        {
+          "drug": "trabectedin",
+          "dose": {
+            "value": 1.1,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Give after PLD is complete. Infuse trabectedin over three hours.",
+          "order": 2
+        }
+      ],
+      "notes": [
+        "You receive a steroid before pegylated liposomal doxorubicin, followed by trabectedin over three hours. Your team normally recommends a central line. Treatment repeats every 21 days while it helps and remains tolerable."
+      ],
+      "active_drugs": [
+        "pegylated liposomal doxorubicin",
+        "trabectedin"
+      ]
+    }
+  ],
+  "regimen_components": [
+    "Pegylated Liposomal Doxorubicin",
+    "Trabectedin"
+  ]
 }

@@ -20,16 +20,26 @@ function createMigration(record) {
       assert.equal(digest(before),entry.before,file);
     }
     const actual = fs.readFileSync(path.join(root,file));
-    assert.equal(actual.length, entry.after_bytes, file);
-    assert.equal(digest(actual), entry.after, file);
+    const release = require('./live-release-v08464.cjs');
+    const next = release.gynae69Inventory().record.files[file];
+    if (next) {
+      assert.equal(next.before, entry.after, file + ' predecessor digest');
+      assert.equal(next.before_bytes, entry.after_bytes, file + ' predecessor size');
+      release.verifyFile(file);
+    } else {
+      assert.equal(actual.length, entry.after_bytes, file);
+      assert.equal(digest(actual), entry.after, file);
+    }
   }
   return record;
 }
 function expectedHash(file, previous) {
-  return reviewed.files[file]?.after ?? previous;
+  const entry = reviewed.files[file];
+  return entry ? require('./live-release-v08464.cjs').expected(file, entry.after, entry.after_bytes).sha256 : previous;
 }
 function expectedBytes(file, previous) {
-  return reviewed.files[file]?.after_bytes ?? previous;
+  const entry = reviewed.files[file];
+  return entry ? require('./live-release-v08464.cjs').expected(file, entry.after, entry.after_bytes).bytes : previous;
 }
 const priorInventory = require('./retrospective-v08467.cjs').inventory;
 const releaseRoutes = NEW_ROUTES;

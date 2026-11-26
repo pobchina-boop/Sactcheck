@@ -13,11 +13,11 @@
     ],
     "title": "Bleomycin, Etoposide and Cisplatin (BEP) Therapy",
     "short_title": "Bleomycin, Etoposide and Cisplatin (BEP) Therapy",
-    "indication": "Advanced or metastatic ovarian dysgerminoma and other germ-cell tumours.",
+    "indication": "Adjuvant high-risk stage I nonseminoma of testis, metastatic testicular germ-cell tumours, advanced or metastatic ovarian dysgerminoma, or extragonadal germ-cell tumours.",
     "source_url": "https://healthservice.hse.ie/documents/6706/300_V7b_BEP.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.45.1",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.84.69",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "ovarian_germ_cell",
@@ -64,14 +64,44 @@
     "regimen_card": {
       "contexts": [
         {
-          "id": "00300-gu",
-          "indication_id": "00300-gu",
-          "intent": "advanced_disease",
+          "id": "00300-gu-adjuvant",
+          "indication_id": "00300-gu-adjuvant",
+          "intent": "adjuvant",
           "cycle_length_days": 21,
           "unresolved": [
             "duration"
           ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "provenance": "NCCP 00300 v7b pp1–2"
+        },
+        {
+          "id": "00300-gu",
+          "indication_id": "00300-gu",
+          "intent": "curative",
+          "cycle_length_days": 21,
+          "unresolved": [
+            "duration"
+          ],
+          "provenance": "NCCP 00300 v7b pp1–2"
+        },
+        {
+          "id": "00300-gyn",
+          "indication_id": "00300-gyn",
+          "intent": "curative",
+          "cycle_length_days": 21,
+          "unresolved": [
+            "duration"
+          ],
+          "provenance": "NCCP 00300 v7b pp1–2"
+        },
+        {
+          "id": "00300-extragonadal",
+          "indication_id": "00300-extragonadal",
+          "intent": "curative",
+          "cycle_length_days": 21,
+          "unresolved": [
+            "duration"
+          ],
+          "provenance": "NCCP 00300 v7b pp1–2"
         }
       ],
       "provenance": {
@@ -112,17 +142,33 @@
   },
   "indications": [
     {
-      "indication_id": "00300-gyn",
+      "indication_id": "00300-gu-adjuvant",
       "code": "00300a",
-      "description": "Advanced or metastatic ovarian dysgerminoma and other germ-cell tumours.",
+      "description": "High-risk stage I non-seminomatous testicular germ-cell tumour.",
+      "tumour_groups": [
+        "Genitourinary"
+      ]
+    },
+    {
+      "indication_id": "00300-gu",
+      "code": "00300b",
+      "description": "Metastatic testicular germ-cell tumour.",
+      "tumour_groups": [
+        "Genitourinary"
+      ]
+    },
+    {
+      "indication_id": "00300-gyn",
+      "code": "00300c",
+      "description": "Advanced or metastatic ovarian dysgerminoma.",
       "tumour_groups": [
         "Gynaecology"
       ]
     },
     {
-      "indication_id": "00300-gu",
-      "code": "00300g",
-      "description": "Curative treatment of testicular or extragonadal germ-cell tumours where BEP is selected.",
+      "indication_id": "00300-extragonadal",
+      "code": "00300d",
+      "description": "Extragonadal germ-cell tumour.",
       "tumour_groups": [
         "Genitourinary"
       ]
@@ -130,7 +176,7 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Bleomycin, Etoposide and Cisplatin (BEP) Therapy",
+    "schedule_summary": "Bleomycin, etoposide and cisplatin are given on day 1. IV fluids and an anti-sickness plan cover the five-day cisplatin block. Return on each of days 2, 3, 4 and 5 for etoposide, cisplatin and fluids. Keep using the same dated anti-sickness prescription for this block. Bleomycin alone on days 8 and 15. The cycle repeats every 21 days. The consultant confirms your total number of cycles based on diagnosis and risk.",
     "drugs": [
       "bleomycin",
       "etoposide",
@@ -420,6 +466,77 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "treatment_visit": {
+      "type": "select",
+      "label": "Treatment being given at this visit",
+      "required": false,
+      "options": [
+        {
+          "value": "day1",
+          "label": "Day 1 · all three medicines"
+        },
+        {
+          "value": "days2to5",
+          "label": "Days 2–5 · etoposide and cisplatin"
+        },
+        {
+          "value": "bleomycin",
+          "label": "Days 8 and 15 · bleomycin"
+        }
+      ],
+      "demo_value": "day1",
+      "input_role": "context"
+    },
+    "confirmed_bleo_lung_injury": {
+      "type": "boolean",
+      "label": "Confirmed bleomycin lung injury or significant decline in diffusion capacity",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "planned_cumulative_bleomycin": {
+      "type": "number",
+      "label": "Lifetime total including the proposed dose",
+      "unit": "International Units",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 30000,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "type": "number",
+      "label": "Measured or assessed creatinine clearance",
+      "unit": "mL/min",
+      "min": 0,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 80,
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6706/300_V7b_BEP.pdf",
+        "reason": "Renal thresholds differ by the germ-cell drug and visit, including 10 and 50 mL/min for bleomycin and etoposide."
+      }
+    },
+    "bilirubin_umol_l": {
+      "type": "number",
+      "label": "Total bilirubin",
+      "unit": "µmol/L",
+      "min": 0,
+      "step": 0.01,
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 12
+    },
+    "albumin_below_normal": {
+      "type": "boolean",
+      "label": "Albumin below laboratory reference range",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -452,204 +569,164 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "id": "SELECT_VISIT",
+        "priority": 9,
         "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "field": "treatment_visit",
+          "operator": "missing"
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Select the visit before interpreting component-specific dosing or toxicity."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00300 v7b",
+          "page": "Treatment"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+        "explanation": "Select the visit before interpreting component-specific dosing or toxicity."
       },
       {
-        "id": "NONHAEM_G3",
+        "id": "COUNTS_CURATIVE",
         "priority": 9,
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "CIS_50_59",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "50_59"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 50–59 mL/min requires the regimen-specific cisplatin dose/substitution pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "CrCl 50–59 mL/min requires the regimen-specific cisplatin dose/substitution pathway."
-      },
-      {
-        "id": "CIS_40_49",
-        "priority": 10,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "40_49"
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 40–49 mL/min requires withholding cisplatin and Consultant review of reduction or alternative treatment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "CrCl 40–49 mL/min requires withholding cisplatin and Consultant review of reduction or alternative treatment."
-      },
-      {
-        "id": "CIS_LT40",
-        "priority": 10,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "in",
-          "value": [
-            "lt40",
-            "dialysis"
+          "any": [
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Assess fever urgently. Counts require prescriber review. Avoid routine delays or dose reductions. Any delay requires consultant approval."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Haematological"
+        },
+        "explanation": "Assess fever urgently. Counts require prescriber review. Avoid routine delays or dose reductions. Any delay requires consultant approval."
+      },
+      {
+        "id": "CIS_CURATIVE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "missing"
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "day1",
+                    "days2to5"
+                  ]
+                },
+                {
+                  "field": "cisplatin_renal_band",
+                  "operator": "in",
+                  "value": [
+                    "40_49",
+                    "50_59"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl <40 mL/min or dialysis triggers the severe renal-impairment pathway; do not give cisplatin without specialist direction."
+          "message": "For curative BEP the consultant may retain full cisplatin with extra hydration, longer infusion and daily creatinine. Discuss Table 1 alternatives."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
         },
-        "explanation": "CrCl <40 mL/min or dialysis triggers the severe renal-impairment pathway; do not give cisplatin without specialist direction."
+        "explanation": "For curative BEP the consultant may retain full cisplatin with extra hydration, longer infusion and daily creatinine. Discuss Table 1 alternatives."
+      },
+      {
+        "id": "CIS_LOW",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "missing"
+            },
+            {
+              "all": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "day1",
+                    "days2to5"
+                  ]
+                },
+                {
+                  "field": "cisplatin_renal_band",
+                  "operator": "==",
+                  "value": "lt40"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Cisplatin is not recommended below 40 mL/min. Discuss the curative treatment plan urgently."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Cisplatin is not recommended below 40 mL/min. Discuss the curative treatment plan urgently."
       },
       {
         "id": "CIS_MG",
         "priority": 9,
         "when": {
-          "field": "magnesium_low_or_unreplaced",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "days2to5"
+              ]
+            },
+            {
+              "field": "magnesium_low_or_unreplaced",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "withhold",
@@ -659,35 +736,14 @@
           "message": "Correct electrolytes and confirm hydration before cisplatin."
         },
         "source": {
-          "document": "Current official NCCP regimen",
+          "document": "NCCP 00300 v7b",
           "page": "Dose modifications"
         },
         "explanation": "Correct electrolytes and confirm hydration before cisplatin."
       },
       {
-        "id": "CIS_NEURO",
-        "priority": 9,
-        "when": {
-          "field": "hearing_or_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Grade 2 or worse hearing/neurological toxicity requires cisplatin dose or substitution review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse hearing/neurological toxicity requires cisplatin dose or substitution review."
-      },
-      {
         "id": "BLEO_LUNG",
-        "priority": 10,
+        "priority": 9,
         "when": {
           "field": "new_respiratory_symptoms",
           "operator": "==",
@@ -698,13 +754,372 @@
           "components": [
             "bleomycin"
           ],
-          "message": "Withhold bleomycin and urgently assess for pulmonary toxicity."
+          "message": "Withhold bleomycin pending urgent assessment of new cough or dyspnoea. Do not reintroduce after bleomycin lung injury."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00300 v7b",
+          "page": "Pulmonary toxicity"
         },
-        "explanation": "Withhold bleomycin and urgently assess for pulmonary toxicity."
+        "explanation": "Withhold bleomycin pending urgent assessment of new cough or dyspnoea. Do not reintroduce after bleomycin lung injury."
+      },
+      {
+        "id": "BLEO_STOP",
+        "priority": 9,
+        "when": {
+          "field": "confirmed_bleo_lung_injury",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bleomycin"
+          ],
+          "message": "Discontinue bleomycin and do not reintroduce after pulmonary injury."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Pulmonary toxicity"
+        },
+        "explanation": "Discontinue bleomycin and do not reintroduce after pulmonary injury."
+      },
+      {
+        "id": "BLEO_MAX",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "bleomycin"
+              ]
+            },
+            {
+              "field": "planned_cumulative_bleomycin",
+              "operator": ">",
+              "value": 400000
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bleomycin"
+          ],
+          "message": "Proposed lifetime exposure exceeds 400,000 International Units. Do not give the planned dose."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Treatment"
+        },
+        "explanation": "Proposed lifetime exposure exceeds 400,000 International Units. Do not give the planned dose."
+      },
+      {
+        "id": "BLEO_RISK",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "bleomycin"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "planned_cumulative_bleomycin",
+                  "operator": ">",
+                  "value": 300000
+                },
+                {
+                  "field": "planned_cumulative_bleomycin",
+                  "operator": "<=",
+                  "value": 400000
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bleomycin"
+          ],
+          "message": "Pulmonary risk rises above 300,000 International Units. Verify cumulative exposure and pulmonary status."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Treatment"
+        },
+        "explanation": "Pulmonary risk rises above 300,000 International Units. Verify cumulative exposure and pulmonary status."
+      },
+      {
+        "id": "BLEO_RENAL_10TO50",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "bleomycin"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "bleomycin"
+          ],
+          "message": "Table 1 specifies 75% of the original bleomycin dose. Confirm any change with the prescribing consultant."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Table 1 specifies 75% of the original bleomycin dose. Confirm any change with the prescribing consultant."
+      },
+      {
+        "id": "BLEO_RENAL_LT10",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "bleomycin"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "bleomycin"
+          ],
+          "message": "Table 1 specifies 50% of the original bleomycin dose. Confirm any change with the prescribing consultant."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Table 1 specifies 50% of the original bleomycin dose. Confirm any change with the prescribing consultant."
+      },
+      {
+        "id": "ETO_RENAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "days2to5"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Start from 75% of original etoposide and increase if tolerated. Discuss with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Start from 75% of original etoposide and increase if tolerated. Discuss with the consultant."
+      },
+      {
+        "id": "ETO_LOW_CRCL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "days2to5"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Source does not give a non-dialysis dose below 10. Confirm renal replacement status and discuss the individual regimen."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Source does not give a non-dialysis dose below 10. Confirm renal replacement status and discuss the individual regimen."
+      },
+      {
+        "id": "ETO_LIVER",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "days2to5"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "albumin_below_normal",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Consider 50% of original etoposide, increasing if tolerated. Reconcile with renal function and the curative plan."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Consider 50% of original etoposide, increasing if tolerated. Reconcile with renal function and the curative plan."
+      },
+      {
+        "id": "CIS_CURATIVE_NUMERIC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "days2to5"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": ">=",
+              "value": 40
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Source bands give 75% at 50–59 or 50% at 40–49. The consultant may choose full dose with extra hydration, slower infusion and daily creatinine in this curative regimen."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Source bands give 75% at 50–59 or 50% at 40–49. The consultant may choose full dose with extra hydration, slower infusion and daily creatinine in this curative regimen."
+      },
+      {
+        "id": "CIS_LOW_NUMERIC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "days2to5"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 40
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Cisplatin is not recommended below 40 mL/min. Check dialysis status and discuss with consultant."
+        },
+        "source": {
+          "document": "NCCP 00300 v7b",
+          "page": "Table 1"
+        },
+        "explanation": "Cisplatin is not recommended below 40 mL/min. Check dialysis status and discuss with consultant."
       }
     ]
   },
@@ -719,13 +1134,101 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
-  }
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "phase_profiles": {
+      "day1": {
+        "label": "Day 1 · all three medicines",
+        "level": "high",
+        "script_id": "nccp-parenteral-high",
+        "prescription": "patient/00300/antiemetic-day1.pdf"
+      },
+      "days2to5": {
+        "label": "Days 2–5 · etoposide and cisplatin",
+        "level": "high",
+        "script_id": "nccp-parenteral-high",
+        "prescription": "patient/00300/antiemetic-days2to5.pdf"
+      },
+      "bleomycin": {
+        "label": "Days 8 and 15 · bleomycin",
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis",
+        "prescription": "patient/00300/antiemetic-bleomycin.pdf"
+      }
+    },
+    "prescription_index": "patient/00300/antiemetic-prescriptions.html",
+    "phase_specific_plan": "patient/00300/antiemetic-prescriptions.html",
+    "source_url": "https://healthservice.hse.ie/documents/6706/300_V7b_BEP.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "bep",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "bleomycin",
+          "dose": {
+            "value": 30000,
+            "unit": "International Units"
+          },
+          "days": [
+            1,
+            8,
+            15
+          ],
+          "route": "IV bolus or IM",
+          "note": "",
+          "order": 1
+        },
+        {
+          "drug": "etoposide",
+          "dose": {
+            "value": 100,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "route": "IV infusion",
+          "note": "Over 60 minutes.",
+          "order": 2
+        },
+        {
+          "drug": "cisplatin",
+          "dose": {
+            "value": 20,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "route": "IV infusion",
+          "note": "Over 60 minutes with hydration.",
+          "order": 3
+        }
+      ],
+      "notes": [
+        "Bleomycin, etoposide and cisplatin are given on day 1. IV fluids and an anti-sickness plan cover the five-day cisplatin block. Return on each of days 2, 3, 4 and 5 for etoposide, cisplatin and fluids. Keep using the same dated anti-sickness prescription for this block. Bleomycin alone on days 8 and 15. The cycle repeats every 21 days. The consultant confirms your total number of cycles based on diagnosis and risk."
+      ],
+      "active_drugs": [
+        "bleomycin",
+        "etoposide",
+        "cisplatin"
+      ]
+    }
+  ]
 }

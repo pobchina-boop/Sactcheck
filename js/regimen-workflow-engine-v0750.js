@@ -515,7 +515,7 @@
     return viewer;
   }
 
-  const prescriptionCodes=new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499']);
+  const prescriptionCodes=new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246']);
   async function openSupportivePdf(protocol,options={}){
     const code=nccpCodeFor(protocol);
     if (prescriptionCodes.has(code)) {

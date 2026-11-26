@@ -106,7 +106,12 @@ for (const code of gynae68Schedules) {
   const row = catalogue.protocols.find(x=>x.path.includes('/'+code+'-'));
   assert.equal(DoseSchedule.buildModel(require(path.join(root,row.path))).phases.length,2);
 }
-const expectedScheduleCoverage = gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
+const gynae69Schedules = ["00246", "00300", "00312", "00375", "00676"];
+for (const code of gynae69Schedules) {
+  const row = catalogue.protocols.find(x=>x.path.includes('/'+code+'-'));
+  assert.equal(DoseSchedule.buildModel(require(path.join(root,row.path))).phases.length,code==='00676'?2:1);
+}
+const expectedScheduleCoverage = gynae69Schedules.length + gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
 assert.strictEqual(usefulCoverage, expectedScheduleCoverage);
 assert.strictEqual(scheduleCoverage, expectedScheduleCoverage);
 assert.strictEqual(doseLevelCoverage, 67);

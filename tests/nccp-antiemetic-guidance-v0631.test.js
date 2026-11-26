@@ -35,6 +35,17 @@ const dualImmuneV35 = {
 // NCCP 00746 v2 distinguishes oral olaparib and bevacizumab on page 9.
 const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate'};
 const gynaePhases = {
+  "00246":{"level": "phase_dependent", "phases": {"injections": "low", "rescue": "minimal"}},
+  "00300":{"level": "phase_dependent", "phases": {"day1": "high", "days2to5": "high", "bleomycin": "minimal"}},
+  "00312":{"level": "low", "phases": {"weekly": "low"}},
+  "00375":{"level": "moderate", "phases": {"combination": "moderate"}},
+  "00676":{"level": "phase_dependent", "phases": {"radiation": "high", "chemotherapy": "high"}},
+  "00499":{"level": "phase_dependent", "phases": {"day1": "high", "day8": "low", "maintenance": "minimal"}},
+  "00766":{"level": "phase_dependent", "phases": {"postop": "high", "combination": "high", "maintenance": "minimal"}},
+  "00799":{"level": "high", "phases": {"combination": "high"}},
+  "00811":{"level": "phase_dependent", "phases": {"combination": "high", "maintenance": "minimal"}},
+  "00817":{"level": "phase_dependent", "phases": {"combination": "high", "maintenance": "minimal"}},
+
   '00620':{level:'phase_dependent',phases:{combination:'high',maintenance:'minimal'}},
   '00716':{level:'phase_dependent',phases:{combination:'high',maintenance:'minimal'}},
   '00769':{level:'low',phases:{both:'low',weekly:'low'}},

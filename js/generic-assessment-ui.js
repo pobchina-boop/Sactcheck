@@ -440,12 +440,18 @@
     riskElement.className = `emetogenic-inline ${risk.className}`;
     const proformaLink = document.getElementById("jsonAntiemeticProforma");
     const supportiveUrl = risk.proformaUrl || protocol.supportive_care?.supportive_medications_pdf_url;
+    proformaLink.removeAttribute("download");
     if (supportiveUrl) {
       proformaLink.href = supportiveUrl;
       const isLocalAsset = !/^https?:/i.test(supportiveUrl);
       proformaLink.innerHTML = isLocalAsset
         ? '<span aria-hidden="true">●</span> Local supportive sheet (validate)'
         : '<span aria-hidden="true">●</span> NCCP antiemetic guidance';
+      if (protocol.supportive_care?.prescription_index) {
+        const directPdf = supportiveUrl.endsWith(".pdf");
+        proformaLink.textContent = directPdf ? "Download antiemetic prescription PDF" : "Choose the visit and prescription";
+        if (directPdf) proformaLink.setAttribute("download", "");
+      }
       proformaLink.classList.remove("hidden");
     } else {
       proformaLink.removeAttribute("href");
@@ -959,7 +965,7 @@
   function updateConditionalInputs() {
     if (!activeProtocol) return;
     const rawInputs = collectRawInputs(true);
-    renderSupportiveRisk(activeProtocol, rawInputs.treatment_phase, rawInputs.treatment_day, rawInputs.vinorelbine_route, rawInputs[activeProtocol.supportive_care?.schedule_context_input]);
+    renderSupportiveRisk(activeProtocol, (activeProtocol.supportive_care?.prescription_index ? rawInputs.treatment_visit : null) || rawInputs.treatment_phase, rawInputs.treatment_day, rawInputs.vinorelbine_route, rawInputs[activeProtocol.supportive_care?.schedule_context_input]);
     const definitions = presentationInputDefinitions(activeProtocol, activeProfileId, rawInputs);
 
     definitions.forEach(definition => {

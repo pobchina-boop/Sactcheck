@@ -10,7 +10,7 @@ assert.equal(legacy.length,377);
 const priorId='nccp-00897-v3', updatedId='nccp-00897-v4', addedId='nccp-00953-v1a';
 assert.equal(legacy.filter(r=>r.id===priorId).length,1);
 assert(!legacy.some(r=>r.id===updatedId || r.id===addedId));
-const revisedIds = new Map([[priorId, updatedId], ['nccp-00374-v4','nccp-00374-v4a'], ['nccp-00554-v2','nccp-00554-v3'], ['nccp-00811-v2','nccp-00811-v3'], ['nccp-00817-v2','nccp-00817-v3']]);
+const revisedIds = new Map([[priorId, updatedId], ['nccp-00374-v4','nccp-00374-v4a'], ['nccp-00554-v2','nccp-00554-v3'], ['nccp-00811-v2','nccp-00811-v3'], ['nccp-00817-v2','nccp-00817-v3'], ['nccp-00375-v6','nccp-00375-v6a']]);
 for (const id of revisedIds.keys()) assert.equal(legacy.filter(row => row.id === id).length, 1);
 const expected=legacy.map(r=>revisedIds.get(r.id) || r.id).concat(addedId).sort();
 assert.deepEqual(current.map(r=>r.id).sort(),expected);

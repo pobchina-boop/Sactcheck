@@ -15,8 +15,8 @@
     "indication": "Adjuvant treatment of high-risk stage I–III endometrial carcinoma after surgery.",
     "source_url": "https://healthservice.hse.ie/documents/6673/676_v3_Cisplatin_50mgm2_with_RT_Pacli_Carbo.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.84.69",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "endometrial_adjuvant",
@@ -35,9 +35,8 @@
     },
     "drugs": [
       "cisplatin",
-      "radiotherapy",
-      "carboplatin",
-      "paclitaxel"
+      "paclitaxel",
+      "carboplatin"
     ],
     "common_trade_names": [
       "Taxol",
@@ -94,12 +93,11 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Cisplatin 50 mg/m² Chemoradiation followed by Carboplatin AUC 5 and Paclitaxel 175 mg/m²",
+    "schedule_summary": "Usually start 4–6 weeks after surgery. Cisplatin is given before radiation on two treatment days three weeks apart. Ring both teams if radiation is cancelled. Cisplatin is only given on a radiation day. Within three weeks of finishing radiation, start paclitaxel then carboplatin AUC 5, every three weeks for four cycles. Bring your steroid premedication instructions.",
     "drugs": [
       "cisplatin",
-      "radiotherapy",
-      "carboplatin",
-      "paclitaxel"
+      "paclitaxel",
+      "carboplatin"
     ]
   },
   "input_definitions": {
@@ -254,7 +252,7 @@
       "input_role": "decision"
     },
     "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
+      "label": "Confirmed paclitaxel infusion reaction grade",
       "type": "select",
       "required": false,
       "options": [
@@ -443,6 +441,83 @@
       "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
       "assessment_guidance": "Assess sensory/motor symptoms, gait, fine motor function and effect on daily activities.",
       "input_role": "decision"
+    },
+    "treatment_visit": {
+      "type": "select",
+      "label": "Treatment being given at this visit",
+      "required": false,
+      "options": [
+        {
+          "value": "radiation",
+          "label": "During pelvic radiotherapy"
+        },
+        {
+          "value": "chemotherapy",
+          "label": "After radiotherapy"
+        }
+      ],
+      "demo_value": "radiation",
+      "input_role": "context"
+    },
+    "radiation_cancelled": {
+      "type": "boolean",
+      "label": "Radiotherapy will not be given today",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cis_neuropathy_grade": {
+      "label": "Peripheral neuropathy grade before cisplatin",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No neuropathy."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild symptoms without functional limitation."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate symptoms limiting instrumental activities of daily living."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe symptoms limiting self-care activities of daily living."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening neurological consequences."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "neuropathy",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Assess sensory/motor symptoms, gait, fine motor function and effect on daily activities.",
+      "input_role": "decision"
+    },
+    "alt_uln_multiple": {
+      "type": "number",
+      "label": "ALT relative to local ULN",
+      "unit": "×ULN",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision"
     }
   },
   "required_inputs": [],
@@ -475,246 +550,308 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "id": "SELECT_VISIT",
+        "priority": 9,
         "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "field": "treatment_visit",
+          "operator": "missing"
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Select the visit before interpreting component-specific dosing or toxicity."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Treatment"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+        "explanation": "Select the visit before interpreting component-specific dosing or toxicity."
       },
       {
-        "id": "NONHAEM_G3",
+        "id": "RT_CANCELLED",
         "priority": 9,
         "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "radiation_cancelled",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "cisplatin"
           ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
+          "message": "Withhold cisplatin if radiotherapy is cancelled that day. Coordinate with radiation oncology."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Treatment"
         },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
+        "explanation": "Withhold cisplatin if radiotherapy is cancelled that day. Coordinate with radiation oncology."
       },
       {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
+        "id": "CIS_COUNTS",
         "priority": 9,
         "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "delay",
           "components": [
-            "whole_regimen"
+            "cisplatin"
           ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
+          "message": "Postpone one week. Stop cisplatin if recovery takes longer than one week."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Table 1"
         },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "CARBO_GFR_LOW",
-        "priority": 9,
-        "when": {
-          "field": "gfr_or_crcl_ml_min",
-          "operator": "<",
-          "value": 30
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-      },
-      {
-        "id": "CARBO_HSR",
-        "priority": 10,
-        "when": {
-          "field": "carboplatin_hypersensitivity_history",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
+        "explanation": "Postpone one week. Stop cisplatin if recovery takes longer than one week."
       },
       {
         "id": "CIS_50_59",
         "priority": 9,
         "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "50_59"
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "cisplatin_renal_band",
+              "operator": "==",
+              "value": "50_59"
+            }
+          ]
         },
         "action": {
-          "type": "consultant_review",
+          "type": "dose_reduce",
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl 50–59 mL/min requires the regimen-specific cisplatin dose/substitution pathway."
+          "message": "Give 75% of cisplatin."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
         },
-        "explanation": "CrCl 50–59 mL/min requires the regimen-specific cisplatin dose/substitution pathway."
+        "explanation": "Give 75% of cisplatin."
       },
       {
         "id": "CIS_40_49",
-        "priority": 10,
+        "priority": 9,
         "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "40_49"
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "cisplatin_renal_band",
+              "operator": "==",
+              "value": "40_49"
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Give 50% of the original cisplatin dose."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
+        },
+        "explanation": "Give 50% of the original cisplatin dose."
+      },
+      {
+        "id": "CIS_lt40",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "cisplatin_renal_band",
+              "operator": "==",
+              "value": "lt40"
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl 40–49 mL/min requires withholding cisplatin and Consultant review of reduction or alternative treatment."
+          "message": "Cisplatin is not recommended below 40 mL/min."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
         },
-        "explanation": "CrCl 40–49 mL/min requires withholding cisplatin and Consultant review of reduction or alternative treatment."
+        "explanation": "Cisplatin is not recommended below 40 mL/min."
       },
       {
-        "id": "CIS_LT40",
-        "priority": 10,
+        "id": "CIS_dialysis",
+        "priority": 9,
         "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "in",
-          "value": [
-            "lt40",
-            "dialysis"
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "cisplatin_renal_band",
+              "operator": "==",
+              "value": "dialysis"
+            }
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl <40 mL/min or dialysis triggers the severe renal-impairment pathway; do not give cisplatin without specialist direction."
+          "message": "Review with oncology pharmacy and renal team. A 50% cisplatin dose may be considered."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
         },
-        "explanation": "CrCl <40 mL/min or dialysis triggers the severe renal-impairment pathway; do not give cisplatin without specialist direction."
+        "explanation": "Review with oncology pharmacy and renal team. A 50% cisplatin dose may be considered."
+      },
+      {
+        "id": "CIS_G2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "cis_neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Reduce cisplatin by 25%."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 2"
+        },
+        "explanation": "Reduce cisplatin by 25%."
+      },
+      {
+        "id": "CIS_G3",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "cis_neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Omit cisplatin."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 2"
+        },
+        "explanation": "Omit cisplatin."
       },
       {
         "id": "CIS_MG",
         "priority": 9,
         "when": {
-          "field": "magnesium_low_or_unreplaced",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "radiation"
+              ]
+            },
+            {
+              "field": "magnesium_low_or_unreplaced",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "withhold",
@@ -724,94 +861,484 @@
           "message": "Correct electrolytes and confirm hydration before cisplatin."
         },
         "source": {
-          "document": "Current official NCCP regimen",
+          "document": "NCCP 00676 v3",
           "page": "Dose modifications"
         },
         "explanation": "Correct electrolytes and confirm hydration before cisplatin."
       },
       {
-        "id": "CIS_NEURO",
+        "id": "POST_RT_COUNTS",
         "priority": 9,
         "when": {
-          "field": "hearing_or_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "consultant_review",
+          "type": "delay",
           "components": [
-            "cisplatin"
+            "paclitaxel",
+            "carboplatin"
           ],
-          "message": "Grade 2 or worse hearing/neurological toxicity requires cisplatin dose or substitution review."
+          "message": "Delay chemotherapy until counts recover."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Table 3"
         },
-        "explanation": "Grade 2 or worse hearing/neurological toxicity requires cisplatin dose or substitution review."
+        "explanation": "Delay chemotherapy until counts recover."
       },
       {
-        "id": "TAXANE_NEURO_G2",
-        "priority": 8,
+        "id": "POST_RT_SEVERE",
+        "priority": 9,
         "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 50
+                },
+                {
+                  "field": "febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
         },
         "action": {
-          "type": "consultant_review",
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery. Consider a 25% reduction in subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Delay until recovery. Consider a 25% reduction in subsequent cycles."
+      },
+      {
+        "id": "TAX_G2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
           "components": [
             "paclitaxel"
           ],
-          "message": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
+          "message": "Reduce paclitaxel by 25%, or by 50% if grade 2 persists."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Table 4"
         },
-        "explanation": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
+        "explanation": "Reduce paclitaxel by 25%, or by 50% if grade 2 persists."
       },
       {
-        "id": "TAXANE_NEURO_G3",
-        "priority": 10,
+        "id": "TAX_G3",
+        "priority": 9,
         "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 3
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Omit paclitaxel."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 4"
+        },
+        "explanation": "Omit paclitaxel."
+      },
+      {
+        "id": "TAX_LIVER_STOP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Paclitaxel is contraindicated at these results."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
+        },
+        "explanation": "Paclitaxel is contraindicated at these results."
+      },
+      {
+        "id": "TAX_LIVER_2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">=",
+                  "value": 1.26
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Table 5 specifies paclitaxel 131 mg/m²."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
+        },
+        "explanation": "Table 5 specifies paclitaxel 131 mg/m²."
+      },
+      {
+        "id": "TAX_LIVER_5",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">=",
+                  "value": 2.01
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Table 5 specifies paclitaxel 87.5 mg/m²."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Table 5"
+        },
+        "explanation": "Table 5 specifies paclitaxel 87.5 mg/m²."
+      },
+      {
+        "id": "CARBO_HSR",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "chemotherapy"
+              ]
+            },
+            {
+              "field": "carboplatin_hypersensitivity_history",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Dose modifications"
+        },
+        "explanation": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
+      },
+      {
+        "id": "CARBO_GFR_STOP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "==",
+              "value": "chemotherapy"
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
-            "paclitaxel"
+            "carboplatin"
           ],
-          "message": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
+          "message": "Do not administer carboplatin at GFR ≤20 mL/min."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Tables 4–5"
         },
-        "explanation": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
+        "explanation": "Do not administer carboplatin at GFR ≤20 mL/min."
       },
       {
-        "id": "TAXANE_LFT",
-        "priority": 8,
+        "id": "CARBO_GFR_CAUTION",
+        "priority": 9,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.25
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "==",
+              "value": "chemotherapy"
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": ">",
+                  "value": 20
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Use extreme caution in the >20 to 30 mL/min band. Confirm the renal estimate and dose with oncology pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Tables 4–5"
+        },
+        "explanation": "Use extreme caution in the >20 to 30 mL/min band. Confirm the renal estimate and dose with oncology pharmacy."
+      },
+      {
+        "id": "TAX_LIVER_GAP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "==",
+              "value": "chemotherapy"
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 1.25
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<",
+                      "value": 1.26
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 2
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<",
+                      "value": 2.01
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "paclitaxel"
           ],
-          "message": "Elevated bilirubin requires the paclitaxel hepatic dose-modification table."
+          "message": "Value lies between the printed bands. Review original results and obtain a prescribing decision."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00676 v3",
+          "page": "Tables 4–5"
         },
-        "explanation": "Elevated bilirubin requires the paclitaxel hepatic dose-modification table."
+        "explanation": "Value lies between the printed bands. Review original results and obtain a prescribing decision."
+      },
+      {
+        "id": "TAX_HSR",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "==",
+              "value": "chemotherapy"
+            },
+            {
+              "field": "hypersensitivity_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Discontinue paclitaxel after a grade 3 or higher paclitaxel reaction."
+        },
+        "source": {
+          "document": "NCCP 00676 v3",
+          "page": "Tables 4–5"
+        },
+        "explanation": "Discontinue paclitaxel after a grade 3 or higher paclitaxel reaction."
       }
     ]
   },
@@ -827,20 +1354,109 @@
   ],
   "supportive_care": {
     "emetogenic_risk": "phase_dependent",
-    "script_id": "nccp-parenteral-high",
+    "script_id": null,
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "phase_profiles": {
-      "combination_or_intensive_phase": {
-        "emetogenic_risk": "high",
-        "script_id": "nccp-parenteral-high"
+      "radiation": {
+        "label": "During pelvic radiotherapy",
+        "level": "high",
+        "script_id": "nccp-parenteral-high",
+        "prescription": "patient/00676/antiemetic-radiation.pdf"
       },
-      "single_agent_or_maintenance_phase": {
-        "emetogenic_risk": "low",
-        "script_id": "nccp-parenteral-low"
+      "chemotherapy": {
+        "label": "After radiotherapy",
+        "level": "high",
+        "script_id": "nccp-v8-carboplatin-v08420",
+        "prescription": "patient/00676/antiemetic-chemotherapy.pdf"
       }
+    },
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "prescription_index": "patient/00676/antiemetic-prescriptions.html",
+    "phase_specific_plan": "patient/00676/antiemetic-prescriptions.html",
+    "source_url": "https://healthservice.hse.ie/documents/6673/676_v3_Cisplatin_50mgm2_with_RT_Pacli_Carbo.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "radiation",
+      "cycle_length_days": 21,
+      "cycles": [
+        1,
+        2
+      ],
+      "administration": [
+        {
+          "drug": "cisplatin",
+          "dose": {
+            "value": 50,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Two cycles three weeks apart. Give before radiotherapy on a radiation day.",
+          "order": 1
+        }
+      ],
+      "notes": [
+        "Usually start 4–6 weeks after surgery. Cisplatin is given before radiation on two treatment days three weeks apart. Ring both teams if radiation is cancelled. Cisplatin is only given on a radiation day. Within three weeks of finishing radiation, start paclitaxel then carboplatin AUC 5, every three weeks for four cycles. Bring your steroid premedication instructions."
+      ],
+      "active_drugs": [
+        "cisplatin"
+      ]
+    },
+    {
+      "phase_id": "chemotherapy",
+      "cycle_length_days": 21,
+      "cycles": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "administration": [
+        {
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 175,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Over three hours.",
+          "order": 1
+        },
+        {
+          "drug": "carboplatin",
+          "dose": {
+            "value": 5,
+            "unit": "AUC"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Four cycles after RT. Calvert dosing using the NCCP renal assessment.",
+          "order": 2
+        }
+      ],
+      "notes": [
+        "Usually start 4–6 weeks after surgery. Cisplatin is given before radiation on two treatment days three weeks apart. Ring both teams if radiation is cancelled. Cisplatin is only given on a radiation day. Within three weeks of finishing radiation, start paclitaxel then carboplatin AUC 5, every three weeks for four cycles. Bring your steroid premedication instructions."
+      ],
+      "active_drugs": [
+        "paclitaxel",
+        "carboplatin"
+      ]
     }
-  }
+  ],
+  "regimen_components": [
+    "Cisplatin",
+    "Paclitaxel",
+    "Carboplatin"
+  ]
 }
