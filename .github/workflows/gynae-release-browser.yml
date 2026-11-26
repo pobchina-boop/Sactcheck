@@ -1,0 +1,57 @@
+name: Gynaecology release browser verification
+on:
+  push:
+    branches: [qa/gynae-08466-browser]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: validation/gynae-browser-check.cjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 13a900a68842d55444754d63fe1d234509d6498c
+          fetch-depth: 0
+          path: candidate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install browser client
+        run: npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false playwright@1.56.1
+      - name: Build and verify the release
+        working-directory: candidate
+        run: |
+          npm run build:pages
+          npm run security:site
+          node tests/gynae-batch-v08466.test.cjs
+      - name: Check ten regimens and all consent and prescription downloads on desktop and mobile
+        working-directory: candidate
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          SACT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser/node_modules/playwright
+        run: node ../validation/gynae-browser-check.cjs
+      - name: Check catalogue startup, card geometry and existing clinical and patient journeys
+        if: success() || failure()
+        working-directory: candidate
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          SACT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser/node_modules/playwright
+          SACT_SITE_DIR: ${{ github.workspace }}/candidate/_site
+          SACT_TEST_SITE: ${{ github.workspace }}/candidate/_site
+          SACT_STARTUP_EVIDENCE: ${{ runner.temp }}/evidence/startup
+          SACT_VISUAL_DIR: ${{ runner.temp }}/evidence/navigation
+          SACT_WORKFLOW_EVIDENCE_DIR: ${{ runner.temp }}/evidence/workflow
+          SACT_CONTRAST_EVIDENCE_DIR: ${{ runner.temp }}/evidence/contrast
+          SACT_CLINICAL_EVIDENCE_DIR: ${{ runner.temp }}/evidence/clinical
+        run: npm run test:patient-browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-browser-evidence
+          retention-days: 14
+          path: ${{ runner.temp }}/evidence
