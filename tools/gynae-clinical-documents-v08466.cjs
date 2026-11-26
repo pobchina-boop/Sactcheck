@@ -1,5 +1,20 @@
 'use strict';
 const sections = {
+  docetaxel: [
+    ['Blood counts, bowel and fluid','Fever, chills or abdominal pain with diarrhoea need an urgent call. Report ankle swelling. Hair and nail changes can occur.'],
+    ['Infusion reaction','Tell the nurse immediately about flushing, wheeze or dizziness. Take the prescribed steroid before infusion.']
+  ],
+  oxaliplatin: [
+    ['Cold sensitivity and nerve injury','Cold can trigger tingling or throat tightness. Numbness may persist and affect walking or finger movements. Report it before the next cycle.'],
+    ['Allergy or line pain','Tell the nurse immediately about swelling, stinging, rash or trouble breathing.']
+  ],
+  '5-fluorouracil': [
+    ['Mouth, gut, hands and feet','Report ulcers, diarrhoea, painful palms or soles early. Severe toxicity can develop rapidly with low DPD activity.'],
+    ['Chest pain','Fluorouracil can cause coronary spasm during or after the pump. Get urgent help for chest pain.']
+  ],
+  'folinic acid': [
+    ['Interaction and allergy','Folinic acid strengthens fluorouracil and can increase mouth and bowel symptoms. Alert the nurse for a new rash, swelling or wheeze.']
+  ],
   bevacizumab: [
     ['Blood pressure and urine protein','High blood pressure and protein leaking into urine can develop without symptoms. Attend blood pressure and urine checks.'],
     ['Bleeding, clots and wound healing','Report bleeding or a wound that opens. Tell the team before surgery or invasive procedures. Sudden chest pain, weakness or severe breathlessness needs emergency help.'],
@@ -37,7 +52,7 @@ const sections = {
     ['Other immune reactions','Report new muscle weakness, chest pain, reduced urine, blistering skin, eye pain or altered vision urgently. Reactions can begin after treatment stops. Carry your immunotherapy alert card.']
   ]
 };
-const codes = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
+const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
 const h = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const table=(headers,rows)=>'<table><thead><tr>'+headers.map(x=>'<th scope="col">'+h(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+h(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 const header=(p,name)=>'<header><div class="brand">SACT<span>Check</span></div><div class="reference">NCCP '+h(p.code)+' · v'+h(p.protocol_version)+'</div></header><h1>'+h(name)+'</h1><p class="regimen">'+h(p.title)+'</p>';
@@ -51,6 +66,11 @@ function consent(p){
 }
 function rx(p,phase){
  const level=phase.emetogenic_risk,high=level==='high',low=level==='low';
+ if (p.code==='00344' && phase.id==='flot') {
+  const rows = phase.medicines.map(m=>[m.name,m.dose.replace(/\bPO\b/g,'by mouth'),m.timing]);
+  const body = header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>FLOT infusion · cycles 1–8</strong><span>MODERATE EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies and reactions</span></div><h2>Day unit</h2>'+table(['Medicine','Dose and route','Directions'],[rows[0]])+'<h2>Scheduled steroid · one combined plan</h2>'+table(['Medicine','Dose and route','Directions'],rows.slice(1,3))+'<p class="note">Confirm at least three steroid doses before docetaxel. If missed, contact the consultant. Record the total steroid dose before signing.</p><h2>Take home · as needed</h2>'+table(['Medicine','Dose and route','Directions'],[rows[3]])+'<p class="note">'+h(phase.medicines[3].note)+'</p><div class="fields"><span>Duration / quantity</span><span>Prescriber amendments</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · NCCP 00344 v9 and NCIS Medical Oncology v8 · Requires signature.</footer>';
+  return page(p,'Antiemetic prescription','antiemetic-flot.pdf','<article>'+body+'</article>');
+ }
  if(![high,low,level==='minimal'].some(Boolean))throw Error('Unhandled antiemetic plan '+level);
  const taxane=phase.active_medicines.some(x=>/paclitaxel/i.test(x));
  const rows=phase.medicines.map(m=>[m.name,m.dose.replace(/\bPO\b/g,'by mouth'),m.timing.replace(/\bOD\b/g,'Once daily').replace(/\bTDS\b/g,'Three times daily').replace(/\bPRN\b/g,'as needed')]);

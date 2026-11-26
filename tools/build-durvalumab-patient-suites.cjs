@@ -7,7 +7,8 @@ const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
 const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
-const codes = new Set([...gynaecology, '00897', '00926', '00953']);
+const illustratedSuites = new Set([...gynaecology, '00344']);
+const codes = new Set([...illustratedSuites, '00897', '00926', '00953']);
 const esc = value => String(value ?? '').replace(/[<>&"']/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[s]));
 const link = (href,text) => '<a href="'+esc(href)+'">'+esc(text)+'</a>';
 const section = (id,title,body) => '<section id="'+id+'"><h2>'+esc(title)+'</h2>'+body+'</section>';
@@ -97,8 +98,8 @@ function renderPages(code, root = projectRoot) {
  files['handbook-print.html']=document(d,'My treatment handbook',handbook,'handbook.pdf');
  files['index.html']=buildOverview(localisePack(pack.portal,d),{root,route:code,profile:d,guideHtml:files['guide.html'],cardHtml:files['sactcard.html'],knowledgeHtml:files['knowledge.html']});
  const pictureEntry = require('./durvalumab-symptom-entry.cjs').entry;
- if (!gynaecology.has(code)) for (const name of ['index.html','knowledge.html']) files[name]=pictureEntry(code,name,files[name]);
- if (gynaecology.has(code)) {
+ if (!illustratedSuites.has(code)) for (const name of ['index.html','knowledge.html']) files[name]=pictureEntry(code,name,files[name]);
+ if (illustratedSuites.has(code)) {
   const map = require('../js/patient-anatomy-v08431.js').render(d);
   files['knowledge.html'] = files['knowledge.html'].replace('</head>','<link rel="stylesheet" href="../../assets/patient/hcc-bodymap-v08431.css"></head>').replace('<section id="common-effects">', map+'<section id="common-effects">');
   const agentRisks = section('risks-by-medicine','Risks to discuss for each medicine',paragraphs(d.agents.map(a => ({title:a.name,text:a.risks.join(', ')+'. '+a.watch}))));
@@ -111,6 +112,13 @@ function renderPages(code, root = projectRoot) {
    if(gynaeBatch.has(code) && code !== '00819') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
    if(code==='00862') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry this card and your latest prescription.').replaceAll('My cycle record','My review record');
   }
+ }
+ if (d.pump_care) {
+  const pump = section('pump-care','Using your 24-hour pump',paragraphs(d.pump_care));
+  files['port-pump.html'] = document(d,'My line and pump',pump+action,'port-pump.pdf').replace('href="port-pump.pdf"','download href="port-pump.pdf"');
+  files['handbook-print.html'] = files['handbook-print.html'].replace('</main>',sheet(pump)+'</main>');
+  if (!files['index.html'].includes('href="port-pump.html"')) files['index.html'] = files['index.html'].replace('</main>','<p><a href="port-pump.html">Using your 24-hour pump</a> · <a download href="port-pump.pdf">Pump instructions PDF</a></p></main>');
+  for (const name of Object.keys(files)) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
  }
  const clinical=require('./gynae-clinical-documents-v08466.cjs');
  if(clinical.codes.has(code)){

@@ -390,7 +390,7 @@
     if(!protocol) throw new Error("A protocol is required.");
     const metadata=protocol.metadata||{};
     const choices=supportPhaseChoices(protocol,data);
-    const phase=choices.find(item=>item.id===supportPhaseId);
+    const phase=choices.find(item=>item.id===supportPhaseId) || (metadata.nccp_regimen_code==="00344" && !supportPhaseId && choices.length===1 ? choices[0] : undefined);
     // Never classify a selected phase using the whole regimen's drug list.
     if(choices.length||riskRecord.baseLevel==="phase_dependent"||riskRecord.level==="phase_dependent"){
       riskRecord={...riskRecord,baseLevel:"phase_dependent",level:"phase_dependent",phaseResolved:false};
@@ -515,7 +515,7 @@
     return viewer;
   }
 
-  const prescriptionCodes=new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
+  const prescriptionCodes=new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
   async function openSupportivePdf(protocol,options={}){
     const code=nccpCodeFor(protocol);
     if (prescriptionCodes.has(code)) {

@@ -40,6 +40,12 @@ for (const file of paths) {
     assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
     assert.equal(require('node:crypto').createHash('sha256').update(expected).digest('hex'),record.files[file].before,file);
     release.verifyFile(file);
+  } else if (code === '00344') {
+    const release = require('./helpers/live-release-v08464.cjs');
+    const {record} = release.flot67Inventory();
+    assert(expected.equals(git('show',record.base+':'+file)),file+' FLOT predecessor');
+    assert.equal(require('node:crypto').createHash('sha256').update(expected).digest('hex'),record.files[file].before,file);
+    release.verifyFile(file);
   } else if (code === '00205') {
     const prior = JSON.parse(expected);
     const breast = prior.assessment_by_indication['00205a'];

@@ -131,6 +131,7 @@ for(const p of [mono,combo]){
       '00308':['Carboplatin','Paclitaxel'],
       '00624':['Pegylated Liposomal Doxorubicin','Carboplatin'],
       '00819':['Dostarlimab'],
+      '00344':['Docetaxel','Oxaliplatin','Folinic Acid','5 Fluorouracil'],
       '00620':['Bevacizumab','Carboplatin','Paclitaxel'],
       '00716':['Bevacizumab','Carboplatin','Paclitaxel'],
       '00769':['Bevacizumab','Paclitaxel'],

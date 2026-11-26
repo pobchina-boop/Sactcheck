@@ -94,8 +94,16 @@ for (const code of gynaeSchedules) {
   const model=DoseSchedule.buildModel(require(path.join(root,row.path)));
   assert.deepEqual(Array.from(model.phases,phase=>phase.cycleLength),code==='00308'?[21]:[21,42]);
 }
-assert.strictEqual(usefulCoverage,258+newSarcomaSchedules.length+gynaeSchedules.length);
-assert.strictEqual(scheduleCoverage,258+newSarcomaSchedules.length+gynaeSchedules.length);
+const flotSchedule = catalogue.protocols.find(entry => entry.path.includes('/00344-'));
+const flotBefore = JSON.parse(require('node:child_process').execFileSync('git', ['show', '13a900a68842d55444754d63fe1d234509d6498c:' + flotSchedule.path], {cwd: root}));
+assert.equal(DoseSchedule.hasData(flotBefore), false);
+const flotPhases = DoseSchedule.buildModel(require(path.join(root, flotSchedule.path))).phases;
+assert.equal(flotPhases.length, 1);
+assert.equal(flotPhases[0].cycleLength, 14);
+assert.deepEqual(Array.from(flotPhases[0].components, item => item.id), ['docetaxel', 'oxaliplatin', 'folinic_acid', '5fu']);
+const expectedScheduleCoverage = 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
+assert.strictEqual(usefulCoverage, expectedScheduleCoverage);
+assert.strictEqual(scheduleCoverage, expectedScheduleCoverage);
 assert.strictEqual(doseLevelCoverage, 67);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.

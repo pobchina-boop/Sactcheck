@@ -11,8 +11,8 @@
     "short_title": "FLOT Therapy – 14 day",
     "indication": "Perioperative treatment of resectable locally advanced gastric or oesophagogastric junction adenocarcinoma.",
     "source_url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.39.0",
+    "source_document_pages": 7,
+    "sactcheck_encoding_version": "0.84.67",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gi_subgroup": "upper_gi",
@@ -65,40 +65,87 @@
       "scope_note": "The NCCP states that its website list is not comprehensive. This reconciliation does not assert that every possible national regimen is published online."
     },
     "encoding_maturity": {
-      "level": "legacy_encoded_pending_source_fidelity_review",
-      "label": "Encoded protocol · full source coverage review pending",
-      "source_reconciled": false,
+      "level": "source_reconciled_pending_independent_validation",
+      "label": "NCCP v9 reconciled · independent review pending",
+      "source_reconciled": true,
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "audit_release": "0.68.0",
-      "audit_date": "2026-08-15",
-      "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
+      "audit_release": "0.84.67",
+      "audit_date": "2026-11-26",
+      "scope_note": "NCCP 00344 pp 1–6, tables 1–5. Cycle 5 timing is external recovery guidance."
     },
-    "catalogue_source_checked_date": "2026-07-29",
+    "catalogue_source_checked_date": "2026-11-26",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00344-v9"
+    "canonical_protocol_id": "nccp-00344-v9",
+    "review_date": "2021-04-28"
   },
   "clinical_governance": {
-    "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
+    "prescriptive_authority": "Consultant medical oncologist initiates the plan. Discuss dose changes with the consultant.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm dose changes against the current official NCCP PDF.",
     "disclaimer": "Decision-support encoding derived from NCCP 00344 Version 9. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
   },
   "indications": [
     {
       "indication_id": "00344a",
-      "description": "Perioperative treatment of resectable locally advanced gastric or oesophagogastric junction adenocarcinoma."
+      "code": "00344a",
+      "description": "Resectable gastric adenocarcinoma, cT2 or higher and/or node positive."
+    },
+    {
+      "indication_id": "00344b",
+      "code": "00344b",
+      "description": "Resectable oesophagogastric junction adenocarcinoma, cT2 or higher and/or node positive."
     }
   ],
   "treatment": {
     "cycle_length_days": 14,
-    "schedule_summary": "FLOT Therapy – 14 day",
+    "schedule_summary": "Four cycles every 14 days before surgery, followed by four cycles every 14 days after recovery. Cycle 5 usually starts 6–12 weeks after surgery.",
     "drugs": [
       "docetaxel",
       "oxaliplatin",
       "folinic acid",
       "5-fluorouracil"
-    ]
+    ],
+    "administration": [
+      {
+        "drug": "Docetaxel",
+        "dose": "50 mg/m²",
+        "route": "IV infusion",
+        "day": "1",
+        "duration": "60 min",
+        "order": 1,
+        "note": "60 min. Premedicate with dexamethasone."
+      },
+      {
+        "drug": "Oxaliplatin",
+        "dose": "85 mg/m²",
+        "route": "IV infusion",
+        "day": "1",
+        "duration": "2 hours",
+        "order": 2,
+        "note": "2 hours. Use glucose 5%. Avoid saline flushes. Give before fluorouracil."
+      },
+      {
+        "drug": "Folinic acid",
+        "dose": "200 mg/m²",
+        "route": "IV infusion",
+        "day": "1",
+        "duration": "2 hours",
+        "order": 3,
+        "note": "2 hours. May run concurrently with oxaliplatin via a Y connector. Give before fluorouracil."
+      },
+      {
+        "drug": "5-Fluorouracil",
+        "dose": "2600 mg/m²",
+        "route": "Continuous IV infusion",
+        "day": "1",
+        "duration": "24 hours",
+        "order": 4,
+        "note": "24 hours. Connect pump on day 1. Arrange day 2 disconnection."
+      }
+    ],
+    "planned_cycles": 8,
+    "duration_text": "4 cycles before surgery and 4 after recovery"
   },
   "input_definitions": {
     "ecog": {
@@ -333,7 +380,7 @@
       "input_role": "decision"
     },
     "neuropathy_grade": {
-      "label": "Peripheral sensory neuropathy grade",
+      "label": "Peripheral neuropathy grade at start of cycle",
       "type": "select",
       "required": false,
       "options": [
@@ -376,13 +423,13 @@
       "input_role": "decision"
     },
     "oxaliplatin_renal_band": {
-      "label": "Renal function for oxaliplatin",
+      "label": "Oxaliplatin renal band (if CrCl unavailable as a number)",
       "type": "select",
       "required": false,
       "options": [
         {
           "value": "ge30",
-          "label": "CrCl ≥30 mL/min"
+          "label": "CrCl ≥30, exact value unconfirmed"
         },
         {
           "value": "lt30",
@@ -391,9 +438,13 @@
         {
           "value": "dialysis",
           "label": "Haemodialysis"
+        },
+        {
+          "value": "gt30",
+          "label": "CrCl confirmed >30 mL/min"
         }
       ],
-      "demo_value": "ge30",
+      "demo_value": "gt30",
       "help_text": "Select the protocol-relevant renal band; no exact value is required unless another drug needs it.",
       "renal_input": {
         "mode": "protocol_specific_band",
@@ -402,7 +453,7 @@
       "input_role": "decision"
     },
     "alt_ast_uln_multiple": {
-      "label": "ALT / AST result (actual values entered; highest ×ULN calculated automatically)",
+      "label": "Highest AST or ALT / ULN (if separate ratios unavailable)",
       "type": "number",
       "required": false,
       "min": 0,
@@ -420,6 +471,196 @@
       "demo_value": 1,
       "unit": "×ULN",
       "input_role": "context"
+    },
+    "wbc_x10e9_l": {
+      "label": "White cell count",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "×10⁹/L",
+      "input_role": "decision",
+      "demo_value": 6
+    },
+    "creatinine_clearance_ml_min": {
+      "label": "Creatinine clearance (CrCl)",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "mL/min",
+      "input_role": "decision",
+      "demo_value": 85,
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf",
+        "reason": "NCCP table 2 distinguishes values below and above 30 mL/min. Exactly 30 is unassigned and requires review."
+      }
+    },
+    "bilirubin_umol_l": {
+      "label": "Total bilirubin for fluorouracil",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "µmol/L",
+      "input_role": "decision",
+      "demo_value": 12
+    },
+    "ast_u_l": {
+      "label": "AST for fluorouracil",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "U/L",
+      "input_role": "decision",
+      "demo_value": 25
+    },
+    "alkaline_phosphatase_multiple": {
+      "label": "Alkaline phosphatase / laboratory upper limit",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "× ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "ast_uln_multiple": {
+      "label": "AST / laboratory upper limit",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "× ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "alt_uln_multiple": {
+      "label": "ALT / laboratory upper limit",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "× ULN",
+      "input_role": "decision",
+      "demo_value": 1
+    },
+    "bleeding_thrombocytopenia": {
+      "label": "Bleeding with thrombocytopenia",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "severe_hepatic_impairment": {
+      "label": "Clinically severe hepatic impairment",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "postop_complication": {
+      "label": "Unresolved postoperative complication or inadequate nutritional/functional recovery before cycle 5",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": null
+    },
+    "brivudine_sorivudine": {
+      "label": "Concurrent brivudine, sorivudine or related DPD inhibitor",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "postop_weeks": {
+      "label": "Weeks since surgery at planned cycle 5",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.1,
+      "unit": "weeks",
+      "input_role": "decision",
+      "demo_value": null
+    },
+    "fn_history": {
+      "label": "Previous febrile neutropenia during FLOT",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "first",
+          "label": "First episode"
+        },
+        {
+          "value": "second_gcsf",
+          "label": "Second episode despite G-CSF"
+        },
+        {
+          "value": "further",
+          "label": "Further recurrence"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": null
+    },
+    "g3_neuropathy_history": {
+      "label": "Grade 3 neuropathy course",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "first",
+          "label": "First occurrence"
+        },
+        {
+          "value": "second",
+          "label": "Second occurrence"
+        },
+        {
+          "value": "persistent",
+          "label": "Persistent grade 3"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": null
+    },
+    "nonhaem_episode": {
+      "label": "Grade 3–4 non-haematological toxicity history",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "first",
+          "label": "First occurrence"
+        },
+        {
+          "value": "second",
+          "label": "Second occurrence"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": null
+    },
+    "clinical_hepatic_band": {
+      "label": "Clinical hepatic impairment (fluorouracil)",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": "moderate",
+          "label": "Moderate"
+        },
+        {
+          "value": "severe",
+          "label": "Severe"
+        }
+      ],
+      "input_role": "decision",
+      "demo_value": null
     }
   },
   "required_inputs": [],
@@ -455,7 +696,7 @@
     "rules": [
       {
         "id": "ECOG_OUTSIDE_USUAL_SOURCE_RANGE",
-        "priority": 8,
+        "priority": 80,
         "when": {
           "field": "ecog",
           "operator": ">",
@@ -466,17 +707,18 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "message": "ECOG exceeds the 0–2 eligibility range. Reassess fitness."
         },
+        "explanation": "ECOG exceeds the 0–2 eligibility range. Reassess fitness.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ECOG is outside the usual NCCP eligibility range encoded for this regimen."
+          "document": "NCCP 00344 v9",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
       },
       {
         "id": "HYPERSENSITIVITY_EXCLUSION",
-        "priority": 10,
+        "priority": 80,
         "when": {
           "field": "hypersensitivity",
           "operator": "==",
@@ -487,13 +729,963 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Known hypersensitivity to a regimen component is an exclusion."
+          "message": "Known hypersensitivity is an exclusion. Identify the component and review the plan."
         },
+        "explanation": "Known hypersensitivity is an exclusion. Identify the component and review the plan.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
+          "document": "NCCP 00344 v9",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FEVER_OR_ACTIVE_INFECTION",
+        "priority": 80,
+        "when": {
+          "field": "febrile_or_active_infection",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "Known hypersensitivity to a regimen component is an exclusion."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Urgent infection assessment before further treatment."
+        },
+        "explanation": "Urgent infection assessment before further treatment.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4–5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "DPD_COMPLETE_DEFICIENCY",
+        "priority": 80,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "complete"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Complete DPD deficiency excludes fluorouracil and this FLOT regimen."
+        },
+        "explanation": "Complete DPD deficiency excludes fluorouracil and this FLOT regimen.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "DPD_PARTIAL_DEFICIENCY",
+        "priority": 80,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "partial"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Consider a reduced starting fluorouracil dose with individual titration and close monitoring."
+        },
+        "explanation": "Consider a reduced starting fluorouracil dose with individual titration and close monitoring.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "DPD_UNKNOWN",
+        "priority": 80,
+        "when": {
+          "field": "dpd_status",
+          "operator": "==",
+          "value": "unknown"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Establish DPD status before first fluorouracil."
+        },
+        "explanation": "Establish DPD status before first fluorouracil.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_BLEED",
+        "priority": 80,
+        "when": {
+          "field": "bleeding_thrombocytopenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "Bleeding with thrombocytopenia: docetaxel and oxaliplatin to 75%, with consultant review. Assess active bleeding urgently."
+        },
+        "explanation": "Bleeding with thrombocytopenia: docetaxel and oxaliplatin to 75%, with consultant review. Assess active bleeding urgently.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_RENAL",
+        "priority": 80,
+        "when": {
+          "field": "creatinine_clearance_ml_min",
+          "operator": "<",
+          "value": 30
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "CrCl below 30 mL/min excludes FLOT. Oxaliplatin is contraindicated."
+        },
+        "explanation": "CrCl below 30 mL/min excludes FLOT. Oxaliplatin is contraindicated.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2–3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_RENAL_EQUAL",
+        "priority": 80,
+        "when": {
+          "field": "creatinine_clearance_ml_min",
+          "operator": "==",
+          "value": 30
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Table 2 does not assign an oxaliplatin dose at exactly 30 mL/min. Confirm with pharmacy and consultant."
+        },
+        "explanation": "Table 2 does not assign an oxaliplatin dose at exactly 30 mL/min. Confirm with pharmacy and consultant.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_HEP_EXCLUSION",
+        "priority": 80,
+        "when": {
+          "field": "severe_hepatic_impairment",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Severe hepatic impairment excludes this regimen."
+        },
+        "explanation": "Severe hepatic impairment excludes this regimen.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_HEP_SEVERE",
+        "priority": 80,
+        "when": {
+          "field": "clinical_hepatic_band",
+          "operator": "==",
+          "value": "severe"
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Severe hepatic impairment is a regimen exclusion. A component dose reduction cannot override this."
+        },
+        "explanation": "Severe hepatic impairment is a regimen exclusion. A component dose reduction cannot override this.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2–3",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_HEP_MODERATE",
+        "priority": 80,
+        "when": {
+          "field": "clinical_hepatic_band",
+          "operator": "==",
+          "value": "moderate"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "For moderate hepatic impairment consider reducing the initial fluorouracil dose by one third. Check absolute contraindications."
+        },
+        "explanation": "For moderate hepatic impairment consider reducing the initial fluorouracil dose by one third. Check absolute contraindications.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_BRIV",
+        "priority": 80,
+        "when": {
+          "field": "brivudine_sorivudine",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "DPD-inhibiting antivirals may cause fatal fluorouracil toxicity. Stop and reconcile with pharmacy."
+        },
+        "explanation": "DPD-inhibiting antivirals may cause fatal fluorouracil toxicity. Stop and reconcile with pharmacy.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "6",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_NEURO_G2",
+        "priority": 80,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 2
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Grade 2 at cycle start: reduce oxaliplatin to 65 mg/m²."
+        },
+        "explanation": "Grade 2 at cycle start: reduce oxaliplatin to 65 mg/m².",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4, table 5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_NEURO_G4",
+        "priority": 80,
+        "when": {
+          "field": "neuropathy_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Grade 4 neuropathy: discontinue oxaliplatin."
+        },
+        "explanation": "Grade 4 neuropathy: discontinue oxaliplatin.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4, table 5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_COUNT_anc_x10e9_l",
+        "priority": 80,
+        "when": {
+          "field": "anc_x10e9_l",
+          "operator": "<",
+          "value": 1
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "ANC below 1 ×10⁹/L. Full-dose criteria for docetaxel and oxaliplatin are unmet. Confirm delay or modification with the consultant."
+        },
+        "explanation": "ANC below 1 ×10⁹/L. Full-dose criteria for docetaxel and oxaliplatin are unmet. Confirm delay or modification with the consultant.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_COUNT_platelets_x10e9_l",
+        "priority": 80,
+        "when": {
+          "field": "platelets_x10e9_l",
+          "operator": "<",
+          "value": 100
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "platelets below 100 ×10⁹/L. Full-dose criteria for docetaxel and oxaliplatin are unmet. Confirm delay or modification with the consultant."
+        },
+        "explanation": "platelets below 100 ×10⁹/L. Full-dose criteria for docetaxel and oxaliplatin are unmet. Confirm delay or modification with the consultant.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_COUNT_wbc_x10e9_l",
+        "priority": 80,
+        "when": {
+          "field": "wbc_x10e9_l",
+          "operator": "<",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "WBC below 3 ×10⁹/L. Full-dose criteria for docetaxel and oxaliplatin are unmet. Confirm delay or modification with the consultant."
+        },
+        "explanation": "WBC below 3 ×10⁹/L. Full-dose criteria for docetaxel and oxaliplatin are unmet. Confirm delay or modification with the consultant.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FN_first",
+        "priority": 80,
+        "when": {
+          "field": "fn_history",
+          "operator": "==",
+          "value": "first"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "Consider G-CSF secondary prophylaxis."
+        },
+        "explanation": "Consider G-CSF secondary prophylaxis.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FN_second_gcsf",
+        "priority": 80,
+        "when": {
+          "field": "fn_history",
+          "operator": "==",
+          "value": "second_gcsf"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "Reduce docetaxel and oxaliplatin to 75%."
+        },
+        "explanation": "Reduce docetaxel and oxaliplatin to 75%.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FN_further",
+        "priority": 80,
+        "when": {
+          "field": "fn_history",
+          "operator": "==",
+          "value": "further"
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "docetaxel",
+            "oxaliplatin"
+          ],
+          "message": "Reduce docetaxel and oxaliplatin to 50%."
+        },
+        "explanation": "Reduce docetaxel and oxaliplatin to 50%.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 1",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_G3_first",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "g3_neuropathy_history",
+              "operator": "==",
+              "value": "first"
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Reduce oxaliplatin to 65 mg/m²."
+        },
+        "explanation": "Reduce oxaliplatin to 65 mg/m².",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4, table 5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_G3_second",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "g3_neuropathy_history",
+              "operator": "==",
+              "value": "second"
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Reduce oxaliplatin to 50 mg/m²."
+        },
+        "explanation": "Reduce oxaliplatin to 50 mg/m².",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4, table 5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_G3_persistent",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "g3_neuropathy_history",
+              "operator": "==",
+              "value": "persistent"
+            }
+          ]
+        },
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Discontinue oxaliplatin."
+        },
+        "explanation": "Discontinue oxaliplatin.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4, table 5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_G3_None",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 3
+            },
+            {
+              "field": "g3_neuropathy_history",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Grade 3 neuropathy: establish first, second or persistent occurrence before choosing the dose."
+        },
+        "explanation": "Grade 3 neuropathy: establish first, second or persistent occurrence before choosing the dose.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "4, table 5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_OTHER_first",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "nonhaem_episode",
+              "operator": "==",
+              "value": "first"
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Reduce all drugs to 75% after consultant review."
+        },
+        "explanation": "Reduce all drugs to 75% after consultant review.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 4",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_OTHER_second",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "nonhaem_episode",
+              "operator": "==",
+              "value": "second"
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Reduce all drugs to 50% after consultant review."
+        },
+        "explanation": "Reduce all drugs to 50% after consultant review.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 4",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_OTHER_None",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "other_nonhaem_toxicity_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "diarrhoea_grade",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "mucositis_grade",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "field": "nonhaem_episode",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Grade >2 toxicity: assess urgently and confirm occurrence before setting doses."
+        },
+        "explanation": "Grade >2 toxicity: assess urgently and confirm occurrence before setting doses.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 4",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FU_bilirubin_umol_lSTOP",
+        "priority": 80,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": ">",
+          "value": 85
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Above the fluorouracil contraindication threshold."
+        },
+        "explanation": "Above the fluorouracil contraindication threshold.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FU_bilirubin_umol_lEQUAL",
+        "priority": 80,
+        "when": {
+          "field": "bilirubin_umol_l",
+          "operator": "==",
+          "value": 85
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Equality is unassigned in table 2. Confirm before fluorouracil."
+        },
+        "explanation": "Equality is unassigned in table 2. Confirm before fluorouracil.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FU_ast_u_lSTOP",
+        "priority": 80,
+        "when": {
+          "field": "ast_u_l",
+          "operator": ">",
+          "value": 180
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Above the fluorouracil contraindication threshold."
+        },
+        "explanation": "Above the fluorouracil contraindication threshold.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_FU_ast_u_lEQUAL",
+        "priority": 80,
+        "when": {
+          "field": "ast_u_l",
+          "operator": "==",
+          "value": 180
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "5-fluorouracil"
+          ],
+          "message": "Equality is unassigned in table 2. Confirm before fluorouracil."
+        },
+        "explanation": "Equality is unassigned in table 2. Confirm before fluorouracil.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_DOC_LIVER_STOP",
+        "priority": 80,
+        "when": {
+          "all": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "any": [
+                {
+                  "field": "alkaline_phosphatase_multiple",
+                  "operator": ">",
+                  "value": 6
+                },
+                {
+                  "all": [
+                    {
+                      "field": "ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3.5
+                    },
+                    {
+                      "field": "alt_uln_multiple",
+                      "operator": ">",
+                      "value": 3.5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Stop docetaxel unless strictly indicated after consultant review."
+        },
+        "explanation": "Stop docetaxel unless strictly indicated after consultant review.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 3",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_DOC_LIVER_REVIEW",
+        "priority": 80,
+        "when": {
+          "any": [
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1
+            },
+            {
+              "field": "alkaline_phosphatase_multiple",
+              "operator": ">",
+              "value": 2.5
+            },
+            {
+              "field": "ast_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "alt_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            },
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "docetaxel"
+          ],
+          "message": "Interpret bilirubin, ALP and both transaminases together. Table 3 lists 100% when ALP >2.5× ULN, AST or ALT >1.5× ULN and bilirubin ≤ULN. Check the stop criteria and severe hepatic exclusion."
+        },
+        "explanation": "Interpret bilirubin, ALP and both transaminases together. Table 3 lists 100% when ALP >2.5× ULN, AST or ALT >1.5× ULN and bilirubin ≤ULN. Check the stop criteria and severe hepatic exclusion.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "3, table 3",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_RENAL_BAND",
+        "priority": 80,
+        "when": {
+          "any": [
+            {
+              "field": "oxaliplatin_renal_band",
+              "operator": "==",
+              "value": "lt30"
+            },
+            {
+              "field": "oxaliplatin_renal_band",
+              "operator": "==",
+              "value": "dialysis"
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "oxaliplatin"
+          ],
+          "message": "Severe renal impairment excludes FLOT. Confirm measured or estimated CrCl."
+        },
+        "explanation": "Severe renal impairment excludes FLOT. Confirm measured or estimated CrCl.",
+        "source": {
+          "document": "NCCP 00344 v9",
+          "page": "2–3",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
+      },
+      {
+        "id": "FLOT_POST_RECOVERY",
+        "priority": 80,
+        "when": {
+          "field": "postop_complication",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Defer cycle 5 for surgical/oncology review of complications, nutrition and performance status."
+        },
+        "explanation": "Defer cycle 5 for surgical/oncology review of complications, nutrition and performance status.",
+        "source": {
+          "document": "Postoperative pathway · clinical review",
+          "page": "Postoperative review",
+          "url": "https://www.cancerresearchuk.org/about-cancer/treatment/drugs/fluorouracil-leucovorin-oxaliplatin-docetaxel-flot"
+        }
+      },
+      {
+        "id": "FLOT_POST_WINDOW",
+        "priority": 80,
+        "when": {
+          "any": [
+            {
+              "field": "postop_weeks",
+              "operator": "<",
+              "value": 6
+            },
+            {
+              "field": "postop_weeks",
+              "operator": ">",
+              "value": 12
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Outside the usual 6–12 week restart window. Review recovery and individualise timing."
+        },
+        "explanation": "Outside the usual 6–12 week restart window. Review recovery and individualise timing.",
+        "source": {
+          "document": "Postoperative pathway · clinical review",
+          "page": "Cycle 5 timing",
+          "url": "https://www.cancerresearchuk.org/about-cancer/treatment/drugs/fluorouracil-leucovorin-oxaliplatin-docetaxel-flot"
+        }
       },
       {
         "id": "PREGNANCY_OR_BREASTFEEDING",
@@ -513,328 +1705,129 @@
           ]
         },
         "action": {
-          "type": "contraindicated",
+          "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+          "message": "Review pregnancy, breastfeeding and product-specific precautions with the consultant before treatment."
         },
         "source": {
-          "document": "Official NCCP regimen",
-          "page": "eligibility/exclusions or dose-modification section"
+          "document": "General systemic treatment precaution. Check current product information.",
+          "page": "Prescribing review"
         },
-        "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
+        "explanation": "Review pregnancy, breastfeeding and product-specific precautions with the consultant before treatment."
       },
       {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
+        "id": "FLOT_RENAL_BAND_VERIFY",
+        "priority": 80,
         "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
+          "all": [
+            {
+              "field": "oxaliplatin_renal_band",
+              "operator": "==",
+              "value": "ge30"
+            },
+            {
+              "field": "creatinine_clearance_ml_min",
+              "operator": "missing"
+            }
+          ]
         },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "oxaliplatin"
           ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "message": "Confirm CrCl exceeds 30 mL/min. Table 2 leaves exactly 30 unassigned."
         },
+        "explanation": "Confirm CrCl exceeds 30 mL/min. Table 2 leaves exactly 30 unassigned.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
+          "document": "NCCP 00344 v9",
+          "page": "3, table 2",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
       },
       {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
+        "id": "FLOT_POST_REVIEW",
+        "priority": 80,
         "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "FEVER_OR_ACTIVE_INFECTION",
-        "priority": 10,
-        "when": {
-          "field": "febrile_or_active_infection",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold systemic treatment pending urgent clinical assessment of fever or active infection."
-      },
-      {
-        "id": "SEVERE_OTHER_TOXICITY",
-        "priority": 8,
-        "when": {
-          "field": "other_nonhaem_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires withholding and regimen-specific review."
-      },
-      {
-        "id": "DPD_COMPLETE_DEFICIENCY",
-        "priority": 10,
-        "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "complete"
-        },
-        "action": {
-          "type": "contraindicated",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Complete DPD deficiency is a contraindication to fluoropyrimidine therapy."
-      },
-      {
-        "id": "DPD_PARTIAL_DEFICIENCY",
-        "priority": 8,
-        "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "partial"
+          "all": [
+            {
+              "field": "postop_weeks",
+              "operator": ">=",
+              "value": 6
+            },
+            {
+              "field": "postop_weeks",
+              "operator": "<=",
+              "value": 12
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+          "message": "Usual postoperative window. Confirm healing, intake, functional recovery, toxicity and current blood results before prescribing cycle 5."
         },
+        "explanation": "Usual postoperative window. Confirm healing, intake, functional recovery, toxicity and current blood results before prescribing cycle 5.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Partial DPD deficiency requires an individualised reduced starting dose and careful titration."
+          "document": "Postoperative pathway",
+          "page": "Cycle 5 timing",
+          "url": "https://www.cancerresearchuk.org/about-cancer/treatment/drugs/fluorouracil-leucovorin-oxaliplatin-docetaxel-flot"
+        }
       },
       {
-        "id": "DPD_UNKNOWN",
-        "priority": 7,
+        "id": "FLOT_GI_SYMPTOMS",
+        "priority": 80,
         "when": {
-          "field": "dpd_status",
-          "operator": "==",
-          "value": "unknown"
+          "any": [
+            {
+              "field": "diarrhoea_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "field": "mucositis_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "whole_regimen"
+            "5-fluorouracil"
           ],
-          "message": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
+          "message": "Assess ongoing symptoms, hydration and intake. Table 4 dose reductions depend on grade >2 and episode history."
         },
+        "explanation": "Assess ongoing symptoms, hydration and intake. Table 4 dose reductions depend on grade >2 and episode history.",
         "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Confirm DPD status before starting or restarting fluoropyrimidine therapy."
-      },
-      {
-        "id": "DIARRHOEA_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "diarrhoea_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse diarrhoea until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "MUCOSITIS_GRADE_2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Withhold fluoropyrimidine treatment for grade 2 or worse mucositis until resolved and apply the source dose-modification pathway."
-      },
-      {
-        "id": "OXALIPLATIN_NEUROPATHY_G2",
-        "priority": 8,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Persistent grade 2 or worse neuropathy requires oxaliplatin-specific interruption/reduction review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Persistent grade 2 or worse neuropathy requires oxaliplatin-specific interruption/reduction review."
-      },
-      {
-        "id": "OXALIPLATIN_SEVERE_RENAL",
-        "priority": 8,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "lt30"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "CrCl <30 mL/min requires protocol-specific oxaliplatin dose review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "CrCl <30 mL/min requires protocol-specific oxaliplatin dose review."
-      },
-      {
-        "id": "OXALIPLATIN_DIALYSIS",
-        "priority": 9,
-        "when": {
-          "field": "oxaliplatin_renal_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Haemodialysis requires specialist pharmacy and Consultant dosing review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Haemodialysis requires specialist pharmacy and Consultant dosing review."
-      },
-      {
-        "id": "TAXANE_NEUROPATHY_G2_PLUS",
-        "priority": 8,
-        "when": {
-          "field": "neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 2 or worse neuropathy requires taxane interruption or dose-modification review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Grade 2 or worse neuropathy requires taxane interruption or dose-modification review."
-      },
-      {
-        "id": "TAXANE_LIVER_REVIEW",
-        "priority": 7,
-        "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 3
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Transaminases >3 ×ULN require taxane-specific hepatic dosing review."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Transaminases >3 ×ULN require taxane-specific hepatic dosing review."
+          "document": "NCCP 00344 v9",
+          "page": "3, table 4; pp 4–5",
+          "url": "https://healthservice.hse.ie/documents/6800/344_FLOT_OGsG2fX.pdf"
+        }
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and organ function appropriate for the selected treatment"
+    "Resectable gastric or junctional adenocarcinoma meeting 00344a/b.",
+    "ECOG 0–2 with adequate marrow, kidney and liver function."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source"
+    "Hypersensitivity to a component or excipient",
+    "Severe hepatic impairment",
+    "Creatinine clearance below 30 mL/min",
+    "Complete DPD deficiency"
   ],
   "monitoring": [
-    "FBC, renal and liver profile as specified by the current NCCP regimen",
-    "Treatment-specific toxicity monitoring before each administration/cycle"
+    "Baseline FBC, renal and liver profile. DPD phenotype or genotype before first fluorouracil if untested. Renal impairment can elevate uracil: consider genotype.",
+    "FBC, renal and liver profile before every cycle. Assess neuropathy at least every two cycles and whenever symptomatic.",
+    "Before cycle 5 assess postoperative complications, nutritional intake, weight, performance status, bloods and residual toxicity."
   ],
   "dose_modifications": [
-    "Component-specific haematological, renal, hepatic and non-haematological dose-modification pathways are encoded as independently actionable rules."
+    "NCCP 00344 v9 pp 3–4, tables 1–5. A value at an undefined boundary requires consultant/pharmacy interpretation."
   ],
   "supportive_care": {
     "emetogenic_risk": "moderate",
@@ -846,6 +1839,9 @@
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk",
+    "premedication": "Docetaxel: dexamethasone 8 mg PO twice daily for three days beginning the day before, with at least three doses before infusion. Missed premedication needs consultant review.",
+    "gcsf": "Secondary prophylaxis after febrile neutropenia or neutropenia/leucopenia causing interruption.",
+    "prescription_pdf_url": "patient/00344/antiemetic-flot.pdf"
   }
 }

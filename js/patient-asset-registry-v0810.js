@@ -13,10 +13,11 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.66';
+  const RELEASE='0.84.67';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00344':{"title": "FLOT · chemotherapy before and after surgery", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "portPump": true},
     '00620':{"title":"Bevacizumab 7.5 mg/kg with carboplatin and paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00716':{"title":"Bevacizumab 15 mg/kg with carboplatin and paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00769':{"title":"Bevacizumab with weekly paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
