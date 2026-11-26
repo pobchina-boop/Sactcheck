@@ -3,6 +3,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f)),json=f=>JSON.parse(read(f)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 let active='genitourinary';globalThis.SACTCheckProtocolContext={activeTumourGroup:()=>active};
 const A=require('../js/patient-asset-registry-v0810.js'),K=require('../js/regimen-knowledge-base.js'),index=json('protocols/index.json').protocols;
+const journey = require('../js/treatment-journey-v0837.js');
+globalThis.SACTCheckTreatmentEvidence = require('../js/treatment-evidence-v08413.js');
 const protocol=c=>json(index.find(p=>p.path.includes('/'+c+'-')).path);
 assert.deepEqual(protocol('00325').indications.map(i=>[i.indication_id,i.code]),[['00325-sarcoma','00325a'],['00325-gu','00325b']],'NCCP national codes must remain distinct from stable internal indication IDs');
 for(const code of ['00325','00719','00244']){
@@ -36,6 +38,34 @@ async function main(){
   const overlay={querySelector:selector=>selector==='[data-regimen-info-content]'?target:null,classList:{add(){},remove(){}}};
   globalThis.document={getElementById:id=>id==='regimenInformationOverlay'?overlay:null,body:{classList:{add(){},remove(){}}}};
   const norm=s=>String(s).replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&#039;/g,"'").replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();
+  for (const [key, definition] of Object.entries(journey.definitions)) {
+   if (!definition.code) continue;
+   const html = journey.renderForCode(key, 'clinician');
+   assert(html.includes('What each check is for'), key + ' clinician journey is missing');
+   assert.equal(html.includes('Context and source differences'), Boolean(definition.clinical_notes?.length), key);
+  }
+  for (const code of ['00335', '00325', '00719', '00244']) {
+   const item = {...protocol(code), patient_context: 'gist'};
+   const profile = K.regimenProfileForProtocol(item, payload);
+   const expected = profile.context_profiles?.find(context => context.context_id === 'gist') || profile;
+   K.open(item);
+   await new Promise(resolve => setImmediate(resolve));
+   assert(norm(target.innerHTML).includes(norm(expected.evidence_at_a_glance.trial)), code + ' trial missing');
+   assert(target.innerHTML.includes('data-treatment-journey='), code + ' clinician journey missing');
+  }
+  for (const [code, sarcomaContext] of [['00205', 'sarcoma'], ['00228', 'liposarcoma']]) {
+   const item = protocol(code);
+   const contexts = K.regimenProfileForProtocol(item, payload).context_profiles;
+   assert.deepEqual(contexts.map(profile => profile.context_id), ['breast', sarcomaContext]);
+   K.open({...item, patient_context: 'sarcoma'});
+   await new Promise(resolve => setImmediate(resolve));
+   assert(norm(target.innerHTML).includes(norm(contexts[1].evidence_at_a_glance.trial)), code + ' sarcoma evidence');
+   assert(!norm(target.innerHTML).includes(norm(contexts[0].evidence_at_a_glance.trial)), code + ' breast trial in sarcoma');
+   change({target: {value: 'breast'}});
+   assert(norm(target.innerHTML).includes(norm(contexts[0].evidence_at_a_glance.trial)), code + ' preserved breast evidence');
+   change({target: {value: ''}});
+   assert(!norm(target.innerHTML).includes(norm(contexts[1].evidence_at_a_glance.trial)), code + ' unselected context');
+  }
   const gist=merged.context_profiles.find(p=>p.context_id==='gist');
   K.open({...protocol('00244'),patient_context:'gist'});await Promise.resolve();assert(norm(target.innerHTML).includes(norm(gist.clinical_summary)));assert(!norm(target.innerHTML).includes(norm(crc.clinical_summary)));
   change({target:{value:'colorectal'}});assert(norm(target.innerHTML).includes(norm(crc.clinical_summary)));assert(!norm(target.innerHTML).includes(norm(gist.clinical_summary)));

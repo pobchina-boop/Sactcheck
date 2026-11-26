@@ -142,9 +142,13 @@
     if (!scoped.length) return profile;
     const contexts = [...(profile?.context_profiles || [])];
     if (profile && !contexts.length) {
-      // The existing 00244 profile is explicitly CRC. Never relabel or replace it with GIST.
-      if (String(protocolCode(protocol)) !== "00244") throw new Error("An existing knowledge profile needs an explicit preserved context.");
-      contexts.push({...profile, context_id:"colorectal", context_label:"Metastatic colorectal cancer"});
+      const preserved = {
+        "00244": {context_id: "colorectal", context_label: "Metastatic colorectal cancer"},
+        "00205": {context_id: "breast", context_label: "Breast cancer"},
+        "00228": {context_id: "breast", context_label: "Breast cancer"}
+      }[protocolCode(protocol)];
+      if (!preserved) throw new Error("An existing knowledge profile needs an explicit preserved context.");
+      contexts.push({...profile, ...preserved});
     }
     for (const item of scoped) {
       const index = contexts.findIndex(existing => existing.context_id === item.context_id);
@@ -159,7 +163,7 @@
     }
     const requested = String(selectedContext ?? protocol?.patient_context ?? root.SACTCheckProtocolContext?.activeTumourGroup?.() ?? "").toLowerCase();
     if (!requested) return "";
-    if (["00325","00719","00244"].includes(String(protocolCode(protocol)))) {
+    if (["00325","00719","00244","00205","00228"].includes(String(protocolCode(protocol)))) {
       return root.SACTCheckPatientAssets?.contextFor?.(protocol,requested) || requested;
     }
     return requested;
