@@ -54121,6 +54121,423 @@ const definitions={
         "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
       }
     ]
+  },
+  "00817": {
+    "code": "00817",
+    "release": "0.84.68",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pembrolizumab with paclitaxel and carboplatin",
+    "setting": "Cervical cancer",
+    "summary": "Pembrolizumab, paclitaxel and carboplatin on day 1 every three weeks for 6–8 cycles, according to benefit and tolerability. Pembrolizumab alone every three weeks while it helps and side effects are manageable.",
+    "stages": [
+      "Combination · day 1",
+      "Maintenance · pembrolizumab"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Combination every 3 weeks, then pembrolizumab alone.",
+        "cells": [
+          "Pembrolizumab, paclitaxel and carboplatin on day 1 every three weeks for 6–8 cycles, according to benefit and tolerability.",
+          "Pembrolizumab alone every three weeks while it helps and side effects are manageable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function. Review medicines, allergies and current symptoms.",
+        "when": "Before starting",
+        "why": "Bring a medicine list and details of previous treatment.",
+        "clinical": "NCCP 00817",
+        "action": "Bring a medicine list and details of previous treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts and organ function are reviewed with symptoms and fitness for treatment.",
+        "when": "Before each cycle",
+        "why": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "clinical": "NCCP 00817",
+        "action": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood sugar, liver and kidney tests, and thyroid function every 3–6 weeks. Other hormone tests depend on symptoms.",
+        "when": "During immunotherapy",
+        "why": "Report new headache, thirst, weakness, cough or diarrhoea even between visits.",
+        "clinical": "NCCP 00817",
+        "action": "Report new headache, thirst, weakness, cough or diarrhoea even between visits.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Persistent, recurrent or metastatic cervical cancer with a PD-L1 combined positive score of at least 1.",
+      "Call oncology urgently for fever, chills, new breathlessness or severe diarrhoea."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00817 v3",
+        "url": "https://healthservice.hse.ie/documents/6429/Pembro_Pac_175_Carbo_AUC_5_817_.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "KEYNOTE-826 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37910822/"
+      }
+    ]
+  },
+  "00811": {
+    "code": "00811",
+    "release": "0.84.68",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Pembrolizumab, paclitaxel, carboplatin and bevacizumab",
+    "setting": "Cervical cancer",
+    "summary": "Four infusions every three weeks for 6–8 cycles. Your team reviews the benefit and side effects before continuing chemotherapy. Pembrolizumab and bevacizumab every three weeks while the treatment helps and side effects are manageable.",
+    "stages": [
+      "Combination · day 1",
+      "Maintenance · two medicines"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Combination every 3 weeks, then pembrolizumab and bevacizumab.",
+        "cells": [
+          "Four infusions every three weeks for 6–8 cycles. Your team reviews the benefit and side effects before continuing chemotherapy.",
+          "Pembrolizumab and bevacizumab every three weeks while the treatment helps and side effects are manageable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function. Review medicines, allergies and current symptoms.",
+        "when": "Before starting",
+        "why": "Bring a medicine list and details of previous treatment.",
+        "clinical": "NCCP 00811",
+        "action": "Bring a medicine list and details of previous treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts and organ function are reviewed with symptoms and fitness for treatment.",
+        "when": "Before each cycle",
+        "why": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "clinical": "NCCP 00811",
+        "action": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood pressure, urine protein, bleeding, bowel symptoms and wound healing.",
+        "when": "Before bevacizumab",
+        "why": "Tell your team about surgery or dental procedures.",
+        "clinical": "NCCP 00811",
+        "action": "Tell your team about surgery or dental procedures.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood sugar, liver and kidney tests, and thyroid function every 3–6 weeks. Other hormone tests depend on symptoms.",
+        "when": "During immunotherapy",
+        "why": "Report new headache, thirst, weakness, cough or diarrhoea even between visits.",
+        "clinical": "NCCP 00811",
+        "action": "Report new headache, thirst, weakness, cough or diarrhoea even between visits.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Persistent, recurrent or metastatic cervical cancer with a PD-L1 combined positive score of at least 1.",
+      "Call oncology urgently for fever, chills, new breathlessness or severe diarrhoea. Severe abdominal pain or unexpected bleeding also needs urgent review."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00811 v3",
+        "url": "https://healthservice.hse.ie/documents/6425/Pembrolizumab_Pac_Carbo_Bev_811_.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "KEYNOTE-826 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37910822/"
+      }
+    ]
+  },
+  "00799": {
+    "code": "00799",
+    "release": "0.84.68",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Paclitaxel, cisplatin and bevacizumab",
+    "setting": "Cervical cancer",
+    "summary": "Paclitaxel, cisplatin and bevacizumab on day 1 every three weeks. IV fluid before and after cisplatin helps protect the kidneys. Treatment continues while it helps and is tolerated.",
+    "stages": [
+      "Combination · day 1"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "All three medicines on day 1 every 3 weeks.",
+        "cells": [
+          "Paclitaxel, cisplatin and bevacizumab on day 1 every three weeks. IV fluid before and after cisplatin helps protect the kidneys. Treatment continues while it helps and is tolerated."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function. Review medicines, allergies and current symptoms.",
+        "when": "Before starting",
+        "why": "Bring a medicine list and details of previous treatment.",
+        "clinical": "NCCP 00799",
+        "action": "Bring a medicine list and details of previous treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts and organ function are reviewed with symptoms and fitness for treatment.",
+        "when": "Before each cycle",
+        "why": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "clinical": "NCCP 00799",
+        "action": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood pressure, urine protein, bleeding, bowel symptoms and wound healing.",
+        "when": "Before bevacizumab",
+        "why": "Tell your team about surgery or dental procedures.",
+        "clinical": "NCCP 00799",
+        "action": "Tell your team about surgery or dental procedures.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Kidney function and electrolytes, including magnesium. Review hearing and fluid balance.",
+        "when": "Before cisplatin",
+        "why": "Tell the team if hearing, sensation or urine output has changed.",
+        "clinical": "NCCP 00799",
+        "action": "Tell the team if hearing, sensation or urine output has changed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Locally advanced, recurrent or metastatic cervical cancer when curative surgery or radiation is unsuitable.",
+      "Call oncology urgently for fever, chills, new breathlessness or severe diarrhoea. Severe abdominal pain or unexpected bleeding also needs urgent review."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00799 v2",
+        "url": "https://healthservice.hse.ie/documents/6422/799_V2_Bev_Pacli_CIS.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG 240 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28756902/"
+      }
+    ]
+  },
+  "00766": {
+    "code": "00766",
+    "release": "0.84.68",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Paclitaxel, carboplatin AUC 6 and bevacizumab",
+    "setting": "First-line ovarian cancer",
+    "summary": "After surgery, the first cycle contains paclitaxel and carboplatin. Bevacizumab starts from cycle 2 if the wound has healed and the team considers it safe. Paclitaxel, carboplatin AUC 6 and bevacizumab 15 mg/kg on day 1 every three weeks. Chemotherapy is given for up to six cycles. Bevacizumab alone every three weeks, up to 15 months (22 cycles) across treatment, or until progression or unacceptable side effects.",
+    "stages": [
+      "First cycle after surgery",
+      "Combination · day 1",
+      "Maintenance · bevacizumab"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Up to 6 combination cycles, then bevacizumab alone.",
+        "cells": [
+          "After surgery, the first cycle contains paclitaxel and carboplatin. Bevacizumab starts from cycle 2 if the wound has healed and the team considers it safe.",
+          "Paclitaxel, carboplatin AUC 6 and bevacizumab 15 mg/kg on day 1 every three weeks. Chemotherapy is given for up to six cycles.",
+          "Bevacizumab alone every three weeks, up to 15 months (22 cycles) across treatment, or until progression or unacceptable side effects."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function. Review medicines, allergies and current symptoms.",
+        "when": "Before starting",
+        "why": "Bring a medicine list and details of previous treatment.",
+        "clinical": "NCCP 00766",
+        "action": "Bring a medicine list and details of previous treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts and organ function are reviewed with symptoms and fitness for treatment.",
+        "when": "Before each cycle",
+        "why": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "clinical": "NCCP 00766",
+        "action": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood pressure, urine protein, bleeding, bowel symptoms and wound healing.",
+        "when": "Before bevacizumab",
+        "why": "Tell your team about surgery or dental procedures.",
+        "clinical": "NCCP 00766",
+        "action": "Tell your team about surgery or dental procedures.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "First-line treatment of FIGO stage IIIB, IIIC or IV epithelial ovarian, fallopian tube or primary peritoneal cancer.",
+      "Call oncology urgently for fever, chills, new breathlessness or severe diarrhoea. Severe abdominal pain or unexpected bleeding also needs urgent review."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00766 v2",
+        "url": "https://healthservice.hse.ie/documents/6667/766_V2_Bevacizumab_15_Paclitaxel_CarboplatinAUC6.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG-0218 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31216226/"
+      }
+    ]
+  },
+  "00499": {
+    "code": "00499",
+    "release": "0.84.68",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Gemcitabine, carboplatin and bevacizumab",
+    "setting": "Recurrent ovarian cancer",
+    "summary": "Bevacizumab, gemcitabine and carboplatin on day 1 of each three-week cycle. Six cycles are usual and up to ten may be given. Gemcitabine alone after a blood count and kidney check. If omitted for low counts, this dose is skipped for the rest of the cycle. After chemotherapy finishes, bevacizumab alone every three weeks while it helps and side effects are manageable.",
+    "stages": [
+      "Day 1 · combination",
+      "Day 8 · gemcitabine",
+      "Maintenance · bevacizumab"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Days 1 and 8 every 3 weeks, then bevacizumab alone.",
+        "cells": [
+          "Bevacizumab, gemcitabine and carboplatin on day 1 of each three-week cycle. Six cycles are usual and up to ten may be given.",
+          "Gemcitabine alone after a blood count and kidney check. If omitted for low counts, this dose is skipped for the rest of the cycle.",
+          "After chemotherapy finishes, bevacizumab alone every three weeks while it helps and side effects are manageable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function. Review medicines, allergies and current symptoms.",
+        "when": "Before starting",
+        "why": "Bring a medicine list and details of previous treatment.",
+        "clinical": "NCCP 00499",
+        "action": "Bring a medicine list and details of previous treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts and organ function are reviewed with symptoms and fitness for treatment.",
+        "when": "Before each cycle",
+        "why": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "clinical": "NCCP 00499",
+        "action": "Tell your team if infection, tiredness or side effects limit normal activity.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood pressure, urine protein, bleeding, bowel symptoms and wound healing.",
+        "when": "Before bevacizumab",
+        "why": "Tell your team about surgery or dental procedures.",
+        "clinical": "NCCP 00499",
+        "action": "Tell your team about surgery or dental procedures.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood count and renal profile before gemcitabine.",
+        "when": "Day 8",
+        "why": "Check with the unit before travelling if unwell.",
+        "clinical": "NCCP 00499",
+        "action": "Check with the unit before travelling if unwell.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "First platinum-sensitive recurrence of epithelial ovarian, fallopian tube or primary peritoneal cancer after no previous VEGF-directed treatment.",
+      "Call oncology urgently for fever, chills, new breathlessness or severe diarrhoea. Severe abdominal pain or unexpected bleeding also needs urgent review."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00499 v8",
+        "url": "https://healthservice.hse.ie/documents/6507/499_V8_GemCARBOAUC_4BEV.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "OCEANS trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26271155/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

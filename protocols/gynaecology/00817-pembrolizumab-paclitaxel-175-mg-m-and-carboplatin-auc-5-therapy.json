@@ -1,22 +1,22 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00817-v2",
+  "protocol_id": "nccp-00817-v3",
   "file_name": "00817-pembrolizumab-paclitaxel-175-mg-m-and-carboplatin-auc-5-therapy.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00817",
-    "nccp_version": "2",
+    "nccp_version": "3",
     "tumour_group": "Gynaecology",
     "tumour_groups": [
       "Gynaecology"
     ],
     "title": "Pembrolizumab, Paclitaxel 175 mg/m² and Carboplatin AUC 5 Therapy",
     "short_title": "Pembrolizumab, Paclitaxel 175 mg/m² and Carboplatin AUC 5 Therapy",
-    "indication": "Persistent, recurrent or metastatic cervical cancer with PD-L1 CPS ≥1.",
-    "source_url": "https://healthservice.hse.ie/documents/6429/817_V2_Pembro_Pac_175_Carbo_AUC_5.pdf",
+    "indication": "Persistent, recurrent or metastatic cervical cancer with a PD-L1 combined positive score of at least 1.",
+    "source_url": "https://healthservice.hse.ie/documents/6429/Pembro_Pac_175_Carbo_AUC_5_817_.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.84.68",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "cervical_immunochemotherapy",
@@ -78,7 +78,8 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00817-v2"
+    "canonical_protocol_id": "nccp-00817-v3",
+    "review_date": "2029-08-21"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -89,12 +90,12 @@
     {
       "indication_id": "00817-gyn",
       "code": "00817a",
-      "description": "Persistent, recurrent or metastatic cervical cancer with PD-L1 CPS ≥1."
+      "description": "Persistent, recurrent or metastatic cervical cancer with a PD-L1 combined positive score of at least 1."
     }
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Pembrolizumab, Paclitaxel 175 mg/m² and Carboplatin AUC 5 Therapy",
+    "schedule_summary": "Pembrolizumab, paclitaxel and carboplatin on day 1 every three weeks for 6–8 cycles, according to benefit and tolerability. Pembrolizumab alone every three weeks while it helps and side effects are manageable.",
     "drugs": [
       "pembrolizumab",
       "paclitaxel",
@@ -564,6 +565,210 @@
       "unit": "mmol/L",
       "ui_section": "immunotherapy_bloods",
       "input_role": "context"
+    },
+    "treatment_visit": {
+      "label": "Treatment being given at this visit",
+      "type": "select",
+      "options": [
+        {
+          "value": "combination",
+          "label": "Combination · day 1"
+        },
+        {
+          "value": "maintenance",
+          "label": "Maintenance · pembrolizumab"
+        }
+      ],
+      "required": false,
+      "input_role": "context",
+      "demo_value": "combination"
+    },
+    "course_neuropathy": {
+      "label": "Neuropathy present at the next cycle",
+      "type": "select",
+      "options": [
+        {
+          "value": "none",
+          "label": "None or unknown"
+        },
+        {
+          "value": "first",
+          "label": "First persistent symptoms"
+        },
+        {
+          "value": "persistent",
+          "label": "Persists despite first reduction"
+        }
+      ],
+      "required": false,
+      "input_role": "context",
+      "demo_value": "none"
+    },
+    "immune_hepatitis_grade": {
+      "label": "Clinician-assessed immune hepatitis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "generic",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Enter the clinician-assessed grade for the confirmed immune event and apply the organ-specific laboratory criteria in NCCP Table 3.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6429/Pembro_Pac_175_Carbo_AUC_5_817_.pdf",
+      "grading_source_label": "NCCP 00817 v3 Table 3"
+    },
+    "immune_nephritis_grade": {
+      "label": "Clinician-assessed immune nephritis grade",
+      "type": "select",
+      "required": false,
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "ctcae_grade": 0,
+          "description": "No adverse event."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "ctcae_grade": 1,
+          "description": "Mild or asymptomatic; observation only."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "ctcae_grade": 2,
+          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "ctcae_grade": 3,
+          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "ctcae_grade": 4,
+          "description": "Life-threatening consequences; urgent intervention required."
+        }
+      ],
+      "demo_value": 0,
+      "ctcae_version": "5.0",
+      "ctcae_category": "generic",
+      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
+      "assessment_guidance": "Enter the clinician-assessed grade for the confirmed immune event and apply the organ-specific laboratory criteria in NCCP Table 3.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6429/Pembro_Pac_175_Carbo_AUC_5_817_.pdf",
+      "grading_source_label": "NCCP 00817 v3 Table 3"
+    },
+    "creatinine_uln_multiple": {
+      "label": "Serum creatinine relative to laboratory ULN",
+      "type": "number",
+      "min": 0,
+      "max": 1000,
+      "step": 0.01,
+      "unit": "× ULN",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0
+    },
+    "immune_recurrence": {
+      "label": "Recurrent immune toxicity",
+      "type": "select",
+      "options": [
+        {
+          "value": "none",
+          "label": "None or unknown"
+        },
+        {
+          "value": "pneum",
+          "label": "Recurrent grade 2 pneumonitis"
+        },
+        {
+          "value": "colitis",
+          "label": "Recurrent grade 3 colitis"
+        }
+      ],
+      "required": false,
+      "input_role": "context",
+      "demo_value": "none"
+    },
+    "first_treatment_assessment": {
+      "label": "Baseline assessment before first administration",
+      "type": "boolean",
+      "input_role": "context",
+      "required": false,
+      "demo_value": false
+    },
+    "classified_immune_event": {
+      "type": "select",
+      "label": "Additional clinician-confirmed immune toxicity (Table 3)",
+      "required": false,
+      "input_role": "decision",
+      "options": [
+        {
+          "value": "none",
+          "label": "None selected"
+        },
+        {
+          "value": "severe_endocrine",
+          "label": "Symptomatic hypophysitis, severe hyperthyroidism or protocol-defined type 1 diabetes with grade 3 or worse hyperglycaemia or ketoacidosis"
+        },
+        {
+          "value": "suspect_skin",
+          "label": "Suspected Stevens–Johnson syndrome or toxic epidermal necrolysis"
+        },
+        {
+          "value": "confirmed_skin",
+          "label": "Confirmed Stevens–Johnson syndrome or toxic epidermal necrolysis"
+        },
+        {
+          "value": "severe_neuro_cardiac",
+          "label": "Grade 3 or 4 myocarditis, encephalitis or Guillain–Barré syndrome"
+        },
+        {
+          "value": "liver_mets",
+          "label": "Hepatitis with liver metastases, baseline grade 2 AST/ALT and a rise of at least 50% persisting at least one week"
+        },
+        {
+          "value": "prolonged_ir",
+          "label": "Immune toxicity has failed to recover to grade 0–1 within 12 weeks of the last dose, or steroid cannot taper to prednisone-equivalent 10 mg/day or less within 12 weeks"
+        }
+      ],
+      "demo_value": "none"
     }
   },
   "required_inputs": [],
@@ -659,96 +864,23 @@
         "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
       },
       {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "CARBO_GFR_LOW",
-        "priority": 9,
-        "when": {
-          "field": "gfr_or_crcl_ml_min",
-          "operator": "<",
-          "value": 30
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-      },
-      {
         "id": "CARBO_HSR",
         "priority": 10,
         "when": {
-          "field": "carboplatin_hypersensitivity_history",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "carboplatin_hypersensitivity_history",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -764,214 +896,1334 @@
         "explanation": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
       },
       {
-        "id": "TAXANE_NEURO_G2",
-        "priority": 8,
+        "id": "VISIT_REQUIRED",
         "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets",
+                  "operator": "exists"
+                }
+              ]
+            }
+          ]
         },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Select the treatment visit and reassess to apply its count and dose rules."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Dose modifications"
+        },
+        "explanation": "Select the treatment visit and reassess to apply its count and dose rules."
+      },
+      {
+        "id": "CARBO_GFR_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Do not administer carboplatin at GFR 20 mL/min or lower."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Renal impairment"
+        },
+        "explanation": "Do not administer carboplatin at GFR 20 mL/min or lower."
+      },
+      {
+        "id": "CARBO_GFR_CAUTION",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": ">",
+                  "value": 20
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Extreme caution with carboplatin. Confirm GFR and discuss before prescribing."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Renal impairment"
+        },
+        "explanation": "Extreme caution with carboplatin. Confirm GFR and discuss before prescribing."
+      },
+      {
+        "id": "ANC_SEVERE",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 0.5
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery and consider a 25% reduction in paclitaxel and carboplatin for later cycles."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Delay until recovery and consider a 25% reduction in paclitaxel and carboplatin for later cycles."
+      },
+      {
+        "id": "ANC_DELAY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Delay until recovery."
+      },
+      {
+        "id": "ANC_OVERLAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "anc",
+              "operator": "==",
+              "value": 1
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "The source includes this exact value in both bands. Defer administration pending a consultant decision."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "The source includes this exact value in both bands. Defer administration pending a consultant decision."
+      },
+      {
+        "id": "ANC_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">",
+                  "value": 1
+                },
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Continuation requires clinical fitness and consultant decision."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Continuation requires clinical fitness and consultant decision."
+      },
+      {
+        "id": "PLATELETS_SEVERE",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 50
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery and consider a 25% reduction in paclitaxel and carboplatin for later cycles."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Delay until recovery and consider a 25% reduction in paclitaxel and carboplatin for later cycles."
+      },
+      {
+        "id": "PLATELETS_DELAY",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Delay until recovery."
+      },
+      {
+        "id": "PLATELETS_OVERLAP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "platelets",
+              "operator": "==",
+              "value": 75
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "The source includes this exact value in both bands. Defer administration pending a consultant decision."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "The source includes this exact value in both bands. Defer administration pending a consultant decision."
+      },
+      {
+        "id": "PLATELETS_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "platelets",
+                  "operator": ">",
+                  "value": 75
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Continuation requires clinical fitness and consultant decision."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Continuation requires clinical fitness and consultant decision."
+      },
+      {
+        "id": "FN",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "febrile_neutropenia",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery. Consider 25% reduction in both cytotoxics in subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 1"
+        },
+        "explanation": "Delay until recovery. Consider 25% reduction in both cytotoxics in subsequent cycles."
+      },
+      {
+        "id": "TAXANE_NEURO_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "all": [
+                    {
+                      "field": "paclitaxel_neuropathy_grade",
+                      "operator": ">=",
+                      "value": 1
+                    },
+                    {
+                      "field": "paclitaxel_neuropathy_grade",
+                      "operator": "<=",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "field": "course_neuropathy",
+                  "operator": "in",
+                  "value": [
+                    "first",
+                    "persistent"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Reduce paclitaxel 25% for grade 1–2 present at the next cycle, or 50% if persistent."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 4"
+        },
+        "explanation": "Reduce paclitaxel 25% for grade 1–2 present at the next cycle, or 50% if persistent."
+      },
+      {
+        "id": "TAXANE_NEURO_OMIT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "omit",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Omit paclitaxel for grade 3 or higher neuropathy."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 4"
+        },
+        "explanation": "Omit paclitaxel for grade 3 or higher neuropathy."
+      },
+      {
+        "id": "PNEUM_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "pneumonitis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "pneumonitis_grade",
+              "operator": "<=",
+              "value": 2
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab pending assessment and recovery. Check for recurrence."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Withhold pembrolizumab pending assessment and recovery. Check for recurrence."
+      },
+      {
+        "id": "PNEUM_STOP",
+        "when": {
+          "any": [
+            {
+              "field": "pneumonitis_grade",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "all": [
+                {
+                  "field": "pneumonitis_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "immune_recurrence",
+                  "operator": "==",
+                  "value": "pneum"
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Permanently discontinue pembrolizumab for this severity or recurrence."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Permanently discontinue pembrolizumab for this severity or recurrence."
+      },
+      {
+        "id": "COLITIS_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "diarrhoea_colitis_grade",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "field": "diarrhoea_colitis_grade",
+              "operator": "<=",
+              "value": 3
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab pending assessment and recovery. Check for recurrence."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Withhold pembrolizumab pending assessment and recovery. Check for recurrence."
+      },
+      {
+        "id": "COLITIS_STOP",
+        "when": {
+          "any": [
+            {
+              "field": "diarrhoea_colitis_grade",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "all": [
+                {
+                  "field": "diarrhoea_colitis_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "immune_recurrence",
+                  "operator": "==",
+                  "value": "colitis"
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Permanently discontinue pembrolizumab for this severity or recurrence."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Permanently discontinue pembrolizumab for this severity or recurrence."
+      },
+      {
+        "id": "NEPHRITIS_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "immune_nephritis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "creatinine_uln_multiple",
+                      "operator": ">",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "creatinine_uln_multiple",
+                      "operator": "<=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab for confirmed grade 2 nephritis."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Withhold pembrolizumab for confirmed grade 2 nephritis."
+      },
+      {
+        "id": "NEPHRITIS_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "immune_nephritis_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "creatinine_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Permanently discontinue pembrolizumab for severe nephritis."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Permanently discontinue pembrolizumab for severe nephritis."
+      },
+      {
+        "id": "NEPHRITIS_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "creatinine_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Assess cause, baseline, trend and CTCAE grade. Consult Table 3 before dosing."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Assess cause, baseline, trend and CTCAE grade. Consult Table 3 before dosing."
+      },
+      {
+        "id": "HEPATITIS_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "immune_hepatitis_grade",
+              "operator": "==",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab for confirmed grade 2 hepatitis."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Withhold pembrolizumab for confirmed grade 2 hepatitis."
+      },
+      {
+        "id": "HEPATITIS_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "immune_hepatitis_grade",
+              "operator": ">=",
+              "value": 3
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Permanently discontinue pembrolizumab for severe hepatitis."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Permanently discontinue pembrolizumab for severe hepatitis."
+      },
+      {
+        "id": "HEPATITIS_REVIEW",
+        "when": {
+          "any": [
+            {
+              "field": "alt_ast_uln_multiple",
+              "operator": ">",
+              "value": 3
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 1.5
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Assess cause, baseline, trend and CTCAE grade. Consult Table 3 before dosing."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Assess cause, baseline, trend and CTCAE grade. Consult Table 3 before dosing."
+      },
+      {
+        "id": "SKIN_HOLD",
+        "when": {
+          "field": "rash_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab for grade 3 immune skin toxicity."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Withhold pembrolizumab for grade 3 immune skin toxicity."
+      },
+      {
+        "id": "SKIN_STOP",
+        "when": {
+          "field": "rash_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Discontinue pembrolizumab for grade 4 immune skin toxicity."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Discontinue pembrolizumab for grade 4 immune skin toxicity."
+      },
+      {
+        "id": "TAXANE_HEPATIC_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Paclitaxel contraindicated at these hepatic values."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 2"
+        },
+        "explanation": "Paclitaxel contraindicated at these hepatic values."
+      },
+      {
+        "id": "TAXANE_HEPATIC_2",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">=",
+                      "value": 1.26
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Use 75% of the original dose of paclitaxel after clinician review."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 2"
+        },
+        "explanation": "Use 75% of the original dose of paclitaxel after clinician review."
+      },
+      {
+        "id": "TAXANE_HEPATIC_5",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">=",
+                      "value": 2.01
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Use 50% of the original dose of paclitaxel after clinician review."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 2"
+        },
+        "explanation": "Use 50% of the original dose of paclitaxel after clinician review."
+      },
+      {
+        "id": "TAXANE_GAPS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "combination"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": "<",
+                  "value": 10
+                },
+                {
+                  "any": [
+                    {
+                      "all": [
+                        {
+                          "field": "bilirubin_uln_multiple",
+                          "operator": ">",
+                          "value": 1.25
+                        },
+                        {
+                          "field": "bilirubin_uln_multiple",
+                          "operator": "<",
+                          "value": 1.26
+                        }
+                      ]
+                    },
+                    {
+                      "all": [
+                        {
+                          "field": "bilirubin_uln_multiple",
+                          "operator": ">",
+                          "value": 2
+                        },
+                        {
+                          "field": "bilirubin_uln_multiple",
+                          "operator": "<",
+                          "value": 2.01
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
         "action": {
           "type": "consultant_review",
           "components": [
             "paclitaxel"
           ],
-          "message": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
+          "message": "This bilirubin value falls between the printed bands. Confirm with the consultant and pharmacy."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Table 2"
         },
-        "explanation": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
+        "explanation": "This bilirubin value falls between the printed bands. Confirm with the consultant and pharmacy."
       },
       {
-        "id": "TAXANE_NEURO_G3",
+        "id": "BASELINE_ANC",
         "priority": 10,
         "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "paclitaxel"
-          ],
-          "message": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
-      },
-      {
-        "id": "TAXANE_LFT",
-        "priority": 8,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.25
+          "all": [
+            {
+              "field": "first_treatment_assessment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
-            "paclitaxel"
+            "whole_regimen"
           ],
-          "message": "Elevated bilirubin requires the paclitaxel hepatic dose-modification table."
+          "message": "Consult the treating oncologist. Baseline ANC below 1.5 is a caution in this regimen."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Cautions"
         },
-        "explanation": "Elevated bilirubin requires the paclitaxel hepatic dose-modification table."
+        "explanation": "Consult the treating oncologist. Baseline ANC below 1.5 is a caution in this regimen."
       },
       {
-        "id": "ICI_PNEUM_G2",
+        "id": "BASELINE_ECOG",
         "priority": 10,
         "when": {
-          "field": "pneumonitis_grade",
-          "operator": ">=",
-          "value": 2
+          "all": [
+            {
+              "field": "first_treatment_assessment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "ecog",
+              "operator": ">=",
+              "value": "2"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "ECOG performance status is outside the listed 0–1 eligibility range. Review before initiation."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Eligibility"
+        },
+        "explanation": "ECOG performance status is outside the listed 0–1 eligibility range. Review before initiation."
+      },
+      {
+        "id": "ICI_SEVERE_ENDOCRINE",
+        "priority": 10,
+        "when": {
+          "field": "classified_immune_event",
+          "operator": "==",
+          "value": "severe_endocrine"
         },
         "action": {
           "type": "withhold",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+          "message": "Withhold pembrolizumab. Symptomatic hypophysitis, severe hyperthyroidism or protocol-defined type 1 diabetes with grade 3 or worse hyperglycaemia or ketoacidosis. Refer for urgent specialist management."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
         },
-        "explanation": "Grade 2 immune pneumonitis requires withholding; Grade 3–4 requires permanent discontinuation."
+        "explanation": "Withhold pembrolizumab. Symptomatic hypophysitis, severe hyperthyroidism or protocol-defined type 1 diabetes with grade 3 or worse hyperglycaemia or ketoacidosis. Refer for urgent specialist management."
       },
       {
-        "id": "ICI_PNEUM_G3",
+        "id": "ICI_SUSPECT_SKIN",
         "priority": 10,
         "when": {
-          "field": "pneumonitis_grade",
-          "operator": ">=",
-          "value": 3
+          "field": "classified_immune_event",
+          "operator": "==",
+          "value": "suspect_skin"
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pembrolizumab"
+          ],
+          "message": "Withhold pembrolizumab. Suspected Stevens–Johnson syndrome or toxic epidermal necrolysis. Refer for urgent specialist management."
+        },
+        "source": {
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
+        },
+        "explanation": "Withhold pembrolizumab. Suspected Stevens–Johnson syndrome or toxic epidermal necrolysis. Refer for urgent specialist management."
+      },
+      {
+        "id": "ICI_CONFIRMED_SKIN",
+        "priority": 10,
+        "when": {
+          "field": "classified_immune_event",
+          "operator": "==",
+          "value": "confirmed_skin"
         },
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
+          "message": "Permanently discontinue pembrolizumab. Confirmed Stevens–Johnson syndrome or toxic epidermal necrolysis. Refer for urgent specialist management."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
         },
-        "explanation": "Grade 3–4 immune pneumonitis requires permanent discontinuation."
+        "explanation": "Permanently discontinue pembrolizumab. Confirmed Stevens–Johnson syndrome or toxic epidermal necrolysis. Refer for urgent specialist management."
       },
       {
-        "id": "ICI_COLITIS_G2",
-        "priority": 9,
-        "when": {
-          "field": "diarrhoea_colitis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse immune diarrhoea/colitis requires withholding and immune-toxicity management."
-      },
-      {
-        "id": "ICI_HEP_G2",
-        "priority": 9,
-        "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ALT/AST >3 ×ULN requires immune-hepatitis assessment and withholding."
-      },
-      {
-        "id": "ICI_HEP_G3",
+        "id": "ICI_SEVERE_NEURO_CARDIAC",
         "priority": 10,
         "when": {
-          "field": "alt_ast_uln_multiple",
-          "operator": ">",
-          "value": 5
+          "field": "classified_immune_event",
+          "operator": "==",
+          "value": "severe_neuro_cardiac"
         },
         "action": {
           "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+          "message": "Permanently discontinue pembrolizumab. Grade 3 or 4 myocarditis, encephalitis or Guillain–Barré syndrome. Refer for urgent specialist management."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
         },
-        "explanation": "ALT/AST >5 ×ULN triggers the severe immune-hepatitis pathway."
+        "explanation": "Permanently discontinue pembrolizumab. Grade 3 or 4 myocarditis, encephalitis or Guillain–Barré syndrome. Refer for urgent specialist management."
       },
       {
-        "id": "ICI_BILI",
-        "priority": 9,
+        "id": "ICI_LIVER_METS",
+        "priority": 10,
         "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.5
+          "field": "classified_immune_event",
+          "operator": "==",
+          "value": "liver_mets"
         },
         "action": {
-          "type": "withhold",
+          "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
+          "message": "Permanently discontinue pembrolizumab. Hepatitis with liver metastases, baseline grade 2 AST/ALT and a rise of at least 50% persisting at least one week. Refer for urgent specialist management."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
         },
-        "explanation": "Bilirubin >1.5 ×ULN requires immune-hepatitis assessment."
+        "explanation": "Permanently discontinue pembrolizumab. Hepatitis with liver metastases, baseline grade 2 AST/ALT and a rise of at least 50% persisting at least one week. Refer for urgent specialist management."
       },
       {
-        "id": "ICI_RENAL",
-        "priority": 9,
+        "id": "ICI_PROLONGED_IR",
+        "priority": 10,
         "when": {
-          "field": "creatinine_ratio_baseline_or_uln",
-          "operator": ">",
-          "value": 1.5
+          "field": "classified_immune_event",
+          "operator": "==",
+          "value": "prolonged_ir"
         },
         "action": {
-          "type": "withhold",
+          "type": "permanently_discontinue",
           "components": [
-            "whole_regimen"
+            "pembrolizumab"
           ],
-          "message": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
+          "message": "Permanently discontinue pembrolizumab. Immune toxicity has failed to recover to grade 0–1 within 12 weeks of the last dose, or steroid cannot taper to prednisone-equivalent 10 mg/day or less within 12 weeks. Refer for urgent specialist management."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00817 v3",
+          "page": "Table 3"
         },
-        "explanation": "Creatinine >1.5 × baseline/ULN requires immune-nephritis assessment."
+        "explanation": "Permanently discontinue pembrolizumab. Immune toxicity has failed to recover to grade 0–1 within 12 weeks of the last dose, or steroid cannot taper to prednisone-equivalent 10 mg/day or less within 12 weeks. Refer for urgent specialist management."
       }
     ]
   },
@@ -994,5 +2246,72 @@
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "pembrolizumab",
+          "dose": {
+            "value": 200,
+            "unit": "mg"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "paclitaxel",
+          "dose": {
+            "value": 175,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 3,
+          "drug": "carboplatin",
+          "dose": {
+            "value": 5,
+            "unit": "AUC"
+          },
+          "route": "IV infusion"
+        }
+      ],
+      "notes": [
+        "Pembrolizumab, paclitaxel and carboplatin on day 1 every three weeks for 6–8 cycles, according to benefit and tolerability. Pembrolizumab alone every three weeks while it helps and side effects are manageable."
+      ],
+      "active_drugs": [
+        "pembrolizumab",
+        "paclitaxel",
+        "carboplatin"
+      ]
+    },
+    {
+      "phase_id": "maintenance",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "pembrolizumab",
+          "dose": {
+            "value": 200,
+            "unit": "mg"
+          },
+          "route": "IV infusion"
+        }
+      ],
+      "active_drugs": [
+        "pembrolizumab"
+      ]
+    }
+  ]
 }

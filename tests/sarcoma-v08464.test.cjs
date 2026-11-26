@@ -1,4 +1,4 @@
-const flot67 = require('./helpers/retrospective-v08467.cjs').inventory;
+const gynae68 = require('./helpers/retrospective-v08468.cjs').inventory;
 const gynae66 = require('./helpers/retrospective-v08466.cjs').inventory;
 'use strict';
 const gynae65 = require('./helpers/retrospective-v08465.cjs').inventory;
@@ -7,7 +7,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f)),json=f=>JSON.parse(read(f)),S=json('validation/sarcoma-v08464/scope.json'),A=require('../js/patient-asset-registry-v0810.js'),V=require('../js/protocol-validator.js'),E=require('../js/assessment-engine.js'),C=require('../tools/consent-core-v08455.cjs');
 const htmlOnly=process.argv.includes('--html-only');assert(process.argv.slice(2).every(x=>x==='--html-only'),'Unknown scoped test argument');
 const codes=['00675','00747','00504','00754','00757'],I=json('protocols/index.json').protocols;
-assert.equal(json('package.json').version,'0.84.67');assert.equal(A.release,'0.84.67');assert.equal(json('data/app-release.json').release,'0.84.67');assert.equal(I.length,378);assert.equal(A.codes.length,flot67.codes);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,flot67.routes);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,flot67.visualRoutes);
+assert.equal(json('package.json').version,'0.84.68');assert.equal(A.release,'0.84.68');assert.equal(json('data/app-release.json').release,'0.84.68');assert.equal(I.length,378);assert.equal(A.codes.length,gynae68.codes);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,gynae68.routes);assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,gynae68.visualRoutes);
 assert.deepEqual(S.new_routes,codes);assert.deepEqual(S.document_routes,codes);assert.equal(S.base_release,'0.84.63');assert.equal(S.base_state_kind,'verified_working_state');assert.equal(S.independent_clinical_approval,false);assert.deepEqual(S.retrospective_codes,['00420','00463','00100','00596','00680']);assert.deepEqual(S.changed_retrospective_routes,[]);assert.deepEqual(S.corrective_consent_routes,S.changed_retrospective_routes);
 const register=json('data/clinical-validation-register-v0630.json').protocols,workflow=json('data/regimen-workflow-v0750.json'),phase=json('data/phase-support-v0838.json').regimens,presentation=json('data/patient-presentation-v08431.json').routes,journey=json('data/breast-treatment-journeys-v0837.json'),KB=json('data/regimen-knowledge-base-v08464-addendum.json');
 assert.equal(KB.regimen_profiles.length,5);const norm=s=>String(s).replace(/<[^>]*>/g,'').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#(?:039|39);/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();

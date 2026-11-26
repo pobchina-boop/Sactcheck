@@ -40,6 +40,11 @@ for (const file of paths) {
     assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
     assert.equal(require('node:crypto').createHash('sha256').update(expected).digest('hex'),record.files[file].before,file);
     release.verifyFile(file);
+  } else if (['00499','00766','00799','00811','00817'].includes(code)) {
+    const release = require('./helpers/live-release-v08464.cjs');
+    const {record} = release.gynae68Inventory();
+    assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
+    release.verifyFile(file);
   } else if (code === '00344') {
     const release = require('./helpers/live-release-v08464.cjs');
     const {record} = release.flot67Inventory();

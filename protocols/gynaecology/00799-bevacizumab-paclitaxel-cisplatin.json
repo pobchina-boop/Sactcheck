@@ -9,7 +9,7 @@
     "tumour_group": "Gynaecology",
     "title": "Bevacizumab 15 mg/kg, Paclitaxel 175 mg/m² and Cisplatin 50 mg/m² Therapy",
     "short_title": "Bevacizumab + paclitaxel + cisplatin",
-    "indication": "Locally advanced, recurrent or metastatic cervical cancer not amenable to curative surgery or radiation.",
+    "indication": "Locally advanced, recurrent or metastatic cervical cancer when curative surgery or radiation is unsuitable.",
     "published_date": "2023-03-10",
     "review_date": "2029-04-12",
     "source_url": "https://healthservice.hse.ie/documents/6422/799_V2_Bev_Pacli_CIS.pdf",
@@ -20,9 +20,9 @@
     "migration": {
       "mode": "live_json"
     },
-    "sactcheck_encoding_version": "0.43.0",
+    "sactcheck_encoding_version": "0.84.68",
     "partial_assessment_supported": true,
-    "source_checked_date": "2026-07-25",
+    "source_checked_date": "2026-11-26",
     "catalogue_section": "chemotherapy_combination_sact",
     "catalogue_section_label": "Chemotherapy & combination SACT",
     "treatment_class": [
@@ -88,7 +88,7 @@
     {
       "indication_id": "advanced_cervical",
       "code": "00799a",
-      "description": "Locally advanced, recurrent or metastatic cervical cancer not amenable to curative surgery or radiation therapy."
+      "description": "Locally advanced, recurrent or metastatic cervical cancer when curative surgery or radiation is unsuitable."
     }
   ],
   "treatment_phases": [
@@ -127,6 +127,11 @@
           },
           "route": "IV infusion"
         }
+      ],
+      "active_drugs": [
+        "paclitaxel",
+        "cisplatin",
+        "bevacizumab"
       ]
     }
   ],
@@ -646,6 +651,33 @@
       "demo_value": false,
       "ui_section": "clinical",
       "input_role": "decision"
+    },
+    "treatment_visit": {
+      "label": "Treatment being given at this visit",
+      "type": "select",
+      "options": [
+        {
+          "value": "combination",
+          "label": "Combination · day 1"
+        }
+      ],
+      "required": false,
+      "input_role": "context",
+      "demo_value": "combination"
+    },
+    "persistent_grade3_htn": {
+      "type": "boolean",
+      "label": "Grade 3 hypertension persists despite treatment",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "first_treatment_assessment": {
+      "label": "Baseline assessment before first administration",
+      "type": "boolean",
+      "input_role": "context",
+      "required": false,
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -1138,24 +1170,6 @@
         "explanation": "Uncontrolled hypertension requires withholding."
       },
       {
-        "rule_id": "BEV_HYPERTENSION_SEVERE",
-        "field": "hypertension_grade",
-        "operator": ">=",
-        "value": 3,
-        "action": {
-          "type": "discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "recommendation": "Discontinue bevacizumab for grade 4 or persistent grade 3 hypertension."
-        },
-        "source": {
-          "page": 5,
-          "document": "Current mapped NCCP source"
-        },
-        "explanation": "Severe hypertension requires discontinuation."
-      },
-      {
         "rule_id": "BEV_DIPSTICK_4",
         "field": "proteinuria_dipstick",
         "operator": "==",
@@ -1289,6 +1303,99 @@
           "document": "Current mapped NCCP source"
         },
         "explanation": "GI perforation requires permanent discontinuation."
+      },
+      {
+        "id": "BEV_HYPERTENSION_SEVERE",
+        "when": {
+          "any": [
+            {
+              "field": "hypertension_grade",
+              "operator": "==",
+              "value": 4
+            },
+            {
+              "all": [
+                {
+                  "field": "hypertension_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "persistent_grade3_htn",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Stop bevacizumab for grade 4 or persistent grade 3 hypertension."
+        },
+        "source": {
+          "document": "NCCP 00799 v2",
+          "page": "Table 3"
+        },
+        "explanation": "Stop bevacizumab for grade 4 or persistent grade 3 hypertension."
+      },
+      {
+        "id": "BEV_HYPERTENSION_REVIEW",
+        "when": {
+          "field": "hypertension_grade",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Treat hypertension and review interruption until controlled. Persistent grade 3 requires discontinuation."
+        },
+        "source": {
+          "document": "NCCP 00799 v2",
+          "page": "Table 3"
+        },
+        "explanation": "Treat hypertension and review interruption until controlled. Persistent grade 3 requires discontinuation."
+      },
+      {
+        "id": "BASELINE_ANC",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "first_treatment_assessment",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Do not initiate this regimen while the baseline ANC exclusion applies."
+        },
+        "source": {
+          "document": "NCCP 00799 v2",
+          "page": "Exclusions"
+        },
+        "explanation": "Do not initiate this regimen while the baseline ANC exclusion applies."
       }
     ]
   },

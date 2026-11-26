@@ -5,7 +5,7 @@ const path = require('node:path');
 const {render} = require('./patient-pack-v08461.cjs');
 const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
-const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
+const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
 const illustratedSuites = new Set([...gynaecology, '00344']);
 const codes = new Set([...illustratedSuites, '00897', '00926', '00953']);
@@ -109,7 +109,7 @@ function renderPages(code, root = projectRoot) {
   files['handbook-print.html'] = files['handbook-print.html'].replace('</main>', phaseSheets+'</main>');
   for (const name of Object.keys(files)) {
    files[name]=files[name].replace(/<a href="([^"]+\.pdf)"(?! download)/g,'<a download href="$1"');
-   if(gynaeBatch.has(code) && code !== '00819') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
+   if(gynaeBatch.has(code) && !['00819','00811','00817'].includes(code)) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
    if(code==='00862') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry this card and your latest prescription.').replaceAll('My cycle record','My review record');
   }
  }

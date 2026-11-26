@@ -31,7 +31,7 @@ const override = overrides.protocols[id];
 // The v63 successor is limited to the two source-reviewed olaparib records.
 // Authenticate its actual bytes before reading the inherited Enhertu state;
 // the original 377-record preservation assertions still run against that state.
-const olaparib = ['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
+const olaparib = ['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
 const inheritedSidecar = olaparib ? olaparib.baselineJson(sidecarPath) : sidecar;
 const inheritedOverrides = olaparib ? olaparib.baselineJson(overridesPath) : overrides;
 const inheritedReport = olaparib ? olaparib.baselineBytes(reportPath) : read(reportPath);

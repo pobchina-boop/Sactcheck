@@ -101,7 +101,12 @@ const flotPhases = DoseSchedule.buildModel(require(path.join(root, flotSchedule.
 assert.equal(flotPhases.length, 1);
 assert.equal(flotPhases[0].cycleLength, 14);
 assert.deepEqual(Array.from(flotPhases[0].components, item => item.id), ['docetaxel', 'oxaliplatin', 'folinic_acid', '5fu']);
-const expectedScheduleCoverage = 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
+const gynae68Schedules = ['00499','00811','00817'];
+for (const code of gynae68Schedules) {
+  const row = catalogue.protocols.find(x=>x.path.includes('/'+code+'-'));
+  assert.equal(DoseSchedule.buildModel(require(path.join(root,row.path))).phases.length,2);
+}
+const expectedScheduleCoverage = gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
 assert.strictEqual(usefulCoverage, expectedScheduleCoverage);
 assert.strictEqual(scheduleCoverage, expectedScheduleCoverage);
 assert.strictEqual(doseLevelCoverage, 67);

@@ -52,7 +52,15 @@ const sections = {
     ['Other immune reactions','Report new muscle weakness, chest pain, reduced urine, blistering skin, eye pain or altered vision urgently. Reactions can begin after treatment stops. Carry your immunotherapy alert card.']
   ]
 };
-const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
+sections.pembrolizumab = [
+ ['Immune inflammation','New cough, diarrhoea, jaundice, rash or reduced urine needs urgent review, even after treatment ends.'],
+ ['Hormone and other serious reactions','Call urgently for severe fatigue, headache, thirst, weakness or chest pain. Hormone replacement can be lifelong. Carry your immunotherapy alert card.']
+];
+sections.cisplatin = [
+ ['Kidneys and hearing','Fluids and blood tests help protect the kidneys. Report reduced urine, ringing or hearing loss promptly. Hearing changes can persist.'],
+ ['Nerves, nausea and low counts','Report numbness, persistent vomiting or bleeding. Call urgently for fever or chills.']
+];
+const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499']);
 const h = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const table=(headers,rows)=>'<table><thead><tr>'+headers.map(x=>'<th scope="col">'+h(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+h(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 const header=(p,name)=>'<header><div class="brand">SACT<span>Check</span></div><div class="reference">NCCP '+h(p.code)+' · v'+h(p.protocol_version)+'</div></header><h1>'+h(name)+'</h1><p class="regimen">'+h(p.title)+'</p>';
@@ -62,7 +70,7 @@ function consent(p){
  const groups=p.agents.map(a=>{const rows=sections[a.id];if(!rows)throw Error('Missing material risks for '+a.id);return '<section class="agent"><h3>'+h(a.name)+'</h3>'+table(['Effect to discuss','What to look for and when to get help'],rows)+'</section>';});
  const a=header(p,'Consent to systemic anti-cancer treatment')+fields+'<h2>Treatment and purpose</h2><p>'+h(p.purpose)+' '+h(p.indication_text)+'</p><p><b>Treatment schedule.</b> '+h(p.schedule_summary)+'</p><h2 class="riskhead">Regimen-specific side effects</h2>'+groups.join('');
  const b=header(p,'Treatment discussion and decision')+'<h2>Benefits, alternatives and individual risks</h2><p>'+h(p.evidence.interpretation)+' '+h(p.evidence.limitations)+'</p><p>Discuss other treatment options, symptom-focused care, fertility, contraception and the effects that matter most to you. You can ask for more time and change your decision.</p><p><b>Options discussed, personal risks and questions</b></p><div class="lines"></div><p><b>Urgent contact</b> '+h(p.urgent_extra)+' Emergency services: 112 or 999.</p><h2>Decision and signatures</h2><p>I have discussed the purpose, likely benefits, material risks and alternatives, and have had the opportunity to ask questions.</p><p>Decision: □ I agree to treatment &nbsp; □ I would like more time &nbsp; □ I decline</p><div class="fields"><span>Patient / representative</span><span>Date</span></div><div class="fields"><span>Clinician and registration number</span><span>Signature / date</span></div><footer>SACTCheck feasibility build · Use with the hospital consent process. Source: NCCP '+h(p.code)+' v'+h(p.protocol_version)+'.</footer>';
- return page(p,'Regimen-specific consent','consent-form.pdf','<article>'+a+'</article><article>'+b+'</article>');
+ return page(p,'Regimen-specific consent','consent-form.pdf','<article'+(p.code==='00811'?' class="four-agents"':'')+'>'+a+'</article><article>'+b+'</article>');
 }
 function rx(p,phase){
  const level=phase.emetogenic_risk,high=level==='high',low=level==='low';
@@ -81,6 +89,7 @@ function rx(p,phase){
  else{
   meds='<h2>Day unit · treatment day</h2>'+table(['Medicine','Dose and route','Directions'],day1);
   if(taxane&&high)meds+='<p class="note">Reconcile dexamethasone with the paclitaxel premedication before signing. Record one total dose.</p>';
+  if(p.code==='00799')meds+='<p class="note">Olanzapine can cause sedation. Review concurrent metoclopramide because of increased risk of extrapyramidal effects.</p>';
   if(later.length)meds+='<h2>Take home · scheduled</h2>'+table(['Medicine','Dose and route','Directions'],later);
   const metoclopramide=rows.find(row=>row[0]==='Metoclopramide');
   if (!metoclopramide) throw Error('Missing subsequent antiemetic for '+p.code+' / '+phase.id);

@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.67';
+  const RELEASE='0.84.68';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00817':{"title": "Pembrolizumab with paclitaxel and carboplatin", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00811':{"title": "Pembrolizumab, paclitaxel, carboplatin and bevacizumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00799':{"title": "Paclitaxel, cisplatin and bevacizumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00766':{"title": "Paclitaxel, carboplatin AUC 6 and bevacizumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00499':{"title": "Gemcitabine, carboplatin and bevacizumab", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00344':{"title": "FLOT · chemotherapy before and after surgery", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "portPump": true},
     '00620':{"title":"Bevacizumab 7.5 mg/kg with carboplatin and paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00716':{"title":"Bevacizumab 15 mg/kg with carboplatin and paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},

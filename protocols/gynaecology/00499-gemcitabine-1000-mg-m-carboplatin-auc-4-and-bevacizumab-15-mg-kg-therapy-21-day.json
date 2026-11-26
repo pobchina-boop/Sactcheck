@@ -12,11 +12,11 @@
     ],
     "title": "Gemcitabine 1000 mg/m², Carboplatin AUC 4 and Bevacizumab 15 mg/kg Therapy – 21 day",
     "short_title": "Gemcitabine 1000 mg/m², Carboplatin AUC 4 and Bevacizumab 15 mg/kg Therapy – 21 day",
-    "indication": "First recurrence of platinum-sensitive ovarian, fallopian tube or primary peritoneal cancer without prior VEGF-directed therapy.",
+    "indication": "First platinum-sensitive recurrence of epithelial ovarian, fallopian tube or primary peritoneal cancer after no previous VEGF-directed treatment.",
     "source_url": "https://healthservice.hse.ie/documents/6507/499_V8_GemCARBOAUC_4BEV.pdf",
     "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "sactcheck_encoding_version": "0.84.68",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "ovarian_platinum_sensitive",
@@ -89,12 +89,12 @@
     {
       "indication_id": "00499-gyn",
       "code": "00499a",
-      "description": "First recurrence of platinum-sensitive ovarian, fallopian tube or primary peritoneal cancer without prior VEGF-directed therapy."
+      "description": "First platinum-sensitive recurrence of epithelial ovarian, fallopian tube or primary peritoneal cancer after no previous VEGF-directed treatment."
     }
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Gemcitabine 1000 mg/m², Carboplatin AUC 4 and Bevacizumab 15 mg/kg Therapy – 21 day",
+    "schedule_summary": "Bevacizumab, gemcitabine and carboplatin on day 1 of each three-week cycle. Six cycles are usual and up to ten may be given. Gemcitabine alone after a blood count and kidney check. If omitted for low counts, this dose is skipped for the rest of the cycle. After chemotherapy finishes, bevacizumab alone every three weeks while it helps and side effects are manageable.",
     "drugs": [
       "gemcitabine",
       "carboplatin",
@@ -407,6 +407,104 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "treatment_visit": {
+      "label": "Treatment being given at this visit",
+      "type": "select",
+      "options": [
+        {
+          "value": "day1",
+          "label": "Day 1 · combination"
+        },
+        {
+          "value": "day8",
+          "label": "Day 8 · gemcitabine"
+        },
+        {
+          "value": "maintenance",
+          "label": "Maintenance · bevacizumab"
+        }
+      ],
+      "required": false,
+      "input_role": "context",
+      "demo_value": "day1"
+    },
+    "uncontrolled_or_symptomatic_bp": {
+      "type": "boolean",
+      "label": "Confirmed uncontrolled or symptomatic hypertension on the treatment day",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_bev_vascular_event": {
+      "type": "boolean",
+      "label": "Confirmed grade 4 hypertension, persistent grade 3 hypertension, grade 4 thromboembolism, or grade 3–4 haemorrhage",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bev_confirmed_perforation_or_severe_fistula": {
+      "type": "boolean",
+      "label": "Confirmed GI perforation, tracheo-oesophageal fistula or any grade 4 fistula",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "urine_protein_g_24h": {
+      "type": "number",
+      "label": "Measured urine protein in a 24-hour collection",
+      "unit": "g/24 h",
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 0,
+      "required": false,
+      "input_role": "decision"
+    },
+    "urine_dipstick": {
+      "type": "number",
+      "label": "Urine dipstick protein (0, 1+, 2+, 3+, 4+)",
+      "unit": "+",
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "required": false,
+      "input_role": "decision",
+      "max": 4
+    },
+    "restart_after_omission": {
+      "label": "Is day 1 restarting after omitted gemcitabine?",
+      "type": "select",
+      "options": [
+        {
+          "value": "ordinary",
+          "label": "New cycle"
+        },
+        {
+          "value": "restart",
+          "label": "Restart after omitted gemcitabine"
+        }
+      ],
+      "required": false,
+      "input_role": "context",
+      "demo_value": "ordinary"
+    },
+    "previous_cycle_gem_toxicity": {
+      "type": "boolean",
+      "label": "Previous cycle had ANC <0.5 for >5 days, ANC <0.1 for >3 days, febrile neutropenia, platelet nadir <25, or toxicity delay >1 week",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false
+    },
+    "bilirubin_umol_l": {
+      "label": "Total bilirubin",
+      "type": "number",
+      "min": 0,
+      "max": 1000,
+      "step": 0.01,
+      "unit": "µmol/L",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": 0
     }
   },
   "required_inputs": [],
@@ -502,96 +600,23 @@
         "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
       },
       {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "CARBO_GFR_LOW",
-        "priority": 9,
-        "when": {
-          "field": "gfr_or_crcl_ml_min",
-          "operator": "<",
-          "value": 30
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-      },
-      {
         "id": "CARBO_HSR",
         "priority": 10,
         "when": {
-          "field": "carboplatin_hypersensitivity_history",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1"
+              ]
+            },
+            {
+              "field": "carboplatin_hypersensitivity_history",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -607,97 +632,61 @@
         "explanation": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
       },
       {
-        "id": "BEV_BP_SYS",
+        "id": "VISIT_REQUIRED",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets",
+                  "operator": "exists"
+                }
+              ]
+            }
+          ]
+        },
         "priority": 9,
-        "when": {
-          "field": "systolic_bp",
-          "operator": ">=",
-          "value": 160
-        },
         "action": {
-          "type": "withhold",
+          "type": "consultant_review",
           "components": [
-            "bevacizumab"
+            "whole_regimen"
           ],
-          "message": "Withhold bevacizumab until blood pressure is controlled."
+          "message": "Select the treatment visit and reassess to apply its count and dose rules."
         },
         "source": {
-          "document": "Current official NCCP regimen",
+          "document": "NCCP 00499 v8",
           "page": "Dose modifications"
         },
-        "explanation": "Withhold bevacizumab until blood pressure is controlled."
-      },
-      {
-        "id": "BEV_BP_DIA",
-        "priority": 9,
-        "when": {
-          "field": "diastolic_bp",
-          "operator": ">=",
-          "value": 100
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Withhold bevacizumab until blood pressure is controlled."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Withhold bevacizumab until blood pressure is controlled."
-      },
-      {
-        "id": "BEV_PROTEIN",
-        "priority": 9,
-        "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Severe proteinuria requires withholding and quantified renal assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Severe proteinuria requires withholding and quantified renal assessment."
-      },
-      {
-        "id": "BEV_BLEED",
-        "priority": 10,
-        "when": {
-          "field": "clinically_significant_bleeding",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Clinically significant bleeding triggers the severe bevacizumab pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Clinically significant bleeding triggers the severe bevacizumab pathway."
+        "explanation": "Select the treatment visit and reassess to apply its count and dose rules."
       },
       {
         "id": "BEV_THROMBOSIS",
-        "priority": 9,
         "when": {
-          "field": "recent_thrombosis",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "recent_thrombosis",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
+        "priority": 9,
         "action": {
           "type": "consultant_review",
           "components": [
@@ -706,19 +695,31 @@
           "message": "Recent thromboembolism requires individualised bevacizumab risk review."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
         },
         "explanation": "Recent thromboembolism requires individualised bevacizumab risk review."
       },
       {
         "id": "BEV_SURGERY",
-        "priority": 9,
         "when": {
-          "field": "major_surgery_or_unhealed_wound",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "major_surgery_or_unhealed_wound",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
+        "priority": 9,
         "action": {
           "type": "withhold",
           "components": [
@@ -727,31 +728,859 @@
           "message": "Withhold bevacizumab around major surgery and until wounds are adequately healed."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
         },
         "explanation": "Withhold bevacizumab around major surgery and until wounds are adequately healed."
       },
       {
-        "id": "BEV_PERF",
-        "priority": 10,
+        "id": "BEV_RECHECK_systolic_bp",
         "when": {
-          "field": "gi_perforation_or_fistula",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "systolic_bp",
+              "operator": ">",
+              "value": 150
+            }
+          ]
         },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+      },
+      {
+        "id": "BEV_RECHECK_diastolic_bp",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "diastolic_bp",
+              "operator": ">",
+              "value": 100
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+      },
+      {
+        "id": "BEV_BP_CONFIRMED",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "uncontrolled_or_symptomatic_bp",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold bevacizumab and start or adjust antihypertensive treatment."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Withhold bevacizumab and start or adjust antihypertensive treatment."
+      },
+      {
+        "id": "BEV_VASCULAR_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "severe_bev_vascular_event",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
         "action": {
           "type": "permanently_discontinue",
           "components": [
             "bevacizumab"
           ],
-          "message": "GI perforation or fistula requires permanent discontinuation."
+          "message": "Discontinue bevacizumab for the confirmed event."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
         },
-        "explanation": "GI perforation or fistula requires permanent discontinuation."
+        "explanation": "Discontinue bevacizumab for the confirmed event."
+      },
+      {
+        "id": "BEV_CLASSIFY_gi_perforation_or_fistula",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "gi_perforation_or_fistula",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+      },
+      {
+        "id": "BEV_CLASSIFY_clinically_significant_bleeding",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "clinically_significant_bleeding",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+      },
+      {
+        "id": "BEV_GI_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "bev_confirmed_perforation_or_severe_fistula",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Discontinue bevacizumab."
+      },
+      {
+        "id": "BEV_PROTEIN_G4",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "proteinuria_grade",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Grade 4 proteinuria: discontinue bevacizumab."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Grade 4 proteinuria: discontinue bevacizumab."
+      },
+      {
+        "id": "BEV_PROTEIN_REVIEW",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "proteinuria_grade",
+              "operator": "==",
+              "value": 3
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Assess proteinuria, quantify urinary protein and confirm the treatment decision."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Assess proteinuria, quantify urinary protein and confirm the treatment decision."
+      },
+      {
+        "id": "BEV_URINE_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "urine_protein_g_24h",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "urine_protein_g_24h",
+                  "operator": "<=",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Hold bevacizumab; recheck 24-hour urine every two weeks. Resume when urine protein is 2 g/24 h or less."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Hold bevacizumab; recheck 24-hour urine every two weeks. Resume when urine protein is 2 g/24 h or less."
+      },
+      {
+        "id": "BEV_URINE_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": ">",
+              "value": 4
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for protein greater than 4 g/24 h."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Discontinue bevacizumab for protein greater than 4 g/24 h."
+      },
+      {
+        "id": "BEV_DIP_CONFIRM",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "urine_dipstick",
+              "operator": "in",
+              "value": [
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Collect 24-hour urine within three days before the next bevacizumab dose. A 2+ or 3+ dipstick alone does not require withholding the scheduled dose."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Collect 24-hour urine within three days before the next bevacizumab dose. A 2+ or 3+ dipstick alone does not require withholding the scheduled dose."
+      },
+      {
+        "id": "BEV_DIP_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "maintenance"
+              ]
+            },
+            {
+              "field": "urine_dipstick",
+              "operator": "==",
+              "value": 4
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold bevacizumab and collect a 24-hour urine protein."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Bevacizumab adverse events and proteinuria tables"
+        },
+        "explanation": "Withhold bevacizumab and collect a 24-hour urine protein."
+      },
+      {
+        "id": "CARBO_GFR_STOP",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1"
+              ]
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Do not administer carboplatin at GFR 20 mL/min or lower."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Renal impairment"
+        },
+        "explanation": "Do not administer carboplatin at GFR 20 mL/min or lower."
+      },
+      {
+        "id": "CARBO_GFR_CAUTION",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": ">",
+                  "value": 20
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Extreme caution with carboplatin. Confirm GFR and discuss before prescribing."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Renal impairment"
+        },
+        "explanation": "Extreme caution with carboplatin. Confirm GFR and discuss before prescribing."
+      },
+      {
+        "id": "DAY1_COUNTS",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "restart_after_omission",
+                  "operator": "==",
+                  "value": "ordinary"
+                },
+                {
+                  "any": [
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "message": "Delay this cycle until the counts meet the applicable day-1 criteria."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 1 and preceding text"
+        },
+        "explanation": "Delay this cycle until the counts meet the applicable day-1 criteria."
+      },
+      {
+        "id": "DAY1_RESTART",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "restart_after_omission",
+                  "operator": "==",
+                  "value": "restart"
+                },
+                {
+                  "any": [
+                    {
+                      "field": "anc",
+                      "operator": "<",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "delay",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "message": "Delay this cycle until the counts meet the applicable day-1 criteria."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 1 and preceding text"
+        },
+        "explanation": "Delay this cycle until the counts meet the applicable day-1 criteria."
+      },
+      {
+        "id": "DAY1_CONTEXT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "restart_after_omission",
+                  "operator": "missing"
+                },
+                {
+                  "any": [
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "carboplatin"
+          ],
+          "message": "Confirm new-cycle versus post-omission restart criteria before treatment."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 1"
+        },
+        "explanation": "Confirm new-cycle versus post-omission restart criteria before treatment."
+      },
+      {
+        "id": "GEM_DAY8_OMIT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day8"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "omit",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "Omit day-8 gemcitabine for this cycle. Reassess at the start of the next cycle."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 1"
+        },
+        "explanation": "Omit day-8 gemcitabine for this cycle. Reassess at the start of the next cycle."
+      },
+      {
+        "id": "GEM_DAY8_75",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day8"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "anc",
+                  "operator": ">=",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets",
+                  "operator": ">=",
+                  "value": 50
+                },
+                {
+                  "any": [
+                    {
+                      "field": "anc",
+                      "operator": "<=",
+                      "value": 1
+                    },
+                    {
+                      "field": "platelets",
+                      "operator": "<=",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "Give 75% of the gemcitabine dose after prescriber verification."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 1"
+        },
+        "explanation": "Give 75% of the gemcitabine dose after prescriber verification."
+      },
+      {
+        "id": "GEM_SUBSEQUENT",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "day8"
+              ]
+            },
+            {
+              "field": "previous_cycle_gem_toxicity",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "Use 75% of the original cycle-initiation gemcitabine dose in subsequent cycles."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 2"
+        },
+        "explanation": "Use 75% of the original cycle-initiation gemcitabine dose in subsequent cycles."
+      },
+      {
+        "id": "GEM_BILI",
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "day1",
+                "day8"
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 27
+            }
+          ]
+        },
+        "priority": 9,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "At initiation consider 80% and escalate if tolerated, or full dose with active monitoring."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 3"
+        },
+        "explanation": "At initiation consider 80% and escalate if tolerated, or full dose with active monitoring."
+      },
+      {
+        "id": "FEBRILE_NEUTROPENIA",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "priority": 9,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Urgent clinical assessment for febrile neutropenia. Document this event for subsequent gemcitabine dosing."
+        },
+        "source": {
+          "document": "NCCP 00499 v8",
+          "page": "Table 2"
+        },
+        "explanation": "Urgent clinical assessment for febrile neutropenia. Document this event for subsequent gemcitabine dosing."
       }
     ]
   },
@@ -774,5 +1603,82 @@
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
     "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
-  }
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "combination",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "bevacizumab",
+          "dose": {
+            "value": 15,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 2,
+          "drug": "gemcitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 1,
+          "order": 3,
+          "drug": "carboplatin",
+          "dose": {
+            "value": 4,
+            "unit": "AUC"
+          },
+          "route": "IV infusion"
+        },
+        {
+          "day": 8,
+          "order": 1,
+          "drug": "gemcitabine",
+          "dose": {
+            "value": 1000,
+            "unit": "mg/m²"
+          },
+          "route": "IV infusion"
+        }
+      ],
+      "notes": [
+        "Bevacizumab, gemcitabine and carboplatin on day 1 of each three-week cycle. Six cycles are usual and up to ten may be given. Gemcitabine alone after a blood count and kidney check. If omitted for low counts, this dose is skipped for the rest of the cycle. After chemotherapy finishes, bevacizumab alone every three weeks while it helps and side effects are manageable."
+      ],
+      "active_drugs": [
+        "bevacizumab",
+        "gemcitabine",
+        "carboplatin"
+      ]
+    },
+    {
+      "phase_id": "maintenance",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "day": 1,
+          "order": 1,
+          "drug": "bevacizumab",
+          "dose": {
+            "value": 15,
+            "unit": "mg/kg"
+          },
+          "route": "IV infusion"
+        }
+      ],
+      "active_drugs": [
+        "bevacizumab"
+      ]
+    }
+  ]
 }
