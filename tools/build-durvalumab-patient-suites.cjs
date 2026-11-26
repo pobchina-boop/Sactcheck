@@ -5,7 +5,7 @@ const path = require('node:path');
 const {render} = require('./patient-pack-v08461.cjs');
 const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
-const gynaeBatch = new Set(['00303','00306','00308','00624','00819']);
+const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
 const codes = new Set([...gynaecology, '00897', '00926', '00953']);
 const esc = value => String(value ?? '').replace(/[<>&"']/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[s]));
@@ -110,6 +110,14 @@ function renderPages(code, root = projectRoot) {
    files[name]=files[name].replace(/<a href="([^"]+\.pdf)"(?! download)/g,'<a download href="$1"');
    if(gynaeBatch.has(code) && code !== '00819') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
    if(code==='00862') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry this card and your latest prescription.').replaceAll('My cycle record','My review record');
+  }
+ }
+ const clinical=require('./gynae-clinical-documents-v08466.cjs');
+ if(clinical.codes.has(code)){
+  const phases=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-v0838.json'),'utf8')).regimens[code];
+  Object.assign(files,clinical.build(d,phases));
+  for(const key of ['supportive-care.html','supportive-care-overview.html']){
+    files[key]=files[key].replace('</main>','<div class="no-print"><h2>Antiemetic prescription PDFs</h2>'+phases.map(p=>'<p><a download href="antiemetic-'+esc(p.id)+'.pdf">'+esc(p.label)+' · Download prescription PDF</a></p>').join('')+'</div></main>');
   }
  }
  return {data:d,files};

@@ -34,6 +34,12 @@ for (const file of paths) {
     assert(expected.equals(git('show',release.gynae65Inventory().record.base+':'+file)),file+' predecessor');
     assert.equal(require('node:crypto').createHash('sha256').update(expected).digest('hex'),transition.before,file);
     release.verifyFile(file);
+  } else if (['00620','00716','00769','00771','00772'].includes(code)) {
+    const release = require('./helpers/live-release-v08464.cjs');
+    const {record} = release.gynae66Inventory();
+    assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
+    assert.equal(require('node:crypto').createHash('sha256').update(expected).digest('hex'),record.files[file].before,file);
+    release.verifyFile(file);
   } else if (code === '00205') {
     const prior = JSON.parse(expected);
     const breast = prior.assessment_by_indication['00205a'];

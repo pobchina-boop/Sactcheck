@@ -13,10 +13,15 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.65';
+  const RELEASE='0.84.66';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00620':{"title":"Bevacizumab 7.5 mg/kg with carboplatin and paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00716':{"title":"Bevacizumab 15 mg/kg with carboplatin and paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00769':{"title":"Bevacizumab with weekly paclitaxel","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00771':{"title":"Bevacizumab with weekly topotecan","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
+    '00772':{"title":"Bevacizumab with pegylated liposomal doxorubicin","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00303':{"title":"Paclitaxel and carboplatin every three weeks","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00306':{"title":"Gemcitabine and carboplatin","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},
     '00308':{"title":"Weekly paclitaxel with three-weekly carboplatin","guide":true,"passport":true,"sactCard":true,"knowledge":true,"consentDraft":true,"supportiveCare":true,"phaseSupport":true,"longitudinal":true},

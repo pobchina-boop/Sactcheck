@@ -9,7 +9,7 @@ from weasyprint import HTML
 
 ROOT = Path(__file__).resolve().parents[1]
 ROUTES = ('00897', '00926', '00953')
-GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819')
+GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819', '00620', '00716', '00769', '00771', '00772')
 DOCS = {
     'guide': 'guide', 'sactcard': 'sactcard', 'knowledge': 'knowledge-print',
     'handbook': 'handbook-print', 'passport': 'passport', 'consent-form': 'consent-form',
@@ -29,6 +29,9 @@ def render_route(code):
     documents = dict(DOCS)
     for source in sorted(folder.glob('support-*.html')):
         documents[source.stem] = source.stem
+    for source in sorted(folder.glob('antiemetic-*.html')):
+        if source.stem != 'antiemetic-prescriptions':
+            documents[source.stem] = source.stem
     for name, html in documents.items():
         source = folder / (html + '.html')
         pdf = folder / (name + '.pdf')

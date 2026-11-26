@@ -53535,6 +53535,481 @@ const definitions={
         "url": "https://pubmed.ncbi.nlm.nih.gov/37363992/"
       }
     ]
+  },
+  "00620": {
+    "code": "00620",
+    "release": "0.84.66",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Bevacizumab 7.5 mg/kg with carboplatin and paclitaxel",
+    "setting": "First-line ovarian cancer",
+    "summary": "Paclitaxel, carboplatin and bevacizumab 7.5 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery. Bevacizumab 7.5 mg/kg alone every 21 days. Up to 18 bevacizumab doses in total, counting combination doses.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Combination · day 1",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Paclitaxel, carboplatin and bevacizumab 7.5 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery.",
+        "cells": [
+          "Baseline checks",
+          "Paclitaxel, carboplatin and bevacizumab 7.5 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      },
+      {
+        "label": "Bevacizumab alone",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Bevacizumab 7.5 mg/kg alone every 21 days. Up to 18 bevacizumab doses in total, counting combination doses.",
+        "cells": [
+          "Baseline checks",
+          "Bevacizumab 7.5 mg/kg alone every 21 days. Up to 18 bevacizumab doses in total, counting combination doses.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, blood pressure and urine protein. Review bowel symptoms, bleeding, recent surgery and wound healing.",
+        "when": "Before starting",
+        "why": "Bring your medicines and the dates of operations.",
+        "clinical": "NCCP 00620",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts before chemotherapy. Your team checks blood pressure, urine protein and organ function.",
+        "when": "During treatment",
+        "why": "Ask when to have blood tests and urine samples before each visit.",
+        "clinical": "NCCP 00620",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Discuss numbness, balance, weakness and previous infusion reactions.",
+        "when": "Before paclitaxel",
+        "why": "Tell the nurse before the infusion starts.",
+        "clinical": "NCCP 00620",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The suggested survival benefit in the poor-prognosis subgroup was exploratory.",
+      "First-line treatment after surgery for stage III epithelial ovarian, fallopian tube or primary peritoneal cancer with at least 1 cm residual disease, or stage IV disease."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00620 v2",
+        "url": "https://healthservice.hse.ie/documents/6852/620_V2_BevPacliCarbo.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "ICON7 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26115797/"
+      }
+    ]
+  },
+  "00716": {
+    "code": "00716",
+    "release": "0.84.66",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Bevacizumab 15 mg/kg with carboplatin and paclitaxel",
+    "setting": "Advanced cervical cancer",
+    "summary": "Paclitaxel, carboplatin and bevacizumab 15 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery. Bevacizumab 15 mg/kg alone every 21 days. Continue until progression or unacceptable toxicity.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Combination · day 1",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Paclitaxel, carboplatin and bevacizumab 15 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery.",
+        "cells": [
+          "Baseline checks",
+          "Paclitaxel, carboplatin and bevacizumab 15 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      },
+      {
+        "label": "Bevacizumab alone",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Bevacizumab 15 mg/kg alone every 21 days. Continue until progression or unacceptable toxicity.",
+        "cells": [
+          "Baseline checks",
+          "Bevacizumab 15 mg/kg alone every 21 days. Continue until progression or unacceptable toxicity.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, blood pressure and urine protein. Review bowel symptoms, bleeding, recent surgery and wound healing.",
+        "when": "Before starting",
+        "why": "Bring your medicines and the dates of operations.",
+        "clinical": "NCCP 00716",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts before chemotherapy. Your team checks blood pressure, urine protein and organ function.",
+        "when": "During treatment",
+        "why": "Ask when to have blood tests and urine samples before each visit.",
+        "clinical": "NCCP 00716",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Discuss numbness, balance, weakness and previous infusion reactions.",
+        "when": "Before paclitaxel",
+        "why": "Tell the nurse before the infusion starts.",
+        "clinical": "NCCP 00716",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "GOG 240 used cisplatin–paclitaxel or topotecan–paclitaxel. It did not directly test the carboplatin backbone in this NCCP schedule.",
+      "Persistent, recurrent or metastatic cervical cancer where surgery or radiotherapy cannot offer a cure."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00716 v2",
+        "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG 240 trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28756902/"
+      }
+    ]
+  },
+  "00769": {
+    "code": "00769",
+    "release": "0.84.66",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Bevacizumab with weekly paclitaxel",
+    "setting": "Platinum-resistant ovarian cancer",
+    "summary": "Bevacizumab 10 mg/kg and paclitaxel 80 mg/m² on days 1 and 15 of each 28-day cycle. Paclitaxel 80 mg/m² alone on days 8 and 22.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Days 1 and 15",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Bevacizumab 10 mg/kg and paclitaxel 80 mg/m² on days 1 and 15 of each 28-day cycle.",
+        "cells": [
+          "Baseline checks",
+          "Bevacizumab 10 mg/kg and paclitaxel 80 mg/m² on days 1 and 15 of each 28-day cycle.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      },
+      {
+        "label": "Days 8 and 22",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Paclitaxel 80 mg/m² alone on days 8 and 22.",
+        "cells": [
+          "Baseline checks",
+          "Paclitaxel 80 mg/m² alone on days 8 and 22.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, blood pressure and urine protein. Review bowel symptoms, bleeding, recent surgery and wound healing.",
+        "when": "Before starting",
+        "why": "Bring your medicines and the dates of operations.",
+        "clinical": "NCCP 00769",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts before chemotherapy. Your team checks blood pressure, urine protein and organ function.",
+        "when": "During treatment",
+        "why": "Ask when to have blood tests and urine samples before each visit.",
+        "clinical": "NCCP 00769",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Discuss numbness, balance, weakness and previous infusion reactions.",
+        "when": "Before paclitaxel",
+        "why": "Tell the nurse before the infusion starts.",
+        "clinical": "NCCP 00769",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "These are pooled results. The study did not compare the three chemotherapy partners against each other or establish an overall survival advantage.",
+      "Platinum-resistant recurrent epithelial ovarian, fallopian tube or primary peritoneal cancer. The NCCP lists up to two previous chemotherapy regimens and no prior bevacizumab or other VEGF-targeted treatment."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00769 v2",
+        "url": "https://healthservice.hse.ie/documents/6666/769_V2_Bevacizumab10_PACLitaxelDay181522.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "AURELIA trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24637997/"
+      }
+    ]
+  },
+  "00771": {
+    "code": "00771",
+    "release": "0.84.66",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Bevacizumab with weekly topotecan",
+    "setting": "Platinum-resistant ovarian cancer",
+    "summary": "Bevacizumab 10 mg/kg and topotecan 4 mg/m² on days 1 and 15 of each 28-day cycle. Topotecan 4 mg/m² alone on day 8. No planned infusion on day 22.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Days 1 and 15",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Bevacizumab 10 mg/kg and topotecan 4 mg/m² on days 1 and 15 of each 28-day cycle.",
+        "cells": [
+          "Baseline checks",
+          "Bevacizumab 10 mg/kg and topotecan 4 mg/m² on days 1 and 15 of each 28-day cycle.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      },
+      {
+        "label": "Day 8",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Topotecan 4 mg/m² alone on day 8. No planned infusion on day 22.",
+        "cells": [
+          "Baseline checks",
+          "Topotecan 4 mg/m² alone on day 8. No planned infusion on day 22.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, blood pressure and urine protein. Review bowel symptoms, bleeding, recent surgery and wound healing.",
+        "when": "Before starting",
+        "why": "Bring your medicines and the dates of operations.",
+        "clinical": "NCCP 00771",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts before chemotherapy. Your team checks blood pressure, urine protein and organ function.",
+        "when": "During treatment",
+        "why": "Ask when to have blood tests and urine samples before each visit.",
+        "clinical": "NCCP 00771",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Check the haemoglobin, neutrophils, platelets and kidney function.",
+        "when": "Before topotecan",
+        "why": "Tell the team about any fever, transfusion or infection.",
+        "clinical": "NCCP 00771",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "These are pooled results. The study did not compare the three chemotherapy partners against each other or establish an overall survival advantage.",
+      "Platinum-resistant recurrent epithelial ovarian, fallopian tube or primary peritoneal cancer. The NCCP lists up to two previous chemotherapy regimens and no prior bevacizumab or other VEGF-targeted treatment."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00771 v2",
+        "url": "https://healthservice.hse.ie/documents/6665/771_V2_Bevacizumab10_Topotecan.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "AURELIA trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24637997/"
+      }
+    ]
+  },
+  "00772": {
+    "code": "00772",
+    "release": "0.84.66",
+    "checked": "2026-11-25",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Bevacizumab with pegylated liposomal doxorubicin",
+    "setting": "Platinum-resistant ovarian cancer",
+    "summary": "Bevacizumab 10 mg/kg with pegylated liposomal doxorubicin 40 mg/m² on day 1 of each 28-day cycle. Bevacizumab 10 mg/kg alone on day 15. The liposomal chemotherapy is given only on day 1.",
+    "stages": [
+      "Before starting",
+      "Treatment",
+      "Between visits",
+      "Review"
+    ],
+    "lanes": [
+      {
+        "label": "Day 1",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Bevacizumab 10 mg/kg with pegylated liposomal doxorubicin 40 mg/m² on day 1 of each 28-day cycle.",
+        "cells": [
+          "Baseline checks",
+          "Bevacizumab 10 mg/kg with pegylated liposomal doxorubicin 40 mg/m² on day 1 of each 28-day cycle.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      },
+      {
+        "label": "Day 15",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Bevacizumab 10 mg/kg alone on day 15. The liposomal chemotherapy is given only on day 1.",
+        "cells": [
+          "Baseline checks",
+          "Bevacizumab 10 mg/kg alone on day 15. The liposomal chemotherapy is given only on day 1.",
+          "Call the oncology unit now for fever, chills, severe abdominal pain, unexpected bleeding or new breathlessness.",
+          "Review before the next visit."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood counts, kidney and liver tests, blood pressure and urine protein. Review bowel symptoms, bleeding, recent surgery and wound healing.",
+        "when": "Before starting",
+        "why": "Bring your medicines and the dates of operations.",
+        "clinical": "NCCP 00772",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts before chemotherapy. Your team checks blood pressure, urine protein and organ function.",
+        "when": "During treatment",
+        "why": "Ask when to have blood tests and urine samples before each visit.",
+        "clinical": "NCCP 00772",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Heart function, prior anthracycline exposure, mouth ulcers and hand–foot symptoms.",
+        "when": "Heart and skin",
+        "why": "Report symptoms even if they started between visits.",
+        "clinical": "NCCP 00772",
+        "action": "Confirm arrangements with your team.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "These are pooled results. The study did not compare the three chemotherapy partners against each other or establish an overall survival advantage.",
+      "Platinum-resistant recurrent epithelial ovarian, fallopian tube or primary peritoneal cancer. The NCCP lists up to two previous chemotherapy regimens and no prior bevacizumab or other VEGF-targeted treatment."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00772 v3",
+        "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "AURELIA trial publication",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24637997/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

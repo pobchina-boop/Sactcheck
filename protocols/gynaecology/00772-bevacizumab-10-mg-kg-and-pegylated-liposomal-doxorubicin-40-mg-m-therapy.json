@@ -12,11 +12,11 @@
     ],
     "title": "Bevacizumab 10 mg/kg and Pegylated Liposomal Doxorubicin 40 mg/m² Therapy",
     "short_title": "Bevacizumab 10 mg/kg and Pegylated Liposomal Doxorubicin 40 mg/m² Therapy",
-    "indication": "Platinum-resistant recurrent ovarian, fallopian tube or primary peritoneal cancer.",
+    "indication": "Platinum-resistant recurrent epithelial ovarian, fallopian tube or primary peritoneal cancer. The NCCP lists up to two previous chemotherapy regimens and no prior bevacizumab or other VEGF-targeted treatment.",
     "source_url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 10,
+    "sactcheck_encoding_version": "0.84.66",
+    "source_checked_date": "2026-11-25",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "ovarian_platinum_resistant",
@@ -77,7 +77,8 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00772-v3"
+    "canonical_protocol_id": "nccp-00772-v3",
+    "source_pdf_sha256": "e759f9039fbaf23bcdc0a626de61c1eae1e88624d7ca4d6e5fc0a43a0a6f8146"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -93,7 +94,7 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Bevacizumab 10 mg/kg and Pegylated Liposomal Doxorubicin 40 mg/m² Therapy",
+    "schedule_summary": "Bevacizumab 10 mg/kg with pegylated liposomal doxorubicin 40 mg/m² on day 1 of each 28-day cycle. Bevacizumab 10 mg/kg alone on day 15. The liposomal chemotherapy is given only on day 1.",
     "drugs": [
       "bevacizumab",
       "pegylated liposomal doxorubicin"
@@ -487,6 +488,85 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "uncontrolled_or_symptomatic_bp": {
+      "type": "boolean",
+      "label": "Confirmed uncontrolled or symptomatic hypertension on the treatment day",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_bev_vascular_event": {
+      "type": "boolean",
+      "label": "Confirmed grade 4 hypertension, persistent grade 3 hypertension, grade 4 thromboembolism, or grade 3–4 haemorrhage",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bev_confirmed_perforation_or_severe_fistula": {
+      "type": "boolean",
+      "label": "Confirmed GI perforation, tracheo-oesophageal fistula or any grade 4 fistula",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "urine_protein_g_24h": {
+      "type": "number",
+      "label": "Measured urine protein in a 24-hour collection",
+      "unit": "g/24 h",
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 0,
+      "required": false,
+      "input_role": "decision"
+    },
+    "urine_dipstick": {
+      "type": "number",
+      "label": "Urine dipstick protein (0, 1+, 2+, 3+, 4+)",
+      "unit": "+",
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "required": false,
+      "input_role": "decision",
+      "max": 4
+    },
+    "bilirubin_umol_l": {
+      "type": "number",
+      "label": "Total bilirubin (absolute laboratory result)",
+      "unit": "µmol/L",
+      "min": 0,
+      "step": 0.1,
+      "demo_value": 10,
+      "required": false,
+      "input_role": "decision"
+    },
+    "pld_delay_weeks": {
+      "type": "number",
+      "label": "Completed weeks of delay since planned PLD dose",
+      "unit": "weeks",
+      "min": 0,
+      "step": 1,
+      "demo_value": 0,
+      "required": false,
+      "input_role": "decision"
+    },
+    "treatment_visit": {
+      "type": "select",
+      "label": "Treatment being given at this visit",
+      "required": false,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "both",
+          "label": "Day 1 · bevacizumab, pegylated liposomal doxorubicin"
+        },
+        {
+          "value": "day15",
+          "label": "Day 15 · bevacizumab"
+        }
+      ],
+      "demo_value": "both"
     }
   },
   "required_inputs": [],
@@ -540,27 +620,6 @@
         "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
         "id": "HSR_G3",
         "priority": 10,
         "when": {
@@ -580,153 +639,6 @@
           "page": "Dose modifications"
         },
         "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "BEV_BP_SYS",
-        "priority": 9,
-        "when": {
-          "field": "systolic_bp",
-          "operator": ">=",
-          "value": 160
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Withhold bevacizumab until blood pressure is controlled."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Withhold bevacizumab until blood pressure is controlled."
-      },
-      {
-        "id": "BEV_BP_DIA",
-        "priority": 9,
-        "when": {
-          "field": "diastolic_bp",
-          "operator": ">=",
-          "value": 100
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Withhold bevacizumab until blood pressure is controlled."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Withhold bevacizumab until blood pressure is controlled."
-      },
-      {
-        "id": "BEV_PROTEIN",
-        "priority": 9,
-        "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Severe proteinuria requires withholding and quantified renal assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Severe proteinuria requires withholding and quantified renal assessment."
-      },
-      {
-        "id": "BEV_BLEED",
-        "priority": 10,
-        "when": {
-          "field": "clinically_significant_bleeding",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Clinically significant bleeding triggers the severe bevacizumab pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Clinically significant bleeding triggers the severe bevacizumab pathway."
       },
       {
         "id": "BEV_THROMBOSIS",
@@ -771,75 +683,31 @@
         "explanation": "Withhold bevacizumab around major surgery and until wounds are adequately healed."
       },
       {
-        "id": "BEV_PERF",
-        "priority": 10,
-        "when": {
-          "field": "gi_perforation_or_fistula",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "GI perforation or fistula requires permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "GI perforation or fistula requires permanent discontinuation."
-      },
-      {
-        "id": "PLD_PPE_G2",
-        "priority": 9,
-        "when": {
-          "field": "ppe_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade 2 or worse PPE requires PLD interruption until recovery and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse PPE requires PLD interruption until recovery and dose modification."
-      },
-      {
-        "id": "PLD_STOM_G2",
-        "priority": 9,
-        "when": {
-          "field": "stomatitis_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "pegylated liposomal doxorubicin"
-          ],
-          "message": "Grade 2 or worse stomatitis requires PLD interruption until recovery and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 or worse stomatitis requires PLD interruption until recovery and dose modification."
-      },
-      {
         "id": "PLD_LVEF",
         "priority": 9,
         "when": {
-          "field": "lvef_percent",
-          "operator": "<",
-          "value": 50
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "lvef_percent",
+              "operator": "<",
+              "value": 50
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -858,9 +726,28 @@
         "id": "PLD_CUM",
         "priority": 9,
         "when": {
-          "field": "cumulative_anthracycline_concern",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "cumulative_anthracycline_concern",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -874,10 +761,979 @@
           "page": "Dose modifications"
         },
         "explanation": "Review cumulative anthracycline exposure and cardiac risk."
+      },
+      {
+        "id": "BEV_RECHECK_systolic_bp",
+        "when": {
+          "field": "systolic_bp",
+          "operator": ">",
+          "value": 150
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+        },
+        "explanation": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_RECHECK_diastolic_bp",
+        "when": {
+          "field": "diastolic_bp",
+          "operator": ">",
+          "value": 100
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+        },
+        "explanation": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_BP_CONFIRMED",
+        "when": {
+          "field": "uncontrolled_or_symptomatic_bp",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold bevacizumab and start or adjust antihypertensive treatment."
+        },
+        "explanation": "Withhold bevacizumab and start or adjust antihypertensive treatment.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_VASCULAR_STOP",
+        "when": {
+          "field": "severe_bev_vascular_event",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for the confirmed event."
+        },
+        "explanation": "Discontinue bevacizumab for the confirmed event.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_CLASSIFY_gi_perforation_or_fistula",
+        "when": {
+          "field": "gi_perforation_or_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+        },
+        "explanation": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_CLASSIFY_clinically_significant_bleeding",
+        "when": {
+          "field": "clinically_significant_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+        },
+        "explanation": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_GI_STOP",
+        "when": {
+          "field": "bev_confirmed_perforation_or_severe_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab."
+        },
+        "explanation": "Discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_PROTEIN_G4",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Grade 4 proteinuria: discontinue bevacizumab."
+        },
+        "explanation": "Grade 4 proteinuria: discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_PROTEIN_REVIEW",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Assess proteinuria, quantify urinary protein and confirm the treatment decision."
+        },
+        "explanation": "Assess proteinuria, quantify urinary protein and confirm the treatment decision.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_URINE_HOLD",
+        "when": {
+          "all": [
+            {
+              "field": "urine_protein_g_24h",
+              "operator": ">",
+              "value": 2
+            },
+            {
+              "field": "urine_protein_g_24h",
+              "operator": "<=",
+              "value": 4
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Hold bevacizumab; recheck 24-hour urine every two weeks. Resume when urine protein is 2 g/24 h or less."
+        },
+        "explanation": "Hold bevacizumab; recheck 24-hour urine every two weeks. Resume when urine protein is 2 g/24 h or less.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_URINE_STOP",
+        "when": {
+          "field": "urine_protein_g_24h",
+          "operator": ">",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab for protein greater than 4 g/24 h."
+        },
+        "explanation": "Discontinue bevacizumab for protein greater than 4 g/24 h.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_DIP_CONFIRM",
+        "when": {
+          "field": "urine_dipstick",
+          "operator": "in",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Collect 24-hour urine within three days before the next bevacizumab dose. A 2+ or 3+ dipstick alone does not require withholding the scheduled dose."
+        },
+        "explanation": "Collect 24-hour urine within three days before the next bevacizumab dose. A 2+ or 3+ dipstick alone does not require withholding the scheduled dose.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_DIP_HOLD",
+        "when": {
+          "field": "urine_dipstick",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold bevacizumab and collect a 24-hour urine protein."
+        },
+        "explanation": "Withhold bevacizumab and collect a 24-hour urine protein.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "PLD_HOLD_anc",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1.5
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Wait until ANC ≥1.5 and platelets ≥75. For ANC <0.5 or platelets <25, reduce by 25% after recovery or consider full dose with growth factor support."
+        },
+        "explanation": "Wait until ANC ≥1.5 and platelets ≥75. For ANC <0.5 or platelets <25, reduce by 25% after recovery or consider full dose with growth factor support.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "PLD_HOLD_platelets",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 75
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Wait until ANC ≥1.5 and platelets ≥75. For ANC <0.5 or platelets <25, reduce by 25% after recovery or consider full dose with growth factor support."
+        },
+        "explanation": "Wait until ANC ≥1.5 and platelets ≥75. For ANC <0.5 or platelets <25, reduce by 25% after recovery or consider full dose with growth factor support.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "PLD_BILI75",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": "between",
+              "value": [
+                20,
+                50
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Give 75% of original PLD dose."
+        },
+        "explanation": "Give 75% of original PLD dose.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "PLD_BILI_GAP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">",
+                  "value": 50
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "<=",
+                  "value": 51
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "The source leaves this interval unclear. Confirm with oncology pharmacy before prescribing."
+        },
+        "explanation": "The source leaves this interval unclear. Confirm with oncology pharmacy before prescribing.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "PLD_BILI50",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">",
+                  "value": 51
+                },
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": "<=",
+                  "value": 86
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Give 50% of the original PLD dose."
+        },
+        "explanation": "Give 50% of the original PLD dose.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "PLD_BILI_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 86
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Pegylated liposomal doxorubicin is not recommended."
+        },
+        "explanation": "Pegylated liposomal doxorubicin is not recommended.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "ppe_grade_REVIEW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "ppe_grade",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Use Table 3 with the delay week and previous grade 3–4 skin or mouth toxicity. Grade 1 can require a delay after a prior severe event."
+        },
+        "explanation": "Use Table 3 with the delay week and previous grade 3–4 skin or mouth toxicity. Grade 1 can require a delay after a prior severe event.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "ppe_grade_HOLD",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "ppe_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "pld_delay_weeks",
+                  "operator": "<",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Delay one week; reassess the toxicity grade and duration of delay."
+        },
+        "explanation": "Delay one week; reassess the toxicity grade and duration of delay.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "ppe_grade_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "ppe_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "pld_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Persistent grade 3–4 at the two-week delay assessment: discontinue PLD."
+        },
+        "explanation": "Persistent grade 3–4 at the two-week delay assessment: discontinue PLD.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "ppe_grade_REDUCE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "ppe_grade",
+                  "operator": "between",
+                  "value": [
+                    1,
+                    2
+                  ]
+                },
+                {
+                  "field": "pld_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Reduce PLD by 25%; for stomatitis the clinician may consider discontinuation."
+        },
+        "explanation": "Reduce PLD by 25%; for stomatitis the clinician may consider discontinuation.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "stomatitis_grade_REVIEW",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "stomatitis_grade",
+              "operator": ">=",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Use Table 3 with the delay week and previous grade 3–4 skin or mouth toxicity. Grade 1 can require a delay after a prior severe event."
+        },
+        "explanation": "Use Table 3 with the delay week and previous grade 3–4 skin or mouth toxicity. Grade 1 can require a delay after a prior severe event.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "stomatitis_grade_HOLD",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "stomatitis_grade",
+                  "operator": ">=",
+                  "value": 2
+                },
+                {
+                  "field": "pld_delay_weeks",
+                  "operator": "<",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Delay one week; reassess the toxicity grade and duration of delay."
+        },
+        "explanation": "Delay one week; reassess the toxicity grade and duration of delay.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "stomatitis_grade_STOP",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "stomatitis_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "pld_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Persistent grade 3–4 at the two-week delay assessment: discontinue PLD."
+        },
+        "explanation": "Persistent grade 3–4 at the two-week delay assessment: discontinue PLD.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "stomatitis_grade_REDUCE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "stomatitis_grade",
+                  "operator": "between",
+                  "value": [
+                    1,
+                    2
+                  ]
+                },
+                {
+                  "field": "pld_delay_weeks",
+                  "operator": ">=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Reduce PLD by 25%; for stomatitis the clinician may consider discontinuation."
+        },
+        "explanation": "Reduce PLD by 25%; for stomatitis the clinician may consider discontinuation.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "FN",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Urgent management of febrile neutropenia; hold cytotoxic treatment and reassess dose after recovery."
+        },
+        "explanation": "Urgent management of febrile neutropenia; hold cytotoxic treatment and reassess dose after recovery.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "OTHER_NONHAEM",
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "pegylated liposomal doxorubicin"
+          ],
+          "message": "Identify the toxicity, agent and grade before applying the adverse-event table. Urgent medical assessment if clinically unwell."
+        },
+        "explanation": "Identify the toxicity, agent and grade before applying the adverse-event table. Urgent medical assessment if clinically unwell.",
+        "source": {
+          "document": "NCCP 00772 v3",
+          "url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+          "page": 7
+        }
       }
     ]
   },
   "eligibility": [
+    "Platinum-resistant recurrent epithelial ovarian, fallopian tube or primary peritoneal cancer. The NCCP lists up to two previous chemotherapy regimens and no prior bevacizumab or other VEGF-targeted treatment.",
     "Indication as listed in the current official NCCP regimen",
     "Performance status and disease-specific eligibility appropriate to the selected indication",
     "Organ function appropriate for the selected regimen"
@@ -888,13 +1744,24 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "phase_specific_plan": "patient/00772/antiemetic-prescriptions.html",
+    "source_url": "https://healthservice.hse.ie/documents/6664/772_V3_Bevacizumab10_PegylatedDOXOrubicin40.docx.pdf",
+    "phase_profiles": {
+      "both": {
+        "level": "low",
+        "script_id": "nccp-v8-low-v08418"
+      },
+      "day15": {
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
+      }
+    }
   }
 }

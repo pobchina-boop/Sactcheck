@@ -36,7 +36,7 @@
   const BILIRUBIN_FIELDS = new Set([
     "bilirubin_ratio_uln", "bilirubin_uln_multiple", "bilirubin_uln", "prior_cycle_bilirubin_peak"
   ]);
-  const ALT_FIELDS = new Set(["alt_uln_multiple", "alt_current_uln", "alt_baseline_uln", "prior_cycle_alt_peak"]);
+  const ALT_FIELDS = new Set(["alt_uln_multiple", "taxane_alt_multiple", "alt_current_uln", "alt_baseline_uln", "prior_cycle_alt_peak"]);
   const AST_FIELDS = new Set(["ast_uln_multiple", "ast_uln", "ast_current_uln", "ast_baseline_uln", "prior_cycle_ast_peak"]);
   const COMBINED_TRANSAMINASE_FIELDS = new Set([
     "alt_ast_uln_multiple", "alt_ast_ratio_uln", "ast_alt_uln",

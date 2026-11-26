@@ -35,6 +35,11 @@ const dualImmuneV35 = {
 // NCCP 00746 v2 distinguishes oral olaparib and bevacizumab on page 9.
 const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate'};
 const gynaePhases = {
+  '00620':{level:'phase_dependent',phases:{combination:'high',maintenance:'minimal'}},
+  '00716':{level:'phase_dependent',phases:{combination:'high',maintenance:'minimal'}},
+  '00769':{level:'low',phases:{both:'low',weekly:'low'}},
+  '00771':{level:'low',phases:{both:'low',day8:'low'}},
+  '00772':{level:'phase_dependent',phases:{both:'low',day15:'minimal'}},
   '00303':{level:'high',phases:{combination:'high'}},
   '00306':{level:'phase_dependent',phases:{day1:'high',day8:'low'}},
   '00308':{level:'phase_dependent',phases:{day1:'high',weekly:'low'}},
@@ -162,7 +167,8 @@ if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   };
   for (const [code, baseline] of Object.entries(classificationBaseline.protocol_risk_map_levels)) {
     const migratedMap = ['00929','00897','00691','00486','00279','00456','00561','00372','00281','00310','00339','00343','00712','00792','00849','00689','00908','00569','00579','00713','00714','00568','00688','00738','00485','00204','00507','00258','00526','00798','00775','00722','00731','00316','00433','00745','00512','00815'].includes(code);
-    const expected = migratedMap ? 'phase_dependent' : reviewedRisks[code] || renalV57Risks[code] || allowedCorrections[code] || baseline.level;
+    const expected = gynaePhases[code]?.level || (migratedMap ? 'phase_dependent' : reviewedRisks[code] || renalV57Risks[code] || allowedCorrections[code] || baseline.level);
+    if (gynaePhases[code]) assert.deepStrictEqual(currentMapLevels[code].phase_levels,gynaePhases[code].phases,code+' gynae treatment visits');
     if(migratedMap) assert.deepStrictEqual(currentMapLevels[code].phase_levels,familyPhases[code],code+' source-reconciled phase risks');
     assert.strictEqual(currentMapLevels[code]?.level, expected, `${code} emetogenic classification differs from the retained baseline or approved v0.64.0 correction`);
   }

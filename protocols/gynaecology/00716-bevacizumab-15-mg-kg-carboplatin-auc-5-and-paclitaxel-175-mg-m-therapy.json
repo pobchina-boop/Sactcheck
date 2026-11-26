@@ -12,11 +12,11 @@
     ],
     "title": "Bevacizumab 15 mg/kg, Carboplatin AUC 5 and Paclitaxel 175 mg/m² Therapy",
     "short_title": "Bevacizumab 15 mg/kg, Carboplatin AUC 5 and Paclitaxel 175 mg/m² Therapy",
-    "indication": "Persistent, recurrent or metastatic cervical cancer not amenable to curative surgery or radiotherapy.",
+    "indication": "Persistent, recurrent or metastatic cervical cancer where surgery or radiotherapy cannot offer a cure.",
     "source_url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 12,
+    "sactcheck_encoding_version": "0.84.66",
+    "source_checked_date": "2026-11-25",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "cervical",
@@ -78,7 +78,8 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00716-v2"
+    "canonical_protocol_id": "nccp-00716-v2",
+    "source_pdf_sha256": "1f094af696fd57a635f78f10f30df2c5dca2d5d54bd3cae7dfd80c6e30946563"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -94,7 +95,7 @@
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Bevacizumab 15 mg/kg, Carboplatin AUC 5 and Paclitaxel 175 mg/m² Therapy",
+    "schedule_summary": "Paclitaxel, carboplatin and bevacizumab 15 mg/kg every 21 days for up to six cycles. Omit bevacizumab in cycle 1 if starting within four weeks of surgery. Bevacizumab 15 mg/kg alone every 21 days. Continue until progression or unacceptable toxicity.",
     "drugs": [
       "bevacizumab",
       "carboplatin",
@@ -190,7 +191,7 @@
       "step": 0.01,
       "demo_value": 1,
       "unit": "×ULN",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "bilirubin_uln_multiple": {
       "label": "Bilirubin actual result (×ULN calculated automatically)",
@@ -450,6 +451,61 @@
       "required": false,
       "demo_value": false,
       "input_role": "decision"
+    },
+    "uncontrolled_or_symptomatic_bp": {
+      "type": "boolean",
+      "label": "Confirmed uncontrolled or symptomatic hypertension on the treatment day",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_bev_vascular_event": {
+      "type": "boolean",
+      "label": "Confirmed grade 4 hypertension, persistent grade 3 hypertension, grade 4 thromboembolism, or grade 3–4 haemorrhage",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bev_confirmed_perforation_or_severe_fistula": {
+      "type": "boolean",
+      "label": "Confirmed GI perforation, tracheo-oesophageal fistula or any grade 4 fistula",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "first_cycle_within_four_weeks_surgery": {
+      "type": "boolean",
+      "label": "First cycle starting within four weeks of surgery",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "taxane_alt_multiple": {
+      "type": "number",
+      "label": "ALT specifically (result divided by laboratory ALT ULN)",
+      "unit": "×ULN",
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "required": false,
+      "input_role": "decision"
+    },
+    "treatment_visit": {
+      "type": "select",
+      "label": "Treatment being given at this visit",
+      "required": false,
+      "input_role": "context",
+      "options": [
+        {
+          "value": "combination",
+          "label": "Combination · day 1 · paclitaxel, carboplatin, bevacizumab"
+        },
+        {
+          "value": "maintenance",
+          "label": "Bevacizumab alone · bevacizumab"
+        }
+      ],
+      "demo_value": "combination"
     }
   },
   "required_inputs": [],
@@ -503,27 +559,6 @@
         "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
       },
       {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
         "id": "HSR_G3",
         "priority": 10,
         "when": {
@@ -545,96 +580,31 @@
         "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
       },
       {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "CARBO_GFR_LOW",
-        "priority": 9,
-        "when": {
-          "field": "gfr_or_crcl_ml_min",
-          "operator": "<",
-          "value": 30
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "GFR/CrCl <30 mL/min requires protocol-specific carboplatin dosing review; use the official regimen and measured GFR where appropriate."
-      },
-      {
         "id": "CARBO_HSR",
         "priority": 10,
         "when": {
-          "field": "carboplatin_hypersensitivity_history",
-          "operator": "==",
-          "value": true
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "carboplatin_hypersensitivity_history",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
@@ -648,153 +618,6 @@
           "page": "Dose modifications"
         },
         "explanation": "Prior carboplatin hypersensitivity requires Consultant, pharmacy and allergy/desensitisation review."
-      },
-      {
-        "id": "TAXANE_NEURO_G2",
-        "priority": 8,
-        "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "paclitaxel"
-          ],
-          "message": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 2 neuropathy requires paclitaxel dose review; Grade 3–4 generally requires withholding/omission."
-      },
-      {
-        "id": "TAXANE_NEURO_G3",
-        "priority": 10,
-        "when": {
-          "field": "paclitaxel_neuropathy_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "paclitaxel"
-          ],
-          "message": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 paclitaxel neuropathy requires withholding and dose modification."
-      },
-      {
-        "id": "TAXANE_LFT",
-        "priority": 8,
-        "when": {
-          "field": "bilirubin_uln_multiple",
-          "operator": ">",
-          "value": 1.25
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "paclitaxel"
-          ],
-          "message": "Elevated bilirubin requires the paclitaxel hepatic dose-modification table."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Elevated bilirubin requires the paclitaxel hepatic dose-modification table."
-      },
-      {
-        "id": "BEV_BP_SYS",
-        "priority": 9,
-        "when": {
-          "field": "systolic_bp",
-          "operator": ">=",
-          "value": 160
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Withhold bevacizumab until blood pressure is controlled."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Withhold bevacizumab until blood pressure is controlled."
-      },
-      {
-        "id": "BEV_BP_DIA",
-        "priority": 9,
-        "when": {
-          "field": "diastolic_bp",
-          "operator": ">=",
-          "value": 100
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Withhold bevacizumab until blood pressure is controlled."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Withhold bevacizumab until blood pressure is controlled."
-      },
-      {
-        "id": "BEV_PROTEIN",
-        "priority": 9,
-        "when": {
-          "field": "proteinuria_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Severe proteinuria requires withholding and quantified renal assessment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Severe proteinuria requires withholding and quantified renal assessment."
-      },
-      {
-        "id": "BEV_BLEED",
-        "priority": 10,
-        "when": {
-          "field": "clinically_significant_bleeding",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "bevacizumab"
-          ],
-          "message": "Clinically significant bleeding triggers the severe bevacizumab pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Clinically significant bleeding triggers the severe bevacizumab pathway."
       },
       {
         "id": "BEV_THROMBOSIS",
@@ -839,10 +662,72 @@
         "explanation": "Withhold bevacizumab around major surgery and until wounds are adequately healed."
       },
       {
-        "id": "BEV_PERF",
-        "priority": 10,
+        "id": "BEV_RECHECK_systolic_bp",
         "when": {
-          "field": "gi_perforation_or_fistula",
+          "field": "systolic_bp",
+          "operator": ">",
+          "value": 150
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+        },
+        "explanation": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_RECHECK_diastolic_bp",
+        "when": {
+          "field": "diastolic_bp",
+          "operator": ">",
+          "value": 100
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy."
+        },
+        "explanation": "Repeat blood pressure and assess symptoms, persistence and treatment. A single value does not establish sustained hypertension on therapy.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_BP_CONFIRMED",
+        "when": {
+          "field": "uncontrolled_or_symptomatic_bp",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold bevacizumab and start or adjust antihypertensive treatment."
+        },
+        "explanation": "Withhold bevacizumab and start or adjust antihypertensive treatment.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_VASCULAR_STOP",
+        "when": {
+          "field": "severe_bev_vascular_event",
           "operator": "==",
           "value": true
         },
@@ -851,17 +736,638 @@
           "components": [
             "bevacizumab"
           ],
-          "message": "GI perforation or fistula requires permanent discontinuation."
+          "message": "Discontinue bevacizumab for the confirmed event."
         },
+        "explanation": "Discontinue bevacizumab for the confirmed event.",
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_CLASSIFY_gi_perforation_or_fistula",
+        "when": {
+          "field": "gi_perforation_or_fistula",
+          "operator": "==",
+          "value": true
         },
-        "explanation": "GI perforation or fistula requires permanent discontinuation."
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+        },
+        "explanation": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_CLASSIFY_clinically_significant_bleeding",
+        "when": {
+          "field": "clinically_significant_bleeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria."
+        },
+        "explanation": "Withhold and urgently establish the event, site and severity. Confirm against the discontinuation criteria.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_GI_STOP",
+        "when": {
+          "field": "bev_confirmed_perforation_or_severe_fistula",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Discontinue bevacizumab."
+        },
+        "explanation": "Discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_PROTEIN_G4",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": "==",
+          "value": 4
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Grade 4 proteinuria: discontinue bevacizumab."
+        },
+        "explanation": "Grade 4 proteinuria: discontinue bevacizumab.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_PROTEIN_REVIEW",
+        "when": {
+          "field": "proteinuria_grade",
+          "operator": "==",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Assess proteinuria, quantify urinary protein and confirm the treatment decision."
+        },
+        "explanation": "Assess proteinuria, quantify urinary protein and confirm the treatment decision.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "ANC_HOLD",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "anc",
+              "operator": "<",
+              "value": 1
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery. If ANC <0.5, consider prophylactic G-CSF (preferred) or reduce both cytotoxics one dose level for subsequent cycles."
+        },
+        "explanation": "Delay until recovery. If ANC <0.5, consider prophylactic G-CSF (preferred) or reduce both cytotoxics one dose level for subsequent cycles.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "PLATELET_HOLD",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "platelets",
+              "operator": "<",
+              "value": 100
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery. For platelets 50–<100 on the treatment day consider reduction by one level; reduction is mandatory if recovery takes more than 7 days."
+        },
+        "explanation": "Delay until recovery. For platelets 50–<100 on the treatment day consider reduction by one level; reduction is mandatory if recovery takes more than 7 days.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "FN",
+        "when": {
+          "field": "febrile_neutropenia",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "paclitaxel",
+            "carboplatin"
+          ],
+          "message": "Delay until recovery; give prophylactic G-CSF subsequently and consider a one-level reduction of paclitaxel and carboplatin."
+        },
+        "explanation": "Delay until recovery; give prophylactic G-CSF subsequently and consider a one-level reduction of paclitaxel and carboplatin.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 5
+        }
+      },
+      {
+        "id": "CARBO_NO_DOSE",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "gfr_or_crcl_ml_min",
+              "operator": "<=",
+              "value": 20
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Do not administer carboplatin at GFR ≤20 mL/min."
+        },
+        "explanation": "Do not administer carboplatin at GFR ≤20 mL/min.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "CARBO_CAUTION",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": ">",
+                  "value": 20
+                },
+                {
+                  "field": "gfr_or_crcl_ml_min",
+                  "operator": "<=",
+                  "value": 30
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "Extreme caution between 20 and 30 mL/min inclusive of 30. Confirm method and current kidney function."
+        },
+        "explanation": "Extreme caution between 20 and 30 mL/min inclusive of 30. Confirm method and current kidney function.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "BEV_POSTOP",
+        "when": {
+          "field": "first_cycle_within_four_weeks_surgery",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "bevacizumab"
+          ],
+          "message": "Omit bevacizumab in cycle 1 when starting within four weeks after surgery."
+        },
+        "explanation": "Omit bevacizumab in cycle 1 when starting within four weeks after surgery.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 1
+        }
+      },
+      {
+        "id": "TAXANE_NEURO_G2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Reduce one dose level; if persistent consider the further reduction specified in the protocol."
+        },
+        "explanation": "Reduce one dose level; if persistent consider the further reduction specified in the protocol.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "TAXANE_NEURO_G3",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "paclitaxel_neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Omit paclitaxel."
+        },
+        "explanation": "Omit paclitaxel.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
+      },
+      {
+        "id": "LFT_CLARIFY",
+        "when": {
+          "field": "alt_ast_uln_multiple",
+          "operator": ">=",
+          "value": 10
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Check which transaminase is elevated. The paclitaxel table uses ALT specifically."
+        },
+        "explanation": "Check which transaminase is elevated. The paclitaxel table uses ALT specifically.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "TAXANE_ALT",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "taxane_alt_multiple",
+              "operator": ">=",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Paclitaxel is not recommended at ALT ≥10×ULN."
+        },
+        "explanation": "Paclitaxel is not recommended at ALT ≥10×ULN.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "TAXANE_BILI",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "bilirubin_uln_multiple",
+              "operator": ">",
+              "value": 5
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Paclitaxel is not recommended above bilirubin 5×ULN."
+        },
+        "explanation": "Paclitaxel is not recommended above bilirubin 5×ULN.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "TAXANE_BILI_REVIEW_2",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.25
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Check ALT. If ALT <10×ULN, the table gives 135 mg/m² for this bilirubin band. Confirm exact boundaries and rounding with pharmacy."
+        },
+        "explanation": "Check ALT. If ALT <10×ULN, the table gives 135 mg/m² for this bilirubin band. Confirm exact boundaries and rounding with pharmacy.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "TAXANE_BILI_REVIEW_5",
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "treatment_visit",
+                  "operator": "missing"
+                },
+                {
+                  "field": "treatment_visit",
+                  "operator": "in",
+                  "value": [
+                    "combination"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": "<=",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Check ALT. If ALT <10×ULN, the table gives 90 mg/m² for this bilirubin band. Confirm exact boundaries and rounding with pharmacy."
+        },
+        "explanation": "Check ALT. If ALT <10×ULN, the table gives 90 mg/m² for this bilirubin band. Confirm exact boundaries and rounding with pharmacy.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 6
+        }
+      },
+      {
+        "id": "OTHER_NONHAEM",
+        "when": {
+          "field": "non_haematological_toxicity_grade",
+          "operator": ">=",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "paclitaxel"
+          ],
+          "message": "Identify the toxicity, agent and grade before applying the adverse-event table. Urgent medical assessment if clinically unwell."
+        },
+        "explanation": "Identify the toxicity, agent and grade before applying the adverse-event table. Urgent medical assessment if clinically unwell.",
+        "source": {
+          "document": "NCCP 00716 v2",
+          "url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+          "page": 7
+        }
       }
     ]
   },
   "eligibility": [
+    "Persistent, recurrent or metastatic cervical cancer where surgery or radiotherapy cannot offer a cure.",
     "Indication as listed in the current official NCCP regimen",
     "Performance status and disease-specific eligibility appropriate to the selected indication",
     "Organ function appropriate for the selected regimen"
@@ -872,13 +1378,24 @@
     "Regimen-specific exclusions encoded in the assessment"
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
+    "emetogenic_risk": "phase_dependent",
+    "script_id": null,
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
-    "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "phase_specific_plan": "patient/00716/antiemetic-prescriptions.html",
+    "source_url": "https://healthservice.hse.ie/documents/6594/716_V2_Bev15mg_PACLi_and_CARBO.pdf",
+    "phase_profiles": {
+      "combination": {
+        "level": "high",
+        "script_id": "nccp-v8-carboplatin-v08420"
+      },
+      "maintenance": {
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis"
+      }
+    }
   }
 }

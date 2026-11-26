@@ -130,7 +130,12 @@ for(const p of [mono,combo]){
       '00306':['Gemcitabine','Carboplatin'],
       '00308':['Carboplatin','Paclitaxel'],
       '00624':['Pegylated Liposomal Doxorubicin','Carboplatin'],
-      '00819':['Dostarlimab']
+      '00819':['Dostarlimab'],
+      '00620':['Bevacizumab','Carboplatin','Paclitaxel'],
+      '00716':['Bevacizumab','Carboplatin','Paclitaxel'],
+      '00769':['Bevacizumab','Paclitaxel'],
+      '00771':['Bevacizumab','Topotecan'],
+      '00772':['Bevacizumab','Pegylated Liposomal Doxorubicin']
     }[p.metadata.nccp_regimen_code];
     if (reviewedGynae) {
       assert.deepEqual(plain(c.SACTCheckRegimenConsentBuilder.componentsForProtocol(p)),reviewedGynae);

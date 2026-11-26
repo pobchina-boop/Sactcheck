@@ -402,12 +402,20 @@
       const retainLocal=(/^(?:hn48_|hn49_(?:00514|00517|00903|00589|00591)_|hn50_(?:00615|00893)_)/.test(String(phase.plan_id)))&&supportive.preserve_local_adjunct_reference===true;
       supportive={...supportive,local_prescription_items:retainLocal?supportive.local_prescription_items:[],localPrescriptionSource:retainLocal?supportive.localPrescriptionSource:null,
         local_adjunct_note:retainLocal?supportive.local_adjunct_note:"",warnings:[...(supportive.warnings||[]),...phase.notes]};
+      if (prescriptionCodes.has(metadata.nccp_regimen_code) && phase.plan_id === 'high_carboplatin') {
+        supportive.subsequent = supportive.subsequent.map(item =>
+          item.medicine === 'Metoclopramide' ? {...item, timing: 'Subsequent days as prescribed'} : item
+        );
+      }
+      if (prescriptionCodes.has(metadata.nccp_regimen_code) && supportive.risk_level === 'low') {
+        supportive.day1 = supportive.day1.map(item => ({...item, timing: 'On this treatment day'}));
+      }
       riskRecord={...riskRecord,level:supportive.risk_level,label:supportive.label,phaseResolved:true,phaseKey:phase.id};
     }
     const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);
     if(supportive) supportive.agentSupport=agentSupport;
     const interactions=interactionOverrides(protocol,data,phase?.active_medicines);
-    const extra=resolveExtravasation(protocol,data,["00929","00303","00306","00308","00624","00819"].includes(metadata.nccp_regimen_code) ? phase?.active_medicines : undefined);
+    const extra=resolveExtravasation(protocol,data,(metadata.nccp_regimen_code === '00929' || prescriptionCodes.has(metadata.nccp_regimen_code)) ? phase?.active_medicines : undefined);
 
     return {
       release:RELEASE,
@@ -507,7 +515,21 @@
     return viewer;
   }
 
+  const prescriptionCodes=new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772']);
   async function openSupportivePdf(protocol,options={}){
+    const code=nccpCodeFor(protocol);
+    if (prescriptionCodes.has(code)) {
+      const data=await load();
+      const phases=data.supportive_phase_selectors[code].phases;
+      const phase=options.supportPhase ? phases.find(p=>p.id===options.supportPhase) : phases.length===1 ? phases[0] : null;
+      if (!phase) return open(protocol,{focusSupport:true});
+      const portal=patientAssets().runtimeUrl(protocol,'portal');
+      const url=new URL('antiemetic-'+phase.id+'.pdf',new URL(portal,root.document.baseURI)).href;
+      const link=root.document.createElement('a');
+      link.href=url;link.download='SACTCheck-'+code+'-antiemetic-'+phase.id+'.pdf';
+      root.document.body.appendChild(link);link.click();link.remove();
+      return {downloaded:true,url};
+    }
     const phaseSelector=patientAssets()?.runtimeUrl?.(protocol,'supportive-care-selector');
     if(phaseSelector){root.open?.(phaseSelector,'_blank','noopener');return phaseSelector;}
     const dedicated=patientAssets()?.runtimeUrl?.(protocol,'supportive-care');
@@ -696,7 +718,7 @@
   function renderSupportPhaseSelector(manifest){
     const choices=manifest.supportPhaseChoices||[];
     if(!choices.length) return "";
-    return `<div class="workflow-support-script"><label for="workflowSupportPhase"><strong>Treatment phase / visit</strong></label>
+    return `<div class="${prescriptionCodes.has(manifest.nccpCode)?"workflow-prescription-visit":"workflow-support-script"}"><label for="workflowSupportPhase"><strong>Treatment phase / visit</strong></label>
       <select id="workflowSupportPhase" style="display:block;width:100%;padding:12px;margin:8px 0" aria-describedby="workflowSupportPhaseHint">
         <option value="">Choose the phase / visit...</option>
         ${choices.map(phase=>`<option value="${esc(phase.id)}" ${manifest.supportPhase?.id===phase.id?"selected":""}>${esc(phase.label)}</option>`).join("")}
@@ -753,7 +775,7 @@
           ${moduleStatus(supportive.status)}
           ${renderSupportPhaseSelector(manifest)}
           ${renderSupportiveScript(manifest)}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open guidance":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${prescriptionCodes.has(manifest.nccpCode) ? (manifest.supportPhase || manifest.supportPhaseChoices.length===1 ? "Download antiemetic prescription PDF" : "Choose visit for prescription PDF") : patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open guidance":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
           ${supportive.status==="phase_review_required"&&!manifest.supportPhaseChoices.length&&!patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?`<p>A verified phase-specific script is not yet available for this regimen. <a href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the NCCP regimen for phase/day guidance</a>.</p>`:""}
           <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer"><span>NCCP antiemetic source</span>${externalLinkIcon()}</a>
         </article>

@@ -16,7 +16,10 @@ function createMigration(record) {
   for (const [file, entry] of Object.entries(record.files)) {
     assert(NEW_ROUTES.some(route => ['patient', 'docs/patient'].some(prefix => path.dirname(file) === prefix + '/' + route)));
     assert.equal(entry.before, null);
-    const actual = fs.readFileSync(path.join(root,file));
+    const next=require('./retrospective-v08466.cjs');
+    const changed=next.approvedPath(file);
+    const actual=changed ? require('node:child_process').execFileSync('git',['show','3368f80d8c6f0390ccd085b34609a87cbea4cf50:'+file],{cwd:root,maxBuffer:32*1024*1024}) : fs.readFileSync(path.join(root,file));
+    if (changed) assert.equal(next.beforeHash(file),entry.after,file);
     assert.equal(actual.length, entry.after_bytes, file);
     assert.equal(digest(actual), entry.after, file);
   }
