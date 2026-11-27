@@ -55593,6 +55593,620 @@ const definitions={
         "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
       }
     ]
+  },
+  "00385:cervical_definitive": {
+    "code": "00385",
+    "context": "cervical_definitive",
+    "title": "Weekly cisplatin with radiotherapy for cervical cancer",
+    "release": "0.84.72",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Definitive treatment for locally advanced cervical squamous, adenosquamous or adenocarcinoma, stage IIB–IVA. Selected IB3 or IIA cases require multidisciplinary discussion.",
+    "summary": "One cisplatin infusion each week with radiotherapy for five planned cycles. Your consultant may extend weekly treatment while radiotherapy continues.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Appointments and checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "radiation"
+        ],
+        "cells": [
+          "Blood count and kidney and liver tests. Your team checks hearing and kidney clearance in more detail when needed.",
+          "Repeat the blood count and kidney and liver tests. Review fluid intake, hearing, nerve symptoms and the radiotherapy plan.",
+          "The radiotherapy team arranges follow-up and checks recovery, including bowel, bladder and vaginal symptoms."
+        ]
+      },
+      {
+        "label": "What to do",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "radiation"
+        ],
+        "cells": [
+          "Mention hearing aids, ringing ears, numbness or difficulty drinking before your first infusion.",
+          "Tell the team about diarrhoea, vomiting or reduced urine. Ask which fluids and anti-sickness medicines to use at home.",
+          "Ask for your follow-up date, a contact for new bleeding and advice on sexual health or menopause symptoms."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count and kidney and liver tests. Your team checks hearing and kidney clearance in more detail when needed.",
+        "action": "Mention hearing aids, ringing ears, numbness or difficulty drinking before your first infusion.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before each weekly dose",
+        "when": "Before each weekly dose",
+        "why": "Repeat the blood count and kidney and liver tests. Review fluid intake, hearing, nerve symptoms and the radiotherapy plan.",
+        "action": "Tell the team about diarrhoea, vomiting or reduced urine. Ask which fluids and anti-sickness medicines to use at home.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "After treatment",
+        "when": "After treatment",
+        "why": "The radiotherapy team arranges follow-up and checks recovery, including bowel, bladder and vaginal symptoms.",
+        "action": "Ask for your follow-up date, a contact for new bleeding and advice on sexual health or menopause symptoms.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Coordinate external-beam radiotherapy and brachytherapy with radiation oncology. Recheck concurrent radiotherapy status before every infusion. Five weekly cisplatin doses are planned in the cervical protocol; additional weekly doses are at consultant discretion while radiotherapy continues."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "Irish NCCP 00385 v5 · 00385a",
+        "url": "https://healthservice.hse.ie/documents/6341/385_V5_CISplatin_40mgm2_weekly_with_RT.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG 120 · definitive chemoradiation",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10202165/"
+      },
+      {
+        "id": "radiation",
+        "title": "European cervical cancer guideline · radiotherapy and follow-up",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10247855/"
+      },
+      {
+        "id": "anti",
+        "title": "NCCP antiemetic medicines for medical oncology · Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00385:cervical_postoperative": {
+    "code": "00385",
+    "context": "cervical_postoperative",
+    "title": "Cisplatin with radiotherapy after cervical cancer surgery",
+    "release": "0.84.72",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Postoperative adjuvant chemoradiation for cervical squamous, adenosquamous or adenocarcinoma with unexpected pathological node positivity.",
+    "summary": "One cisplatin infusion each week with radiotherapy for five planned cycles. Your consultant may extend weekly treatment while radiotherapy continues.",
+    "stages": [
+      "After the operation",
+      "During treatment",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Appointments and checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "radiation"
+        ],
+        "cells": [
+          "Blood count and kidney and liver tests. Your team checks hearing and kidney clearance in more detail when needed.",
+          "Repeat the blood count and kidney and liver tests. Review fluid intake, hearing, nerve symptoms and the radiotherapy plan.",
+          "The radiotherapy team arranges follow-up and checks recovery, including bowel, bladder and vaginal symptoms."
+        ]
+      },
+      {
+        "label": "What to do",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "radiation"
+        ],
+        "cells": [
+          "Review wound recovery, the pathology result and when the radiation team wants to begin. Report pelvic pain, leg swelling or discharge.",
+          "Tell the team about diarrhoea, vomiting or reduced urine. Ask which fluids and anti-sickness medicines to use at home.",
+          "Ask for your follow-up date, a contact for new bleeding and advice on sexual health or menopause symptoms."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "After the operation",
+        "when": "After the operation",
+        "why": "Blood count and kidney and liver tests. Your team checks hearing and kidney clearance in more detail when needed.",
+        "action": "Review wound recovery, the pathology result and when the radiation team wants to begin. Report pelvic pain, leg swelling or discharge.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before each weekly dose",
+        "when": "Before each weekly dose",
+        "why": "Repeat the blood count and kidney and liver tests. Review fluid intake, hearing, nerve symptoms and the radiotherapy plan.",
+        "action": "Tell the team about diarrhoea, vomiting or reduced urine. Ask which fluids and anti-sickness medicines to use at home.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "After treatment",
+        "when": "After treatment",
+        "why": "The radiotherapy team arranges follow-up and checks recovery, including bowel, bladder and vaginal symptoms.",
+        "action": "Ask for your follow-up date, a contact for new bleeding and advice on sexual health or menopause symptoms.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Document the unexpected positive surgical node and postoperative recovery. A radiation boost depends on local or margin risk. The cervical NCCP pathway uses five planned weekly cisplatin doses, with extension at consultant discretion while radiotherapy continues."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "Irish NCCP 00385 v5 · 00385e",
+        "url": "https://healthservice.hse.ie/documents/6341/385_V5_CISplatin_40mgm2_weekly_with_RT.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG 109 · postoperative high-risk disease",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10764420/"
+      },
+      {
+        "id": "radiation",
+        "title": "European cervical cancer guideline · radiotherapy and follow-up",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10247855/"
+      },
+      {
+        "id": "anti",
+        "title": "NCCP antiemetic medicines for medical oncology · Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00419:cervical": {
+    "code": "00419",
+    "context": "cervical",
+    "title": "Weekly carboplatin with radiotherapy for cervical cancer",
+    "release": "0.84.72",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Concurrent treatment for locally advanced cervical cancer with a documented cisplatin contraindication or intolerance. Keep the systemic schedule linked to the radiation course.",
+    "summary": "One carboplatin infusion each week during radiotherapy for up to six cycles. The team stops carboplatin if the radiation course ends early.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Appointments and checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "radiation"
+        ],
+        "cells": [
+          "Blood count, kidney and liver tests. A measured kidney filtration test is preferred for dosing; the team can use an estimate when appropriate.",
+          "Blood count and kidney and liver function are checked. Kidney function can affect the calculated dose.",
+          "The radiotherapy team arranges follow-up and checks recovery, including bowel, bladder and vaginal symptoms."
+        ]
+      },
+      {
+        "label": "What to do",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "radiation"
+        ],
+        "cells": [
+          "Discuss the reason cisplatin is unsuitable. Hearing and nerve tests are considered when indicated.",
+          "Report unusual bruising, bleeding, numbness or vomiting. Verify that radiotherapy is still proceeding.",
+          "Ask for your follow-up date, a contact for new bleeding and advice on sexual health or menopause symptoms."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver tests. A measured kidney filtration test is preferred for dosing; the team can use an estimate when appropriate.",
+        "action": "Discuss the reason cisplatin is unsuitable. Hearing and nerve tests are considered when indicated.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before each weekly infusion",
+        "when": "Before each weekly infusion",
+        "why": "Blood count and kidney and liver function are checked. Kidney function can affect the calculated dose.",
+        "action": "Report unusual bruising, bleeding, numbness or vomiting. Verify that radiotherapy is still proceeding.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "After treatment",
+        "when": "After treatment",
+        "why": "The radiotherapy team arranges follow-up and checks recovery, including bowel, bladder and vaginal symptoms.",
+        "action": "Ask for your follow-up date, a contact for new bleeding and advice on sexual health or menopause symptoms.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "AUC 2 weekly for six cycles with radiotherapy. Check measured or estimated GFR/CrCl and counts before dosing. Carboplatin is discontinued if radiotherapy is truncated. The post-radiotherapy carboplatin/5-FU sequence belongs to a different indication."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "Irish NCCP 00419 v6 · 00419b",
+        "url": "https://healthservice.hse.ie/documents/6458/419_CARBO_AUC2and_RT.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Weekly carboplatin and cervical radiotherapy · meta-analysis",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29996970/"
+      },
+      {
+        "id": "radiation",
+        "title": "European cervical cancer guideline · radiotherapy and follow-up",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10247855/"
+      },
+      {
+        "id": "anti",
+        "title": "NCCP antiemetic medicines for medical oncology · Table 1",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      }
+    ]
+  },
+  "00812:cervical": {
+    "code": "00812",
+    "context": "cervical",
+    "title": "Cemiplimab for cervical cancer after platinum chemotherapy",
+    "release": "0.84.72",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adults with recurrent or metastatic cervical cancer that progressed on or after platinum chemotherapy, ECOG 0–2 and adequate organ function. NCCP 00812a specifies no PD-L1 threshold. Review prior checkpoint inhibitor exposure under current Irish sequencing guidance.",
+    "summary": "One infusion every three weeks (21 days), while it is helping and side effects remain manageable.",
+    "stages": [
+      "Before starting",
+      "During treatment",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Appointments and checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "ema"
+        ],
+        "cells": [
+          "Blood count, kidney and liver tests, blood glucose and thyroid function. Hepatitis B and C screening is also required.",
+          "Blood count, kidney and liver tests, blood glucose and a review of changes in breathing, bowels, skin and energy.",
+          "Immune side effects can appear after your last infusion. Keep your alert card and use your oncology contact number for new symptoms."
+        ]
+      },
+      {
+        "label": "What to do",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "ema"
+        ],
+        "cells": [
+          "List any steroids or hormone replacements and tell the team about autoimmune illness, diabetes or previous immunotherapy reactions.",
+          "Bring your alert card and medicines list. Ring between visits about new symptoms, even if your last blood tests were normal.",
+          "Tell the team which immunotherapy you received and when your last dose was given."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver tests, blood glucose and thyroid function. Hepatitis B and C screening is also required.",
+        "action": "List any steroids or hormone replacements and tell the team about autoimmune illness, diabetes or previous immunotherapy reactions.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before each infusion",
+        "when": "Before each infusion",
+        "why": "Blood count, kidney and liver tests, blood glucose and a review of changes in breathing, bowels, skin and energy.",
+        "action": "Bring your alert card and medicines list. Ring between visits about new symptoms, even if your last blood tests were normal.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Every 3–6 weeks",
+        "when": "Every 3–6 weeks",
+        "why": "Thyroid blood tests check for immune inflammation. Other hormone tests depend on your symptoms.",
+        "action": "Ask for your blood test dates and the date for your next scan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Clarify progression date relative to platinum and prior anti-PD-(L)1 use. Check active infection, CNS disease, baseline immunosuppression and history of immune toxicity. Select this cervical indication independently of cutaneous squamous cell criteria. Under the NCCP prior PD-(L)1 policy, previous treatment in the same unresectable or metastatic disease generally precludes another PD-(L)1 inhibitor; an approved alternative may be considered for intolerance. The specific reimbursed indication takes precedence."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "Irish NCCP 00812 v3a · 00812a",
+        "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EMPOWER-Cervical 1 · final overall survival",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39798514/"
+      },
+      {
+        "id": "ema",
+        "title": "EMA · Libtayo product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/libtayo-epar-product-information_en.pdf"
+      },
+      {
+        "id": "prior",
+        "title": "NCCP · prior checkpoint inhibitor treatment, version 2",
+        "url": "https://healthservice.hse.ie/documents/7145/Information_regarding_previous_treatment_in_NCCP_SACT_regimens_containing_PD-1_mBerhkG.pdf"
+      }
+    ]
+  },
+  "00455:cervical_maintenance": {
+    "code": "00455",
+    "context": "cervical_maintenance",
+    "title": "Pembrolizumab maintenance every 3 weeks for cervical cancer",
+    "release": "0.84.72",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adult persistent, recurrent or metastatic cervical cancer, validated PD-L1 combined positive score (CPS) ≥1, ECOG 0–2 and completion of the induction chemotherapy component. Select monotherapy only when a pembrolizumab-alone maintenance plan has been confirmed.",
+    "summary": "One infusion every 3 weeks (21 days). The team confirms the first maintenance date from your actual last treatment.",
+    "stages": [
+      "At maintenance handover",
+      "During treatment",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Appointments and checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "ema"
+        ],
+        "cells": [
+          "Blood count, kidney and liver tests, blood glucose and thyroid function. The team confirms your tumour PD-L1 test and reviews side effects from the earlier combination.",
+          "Blood count, kidney and liver tests, blood glucose and a review of changes in breathing, bowels, skin and energy.",
+          "Immune side effects can appear after your last infusion. Keep your alert card and use your oncology contact number for new symptoms."
+        ]
+      },
+      {
+        "label": "What to do",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "ema"
+        ],
+        "cells": [
+          "List any steroids or hormone replacements and tell the team about autoimmune illness, diabetes or previous immunotherapy reactions.",
+          "Bring your alert card and medicines list. Ring between visits about new symptoms, even if your last blood tests were normal.",
+          "Tell the team which immunotherapy you received and when your last dose was given."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "At maintenance handover",
+        "when": "At maintenance handover",
+        "why": "Blood count, kidney and liver tests, blood glucose and thyroid function. The team confirms your tumour PD-L1 test and reviews side effects from the earlier combination.",
+        "action": "List any steroids or hormone replacements and tell the team about autoimmune illness, diabetes or previous immunotherapy reactions.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before each infusion",
+        "when": "Before each infusion",
+        "why": "Blood count, kidney and liver tests, blood glucose and a review of changes in breathing, bowels, skin and energy.",
+        "action": "Bring your alert card and medicines list. Ring between visits about new symptoms, even if your last blood tests were normal.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Every 3–6 weeks",
+        "when": "Every 3–6 weeks",
+        "why": "Thyroid blood tests check for immune inflammation. Cortisol is checked when your symptoms or the clinical assessment suggest it is needed.",
+        "action": "Ask for your blood test dates and the date for your next scan.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "00817 and 00811 use 6–8 three-weekly induction chemotherapy cycles, with consultant review after six. On 00811 both pembrolizumab and bevacizumab may continue as maintenance: confirm the intended partner before choosing a single-agent route. Reconcile the last administered date and current 200 mg/21-day schedule to avoid overlapping visits. Continuing pembrolizumab from induction is continuation of the same course. Avoid treating the change of phase as a new course for duration review."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "Irish NCCP 00455 v16 · 00455j",
+        "url": "https://healthservice.hse.ie/documents/6903/Pembrolizumab_200mg_Monotherapy_455.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "KEYNOTE-826 · final overall survival in PD-L1 CPS ≥1",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37910822/"
+      },
+      {
+        "id": "ema",
+        "title": "EMA · Keytruda product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+      },
+      {
+        "id": "induction",
+        "title": "NCCP 00817 · induction without bevacizumab",
+        "url": "https://healthservice.hse.ie/documents/6429/Pembro_Pac_175_Carbo_AUC_5_817_.pdf"
+      },
+      {
+        "id": "bev",
+        "title": "NCCP 00811 · induction and maintenance with bevacizumab",
+        "url": "https://healthservice.hse.ie/documents/6425/Pembrolizumab_Pac_Carbo_Bev_811_.pdf"
+      },
+      {
+        "id": "prior",
+        "title": "NCCP · prior checkpoint inhibitor treatment, version 2",
+        "url": "https://healthservice.hse.ie/documents/7145/Information_regarding_previous_treatment_in_NCCP_SACT_regimens_containing_PD-1_mBerhkG.pdf"
+      }
+    ]
+  },
+  "00558:cervical_maintenance": {
+    "code": "00558",
+    "context": "cervical_maintenance",
+    "title": "Pembrolizumab maintenance every 6 weeks for cervical cancer",
+    "release": "0.84.72",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Adult persistent, recurrent or metastatic cervical cancer, validated PD-L1 combined positive score (CPS) ≥1, ECOG 0–2 and completion of the induction chemotherapy component. Select monotherapy only when a pembrolizumab-alone maintenance plan has been confirmed.",
+    "summary": "One infusion every 6 weeks (42 days). The team confirms the first maintenance date from your actual last treatment.",
+    "stages": [
+      "At maintenance handover",
+      "During treatment",
+      "After treatment"
+    ],
+    "lanes": [
+      {
+        "label": "Appointments and checks",
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp",
+          "ema"
+        ],
+        "cells": [
+          "Blood count, kidney and liver tests, blood glucose and thyroid function. The team confirms your tumour PD-L1 test and reviews side effects from the earlier combination.",
+          "Blood count, kidney and liver tests, blood glucose and a review of changes in breathing, bowels, skin and energy.",
+          "Immune side effects can appear after your last infusion. Keep your alert card and use your oncology contact number for new symptoms."
+        ]
+      },
+      {
+        "label": "What to do",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp",
+          "ema"
+        ],
+        "cells": [
+          "List any steroids or hormone replacements and tell the team about autoimmune illness, diabetes or previous immunotherapy reactions.",
+          "Bring your alert card and medicines list. Ring between visits about new symptoms, even if your last blood tests were normal.",
+          "Tell the team which immunotherapy you received and when your last dose was given."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "At maintenance handover",
+        "when": "At maintenance handover",
+        "why": "Blood count, kidney and liver tests, blood glucose and thyroid function. The team confirms your tumour PD-L1 test and reviews side effects from the earlier combination.",
+        "action": "List any steroids or hormone replacements and tell the team about autoimmune illness, diabetes or previous immunotherapy reactions.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before each infusion",
+        "when": "Before each infusion",
+        "why": "Blood count, kidney and liver tests, blood glucose and a review of changes in breathing, bowels, skin and energy.",
+        "action": "Bring your alert card and medicines list. Ring between visits about new symptoms, even if your last blood tests were normal.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Every 3–6 weeks",
+        "when": "Every 3–6 weeks",
+        "why": "Thyroid blood tests check for immune inflammation. Cortisol is checked when your symptoms or the clinical assessment suggest it is needed.",
+        "action": "Ask for your blood test dates between infusions if a check is needed before the six-week visit.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "00817 and 00811 use 6–8 three-weekly induction chemotherapy cycles, with consultant review after six. On 00811 both pembrolizumab and bevacizumab may continue as maintenance: confirm the intended partner before choosing a single-agent route. Reconcile the last administered date and current 400 mg/42-day schedule to avoid overlapping visits. Continuing pembrolizumab from induction is continuation of the same course. Avoid treating the change of phase as a new course for duration review."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "Irish NCCP 00558 v13 · 00558j",
+        "url": "https://healthservice.hse.ie/documents/6389/Pembrolizumab_400mg_monotherapy_558_.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "KEYNOTE-826 · final overall survival in PD-L1 CPS ≥1",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37910822/"
+      },
+      {
+        "id": "ema",
+        "title": "EMA · Keytruda product information",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/keytruda-epar-product-information_en.pdf"
+      },
+      {
+        "id": "induction",
+        "title": "NCCP 00817 · induction without bevacizumab",
+        "url": "https://healthservice.hse.ie/documents/6429/Pembro_Pac_175_Carbo_AUC_5_817_.pdf"
+      },
+      {
+        "id": "bev",
+        "title": "NCCP 00811 · induction and maintenance with bevacizumab",
+        "url": "https://healthservice.hse.ie/documents/6425/Pembrolizumab_Pac_Carbo_Bev_811_.pdf"
+      },
+      {
+        "id": "prior",
+        "title": "NCCP · prior checkpoint inhibitor treatment, version 2",
+        "url": "https://healthservice.hse.ie/documents/7145/Information_regarding_previous_treatment_in_NCCP_SACT_regimens_containing_PD-1_mBerhkG.pdf"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

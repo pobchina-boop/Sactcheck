@@ -56,6 +56,11 @@ sections.pembrolizumab = [
  ['Immune inflammation','New cough, diarrhoea, jaundice, rash or reduced urine needs urgent review, even after treatment ends.'],
  ['Hormone and other serious reactions','Call urgently for severe fatigue, headache, thirst, weakness or chest pain. Hormone replacement can be lifelong. Carry your immunotherapy alert card.']
 ];
+const cervicalImmunotherapyRisks = [
+ ...sections.pembrolizumab,
+ ['Heart, muscle, nerves and skin', 'Get urgent help for chest pain, new weakness, difficulty swallowing, confusion or a widespread blistering rash.'],
+ ['Infusion reaction', 'Tell the nurse at once about flushing, breathing difficulty, dizziness or swelling during the infusion.']
+];
 sections.cisplatin = [
  ['Kidneys and hearing','Fluids and blood tests help protect the kidneys. Report reduced urine, ringing or hearing loss promptly. Hearing changes can persist.'],
  ['Nerves, nausea and low counts','Report numbness, persistent vomiting or bleeding. Call urgently for fever or chills.']
@@ -106,8 +111,11 @@ const gtnRisks = {
   paclitaxel: [['Nerves, marrow and infusion reactions','Report numbness, fever or unexpected bleeding. Tell the nurse at once about chest tightness or breathlessness. Hair loss is common.']]
 };
 function consent(p){
- const groups=p.agents.map(a=>{const rows=p.code==='00249' && a.id==='methotrexate' ? [['Spinal and systemic effects','Seek urgent advice for severe headache, fever, stiff neck, weakness, confusion or seizure. Blood counts and kidney function also need checking.']] : trophoblasticCodes.has(p.code) ? gtnRisks[a.id] : p.code==='00246' && a.id==='folinic acid' ? folinicRescue : sections[a.id];if(!rows)throw Error('Missing material risks for '+a.id);return '<section class="agent"><h3>'+h(a.name)+'</h3>'+table(['Effect to discuss','What to look for and when to get help'],rows)+'</section>';});
- const a=header(p,'Consent to systemic anti-cancer treatment')+fields+'<h2>Treatment and purpose</h2><p>'+h(p.purpose)+' '+h(p.code==='00248'?'High-risk or resistant gestational trophoblastic neoplasia.':p.indication_text)+'</p><p><b>Treatment schedule.</b> '+h(trophoblasticCodes.has(p.code)?p.schedule_label:p.schedule_summary)+'</p><h2 class="riskhead">Regimen-specific side effects</h2>'+groups.join('');
+ const groups=p.agents.map(a=>{const rows=Array.isArray(p.prescription_phases) && ['pembrolizumab','cemiplimab'].includes(a.id) ? cervicalImmunotherapyRisks : p.code==='00249' && a.id==='methotrexate' ? [['Spinal and systemic effects','Seek urgent advice for severe headache, fever, stiff neck, weakness, confusion or seizure. Blood counts and kidney function also need checking.']] : trophoblasticCodes.has(p.code) ? gtnRisks[a.id] : p.code==='00246' && a.id==='folinic acid' ? folinicRescue : sections[a.id];if(!rows)throw Error('Missing material risks for '+a.id);return '<section class="agent"><h3>'+h(a.name)+'</h3>'+table(['Effect to discuss','What to look for and when to get help'],rows)+'</section>';});
+ const pelvicRadiation = Array.isArray(p.prescription_phases) && ['00385','00419'].includes(p.code)
+   ? '<h2>Pelvic radiotherapy alongside chemotherapy</h2><p>Discuss bowel and bladder irritation, vaginal changes and the effects on sexual health, ovarian function and fertility that apply to you. Your radiation oncology team will discuss and document your radiotherapy plan separately.</p>'
+   : '';
+ const a=header(p,'Consent to systemic anti-cancer treatment')+fields+'<h2>Treatment and purpose</h2><p>'+h(p.purpose)+' '+h(p.code==='00248'?'High-risk or resistant gestational trophoblastic neoplasia.':p.indication_text)+'</p><p><b>Treatment schedule.</b> '+h(trophoblasticCodes.has(p.code)?p.schedule_label:p.schedule_summary)+'</p><h2 class="riskhead">Regimen-specific side effects</h2>'+groups.join('')+pelvicRadiation;
  const b=header(p,'Treatment discussion and decision')+'<h2>Benefits, alternatives and individual risks</h2><p>'+h(p.evidence.interpretation)+' '+h(p.evidence.limitations)+'</p><p>Discuss other treatment options, symptom-focused care, fertility, contraception and the effects that matter most to you. You can ask for more time and change your decision.</p><p><b>Options discussed, personal risks and questions</b></p><div class="lines"></div><p><b>Urgent contact</b> '+h(p.urgent_extra)+' Emergency services: 112 or 999.</p><h2>Decision and signatures</h2><p>I have discussed the purpose, likely benefits, material risks and alternatives, and have had the opportunity to ask questions.</p><p>Decision: □ I agree to treatment &nbsp; □ I would like more time &nbsp; □ I decline</p><div class="fields"><span>Patient / representative</span><span>Date</span></div><div class="fields"><span>Clinician and registration number</span><span>Signature / date</span></div><footer>SACTCheck feasibility build · Use with the hospital consent process. Source: NCCP '+h(p.code)+' v'+h(p.protocol_version)+'.</footer>';
  return page(p,'Regimen-specific consent','consent-form.pdf','<article'+(p.agents.length>4 && trophoblasticCodes.has(p.code)?' class="gtn-multiple"':p.code==='00811'?' class="four-agents"':'')+'>'+a+'</article><article>'+b+'</article>');
 }
@@ -119,15 +127,16 @@ function rx(p,phase){
   return page(p,'Antiemetic prescription','antiemetic-flot.pdf','<article>'+body+'</article>');
  }
  const finalGynae = ['00267','00301','00904'].includes(p.code);
- if (trophoblasticCodes.has(p.code) || finalGynae) {
+ if (trophoblasticCodes.has(p.code) || finalGynae || Array.isArray(p.prescription_phases)) {
    const rows=phase.medicines.map(m=>[m.name,m.dose.replace(/\bPO\b/g,'by mouth'),m.timing.replace(/\bOD\b/g,'Once daily').replace(/\bTDS\b/g,'Up to three times daily').replace(/\bPRN\b/g,'as needed')]);
    const notes = [...phase.prescription_notes];
    if(rows.some(r=>r[0]==='Metoclopramide')) notes.push('Metoclopramide: space doses by at least 6 hours. Maximum 30 mg or 0.5 mg/kg daily, whichever is lower, for up to 5 days.');
-   const prescriptionSource = p.code === '00904' ? 'NCCP 00904 v'+h(p.protocol_version)+' · Oral antiemesis per local policy' : 'NCCP '+h(p.code)+' · NCIS Medical Oncology v8'+(finalGynae ? ' · MASCC/ESMO multiday cisplatin guidance' : '');
+   const prescriptionSource = Array.isArray(p.prescription_phases) ? 'NCCP '+h(p.code)+' v'+h(p.protocol_version)+' · Local prescribing policy' : p.code === '00904' ? 'NCCP 00904 v'+h(p.protocol_version)+' · Oral antiemesis per local policy' : 'NCCP '+h(p.code)+' · NCIS Medical Oncology v8'+(finalGynae ? ' · MASCC/ESMO multiday cisplatin guidance' : '');
    const visitLabel = p.code === '00904' ? 'Daily anti-sickness medicine during rucaparib treatment' : phase.label;
    const riskLabel = p.code === '00904' ? 'MODERATE TO HIGH · ORAL' : level.toUpperCase();
    const oralPlan = '<p>Individual oral antiemetic prescription</p>'+table(['Medicine and strength', 'Dose and route', 'Directions and duration'],[['________________', '________________', '________________']]);
-   const medicines = rows.length ? table(['Medicine','Dose and route','Directions'],rows) : p.code === '00904' ? oralPlan : '<p>No routine preventive antiemetic for this visit. Record individual rescue if needed.</p>';
+   const localRegimen = Array.isArray(p.prescription_phases) && level !== 'minimal';
+   const medicines = rows.length ? table(['Medicine','Dose and route','Directions'],rows) : p.code === '00904' ? oralPlan : localRegimen ? table(['Medicine','Dose and route','Directions and duration'],[['________________','________________','________________'],['________________','________________','________________']]) : '<p>No routine preventive antiemetic for this visit. Record individual rescue if needed.</p>';
    const body=header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>'+h(visitLabel)+'</strong><span>'+h(riskLabel)+' EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies</span></div>'+medicines+notes.map(n=>'<p class="note">'+h(n)+'</p>').join('')+'<div class="fields"><span>Amendments / duration</span><span>Quantity to supply</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · '+prescriptionSource+' · Prescriber review and signature required.</footer>';
    return page(p,'Antiemetic prescription','antiemetic-'+phase.id+'.pdf','<article>'+body+'</article>');
  }

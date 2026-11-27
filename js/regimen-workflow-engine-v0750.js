@@ -381,6 +381,7 @@
 
   function supportPhaseChoices(protocol,data){
     const code=nccpCodeFor(protocol),context=patientAssets()?.contextFor?.(protocol)||'';
+    if (!context && patientAssets()?.cervicalSupportPath?.(protocol)) return [];
     const entry=data?.context_supportive_phase_selectors?.[code]?.[context]||data?.supportive_phase_selectors?.[code];
     // Exact protocol binding: an assessment-profile alias is not a prescribing phase.
     return entry?.protocol_id===protocol?.protocol_id && String(entry.source_version)===String(protocol?.metadata?.nccp_version)?entry.phases:[];
@@ -390,7 +391,9 @@
     if(!protocol) throw new Error("A protocol is required.");
     const metadata=protocol.metadata||{};
     const choices=supportPhaseChoices(protocol,data);
-    const phase=choices.find(item=>item.id===supportPhaseId) || (metadata.nccp_regimen_code==="00344" && !supportPhaseId && choices.length===1 ? choices[0] : undefined);
+    const cervicalVisit=patientAssets()?.cervicalPrescription?.(protocol);
+    const phase=choices.find(item=>item.id===supportPhaseId) || (!supportPhaseId && choices.length===1 &&
+      (metadata.nccp_regimen_code==="00344" || choices[0].id===cervicalVisit) ? choices[0] : undefined);
     // Never classify a selected phase using the whole regimen's drug list.
     if(choices.length||riskRecord.baseLevel==="phase_dependent"||riskRecord.level==="phase_dependent"){
       riskRecord={...riskRecord,baseLevel:"phase_dependent",level:"phase_dependent",phaseResolved:false};
@@ -428,6 +431,7 @@
       components:phase?.active_medicines||componentNames(protocol),
       supportPhase:phase||null,
       supportPhaseChoices:choices,
+      visitPrescription:prescriptionCodes.has(metadata.nccp_regimen_code) || Boolean(cervicalVisit),
       emetogenic:riskRecord,
       supportiveCare:supportive,
       interactionOverrides:interactions,
@@ -518,9 +522,14 @@
   const prescriptionCodes=new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
   async function openSupportivePdf(protocol,options={}){
     const code=nccpCodeFor(protocol);
-    if (prescriptionCodes.has(code)) {
+    const contextual=patientAssets()?.cervicalSupportPath?.(protocol);
+    if(contextual && !contextual.endsWith('.pdf')){
+      const target=patientAssets().runtimeUrl(protocol,'antiemetic-prescription');
+      root.open?.(target,'_blank','noopener'); return target;
+    }
+    if (prescriptionCodes.has(code) || contextual) {
       const data=await load();
-      const phases=data.supportive_phase_selectors[code].phases;
+      const phases=supportPhaseChoices(protocol,data);
       const phase=options.supportPhase ? phases.find(p=>p.id===options.supportPhase) : phases.length===1 ? phases[0] : null;
       if (!phase) return open(protocol,{focusSupport:true});
       const portal=patientAssets().runtimeUrl(protocol,'portal');
@@ -718,7 +727,7 @@
   function renderSupportPhaseSelector(manifest){
     const choices=manifest.supportPhaseChoices||[];
     if(!choices.length) return "";
-    return `<div class="${prescriptionCodes.has(manifest.nccpCode)?"workflow-prescription-visit":"workflow-support-script"}"><label for="workflowSupportPhase"><strong>Treatment phase / visit</strong></label>
+    return `<div class="${manifest.visitPrescription?"workflow-prescription-visit":"workflow-support-script"}"><label for="workflowSupportPhase"><strong>Treatment phase / visit</strong></label>
       <select id="workflowSupportPhase" style="display:block;width:100%;padding:12px;margin:8px 0" aria-describedby="workflowSupportPhaseHint">
         <option value="">Choose the phase / visit...</option>
         ${choices.map(phase=>`<option value="${esc(phase.id)}" ${manifest.supportPhase?.id===phase.id?"selected":""}>${esc(phase.label)}</option>`).join("")}
@@ -737,6 +746,8 @@
         <span class="workflow-eyebrow">One regimen · one clinical workflow</span>
         <h2 id="workflowPanelTitle">${esc(manifest.title)}</h2>
         <p>${esc(manifest.nccpCode?`NCCP ${manifest.nccpCode}${manifest.nccpVersion?` · v${manifest.nccpVersion}`:""}`:"Regimen source")}</p>
+        ${manifest.nccpCode==="00385" && (root.SACTCheckProtocolContext?.activeTumourGroup?.()==="Gynaecology" || activeProtocol?.patient_context?.startsWith("cervical_")) ? `<label for="workflowCervicalIntent">Cervical treatment setting</label>
+          <select id="workflowCervicalIntent"><option value="">Choose the setting</option><option value="cervical_definitive" ${patientAssets().contextFor(activeProtocol)==="cervical_definitive"?"selected":""}>Definitive chemoradiation</option><option value="cervical_postoperative" ${patientAssets().contextFor(activeProtocol)==="cervical_postoperative"?"selected":""}>Postoperative chemoradiation</option></select>` : ""}
         <div class="workflow-component-line">${manifest.components.map(x=>`<span>${esc(x)}</span>`).join("")}</div>
       </section>
 
@@ -775,7 +786,7 @@
           ${moduleStatus(supportive.status)}
           ${renderSupportPhaseSelector(manifest)}
           ${renderSupportiveScript(manifest)}
-          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${prescriptionCodes.has(manifest.nccpCode) ? (manifest.supportPhase || manifest.supportPhaseChoices.length===1 ? "Download antiemetic prescription PDF" : "Choose visit for prescription PDF") : patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open guidance":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
+          <button class="btn secondary workflow-module-action" type="button" data-workflow-support ${supportive.status==="available"||patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"":"disabled"}>${manifest.visitPrescription ? (manifest.supportPhase || manifest.supportPhaseChoices.length===1 ? "Download antiemetic prescription PDF" : "Choose visit for prescription PDF") : patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?"Open guidance":manifest.supportPhase?"Open selected phase script":"Open prescribing support"}</button>
           ${supportive.status==="phase_review_required"&&!manifest.supportPhaseChoices.length&&!patientAssets()?.relativePath?.(activeProtocol,'supportive-care')?`<p>A verified phase-specific script is not yet available for this regimen. <a href="${esc(manifest.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open the NCCP regimen for phase/day guidance</a>.</p>`:""}
           <a class="workflow-source-link" href="${esc(dataCache?.sources?.nccp_antiemetic_v8?.url||"")}" target="_blank" rel="noopener noreferrer"><span>NCCP antiemetic source</span>${externalLinkIcon()}</a>
         </article>
@@ -825,10 +836,18 @@
       <div class="workflow-boundary"><strong>Clinician-controlled workflow.</strong> SACTCheck surfaces regimen-derived tools and source-linked guidance. It does not prescribe, authorise treatment or replace the current NCCP regimen, local policy or independent clinical judgement.</div>
     `;
 
+    body.querySelector("#workflowCervicalIntent")?.addEventListener("change",event=>{
+      const context=event.target.value;
+      const indication=context==="cervical_postoperative"?"00385e":context==="cervical_definitive"?"00385a":"";
+      open({...activeProtocol,patient_context:context,selected_indication_id:indication});
+    });
     body.querySelector("[data-workflow-assess]")?.addEventListener("click",()=>{
-      const card=cardFor(activeProtocol);
+      const protocol=activeProtocol;
+      const card=cardFor(protocol);
       closePanel({restoreFocus:false});
-      card?.querySelector(".json-assessment-launch")?.click();
+      if(patientAssets()?.cervicalPrescription?.(protocol) && root.SACTCheckGenericAssessment?.open){
+        root.SACTCheckGenericAssessment.open(protocol,{tumourGroup:"Gynaecology"});
+      } else card?.querySelector(".json-assessment-launch")?.click();
     });
     body.querySelector("[data-workflow-nccp-tracker]")?.addEventListener("click",()=>{
       const tracker=root.SACTCheckNccpChangeTracker;

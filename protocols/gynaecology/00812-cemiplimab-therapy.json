@@ -1216,6 +1216,14 @@
       "required": false,
       "input_role": "decision",
       "demo_value": false
+    },
+    "immune_hepatitis_assessed": {
+      "type": "boolean",
+      "label": "Clinician attributes liver abnormalities to immune-mediated hepatitis after assessing alternative causes",
+      "required": false,
+      "input_role": "decision",
+      "demo_value": false,
+      "assessment_guidance": "Review symptoms and trend, hepatic disease, infection and other drugs. Record whether the findings represent immune-mediated hepatitis before applying the treatment-modification table."
     }
   },
   "required_inputs": [],
@@ -2129,13 +2137,49 @@
         "rule_id": "HEPATITIS_HOLD",
         "priority": 20,
         "when": {
-          "any": [
+          "all": [
             {
-              "all": [
+              "field": "immune_hepatitis_assessed",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": ">",
+                      "value": 3
+                    },
+                    {
+                      "field": "alt_ast_uln_multiple",
+                      "operator": "<=",
+                      "value": 5
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": ">",
+                      "value": 1.5
+                    },
+                    {
+                      "field": "bilirubin_uln_multiple",
+                      "operator": "<=",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "any": [
                 {
                   "field": "alt_ast_uln_multiple",
-                  "operator": ">",
-                  "value": 3
+                  "operator": "missing"
                 },
                 {
                   "field": "alt_ast_uln_multiple",
@@ -2145,11 +2189,10 @@
               ]
             },
             {
-              "all": [
+              "any": [
                 {
                   "field": "bilirubin_uln_multiple",
-                  "operator": ">",
-                  "value": 1.5
+                  "operator": "missing"
                 },
                 {
                   "field": "bilirubin_uln_multiple",
@@ -2165,31 +2208,41 @@
           "components": [
             "cemiplimab"
           ],
-          "message": "AST/ALT >3–5×ULN or bilirubin >1.5–3×ULN: withhold. Resume only with sustained grade 0–1 after taper to ≤10 mg/day, or baseline AST/ALT after completed taper, under consultant review.",
-          "recommendation": "AST/ALT >3–5×ULN or bilirubin >1.5–3×ULN: withhold. Resume only with sustained grade 0–1 after taper to ≤10 mg/day, or baseline AST/ALT after completed taper, under consultant review."
+          "message": "Withhold for immune-mediated hepatitis with AST or ALT above 3 through 5 ×ULN, or total bilirubin above 1.5 through 3 ×ULN. Consider resuming after sustained recovery to grade 0–1 following steroid taper to ≤10 mg/day prednisolone equivalent, or return to baseline AST/ALT after the steroid taper is complete, under consultant review.",
+          "recommendation": "Withhold for immune-mediated hepatitis with AST or ALT above 3 through 5 ×ULN, or total bilirubin above 1.5 through 3 ×ULN. Consider resuming after sustained recovery to grade 0–1 following steroid taper to ≤10 mg/day prednisolone equivalent, or return to baseline AST/ALT after the steroid taper is complete, under consultant review."
         },
-        "explanation": "AST/ALT >3–5×ULN or bilirubin >1.5–3×ULN: withhold. Resume only with sustained grade 0–1 after taper to ≤10 mg/day, or baseline AST/ALT after completed taper, under consultant review.",
+        "explanation": "Withhold for immune-mediated hepatitis with AST or ALT above 3 through 5 ×ULN, or total bilirubin above 1.5 through 3 ×ULN. Consider resuming after sustained recovery to grade 0–1 following steroid taper to ≤10 mg/day prednisolone equivalent, or return to baseline AST/ALT after the steroid taper is complete, under consultant review.",
         "source": {
           "document": "NCCP 00812 version 3a",
           "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
           "page": 3,
-          "checked_date": "2026-11-06"
+          "checked_date": "2026-11-27",
+          "table": "Table 2, immune-mediated hepatitis"
         }
       },
       {
         "rule_id": "HEPATITIS_STOP",
         "priority": 30,
         "when": {
-          "any": [
+          "all": [
             {
-              "field": "alt_ast_uln_multiple",
-              "operator": ">",
-              "value": 5
+              "field": "immune_hepatitis_assessed",
+              "operator": "==",
+              "value": true
             },
             {
-              "field": "bilirubin_uln_multiple",
-              "operator": ">",
-              "value": 3
+              "any": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 5
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                }
+              ]
             }
           ]
         },
@@ -2198,15 +2251,16 @@
           "components": [
             "cemiplimab"
           ],
-          "message": "AST/ALT >5×ULN or total bilirubin >3×ULN permanently discontinues cemiplimab. Do not borrow HCC thresholds from a different regimen.",
-          "recommendation": "AST/ALT >5×ULN or total bilirubin >3×ULN permanently discontinues cemiplimab. Do not borrow HCC thresholds from a different regimen."
+          "message": "Permanently discontinue cemiplimab for clinically attributed immune-mediated hepatitis with AST or ALT above 5 ×ULN or total bilirubin above 3 ×ULN.",
+          "recommendation": "Permanently discontinue cemiplimab for clinically attributed immune-mediated hepatitis with AST or ALT above 5 ×ULN or total bilirubin above 3 ×ULN."
         },
-        "explanation": "AST/ALT >5×ULN or total bilirubin >3×ULN permanently discontinues cemiplimab. Do not borrow HCC thresholds from a different regimen.",
+        "explanation": "Permanently discontinue cemiplimab for clinically attributed immune-mediated hepatitis with AST or ALT above 5 ×ULN or total bilirubin above 3 ×ULN.",
         "source": {
           "document": "NCCP 00812 version 3a",
           "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
           "page": 3,
-          "checked_date": "2026-11-06"
+          "checked_date": "2026-11-27",
+          "table": "Table 2, immune-mediated hepatitis"
         }
       },
       {
@@ -3620,6 +3674,57 @@
           "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
           "page": 5,
           "checked_date": "2026-11-06"
+        }
+      },
+      {
+        "rule_id": "HEPATIC_ATTRIBUTION_REVIEW",
+        "priority": 20,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "immune_hepatitis_assessed",
+                  "operator": "missing"
+                },
+                {
+                  "field": "immune_hepatitis_assessed",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 3
+                },
+                {
+                  "field": "bilirubin_uln_multiple",
+                  "operator": ">",
+                  "value": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cemiplimab"
+          ],
+          "message": "Withhold the next infusion pending urgent clinical review of the abnormal liver results. Determine the cause, including progression, biliary obstruction, infection, medicines and immune toxicity. Confirm immune-mediated hepatitis before applying its permanent discontinuation threshold.",
+          "recommendation": "Withhold the next infusion pending urgent clinical review of the abnormal liver results. Determine the cause, including progression, biliary obstruction, infection, medicines and immune toxicity. Confirm immune-mediated hepatitis before applying its permanent discontinuation threshold."
+        },
+        "explanation": "Withhold the next infusion pending urgent clinical review of the abnormal liver results. Determine the cause, including progression, biliary obstruction, infection, medicines and immune toxicity. Confirm immune-mediated hepatitis before applying its permanent discontinuation threshold.",
+        "source": {
+          "document": "NCCP 00812 v3a; EMA Libtayo SmPC, section 4.4",
+          "url": "https://healthservice.hse.ie/documents/6426/812_V3a_Cemiplimab.pdf",
+          "page": 3,
+          "table": "Table 2, immune-mediated hepatitis; SmPC sections 4.2 and 4.4",
+          "checked_date": "2026-11-27"
         }
       }
     ]

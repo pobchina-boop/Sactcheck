@@ -6,6 +6,8 @@ const patientVisualStandard=require('./patient-visual-standard-v08443.cjs');
 const patientPublication=require('./patient-publication-v08444.cjs');
 function publishPatient(file,html){return patientPublication.decorateGenerated(file,html,root);}
 const context=process.env.SACT_SUITE_CONTEXT||'';
+const cervicalRoutes = require('./lib/cervical-patient-routes-v08472.json');
+const cervical = context && cervicalRoutes.some(route=>route.split('/')[1]===context);
 const hn45Contexts=['head_neck','nasopharyngeal'];
 const skin42Contexts=['melanoma','merkel_cell'];
 const melanomaContexts=['melanoma_advanced','melanoma_adjuvant','melanoma_perioperative'];
@@ -15,8 +17,9 @@ if(v30Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').
 const v29Contexts=['schedule_7d','schedule_3d','schedule_21d'];
 if(v29Contexts.includes(context)&&(process.env.SACT_SUITE_CODES||'').split(',').some(c=>c!=='00388'))throw new Error('Oral etoposide context escaped00388');
 const v27Contexts=['backbone_00304','backbone_00310','backbone_00281','backbone_00318','backbone_00317'];
-if(context && context!=='gist'&&context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context)&&context!=='liposarcoma'&&context!=='sarcoma'&&!olaparibContexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
+if(context && !cervical && context!=='gist'&&context!=='prostate'&&context!=='lung'&&context!=='colorectal'&&context!=='neuroendocrine'&&context!=='adjuvant'&&!v27Contexts.includes(context)&&!v29Contexts.includes(context)&&!v30Contexts.includes(context)&&!melanomaContexts.includes(context)&&!skin42Contexts.includes(context)&&!hn45Contexts.includes(context)&&context!=='liposarcoma'&&context!=='sarcoma'&&!olaparibContexts.includes(context))throw new Error('Unsupported patient suite context: '+context);
 const codes=(process.env.SACT_SUITE_CODES||'').split(',').filter(Boolean);
+if(cervical && codes.some(code=>!cervicalRoutes.includes(code+'/'+context)))throw Error('Unsupported cervical regimen/context');
 if(olaparibContexts.includes(context)&&codes.some(c=>c!=='00588'))throw new Error('Olaparib monotherapy context escaped00588');
 if(context==='liposarcoma'&&codes.some(c=>c!=='00228'))throw Error('Liposarcoma context escaped00228');
 if(context==='sarcoma'&&codes.some(c=>c!=='00205'))throw Error('Sarcoma context escaped00205');
@@ -61,6 +64,7 @@ function output(file,html){
 }
 function phases(defaultData){
  if(!context)return defaultData;
+ if(cervical)return {...defaultData,regimens:Object.fromEntries(codes.map(code=>[code,profile(code).prescription_phases]))};
  const d=JSON.parse(fs.readFileSync(path.join(root,context==='lung'?'data/phase-support-contexts-v08425.json':'data/phase-support-contexts-v08427.json'),'utf8'));
  const current=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-contexts-v08429.json'),'utf8'));
  for(const [c,plans]of Object.entries(current.regimens))d.regimens[c]={...(d.regimens[c]||{}),...plans};
@@ -107,7 +111,7 @@ function phases(defaultData){
  }
  return {...defaultData,regimens:Object.fromEntries(codes.map(c=>[c,d.regimens[c][context]]))};
 }
-if(context){
+if(context&&!cervical){
  const journey=require('../js/treatment-journey-v0837.js');
  for(const code of codes){
   const scoped=journey.definitions[`${code}:${context}`];

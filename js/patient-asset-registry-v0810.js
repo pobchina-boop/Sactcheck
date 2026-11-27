@@ -13,7 +13,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.71';
+  const RELEASE='0.84.72';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
@@ -145,7 +145,7 @@
     '00415':{"title": "Dabrafenib and trametinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00563':{"title": "Encorafenib and binimetinib for advanced BRAF-mutated melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00431':{"title": "Nivolumab and ipilimumab for advanced melanoma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Melanoma patient information only"},
-    '00812':{"title": "Cemiplimab for advanced cutaneous squamous cell cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Cutaneous squamous cell carcinoma patient information only"},
+    '00812':{"title": "Cemiplimab for advanced cutaneous squamous cell cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Choose the advanced cutaneous squamous cell carcinoma or cervical cancer pathway"},
     '00742':{"title": "Lomustine + bevacizumab 5 mg/kg", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00804':{"title": "Lomustine + bevacizumab 7.5 mg/kg", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00805':{"title": "Lomustine for recurrent malignant glioma", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -353,7 +353,7 @@
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
   const HEAD_NECK46_CODES=Object.freeze(['00261','00483','00484','00455','00558']);
   const GIST_CONTEXT_CODES=Object.freeze(['00325','00719','00244']);
-  const CONTEXT_CODES=Object.freeze(['00228','00205','00251','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00812','00228','00205','00251','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
   const OLAPARIB_ROUTES=Object.freeze({breast:'',prostate:'prostate/',ovarian_first_line:'ovarian_first_line/',ovarian_relapsed:'ovarian_relapsed/',pancreatic:'pancreatic/'});
   const OLAPARIB_ASSETS=Object.freeze({...CONTEXT_ASSETS,handbook:'handbook.pdf','support-treatment':'support-treatment.html','support-treatment-pdf':'support-treatment.pdf','consent-pdf':'consent-form.pdf'});
@@ -385,11 +385,75 @@
     return resolve(root.SACTCheckProtocolContext?.activeTumourGroup?.()||'');
   }
 
+  const cervicalVisits = {
+    '00385': {cervical_definitive:'weekly_rt', cervical_postoperative:'weekly_rt'},
+    '00419': {cervical:'weekly_rt'},
+    '00812': {cervical:'cemiplimab'},
+    '00455': {cervical_maintenance:'maintenance'},
+    '00558': {cervical_maintenance:'maintenance'}
+  };
+  const cervicalIndications = {
+    '00385a':'cervical_definitive', '00385e':'cervical_postoperative',
+    '00419b':'cervical', '00419-gyn':'cervical', '00812a':'cervical', '00812-gyn':'cervical',
+    '00455j':'cervical_maintenance', '00455-gyn':'cervical_maintenance', '00558j':'cervical_maintenance'
+  };
+  function cervicalSelection(code, value, selected) {
+    const choices = cervicalVisits[code];
+    if (!choices) return null;
+    const indication = value?.selected_indication_id || value?.selected_indication || value?.indication_id || value?.reimbursement_code ||
+      (typeof value === 'string' && /^\d{5}[a-z]$/i.test(value) ? value : '');
+    const id = text(typeof indication === 'object' ? indication.code || indication.indication_id || indication.id : indication).toLowerCase();
+    const fromId = id.startsWith(code) && Object.hasOwn(cervicalIndications,id) ? cervicalIndications[id] : '';
+    const fromChoice = Object.hasOwn(choices,selected) ? selected :
+      selected.startsWith(code) && Object.hasOwn(cervicalIndications,selected) ? cervicalIndications[selected] : '';
+    const stored = text(value?.patient_context).toLowerCase();
+    if (stored && ['all','gynaecology','gynecology','cervical'].includes(selected) && Object.hasOwn(choices,stored))
+      return id && stored!==fromId ? '' : stored;
+    if (fromChoice) return id && fromChoice !== fromId ? '' : fromChoice;
+    if (['gynaecology','gynecology','cervical'].includes(selected)) {
+      if (id) return fromId;
+      const names = Object.keys(choices);
+      return names.length === 1 ? names[0] : '';
+    }
+    if (fromId) return !selected || selected === 'all' ? fromId : '';
+    if (selected === 'cervical_definitive' || selected === 'cervical_postoperative' || selected === 'cervical_maintenance') return '';
+    return null;
+  }
+  function cervicalAssessmentIndication(value, explicit='') {
+    const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
+    const context = contextFor(value,explicit);
+    if(!cervicalVisits[code]?.[context]) return '';
+    if(code==='00385') return context==='cervical_definitive' ? '00385a' : '00385e';
+    return {'00419':'00419-gyn','00812':'00812-gyn','00455':'00455-gyn','00558':'00558j'}[code] || '';
+  }
+  function cervicalPrescription(value, explicit='') {
+    const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
+    const context = contextFor(value, explicit);
+    return cervicalVisits[code]?.[context] || '';
+  }
+
+  function scopePath(code, asset, value, explicit) {
+    const group=text(explicit || value?.patient_context || root.SACTCheckProtocolContext?.activeTumourGroup?.()).toLowerCase();
+    const cervicalIntent=code==='00385' && ['gynaecology','gynecology','cervical'].includes(group);
+    return 'patient/'+code+'/scope.html?asset='+encodeURIComponent(asset)+(cervicalIntent?'&group=gynaecology':'');
+  }
+  function cervicalSupportPath(value, explicit='') {
+    const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
+    if (!cervicalVisits[code]) return null;
+    if (cervicalPrescription(value,explicit)) return relativePath(value,'antiemetic-prescription',explicit);
+    const selected = text(explicit || value?.patient_context || root.SACTCheckProtocolContext?.activeTumourGroup?.()).toLowerCase();
+    if (['gynaecology','gynecology','cervical'].includes(selected))
+      return scopePath(code,'antiemetic-prescription',value,explicit);
+    return null;
+  }
   function contextFor(value,explicit=''){
     if(!CONTEXT_CODES.includes(typeof value==='string'?normaliseCode(value):codeFor(value)))return '';
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
     if(code==='00588')return olaparibContext(value,explicit);
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
+    const cervical = cervicalSelection(code,value,selected);
+    if(cervical !== null) return cervical;
+    if(code==='00812')return selected==='cutaneous-scc'?'cutaneous-scc':'';
     if(code==='00228')return ['liposarcoma','sarcoma'].includes(selected)?'liposarcoma':selected==='breast'?'breast':'';
     if(code==='00205')return selected==='sarcoma'?'sarcoma':selected==='breast'?'breast':'';
     if(GIST_CONTEXT_CODES.includes(code)){
@@ -439,6 +503,8 @@
   }
   function bundleRoutes(value){
     const d=definitionFor(value);if(!d)return [];
+    const extra = Object.keys(cervicalVisits[d.code] || {}).map(context => d.code + '/' + context);
+    if(d.code==='00812')return [d.code,...extra];
     if(d.code==='00228')return [d.code,d.code+'/liposarcoma'];
     if(d.code==='00205')return [d.code,d.code+'/sarcoma'];
     if(['00325','00719'].includes(d.code))return [d.code+'/gist'];
@@ -446,9 +512,9 @@
     if(d.code==='00261')return [d.code,d.code+'/head_neck'];
     if(d.code==='00588')return Object.values(OLAPARIB_ROUTES).map(suffix=>'00588'+(suffix?'/'+suffix.slice(0,-1):''));
     if(d.code==='00203')return ['00203','00203/lung','00203/prostate'];
-    if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[])];
-    if(['00419','00294'].includes(d.code))return [d.code+'/head_neck'];
-    if(d.code==='00385')return ['00385/head_neck','00385/nasopharyngeal'];
+    if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[]),...extra];
+    if(['00419','00294'].includes(d.code))return [d.code+'/head_neck',...extra];
+    if(d.code==='00385')return ['00385/head_neck','00385/nasopharyngeal',...extra];
     if(d.code==='00207')return ['00207','00207/head_neck'];
     if(d.code==='00535')return [d.code+'/merkel_cell'];
     if(d.code==='00551')return [d.code,d.code+'/melanoma'];
@@ -469,8 +535,16 @@
     }
     if(CONTEXT_CODES.includes(def.code)){
       const selected=contextFor(value,context);
-      if(!selected)return `patient/${def.code}/scope.html?asset=${encodeURIComponent(asset)}`;
+      if(!selected)return scopePath(def.code,asset,value,context);
+      if(cervicalVisits[def.code]?.[selected]){
+        const phase = cervicalVisits[def.code][selected];
+        const file = asset === 'antiemetic-prescription' ? 'antiemetic-'+phase+'.pdf' :
+          asset === 'handbook' ? 'handbook.pdf' : asset === 'consent-pdf' ? 'consent-form.pdf' :
+          Object.hasOwn(CONTEXT_ASSETS,asset) ? CONTEXT_ASSETS[asset] : null;
+        return file === null ? null : 'patient/'+def.code+'/'+selected+'/'+file;
+      }
       if(!Object.prototype.hasOwnProperty.call(CONTEXT_ASSETS,asset))return null;
+      if(def.code==='00812')return 'patient/00812/'+CONTEXT_ASSETS[asset];
       if(['00228','00205'].includes(def.code))return `patient/${def.code}/${selected==='breast'?'':selected+'/'}${CONTEXT_ASSETS[asset]}`;
       if(GIST_CONTEXT_CODES.includes(def.code))return `patient/${def.code}/${selected==='gist'?'gist/':''}${CONTEXT_ASSETS[asset]}`;
       if(HEAD_NECK46_CODES.includes(def.code)&&selected==='head_neck')return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
@@ -557,7 +631,7 @@
     publicOrigin:PUBLIC_ORIGIN,
     codes:CODES,
     definitions:DEFINITIONS,
-    bundleRoutes,normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,contextCodes:CONTEXT_CODES,
+    bundleRoutes,normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,cervicalPrescription,cervicalSupportPath,cervicalAssessmentIndication,contextCodes:CONTEXT_CODES,
     publicUrl,runtimeUrl,compatibilityUrl,fallbackUrl,publicPortalUrl,
     guideUrl,passportUrl,sactCardUrl,openPortal,openGuide,openPassport,openSactCard
   });

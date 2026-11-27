@@ -4,9 +4,28 @@
   const olaparib=/\/patient\/00588\/scope\.html$/.test(window.location.pathname||'');
   const olaparibRoutes={breast:'./',prostate:'prostate/',ovarian_first_line:'ovarian_first_line/',ovarian_relapsed:'ovarian_relapsed/',pancreatic:'pancreatic/',combination_00746:'../00746/'};
   if(olaparib)Object.assign(assets,{handbook:'handbook.pdf','support-treatment':'support-treatment.html','support-treatment-pdf':'support-treatment.pdf','consent-pdf':'consent-form.pdf'});
-  const requested=new URLSearchParams(window.location.search).get('asset')||'portal';
+  const cervicalChoice = {
+    '00385':{cervical_definitive:'weekly_rt',cervical_postoperative:'weekly_rt'},
+    '00419':{cervical:'weekly_rt'}, '00812':{cervical:'cemiplimab'},
+    '00455':{cervical_maintenance:'maintenance'}, '00558':{cervical_maintenance:'maintenance'}
+  };
+  const code=((window.location.pathname || '').match(/\/patient\/(\d{5})\/(?:scope\.html|index\.html)?$/)||[])[1];
+  const params=new URLSearchParams(window.location.search);
+  if (code==='00385' && params.get('group')==='gynaecology') {
+    document.querySelectorAll('[data-other-settings]').forEach(section=>{section.hidden=true;});
+  }
+  const requested=params.get('asset')||'portal';
   const file=Object.prototype.hasOwnProperty.call(assets,requested)?assets[requested]:'';
   document.querySelectorAll('[data-context]').forEach(link=>{
+    const cervical = cervicalChoice[code];
+    if(cervical && Object.hasOwn(cervical,link.dataset.context)){
+      const route=link.dataset.context+'/';
+      const target=requested==='antiemetic-prescription' ? 'antiemetic-'+cervical[link.dataset.context]+'.pdf' :
+        requested==='consent-pdf' ? 'consent-form.pdf' : requested==='handbook' ? 'handbook.pdf' : file;
+      link.setAttribute('href',route+target);
+      if(target.endsWith('.pdf')) link.setAttribute('download',target);
+      return;
+    }
     if(olaparib){
       const route=Object.prototype.hasOwnProperty.call(olaparibRoutes,link.dataset.context)?olaparibRoutes[link.dataset.context]:null;
       if(!route||link.dataset.route!==route){

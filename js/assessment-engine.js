@@ -278,6 +278,19 @@
     ];
   }
 
+  // External callers may supply the NCCP indication code rather than a local selector value.
+  // Keep existing selector IDs authoritative and resolve only an unambiguous published mapping.
+  function resolveIndicationInput(protocol, rawInputs) {
+    const code = rawInputs?.indication_id;
+    const options = protocol?.input_definitions?.indication_id?.options;
+    if (typeof code !== "string" || !Array.isArray(options) || options.some(option => option.value === code)) return rawInputs;
+    const ids = unique(asArray(protocol.indications)
+      .filter(indication => indication.code === code)
+      .map(indication => indication.indication_id || indication.id)
+      .filter(id => options.some(option => option.value === id)));
+    return ids.length === 1 ? { ...rawInputs, indication_id: ids[0] } : rawInputs;
+  }
+
   function protocolForIndication(protocol, inputs) {
     const variants = protocol?.assessment_by_indication;
     const id = inputs?.indication_id || protocol?.default_assessment_indication;
@@ -285,6 +298,7 @@
   }
 
   function getInputDefinitions(protocol, profileId, rawInputs = {}) {
+    rawInputs = resolveIndicationInput(protocol, rawInputs);
     protocol = protocolForIndication(protocol, rawInputs);
     const profile = getSelectedProfile(protocol, profileId);
     const potentialRules = getPotentialRules(protocol, profile.context);
@@ -856,6 +870,7 @@
   }
 
   function assess(protocol, rawInputs, options = {}) {
+    rawInputs = resolveIndicationInput(protocol, rawInputs);
     protocol = protocolForIndication(protocol, rawInputs);
     if (!protocol || typeof protocol !== "object") throw new Error("A protocol object is required.");
     const profile = getSelectedProfile(protocol, options.profileId);

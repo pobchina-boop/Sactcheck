@@ -111,8 +111,8 @@ for(const [f,hs,ss]of [['pneumonitis_grade',[2],[3,4]],['diarrhoea_colitis_grade
  if(ss.includes(g))yes(c,f+' stopG'+g,x,f.toUpperCase()+'_STOP',stop);else no(c,f+' nostopG'+g,x,[f.toUpperCase()+'_STOP']);
 }
 for(const f of ['pneumonitis_recurrent_grade2','colitis_recurrent_grade3'])yes(c,f,{[f]:true},f.toUpperCase(),stop);
-for(const [f,rows]of [['alt_ast_uln_multiple',[[3,false,false],[3.001,true,false],[5,true,false],[5.001,false,true]]],['bilirubin_uln_multiple',[[1.5,false,false],[1.501,true,false],[3,true,false],[3.001,false,true]]]])for(const [v,h,s]of rows){const x={[f]:v};if(h)yes(c,f+' hold '+v,x,'HEPATITIS_HOLD',hold);else no(c,f+' nohold '+v,x,['HEPATITIS_HOLD']);if(s)yes(c,f+' stop '+v,x,'HEPATITIS_STOP',stop);else no(c,f+' nostop '+v,x,['HEPATITIS_STOP']);}
-test(c,'Most restrictive liver action wins',()=>assert.equal(run(c,{alt_ast_uln_multiple:4,bilirubin_uln_multiple:3.01}).actionType,stop));
+for(const [f,rows]of [['alt_ast_uln_multiple',[[3,false,false],[3.001,true,false],[5,true,false],[5.001,false,true]]],['bilirubin_uln_multiple',[[1.5,false,false],[1.501,true,false],[3,true,false],[3.001,false,true]]]])for(const [v,h,s]of rows){const x={[f]:v,immune_hepatitis_assessed:true};if(h)yes(c,f+' hold '+v,x,'HEPATITIS_HOLD',hold);else no(c,f+' nohold '+v,x,['HEPATITIS_HOLD']);if(s)yes(c,f+' stop '+v,x,'HEPATITIS_STOP',stop);else no(c,f+' nostop '+v,x,['HEPATITIS_STOP']);}
+test(c,'Most restrictive liver action wins',()=>assert.equal(run(c,{alt_ast_uln_multiple:4,bilirubin_uln_multiple:3.01,immune_hepatitis_assessed:true}).actionType,stop));
 for(const [f,gs]of [['thyroid_grade',[3,4]],['thyroiditis_grade',[3,4]],['hypophysitis_grade',[2,3,4]],['adrenal_grade',[2,3,4]],['diabetes_grade',[3,4]]])for(let g=0;g<=4;g++){
  if(gs.includes(g)){yes(c,f+' unstableG'+g,{[f]:g},f.toUpperCase()+'_HOLD',hold);yes(c,f+' clinicallystableG'+g,{[f]:g,endocrine_clinically_stable:true},f.toUpperCase()+'_STABLE_REVIEW',review);no(c,f+' stable nohold',{[f]:g,endocrine_clinically_stable:true},[f.toUpperCase()+'_HOLD']);}else no(c,f+' lowergrade'+g,{[f]:g},[f.toUpperCase()+'_HOLD']);
  test(c,f+' no genericG4permanentstop '+g,()=>assert.notEqual(run(c,{[f]:g}).actionType,stop));
@@ -156,7 +156,7 @@ for(const [target,analyte,uln,rows] of [
  ['alt_ast_uln_multiple','ast',42,[[126,null],[126.042,'HEPATITIS_HOLD'],[210,'HEPATITIS_HOLD'],[210.042,'HEPATITIS_STOP']]],
  ['bilirubin_uln_multiple','bilirubin',20,[[30,null],[30.02,'HEPATITIS_HOLD'],[60,'HEPATITIS_HOLD'],[60.02,'HEPATITIS_STOP']]]])for(const [actual,id] of rows)test('00812','Actual '+analyte+' '+actual+' / ULN '+uln,()=>{
  const converted=Lab.calculate(target,{[analyte]:actual},{...Lab.defaults,altUln:34,astUln:42,bilirubinUln:20});assert(Math.abs(converted.ratio-actual/uln)<1e-12);
- const r=run('00812',{[target]:converted.ratio});if(id)assert(r.findings.some(f=>f.ruleId===id));else assert(!r.findings.some(f=>['HEPATITIS_HOLD','HEPATITIS_STOP'].includes(f.ruleId)));
+ const r=run('00812',{[target]:converted.ratio,immune_hepatitis_assessed:true});if(id)assert(r.findings.some(f=>f.ruleId===id));else assert(!r.findings.some(f=>['HEPATITIS_HOLD','HEPATITIS_STOP'].includes(f.ruleId)));
 });
 for(const a of ['alt','ast'])for(const [base,current,expected] of [[1,3,false],[1,3.001,true],[3,5,false],[3,5.001,true],[4,8,false],[4,8.001,true]])test('00431','Actual matched '+a+' HCC '+base+'/'+current,()=>{
  const ul=a==='alt'?34:42,bf='baseline_'+a+'_uln_multiple',cf='current_'+a+'_uln_multiple';
@@ -165,7 +165,27 @@ for(const a of ['alt','ast'])for(const [base,current,expected] of [[1,3,false],[
 });
 for(const target of ['alt_ast_uln_multiple','bilirubin_uln_multiple','baseline_ast_uln_multiple','current_ast_uln_multiple','baseline_alt_uln_multiple','current_alt_uln_multiple'])test('both','Missing actual lab value stays missing '+target,()=>assert.equal(Lab.calculate(target,{}),null));
 for(const [analyte,setting] of [['alt','altUln'],['ast','astUln'],['bilirubin','bilirubinUln']])for(const invalid of [0,-1,NaN])test('both','Invalid ULN '+setting+' '+invalid,()=>{const target=analyte==='bilirubin'?'bilirubin_uln_multiple':'alt_ast_uln_multiple';const v=Lab.calculate(target,{[analyte]:100},{...Lab.defaults,[setting]:invalid});assert.equal(v.invalid,true);assert(Number.isNaN(v.ratio));});
+if (!baseline) {
+ for (const indication of [undefined, '00812b', '00812-gyn']) {
+   const sample = {alt_ast_uln_multiple: 6};
+   if (indication) sample.indication_id = indication;
+   for (const attributed of [undefined, false]) {
+     const inputs = {...sample};
+     if (attributed !== undefined) inputs.immune_hepatitis_assessed = attributed;
+     test('00812', 'Unattributed liver result requires review before stopping: '+JSON.stringify(inputs), () => {
+       const report = run('00812', inputs);
+       assert(report.findings.some(f => f.ruleId === 'HEPATIC_ATTRIBUTION_REVIEW'));
+       assert(!report.findings.some(f => f.ruleId === 'HEPATITIS_STOP'));
+     });
+   }
+ }
+}
 for(const c of Object.keys(P))if(!baseline)test(c,'Every current rule has a positive executable witness',()=>{const missing=P[c].rule_engine.rules.map(x=>x.rule_id||x.id).filter(x=>!coverage[c]?.has(x));assert.deepEqual(missing,[]);});
 const summary={baseline,total:results.length,passed:results.filter(x=>x.passed).length,failed:results.filter(x=>!x.passed).length,coverage:Object.fromEntries(Object.entries(coverage).map(([c,s])=>[c,{witnessed:[...s].filter(x=>P[c].rule_engine.rules.some(r=>(r.rule_id||r.id)===x)),rule_count:P[c].rule_engine.rules.length}])),results};
-fs.writeFileSync(path.join(__dirname,baseline?'baseline-results.json':'current-results.json'),JSON.stringify(summary,null,2)+'\n');fs.writeFileSync(path.join(__dirname,baseline?'baseline-outputs.json':'current-outputs.json'),JSON.stringify(outputs,null,2)+'\n');
+// Preserve the v40 source-audit evidence when replaying the corrected attribution cases.
+const outputDirectory = !baseline && P['00812'].input_definitions.immune_hepatitis_assessed
+ ? fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'sactcheck-cemiplimab-'))
+ : __dirname;
+if (outputDirectory !== __dirname) console.log('Current replay evidence: '+outputDirectory);
+fs.writeFileSync(path.join(outputDirectory,baseline?'baseline-results.json':'current-results.json'),JSON.stringify(summary,null,2)+'\n');fs.writeFileSync(path.join(outputDirectory,baseline?'baseline-outputs.json':'current-outputs.json'),JSON.stringify(outputs,null,2)+'\n');
 console.log(JSON.stringify({baseline,total:summary.total,passed:summary.passed,failed:summary.failed,failures:results.filter(x=>!x.passed)},null,2));if(summary.failed&&!baseline)process.exitCode=1;

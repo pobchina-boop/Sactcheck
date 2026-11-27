@@ -60,6 +60,30 @@ for (const file of paths) {
     const {record} = release.gynae71Inventory();
     assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
     release.verifyFile(file);
+  } else if (code === '00812') {
+    const hash = buffer => require('node:crypto').createHash('sha256').update(buffer).digest('hex');
+    assert.equal(hash(expected), '343bf7d8b4123b959bf6b1b2174f307be931c26c1f84f615bf105df0e7726ad2');
+    assert.equal(hash(actual), '619e27c96b5e4d80dc9519f6cc54a5b75515185860c60f072b3633b9fa49d3a9');
+    const current = JSON.parse(actual);
+    const original = JSON.parse(expected);
+    delete current.input_definitions.immune_hepatitis_assessed;
+    assert.equal(current.rule_engine.rules.pop().rule_id, 'HEPATIC_ATTRIBUTION_REVIEW');
+    for (const rule of current.rule_engine.rules) {
+      if (!['HEPATITIS_HOLD', 'HEPATITIS_STOP'].includes(rule.rule_id)) continue;
+      const oldRule = original.rule_engine.rules.find(r => r.rule_id === rule.rule_id);
+      assert.deepEqual(rule.when.all[1], oldRule.when, 'Original numeric liver thresholds are retained');
+      for (const key of ['when', 'source', 'action', 'explanation']) rule[key] = oldRule[key];
+    }
+    assert.deepEqual(current, original, 'Only the shared immunotherapy hepatitis changes may differ');
+  } else if (code === '00419') {
+    const original = JSON.parse(expected);
+    const current = JSON.parse(actual);
+    const additional = current.metadata.regimen_card.contexts.pop();
+    assert.equal(additional.id, '00419-gyn');
+    assert.equal(additional.planned_cycles, 6);
+    assert.equal(additional.cycle_length_days, 7);
+    assert.deepEqual(current, original, 'Only the reviewed cervical regimen card may change');
+    require('./helpers/live-release-v08464.cjs').verifyFile(file);
   } else if (code === '00344') {
     const release = require('./helpers/live-release-v08464.cjs');
     const {record} = release.flot67Inventory();

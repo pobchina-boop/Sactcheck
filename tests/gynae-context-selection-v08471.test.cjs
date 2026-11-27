@@ -10,16 +10,24 @@ const protocol = code => require(path.join(root, index.find(r => r.path.includes
 const missing = '00203 00205 00212 00215 00226 00232 00251 00261 00279 00311 00385 00419 00455 00558 00621 00812'.split(' ');
 
 global.SACTCheckProtocolContext = {activeTumourGroup: () => 'Gynaecology'};
-for (const code of missing) {
-  const p = protocol(code);
-  for (const asset of ['portal', 'guide', 'passport', 'sact-card', 'consent-draft']) {
-    const route = 'patient/' + code + '/scope.html?asset=' + asset;
-    // The normal workflow passes the active protocol and gets the tumour group from the catalogue.
-    assert.equal(registry.relativePath(p, asset), route);
-    assert.equal(registry.compatibilityUrl(p, asset), 'https://sactcheck.com/' + route);
-    assert(fs.existsSync(path.join(root, route.split('?')[0])), route);
+const archived = require('node:child_process').execFileSync('git', ['show', '1cea3d6140defcbc8a4fc29aca463b3b130e538f:js/patient-asset-registry-v0810.js'], {cwd: root, encoding: 'utf8'});
+const previous = {URL, SACTCheckProtocolContext: global.SACTCheckProtocolContext};
+vm.runInNewContext(archived, previous);
+function verifyScope(assets, codes) {
+  for (const code of codes) {
+    const p = protocol(code);
+    for (const asset of ['portal', 'guide', 'passport', 'sact-card', 'consent-draft']) {
+      const route = 'patient/' + code + '/scope.html?asset=' + asset;
+      // The normal workflow passes the active protocol and gets the tumour group from the catalogue.
+      assert.equal(assets.relativePath(p, asset), route);
+      assert.equal(assets.compatibilityUrl(p, asset), 'https://sactcheck.com/' + route);
+      assert(fs.existsSync(path.join(root, route.split('?')[0])), route);
+    }
   }
 }
+verifyScope(previous.SACTCheckPatientAssets, missing);
+const cervicalCodes = new Set(['00385', '00419', '00455', '00558', '00812']);
+verifyScope(registry, missing.filter(code => !cervicalCodes.has(code)));
 const carbo = protocol('00251');
 global.SACTCheckProtocolContext.activeTumourGroup = () => 'Breast';
 assert.equal(registry.relativePath(carbo, 'guide'), 'patient/00251/guide.pdf');
@@ -44,4 +52,4 @@ for (const [code, asset, expected] of [
   for (const link of links) assert(fs.existsSync(path.join(root, 'patient', code, link.href)));
 }
 delete global.SACTCheckProtocolContext;
-console.log('Sixteen gynae context gaps resolve through a real scope page. Breast, sarcoma and selected-indication boundaries passed.');
+console.log('Sixteen published v71 scope routes and eleven remaining gaps verified. Breast, sarcoma and selected-indication boundaries passed.');

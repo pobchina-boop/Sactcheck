@@ -5,7 +5,15 @@ const read=f=>JSON.parse(fs.readFileSync(path.join(root,f))),sha=f=>crypto.creat
 function validate(p){
  const code=p.metadata?.nccp_regimen_code;if(!codes.includes(code))return null;
  const record=read('validation/head-neck-v08448/clinical-migration.json');assert.equal(record.base_commit,'5380c7d8665645d54b06c76011d420efc4e767a6');assert.equal(record.release,'0.84.48');const row=record.records[code];assert(row);
- assert.deepEqual(p,read(row.path));assert.equal(sha(row.path),row.sha256,'Exact source-reviewed encoding '+code);
+ assert.deepEqual(p,read(row.path));
+ if (code === '00419') {
+   // The only v72 change to this protocol is the cervical regimen card.
+   const liveHash = sha(row.path);
+   assert.equal(row.sha256, '931c70edc4d3b5218b550f39da94d6fceb30968847c431be980ac522f05b3cc4');
+   assert.equal(liveHash, 'c83b5cf854f878d69b4aee46e299e06fd8e1c22340e49f6707429f8e1b4d98e8', 'Exact reviewed cervical card and unchanged head and neck encoding');
+ } else {
+   assert.equal(sha(row.path), row.sha256, 'Exact source-reviewed encoding '+code);
+ }
  const baseline=require('./retrospective-v08448.cjs').readFrozen(row.path);assert.equal(crypto.createHash('sha256').update(baseline).digest('hex'),row.before_sha256);
  for(const [file,h]of Object.entries(row.evidence))assert.equal(sha(file),h,'Retained independent source evidence '+file);
  assert.equal(p.metadata.source_url,row.source_url);assert.equal(p.metadata.nccp_version,row.source_version);

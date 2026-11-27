@@ -105,6 +105,9 @@
           <button class="btn secondary hidden" type="button" id="jsonDoseScheduleButton"><span aria-hidden="true">📅</span> Dose &amp; Schedule</button>
           <button class="btn secondary hidden" type="button" id="jsonImmuneSafetyButton"><span aria-hidden="true">◉</span> Immune safety</button>
           <button class="btn secondary hidden" type="button" id="jsonRegimenInfoButton"><span aria-hidden="true">◈</span> Regimen info</button>
+          <label id="jsonCervicalIntentGroup" hidden>Cervical treatment setting
+            <select id="jsonCervicalIntent"><option value="">Choose the setting</option><option value="00385a">Definitive chemoradiation</option><option value="00385e">Postoperative chemoradiation</option></select>
+          </label>
           <a class="btn secondary antiemetic-proforma-link hidden" id="jsonAntiemeticProforma" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">●</span> Supportive medicines</a>
           </div>
         </details>
@@ -320,8 +323,10 @@
       root.SACTCheckScenarioInterpreter?.open?.(activeProtocol);
     });
 
+    document.getElementById("jsonCervicalIntent")?.addEventListener("change",updateConditionalInputs);
+
     document.getElementById("jsonRegimenInfoButton")?.addEventListener("click", () => {
-      root.SACTCheckRegimenKnowledgeBase?.open?.(activeProtocol);
+      root.SACTCheckRegimenKnowledgeBase?.open?.(supportProtocol(activeProtocol));
     });
 
     document.getElementById("jsonProfile").addEventListener("change", event => {
@@ -402,6 +407,10 @@
     protocol = root.SACTCheckToxicityAttribution?.decorate?.(protocol) || protocol;
     activeProtocol = protocol;
     activeTumourGroup = root.SACTCheckProtocolContext?.normaliseGroup?.(context.tumourGroup || "all") || context.tumourGroup || "all";
+    const cervicalIntent = document.getElementById("jsonCervicalIntent");
+    const showCervicalIntent = protocol.metadata?.nccp_regimen_code === "00385" && activeTumourGroup === "Gynaecology";
+    document.getElementById("jsonCervicalIntentGroup").hidden = !showCervicalIntent;
+    cervicalIntent.value = showCervicalIntent ? root.SACTCheckPatientAssets?.cervicalAssessmentIndication?.(protocol,activeTumourGroup) || "" : "";
     const validation = Engine.validateProtocol(protocol);
     if (!validation.valid) {
       throw new Error(`Protocol cannot be assessed: ${validation.errors.join(" ")}`);
@@ -426,8 +435,18 @@
     history.replaceState(null, "", "#jsonAssessmentScreen");
   }
 
+  function supportProtocol(protocol) {
+    const intent = document.getElementById("jsonCervicalIntentGroup");
+    if(intent && !intent.hidden) {
+      const id=document.getElementById("jsonCervicalIntent").value;
+      return {...protocol,patient_context:"",selected_indication_id:id};
+    }
+    const id=document.getElementById("jsonInput_indication_id")?.value;
+    return id ? {...protocol,selected_indication_id:id} : protocol;
+  }
+
   function renderSupportiveRisk(protocol, treatmentPhase, treatmentDay, treatmentRoute, treatmentSchedule) {
-    const risk = root.SACTCheckEmetogenicRisk?.get(protocol, { profileId: activeProfileId, treatmentPhase, treatmentDay, treatmentRoute, treatmentSchedule, tumourGroup: activeTumourGroup }) || {
+    const risk = root.SACTCheckEmetogenicRisk?.get(supportProtocol(protocol), { profileId: activeProfileId, treatmentPhase, treatmentDay, treatmentRoute, treatmentSchedule, tumourGroup: activeTumourGroup }) || {
       level: "pending",
       label: "Supportive-care mapping requires review",
       className: "emetogenic-pending",
@@ -447,7 +466,7 @@
       proformaLink.innerHTML = isLocalAsset
         ? '<span aria-hidden="true">●</span> Local supportive sheet (validate)'
         : '<span aria-hidden="true">●</span> NCCP antiemetic guidance';
-      if (protocol.supportive_care?.prescription_index) {
+      if (protocol.supportive_care?.prescription_index || risk.contextPrescription) {
         const directPdf = supportiveUrl.endsWith(".pdf");
         proformaLink.textContent = directPdf ? "Download antiemetic prescription PDF" : "Choose the visit and prescription";
         if (directPdf) proformaLink.setAttribute("download", "");
@@ -690,8 +709,10 @@
 
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
-    if (activeProtocol.assessment_by_indication && !Object.hasOwn(rawInputs, "indication_id") && activeTumourGroup !== "all") {
-      const preferred = root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol, activeTumourGroup);
+    const cervicalId=root.SACTCheckPatientAssets?.cervicalAssessmentIndication?.(activeProtocol,activeTumourGroup);
+    const cervicalInput=cervicalId && activeProtocol.input_definitions?.indication_id?.options?.some(option=>option.value===cervicalId);
+    if ((activeProtocol.assessment_by_indication || cervicalInput) && !Object.hasOwn(rawInputs, "indication_id") && activeTumourGroup !== "all") {
+      const preferred = cervicalInput ? cervicalId : root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol, activeTumourGroup);
       if (preferred) rawInputs = { ...rawInputs, indication_id: preferred };
     }
     if (activeProtocol.assessment_by_indication) renderProtocolInformation(Engine.protocolForIndication(activeProtocol, rawInputs));
@@ -714,13 +735,14 @@
     document.getElementById("jsonToxicityInputGrid").innerHTML = toxicityDefinitions.map(definition => renderInput(definition, { compact: true, toxicity: true })).join("");
     document.getElementById("jsonInputGrid").innerHTML = additionalDefinitions.map(definition => renderInput(definition, { compact: true })).join("");
     document.getElementById("jsonTreatmentContextGrid").innerHTML = contextDefinitions.map(definition => renderInput(definition, { compact: true, context: true })).join("");
-    if (activeProtocol.assessment_by_indication && Object.hasOwn(rawInputs, "indication_id")) {
+    if ((activeProtocol.assessment_by_indication || cervicalInput) && Object.hasOwn(rawInputs, "indication_id")) {
       const selector = document.getElementById("jsonInput_indication_id");
       if (selector) selector.value = rawInputs.indication_id;
     } else {
       applyPreferredIndication();
     }
 
+    if(cervicalInput) renderSupportiveRisk(activeProtocol);
     const visibleLabs = laboratoryDefinitions.filter(definition => definition.visible !== false);
     const visibleToxicities = toxicityDefinitions.filter(definition => definition.visible !== false);
     const visibleAdditional = additionalDefinitions.filter(definition => definition.visible !== false);

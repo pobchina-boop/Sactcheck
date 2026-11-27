@@ -101,8 +101,9 @@
     const prescription = supportive.prescription_index
       ? (phase.prescription || visitPrescription || supportive.prescription_index)
       : null;
-    const baseUrl = prescription || nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
-    const anchor = prescription ? null : metadata.antiemetic_proforma_anchor || null;
+    const cervicalPath = root.SACTCheckPatientAssets?.cervicalSupportPath?.(protocol,options.tumourGroup);
+    const baseUrl = cervicalPath || prescription || nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
+    const anchor = (prescription || cervicalPath) ? null : metadata.antiemetic_proforma_anchor || null;
     const unresolvedPhase = baseLevel === "phase_dependent" && !phase.phaseResolved;
     const phaseProfiles = phase.phaseProfiles || supportive.phase_profiles || record.phase_profiles || {};
 
@@ -127,6 +128,7 @@
       scriptId,
       scriptStatus: script.status || (baseUrl ? "available" : "unmapped"),
       scriptLabel: supportive.supportive_medications_label || script.label || null,
+      contextPrescription: Boolean(cervicalPath),
       proformaUrl: baseUrl ? `${baseUrl}${anchor ? `#${anchor}` : ""}` : null,
       proformaAnchor: anchor,
       summary,
@@ -150,7 +152,7 @@
   function badge(protocol, options = {}) {
     const risk = get(protocol, options);
     const tag = risk.proformaUrl ? "a" : "span";
-    const download = protocol?.supportive_care?.prescription_index && risk.proformaUrl?.endsWith(".pdf");
+    const download = (protocol?.supportive_care?.prescription_index || risk.contextPrescription) && risk.proformaUrl?.endsWith(".pdf");
     const href = risk.proformaUrl ? ` href="${risk.proformaUrl}" ${download ? "download" : 'target="_blank" rel="noopener noreferrer"'}` : "";
     const title = ` title="${String(risk.warning || risk.mappingBasis || "Supportive-care mapping").replace(/"/g, "&quot;")}"`;
     return `<${tag} class="badge emetogenic-badge ${risk.className}"${href}${title}><span class="emetogenic-dot" aria-hidden="true"></span>${risk.label}</${tag}>`;

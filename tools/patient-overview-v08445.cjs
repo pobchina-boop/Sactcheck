@@ -50,7 +50,7 @@ function sourceParts(guide,card,index,profile,scheduleHtml){
  if(!main)throw Error('An authored standalone treatment-card main section is required');
  return {modern:false,panels:[first,second,clean(inner(card,main))],mode:'legacy-guide-anatomy-with-authored-summary-and-separate-card'};
 }
-function buildOverview(input,{root=process.cwd(),route,profile,data,guideHtml,cardHtml,knowledgeHtml}={}){
+function buildOverview(input,{root=process.cwd(),route,profile,data,guideHtml,cardHtml,knowledgeHtml,authoredCompanions=[]}={}){
  profile=profile||data;
  if(!route||!/^\d{5}(?:\/[a-z0-9_]+)?$/.test(route))throw Error('An exact authored regimen route is required');
  const folder=path.join(root,'patient',route);
@@ -99,9 +99,12 @@ function buildOverview(input,{root=process.cwd(),route,profile,data,guideHtml,ca
   'between-treatments':[['supportive-care.html','My prescribed supportive care']],
   'my-passport':[['sactcard.html','My standalone treatment card'],['sactcard.pdf','Download my treatment card']]
  };
+ if(authoredCompanions.includes('consent-form.pdf')){
+  companionGroups['my-treatment']=[['consent-form.pdf','Download my treatment consent form']];
+ }
  const declaredWallet=((profile.suite_release==='0.84.62'&&['00374','00462','00554','00228/liposarcoma','00205/sarcoma'].includes(route))||(profile.suite_release==='0.84.63'&&['00420','00463','00100','00596','00680'].includes(route))||(profile.suite_release==='0.84.64'&&['00675','00747','00504','00754','00757'].includes(route)))&&String(profile.code)===route.split('/')[0]&&(profile.patient_context||'')===(route.split('/')[1]||'');
  const deeper=destinations.map(([id,title,purpose,href])=>{
-  const companions=(companionGroups[id]||[]).filter(([name])=>(name==='sactcard.pdf'&&declaredWallet)||fs.existsSync(path.join(folder,name)));
+  const companions=(companionGroups[id]||[]).filter(([name])=>(name==='sactcard.pdf'&&declaredWallet)||authoredCompanions.includes(name)||fs.existsSync(path.join(folder,name)));
   const extras=companions.length?'<ul class="po45-companion-links">'+companions.map(([name,label])=>'<li><a href="'+name+'"'+(name.endsWith('.pdf')?' download':'')+'>'+label+'</a></li>').join('')+'</ul>':'';
   return '<article class="po45-destination" id="'+id+'"><h3><a href="'+href+'">'+title+'</a></h3><p>'+purpose+'</p><a class="po45-read-more" href="'+href+'">Read more <span aria-hidden="true">→</span></a>'+extras+'</article>';
  }).join('');

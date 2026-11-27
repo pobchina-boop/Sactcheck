@@ -11,7 +11,16 @@ for(const [code,action]of [['00431','permanently_discontinue'],['00812','withhol
 for(const [code,action]of [['00431','permanently_discontinue'],['00812','consultant_review']])test(code,'Stable Grade4 thyroid exception remains regimen-specific',{thyroid_grade:4,endocrine_clinically_stable:true},{action},code==='00431'?'NCCP00431v11p7thyroidgrade4':'NCCP00812v3ap3hypothyroidstableexception');
 for(const days of [21,41.99,42])test('00431','Melanoma q28 maintenance is not three-week HCC transition '+days,{indication_id:'00431a',first_maintenance_dose:true,maintenance_schedule:'iv480_q28',days_since_last_combination:days},days<42?{action:'withhold',yes:['MELANOMA_MAINTENANCE_EARLY']}:{no:['MELANOMA_MAINTENANCE_EARLY']},'NCCP00431v11pp1–3: melanoma firstq28sixweeksaftercombination');
 test('00431','Melanoma after2years does not inherit HCC duration cap',{indication_id:'00431a',monotherapy_months:25},{no:['HCC_MONOTHERAPY_24_MONTHS']},'NCCP00431v11p1vsHCCp3');
-for(const [field,v,id]of [['alt_ast_uln_multiple',5,'HEPATITIS_HOLD'],['alt_ast_uln_multiple',5.0001,'HEPATITIS_STOP'],['bilirubin_uln_multiple',3,'HEPATITIS_HOLD'],['bilirubin_uln_multiple',3.0001,'HEPATITIS_STOP']])test('00812','Independent exact liver boundary '+field+'/'+v,{[field]:v},{yes:[id]},'NCCP00812v3ap3Table2inclusive5AST/3bili');
+for(const [field,v,id]of [['alt_ast_uln_multiple',5,'HEPATITIS_HOLD'],['alt_ast_uln_multiple',5.0001,'HEPATITIS_STOP'],['bilirubin_uln_multiple',3,'HEPATITIS_HOLD'],['bilirubin_uln_multiple',3.0001,'HEPATITIS_STOP']])test('00812','Confirmed immune hepatitis exact liver boundary '+field+'/'+v,{[field]:v,immune_hepatitis_assessed:true},{yes:[id]},'NCCP00812v3ap3Table2inclusive5AST/3bili');
+for (const [field, value] of [['alt_ast_uln_multiple', 5.0001], ['bilirubin_uln_multiple', 3.0001]]) {
+ for (const attributed of [undefined, false]) {
+  const input = {[field]: value};
+  if (attributed !== undefined) input.immune_hepatitis_assessed = attributed;
+  test('00812', 'Abnormal liver result without confirmed attribution '+field+'/'+attributed,
+    input, {action:'withhold', yes:['HEPATIC_ATTRIBUTION_REVIEW'], no:['HEPATITIS_STOP','HEPATITIS_HOLD']},
+    'NCCP 00812 v3a Table 2: apply hepatitis thresholds to immune-mediated hepatitis');
+ }
+}
 for(const c of ['00415','00563'])test(c,'Exact10point LVEF decline belowLLN does not meet >10 condition',{baseline_lvef_percent:59,lvef_percent:49,lvef_lln_percent:50},{no:[c==='00415'?'LVEF_DROP_HOLD':'LVEF_HOLD']},'BothNCCPp5 strictlygreaterthan10points and belowLLN');
 for(const t of [37.9999,38])test('00415','Exact fever boundary '+t,{temperature_c:t,pyrexia_restart:true,symptom_free_hours:24},t>=38?{action:'withhold',yes:['PYREXIA_HOLD']}:{no:['PYREXIA_HOLD']},'NCCP00415v5p4Table4temp≥38evenifrecoveryflagstated');
 test('00415','Recurrent first symptoms activate fever pathway before measured38',{temperature_c:37.1,pyrexia_recurrent_first_symptom:true},{action:'withhold',yes:['PYREXIA_HOLD']},'NCCP00415v5p4Table4recurrence');
@@ -25,4 +34,8 @@ for(const days of [28,29])test('00236','Trial4week interruption is not automatic
 for(const crcl of [29.9999,30,79,79.0001])test('00236','Vismodegib renal tiers never borrow cytotoxicpercentage '+crcl,{crcl_ml_min:crcl},crcl<30?{action:'consultant_review',yes:['RENAL_LT30']}:crcl<=79?{yes:['RENAL_30_TO79']}:{yes:['RENAL_GT79']},'NCCP00236v3p2Table1noadjustmentneeded/expected');
 test('00236','No recommended reduced-dose ladder',{dose_reduction_requested:true},{action:'consultant_review',yes:['NO_RECOMMENDED_REDUCTION']},'NCCP00236v3p2no recommended dose reductions');
 invariant('00415','Adjuvant and metastatic durations remain distinct',()=>{const t=JSON.stringify(P['00415'].treatment)+JSON.stringify(P['00415'].metadata.regimen_card);assert.match(t,/12 months/);assert.match(t,/progression/)});
-const out={release:'0.84.42',scope:'five freshly source-checked retrospective protocols',total:cases.length,passed:cases.filter(c=>c.pass).length,failed:cases.filter(c=>!c.pass).length,cases};fs.writeFileSync(path.join(__dirname,'retrospective-new-case-results.json'),JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify({total:out.total,passed:out.passed,failed:out.failed}));for(const x of cases.filter(c=>!c.pass))console.error(x.code,x.name,x.error);if(out.failed)process.exitCode=1;
+const out={release:'0.84.42',scope:'five freshly source-checked retrospective protocols',total:cases.length,passed:cases.filter(c=>c.pass).length,failed:cases.filter(c=>!c.pass).length,cases};
+// Preserve the original published v42 report alongside its source evidence.
+const replayDirectory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'sactcheck-v42-cemiplimab-'));
+console.log('Current replay evidence: '+replayDirectory);
+fs.writeFileSync(path.join(replayDirectory,'retrospective-new-case-results.json'),JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify({total:out.total,passed:out.passed,failed:out.failed}));for(const x of cases.filter(c=>!c.pass))console.error(x.code,x.name,x.error);if(out.failed)process.exitCode=1;

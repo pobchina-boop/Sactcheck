@@ -141,12 +141,13 @@ Object.assign(severity,{
   ]
 });
 const durvalumabCombinations = require('./build-durvalumab-patient-suites.cjs');
-for(const code of [...new Set([...codes, ...(!suiteContext.context ? durvalumabCombinations.codes : [])])]){
+for(const code of [...new Set([...codes, ...(!suiteContext.context ? durvalumabCombinations.codes : suiteContext.codes)])]){
  // These shared regimens have only explicitly authored contexts, never a generic plan.
  if(['00419','00294','00325','00719'].includes(code)&&!suiteContext.context)continue;
  if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(code))continue;
- if (!suiteContext.context && durvalumabCombinations.codes.has(code)) {
-  durvalumabCombinations.build(code,{check:process.argv.includes('--check')});
+ const nativeRoute=suiteContext.context ? code+'/'+suiteContext.context : code;
+ if (durvalumabCombinations.codes.has(nativeRoute) || durvalumabCombinations.cervicalRoutes.has(nativeRoute)) {
+  durvalumabCombinations.build(nativeRoute,{check:process.argv.includes('--check')});
   continue;
  }
  const d=presentation.legacyProfile(JSON.parse(read(`data/patient-knowledge/${code}.json`)));
