@@ -94,7 +94,7 @@
     const helper=root?.SACTCheckRegimenComponents;
     if(helper?.componentsForProtocol){
       try{ add(helper.componentsForProtocol(protocol)); }catch(_){}
-    }else if(["00588","00746","00862","00929","00303","00306","00308","00624","00819","00344","00620","00716","00769","00771","00772","00817","00811","00799","00766","00499","00312","00375","00676","00300","00246"].includes(protocolCode(protocol))&&helper?.forProtocol){
+    }else if(["00588","00746","00862","00929","00303","00306","00308","00624","00819","00344","00620","00716","00769","00771","00772","00817","00811","00799","00766","00499","00312","00375","00676","00300","00246","00247","00248","00249","00264","00266"].includes(protocolCode(protocol))&&helper?.forProtocol){
       // These reviewed schemas store medicines in structured treatment fields.
       // The current shared component module exports forProtocol; retain the
       // historical resolution path unchanged for every other regimen.

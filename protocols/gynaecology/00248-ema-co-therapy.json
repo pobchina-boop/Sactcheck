@@ -1,22 +1,22 @@
 {
   "schema_version": "2.0.0",
-  "protocol_id": "nccp-00248-v4",
+  "protocol_id": "nccp-00248-v5",
   "file_name": "00248-ema-co-therapy.json",
   "status": "encoded_prototype_pending_clinical_and_pharmacy_validation",
   "metadata": {
     "nccp_regimen_code": "00248",
-    "nccp_version": "4",
+    "nccp_version": "5",
     "tumour_group": "Gynaecology",
     "tumour_groups": [
       "Gynaecology"
     ],
-    "title": "EMA/CO Therapy",
-    "short_title": "EMA/CO Therapy",
-    "indication": "High-risk GTN or low-risk GTN resistant/relapsed after single-agent chemotherapy.",
-    "source_url": "https://healthservice.hse.ie/documents/6351/248_V4_EMA_CO.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.43.0",
-    "source_checked_date": "2026-07-25",
+    "title": "EMA/CO for gestational trophoblastic neoplasia",
+    "short_title": "EMA/CO for gestational trophoblastic neoplasia",
+    "indication": "High-risk GTN (FIGO score 7 or above), low-risk disease after failure or relapse following sequential single-agent therapy, or low-risk disease after methotrexate failure with hCG above 1,000 IU/L.",
+    "source_url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf",
+    "source_document_pages": 8,
+    "sactcheck_encoding_version": "0.84.70",
+    "source_checked_date": "2026-11-26",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "gtn",
@@ -80,7 +80,41 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00248-v4"
+    "canonical_protocol_id": "nccp-00248-v5",
+    "regimen_card": {
+      "contexts": [
+        {
+          "id": "00248-gyn",
+          "indication_id": "00248-gyn",
+          "intent": "curative",
+          "cycle_length_days": 14,
+          "unresolved": [
+            "duration"
+          ],
+          "provenance": "NCCP 00248 p1"
+        },
+        {
+          "id": "00248-gyn-b",
+          "indication_id": "00248-gyn-b",
+          "intent": "curative",
+          "cycle_length_days": 14,
+          "unresolved": [
+            "duration"
+          ],
+          "provenance": "NCCP 00248 p1"
+        },
+        {
+          "id": "00248-gyn-c",
+          "indication_id": "00248-gyn-c",
+          "intent": "curative",
+          "cycle_length_days": 14,
+          "unresolved": [
+            "duration"
+          ],
+          "provenance": "NCCP 00248 p1"
+        }
+      ]
+    }
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
@@ -91,12 +125,31 @@
     {
       "indication_id": "00248-gyn",
       "code": "00248a",
-      "description": "High-risk GTN or low-risk GTN resistant/relapsed after single-agent chemotherapy."
+      "description": "High-risk GTN with FIGO score ≥7.",
+      "tumour_groups": [
+        "Gynaecology"
+      ]
+    },
+    {
+      "indication_id": "00248-gyn-b",
+      "code": "00248b",
+      "description": "Low-risk GTN after failure or relapse following sequential single-agent methotrexate and dactinomycin.",
+      "tumour_groups": [
+        "Gynaecology"
+      ]
+    },
+    {
+      "indication_id": "00248-gyn-c",
+      "code": "00248c",
+      "description": "Low-risk GTN after methotrexate failure with hCG >1,000 IU/L.",
+      "tumour_groups": [
+        "Gynaecology"
+      ]
     }
   ],
   "treatment": {
     "cycle_length_days": 14,
-    "schedule_summary": "EMA/CO Therapy",
+    "schedule_summary": "Dactinomycin and etoposide are followed by methotrexate over 12 hours. Write down the infusion start time so you know when rescue begins. Return for dactinomycin and etoposide. Oral folinic acid starts today. The day 1 and 2 anti-sickness medicines form one course. Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away. Vincristine is given only into a vein, followed by cyclophosphamide. Tell the team about constipation or numbness before treatment. The full sequence repeats every 14 days.",
     "drugs": [
       "etoposide",
       "methotrexate",
@@ -106,6 +159,31 @@
     ]
   },
   "input_definitions": {
+    "treatment_visit": {
+      "type": "select",
+      "label": "Treatment visit",
+      "options": [
+        {
+          "value": "ema",
+          "label": "Day 1 · EMA"
+        },
+        {
+          "value": "ema2",
+          "label": "Day 2 · EMA continues"
+        },
+        {
+          "value": "rescue",
+          "label": "Day 3 · rescue continues"
+        },
+        {
+          "value": "co",
+          "label": "Day 8 · CO"
+        }
+      ],
+      "required": false,
+      "demo_value": "ema",
+      "input_role": "context"
+    },
     "assessment_phase": {
       "label": "Assessment phase",
       "type": "select",
@@ -126,178 +204,6 @@
       ],
       "demo_value": "pre_treatment",
       "input_role": "context"
-    },
-    "ecog": {
-      "label": "ECOG performance status",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "0",
-          "label": "0"
-        },
-        {
-          "value": "1",
-          "label": "1"
-        },
-        {
-          "value": "2",
-          "label": "2"
-        },
-        {
-          "value": "3",
-          "label": "3"
-        },
-        {
-          "value": "4",
-          "label": "4"
-        }
-      ],
-      "demo_value": "1",
-      "input_role": "decision"
-    },
-    "anc": {
-      "label": "ANC",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 2,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "platelets": {
-      "label": "Platelets",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 1,
-      "demo_value": 180,
-      "unit": "×10⁹/L",
-      "input_role": "decision"
-    },
-    "haemoglobin": {
-      "label": "Haemoglobin",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
-      "unit": "g/dL",
-      "input_role": "monitoring"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the named toxicity and grade it using the applicable CTCAE term rather than a generic impression.",
-      "input_role": "decision"
-    },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia or neutropenic sepsis",
-      "type": "boolean",
-      "required": false,
-      "demo_value": false,
-      "input_role": "decision"
-    },
-    "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess timing, treatment required, recurrence and airway or haemodynamic compromise.",
-      "input_role": "decision"
     },
     "serum_hcg_trend": {
       "label": "Serum hCG response",
@@ -324,54 +230,273 @@
       "demo_value": "falling",
       "input_role": "decision"
     },
-    "mucositis_grade": {
-      "label": "Mucositis grade",
-      "type": "select",
+    "fever_or_infection": {
+      "type": "boolean",
+      "label": "Fever, chills or suspected infection",
       "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "known_hypersensitivity": {
+      "type": "boolean",
+      "label": "Known hypersensitivity to a regimen component",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "post_mtx_hcg": {
+      "type": "number",
+      "label": "Serum hCG after documented methotrexate failure",
+      "unit": "IU/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 200,
+      "input_role": "decision"
+    },
+    "anc": {
+      "label": "ANC",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 2,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
+    "platelets": {
+      "label": "Platelets",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "step": 1,
+      "demo_value": 180,
+      "unit": "×10⁹/L",
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "type": "number",
+      "label": "Creatinine clearance",
+      "unit": "mL/min",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 90,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf",
+        "reason": "Use the measured result to compare the source-specific threshold for the selected treatment visit and individual drug."
+      }
+    },
+    "folinic_acid_rescue_confirmed": {
+      "type": "boolean",
+      "label": "Correct route, dose and actual rescue times confirmed",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "type": "number",
+      "label": "Total bilirubin",
+      "unit": "µmol/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 12,
+      "input_role": "decision"
+    },
+    "ast_u_l": {
+      "type": "number",
+      "label": "AST",
+      "unit": "U/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 25,
+      "input_role": "decision"
+    },
+    "third_space_fluid": {
+      "type": "boolean",
+      "label": "Ascites, pleural effusion or very large ovarian cyst",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_hepatic_disease": {
+      "type": "boolean",
+      "label": "Severe hepatic disease",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "gut_grade": {
+      "type": "select",
+      "label": "Highest current grade of mucositis, stomatitis or diarrhoea",
+      "required": false,
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf",
+      "grading_source_label": "NCCP 00248 Table 2",
+      "assessment_guidance": "Select the clinician-confirmed grade of mucositis, stomatitis or diarrhoea. The source gives management thresholds and does not specify a grading edition.",
+      "source_grading_note": "The NCCP management table does not define clinical grade descriptors.",
       "options": [
         {
           "value": 0,
           "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No oral mucositis."
+          "description": "No toxicity reported."
         },
         {
           "value": 1,
           "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Asymptomatic or mild symptoms; intervention not indicated."
+          "description": "Clinician-confirmed grade 1 of mucositis, stomatitis or diarrhoea."
         },
         {
           "value": 2,
           "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate pain or ulceration not interfering with oral intake; modified diet indicated."
+          "description": "Clinician-confirmed grade 2 of mucositis, stomatitis or diarrhoea."
         },
         {
           "value": 3,
           "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe pain interfering with oral intake."
+          "description": "Clinician-confirmed grade 3 of mucositis, stomatitis or diarrhoea."
         },
         {
           "value": 4,
           "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
+          "description": "Clinician-confirmed grade 4 of mucositis, stomatitis or diarrhoea."
         }
-      ],
+      ]
+    },
+    "previous_gut_grade": {
+      "type": "select",
+      "label": "Grade of the severe episode being reviewed after recovery",
+      "required": false,
       "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "stomatitis",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess oral ulceration, pain and effect on intake.",
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf",
+      "grading_source_label": "NCCP 00248 Table 2",
+      "assessment_guidance": "Select the clinician-confirmed grade of mucositis, stomatitis or diarrhoea. The source gives management thresholds and does not specify a grading edition.",
+      "source_grading_note": "The NCCP management table does not define clinical grade descriptors.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No toxicity reported."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 of mucositis, stomatitis or diarrhoea."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 of mucositis, stomatitis or diarrhoea."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 of mucositis, stomatitis or diarrhoea."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 of mucositis, stomatitis or diarrhoea."
+        }
+      ]
+    },
+    "episode_number": {
+      "type": "number",
+      "label": "Occurrence of this toxicity at this grade",
+      "unit": "episode",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
       "input_role": "decision"
     },
-    "folinic_acid_rescue_confirmed": {
-      "label": "Folinic-acid rescue/timing confirmed where required",
+    "neuropathy_grade": {
+      "type": "select",
+      "label": "Vincristine neuropathy",
+      "required": false,
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf",
+      "grading_source_label": "NCCP 00248 Table 2",
+      "assessment_guidance": "Select the clinician-confirmed grade of peripheral neuropathy. The source gives management thresholds and does not specify a grading edition.",
+      "source_grading_note": "The NCCP management table does not define clinical grade descriptors.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No toxicity reported."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 of peripheral neuropathy."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 of peripheral neuropathy."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 of peripheral neuropathy."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 of peripheral neuropathy."
+        }
+      ]
+    },
+    "neuropathy_persistent": {
       "type": "boolean",
+      "label": "Persistent grade 2 neuropathy",
       "required": false,
       "demo_value": false,
+      "input_role": "decision"
+    },
+    "alt_u_l": {
+      "type": "number",
+      "label": "ALT",
+      "unit": "U/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 25,
+      "input_role": "decision"
+    },
+    "confirmed_malignant_lymphoma": {
+      "type": "boolean",
+      "label": "Confirmed treatment-associated malignant lymphoma",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "alt_ast_uln_multiple": {
+      "type": "number",
+      "label": "ALT / AST",
+      "unit": "× ULN",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "alp_uln_multiple": {
+      "type": "number",
+      "label": "Alkaline phosphatase",
+      "unit": "× ULN",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
       "input_role": "decision"
     }
   },
@@ -405,134 +530,28 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
+        "id": "SELECT_VISIT",
+        "priority": 9,
         "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": "3"
+          "field": "treatment_visit",
+          "operator": "missing"
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "whole_regimen"
           ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+          "message": "Choose the visit to interpret component-specific decisions."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00248 v5",
+          "page": "Treatment"
         },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
+        "explanation": "Choose the visit to interpret component-specific decisions."
       },
       {
-        "id": "NONHAEM_G3",
+        "id": "HCG_TREND",
         "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "HSR_G3",
-        "priority": 10,
-        "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
-          "operator": "==",
-          "value": true
-        },
-        "action": {
-          "type": "withhold_then_reduce",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
-      },
-      {
-        "id": "GTN_HCG_PLATEAU",
-        "priority": 10,
         "when": {
           "field": "serum_hcg_trend",
           "operator": "in",
@@ -546,84 +565,1564 @@
           "components": [
             "whole_regimen"
           ],
-          "message": "Plateauing or rising hCG requires GTN specialist review of resistance/relapse and regimen escalation."
+          "message": "Consult the GTN service about a plateau or rise. Review the serial assay results and disease status."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00248 v5",
+          "page": "Tests"
         },
-        "explanation": "Plateauing or rising hCG requires GTN specialist review of resistance/relapse and regimen escalation."
+        "explanation": "Consult the GTN service about a plateau or rise. Review the serial assay results and disease status."
       },
       {
-        "id": "GTN_MUC_G2",
+        "id": "FEVER_OR_INFECTION",
         "priority": 9,
         "when": {
-          "field": "mucositis_grade",
-          "operator": ">=",
-          "value": 2
+          "field": "fever_or_infection",
+          "operator": "==",
+          "value": true
         },
         "action": {
           "type": "withhold",
           "components": [
             "whole_regimen"
           ],
-          "message": "Grade 2 or worse mucositis requires interruption and recovery before further methotrexate/dactinomycin."
+          "message": "Arrange urgent assessment for infection. Check blood counts and contact the oncology team."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00248 v5",
+          "page": "Adverse effects"
         },
-        "explanation": "Grade 2 or worse mucositis requires interruption and recovery before further methotrexate/dactinomycin."
+        "explanation": "Arrange urgent assessment for infection. Check blood counts and contact the oncology team."
       },
       {
-        "id": "GTN_RESCUE",
-        "priority": 10,
+        "id": "KNOWN_HYPERSENSITIVITY",
+        "priority": 9,
         "when": {
-          "field": "folinic_acid_rescue_confirmed",
-          "operator": "==",
-          "value": false
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "field": "known_hypersensitivity",
+              "operator": "==",
+              "value": true
+            }
+          ]
         },
         "action": {
           "type": "withhold",
           "components": [
             "whole_regimen"
           ],
-          "message": "Do not proceed with methotrexate-containing treatment until the prescribed folinic-acid rescue plan is confirmed."
+          "message": "Confirm the culprit and exclusions with the treating consultant before administration."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00248 v5",
+          "page": "Exclusions"
         },
-        "explanation": "Do not proceed with methotrexate-containing treatment until the prescribed folinic-acid rescue plan is confirmed."
+        "explanation": "Confirm the culprit and exclusions with the treating consultant before administration."
+      },
+      {
+        "id": "HCG_1000",
+        "priority": 9,
+        "when": {
+          "field": "post_mtx_hcg",
+          "operator": "==",
+          "value": 1000
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "The thresholds for these specific post-methotrexate indications leave exactly 1,000 IU/L unassigned. Obtain the GTN consultant’s decision."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Indications and eligibility"
+        },
+        "explanation": "The thresholds for these specific post-methotrexate indications leave exactly 1,000 IU/L unassigned. Obtain the GTN consultant’s decision."
+      },
+      {
+        "id": "HCG_ELIGIBILITY",
+        "priority": 9,
+        "when": {
+          "field": "post_mtx_hcg",
+          "operator": "<",
+          "value": 1000
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Recheck the specific post-methotrexate indication, FIGO risk and prior treatment with the GTN service. Other indications are assessed separately."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Indications and eligibility"
+        },
+        "explanation": "Recheck the specific post-methotrexate indication, FIGO risk and prior treatment with the GTN service. Other indications are assessed separately."
+      },
+      {
+        "id": "COUNTS",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc",
+                  "operator": "<=",
+                  "value": 1
+                },
+                {
+                  "field": "platelets",
+                  "operator": "<=",
+                  "value": 75
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Counts do not meet the usual proceed threshold. Discuss timing and count support with the GTN consultant."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p3"
+        },
+        "explanation": "Counts do not meet the usual proceed threshold. Discuss timing and count support with the GTN consultant."
+      },
+      {
+        "id": "RESCUE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "rescue"
+              ]
+            },
+            {
+              "field": "folinic_acid_rescue_confirmed",
+              "operator": "==",
+              "value": false
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate",
+            "folinic acid"
+          ],
+          "message": "Contact oncology and pharmacy immediately if the prescribed rescue or actual dose time is uncertain."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Treatment"
+        },
+        "explanation": "Contact oncology and pharmacy immediately if the prescribed rescue or actual dose time is uncertain."
+      },
+      {
+        "id": "ETO_15_50",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 15
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "etoposide"
+          ],
+          "message": "75% of the original etoposide dose."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "75% of the original etoposide dose."
+      },
+      {
+        "id": "ETO_LT15",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 15
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "etoposide"
+          ],
+          "message": "50% of the original etoposide dose."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "50% of the original etoposide dose."
+      },
+      {
+        "id": "ETO_LIVER",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": ">=",
+                      "value": 26
+                    },
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": "<=",
+                      "value": 51
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "ast_u_l",
+                      "operator": ">=",
+                      "value": 60
+                    },
+                    {
+                      "field": "ast_u_l",
+                      "operator": "<=",
+                      "value": 180
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Check both results. The moderate band calls for 50% etoposide. A more severe result needs a clinical decision."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Check both results. The moderate band calls for 50% etoposide. A more severe result needs a clinical decision."
+      },
+      {
+        "id": "ETO_SEVERE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">",
+                  "value": 51
+                },
+                {
+                  "field": "ast_u_l",
+                  "operator": ">",
+                  "value": 180
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "A clinical decision is required for etoposide in this hepatic band."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "A clinical decision is required for etoposide in this hepatic band."
+      },
+      {
+        "id": "MTX_LT30",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 30
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Methotrexate is contraindicated."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Methotrexate is contraindicated."
+      },
+      {
+        "id": "MTX_30_45",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 30
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 45
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Individual methotrexate decision."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Individual methotrexate decision."
+      },
+      {
+        "id": "MTX_OVERLAP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "==",
+                  "value": 45
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "==",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Printed renal bands overlap at this exact value. Resolve with oncology pharmacy and the consultant."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Printed renal bands overlap at this exact value. Resolve with oncology pharmacy and the consultant."
+      },
+      {
+        "id": "MTX_45_60",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 45
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "50% of the original methotrexate dose."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "50% of the original methotrexate dose."
+      },
+      {
+        "id": "MTX_60_80",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">",
+                  "value": 60
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 80
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "65% of the original methotrexate dose."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "65% of the original methotrexate dose."
+      },
+      {
+        "id": "MTX_HEP_STOP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">",
+              "value": 85
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Methotrexate is contraindicated above 85 µmol/L."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Methotrexate is contraindicated above 85 µmol/L."
+      },
+      {
+        "id": "MTX_HEP_REVIEW",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": ">=",
+                      "value": 51
+                    },
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": "<=",
+                      "value": 85
+                    }
+                  ]
+                },
+                {
+                  "field": "ast_u_l",
+                  "operator": ">",
+                  "value": 180
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Table 1 gives 75% of original methotrexate dose. Check bilirubin first: above 85 µmol/L it is contraindicated."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Table 1 gives 75% of original methotrexate dose. Check bilirubin first: above 85 µmol/L it is contraindicated."
+      },
+      {
+        "id": "MTX_HEP_GAP",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": ">=",
+                      "value": 50
+                    },
+                    {
+                      "field": "bilirubin_umol_l",
+                      "operator": "<",
+                      "value": 51
+                    }
+                  ]
+                },
+                {
+                  "field": "ast_u_l",
+                  "operator": "==",
+                  "value": 180
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "This result is on an unassigned liver threshold. Resolve with the consultant and pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "This result is on an unassigned liver threshold. Resolve with the consultant and pharmacy."
+      },
+      {
+        "id": "THIRD_SPACE_FLUID",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema"
+              ]
+            },
+            {
+              "field": "third_space_fluid",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Hold methotrexate until recovery."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Hold methotrexate until recovery."
+      },
+      {
+        "id": "SEVERE_HEPATIC_DISEASE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2"
+              ]
+            },
+            {
+              "field": "severe_hepatic_disease",
+              "operator": "==",
+              "value": true
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "dactinomycin"
+          ],
+          "message": "Review whether to reduce dactinomycin."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 1"
+        },
+        "explanation": "Review whether to reduce dactinomycin."
+      },
+      {
+        "id": "GI_ACTIVE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "field": "gut_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dactinomycin",
+            "etoposide",
+            "methotrexate",
+            "vincristine",
+            "cyclophosphamide"
+          ],
+          "message": "Delay treatment until recovery to grade 1 or less. Record occurrence number before prescribing again."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Delay treatment until recovery to grade 1 or less. Record occurrence number before prescribing again."
+      },
+      {
+        "id": "GI_RECOVERY",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "previous_gut_grade",
+                  "operator": ">=",
+                  "value": 3
+                },
+                {
+                  "field": "gut_grade",
+                  "operator": ">",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "dactinomycin",
+            "etoposide",
+            "methotrexate",
+            "vincristine",
+            "cyclophosphamide"
+          ],
+          "message": "Recovery to grade 1 or less is required before restarting."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Recovery to grade 1 or less is required before restarting."
+      },
+      {
+        "id": "GI_3_1",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "previous_gut_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "episode_number",
+                  "operator": "==",
+                  "value": 1
+                },
+                {
+                  "field": "gut_grade",
+                  "operator": "<=",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "dactinomycin",
+            "etoposide",
+            "methotrexate",
+            "vincristine",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery reduce subsequent doses by 25%."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "After recovery reduce subsequent doses by 25%."
+      },
+      {
+        "id": "GI_3_2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "previous_gut_grade",
+                  "operator": "==",
+                  "value": 3
+                },
+                {
+                  "field": "episode_number",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "gut_grade",
+                  "operator": "<=",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "dactinomycin",
+            "etoposide",
+            "methotrexate",
+            "vincristine",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery reduce subsequent doses by 50%."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "After recovery reduce subsequent doses by 50%."
+      },
+      {
+        "id": "GI_4_1",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "previous_gut_grade",
+                  "operator": "==",
+                  "value": 4
+                },
+                {
+                  "field": "episode_number",
+                  "operator": "==",
+                  "value": 1
+                },
+                {
+                  "field": "gut_grade",
+                  "operator": "<=",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "dactinomycin",
+            "etoposide",
+            "methotrexate",
+            "vincristine",
+            "cyclophosphamide"
+          ],
+          "message": "After recovery reduce subsequent doses by 50%."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "After recovery reduce subsequent doses by 50%."
+      },
+      {
+        "id": "GI_4_2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "ema",
+                "ema2",
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "field": "previous_gut_grade",
+                      "operator": "==",
+                      "value": 4
+                    },
+                    {
+                      "field": "gut_grade",
+                      "operator": "==",
+                      "value": 4
+                    }
+                  ]
+                },
+                {
+                  "field": "episode_number",
+                  "operator": "==",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "dactinomycin",
+            "etoposide",
+            "methotrexate",
+            "vincristine",
+            "cyclophosphamide"
+          ],
+          "message": "Second grade 4 event: cease treatment."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Second grade 4 event: cease treatment."
+      },
+      {
+        "id": "VCR_G2",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": "==",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Reduce vincristine by 25% for grade 2, or by 50% if persistent."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p5 Table 2"
+        },
+        "explanation": "Reduce vincristine by 25% for grade 2, or by 50% if persistent."
+      },
+      {
+        "id": "VCR_PERSIST",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "neuropathy_grade",
+                  "operator": "==",
+                  "value": 2
+                },
+                {
+                  "field": "neuropathy_persistent",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Persistent grade 2: reduce vincristine by 50%."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p5 Table 2"
+        },
+        "explanation": "Persistent grade 2: reduce vincristine by 50%."
+      },
+      {
+        "id": "VCR_G3",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 3
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Omit vincristine for grade 3 or higher neuropathy."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p5 Table 2"
+        },
+        "explanation": "Omit vincristine for grade 3 or higher neuropathy."
+      },
+      {
+        "id": "VCR_LIVER",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">=",
+                  "value": 26
+                },
+                {
+                  "field": "ast_u_l",
+                  "operator": ">=",
+                  "value": 60
+                },
+                {
+                  "field": "alt_u_l",
+                  "operator": ">=",
+                  "value": 60
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Table 1: consider 50% with bilirubin 26–51 or transaminases 60–180. Above bilirubin 51 use 50% with normal transaminases, omit when transaminases exceed 180. Review other combinations individually."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Table 1: consider 50% with bilirubin 26–51 or transaminases 60–180. Above bilirubin 51 use 50% with normal transaminases, omit when transaminases exceed 180. Review other combinations individually."
+      },
+      {
+        "id": "VCR_LIVER_OMIT",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">",
+                  "value": 51
+                },
+                {
+                  "any": [
+                    {
+                      "field": "ast_u_l",
+                      "operator": ">",
+                      "value": 180
+                    },
+                    {
+                      "field": "alt_u_l",
+                      "operator": ">",
+                      "value": 180
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "vincristine"
+          ],
+          "message": "Omit vincristine when both hepatic criteria are met."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "Omit vincristine when both hepatic criteria are met."
+      },
+      {
+        "id": "CYC_LT10",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "message": "50% of original cyclophosphamide dose, subject to clinical review."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "50% of original cyclophosphamide dose, subject to clinical review."
+      },
+      {
+        "id": "CYC_10_20",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "crcl_ml_min",
+                  "operator": ">=",
+                  "value": 10
+                },
+                {
+                  "field": "crcl_ml_min",
+                  "operator": "<=",
+                  "value": 20
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "message": "75% of original cyclophosphamide dose, subject to clinical review."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "75% of original cyclophosphamide dose, subject to clinical review."
+      },
+      {
+        "id": "CYC_LIVER",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_visit",
+              "operator": "in",
+              "value": [
+                "co"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "bilirubin_umol_l",
+                  "operator": ">",
+                  "value": 17
+                },
+                {
+                  "field": "alt_ast_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                },
+                {
+                  "field": "alp_uln_multiple",
+                  "operator": ">",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cyclophosphamide"
+          ],
+          "message": "NCCP advises against the usual cyclophosphamide dose when bilirubin exceeds 17 µmol/L or transaminases or ALP exceed 2–3 × ULN. Review above 2 × ULN with the GTN consultant. If treatment proceeds in the affected range, a reduced dose is advised. No percentage is specified."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "p4 Table 1"
+        },
+        "explanation": "NCCP advises against the usual cyclophosphamide dose when bilirubin exceeds 17 µmol/L or transaminases or ALP exceed 2–3 × ULN. Review above 2 × ULN with the GTN consultant. If treatment proceeds in the affected range, a reduced dose is advised. No percentage is specified."
+      },
+      {
+        "id": "CONFIRMED_MALIGNANT_LYMPHOMA",
+        "priority": 9,
+        "when": {
+          "field": "confirmed_malignant_lymphoma",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "permanently_discontinue",
+          "components": [
+            "methotrexate"
+          ],
+          "message": "Discontinue and seek the treating consultant’s decision."
+        },
+        "source": {
+          "document": "NCCP 00248 v5",
+          "page": "Table 2"
+        },
+        "explanation": "Discontinue and seek the treating consultant’s decision."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "High-risk GTN with FIGO score ≥7.",
+    "Low-risk GTN after failure or relapse following sequential single-agent methotrexate and dactinomycin.",
+    "Low-risk GTN after methotrexate failure with hCG >1,000 IU/L."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Known hypersensitivity to a treatment component."
   ],
   "supportive_care": {
     "emetogenic_risk": "phase_dependent",
-    "script_id": "nccp-parenteral-high",
+    "script_id": null,
     "mapping_basis": "Highest emetogenic active component and phase-specific NCCP classification.",
     "mapping_confidence": "source_reconciled_pending_pharmacy_validation",
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "phase_profiles": {
-      "combination_or_intensive_phase": {
-        "emetogenic_risk": "high",
-        "script_id": "nccp-parenteral-high"
+      "ema": {
+        "label": "Day 1 · EMA",
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate",
+        "prescription": "patient/00248/antiemetic-ema.pdf"
       },
-      "single_agent_or_maintenance_phase": {
-        "emetogenic_risk": "low",
-        "script_id": "nccp-parenteral-low"
+      "ema2": {
+        "label": "Day 2 · EMA continues",
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate",
+        "prescription": "patient/00248/antiemetic-ema2.pdf"
+      },
+      "rescue": {
+        "label": "Day 3 · rescue continues",
+        "level": "minimal",
+        "script_id": "nccp-minimal-no-routine-prophylaxis",
+        "prescription": "patient/00248/antiemetic-rescue.pdf"
+      },
+      "co": {
+        "label": "Day 8 · CO",
+        "level": "moderate",
+        "script_id": "nccp-parenteral-moderate",
+        "prescription": "patient/00248/antiemetic-co.pdf"
       }
+    },
+    "phase_specific_plan": "patient/00248/antiemetic-prescriptions.html",
+    "prescription_index": "patient/00248/antiemetic-prescriptions.html",
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "source_url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf"
+  },
+  "treatment_phases": [
+    {
+      "phase_id": "ema",
+      "cycle_length_days": 14,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "dactinomycin",
+          "dose": {
+            "value": 0.5,
+            "unit": "mg"
+          },
+          "days": [
+            1,
+            2
+          ],
+          "route": "IV bolus",
+          "note": "Give first on days 1 and 2.",
+          "order": 1
+        },
+        {
+          "drug": "etoposide",
+          "dose": {
+            "value": 100,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1,
+            2
+          ],
+          "route": "IV infusion",
+          "note": "60 minutes.",
+          "order": 2
+        },
+        {
+          "drug": "methotrexate",
+          "dose": {
+            "value": 300,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Over 12 hours. Time rescue from the start.",
+          "order": 3
+        },
+        {
+          "drug": "folinic acid",
+          "dose": {
+            "value": 15,
+            "unit": "mg"
+          },
+          "days": [
+            2,
+            3
+          ],
+          "route": "PO",
+          "note": "Start 24 hours after the START of IV methotrexate. Every 12 hours for 4 doses.",
+          "order": 4
+        }
+      ],
+      "active_drugs": [
+        "dactinomycin",
+        "etoposide",
+        "methotrexate",
+        "folinic acid"
+      ],
+      "notes": [
+        "Dactinomycin and etoposide are followed by methotrexate over 12 hours. Write down the infusion start time so you know when rescue begins. Return for dactinomycin and etoposide. Oral folinic acid starts today. The day 1 and 2 anti-sickness medicines form one course. Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away. Vincristine is given only into a vein, followed by cyclophosphamide. Tell the team about constipation or numbness before treatment. The full sequence repeats every 14 days."
+      ]
+    },
+    {
+      "phase_id": "co",
+      "cycle_length_days": 14,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "vincristine",
+          "dose": {
+            "value": 0.8,
+            "unit": "mg/m²"
+          },
+          "days": [
+            8
+          ],
+          "route": "IV infusion",
+          "note": "IV only. Maximum 2 mg. In a minibag over 15 minutes.",
+          "order": 1
+        },
+        {
+          "drug": "cyclophosphamide",
+          "dose": {
+            "value": 600,
+            "unit": "mg/m²"
+          },
+          "days": [
+            8
+          ],
+          "route": "IV infusion",
+          "note": "Over 30 minutes after vincristine.",
+          "order": 2
+        }
+      ],
+      "active_drugs": [
+        "vincristine",
+        "cyclophosphamide"
+      ],
+      "notes": [
+        "Dactinomycin and etoposide are followed by methotrexate over 12 hours. Write down the infusion start time so you know when rescue begins. Return for dactinomycin and etoposide. Oral folinic acid starts today. The day 1 and 2 anti-sickness medicines form one course. Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away. Vincristine is given only into a vein, followed by cyclophosphamide. Tell the team about constipation or numbness before treatment. The full sequence repeats every 14 days."
+      ]
     }
-  }
+  ],
+  "regimen_components": [
+    "Dactinomycin",
+    "Etoposide",
+    "Methotrexate",
+    "Folinic Acid",
+    "Vincristine",
+    "Cyclophosphamide"
+  ]
 }

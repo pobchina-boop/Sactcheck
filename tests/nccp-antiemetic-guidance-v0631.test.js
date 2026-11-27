@@ -35,6 +35,12 @@ const dualImmuneV35 = {
 // NCCP 00746 v2 distinguishes oral olaparib and bevacizumab on page 9.
 const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate'};
 const gynaePhases = {
+  "00247":{"level": "moderate", "phases": {"day1": "moderate"}},
+  "00248":{"level": "phase_dependent", "phases": {"ema": "moderate", "ema2": "moderate", "rescue": "minimal", "co": "moderate"}},
+  "00249":{"level": "phase_dependent", "phases": {"intrathecal": "low", "rescue": "minimal"}},
+  "00264":{"level": "phase_dependent", "phases": {"ema": "moderate", "rescue": "minimal", "ep": "high"}},
+  "00266":{"level": "phase_dependent", "phases": {"tp": "high", "te": "low"}},
+
   "00246":{"level": "phase_dependent", "phases": {"injections": "low", "rescue": "minimal"}},
   "00300":{"level": "phase_dependent", "phases": {"day1": "high", "days2to5": "high", "bleomycin": "minimal"}},
   "00312":{"level": "low", "phases": {"weekly": "low"}},

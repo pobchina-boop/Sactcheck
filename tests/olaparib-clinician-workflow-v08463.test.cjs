@@ -132,6 +132,12 @@ for(const p of [mono,combo]){
       '00624':['Pegylated Liposomal Doxorubicin','Carboplatin'],
       '00819':['Dostarlimab'],
       '00246':['Methotrexate','Folinic Acid'],
+      "00247":["Dactinomycin"],
+      "00248":["Dactinomycin", "Etoposide", "Methotrexate", "Folinic Acid", "Vincristine", "Cyclophosphamide"],
+      "00249":["Methotrexate", "Folinic Acid"],
+      "00264":["Dactinomycin", "Etoposide", "Methotrexate", "Folinic Acid", "Cisplatin"],
+      "00266":["Paclitaxel", "Cisplatin", "Etoposide"],
+
       '00300':['Bleomycin','Etoposide','Cisplatin'],
       '00312':['Topotecan'],
       '00375':['Pegylated Liposomal Doxorubicin','Trabectedin'],

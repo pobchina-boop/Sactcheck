@@ -22,7 +22,7 @@ const sarcomaRegister = JSON.parse(require('node:child_process').execFileSync('g
  ['show','5b063b3f390cfe9a5a324c4615a3fba3a6eb8878:'+registerPath],{cwd:review.ROOT,maxBuffer:32*1024*1024}));
 for(const row of currentRegister.protocols){
  const old=inheritedRegister.protocols.find(item=>item.nccp_code===row.nccp_code);assert(old);
- if(['00862','00929',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,'00344'].includes(row.nccp_code)) {
+ if(['00862','00929',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08470.cjs').NEW_ROUTES,'00344'].includes(row.nccp_code)) {
   require('./helpers/live-release-v08464.cjs').verifyFile(registerPath);
   const protocol = JSON.parse(fs.readFileSync(path.join(review.ROOT,row.path)));
   assert.equal(row.rule_count,protocol.rule_engine.rules.length);

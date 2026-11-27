@@ -5,7 +5,7 @@ const path = require('node:path');
 const {render} = require('./patient-pack-v08461.cjs');
 const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
-const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246']);
+const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
 const illustratedSuites = new Set([...gynaecology, '00344']);
 const codes = new Set([...illustratedSuites, '00897', '00926', '00953']);
@@ -83,7 +83,10 @@ function renderPages(code, root = projectRoot) {
   for (const phase of phaseSheets) {
    const rows=phase.medicines.map(m=>[m.name,m.dose,m.timing,m.note||'']);
    const pills=rows.length?table(['Medicine','Dose in reference plan','When','Additional instructions'],rows):'<p>No routine preventive anti-sickness medicine is specified. Follow the individually prescribed plan.</p>';
-   const entry=section('written-plan-'+phase.id,'Support medicines for this visit',(code==='00300' && phase.id!=='bleomycin'?'<p>Use one signed anti-sickness plan from day 1 of the five-day block. Keep the same day numbers on return visits.</p>':'<p>Ask your team to confirm your signed prescription. The day numbers on a support prescription are counted from this visit.</p>')+pills+list(phase.additional_support));
+   let timingNote='Ask your team to confirm your signed prescription. The day numbers on a support prescription are counted from this visit.';
+   if (code==='00300' && phase.id!=='bleomycin') timingNote='Use one signed anti-sickness plan from day 1 of the five-day block. Keep the same day numbers on return visits.';
+   if (code==='00248' && ['ema','ema2'].includes(phase.id)) timingNote='The EMA anti-sickness prescription counts from day 1. Continue the same course when you return on day 2.';
+   const entry=section('written-plan-'+phase.id,'Support medicines for this visit','<p>'+timingNote+'</p>'+pills+list(phase.additional_support));
    const key='support-'+phase.id+'.html';
    files[key]=files[key].replace('</main>',entry+'</main>');
   }

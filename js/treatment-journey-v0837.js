@@ -54921,6 +54921,398 @@ const definitions={
         "url": "https://pubmed.ncbi.nlm.nih.gov/11919242/"
       }
     ]
+  },
+  "00247": {
+    "code": "00247",
+    "release": "0.84.70",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Dactinomycin for low-risk GTN",
+    "setting": "Low-risk gestational trophoblastic neoplasia",
+    "summary": "The nurse gives dactinomycin into a vein once every two weeks. Tell the nurse at once if the line stings. After hCG normalises the plan includes three more cycles.",
+    "stages": [
+      "Day 1 · dactinomycin"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "One injection into a vein on day 1 of a 14-day cycle.",
+        "cells": [
+          "The nurse gives dactinomycin into a vein once every two weeks. Tell the nurse at once if the line stings. After hCG normalises the plan includes three more cycles."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Check blood count, kidney and liver function and serum hCG using a validated assay.",
+        "when": "Before treatment",
+        "why": "Bring your medicines list and your GTN centre contact details.",
+        "clinical": "NCCP 00247",
+        "action": "Bring your medicines list and your GTN centre contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Repeat blood count, kidney and liver tests. Check serum hCG on day 1, more often if indicated.",
+        "when": "Before each cycle",
+        "why": "Ask how your hCG trend affects the next treatment.",
+        "clinical": "NCCP 00247",
+        "action": "Ask how your hCG trend affects the next treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Continue follow-up through your GTN service.",
+        "when": "After treatment",
+        "why": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "clinical": "NCCP 00247",
+        "action": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "An alternative after methotrexate resistance in low-risk GTN (FIGO score 6 or below) when hCG is below 1,000 IU/L.",
+      "Call your oncology unit urgently for fever, shaking chills or sudden illness. A burning or painful IV site must be checked immediately, including redness or blistering after going home."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00247 v5",
+        "url": "https://healthservice.hse.ie/documents/6350/247_DACTINomycin.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Dactinomycin after methotrexate failure",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22838241/"
+      }
+    ]
+  },
+  "00248": {
+    "code": "00248",
+    "release": "0.84.70",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "EMA/CO for gestational trophoblastic neoplasia",
+    "setting": "High-risk or resistant gestational trophoblastic neoplasia",
+    "summary": "Dactinomycin and etoposide are followed by methotrexate over 12 hours. Write down the infusion start time so you know when rescue begins. Return for dactinomycin and etoposide. Oral folinic acid starts today. The day 1 and 2 anti-sickness medicines form one course. Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away. Vincristine is given only into a vein, followed by cyclophosphamide. Tell the team about constipation or numbness before treatment. The full sequence repeats every 14 days.",
+    "stages": [
+      "Day 1 · EMA",
+      "Day 2 · EMA continues",
+      "Day 3 · rescue continues",
+      "Day 8 · CO"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Two treatment days in week one, oral rescue, then two different IV medicines on day 8.",
+        "cells": [
+          "Dactinomycin and etoposide are followed by methotrexate over 12 hours. Write down the infusion start time so you know when rescue begins.",
+          "Return for dactinomycin and etoposide. Oral folinic acid starts today. The day 1 and 2 anti-sickness medicines form one course.",
+          "Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away.",
+          "Vincristine is given only into a vein, followed by cyclophosphamide. Tell the team about constipation or numbness before treatment. The full sequence repeats every 14 days."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Check blood count, kidney and liver function and serum hCG using a validated assay.",
+        "when": "Before treatment",
+        "why": "Bring your medicines list and your GTN centre contact details.",
+        "clinical": "NCCP 00248",
+        "action": "Bring your medicines list and your GTN centre contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Repeat blood count, kidney and liver tests. Check serum hCG on day 1, more often if indicated.",
+        "when": "Before each cycle",
+        "why": "Ask how your hCG trend affects the next treatment.",
+        "clinical": "NCCP 00248",
+        "action": "Ask how your hCG trend affects the next treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Continue follow-up through your GTN service.",
+        "when": "After treatment",
+        "why": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "clinical": "NCCP 00248",
+        "action": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "High-risk GTN (FIGO score 7 or above), low-risk disease after failure or relapse following sequential single-agent therapy, or low-risk disease after methotrexate failure with hCG above 1,000 IU/L.",
+      "Call your oncology unit urgently for fever, shaking chills or sudden illness. Call for severe constipation, abdominal pain, weakness, or a missed folinic acid dose. Report stinging at an IV site immediately.",
+      "Treatment continues to clear disease too small to detect. Low-risk disease usually needs three more courses. With high-risk disease the usual plan is three more cycles (six weeks), or four (eight weeks) with adverse features such as liver metastases."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00248 v5",
+        "url": "https://healthservice.hse.ie/documents/6351/248_EMA_CO.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EMA/CO in 272 patients with high-risk disease",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9215835/"
+      }
+    ]
+  },
+  "00249": {
+    "code": "00249",
+    "release": "0.84.70",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Intrathecal methotrexate for GTN",
+    "setting": "Central nervous system prophylaxis in GTN",
+    "summary": "The specialist team gives methotrexate into the fluid around the spinal cord. There are three treatments two weeks apart. The team coordinates appointments with your systemic chemotherapy. Take the single prescribed oral folinic acid tablet 24 hours after the spinal dose. If you also have a separate methotrexate course, ask the team to write down both rescue schedules. Call immediately about a missed or vomited tablet.",
+    "stages": [
+      "Day 1 · spinal treatment",
+      "Day 2 · oral rescue"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "One spinal treatment every 14 days for three doses, with an oral rescue tablet the following day.",
+        "cells": [
+          "The specialist team gives methotrexate into the fluid around the spinal cord. There are three treatments two weeks apart. The team coordinates appointments with your systemic chemotherapy.",
+          "Take the single prescribed oral folinic acid tablet 24 hours after the spinal dose. If you also have a separate methotrexate course, ask the team to write down both rescue schedules. Call immediately about a missed or vomited tablet."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Check blood count, kidney and liver function and serum hCG using a validated assay.",
+        "when": "Before treatment",
+        "why": "Bring your medicines list and your GTN centre contact details.",
+        "clinical": "NCCP 00249",
+        "action": "Bring your medicines list and your GTN centre contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Repeat blood count, kidney and liver tests. Check serum hCG on day 1, more often if indicated.",
+        "when": "Before each cycle",
+        "why": "Ask how your hCG trend affects the next treatment.",
+        "clinical": "NCCP 00249",
+        "action": "Ask how your hCG trend affects the next treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Confirm your systemic and spinal treatment dates and the next rescue dose.",
+        "when": "At each spinal appointment",
+        "why": "Bring both schedules. Ask which symptoms need an urgent call after the procedure.",
+        "clinical": "NCCP 00249",
+        "action": "Bring both schedules. Ask which symptoms need an urgent call after the procedure.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Prevention of central nervous system involvement in high-risk GTN or low-risk GTN with lung metastases.",
+      "Call your oncology unit urgently for fever, shaking chills or sudden illness. Seek urgent assessment for severe headache, fever, a stiff neck, new weakness, confusion or a seizure after spinal treatment.",
+      "Only the specialist team authorised to give intrathecal chemotherapy gives the spinal dose. Your oral rescue tablet and systemic medicines have separate routes and prescriptions."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00249 v4",
+        "url": "https://healthservice.hse.ie/documents/6352/249_Intrathecal_Methotrexate_-_CNS_prophylaxis_in_GTN.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Irish national gestational trophoblastic disease guideline",
+        "url": "https://www2.healthservice.hse.ie/files/138/"
+      }
+    ]
+  },
+  "00264": {
+    "code": "00264",
+    "release": "0.84.70",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "EMA/EP for gestational trophoblastic neoplasia",
+    "setting": "High-risk gestational trophoblastic neoplasia",
+    "summary": "Dactinomycin and etoposide are followed by a 12-hour methotrexate infusion. Record its start time. There is no second day of IV EMA in this regimen. Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away. Etoposide is followed by cisplatin. Fluids are given before and after cisplatin to protect the kidneys. The complete cycle repeats every two weeks.",
+    "stages": [
+      "Day 1 · EMA",
+      "Days 2 and 3 · oral rescue",
+      "Day 8 · EP"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "EMA on day 1, folinic acid on days 2 and 3, then EP with fluids on day 8.",
+        "cells": [
+          "Dactinomycin and etoposide are followed by a 12-hour methotrexate infusion. Record its start time. There is no second day of IV EMA in this regimen.",
+          "Start the first oral folinic acid tablet 24 hours after the methotrexate infusion STARTS. Take four doses 12 hours apart unless your team gives you a different written rescue plan. If a tablet is late, missed or vomited, phone the unit straight away.",
+          "Etoposide is followed by cisplatin. Fluids are given before and after cisplatin to protect the kidneys. The complete cycle repeats every two weeks."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Check blood count, kidney and liver tests and serum hCG. Arrange hearing assessment and measured or calculated clearance as clinically indicated.",
+        "when": "Before treatment",
+        "why": "Report hearing symptoms and medicines that may affect the kidneys.",
+        "clinical": "NCCP 00264",
+        "action": "Report hearing symptoms and medicines that may affect the kidneys.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Repeat blood count, kidney and liver tests. Check serum hCG on day 1, more often if indicated.",
+        "when": "Before each cycle",
+        "why": "Ask how your hCG trend affects the next treatment.",
+        "clinical": "NCCP 00264",
+        "action": "Ask how your hCG trend affects the next treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Continue follow-up through your GTN service.",
+        "when": "After treatment",
+        "why": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "clinical": "NCCP 00264",
+        "action": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For high-risk GTN resistant to or recurring after EMA/CO, or GTN with liver metastases at presentation.",
+      "Call your oncology unit urgently for fever, shaking chills or sudden illness. Call promptly for reduced urine, ringing in the ears, new numbness, or missed rescue tablets.",
+      "Three further cycles over six weeks help treat disease too small to detect. Your consultant may extend this to four cycles over eight weeks when adverse features such as liver metastases are present."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00264 v4",
+        "url": "https://healthservice.hse.ie/documents/6689/264_EMA_EP.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "EP/EMA in resistant gestational trophoblastic tumours",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10673528/"
+      }
+    ]
+  },
+  "00266": {
+    "code": "00266",
+    "release": "0.84.70",
+    "checked": "2026-11-26",
+    "status": "Feasibility build. Clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "TP/TE for gestational trophoblastic neoplasia",
+    "setting": "High-risk gestational trophoblastic neoplasia after EMA/CO",
+    "summary": "Paclitaxel runs over three hours, followed by cisplatin and kidney-protecting fluids. Anti-sickness medicines are stronger at this visit. After paclitaxel, etoposide runs over an hour. Your team checks for infusion reactions. Treatment is usually planned for two to four complete 28-day cycles, guided by hCG and tolerance.",
+    "stages": [
+      "Day 1 · paclitaxel and cisplatin",
+      "Day 15 · paclitaxel and etoposide"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Day 1 is paclitaxel and cisplatin. Day 15 is paclitaxel and etoposide. One full cycle lasts 28 days.",
+        "cells": [
+          "Paclitaxel runs over three hours, followed by cisplatin and kidney-protecting fluids. Anti-sickness medicines are stronger at this visit.",
+          "After paclitaxel, etoposide runs over an hour. Your team checks for infusion reactions. Treatment is usually planned for two to four complete 28-day cycles, guided by hCG and tolerance."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Check blood count, kidney and liver tests, serum hCG and ECG. Assess renal clearance and hearing when indicated.",
+        "when": "Before treatment",
+        "why": "Report any numbness, hearing changes and previous infusion reactions.",
+        "clinical": "NCCP 00266",
+        "action": "Report any numbness, hearing changes and previous infusion reactions.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Repeat blood count, kidney and liver tests. Check serum hCG on day 1, more often if indicated.",
+        "when": "Before each cycle",
+        "why": "Ask how your hCG trend affects the next treatment.",
+        "clinical": "NCCP 00266",
+        "action": "Ask how your hCG trend affects the next treatment.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Continue follow-up through your GTN service.",
+        "when": "After treatment",
+        "why": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "clinical": "NCCP 00266",
+        "action": "After remission your specialist arranges hCG every two weeks for six months, then monthly for six months, then every two months for two years.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "For high-risk GTN resistant to or recurring after EMA/CO.",
+      "Call your oncology unit urgently for fever, shaking chills or sudden illness. Report new tingling or hearing changes before your next infusion. Tell the nurse immediately about flushing, chest tightness or breathing difficulty."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00266 v5",
+        "url": "https://healthservice.hse.ie/documents/6691/266_TP_TE.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Paclitaxel-based salvage treatment in GTN",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18453518/"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
