@@ -381,7 +381,7 @@
 
   function supportPhaseChoices(protocol,data){
     const code=nccpCodeFor(protocol),context=patientAssets()?.contextFor?.(protocol)||'';
-    if (!context && patientAssets()?.cervicalSupportPath?.(protocol)) return [];
+    if (!context && (patientAssets()?.cervicalSupportPath?.(protocol) || patientAssets()?.gynaeVisitPath?.(protocol)?.includes('/scope.html?'))) return [];
     const entry=data?.context_supportive_phase_selectors?.[code]?.[context]||data?.supportive_phase_selectors?.[code];
     // Exact protocol binding: an assessment-profile alias is not a prescribing phase.
     return entry?.protocol_id===protocol?.protocol_id && String(entry.source_version)===String(protocol?.metadata?.nccp_version)?entry.phases:[];
@@ -391,9 +391,10 @@
     if(!protocol) throw new Error("A protocol is required.");
     const metadata=protocol.metadata||{};
     const choices=supportPhaseChoices(protocol,data);
+    const gynaeSetting=patientAssets()?.gynaeVisitContext?.(protocol);
     const cervicalVisit=patientAssets()?.cervicalPrescription?.(protocol);
     const phase=choices.find(item=>item.id===supportPhaseId) || (!supportPhaseId && choices.length===1 &&
-      (metadata.nccp_regimen_code==="00344" || choices[0].id===cervicalVisit) ? choices[0] : undefined);
+      (metadata.nccp_regimen_code==="00344" || choices[0].id===cervicalVisit || gynaeSetting?.visits.length===1 && choices[0].id===gynaeSetting.visits[0]) ? choices[0] : undefined);
     // Never classify a selected phase using the whole regimen's drug list.
     if(choices.length||riskRecord.baseLevel==="phase_dependent"||riskRecord.level==="phase_dependent"){
       riskRecord={...riskRecord,baseLevel:"phase_dependent",level:"phase_dependent",phaseResolved:false};
@@ -418,7 +419,7 @@
     const agentSupport=agentSupportForProtocol(protocol,data,phase?.active_medicines);
     if(supportive) supportive.agentSupport=agentSupport;
     const interactions=interactionOverrides(protocol,data,phase?.active_medicines);
-    const extra=resolveExtravasation(protocol,data,(metadata.nccp_regimen_code === '00929' || prescriptionCodes.has(metadata.nccp_regimen_code)) ? phase?.active_medicines : undefined);
+    const extra=resolveExtravasation(protocol,data,(metadata.nccp_regimen_code === '00929' || prescriptionCodes.has(metadata.nccp_regimen_code) || gynaeSetting) ? phase?.active_medicines : undefined);
 
     return {
       release:RELEASE,
@@ -431,7 +432,7 @@
       components:phase?.active_medicines||componentNames(protocol),
       supportPhase:phase||null,
       supportPhaseChoices:choices,
-      visitPrescription:prescriptionCodes.has(metadata.nccp_regimen_code) || Boolean(cervicalVisit),
+      visitPrescription:prescriptionCodes.has(metadata.nccp_regimen_code) || Boolean(cervicalVisit || gynaeSetting),
       emetogenic:riskRecord,
       supportiveCare:supportive,
       interactionOverrides:interactions,
@@ -522,8 +523,8 @@
   const prescriptionCodes=new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
   async function openSupportivePdf(protocol,options={}){
     const code=nccpCodeFor(protocol);
-    const contextual=patientAssets()?.cervicalSupportPath?.(protocol);
-    if(contextual && !contextual.endsWith('.pdf')){
+    const contextual=patientAssets()?.gynaeVisitPath?.(protocol,'',options.supportPhase) || patientAssets()?.cervicalSupportPath?.(protocol);
+    if(contextual?.includes('/scope.html?')){
       const target=patientAssets().runtimeUrl(protocol,'antiemetic-prescription');
       root.open?.(target,'_blank','noopener'); return target;
     }
@@ -845,7 +846,7 @@
       const protocol=activeProtocol;
       const card=cardFor(protocol);
       closePanel({restoreFocus:false});
-      if(patientAssets()?.cervicalPrescription?.(protocol) && root.SACTCheckGenericAssessment?.open){
+      if((patientAssets()?.cervicalPrescription?.(protocol) || patientAssets()?.gynaeVisitContext?.(protocol)) && root.SACTCheckGenericAssessment?.open){
         root.SACTCheckGenericAssessment.open(protocol,{tumourGroup:"Gynaecology"});
       } else card?.querySelector(".json-assessment-launch")?.click();
     });

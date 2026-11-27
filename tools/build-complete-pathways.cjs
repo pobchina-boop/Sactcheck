@@ -146,7 +146,7 @@ for(const code of [...new Set([...codes, ...(!suiteContext.context ? durvalumabC
  if(['00419','00294','00325','00719'].includes(code)&&!suiteContext.context)continue;
  if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(code))continue;
  const nativeRoute=suiteContext.context ? code+'/'+suiteContext.context : code;
- if (durvalumabCombinations.codes.has(nativeRoute) || durvalumabCombinations.cervicalRoutes.has(nativeRoute)) {
+ if (durvalumabCombinations.codes.has(nativeRoute) || durvalumabCombinations.contextRoutes.has(nativeRoute)) {
   durvalumabCombinations.build(nativeRoute,{check:process.argv.includes('--check')});
   continue;
  }

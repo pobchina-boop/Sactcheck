@@ -101,7 +101,12 @@
     const prescription = supportive.prescription_index
       ? (phase.prescription || visitPrescription || supportive.prescription_index)
       : null;
-    const cervicalPath = root.SACTCheckPatientAssets?.cervicalSupportPath?.(protocol,options.tumourGroup);
+    // The cervical 00279 assessment records its treatment day and schedule separately.
+    // Reuse the source-defined schedule mapping for the visit-specific prescription.
+    const cervicalEtoposideVisits = {cis_day1:'day1_platinum_etoposide',carboplatin_substitution:'day1_platinum_etoposide',
+      iv_only:'days23_iv_etoposide',oral_only:'days23_oral_etoposide',split_platinum:'days23_fractionated_cisplatin'};
+    const contextualVisit = codeFor(protocol) === '00279' ? cervicalEtoposideVisits[selectedPhase] : options.treatmentPhase;
+    const cervicalPath = root.SACTCheckPatientAssets?.gynaeVisitPath?.(protocol,options.tumourGroup,contextualVisit) || root.SACTCheckPatientAssets?.cervicalSupportPath?.(protocol,options.tumourGroup);
     const baseUrl = cervicalPath || prescription || nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
     const anchor = (prescription || cervicalPath) ? null : metadata.antiemetic_proforma_anchor || null;
     const unresolvedPhase = baseLevel === "phase_dependent" && !phase.phaseResolved;

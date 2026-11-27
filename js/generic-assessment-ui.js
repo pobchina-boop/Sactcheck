@@ -442,7 +442,12 @@
       return {...protocol,patient_context:"",selected_indication_id:id};
     }
     const id=document.getElementById("jsonInput_indication_id")?.value;
-    return id ? {...protocol,selected_indication_id:id} : protocol;
+    const scoped=id ? {...protocol,selected_indication_id:id} : protocol;
+    if(protocol?.metadata?.nccp_regimen_code==='00279'){
+      const primary=document.getElementById("jsonInput_cervical_primary_confirmed")?.value;
+      if(primary==='false' || primary==='true')return {...scoped,cervical_primary_confirmed:primary==='true'};
+    }
+    return scoped;
   }
 
   function renderSupportiveRisk(protocol, treatmentPhase, treatmentDay, treatmentRoute, treatmentSchedule) {
@@ -672,9 +677,20 @@
     return String(a.label || a.id).localeCompare(String(b.label || b.id));
   }
 
+  function preferredAssessmentIndication() {
+    const assets = root.SACTCheckPatientAssets;
+    const code = activeProtocol?.metadata?.nccp_regimen_code;
+    const ovarianGroup = ['gynaecology','gynecology','ovarian'].includes(String(activeTumourGroup).toLowerCase());
+    if (['00251','00261'].includes(code) && (ovarianGroup || assets?.contextFor(activeProtocol,activeTumourGroup) === 'ovarian')) {
+      // A single ovarian pack covers nine indications. Only an explicitly selected
+      // NCCP indication determines the assessment's stage, site and line.
+      return assets?.gynaeAssessmentIndication?.(activeProtocol,activeTumourGroup) || '';
+    }
+    return root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol,activeTumourGroup);
+  }
   function applyPreferredIndication() {
     if (!activeProtocol || activeTumourGroup === "all") return;
-    const preferred = root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol, activeTumourGroup);
+    const preferred = preferredAssessmentIndication();
     const select = document.getElementById("jsonInput_indication_id");
     if (preferred && select && [...select.options].some(option => option.value === preferred)) {
       select.value = preferred;
@@ -709,10 +725,10 @@
 
   function renderInputs(rawInputs = {}) {
     if (!activeProtocol) return;
-    const cervicalId=root.SACTCheckPatientAssets?.cervicalAssessmentIndication?.(activeProtocol,activeTumourGroup);
+    const cervicalId=root.SACTCheckPatientAssets?.gynaeAssessmentIndication?.(activeProtocol,activeTumourGroup) || root.SACTCheckPatientAssets?.cervicalAssessmentIndication?.(activeProtocol,activeTumourGroup);
     const cervicalInput=cervicalId && activeProtocol.input_definitions?.indication_id?.options?.some(option=>option.value===cervicalId);
     if ((activeProtocol.assessment_by_indication || cervicalInput) && !Object.hasOwn(rawInputs, "indication_id") && activeTumourGroup !== "all") {
-      const preferred = cervicalInput ? cervicalId : root.SACTCheckProtocolContext?.preferredIndicationId?.(activeProtocol, activeTumourGroup);
+      const preferred = cervicalInput ? cervicalId : preferredAssessmentIndication();
       if (preferred) rawInputs = { ...rawInputs, indication_id: preferred };
     }
     if (activeProtocol.assessment_by_indication) renderProtocolInformation(Engine.protocolForIndication(activeProtocol, rawInputs));

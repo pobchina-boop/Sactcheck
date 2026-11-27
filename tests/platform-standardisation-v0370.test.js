@@ -117,9 +117,13 @@ const nivoFruqV35Grading = {
 };
 
 const protocols = loadProtocols();
-assert.equal(protocols.length, require('./helpers/live-inventory-v08462.cjs').total, `Expected 377 canonical regimen protocols, found ${protocols.length}`);
+assert.equal(protocols.length, require('./helpers/live-inventory-v08462.cjs').total, `Unexpected canonical regimen count, found ${protocols.length}`);
 const riskMap = JSON.parse(fs.readFileSync(path.join(root, 'data', 'emetogenic-risk-map.json'), 'utf8'));
 
+const mirvetuximabCategories = {
+  pneumonitis_grade:'pneumonitis', neuropathy_grade:'peripheral_neuropathy', irr_grade:'infusion_related_reaction',
+  haematological_grade:'haematological', other_toxicity_grade:'other_treatment_related_toxicity'
+};
 const ids = new Map();
 const codes = new Map();
 const normalisedTitles = new Map();
@@ -230,6 +234,39 @@ for (const { file, data } of protocols) {
       assert.deepEqual(def.options.map(o=>o.value),[0,1,2,3,4]);
       assert(ctcae.guide({...def,id:field}).sourceSpecific);
     }
+    if (code === '00921' && Object.hasOwn(mirvetuximabCategories,field)) {
+      assert.equal(def.ctcae_category, mirvetuximabCategories[field]);
+      assert.equal(def.ctcae_version, '5.0');
+      assert.equal(def.grading_source_url, metadata.source_url);
+      assert.match(def.grading_source_label, /00921 v1 Table 3/);
+      assert.equal(def.required,false);
+      assert.deepEqual(def.options.map(option=>option.value),[0,1,2,3,4]);
+      assert.match(def.options[0].description, /blank if the domain was not assessed/i);
+    }
+    const cervicalEtoposideGrade = code === '00279' && ['neuropathy_grade','other_nonhaem_toxicity_grade'].includes(field);
+    if (cervicalEtoposideGrade) {
+      assert.equal(def.ctcae_version,undefined);
+      assert.equal(def.grading_source_url,metadata.source_url);
+      assert.match(def.grading_source_label,/00279 v8 Table\s*5/);
+      assert.match(def.source_grading_note,/does not identify a CTCAE version/);
+      assert.deepEqual(def.options.map(option=>option.value),[0,1,2,3,4]);
+      assert(def.options.every(option=>option.description));
+      const guide=ctcae.guide({...def,id:field});
+      assert(guide.sourceSpecific && !guide.calculable);
+      assert.equal(guide.sourceUrl,metadata.source_url);
+    }
+    const cervicalComponent = code === '00943' && (field === 'peripheral_neuropathy_grade' ? '00385' :
+      ['pneumonitis_grade','diarrhoea_colitis_grade','rash_grade','myocarditis_grade','encephalitis_grade','guillain_barre_grade','other_immune_toxicity_grade','infusion_reaction_grade'].includes(field) ? '00455' : null);
+    if (cervicalComponent) {
+      const parent = protocols.find(row=>String(row.data.metadata.nccp_regimen_code)===cervicalComponent).data;
+      const componentGrade = parent.input_definitions[field];
+      for (const key of ['type','ctcae_category','ctcae_version','grading_source_url','grading_source_label','assessment_guidance','options'])
+        assert.deepStrictEqual(def[key],componentGrade[key],code+'/'+field+' must retain its source component grading');
+      assert.equal(def.grading_source_url,parent.metadata.source_url);
+      const guide=ctcae.guide({...def,id:field});
+      assert(guide.sourceSpecific && !guide.calculable);
+      assert.equal(guide.sourceUrl,def.grading_source_url);
+    }
     const finalGynaeGrade = (['00267','00301'].includes(code) && field === 'neuropathy_grade') ||
       (code === '00904' && ['transaminase_grade','previous_transaminase_grade'].includes(field));
     if (finalGynaeGrade) {
@@ -246,7 +283,7 @@ for (const { file, data } of protocols) {
       assert.equal(guide.calculable, false);
       assert.equal(guide.sourceUrl, reference.url);
     }
-    if (!finalGynaeGrade && !gtnGrade && !bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
+    if (!cervicalEtoposideGrade && !cervicalComponent && !finalGynaeGrade && !gtnGrade && !bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const headNeckV45Source = HEADNECK45.applies(data);
@@ -427,7 +464,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00267','00301','00904','00248','00249','00264','00266','00246','00300','00375','00344','00953','00385','00387','00706','00555','00783','00691','00214','00279','00309','00372','00456','00561','00284','00311','00388','00587','00614','00281','00310','00304','00339','00343','00621','00483','00484','00712','00792','00849','00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00921','00943','00267','00301','00904','00248','00249','00264','00266','00246','00300','00375','00344','00953','00385','00387','00706','00555','00783','00691','00214','00279','00309','00372','00456','00561','00284','00311','00388','00587','00614','00281','00310','00304','00339','00343','00621','00483','00484','00712','00792','00849','00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);

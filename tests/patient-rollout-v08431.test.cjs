@@ -19,7 +19,11 @@ for(const c of scope.codes){
 }
 for(const [f,h]of Object.entries(base))if(f.startsWith('protocols/'))assert.equal(sha(f),require('./helpers/retrospective-v08432.cjs').expectedHash(f,h),'Clinical rules changed '+f);
 const ctx={};vm.runInNewContext(read('js/patient-anatomy-data-v08431.js'),ctx);
-for(const [c,d]of Object.entries(ctx.SACTCheckAnatomyData))assert.deepEqual(JSON.parse(JSON.stringify(d.anatomy)),json('data/patient-knowledge/'+c+'.json').anatomy,'Anatomical detail changed '+c);
+for (const [key,definition] of Object.entries(ctx.SACTCheckAnatomyData)) {
+ const [code,context]=key.split(':');
+ const profile=context?'data/patient-knowledge-contexts/'+code+'/'+context+'.json':'data/patient-knowledge/'+code+'.json';
+ assert.deepEqual(JSON.parse(JSON.stringify(definition.anatomy)),json(profile).anatomy,'Anatomical detail changed '+key);
+}
 assert(read('js/patient-support-v0750.js').includes('protocolCode(protocol)!=="00831"'),'Preserve bespoke HCC visual');
 assert.equal(json('data/patient-knowledge/00722.json').patient_summary.card_cycle_count,6);
 assert.equal(json('data/patient-knowledge/00655.json').patient_summary.card_cycle_count,null);

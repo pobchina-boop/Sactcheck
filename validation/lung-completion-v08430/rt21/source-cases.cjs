@@ -6,19 +6,39 @@ function check(name,f){try{f();out.push({name,pass:true});}catch(e){out.push({na
 function load(code){if(!integrated)return JSON.parse(fs.readFileSync(B+'/proposed/'+code+'-protocol.json'));for(const t of fs.readdirSync(R+'/protocols')){const dir=R+'/protocols/'+t;if(!fs.statSync(dir).isDirectory())continue;const f=fs.readdirSync(dir).find(n=>n.startsWith(code+'-'));if(f)return JSON.parse(fs.readFileSync(dir+'/'+f));}throw Error('Missing '+code);}
 for(const code of ['00279','00309']){
  const p=load(code),m=D.buildModel(p),a=auth[code],d=a.patient;
+ const revised=integrated && code==='00279' && p.metadata.sactcheck_encoding_version==='0.84.73';
+ const newAudit=revised ? require(R+'/validation/gynae-v08473/00279-source-audit.json') : null;
+ const revisedRules=new Set(['OTHER_SITE_CONTEXT','OFFLABEL_CONSENT','OFFLABEL_GOVERNANCE','RENAL_DIALYSIS_STATUS']);
+
  function t(name,input,yes=[],no=[]){check(code+' '+name,()=>{const r=E.assess(p,input);assert.deepEqual(r.invalid,[]);assert.deepEqual(r.errors,[]);const ids=r.findings.map(x=>x.ruleId);for(const id of yes)assert(ids.includes(id),'missing '+id+'; got '+ids);for(const id of no)assert(!ids.includes(id),'unexpected '+id);});}
  check(code+' strict schema and unique rule IDs',()=>{const v=V.validate(p,{strict:true});assert(v.valid,V.formatIssues(v).join('\n'));const ids=p.rule_engine.rules.map(x=>x.rule_id||x.id);assert.equal(new Set(ids).size,ids.length);});
- check(code+' audited source identity and date',()=>{const source=JSON.parse(fs.readFileSync(B+'/sources.json')).sources.find(x=>x.id===code);const expected={'00279':'573509d209755b2738a617b73362bfeea7c054eb0729c48b49f145562b7e3de4','00309':'6a510cd2a937e6d1275936916e4f7452689b1a7909cb0429da675e66de474ebe'};assert.equal(p.metadata.nccp_version,code==='00279'?'8':'6a');assert.equal(source.version,p.metadata.nccp_version);assert.equal(p.metadata.source_checked_date,'2026-11-02');assert.equal(source.retrieved,p.metadata.source_checked_date);assert.equal(p.metadata.full_suite_release,'0.84.30');assert.equal(source.pdf_sha256,expected[code]);assert.equal(p.metadata.source_pdf_sha256,source.pdf_sha256);});
+ check(code+(integrated?' audited source identity and date':' fresh PDF identity and date'),()=>{const source=JSON.parse(fs.readFileSync(B+'/sources.json')).sources.find(x=>x.id===code);const expected={'00279':'573509d209755b2738a617b73362bfeea7c054eb0729c48b49f145562b7e3de4','00309':'6a510cd2a937e6d1275936916e4f7452689b1a7909cb0429da675e66de474ebe'};assert.equal(p.metadata.nccp_version,code==='00279'?'8':'6a');assert.equal(source.version,p.metadata.nccp_version);assert.equal(source.retrieved,'2026-11-02');assert.equal(p.metadata.source_checked_date,revised?'2026-11-27':source.retrieved);if(revised){assert.equal(newAudit.source_checked_date,p.metadata.source_checked_date);assert.equal(newAudit.pdf_sha256,source.pdf_sha256);}assert.equal(p.metadata.full_suite_release,'0.84.30');assert.equal(source.pdf_sha256,expected[code]);assert.equal(p.metadata.source_pdf_sha256,source.pdf_sha256);});
  // Research PDF byte checks are explicit; portable CI uses the frozen audited identity above.
  if(process.argv.includes('--verify-local-pdfs'))assert.equal(p.metadata.source_pdf_sha256,crypto.createHash('sha256').update(fs.readFileSync(B+'/sources/'+code+'.pdf')).digest('hex'),code+' raw PDF hash');
  check(code+' independent review remains pending',()=>{assert.equal(p.clinical_governance.clinical_use_authorised,false);assert.equal(p.metadata.encoding_maturity.consultant_reviewed,false);assert.equal(p.metadata.encoding_maturity.oncology_pharmacy_reviewed,false);});
- check(code+' sources attached to every rule',()=>{for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert(r.source.version);assert.equal(r.source.checked_date,'2026-11-02');}});
+ check(code+' sources attached to every rule',()=>{
+  for(const r of p.rule_engine.rules){assert(r.source.url);assert(r.source.page);assert(r.source.version);assert.equal(r.source.checked_date,revised && revisedRules.has(r.rule_id)?newAudit.source_checked_date:'2026-11-02');}
+  if(revised){
+   const file='protocols/shared/'+p.file_name;
+   const original=JSON.parse(require('node:child_process').execFileSync('git',['show','16f504405ecf1333c2e7dbcac2c2a8ebab7ab3b1:'+file],{cwd:R}));
+   assert.equal(original.metadata.source_checked_date,'2026-11-02');
+   assert(original.rule_engine.rules.every(r=>r.source.checked_date==='2026-11-02'));
+   assert.deepEqual(p.rule_engine.rules.filter(r=>!revisedRules.has(r.rule_id)),original.rule_engine.rules.filter(r=>r.rule_id!=='OTHER_SITE_CONTEXT'));
+   assert.deepEqual(p.rule_engine.rules.filter(r=>revisedRules.has(r.rule_id)).map(r=>r.rule_id).sort(),[...revisedRules].sort());
+  }});
  check(code+' empty form incomplete without invented low counts',()=>{const r=E.assess(p,{});assert.equal(r.complete,false);assert(!['proceed','proceed_with_caution','withhold','contraindicated'].includes(r.actionType));assert(!r.findings.some(f=>/LOW_|BASELINE_COUNTS/.test(f.ruleId)));});
  check(code+' complete drug schedules do not turn RT into a drug',()=>{assert(m.phases.length>0);assert(m.phases.every(p=>p.complete));assert(m.phases.every(p=>p.components.every(c=>!/radiation|radiotherapy/i.test(c.drug))));assert.equal(p.treatment.radiotherapy.dose,null);assert.equal(p.treatment.radiotherapy.fractions,null);});
  check(code+' no unselected alternative numerical dose',()=>{const r=E.assess(p,code==='00279'?{bilirubin_micromol_l:60}:{alt_uln_multiple:1,bilirubin_uln_multiple:1.5});const mod=D.buildModificationModel(p,r);assert(mod.rows.every(x=>!x.quantified&&x.startingDose===''));});
  check(code+' alternatives agree with selector',()=>{for(const phase of m.phases)assert(p.input_definitions.schedule_variant.options.some(o=>o.value===phase.id));});
  check(code+' patient three-page source content and no prognosis figures',()=>{assert.equal(d.patient_summary.template_version,'0.84.30');assert.deepEqual(d.evidence.metrics,[]);assert(d.evidence.title);assert(d.patient_summary.phases.length>=2);assert(d.patient_summary.monitoring.some(x=>x.stage.includes('After')));assert(d.patient_summary.card_schedule.length<=100);assert(d.anatomy.length>=6);for(let i=1;i<=d.cycle_days;i++)assert.equal(d.day_groups.filter(x=>x.start<=i&&x.end>=i).length,1);for(const r of a.journey.lanes)assert.equal(r.cells.length,a.journey.stages.length);});
- check(code+' source grade provenance without invented CTCAE definition',()=>{for(const [k,v]of Object.entries(p.input_definitions)){if(/grade/.test(k)){assert(v.grading_source_label);assert(v.grading_source_url);assert(!v.ctcae_version);assert(v.options.every(o=>!o.description));}}});
+ check(code+' source grade provenance without invented CTCAE definition',()=>{for(const [k,v]of Object.entries(p.input_definitions)){if(/grade/.test(k)){assert(v.grading_source_label);assert(v.grading_source_url);assert(!v.ctcae_version);if(revised && ['neuropathy_grade','other_nonhaem_toxicity_grade'].includes(k)){
+   const previous=JSON.parse(fs.readFileSync(B+'/proposed/00279-protocol.json')).input_definitions[k];
+   assert.deepEqual(v.options.map(({description,...option})=>option),previous.options);
+   assert.match(v.options[0].description,/blank when unassessed/);
+   const text=v.options.map(option=>option.description).join(' ');
+   assert.match(text,k==='neuropathy_grade' ? /baseline|Pre-existing/ : /mucositis or alopecia/);
+   assert(v.options.every(option=>option.description && !/CTCAE v[0-9]/.test(option.description)));
+  }else assert(v.options.every(o=>!o.description));}}});
  for(const [key,id]of [['febrile_or_active_infection','FEVER_INFECTION'],['new_breathlessness','RESPIRATORY_URGENT'],['unable_to_drink','HYDRATION_SWALLOWING'],['significant_bleeding','BLEEDING_URGENT'],['acute_infusion_reaction','ACUTE_REACTION'],['suspected_extravasation','EXTRAVASATION']])t('urgent '+key,{[key]:true},[id]);
  if(code==='00279'){
   check('00279 distinct source indications retained',()=>assert.deepEqual(p.indications.map(x=>x.indication_id),['00279a','00279b']));

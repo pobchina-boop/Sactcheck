@@ -99,6 +99,13 @@ assert.equal(duplicateValues(solid.map(item => code(item.protocol))).length, 0, 
 assert.equal(duplicateValues(solid.map(item => item.protocol.metadata?.source_url)).length, 0, 'Duplicate Solid Tumour source URLs found.');
 assert(!fs.existsSync(path.join(root, 'protocols', 'protocols')), 'Stale nested protocols/protocols directory remains.');
 
+const laterReconciliation = {
+  '00947': ['0.84.20', '2026-10-25'],
+  '00953': ['0.84.62', '2026-11-23'],
+  '00921': ['0.84.73', '2026-11-27'],
+  '00943': ['0.84.73', '2026-11-27']
+};
+
 let inputCount = 0;
 let ruleCount = 0;
 for (const { entry, protocol } of solid) {
@@ -124,8 +131,9 @@ for (const { entry, protocol } of solid) {
   }
   assert.equal(metadata.partial_assessment_supported, true, `${protocolCode}: partial-assessment flag is missing.`);
   assert(/entered value is assessed independently/i.test(metadata.partial_assessment_policy || ''), `${protocolCode}: partial-assessment policy is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.release, protocolCode==='00953'?'0.84.62':protocolCode==='00947'?'0.84.20':RECONCILIATION_RELEASE, `${protocolCode}: reconciliation release metadata is missing.`);
-  assert.equal(metadata.catalogue_reconciliation?.checked_date, protocolCode==='00953'?'2026-11-23':protocolCode==='00947'?'2026-10-25':CHECK_DATE, `${protocolCode}: reconciliation date metadata is missing.`);
+  const [checkedRelease, checkedDate] = laterReconciliation[protocolCode] || [RECONCILIATION_RELEASE, CHECK_DATE];
+  assert.equal(metadata.catalogue_reconciliation?.release, checkedRelease, `${protocolCode}: reconciliation release metadata is missing.`);
+  assert.equal(metadata.catalogue_reconciliation?.checked_date, checkedDate, `${protocolCode}: reconciliation date metadata is missing.`);
   assert.equal(metadata.catalogue_reconciliation?.clinical_use_authorised, false, `${protocolCode}: reconciliation must not authorise clinical use.`);
   assert.notEqual(metadata.validation?.clinical_use_authorised, true, `${protocolCode}: protocol is incorrectly marked authorised.`);
   inputCount += Object.keys(protocol.input_definitions || {}).length;

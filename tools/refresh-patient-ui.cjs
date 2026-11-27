@@ -65,7 +65,7 @@ function refreshKnowledge(html,profile){
   // Its controls, dates and full text must not be replaced by a static chart.
   const interactive=all.some(t=>hasClass(t.raw,'pk-chart'))&&all.some(t=>attribute(t.raw,'id')==='pk-phase')&&all.some(t=>attribute(t.raw,'id')==='pk-start');
   if(interactive&&wrappers.length===0)return {html,status:'preserved-interactive'};
-  if ((combinationSuites.codes.has(profile.code) || combinationSuites.cervicalRoutes.has(profile.code+'/'+profile.patient_context)) && !wrappers.length) {
+  if ((combinationSuites.codes.has(profile.code) || combinationSuites.contextRoutes.has(profile.code+'/'+profile.patient_context)) && !wrappers.length) {
    const sections=all.filter(t=>!t.closing && t.name==='section' && attribute(t.raw,'id')==='cycle');
    if (sections.length!==1) throw new Error(`Expected one authored infusion schedule for ${profile.code}`);
    const range=elementRange(all,sections[0]);

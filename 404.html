@@ -1,4 +1,13 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SACTCheck - page not found</title><script>(function(){var p=location.pathname;
+var current=p.match(/^\/(docs\/)?patient\/(00279\/cervical|00251\/ovarian|00261\/ovarian|00921|00943)(?:\/([\w.-]+))?\/?$/);
+if(current){
+ var route=current[2], name=current[3]||'';
+ var visits={'00279/cervical':['day1_platinum_etoposide','days23_iv_etoposide','days23_oral_etoposide','days23_fractionated_cisplatin'],'00251/ovarian':['day1'],'00261/ovarian':['day1'],'00921':['first_infusion','subsequent_infusion'],'00943':['concurrent_day1','cisplatin_weekly','optional_c2d15','pembro_q3w','pembro_q6w']};
+ var files=['','antiemetic-prescriptions.html','index.html','guide.html','guide.pdf','knowledge.html','knowledge.pdf','passport.pdf','sactcard.pdf','handbook.pdf','consent-form.html','consent-form.pdf','treatment-journey.html','treatment-journey.pdf','supportive-care.html','supportive-care.pdf'].concat(visits[route].map(function(id){return 'antiemetic-'+id+'.pdf';}));
+ if((current[1]&&files.includes(name))||(!current[1]&&!name&&!p.endsWith('/'))){
+  location.replace('/patient/'+route+'/'+(name==='guide.html'?'guide.pdf':name==='index.html'?'':name)+location.search+location.hash);return;
+ }
+}
 var shared=p.match(/^\/(?:docs\/)?patient\/(00385|00419)\/(guide\.(?:html|pdf)|passport\.pdf|sactcard\.pdf|handbook\.pdf|consent-form\.(?:html|pdf)|knowledge\.html|supportive-care\.(?:html|pdf)|treatment-journey\.html)$/);
 if(shared){
  var assets={'guide.html':'guide','guide.pdf':'guide','passport.pdf':'passport','sactcard.pdf':'sact-card','handbook.pdf':'handbook','consent-form.html':'consent-draft','consent-form.pdf':'consent-pdf','knowledge.html':'knowledge','supportive-care.html':'supportive-care-selector','supportive-care.pdf':'supportive-care','treatment-journey.html':'longitudinal'};

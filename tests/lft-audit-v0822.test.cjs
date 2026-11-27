@@ -27,8 +27,15 @@ for(const dir of directories(path.join(root,'protocols'))){
   protocolRows.push({group,protocol:filename.replace('.json',''),automatic:local.filter(d=>d.status.startsWith('automatic')).length,fields:local});
  }
 }
-const retainedCount=380;
-assert.equal(protocolCount,retainedCount+1);
+const previous = require('node:child_process').execFileSync('git',['ls-tree','-r','--name-only','16f504405ecf1333c2e7dbcac2c2a8ebab7ab3b1','--','protocols'],{cwd:root,encoding:'utf8'})
+  .split('\n').filter(file=>/^protocols\/.+\/[^/]+\.json$/.test(file));
+const additions = [
+  'protocols/gynaecology/00921-mirvetuximab-soravtansine-therapy.json',
+  'protocols/gynaecology/00943-pembrolizumab-cisplatin-chemoradiotherapy.json'
+];
+assert.equal(previous.length,381);
+assert.deepEqual(protocolRows.map(row=>'protocols/'+row.group+'/'+row.protocol+'.json').sort(),previous.concat(additions).sort());
+assert.equal(protocolCount,383);
 assert.equal(protocolRows.filter(row=>row.protocol==='00953-durvalumab-carboplatin-paclitaxel').length,1);
 for (const analyte of ['alt','ast']) {
   for (const [period,label] of [['baseline','Pretreatment'],['current','Current']]) {

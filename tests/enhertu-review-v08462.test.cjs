@@ -131,11 +131,20 @@ if(olaparib){
   assert.equal(currentIndex.bundle.protocol_count,currentCatalogue.records.length);
   assert.equal(currentCatalogue.schema_version,inheritedCatalogue.schema_version);
   assert.equal(currentCatalogue.records.length,currentIndex.protocol_count);
-  assert.equal(currentCatalogue.records.length,inheritedCatalogue.records.length);
+  const additions = [
+    'protocols/gynaecology/00921-mirvetuximab-soravtansine-therapy.json',
+    'protocols/gynaecology/00943-pembrolizumab-cisplatin-chemoradiotherapy.json'
+  ];
+  for (const file of additions) {
+    assert(release.addition(file),file+' is an authenticated addition');
+    assert(!inheritedCatalogue.records.some(record=>record.entry.path===file),file+' must be new');
+    release.verifyFile(file);
+  }
+  assert.equal(currentCatalogue.records.length,inheritedCatalogue.records.length+additions.length);
   assert.equal(new Set(currentCatalogue.records.map(record=>record.entry.id)).size,currentCatalogue.records.length,'Current catalogue cannot duplicate a record to hide a missing protocol');
-  assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).sort(),'Current catalogue retains every inherited protocol path');
+  assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).concat(additions).sort(),'Current catalogue retains every inherited protocol path and the two audited additions');
   const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
-  const gynaeCodes = ['00419', '00812',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES, ...require('./helpers/retrospective-v08467.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08470.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08471.cjs').NEW_ROUTES];
+  const gynaeCodes = ['00419', '00812', '00251', '00261', '00279', '00921', '00943',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES, ...require('./helpers/retrospective-v08467.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08470.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08471.cjs').NEW_ROUTES];
   const sarcomaCodes = require('./helpers/retrospective-v08464.cjs').releaseRoutes.map(route=>route.split('/')[0]);
   const priorAstra=new Map(JSON.parse(zlib.gunzipSync(release.astraBytes(bundlePath))).records.map(r=>[r.entry.path,r]));
   for(const current of currentCatalogue.records){

@@ -53,7 +53,7 @@ for(const file of profiles){
  if(d.patient_context_selector&&!suiteContext.context)continue;
   if(process.env.SACT_SUITE_CODES&&!process.env.SACT_SUITE_CODES.split(',').includes(d.code))continue;
   const nativeRoute=suiteContext.context ? d.code+'/'+suiteContext.context : d.code;
-  if (combinations.codes.has(nativeRoute) || combinations.cervicalRoutes.has(nativeRoute)) {
+  if (combinations.codes.has(nativeRoute) || combinations.contextRoutes.has(nativeRoute)) {
     combinations.build(nativeRoute,{names:['knowledge.html','consent.html'],check:process.argv.includes('--check')});
     continue;
   }

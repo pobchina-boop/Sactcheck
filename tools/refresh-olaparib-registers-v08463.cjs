@@ -3,6 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const tracker=require('./nccp-change-tracker');
 const root=path.resolve(__dirname,'..'),date='2026-11-24';
+const olaparibRelease='0.84.63';
 const paths={'00588':'protocols/shared/00588-olaparib-tablet-monotherapy.json','00746':'protocols/gynaecology/00746-olaparib-tablet-and-bevacizumab-therapy.json'};
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const protocols=Object.fromEntries(Object.entries(paths).map(([code,file])=>[code,read(file)]));
@@ -18,6 +19,8 @@ const digest=bytes=>require('node:crypto').createHash('sha256').update(bytes).di
 for (const [code, expected] of Object.entries(hashes)) {
   assert.equal(digest(fs.readFileSync(path.join(root,'validation/olaparib-source-20261124',code+'.pdf'))),expected);
   assert.equal(protocols[code].metadata.source_pdf_sha256,expected);
+  assert.equal(source.records.filter(row=>row.nccp_regimen_code===code).length,1,code+' must have one source record');
+  assert.equal(review.protocols.filter(row=>row.nccp_code===code).length,1,code+' must have one clinical record');
 }
 source.records=source.records.map(old=>{
   const code=old.nccp_regimen_code;if(!paths[code])return old;
@@ -28,7 +31,6 @@ source.records=source.records.map(old=>{
     review_status:'source_checked_independent_review_pending',source_text_checked_date:date,source_reconciliation_note:note,
     supporting_ema_pdf_sha256:'04cb6a8e4fff66099a345e60858378068000de050b0e7fedaddb3d5347849598'};
 });
-source.content_update_release='0.84.63';
 review.protocols=review.protocols.map(old=>{
   const p=protocols[old.nccp_code];if(!p)return old;
   const m=p.metadata;
@@ -40,8 +42,11 @@ review.protocols=review.protocols.map(old=>{
     rule_source_review_date:date,verification_scope:'Scoped source-boundary and integration checks are recorded in validation/olaparib-v08463/clinical. Full release gates are separate; no clinical-use authorisation is implied.',
     source_verification_note:note};
 });
-review.content_update_release='0.84.63';
 for(const [file,data]of [[sourceFile,source],[reviewFile,review]]){
+  // This marker belongs to the complete register, including subsequent reviewed additions.
+  if (!data.content_update_release || data.content_update_release.localeCompare(olaparibRelease,'en',{numeric:true}) < 0) {
+    data.content_update_release=olaparibRelease;
+  }
   const bytes=Buffer.from(JSON.stringify(data,null,2)+'\n');
   if(process.argv.includes('--write'))fs.writeFileSync(path.join(root,file),bytes);
   else assert(fs.readFileSync(path.join(root,file)).equals(bytes),file+' differs from reviewed current 00588/00746 records');

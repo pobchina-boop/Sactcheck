@@ -341,7 +341,14 @@
 
   function bodyMapMarkup(rows,protocol){
     if(["00372","00388"].includes(protocolCode(protocol))) return `<section class="patient-bodymap-card"><div><h4>Your treatment plan matters</h4><p>Choose your prescribed ${protocolCode(protocol)==="00372"?"treatment phase":"etoposide schedule"} to see its anatomical side-effect map.</p><a href="patient/${protocolCode(protocol)}/">Choose your prescribed treatment plan</a></div></section>`;
-    const authored=root.SACTCheckAnatomyData?.[protocolCode(protocol)];
+    const code=protocolCode(protocol);
+    const maps=root.SACTCheckAnatomyData;
+    let authored=maps?.[code];
+    if (["00251","00261","00279"].includes(code)) {
+      const context=patientAssets()?.contextFor(protocol);
+      if (!context) return `<section class="patient-bodymap-card"><h4>Choose your treatment setting</h4><p>The medicines and effects shown depend on the cancer being treated.</p><a href="patient/${code}/scope.html">Choose your treatment setting</a></section>`;
+      authored=maps?.[`${code}:${context}`] || authored;
+    }
     if(authored&&root.SACTCheckAnatomy&&protocolCode(protocol)!=="00831"){ensureHccAssets();return root.SACTCheckAnatomy.render(authored,new URL("assets/patient/",root.location?.href||"https://sactcheck.com/").href);}
 
     const regimenMap=dedicatedRegimenMap(protocol);

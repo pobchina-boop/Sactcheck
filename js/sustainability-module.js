@@ -38,7 +38,8 @@
     const key = keys.find(value => data.profiles?.[value]);
     if (key) Object.assign(profile, data.profiles[key]);
     if(profile.context_profiles){
-      const context=String(ctx.tumour||'').toLowerCase();
+      const selected=String(ctx.tumour||'').toLowerCase();
+      const context=profile.context_aliases?.[selected] || selected;
       if(profile.context_profiles[context])Object.assign(profile,profile.context_profiles[context]);
       else profile.administration_frequency={status:'evidence_required',value:'Confirm the treatment indication, schedule and planned doses with the oncology team.',source:'Indication-specific profiles; exact context has not been selected.'};
     }

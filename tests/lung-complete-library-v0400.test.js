@@ -137,7 +137,7 @@ for (const { file, data } of lung) {
   const v08424=['00353','00401','00562','00570','00243'].includes(code)&&m.sactcheck_encoding_version==='0.84.24';
   const v08426=['00219','00220','00544','00592','00593','00455','00558','00576','00655','00689'].includes(code)&&m.sactcheck_encoding_version==='0.84.26';
   const v08434=['00214','00215'].includes(code)&&m.sactcheck_encoding_version==='0.84.34';
-  const v08430=['00214','00279','00309','00372','00456','00561'].includes(code)&&m.sactcheck_encoding_version==='0.84.30';
+  const v08430=['00214','00279','00309','00372','00456','00561'].includes(code)&&m.sactcheck_encoding_version==='0.84.30' || (code==='00279' && m.sactcheck_encoding_version==='0.84.73' && m.full_suite_release==='0.84.30');
   const v08429=['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code)&&m.sactcheck_encoding_version==='0.84.29';
   const v08428=['00281','00310','00304','00339','00343','00317','00318','00271','00280','00621'].includes(code)&&m.sactcheck_encoding_version==='0.84.28';
   const v08427=['00483','00484','00712','00792','00849','00713','00714','00568','00569','00579'].includes(code)&&m.sactcheck_encoding_version==='0.84.27';

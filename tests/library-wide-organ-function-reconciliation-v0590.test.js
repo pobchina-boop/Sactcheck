@@ -250,8 +250,22 @@ assert(html.includes('v0.59.0 · What changed?'));
 assert(html.includes('js/generic-assessment-ui.js?v=0.59.0'));
 assert(html.includes('js/protocol-loader.js?v=0.59.0'));
 
-execFileSync(process.execPath, [path.join(root, 'tools/audit-library-organ-function-v0590.js'), '--fail-on-issue'], { cwd: root, stdio: 'pipe' });
-const audit = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.json'), 'utf8'));
+const outputDir=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'sactcheck-organ-v0590-'));
+let audit;
+try {
+  execFileSync(process.execPath,[path.join(root,'tools/audit-library-organ-function-v0590.js'),'--fail-on-issue'],{
+    cwd:root,stdio:'pipe',env:{...process.env,SACTCHECK_ORGAN_AUDIT_OUTPUT:outputDir}
+  });
+  audit=JSON.parse(fs.readFileSync(path.join(outputDir,'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.json'),'utf8'));
+} finally {
+  fs.rmSync(outputDir,{recursive:true,force:true});
+}
+for(const code of ['00921','00943']) {
+  const entry=audit.records.find(row=>row.code===code);
+  assert(entry && !entry.in_v0590_scope,code+' was added after the original reconciliation');
+  assert.deepStrictEqual(entry.issues,[]);
+  assert(entry.organ_inputs.length>0 && entry.organ_rules.length>0,code+' source-specific organ checks must be visible in the live inventory');
+}
 assert.strictEqual(audit.summary.protocols_in_reconciliation_scope, 74);
 assert.strictEqual(audit.summary.remaining_partial_rule_encoding_records, 0);
 assert.strictEqual(audit.summary.records_with_audit_issues, 0);

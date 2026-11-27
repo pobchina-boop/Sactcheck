@@ -108,12 +108,25 @@ for(const code of ['00811', '00817']) {
 }
 // A deliberate tissue-specific setting choice exists for both ovarian olaparib and cervical cisplatin.
 const gynae = index.filter(entry => [entry.tumour_group].flat().includes('Gynaecology'));
-assert.equal(gynae.length,49);
-assert.equal(gynae.filter(entry => [entry.tumour_group].flat()[0] === 'Gynaecology').length,36);
-const remaining = ['00203','00205','00212','00215','00226','00232','00251','00261','00279','00311','00621'];
-const guarded = gynae.map(entry => require(path.join(root,entry.path))).filter(p =>
-  registry.relativePath(p,'guide','Gynaecology').includes('/scope.html?')).map(p => p.metadata.nccp_regimen_code);
-assert.deepEqual(guarded.sort(),[...remaining,'00385','00588'].sort());
+const archivalFiles = require('node:child_process');
+const release72 = '16f504405ecf1333c2e7dbcac2c2a8ebab7ab3b1';
+const archived = name => archivalFiles.execFileSync('git',['show',release72+':'+name],{cwd:root,encoding:'utf8',maxBuffer:16*1024*1024});
+const oldIndex = JSON.parse(archived('protocols/index.json')).protocols;
+const oldRegistry = {URL,SACTCheckProtocolContext:global.SACTCheckProtocolContext};
+vm.runInNewContext(archived('js/patient-asset-registry-v0810.js'),oldRegistry);
+const published = oldIndex.filter(entry=>[entry.tumour_group].flat().includes('Gynaecology'));
+assert.equal(published.length,49);
+assert.equal(published.filter(entry=>[entry.tumour_group].flat()[0]==='Gynaecology').length,36);
+const oldGaps = ['00203','00205','00212','00215','00226','00232','00251','00261','00279','00311','00621'];
+const currentGaps = oldGaps.filter(code=>!['00251','00261','00279'].includes(code));
+function checkRemaining(entries,assets,load,expected) {
+  const guarded=entries.map(load).filter(p=>assets.relativePath(p,'guide','Gynaecology').includes('/scope.html?')).map(p=>p.metadata.nccp_regimen_code);
+  assert.deepEqual(guarded.sort(),[...expected,'00385','00588'].sort());
+}
+checkRemaining(published,oldRegistry.SACTCheckPatientAssets,entry=>JSON.parse(archived(entry.path)),oldGaps);
+assert.equal(gynae.length,51);
+assert.equal(gynae.filter(entry=>[entry.tumour_group].flat()[0]==='Gynaecology').length,38);
+checkRemaining(gynae,registry,entry=>require(path.join(root,entry.path)),currentGaps);
 for(const context of ['ovarian_first_line','ovarian_relapsed'])
   assert(fs.existsSync(path.join(root, registry.relativePath(protocol('00588'),'guide',context))));
 delete global.SACTCheckProtocolContext;

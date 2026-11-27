@@ -7,7 +7,7 @@ const scope=json('validation/neuro-oncology-v08438/scope.json'),presentation=jso
 const registry=require('../js/patient-asset-registry-v0810.js'),kb=json('data/regimen-knowledge-base-v08438-addendum.json');
 assert.deepEqual(scope.codes,['00334','00342','00379','00461','00658']);
 require('./helpers/neuro-suite-registration-v08438.cjs').registry(registry.codes);
-assert(['0.84.41','0.84.42','0.84.43','0.84.44','0.84.45','0.84.46','0.84.47','0.84.48','0.84.49','0.84.50','0.84.51','0.84.52','0.84.53','0.84.54','0.84.55','0.84.56','0.84.57','0.84.58','0.84.59','0.84.60','0.84.61','0.84.62','0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71','0.84.72'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
+assert(['0.84.41','0.84.42','0.84.43','0.84.44','0.84.45','0.84.46','0.84.47','0.84.48','0.84.49','0.84.50','0.84.51','0.84.52','0.84.53','0.84.54','0.84.55','0.84.56','0.84.57','0.84.58','0.84.59','0.84.60','0.84.61','0.84.62','0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71','0.84.72','0.84.73'].includes(json('package.json').version));assert.equal(json('data/app-release.json').release,json('package.json').version);
 assert.equal(scope.base_release,'0.84.37');assert.equal(scope.independent_clinical_approval,false);
 const proto=c=>json(index.find(x=>x.path.includes('/'+c+'-')).path);
 for(const code of scope.codes){

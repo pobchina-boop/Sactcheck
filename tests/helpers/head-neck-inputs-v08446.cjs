@@ -18,8 +18,15 @@ function validate(protocol, {allowUnchanged = false} = {}) {
   const row = record.protocols.find(item => item.code === code);
   const source = record.sources.find(item => item.code === code);
   assert(row && source, code + ' complete current audit record');
-  assert.equal(sha(row.path), row.after_sha256, code + ' exact audited protocol');
   assert.deepEqual(protocol, read(row.path), code + ' passed object is not the audited protocol');
+  if (code === '00261') {
+    const transition=require('./ovarian-carboplatin-transition-v08473.cjs').verify(code);
+    assert.equal(transition.file,row.path);
+    assert.equal(transition.previousSha,row.after_sha256);
+    protocol=JSON.parse(transition.before);
+  } else {
+    assert.equal(sha(row.path),row.after_sha256,code+' exact audited protocol');
+  }
   assert.equal(sha(source.path), source.sha256, code + ' retained official PDF');
   assert.equal(protocol.metadata.nccp_version, source.version);
   assert.equal(protocol.metadata.source_url, source.url);

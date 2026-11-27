@@ -21,14 +21,33 @@ function recordPaths(revision) {
 }
 const paths = recordPaths(published);
 assert.deepEqual(recordPaths(reviewed), paths);
-assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'protocols/index.json'))).protocols.map(entry => entry.path).sort(), paths);
+const index=JSON.parse(fs.readFileSync(path.join(root,'protocols/index.json'))).protocols;
+const additions=[
+  'protocols/gynaecology/00921-mirvetuximab-soravtansine-therapy.json',
+  'protocols/gynaecology/00943-pembrolizumab-cisplatin-chemoradiotherapy.json'
+];
+assert.deepEqual(index.map(entry=>entry.path).sort(),[...paths,...additions].sort());
+const release73=require('./helpers/live-release-v08464.cjs');
+const transition73=release73.gynae73Inventory().record;
+for(const file of additions) {
+  assert.equal(transition73.files[file].before,null,file+' is a genuine new protocol');
+  assert.equal(transition73.files[file].before_bytes,null);
+  release73.verifyFile(file);
+}
 const protectedCodes = new Set();
 for (const file of paths) {
   const code = path.basename(file).slice(0,5);
   const reference = integratedCodes.has(code) ? reviewed : published;
   const expected = git('show', reference + ':' + file);
   const actual = fs.readFileSync(path.join(root,file));
-  if (['00303','00306','00308','00624','00819'].includes(code)) {
+  if (['00251','00261','00279'].includes(code)) {
+    const before=git('show',transition73.base+':'+file);
+    assert(expected.equals(before),file+' must retain its original sarcoma-era predecessor through v0.84.72');
+    const entry=transition73.files[file];
+    assert.equal(require('node:crypto').createHash('sha256').update(before).digest('hex'),entry.before,file);
+    assert.equal(before.length,entry.before_bytes,file);
+    release73.verifyFile(file);
+  } else if (['00303','00306','00308','00624','00819'].includes(code)) {
     const release = require('./helpers/live-release-v08464.cjs');
     const transition = release.gynae65Inventory().record.files[file];
     assert(expected.equals(git('show',release.gynae65Inventory().record.base+':'+file)),file+' predecessor');
@@ -102,4 +121,4 @@ for (const file of paths) {
   if (integratedCodes.has(code)) protectedCodes.add(code);
 }
 assert.deepEqual(protectedCodes, integratedCodes);
-console.log(paths.length + ' clinical records checked against published main or the reviewed sarcoma source.');
+console.log(paths.length + ' inherited protocol records and ' + additions.length + ' authenticated additions checked.');

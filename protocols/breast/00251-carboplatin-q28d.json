@@ -100,7 +100,7 @@
       "The selected AUC, verified renal method, prior dose history and current renal result require consultant/pharmacy verification; this encoding does not select AUC or emit a final milligram dose.",
       "NCCP caps the GFR used in the Calvert calculation at125 mL/min; it does not authorise directly substituting indexed eGFR.",
       "The breast indication is off-label in Ireland and requires local discussion/consent and DTC-equivalent acknowledgement.",
-      "The physically rendered q28 count table uses ANC>1 and platelets>100, with <1/<100 delay; equality is not assigned and remains review."
+      "Page 4, Table 1 uses ANC ≥1 and platelets ≥100 ×10⁹/L for the routine haematological criterion. The printed symbols have underlines that are missing in text extraction. Individual treatment thresholds may be higher."
     ],
     "regimen_card": {
       "contexts": [
@@ -692,6 +692,56 @@
       "ui_section": "clinical",
       "input_role": "decision",
       "always_show": true
+    },
+    "indication_id": {
+      "label": "Selected source indication",
+      "type": "select",
+      "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "options": [
+        {
+          "value": "00251-gyn",
+          "label": "First-line adjuvant treatment where combination therapy is unsuitable: ovarian carcinoma of epithelial origin."
+        },
+        {
+          "value": "00251b",
+          "label": "First-line adjuvant treatment where combination therapy is unsuitable: primary peritoneal carcinoma."
+        },
+        {
+          "value": "00251c",
+          "label": "First-line adjuvant treatment where combination therapy is unsuitable: fallopian tube cancer."
+        },
+        {
+          "value": "00251d",
+          "label": "First-line advanced stage3/4 disease where surgery is not feasible and combination therapy is unsuitable: ovarian carcinoma of epithelial origin."
+        },
+        {
+          "value": "00251e",
+          "label": "First-line advanced stage3/4 disease where surgery is not feasible and combination therapy is unsuitable: primary peritoneal carcinoma."
+        },
+        {
+          "value": "00251f",
+          "label": "First-line advanced stage3/4 disease where surgery is not feasible and combination therapy is unsuitable: fallopian tube cancer."
+        },
+        {
+          "value": "00251g",
+          "label": "Platinum-sensitive recurrent disease: ovarian carcinoma of epithelial origin."
+        },
+        {
+          "value": "00251h",
+          "label": "Platinum-sensitive recurrent disease: primary peritoneal carcinoma."
+        },
+        {
+          "value": "00251i",
+          "label": "Platinum-sensitive recurrent disease: fallopian tube cancer."
+        },
+        {
+          "value": "00251j",
+          "label": "Metastatic breast carcinoma; off-label indication in Ireland."
+        }
+      ]
     }
   },
   "required_inputs": [],
@@ -856,6 +906,117 @@
           "url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf",
           "page": 1,
           "checked_date": "2026-10-25"
+        }
+      },
+      {
+        "id": "CARBO00251_INDICATION_CONTEXT_CONFLICT",
+        "priority": 70,
+        "when": {
+          "any": [
+            {
+              "all": [
+                {
+                  "field": "indication_id",
+                  "operator": "in",
+                  "value": [
+                    "00251-gyn",
+                    "00251b",
+                    "00251c"
+                  ]
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "in",
+                  "value": [
+                    "breast_metastatic",
+                    "gyn_advanced",
+                    "gyn_recurrent"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "indication_id",
+                  "operator": "in",
+                  "value": [
+                    "00251d",
+                    "00251e",
+                    "00251f"
+                  ]
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "in",
+                  "value": [
+                    "breast_metastatic",
+                    "gyn_adjuvant",
+                    "gyn_recurrent"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "indication_id",
+                  "operator": "in",
+                  "value": [
+                    "00251g",
+                    "00251h",
+                    "00251i"
+                  ]
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "in",
+                  "value": [
+                    "breast_metastatic",
+                    "gyn_adjuvant",
+                    "gyn_advanced"
+                  ]
+                }
+              ]
+            },
+            {
+              "all": [
+                {
+                  "field": "indication_id",
+                  "operator": "in",
+                  "value": [
+                    "00251j"
+                  ]
+                },
+                {
+                  "field": "disease_context",
+                  "operator": "in",
+                  "value": [
+                    "gyn_adjuvant",
+                    "gyn_advanced",
+                    "gyn_recurrent"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "carboplatin"
+          ],
+          "message": "The selected NCCP indication and treatment setting disagree. Confirm the tumour site and line of therapy before using a dose or treatment plan.",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "dose_calculation": "specialist_review"
+        },
+        "explanation": "The selected NCCP indication and treatment setting disagree. Confirm the tumour site and line of therapy before using a dose or treatment plan.",
+        "source": {
+          "document": "NCCP 00251 v6",
+          "url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf",
+          "page": 1,
+          "checked_date": "2026-11-27"
         }
       },
       {
@@ -1036,60 +1197,6 @@
           "url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf",
           "page": 4,
           "checked_date": "2026-10-25"
-        }
-      },
-      {
-        "id": "CARBO00251_EXACT_ANC",
-        "priority": 70,
-        "when": {
-          "field": "anc",
-          "operator": "==",
-          "value": 1
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "The q28 source table leaves exact anc=1 between its strict greater-than full-dose and less-than delay rows. Resolve this boundary with the consultant; do not import the q21 ≥ threshold.",
-          "show_in_dose_actions": true,
-          "block_numeric_dose": true,
-          "dose_calculation": "specialist_review"
-        },
-        "explanation": "The q28 source table leaves exact anc=1 between its strict greater-than full-dose and less-than delay rows. Resolve this boundary with the consultant; do not import the q21 ≥ threshold.",
-        "source": {
-          "document": "NCCP 00251 v6",
-          "url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf",
-          "page": 4,
-          "checked_date": "2026-10-25",
-          "interpretation_note": "Physical PDF table inspected; equality is unassigned."
-        }
-      },
-      {
-        "id": "CARBO00251_EXACT_PLATELETS",
-        "priority": 70,
-        "when": {
-          "field": "platelets",
-          "operator": "==",
-          "value": 100
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "carboplatin"
-          ],
-          "message": "The q28 source table leaves exact platelets=100 between its strict greater-than full-dose and less-than delay rows. Resolve this boundary with the consultant; do not import the q21 ≥ threshold.",
-          "show_in_dose_actions": true,
-          "block_numeric_dose": true,
-          "dose_calculation": "specialist_review"
-        },
-        "explanation": "The q28 source table leaves exact platelets=100 between its strict greater-than full-dose and less-than delay rows. Resolve this boundary with the consultant; do not import the q21 ≥ threshold.",
-        "source": {
-          "document": "NCCP 00251 v6",
-          "url": "https://healthservice.hse.ie/documents/6355/251_CARBOplatin_AUC4-6_28days.pdf",
-          "page": 4,
-          "checked_date": "2026-10-25",
-          "interpretation_note": "Physical PDF table inspected; equality is unassigned."
         }
       },
       {
@@ -2415,13 +2522,13 @@
   "monitoring": {
     "baseline": [
       "FBC, renal and liver profile",
-      "Measured isotopeGFR preferred, otherwise a verified WrightGFR or Cockcroft–Gault estimate"
+      "Measured isotope GFR is preferred. A verified Wright or Cockcroft–Gault estimate is an alternative."
     ],
     "regular": [
-      "FBC atDay13–15 andDay21 in the first cycles to determine nadir; subsequently before each cycle",
+      "Check the full blood count on days 13–15 and day 21 during the first cycles to establish the nadir, then before each cycle.",
       "Renal and liver profile before each cycle",
-      "Neurological evaluation and hearing assessment regularly; greater attention after prior cisplatin/platinum or ototoxic medicines",
-      "Estimated renal dosing uses a creatinine result obtained within48hours of treatment; isotope-based dose carry-forward needs a verified ≤110% creatinine trend"
+      "Assess neurological symptoms and hearing regularly, particularly after cisplatin or with other ototoxic medicines.",
+      "For estimated renal function, use serum creatinine measured within 48 hours of administration. When reusing an isotope GFR, verify that current creatinine is at most 110% of the value at isotope measurement."
     ],
     "disease": "Response tests and scan interval follow the consultant treatment plan; no fixed CT/echo/DXA schedule is mandated by this regimen."
   }

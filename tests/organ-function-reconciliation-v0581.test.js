@@ -78,11 +78,15 @@ try {
   fs.rmSync(outputDir,{recursive:true,force:true});
 }
 assert.strictEqual(audit.summary.protocols_with_rule_level_claim_mismatch,0);
-assert.strictEqual(audit.summary.protocols_scanned,383);
-const addedPath='protocols/gynaecology/00953-durvalumab-carboplatin-paclitaxel.json';
+const addedPaths=[
+  'protocols/gynaecology/00953-durvalumab-carboplatin-paclitaxel.json',
+  'protocols/gynaecology/00921-mirvetuximab-soravtansine-therapy.json',
+  'protocols/gynaecology/00943-pembrolizumab-cisplatin-chemoradiotherapy.json'
+];
 const baselinePaths=archived.records.map(r=>r.path);
-assert(!baselinePaths.includes(addedPath));
-assert.deepStrictEqual(audit.records.map(r=>r.path).sort(),[...baselinePaths,addedPath].sort());
+for(const added of addedPaths) assert(!baselinePaths.includes(added));
+assert.strictEqual(audit.summary.protocols_scanned,archived.summary.protocols_scanned+addedPaths.length);
+assert.deepStrictEqual(audit.records.map(r=>r.path).sort(),[...baselinePaths,...addedPaths].sort());
 
 const partial = audit.records.filter(record => record.encoding_maturity === 'partial_rule_encoding');
 assert.strictEqual(partial.length, 0, 'v0.59.0 should reconcile all records previously marked partial.');

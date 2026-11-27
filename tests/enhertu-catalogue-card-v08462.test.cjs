@@ -1,4 +1,5 @@
 'use strict';
+const {total: liveProtocolCount} = require('./helpers/live-inventory-v08462.cjs');
 // Source-based catalogue acceptance for the two existing NCCP00776 contexts.
 // The real sidecar loader and renderer run in a minimal DOM fixture; this is
 // software verification, not a substitute for the blocked browser acceptance.
@@ -31,7 +32,7 @@ const override = overrides.protocols[id];
 // The v63 successor is limited to the two source-reviewed olaparib records.
 // Authenticate its actual bytes before reading the inherited Enhertu state;
 // the original 377-record preservation assertions still run against that state.
-const olaparib = ['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71','0.84.72'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
+const olaparib = ['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71','0.84.72','0.84.73'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
 const inheritedSidecar = olaparib ? olaparib.baselineJson(sidecarPath) : sidecar;
 const inheritedOverrides = olaparib ? olaparib.baselineJson(overridesPath) : overrides;
 const inheritedReport = olaparib ? olaparib.baselineBytes(reportPath) : read(reportPath);
@@ -152,7 +153,7 @@ class Element {
   assert.equal(row.dataset.metadataComplete, 'true');
   assert.match(card.dataset.name, /advanced disease until progression\/toxicity q21d/);
   assert.equal(requests.length, 1, 'Production loader uses the canonical sidecar');
-  assert.equal(events[0].detail.available, 378);
+  assert.equal(events[0].detail.available, liveProtocolCount);
   assert.equal(api.renderAll(), 1);
   assert.equal(card.children.length, 1, 'Re-render does not duplicate the metadata strip');
 
@@ -185,11 +186,11 @@ class Element {
     assert.equal(fallbackRow.attributes['aria-label'], row.attributes['aria-label']);
     assert.equal(fallbackCard.dataset.courseMetadata, 'complete');
     assert(fallbackRequests.includes('protocols/breast/00776-trastuzumab-deruxtecan.json'));
-    assert.equal(fallbackRequests.length, 380, failure + ': preferred sidecar, catalogue and all 378 protocol fallback loads exercised');
+    assert.equal(fallbackRequests.length, 2 + liveProtocolCount, failure + ': preferred sidecar, catalogue and every indexed protocol fallback load exercised');
   }
 
   const before = new Map([sidecarPath, reportPath].map(f => [f, read(f)]));
   cp.execFileSync(process.execPath, ['tools/add-regimen-card-metadata.js'], {cwd: root, stdio: 'pipe'});
   for (const [f, bytes] of before) assert(read(f).equals(bytes), 'Canonical card generator is byte-idempotent: ' + f);
-  console.log('Enhertu catalogue source, two advanced-disease contexts, indefinite duration, actual sidecar renderer and both unavailable/invalid-sidecar fallback paths, brand/code/tissue/route identity and generator idempotence passed. ' + (olaparib ? 'The original 377-record preservation check passed against the authenticated Enhertu state; 376 current records remain exact after only the two authenticated olaparib successors.' : 'All 377 unrelated records remain unchanged.') + ' Browser acceptance remains separate.');
+  console.log('Verified the two Enhertu indications, archived preservation checks and both metadata fallback paths for '+liveProtocolCount+' live protocols.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

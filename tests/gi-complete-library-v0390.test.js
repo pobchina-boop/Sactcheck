@@ -127,7 +127,7 @@ for (const { file, data } of gi) {
   const colorectalV35=['00890','00551','00900'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.35';
   const antibodyV34=['00212','00214','00215','00207','00225','00328','00330','00331'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.34';
   const oralV34=['00244','00382'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.34';
-  const v08430=['00214','00279','00309','00372','00456','00561'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.30';
+  const v08430=['00214','00279','00309','00372','00456','00561'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.30' || code==='00279'&&metadata.sactcheck_encoding_version==='0.84.73';
   const v08429=['00284','00311','00587','00388','00614','00319','00232','00259','00203','00222'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.29';
   const v08428=code==='00621'&&metadata.sactcheck_encoding_version==='0.84.28';
   const v08425=['00203','00226','00215'].includes(code)&&metadata.sactcheck_encoding_version==='0.84.25';

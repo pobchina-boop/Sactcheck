@@ -17,6 +17,17 @@
   const requested=params.get('asset')||'portal';
   const file=Object.prototype.hasOwnProperty.call(assets,requested)?assets[requested]:'';
   document.querySelectorAll('[data-context]').forEach(link=>{
+    if (['00251','00261','00279'].includes(code)) {
+      const routes = code === '00279' ? {lung:'./',cervical:'cervical/'} :
+        code === '00261' ? {breast:'./',head_neck:'head_neck/',ovarian:'ovarian/'} : {breast:'./',ovarian:'ovarian/'};
+      const context = link.dataset.context;
+      if (!Object.hasOwn(routes,context) || routes[context] !== link.dataset.route) return;
+      const target = requested === 'antiemetic-prescription' ? (context === 'ovarian' ? 'antiemetic-day1.pdf' : context === 'cervical' ? 'antiemetic-prescriptions.html' : 'supportive-care.html') :
+        requested === 'handbook' ? 'handbook.pdf' : requested === 'consent-pdf' ? 'consent-form.pdf' : file;
+      link.setAttribute('href',routes[context]+target);
+      if (target.endsWith('.pdf')) link.setAttribute('download',target);
+      return;
+    }
     const cervical = cervicalChoice[code];
     if(cervical && Object.hasOwn(cervical,link.dataset.context)){
       const route=link.dataset.context+'/';

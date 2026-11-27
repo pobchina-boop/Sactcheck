@@ -1,4 +1,5 @@
 'use strict';
+const {total: liveProtocolCount} = require('./helpers/live-inventory-v08462.cjs');
 const release = require('./helpers/live-release-v08464.cjs');
 // Actual catalogue loader/renderer and source-specific card contracts. The DOM
 // fixture verifies software behaviour; real browser acceptance is separate.
@@ -30,8 +31,8 @@ const expectedIds = {
 const expectedIntents = ['maintenance', 'maintenance', 'advanced_disease', 'adjuvant', 'maintenance'];
 const summaries = {};
 assert.equal(sidecar.schema_version, '1.0.0');
-assert.equal(sidecar.protocol_count, 378);
-assert.equal(sidecar.protocols.length, 378);
+assert.equal(sidecar.protocol_count, liveProtocolCount);
+assert.equal(sidecar.protocols.length, liveProtocolCount);
 
 for (const code of Object.keys(files)) {
   const protocol = protocols[code], id = protocol.protocol_id;
@@ -197,8 +198,8 @@ class Element {
       assert.equal(row.dataset.metadataComplete, 'true');
       assert(!/q28d/.test(row.title + row.attributes['aria-label']));
     });
-    assert.equal(events[0].detail.available, 378);
-    assert.equal(requests.length, availability === 'sidecar' ? 1 : 380);
+    assert.equal(events[0].detail.available, liveProtocolCount);
+    assert.equal(requests.length, availability === 'sidecar' ? 1 : 2 + liveProtocolCount);
     if (availability !== 'sidecar') for (const file of Object.values(files)) assert(requests.includes(file));
     assert.equal(api.renderAll(), 2);
     for (const card of cards) assert.equal(card.children.length, 1, 'Re-render does not duplicate the metadata strip');

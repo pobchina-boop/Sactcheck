@@ -12,7 +12,7 @@
     "indication": "00279a: limited-stage small-cell lung cancer; 00279b: small-cell cancer of cervix and other sites.",
     "source_url": "https://assets.hse.ie/media/documents/279_CISplatin_and_Etoposide_and_RT.pdf",
     "source_document_pages": 7,
-    "sactcheck_encoding_version": "0.84.30",
+    "sactcheck_encoding_version": "0.84.73",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "lung_subgroup": "chemoradiation",
@@ -64,7 +64,7 @@
       "Gynaecology"
     ],
     "gynaecology_subgroup": "cervical_neuroendocrine",
-    "source_checked_date": "2026-11-02",
+    "source_checked_date": "2026-11-27",
     "partial_assessment_policy": "Each entered value is assessed independently. Omitted domains remain unassessed and are never assumed normal.",
     "catalogue_reconciliation": {
       "release": "0.51.0",
@@ -104,7 +104,7 @@
     ],
     "source_schedule_interval_label": "Every21days; explicit consultant28-day alternative",
     "source_planned_cycles": 4,
-    "patient_scope": "00279a",
+    "patient_scope": "00279a for limited-stage small-cell lung cancer; 00279b for the confirmed cervical primary. Other primary sites need matching information.",
     "source_review_note": "Source v8 amended29June2026; footer last-reviewed date remains24June2021.",
     "schedule_summary": "Reference plan: four 21-day cycles. Day 1: cisplatin and etoposide. Days 2–3: etoposide. Radiotherapy usually starts with cycle 1; its appointments are planned separately. Capsules, split cisplatin, a 28-day interval or a different platinum are used only if explicitly prescribed.",
     "source_supplements": [
@@ -139,7 +139,8 @@
       "tumour_groups": [
         "Gynaecology",
         "Other"
-      ]
+      ],
+      "regulatory_note": "NCCP v8 p7 footnote i identifies this use of cisplatin and etoposide as unlicensed in Ireland. Obtain informed consent and confirm local Drugs and Therapeutics Committee or equivalent acknowledgement under hospital policy."
     }
   ],
   "treatment": {
@@ -536,23 +537,28 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "description": "No current toxicity documented. Leave the field blank when unassessed."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "description": "Grade 1 is the recovery threshold before restarting an adjusted cisplatin plan after higher-grade neuropathy."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "description": "Pre-existing grade 2 or higher excludes cisplatin. For treatment-emergent neuropathy, Table 5 calls for platinum review with an alternative or adjusted dose after recovery to grade 1 or better. Etoposide remains at the prescribed full dose if eligible."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "description": "Pre-existing grade 2 or higher excludes cisplatin. For treatment-emergent neuropathy, Table 5 calls for platinum review with an alternative or adjusted dose after recovery to grade 1 or better. Etoposide remains at the prescribed full dose if eligible."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "description": "Pre-existing grade 2 or higher excludes cisplatin. For treatment-emergent neuropathy, Table 5 calls for platinum review with an alternative or adjusted dose after recovery to grade 1 or better. Etoposide remains at the prescribed full dose if eligible."
         }
       ],
       "grading_source_label": "NCCP00279 v8 Table5: numbered grade thresholds; no grading definitions supplied",
@@ -570,29 +576,73 @@
       "options": [
         {
           "value": 0,
-          "label": "Grade 0"
+          "label": "Grade 0",
+          "description": "No current toxicity documented. Leave the field blank when unassessed."
         },
         {
           "value": 1,
-          "label": "Grade 1"
+          "label": "Grade 1",
+          "description": "Grade 1 is the recovery threshold after a grade 3 event. Table 5 has no stand-alone reduction for a current grade 1 event."
         },
         {
           "value": 2,
-          "label": "Grade 2"
+          "label": "Grade 2",
+          "description": "Table 5 gives no separate general grade 2 dose row. Review the named event and its other applicable actions."
         },
         {
           "value": 3,
-          "label": "Grade 3"
+          "label": "Grade 3",
+          "description": "For a grade 3 event other than mucositis or alopecia, delay until grade 1, then reduce both cisplatin and etoposide to 75%."
         },
         {
           "value": 4,
-          "label": "Grade 4"
+          "label": "Grade 4",
+          "description": "Grade 4 needs urgent specialist assessment. Table 5 gives no general grade 4 dosing row."
         }
       ],
       "grading_source_label": "NCCP00279 v8 Table5: numbered grade thresholds; no grading definitions supplied",
       "grading_source_url": "https://assets.hse.ie/media/documents/279_CISplatin_and_Etoposide_and_RT.pdf",
       "source_grading_note": "NCCP does not identify a CTCAE version or reproduce grade definitions. Grade the exact adverse event using the locally adopted scale; do not infer a definition from this selector.",
       "assessment_guidance": "Document the actual event and clinically assigned grade. The source row excludes mucositis and alopecia from the Grade3 general rule."
+    },
+    "cervical_primary_confirmed": {
+      "label": "For 00279b, the confirmed primary is the cervix",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "context",
+      "ui_section": "treatment_context",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00279b"
+      }
+    },
+    "off_label_consent_documented": {
+      "label": "Patient informed of off-label use and consent recorded under hospital policy",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00279b"
+      }
+    },
+    "local_off_label_acknowledged": {
+      "label": "Hospital Drugs and Therapeutics Committee or equivalent acknowledgement confirmed",
+      "type": "boolean",
+      "required": false,
+      "demo_value": "",
+      "input_role": "decision",
+      "ui_section": "clinical",
+      "visible_when": {
+        "field": "indication_id",
+        "operator": "==",
+        "value": "00279b"
+      }
     }
   },
   "required_inputs": [],
@@ -1051,29 +1101,143 @@
       {
         "rule_id": "OTHER_SITE_CONTEXT",
         "when": {
-          "field": "indication_id",
-          "operator": "==",
-          "value": "00279b"
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00279b"
+            },
+            {
+              "any": [
+                {
+                  "field": "cervical_primary_confirmed",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "cervical_primary_confirmed",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
         },
         "priority": 8,
         "action": {
           "type": "consultant_review",
           "components": [
             "cisplatin",
-            "etoposide",
-            "carboplatin"
+            "etoposide"
           ],
-          "recommendation": "The clinical schedule preserves NCCP00279b. This release patient information is scoped to limited-stage lung cancer; provide site-specific radiation and patient information for cervix/other sites.",
-          "message": "The clinical schedule preserves NCCP00279b. This release patient information is scoped to limited-stage lung cancer; provide site-specific radiation and patient information for cervix/other sites.",
+          "recommendation": "00279b covers cervical and other small-cell primaries. Confirm the primary and obtain its radiation oncology plan. Use the cervical pack only for a confirmed cervical primary. Other sites require separate patient information.",
+          "message": "00279b covers cervical and other small-cell primaries. Confirm the primary and obtain its radiation oncology plan. Use the cervical pack only for a confirmed cervical primary. Other sites require separate patient information.",
           "show_in_dose_actions": true
         },
-        "explanation": "The clinical schedule preserves NCCP00279b. This release patient information is scoped to limited-stage lung cancer; provide site-specific radiation and patient information for cervix/other sites.",
+        "explanation": "00279b covers cervical and other small-cell primaries. Confirm the primary and obtain its radiation oncology plan. Use the cervical pack only for a confirmed cervical primary. Other sites require separate patient information.",
         "source": {
           "document": "NCCP 00279 v8",
           "url": "https://assets.hse.ie/media/documents/279_CISplatin_and_Etoposide_and_RT.pdf",
           "page": 1,
           "version": "8",
-          "checked_date": "2026-11-02"
+          "checked_date": "2026-11-27"
+        }
+      },
+      {
+        "rule_id": "OFFLABEL_GOVERNANCE",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00279b"
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "local_off_label_acknowledged",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "local_off_label_acknowledged",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 8,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "Before starting 00279b, verify acknowledgment by the hospital Drugs and Therapeutics Committee or equivalent under local policy.",
+          "message": "Before starting 00279b, verify acknowledgment by the hospital Drugs and Therapeutics Committee or equivalent under local policy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Before starting 00279b, verify acknowledgment by the hospital Drugs and Therapeutics Committee or equivalent under local policy.",
+        "source": {
+          "document": "NCCP 00279 v8",
+          "url": "https://assets.hse.ie/media/documents/279_CISplatin_and_Etoposide_and_RT.pdf",
+          "page": 7,
+          "version": "8",
+          "checked_date": "2026-11-27"
+        }
+      },
+      {
+        "rule_id": "OFFLABEL_CONSENT",
+        "when": {
+          "all": [
+            {
+              "field": "indication_id",
+              "operator": "==",
+              "value": "00279b"
+            },
+            {
+              "field": "assessment_stage",
+              "operator": "==",
+              "value": "baseline"
+            },
+            {
+              "any": [
+                {
+                  "field": "off_label_consent_documented",
+                  "operator": "==",
+                  "value": false
+                },
+                {
+                  "field": "off_label_consent_documented",
+                  "operator": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 8,
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "Before starting 00279b, explain that NCCP flags cisplatin and etoposide for this indication as unlicensed in Ireland. Confirm the planned medicines and document informed consent under hospital policy.",
+          "message": "Before starting 00279b, explain that NCCP flags cisplatin and etoposide for this indication as unlicensed in Ireland. Confirm the planned medicines and document informed consent under hospital policy.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Before starting 00279b, explain that NCCP flags cisplatin and etoposide for this indication as unlicensed in Ireland. Confirm the planned medicines and document informed consent under hospital policy.",
+        "source": {
+          "document": "NCCP 00279 v8",
+          "url": "https://assets.hse.ie/media/documents/279_CISplatin_and_Etoposide_and_RT.pdf",
+          "page": 7,
+          "version": "8",
+          "checked_date": "2026-11-27"
         }
       },
       {
@@ -1429,6 +1593,41 @@
           "page": 3,
           "version": "8",
           "checked_date": "2026-11-02"
+        }
+      },
+      {
+        "rule_id": "RENAL_DIALYSIS_STATUS",
+        "when": {
+          "all": [
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            },
+            {
+              "field": "haemodialysis",
+              "operator": "missing"
+            }
+          ]
+        },
+        "priority": 8,
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin",
+            "etoposide"
+          ],
+          "recommendation": "Confirm dialysis status before selecting the renal dose row. Below CrCl 40 mL/min, routine non-dialysis cisplatin is not recommended; haemodialysis has separate specialist guidance. Review the independently prescribed etoposide and platinum components.",
+          "message": "Confirm dialysis status before selecting the renal dose row. Below CrCl 40 mL/min, routine non-dialysis cisplatin is not recommended; haemodialysis has separate specialist guidance. Review the independently prescribed etoposide and platinum components.",
+          "show_in_dose_actions": true
+        },
+        "explanation": "Confirm dialysis status before selecting the renal dose row. Below CrCl 40 mL/min, routine non-dialysis cisplatin is not recommended; haemodialysis has separate specialist guidance. Review the independently prescribed etoposide and platinum components.",
+        "source": {
+          "document": "NCCP 00279 v8",
+          "url": "https://assets.hse.ie/media/documents/279_CISplatin_and_Etoposide_and_RT.pdf",
+          "page": 4,
+          "version": "8",
+          "checked_date": "2026-11-27"
         }
       },
       {

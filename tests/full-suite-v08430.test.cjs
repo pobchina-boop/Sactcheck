@@ -9,7 +9,7 @@ assert.equal(idx.codes.length,6);assert.equal(kb.regimen_profiles.length,6);requ
 const routes=[];
 for(const c of idx.codes){
  const p=protocol(c),x=author[c],k=kb.regimen_profiles.find(x=>x.protocol_id===p.protocol_id);
- assert.equal(p.metadata.full_suite_release,'0.84.30');if(c==='00456')require('./helpers/head-neck-inputs-v08445.cjs').validate(p);else assert.equal(p.metadata.source_checked_date,c==='00214'?'2026-11-05':'2026-11-02');
+ assert.equal(p.metadata.full_suite_release,'0.84.30');if(c==='00456')require('./helpers/head-neck-inputs-v08445.cjs').validate(p);else assert.equal(p.metadata.source_checked_date,c==='00279'?'2026-11-27':c==='00214'?'2026-11-05':'2026-11-02');
  for(const flag of ['consultant_reviewed','oncology_pharmacy_reviewed','clinical_use_authorised'])assert.equal(p.metadata.validation[flag],false);
  assert.equal(Engine.assess(p,{}).complete,false);assert(!['proceed','proceed_with_caution'].includes(Engine.assess(p,{}).actionType));
  assert.equal(new Set(p.rule_engine.rules.map(x=>x.rule_id||x.id)).size,p.rule_engine.rules.length,c+' duplicate rules');

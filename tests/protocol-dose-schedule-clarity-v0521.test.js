@@ -122,11 +122,26 @@ for (const [code, visits] of Object.entries(finalGynaeVisits)) {
   const phases = DoseSchedule.buildModel(require(path.join(root,row.path))).phases;
   assert.deepEqual(Array.from(phases, p=>p.id),visits);
 }
-const expectedScheduleCoverage = Object.keys(finalGynaeVisits).length + gynae70Schedules.length + gynae69Schedules.length + gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
+const gynae73Visits = {
+  '00921': ['first_infusion', 'subsequent_infusion'],
+  '00943': ['concurrent_day1', 'cisplatin_weekly', 'optional_c2d15', 'pembro_q3w', 'pembro_q6w']
+};
+for (const [code, visits] of Object.entries(gynae73Visits)) {
+  const row = catalogue.protocols.find(entry => entry.path.includes('/' + code + '-'));
+  const model = DoseSchedule.buildModel(require(path.join(root, row.path)));
+  assert.deepEqual(Array.from(model.phases, phase => phase.id), visits);
+  if (code === '00921') {
+    assert.deepEqual(Array.from(model.doseLevels[0].levels, level => level.dose), ['6 mg/kg AIBW', '5 mg/kg AIBW', '4 mg/kg AIBW']);
+  } else {
+    assert.deepEqual(Array.from(model.phases, phase => phase.cycleLength), [21, 21, 21, 21, 42]);
+    assert.equal(model.doseLevels.length, 0);
+  }
+}
+const expectedScheduleCoverage = Object.keys(gynae73Visits).length + Object.keys(finalGynaeVisits).length + gynae70Schedules.length + gynae69Schedules.length + gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
 assert.strictEqual(usefulCoverage, expectedScheduleCoverage);
 assert.strictEqual(scheduleCoverage, expectedScheduleCoverage);
-// First-line rucaparib adds the four NCCP dose levels to the 67 existing tables.
-assert.strictEqual(doseLevelCoverage, 68);
+// Mirvetuximab adds its source-defined AIBW reductions to the 68 existing tables.
+assert.strictEqual(doseLevelCoverage, 69);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.
 for(const code of ['00244','00325','00335','00719']){

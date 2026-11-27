@@ -17,12 +17,22 @@ const reviewedRegister=structuredClone(oldRegister),enhertuRegister=reviewedRegi
 enhertuRegister.rule_count=clinical.rule_engine.rules.length;enhertuRegister.input_count=Object.keys(clinical.input_definitions).length;
 const inheritedRegister=successor.baselineJson(registerPath);
 assert.deepEqual(inheritedRegister,reviewedRegister,'The inherited Enhertu register changed only reviewed00776 rule/input counts; all other rows and approval flags remained unchanged');
-assert.equal(currentRegister.protocols.length,inheritedRegister.protocols.length);
+const newClinicalCodes=['00921','00943'];
+assert.deepEqual(currentRegister.protocols.map(r=>r.nccp_code).sort(),inheritedRegister.protocols.map(r=>r.nccp_code).concat(newClinicalCodes).sort());
+const currentBatchCodes=['00251','00261','00279',...newClinicalCodes];
 const sarcomaRegister = JSON.parse(require('node:child_process').execFileSync('git',
  ['show','5b063b3f390cfe9a5a324c4615a3fba3a6eb8878:'+registerPath],{cwd:review.ROOT,maxBuffer:32*1024*1024}));
 for(const row of currentRegister.protocols){
- const old=inheritedRegister.protocols.find(item=>item.nccp_code===row.nccp_code);assert(old);
- if(['00385','00419','00455','00558','00812','00862','00929',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08470.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08471.cjs').NEW_ROUTES,'00344'].includes(row.nccp_code)) {
+ const old=inheritedRegister.protocols.find(item=>item.nccp_code===row.nccp_code);
+ assert.equal(!old,newClinicalCodes.includes(row.nccp_code));
+ if(currentBatchCodes.includes(row.nccp_code)){
+   const protocol=JSON.parse(fs.readFileSync(path.join(review.ROOT,row.path)));
+   assert.equal(protocol.protocol_id,row.protocol_id);
+   assert.equal(protocol.metadata.nccp_version,row.nccp_version);
+   assert.equal(protocol.metadata.source_url,row.source_url);
+   if(!old) assert.deepEqual(row.tumour_groups,['Gynaecology']);
+ }
+ if([...currentBatchCodes,'00385','00419','00455','00558','00812','00862','00929',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08470.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08471.cjs').NEW_ROUTES,'00344'].includes(row.nccp_code)) {
   require('./helpers/live-release-v08464.cjs').verifyFile(registerPath);
   const protocol = JSON.parse(fs.readFileSync(path.join(review.ROOT,row.path)));
   assert.equal(row.rule_count,protocol.rule_engine.rules.length);
@@ -44,7 +54,11 @@ for(const row of currentRegister.protocols){
  }
 }
 const registerSummary=value=>Object.fromEntries(Object.entries(value).filter(([key])=>!['protocols','content_update_release','generated_date'].includes(key)));
-assert.deepEqual(registerSummary(currentRegister),registerSummary(inheritedRegister),'Unrelated register totals and governance stay unchanged');
+const expectedSummary=structuredClone(registerSummary(inheritedRegister));
+expectedSummary.protocol_count+=newClinicalCodes.length;
+expectedSummary.tissue_context_count+=newClinicalCodes.length;
+expectedSummary.tissue_counts.Gynaecology+=newClinicalCodes.length;
+assert.deepEqual(registerSummary(currentRegister),expectedSummary,'Only the two new Gynaecology rows may change the register totals.');
 for(const[f,entry]of Object.entries(record.files)){
  const actual=review.expected(f,entry.before,entry.before_bytes);assert.equal(actual.sha256,entry.after);assert.equal(actual.bytes,entry.after_bytes);
  assert.throws(()=>review.expected(f,'0'.repeat(64)),/unexpected Enhertu transition origin/);

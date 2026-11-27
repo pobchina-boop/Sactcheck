@@ -13,7 +13,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.72';
+  const RELEASE='0.84.73';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
@@ -240,6 +240,8 @@
     '00388':{"title": "Oral etoposide · small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "contextOnly": true, "patientContexts": ["schedule_7d", "schedule_3d", "schedule_21d"], "scopeGuard": true, "scope": "Choose the prescribed oral etoposide schedule"},
     '00284':{"title": "Gemcitabine alone · non-small-cell lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Lung contexts only; distinguish the source indication and treatment phase"},
     '00614':{"title": "Carboplatin and vinorelbine · lung cancer", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00943':{title:"Pembrolizumab with cisplatin chemoradiotherapy for cervical cancer", guide:true, passport:true, sactCard:true, knowledge:true, consentDraft:true, supportiveCare:true, phaseSupport:true, longitudinal:true},
+    '00921':{title:"Mirvetuximab soravtansine for ovarian, fallopian tube or primary peritoneal cancer", guide:true, passport:true, sactCard:true, knowledge:true, consentDraft:true, supportiveCare:true, phaseSupport:true, longitudinal:true},
     '00279':{"title": "Cisplatin + etoposide with radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true, "scopeGuard": true, "scope": "Reference IV cisplatin/etoposide every21days; confirm any alternative prescription"},
     '00309':{"title": "Weekly carboplatin + paclitaxel with radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00456':{"title": "Cisplatin + etoposide + chest radiotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -353,7 +355,7 @@
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
   const HEAD_NECK46_CODES=Object.freeze(['00261','00483','00484','00455','00558']);
   const GIST_CONTEXT_CODES=Object.freeze(['00325','00719','00244']);
-  const CONTEXT_CODES=Object.freeze(['00812','00228','00205','00251','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00279','00812','00228','00205','00251','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
   const OLAPARIB_ROUTES=Object.freeze({breast:'',prostate:'prostate/',ovarian_first_line:'ovarian_first_line/',ovarian_relapsed:'ovarian_relapsed/',pancreatic:'pancreatic/'});
   const OLAPARIB_ASSETS=Object.freeze({...CONTEXT_ASSETS,handbook:'handbook.pdf','support-treatment':'support-treatment.html','support-treatment-pdf':'support-treatment.pdf','consent-pdf':'consent-form.pdf'});
@@ -397,6 +399,74 @@
     '00419b':'cervical', '00419-gyn':'cervical', '00812a':'cervical', '00812-gyn':'cervical',
     '00455j':'cervical_maintenance', '00455-gyn':'cervical_maintenance', '00558j':'cervical_maintenance'
   };
+  const gynaeVisits = Object.freeze({
+    '00943': ['concurrent_day1','cisplatin_weekly','optional_c2d15','pembro_q3w','pembro_q6w'],
+    '00921': ['first_infusion','subsequent_infusion'],
+    '00279': ['day1_platinum_etoposide','days23_iv_etoposide','days23_oral_etoposide','days23_fractionated_cisplatin'],
+    '00251': ['day1'], '00261': ['day1']
+  });
+  const gynaeContext = {'00279':'cervical','00251':'ovarian','00261':'ovarian'};
+  const gynaeGroups = ['gynaecology','gynecology'];
+
+  function sharedGynaeSelection(code,value,selected) {
+    const setting = gynaeContext[code];
+    if (!setting) return null;
+    const indication = value?.selected_indication_id || value?.selected_indication || value?.indication_id || value?.reimbursement_code ||
+      (typeof value === 'string' && /^\d{5}[a-z]$/i.test(value) ? value : '');
+    const id = text(typeof indication === 'object' ? indication.code || indication.indication_id || indication.id : indication).toLowerCase();
+    function fromId(token) {
+      if (code === '00279') return token === '00279a' ? 'lung' : token === '00279b' ? 'cervical' : '';
+      if (token === code + '-gyn' || (token.startsWith(code) && /^[a-i]$/.test(token.slice(code.length)))) return 'ovarian';
+      if (token === code + 'j') return 'breast';
+      return code === '00261' && ['00261k','00261-head-neck'].includes(token) ? 'head_neck' : '';
+    }
+    const stored = text(value?.patient_context).toLowerCase();
+    let requested = selected;
+    if (stored && (!requested || requested === 'all' || gynaeGroups.includes(requested) && stored === setting)) requested = stored;
+    if (gynaeGroups.includes(requested)) requested = setting;
+    if (['head and neck','head/neck'].includes(requested)) requested = 'head_neck';
+    if (fromId(requested)) {
+      if (requested === '00279b') return '';
+      requested = fromId(requested);
+    }
+    const available = code === '00279' ? ['cervical','lung'] :
+      code === '00251' ? ['ovarian','breast'] : ['ovarian','breast','head_neck'];
+    if (code === '00279' && requested === 'cervical' && [false,'false'].includes(value?.cervical_primary_confirmed)) return '';
+    if (available.includes(requested)) return id && fromId(id) !== requested ? '' : requested;
+    if (requested && requested !== 'all') return '';
+    // NCCP 00279b also covers other sites. Only a confirmed cervical setting opens this pack.
+    return id === '00279b' ? '' : fromId(id);
+  }
+
+  function gynaeVisitContext(value,explicit='') {
+    const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
+    if (!gynaeVisits[code]) return null;
+    const context = gynaeContext[code];
+    if (context && contextFor(value,explicit) !== context) return null;
+    return {code, route:'patient/'+code+'/'+(context ? context+'/' : ''), visits:gynaeVisits[code]};
+  }
+
+  function gynaeVisitPath(value,explicit='',phase='') {
+    const setting = gynaeVisitContext(value,explicit);
+    if (!setting) {
+      const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
+      return gynaeContext[code] && !contextFor(value,explicit) ? scopePath(code,'antiemetic-prescription',value,explicit) : null;
+    }
+    const visit = setting.visits.includes(phase) ? phase : !phase && setting.visits.length === 1 ? setting.visits[0] : '';
+    return setting.route + (visit ? 'antiemetic-'+visit+'.pdf' : 'antiemetic-prescriptions.html');
+  }
+
+  function gynaeAssessmentIndication(protocol,explicit='') {
+    const setting = gynaeVisitContext(protocol,explicit);
+    if (!setting) return '';
+    if (setting.code === '00279') return '00279b';
+    if (!gynaeContext[setting.code]) return setting.code+'a';
+    const selected = protocol?.selected_indication_id || protocol?.indication_id || protocol?.selected_indication || protocol?.reimbursement_code;
+    const id = typeof selected === 'object' ? selected?.code || selected?.id || selected?.indication_id : selected;
+    const entry = protocol.indications?.find(item => item.code === id || item.indication_id === id);
+    return entry?.indication_id || '';
+  }
+
   function cervicalSelection(code, value, selected) {
     const choices = cervicalVisits[code];
     if (!choices) return null;
@@ -451,6 +521,8 @@
     const code=typeof value==='string'?normaliseCode(value):codeFor(value);
     if(code==='00588')return olaparibContext(value,explicit);
     const selected=String(explicit||value?.patient_context||root.SACTCheckProtocolContext?.activeTumourGroup?.()||'').toLowerCase();
+    const shared = sharedGynaeSelection(code,value,selected);
+    if (shared !== null) return shared;
     const cervical = cervicalSelection(code,value,selected);
     if(cervical !== null) return cervical;
     if(code==='00812')return selected==='cutaneous-scc'?'cutaneous-scc':'';
@@ -462,16 +534,6 @@
     }
     if(code==='00203'&&['prostate','genitourinary','genitourinary_prostate'].includes(selected))return 'prostate';
     if(HEAD_NECK46_CODES.includes(code)&&['head_neck','head and neck','head/neck'].includes(selected))return 'head_neck';
-    if(code==='00251') {
-      const indication = value?.selected_indication_id || value?.indication_id || value?.selected_indication || value?.reimbursement_code;
-      if(indication) {
-        const id = typeof indication === 'object' ? indication.code || indication.indication_id || indication.id : indication;
-        if(id !== '00251j') return '';
-        if(!selected) return 'breast';
-      }
-      return selected === 'breast' ? 'breast' : '';
-    }
-    if(code==='00261')return selected==='breast'?'breast':'';
     if(['00419','00294'].includes(code))return ['head_neck','head and neck','head/neck','head_neck_squamous_cell'].includes(selected)?'head_neck':'';
     if(code==='00385')return ['head_neck','nasopharyngeal'].includes(selected)?selected:'';
     if(code==='00207')return ['head_neck','head and neck','head/neck','head_neck_squamous_cell'].includes(selected)?'head_neck':(['gastrointestinal','colorectal'].includes(selected)?'colorectal':'');
@@ -509,7 +571,7 @@
     if(d.code==='00205')return [d.code,d.code+'/sarcoma'];
     if(['00325','00719'].includes(d.code))return [d.code+'/gist'];
     if(d.code==='00244')return [d.code,d.code+'/gist'];
-    if(d.code==='00261')return [d.code,d.code+'/head_neck'];
+    if (gynaeContext[d.code]) return [d.code,...(d.code==='00261'?[d.code+'/head_neck']:[]),d.code+'/'+gynaeContext[d.code]];
     if(d.code==='00588')return Object.values(OLAPARIB_ROUTES).map(suffix=>'00588'+(suffix?'/'+suffix.slice(0,-1):''));
     if(d.code==='00203')return ['00203','00203/lung','00203/prostate'];
     if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[]),...extra];
@@ -526,6 +588,13 @@
   function hasDedicated(value){return Boolean(definitionFor(value));}
   function relativePath(value,asset='portal',context=''){
     const def=definitionFor(value); if(!def) return null;
+    const gynae = gynaeVisitContext(value,context);
+    if (gynae) {
+      if (asset === 'antiemetic-prescription') return gynaeVisitPath(value,context);
+      const file = asset === 'handbook' ? 'handbook.pdf' : asset === 'consent-pdf' ? 'consent-form.pdf' :
+        Object.hasOwn(CONTEXT_ASSETS,asset) ? CONTEXT_ASSETS[asset] : null;
+      return file === null ? null : gynae.route+file;
+    }
     if(def.code==='00588'||def.code==='00746'){
       if(!Object.prototype.hasOwnProperty.call(OLAPARIB_ASSETS,asset))return null;
       if(def.code==='00746')return `patient/00746/${OLAPARIB_ASSETS[asset]}`;
@@ -535,7 +604,7 @@
     }
     if(CONTEXT_CODES.includes(def.code)){
       const selected=contextFor(value,context);
-      if(!selected)return scopePath(def.code,asset,value,context);
+      if(!selected || def.code==='00279' && selected==='lung')return scopePath(def.code,asset,value,context);
       if(cervicalVisits[def.code]?.[selected]){
         const phase = cervicalVisits[def.code][selected];
         const file = asset === 'antiemetic-prescription' ? 'antiemetic-'+phase+'.pdf' :
@@ -549,7 +618,7 @@
       if(GIST_CONTEXT_CODES.includes(def.code))return `patient/${def.code}/${selected==='gist'?'gist/':''}${CONTEXT_ASSETS[asset]}`;
       if(HEAD_NECK46_CODES.includes(def.code)&&selected==='head_neck')return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00203'&&selected==='prostate')return `patient/${def.code}/prostate/${CONTEXT_ASSETS[asset]}`;
-      if(def.code==='00261')return `patient/${def.code}/${CONTEXT_ASSETS[asset]}`;
+      if(gynaeContext[def.code])return `patient/${def.code}/${CONTEXT_ASSETS[asset]}`;
       if(['00419','00294'].includes(def.code))return `patient/${def.code}/head_neck/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00385')return `patient/${def.code}/${selected}/${CONTEXT_ASSETS[asset]}`;
       if(def.code==='00207')return `patient/${def.code}/${selected==='head_neck'?'head_neck/':''}${CONTEXT_ASSETS[asset]}`;
@@ -631,7 +700,7 @@
     publicOrigin:PUBLIC_ORIGIN,
     codes:CODES,
     definitions:DEFINITIONS,
-    bundleRoutes,normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,cervicalPrescription,cervicalSupportPath,cervicalAssessmentIndication,contextCodes:CONTEXT_CODES,
+    bundleRoutes,normaliseCode,codeFor,definitionFor,hasDedicated,relativePath,contextFor,gynaeVisitContext,gynaeVisitPath,gynaeAssessmentIndication,cervicalPrescription,cervicalSupportPath,cervicalAssessmentIndication,contextCodes:CONTEXT_CODES,
     publicUrl,runtimeUrl,compatibilityUrl,fallbackUrl,publicPortalUrl,
     guideUrl,passportUrl,sactCardUrl,openPortal,openGuide,openPassport,openSactCard
   });

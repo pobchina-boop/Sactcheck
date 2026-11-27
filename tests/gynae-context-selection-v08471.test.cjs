@@ -26,18 +26,18 @@ function verifyScope(assets, codes) {
   }
 }
 verifyScope(previous.SACTCheckPatientAssets, missing);
-const cervicalCodes = new Set(['00385', '00419', '00455', '00558', '00812']);
+const cervicalCodes = new Set(['00385', '00419', '00455', '00558', '00812', '00279', '00251', '00261']);
 verifyScope(registry, missing.filter(code => !cervicalCodes.has(code)));
 const carbo = protocol('00251');
 global.SACTCheckProtocolContext.activeTumourGroup = () => 'Breast';
 assert.equal(registry.relativePath(carbo, 'guide'), 'patient/00251/guide.pdf');
 assert.equal(registry.relativePath({...carbo, selected_indication_id: '00251a'}, 'guide'), 'patient/00251/scope.html?asset=guide');
 assert.equal(registry.relativePath({...carbo, selected_indication_id: '00251j'}, 'guide'), 'patient/00251/guide.pdf');
-assert.equal(registry.relativePath(carbo, 'guide', 'Gynaecology'), 'patient/00251/scope.html?asset=guide');
+assert.equal(registry.relativePath(carbo, 'guide', 'Gynaecology'), 'patient/00251/ovarian/guide.pdf');
 
 const selector = fs.readFileSync(path.join(root, 'assets/patient/context-selector-v08425.js'), 'utf8');
 for (const [code, asset, expected] of [
-  ['00251', 'guide', ['./guide.pdf']],
+  ['00251', 'guide', ['./guide.pdf','ovarian/guide.pdf']],
   ['00205', 'guide', ['./guide.pdf', 'sarcoma/guide.pdf']],
   ['00205', 'passport', ['./passport.pdf', 'sarcoma/passport.pdf']]
 ]) {
@@ -52,4 +52,4 @@ for (const [code, asset, expected] of [
   for (const link of links) assert(fs.existsSync(path.join(root, 'patient', code, link.href)));
 }
 delete global.SACTCheckProtocolContext;
-console.log('Sixteen published v71 scope routes and eleven remaining gaps verified. Breast, sarcoma and selected-indication boundaries passed.');
+console.log('Sixteen published v71 scope routes and eight remaining gaps verified. Breast, sarcoma and selected-indication boundaries passed.');

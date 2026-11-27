@@ -10,9 +10,10 @@ const root = path.resolve(__dirname, '..');
 const protocolRoot = path.join(root, 'protocols');
 const sourceRegister = JSON.parse(fs.readFileSync(path.join(root, 'V0590_ORGAN_FUNCTION_SOURCE_REGISTER.json'), 'utf8'));
 const reconciledCodes = new Set(sourceRegister.records.map(r => r.nccp_code));
-const OUTPUT_JSON = path.join(root, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.json');
-const OUTPUT_CSV = path.join(root, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.csv');
-const OUTPUT_MD = path.join(root, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.md');
+const outputDir = process.env.SACTCHECK_ORGAN_AUDIT_OUTPUT || root;
+const OUTPUT_JSON = path.join(outputDir, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.json');
+const OUTPUT_CSV = path.join(outputDir, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.csv');
+const OUTPUT_MD = path.join(outputDir, 'V0590_ORGAN_FUNCTION_RECONCILIATION_AUDIT.md');
 
 function files(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {

@@ -9,6 +9,7 @@ const catalogue = JSON.parse(fs.readFileSync(path.join(root, "protocols/index.js
 const SOURCE_HOSTS = new Set(["healthservice.hse.ie", "assets.hse.ie", "www.hse.ie"]);
 const RELEASE = "0.51.0";
 const CHECK_DATE = "2026-07-29";
+const REVIEWED_INVENTORY = { solid: 365, total: 380 }; // v0.84.73, including 00921 and 00943.
 
 function readJson(file) { return JSON.parse(fs.readFileSync(file, "utf8")); }
 function groups(protocol) {
@@ -114,7 +115,9 @@ for (const { entry, protocol } of solid) {
   }
   if (metadata.partial_assessment_supported !== true) findings.missing_partial_assessment_flag.push(protocolCode);
   const reconciliation = metadata.catalogue_reconciliation || {};
-  const expectedReconciliation = protocolCode === "00953"
+  const expectedReconciliation = ["00921", "00943"].includes(protocolCode)
+    ? { release: "0.84.73", checked_date: "2026-11-27" }
+    : protocolCode === "00953"
     ? { release: "0.84.62", checked_date: "2026-11-23" }
     : protocolCode === "00947"
     ? { release: "0.84.20", checked_date: "2026-10-25" }
@@ -178,7 +181,7 @@ const report = {
     protocols_marked_source_document_checked: solid.length - findings.source_document_not_marked_checked.length
   },
   hard_failure_count: hardFailureCount,
-  pass: hardFailureCount === 0 && solid.length === 363 && loaded.length === 378,
+  pass: hardFailureCount === 0 && solid.length === REVIEWED_INVENTORY.solid && loaded.length === REVIEWED_INVENTORY.total,
   findings,
   governance_backlog: {
     missing_published_date: findings.missing_published_date,

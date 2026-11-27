@@ -135,6 +135,14 @@ for (const [id, script] of Object.entries(riskMap.scripts || {})) {
     assert.strictEqual(protocol.supportive_care.script_id,id);
     assert.strictEqual(protocol.supportive_care.supportive_medications_label,script.label);
     assert.strictEqual(riskMap.protocols[code].level,script.risk_level);
+  } else if (id === 'gyn73-mirvetuximab-premedication') {
+    const source = 'https://healthservice.hse.ie/documents/11115/921_Mirvetuximab_soravtansine.pdf';
+    assert.strictEqual(script.status, 'national_regimen_specific');
+    assert.strictEqual(script.risk_level, 'moderate');
+    assert.strictEqual(script.url, source);
+    assert.strictEqual(script.source_url, source);
+    assert.match(script.label, /Table 4/);
+    assert.match(script.summary, /paracetamol 1 g PO, chlorphenamine 10 mg IV and dexamethasone 10 mg IV at 60 minutes, plus ondansetron 16 mg PO at 30 minutes/i);
   } else assert.strictEqual(script.status, "national_guidance_link", `${id} must be marked as national guidance`);
 }
 
@@ -142,6 +150,27 @@ const currentMapLevels = Object.fromEntries(Object.entries(riskMap.protocols || 
   level: rec.level,
   phase_levels: Object.fromEntries(Object.entries(rec.phase_profiles || {}).map(([k, v]) => [k, v?.level]))
 }]));
+const newGynaeVisits = {
+  '00921': {first_infusion:'moderate', subsequent_infusion:'moderate'},
+  '00943': {concurrent_day1:'high', cisplatin_weekly:'high', optional_c2d15:'high', pembro_q3w:'minimal', pembro_q6w:'minimal'}
+};
+for (const [code, phases] of Object.entries(newGynaeVisits)) {
+  const protocol = readJson(index.protocols.find(record => record.path.includes('/'+code+'-')).path);
+  const scheme = protocol.supportive_care;
+  const central = riskMap.protocols[code];
+  assert.strictEqual(central.level, code === '00921' ? 'moderate' : 'phase_dependent');
+  assert.strictEqual(scheme.emetogenic_risk, central.level);
+  assert.strictEqual(central.script_id, code === '00921' ? 'gyn73-mirvetuximab-premedication' : null);
+  assert.strictEqual(scheme.script_id, central.script_id);
+  assert.deepStrictEqual(currentMapLevels[code].phase_levels, phases);
+  assert.deepStrictEqual(Object.keys(scheme.phase_profiles).sort(), Object.keys(phases).sort());
+  for (const [phase, level] of Object.entries(phases)) {
+    const script = code === '00921' ? 'gyn73-mirvetuximab-premedication' : level === 'high' ? 'nccp-v8-high-v08420' : 'nccp-minimal-no-routine-prophylaxis';
+    assert.strictEqual(central.phase_profiles[phase].script_id, script, code+'/'+phase);
+    assert.strictEqual(scheme.phase_profiles[phase].script_id, script, code+'/'+phase);
+    assert.strictEqual(scheme.phase_profiles[phase].level, level, code+'/'+phase);
+  }
+}
 if (pkg.version.localeCompare("0.64.0", undefined, { numeric: true }) < 0) {
   assert.deepStrictEqual(currentMapLevels, classificationBaseline.protocol_risk_map_levels, "central emetogenic classifications must remain unchanged");
 } else {

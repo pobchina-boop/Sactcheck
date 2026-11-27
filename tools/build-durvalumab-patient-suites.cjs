@@ -7,9 +7,12 @@ const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
 const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
+const newGynaeRoutes = require('./lib/gynae-patient-routes-v08473.json');
 const cervicalRoutes = new Set(require('./lib/cervical-patient-routes-v08472.json'));
+const contextRoutes = new Set([...cervicalRoutes, ...newGynaeRoutes.filter(route => route.includes('/'))]);
+const nativePrescriptionRoutes = new Set([...cervicalRoutes, ...newGynaeRoutes]);
 const illustratedSuites = new Set([...gynaecology, '00344']);
-const codes = new Set([...illustratedSuites, '00897', '00926', '00953']);
+const codes = new Set([...illustratedSuites, '00897', '00926', '00953', ...newGynaeRoutes.filter(route => !route.includes('/'))]);
 const esc = value => String(value ?? '').replace(/[<>&"']/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[s]));
 const link = (href,text) => '<a href="'+esc(href)+'">'+esc(text)+'</a>';
 const section = (id,title,body) => '<section id="'+id+'"><h2>'+esc(title)+'</h2>'+body+'</section>';
@@ -44,15 +47,21 @@ function contextAssets(html,code,route) {
    .replaceAll('href="https://sactcheck.com/patient/'+code+'/"', 'href="https://sactcheck.com/patient/'+route+'/"');
 }
 function renderPages(route, root = projectRoot) {
- const cervical = cervicalRoutes.has(route);
+ const contextRoute = contextRoutes.has(route);
+ const profilePhases = nativePrescriptionRoutes.has(route);
  const [code, context] = route.split('/');
- if (!cervical && !codes.has(route)) throw Error('Unknown dedicated suite: '+route);
- const source = cervical ? 'data/patient-knowledge-contexts' : 'data/patient-knowledge';
+ if (!contextRoute && !codes.has(route)) throw Error('Unknown dedicated suite: '+route);
+ const source = contextRoute ? 'data/patient-knowledge-contexts' : 'data/patient-knowledge';
  const data=JSON.parse(fs.readFileSync(path.join(root,source,route+'.json'),'utf8'));
- if (data.code !== code || (cervical && data.patient_context !== context)) throw Error('Mismatched patient profile for '+route);
+ if (data.code !== code || (contextRoute && data.patient_context !== context)) throw Error('Mismatched patient profile for '+route);
  const d=data; const s=d.patient_summary;
  const pack=render({...d,patient_summary:{...s,template_version:'0.84.31'}});
  const files={};files['guide.html']=localisePack(pack.print,d);files['sactcard.html']=localisePack(pack.card,d);
+ if (newGynaeRoutes.includes(route) && s.phases.length === s.cycle_blocks?.length &&
+     s.phases.every((phase, i) => phase.title === s.cycle_blocks[i].label && phase.text === s.cycle_blocks[i].text)) {
+  // The calendar already prints these same visits and instructions below the overall schedule.
+  files['guide.html']=files['guide.html'].replace(/<ol class="pt-phases">[\s\S]*?<\/ol>/,'');
+ }
  const purpose='<p>'+esc(d.purpose)+'</p>';
  const meds=paragraphs(d.agents.map(a=>({title:a.name+' · '+a.brand,text:a.type+'. '+a.explanation+' '+a.watch})));
  const tests=d.monitoring_schedule;
@@ -88,16 +97,16 @@ function renderPages(route, root = projectRoot) {
   }
   for(const name of ['supportive-care.html','supportive-care-overview.html'])files[name]=files[name].replace('</main>','<div class="no-print">'+section('phase-support','Choose the current phase',refs.join(''))+'</div>'+'</main>');
  }
- const phaseSheets = cervical ? d.prescription_phases : gynaeBatch.has(code) || code === '00344'
+ const phaseSheets = profilePhases ? d.prescription_phases : gynaeBatch.has(code) || code === '00344'
    ? JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-v0838.json'),'utf8')).regimens[code] : null;
- if (cervical || gynaeBatch.has(code)) {
+ if (profilePhases || gynaeBatch.has(code)) {
   for (const phase of phaseSheets) {
    const rows=phase.medicines.map(m=>[m.name,m.dose,m.timing,m.note||'']);
-   const emptyPlan = cervical && phase.emetogenic_risk !== 'minimal' ? 'Your oncology team will complete your written anti-sickness plan for this treatment visit.' : code === '00904' ? 'Your team will write which anti-sickness medicine to take, how much and when.' : 'No routine preventive anti-sickness medicine is specified. Follow the individually prescribed plan.';
+   const emptyPlan = profilePhases && phase.emetogenic_risk !== 'minimal' ? 'Your oncology team will complete your written anti-sickness plan for this treatment visit.' : code === '00904' ? 'Your team will write which anti-sickness medicine to take, how much and when.' : 'No routine preventive anti-sickness medicine is specified. Follow the individually prescribed plan.';
    const pills=rows.length?table(['Medicine','Dose in reference plan','When','Additional instructions'],rows):'<p>'+emptyPlan+'</p>';
    let timingNote='Ask your team to confirm your signed prescription. The day numbers on a support prescription are counted from this visit.';
    if (['00267','00301'].includes(code)) timingNote='Use the dated anti-sickness plan for the whole treatment block. On a return visit, continue from the actual cycle day and confirm which medicines you have already taken.';
-   if (cervical) timingNote='Your treatment team confirms which medicines you need for this visit and completes your personal prescription.';
+   if (profilePhases) timingNote='Your treatment team confirms which medicines you need for this visit and completes your personal prescription.';
    if (code==='00904') timingNote='Use the anti-sickness medicine and timing on your personal prescription. Tell your team if nausea is affecting eating, drinking or taking the tablets.';
    if (code==='00300' && phase.id!=='bleomycin') timingNote='Use one signed anti-sickness plan from day 1 of the five-day block. Keep the same day numbers on return visits.';
    if (code==='00248' && ['ema','ema2'].includes(phase.id)) timingNote='The EMA anti-sickness prescription counts from day 1. Continue the same course when you return on day 2.';
@@ -118,24 +127,28 @@ function renderPages(route, root = projectRoot) {
   const maintenancePrint = '<style>@media print{@page maintenance-plan{size:A4;margin:9mm 10mm}.pt-first{page:maintenance-plan}.pt-first .pt-tests td,.pt-first .pt-tests th{padding:.75mm 1.2mm}.pt-first .pt-cycle>div,.pt-first .pt-phases li{padding:1mm 1.5mm}.pt-first h2{margin:1.3mm 0 .7mm}.pt-first .pt-urgent{padding:1.4mm}.pt-first footer{margin-top:1mm}}</style>';
   files['guide.html']=files['guide.html'].replace('</head>',maintenancePrint+'</head>');
  }
- if (cervical) {
+ if (['00279/cervical','00251/ovarian'].includes(route)) {
+  const compactPlan = '<style>@media print{@page compact-plan{size:A4;margin:9mm 10mm}.pt-first{page:compact-plan}.pt-first .pt-tests td,.pt-first .pt-tests th{padding:.75mm 1.2mm!important}.pt-first .pt-cycle>div{padding:1mm 1.5mm!important}.pt-first h2{margin:1.3mm 0 .7mm!important}.pt-first .pt-urgent{padding:1.4mm!important}.pt-first footer{margin-top:1mm!important}}</style>';
+  files['guide.html']=files['guide.html'].replace('</head>',compactPlan+'</head>');
+ }
+ if (contextRoute) {
   for (const name of ['guide.html','sactcard.html']) files[name]=contextAssets(files[name],code,route);
  }
  const portal=localisePack(pack.portal,d);
- files['index.html']=buildOverview(cervical ? contextAssets(portal,code,route) : portal,{root,route,authoredCompanions:cervical ? ['treatment-journey.html','logistics.html','supportive-care.html','sactcard.html','sactcard.pdf','consent-form.pdf'] : undefined,profile:d,guideHtml:files['guide.html'],cardHtml:files['sactcard.html'],knowledgeHtml:files['knowledge.html']});
+ files['index.html']=buildOverview(contextRoute ? contextAssets(portal,code,route) : portal,{root,route,authoredCompanions:profilePhases ? ['treatment-journey.html','logistics.html','supportive-care.html','sactcard.html','sactcard.pdf','consent-form.pdf'] : undefined,profile:d,guideHtml:files['guide.html'],cardHtml:files['sactcard.html'],knowledgeHtml:files['knowledge.html']});
  const pictureEntry = require('./durvalumab-symptom-entry.cjs').entry;
- if (!cervical && !illustratedSuites.has(code)) for (const name of ['index.html','knowledge.html']) files[name]=pictureEntry(code,name,files[name]);
- if (cervical || illustratedSuites.has(code)) {
+ if (!profilePhases && !illustratedSuites.has(code)) for (const name of ['index.html','knowledge.html']) files[name]=pictureEntry(code,name,files[name]);
+ if (profilePhases || illustratedSuites.has(code)) {
   const map = require('../js/patient-anatomy-v08431.js').render(d);
   files['knowledge.html'] = files['knowledge.html'].replace('</head>','<link rel="stylesheet" href="../../assets/patient/hcc-bodymap-v08431.css"></head>').replace('<section id="common-effects">', map+'<section id="common-effects">');
   const agentRisks = section('risks-by-medicine','Risks to discuss for each medicine',paragraphs(d.agents.map(a => ({title:a.name,text:a.risks.join(', ')+'. '+a.watch}))));
   const consentWithAgents = files['consent-form.html'].replace('<section id="understanding">',agentRisks+'<section id="understanding">');
   files['consent-form.html'] = files['consent.html'] = consentWithAgents;
-  const phaseSheets = d.phases.map(p => sheet(section('support-'+p.id, p.short+' · supportive care', paragraphs(d.phase_support[p.id])+((cervical || gynaeBatch.has(code))?(files['support-'+p.id+'.html'].match(/<section id="written-plan-[\s\S]*?<\/section>/)||[''])[0]:'')))).join('');
+  const phaseSheets = d.phases.map(p => sheet(section('support-'+p.id, p.short+' · supportive care', paragraphs(d.phase_support[p.id])+((profilePhases || gynaeBatch.has(code))?(files['support-'+p.id+'.html'].match(/<section id="written-plan-[\s\S]*?<\/section>/)||[''])[0]:'')))).join('');
   files['handbook-print.html'] = files['handbook-print.html'].replace('</main>', phaseSheets+'</main>');
   for (const name of Object.keys(files)) {
    files[name]=files[name].replace(/<a href="([^"]+\.pdf)"(?! download)/g,'<a download href="$1"');
-   if((cervical && ['00385','00419'].includes(code)) || (gynaeBatch.has(code) && !['00819','00811','00817'].includes(code))) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
+   if((profilePhases && ['00385','00419','00279','00251','00261','00921'].includes(code)) || (gynaeBatch.has(code) && !['00819','00811','00817'].includes(code))) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
    if(code === '00904') files[name]=files[name]
      .replaceAll('My cycle record', 'My review record')
      .replaceAll('<th>Cycle</th>', '<th>Review</th>')
@@ -156,7 +169,7 @@ function renderPages(route, root = projectRoot) {
   for (const name of Object.keys(files)) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
  }
  const clinical=require('./gynae-clinical-documents-v08466.cjs');
- if(cervical || clinical.codes.has(code)){
+ if(profilePhases || clinical.codes.has(code)){
   const phases=phaseSheets;
   Object.assign(files,clinical.build(d,phases));
   for(const key of ['supportive-care.html','supportive-care-overview.html']){
@@ -171,14 +184,14 @@ function renderPages(route, root = projectRoot) {
   for(const name of ['index.html','knowledge.html','treatment-journey.html','support-maintenance.html'])
    files[name]=files[name].replace('</main>',handoff+'</main>');
  }
- if (cervical) for (const name of Object.keys(files)) files[name]=contextAssets(files[name],code,route);
+ if (contextRoute) for (const name of Object.keys(files)) files[name]=contextAssets(files[name],code,route);
  return {data:d,files};
 }
 // Shared publication uses the native source for every document this suite owns.
 function renderFile(file, root = projectRoot) {
  const relative = path.relative(root, path.resolve(root,file)).split(path.sep).join('/');
  const match = /^patient\/(\d{5}(?:\/[a-z0-9_]+)?)\/([^/]+\.html)$/.exec(relative);
- if (!match || (!codes.has(match[1]) && !cervicalRoutes.has(match[1]))) return null;
+ if (!match || (!codes.has(match[1]) && !contextRoutes.has(match[1]))) return null;
  return renderPages(match[1],root).files[match[2]] ?? null;
 }
 function build(code, {names, check = false} = {}) {
@@ -200,4 +213,4 @@ function build(code, {names, check = false} = {}) {
  }
 }
 if(require.main===module){const selected=process.argv.slice(2);for(const code of selected.length?selected:['00897', '00926', '00953'])build(code);}
-module.exports={build,codes,cervicalRoutes,renderFile,scheduleSection};
+module.exports={build,codes,cervicalRoutes,contextRoutes,renderFile,scheduleSection};
