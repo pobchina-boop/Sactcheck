@@ -1,3 +1,4 @@
+const gynae71 = require('./helpers/retrospective-v08471.cjs').inventory;
 const gynae70 = require('./helpers/retrospective-v08470.cjs').inventory;
 const gynae69 = require('./helpers/retrospective-v08469.cjs').inventory;
 const gynae68 = require('./helpers/retrospective-v08468.cjs').inventory;
@@ -14,9 +15,9 @@ const check=require('./helpers/head-neck-suite-registration-v08445.cjs').registr
 const prior=Object.keys(JSON.parse(fs.readFileSync(path.join(root,'data/protected-patient-assets-v0810.json'))).assets);
 check(registry.codes,prior);
 const release=require('../package.json').version;
-assert.equal(registry.codes.length,release==='0.84.70'?gynae70.codes:release==='0.84.69'?gynae69.codes:release==='0.84.68'?gynae68.codes:release==='0.84.67'?flot67.codes:release==='0.84.66'?gynae66.codes:release==='0.84.65'?gynae65.codes:release==='0.84.64'?sarcomaCounts.codes:release==='0.84.63'?gynaecologyCounts.codes:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
-if(['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70'].includes(release)){
- const liveCounts = release==='0.84.70'?gynae70:release==='0.84.69'?gynae69:release==='0.84.68'?gynae68:release==='0.84.67'?flot67:release==='0.84.66'?gynae66:release==='0.84.65'?gynae65:release==='0.84.64'?sarcomaCounts:gynaecologyCounts;
+assert.equal(registry.codes.length,release==='0.84.71'?gynae71.codes:release==='0.84.70'?gynae70.codes:release==='0.84.69'?gynae69.codes:release==='0.84.68'?gynae68.codes:release==='0.84.67'?flot67.codes:release==='0.84.66'?gynae66.codes:release==='0.84.65'?gynae65.codes:release==='0.84.64'?sarcomaCounts.codes:release==='0.84.63'?gynaecologyCounts.codes:275 + require('./helpers/retrospective-v08462.cjs').NEW_ROUTES.length);
+if(['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71'].includes(release)){
+ const liveCounts = release==='0.84.71'?gynae71:release==='0.84.70'?gynae70:release==='0.84.69'?gynae69:release==='0.84.68'?gynae68:release==='0.84.67'?flot67:release==='0.84.66'?gynae66:release==='0.84.65'?gynae65:release==='0.84.64'?sarcomaCounts:gynaecologyCounts;
  assert.equal(registry.codes.flatMap(code=>registry.bundleRoutes(code)).length,liveCounts.routes);
  assert.equal(require('../tools/apply-patient-visual-standard-v08443.cjs').discoverRoutes(root).length,liveCounts.visualRoutes);
 }
@@ -40,7 +41,7 @@ const records=releases.map(([dir])=>JSON.parse(fs.readFileSync(path.join(root,'v
 for(const tool of ['tools/system-health-audit-v0810.js','tools/validate-pages-site.js','tests/v0810-architecture-consolidation.test.js']){
  const src=fs.readFileSync(path.join(root,tool),'utf8');
  assert(src.includes('patient-migration-catalogue.cjs'),tool+' uses the shared reviewed migration catalogue');
- for(const version of (release==='0.84.70'?[58,59,60,61,62,63,64,65,66,67,68,69,70]:release==='0.84.69'?[58,59,60,61,62,63,64,65,66,67,68,69]:release==='0.84.68'?[58,59,60,61,62,63,64,65,66,67,68]:release==='0.84.67'?[58,59,60,61,62,63,64,65,66,67]:release==='0.84.66'?[58,59,60,61,62,63,64,65,66]:release==='0.84.65'?[58,59,60,61,62,63,64,65]:release==='0.84.64'?[58,59,60,61,62,63,64]:release==='0.84.63'?[58,59,60,61,62,63]:[58,59,60,61,62]))assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
+ for(const version of (release==='0.84.71'?[58,59,60,61,62,63,64,65,66,67,68,69,70,71]:release==='0.84.70'?[58,59,60,61,62,63,64,65,66,67,68,69,70]:release==='0.84.69'?[58,59,60,61,62,63,64,65,66,67,68,69]:release==='0.84.68'?[58,59,60,61,62,63,64,65,66,67,68]:release==='0.84.67'?[58,59,60,61,62,63,64,65,66,67]:release==='0.84.66'?[58,59,60,61,62,63,64,65,66]:release==='0.84.65'?[58,59,60,61,62,63,64,65]:release==='0.84.64'?[58,59,60,61,62,63,64]:release==='0.84.63'?[58,59,60,61,62,63]:[58,59,60,61,62]))assert(require('./helpers/patient-migration-catalogue.cjs').getMigrations().some(x=>x.version===version),tool+' covers '+version);
 }
 let assets=0;
 for(let i=0;i<releases.length;i++)for(const code of releases[i][1])for(const name of ['index.html','guide.pdf','passport.pdf']){

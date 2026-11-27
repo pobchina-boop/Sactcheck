@@ -13,10 +13,13 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.70';
+  const RELEASE='0.84.71';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
+    '00267':{"title": "Two-day etoposide and cisplatin (EP)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00301':{"title": "Five-day etoposide and cisplatin (EP)", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
+    '00904':{"title": "Rucaparib monotherapy", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00247':{"title": "Dactinomycin for low-risk GTN", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00248':{"title": "EMA/CO for gestational trophoblastic neoplasia", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
     '00249':{"title": "Intrathecal methotrexate for GTN", "guide": true, "passport": true, "sactCard": true, "knowledge": true, "consentDraft": true, "supportiveCare": true, "phaseSupport": true, "longitudinal": true},
@@ -350,7 +353,7 @@
   const MELANOMA_CONTEXTS=['melanoma_advanced','melanoma_adjuvant'];
   const HEAD_NECK46_CODES=Object.freeze(['00261','00483','00484','00455','00558']);
   const GIST_CONTEXT_CODES=Object.freeze(['00325','00719','00244']);
-  const CONTEXT_CODES=Object.freeze(['00228','00205','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
+  const CONTEXT_CODES=Object.freeze(['00228','00205','00251','00325','00719','00244','00588','00294','00419','00261','00385','00207','00535','00551','00483','00484','00415','00320','00455','00558','00212','00214','00203','00226','00232','00259','00215','00621']);
   const CONTEXT_ASSETS=Object.freeze({'portal':'','knowledge':'knowledge.html','guide':'guide.pdf','passport':'passport.pdf','sact-card':'sactcard.pdf','consent-draft':'consent-form.html','supportive-care-selector':'supportive-care.html','supportive-care':'supportive-care.pdf','longitudinal':'treatment-journey.html'});
   const OLAPARIB_ROUTES=Object.freeze({breast:'',prostate:'prostate/',ovarian_first_line:'ovarian_first_line/',ovarian_relapsed:'ovarian_relapsed/',pancreatic:'pancreatic/'});
   const OLAPARIB_ASSETS=Object.freeze({...CONTEXT_ASSETS,handbook:'handbook.pdf','support-treatment':'support-treatment.html','support-treatment-pdf':'support-treatment.pdf','consent-pdf':'consent-form.pdf'});
@@ -395,6 +398,15 @@
     }
     if(code==='00203'&&['prostate','genitourinary','genitourinary_prostate'].includes(selected))return 'prostate';
     if(HEAD_NECK46_CODES.includes(code)&&['head_neck','head and neck','head/neck'].includes(selected))return 'head_neck';
+    if(code==='00251') {
+      const indication = value?.selected_indication_id || value?.indication_id || value?.selected_indication || value?.reimbursement_code;
+      if(indication) {
+        const id = typeof indication === 'object' ? indication.code || indication.indication_id || indication.id : indication;
+        if(id !== '00251j') return '';
+        if(!selected) return 'breast';
+      }
+      return selected === 'breast' ? 'breast' : '';
+    }
     if(code==='00261')return selected==='breast'?'breast':'';
     if(['00419','00294'].includes(code))return ['head_neck','head and neck','head/neck','head_neck_squamous_cell'].includes(selected)?'head_neck':'';
     if(code==='00385')return ['head_neck','nasopharyngeal'].includes(selected)?selected:'';

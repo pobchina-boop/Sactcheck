@@ -55,6 +55,11 @@ for (const file of paths) {
     const {record} = release.gynae70Inventory();
     assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
     release.verifyFile(file);
+  } else if (["00267", "00301", "00904"].includes(code)) {
+    const release = require('./helpers/live-release-v08464.cjs');
+    const {record} = release.gynae71Inventory();
+    assert(expected.equals(git('show',record.base+':'+file)),file+' predecessor');
+    release.verifyFile(file);
   } else if (code === '00344') {
     const release = require('./helpers/live-release-v08464.cjs');
     const {record} = release.flot67Inventory();

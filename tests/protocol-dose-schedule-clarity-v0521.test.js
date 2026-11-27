@@ -116,10 +116,17 @@ for (const code of gynae70Schedules) {
   const row = catalogue.protocols.find(x=>x.path.includes('/'+code+'-'));
   assert.equal(DoseSchedule.buildModel(require(path.join(root,row.path))).phases.length,['00248','00264','00266'].includes(code)?2:1);
 }
-const expectedScheduleCoverage = gynae70Schedules.length + gynae69Schedules.length + gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
+const finalGynaeVisits = {'00267':['day1','day2'], '00301':['day1','days2to5'], '00904':['daily']};
+for (const [code, visits] of Object.entries(finalGynaeVisits)) {
+  const row = catalogue.protocols.find(x=>x.path.includes('/'+code+'-'));
+  const phases = DoseSchedule.buildModel(require(path.join(root,row.path))).phases;
+  assert.deepEqual(Array.from(phases, p=>p.id),visits);
+}
+const expectedScheduleCoverage = Object.keys(finalGynaeVisits).length + gynae70Schedules.length + gynae69Schedules.length + gynae68Schedules.length + 258 + newSarcomaSchedules.length + gynaeSchedules.length + 1;
 assert.strictEqual(usefulCoverage, expectedScheduleCoverage);
 assert.strictEqual(scheduleCoverage, expectedScheduleCoverage);
-assert.strictEqual(doseLevelCoverage, 67);
+// First-line rucaparib adds the four NCCP dose levels to the 67 existing tables.
+assert.strictEqual(doseLevelCoverage, 68);
 // v61 adds precisely the source-reviewed 00719 schedule and dose-level table.
 // The other three GIST protocols retain their prior structured-model coverage.
 for(const code of ['00244','00325','00335','00719']){

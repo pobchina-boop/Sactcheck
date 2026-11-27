@@ -96,7 +96,11 @@
     const nationalGuidanceUrl = /haem|lymph|myeloma|leuka/.test(tumourContext)
       ? mapping.source?.haemato_oncology_antiemetic_guidance_url
       : mapping.source?.medical_oncology_antiemetic_guidance_url;
-    const prescription = supportive.prescription_index ? (phase.prescription || supportive.prescription_index) : null;
+    // Visits can have different prescriptions even when they share an emetogenic risk level.
+    const visitPrescription = supportive.phase_profiles?.[options.treatmentPhase]?.prescription;
+    const prescription = supportive.prescription_index
+      ? (phase.prescription || visitPrescription || supportive.prescription_index)
+      : null;
     const baseUrl = prescription || nationalGuidanceUrl || supportive.supportive_medications_pdf_url || metadata.antiemetic_proforma_url || script.url || null;
     const anchor = prescription ? null : metadata.antiemetic_proforma_anchor || null;
     const unresolvedPhase = baseLevel === "phase_dependent" && !phase.phaseResolved;

@@ -55313,6 +55313,286 @@ const definitions={
         "url": "https://pubmed.ncbi.nlm.nih.gov/18453518/"
       }
     ]
+  },
+  "00267": {
+    "code": "00267",
+    "release": "0.84.71",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Two-day EP for emergency treatment of GTN",
+    "setting": "Gestational trophoblastic neoplasia with acute illness",
+    "summary": "Both medicines on days 1 and 2. The specialist may repeat the block weekly for 1–3 weeks. The GTN team decides when to switch to EMA/CO or EMA/EP, combinations of chemotherapy medicines used after induction.",
+    "stages": [
+      "Day 1 · start emergency EP",
+      "Day 2 · continue emergency EP",
+      "After this block"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Both medicines on days 1 and 2. The specialist may repeat the block weekly for 1–3 weeks.",
+        "cells": [
+          "Your team monitors your breathing, blood pressure and fluid balance during both infusions.",
+          "Both medicines are given again. Bring the anti-sickness record from yesterday so the team can check the doses already given.",
+          "The GTN team decides when to switch to EMA/CO or EMA/EP, combinations of chemotherapy medicines used after induction."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver tests and a blood pregnancy-hormone test (hCG) help the team assess illness and plan treatment.",
+        "when": "At admission",
+        "why": "Tell the team about ringing in the ears, hearing loss or tingling. Hearing tests and a measured kidney clearance may be needed.",
+        "clinical": "NCCP 00267",
+        "action": "Tell the team about ringing in the ears, hearing loss or tingling. Hearing tests and a measured kidney clearance may be needed.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Blood counts and kidney and liver tests are repeated. The team checks hCG on day 1 of each cycle and more often if needed.",
+        "when": "During induction",
+        "why": "If a third block is planned, ask about the 24-hour urine collection used to measure kidney clearance beforehand.",
+        "clinical": "NCCP 00267",
+        "action": "If a third block is planned, ask about the 24-hour urine collection used to measure kidney clearance beforehand.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "The NCCP schedule checks hCG every two weeks for six months, monthly for six months, then every two months for two years.",
+        "when": "After remission and consolidation",
+        "why": "Get your own testing dates and specialist contact details before leaving hospital.",
+        "clinical": "NCCP 00267",
+        "action": "Get your own testing dates and specialist contact details before leaving hospital.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Admit and initiate emergency induction under the GTN specialist. Reassess after each two-day block and document the intended transition to EMA/CO or EMA/EP. Serial validated hCG tracks disease response.",
+      "Tell ward staff immediately about new breathlessness, coughing blood, a severe headache, confusion or a seizure. At home, call 112 or 999 for severe breathing difficulty, collapse or a seizure. Call the oncology number urgently for fever or shaking chills."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00267 v5",
+        "url": "https://healthservice.hse.ie/documents/6692/267_EP_.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Low-dose EP induction in high-risk GTN",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23233709/"
+      },
+      {
+        "id": "gtd",
+        "title": "Irish national clinical guideline for gestational trophoblastic disease",
+        "url": "https://www2.healthservice.hse.ie/files/138/"
+      },
+      {
+        "id": "centre",
+        "title": "Irish National GTD Centre · treatment and follow-up",
+        "url": "https://gtd-cumh.irelandsouthwid.ie/patient-information/treatment/"
+      },
+      {
+        "id": "anti",
+        "title": "NCCP NCIS antiemetic guidance v8, pages 4–5",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "multiday",
+        "title": "MASCC/ESMO multiday cisplatin antiemetic recommendations",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10725845/"
+      }
+    ]
+  },
+  "00301": {
+    "code": "00301",
+    "release": "0.84.71",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Five-day EP for good-risk metastatic germ-cell tumours",
+    "setting": "Good-prognosis metastatic germ-cell tumours",
+    "summary": "Both medicines on days 1–5 of a 21-day cycle. Four cycles are planned if treatment remains suitable. Days 6–21 have no scheduled EP infusions. Your blood count can still fall. The next cycle starts only after review.",
+    "stages": [
+      "Day 1 · begin five-day EP",
+      "Days 2–5 · continue EP",
+      "After this block"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Both medicines on days 1–5 of a 21-day cycle. Four cycles are planned if treatment remains suitable.",
+        "cells": [
+          "Bring your medicines list. The team checks your treatment plan and dates one anti-sickness course for the whole block.",
+          "On each of these four days both infusions and kidney-protecting fluid are repeated. Show the team your dated anti-sickness plan each day.",
+          "Days 6–21 have no scheduled EP infusions. Your blood count can still fall. The next cycle starts only after review."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Blood count, kidney and liver function are checked. The team considers a hearing test and discusses fertility preservation, including sperm banking where appropriate.",
+        "when": "Before the first cycle",
+        "why": "Raise fertility questions before the first infusion, even if you are unsure about future plans.",
+        "clinical": "NCCP 00301",
+        "action": "Raise fertility questions before the first infusion, even if you are unsure about future plans.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "A blood count is checked weekly. Kidney and liver tests are repeated before each cycle. A change in hearing may prompt audiology.",
+        "when": "During each cycle",
+        "why": "Keep your weekly blood appointment during the break. Report numbness, ringing in the ears, or a change in how much urine you pass.",
+        "clinical": "NCCP 00301",
+        "action": "Keep your weekly blood appointment during the break. Report numbness, ringing in the ears, or a change in how much urine you pass.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Your specialist plans scans and tumour-marker tests according to your disease. AFP, beta-hCG and LDH may be relevant depending on tumour type and earlier results.",
+        "when": "At response review",
+        "why": "Ask which markers matter for you and how any residual mass will be assessed.",
+        "clinical": "NCCP 00301",
+        "action": "Ask which markers matter for you and how any residual mass will be assessed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Confirm IGCCCG prognostic group, histology, tumour-marker profile and the rationale for a bleomycin-free curative regimen. Gynaecology is a catalogue cross-listing. The PDF gives C62 for 00301a and does not establish a separate ovarian indication. The consultant approves any treatment delay.",
+      "Call your oncology unit urgently for fever, shaking chills, unexpected bleeding or sudden illness, including during the treatment break. Sudden chest pain, collapse or severe breathlessness needs emergency help."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00301 v5",
+        "url": "https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Four cycles of EP in good-risk germ-cell tumours",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33586274/"
+      },
+      {
+        "id": "nci",
+        "title": "NCI · testicular cancer treatment and germ-cell markers",
+        "url": "https://www.cancer.gov/types/testicular/hp/testicular-treatment-pdq"
+      },
+      {
+        "id": "anti",
+        "title": "NCCP NCIS antiemetic guidance v8, pages 4–5",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "multiday",
+        "title": "MASCC/ESMO multiday cisplatin antiemetic recommendations",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10725845/"
+      }
+    ]
+  },
+  "00904": {
+    "code": "00904",
+    "release": "0.84.71",
+    "checked": "2026-11-27",
+    "status": "Feasibility build. Independent clinical, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "title": "Rucaparib (Rubraca) maintenance tablets",
+    "setting": "First-line maintenance after a platinum response",
+    "summary": "Take the prescribed dose twice daily, about 12 hours apart, every day. There is no planned week off. Start within eight weeks of the final platinum dose. Treatment lasts up to two years and may stop earlier if the cancer grows or side effects make continued treatment unsuitable.",
+    "stages": [
+      "Every day · morning and evening",
+      "Next review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Take the prescribed dose twice daily, about 12 hours apart, every day. There is no planned week off.",
+        "cells": [
+          "Check the strength and number of tablets against the latest dispensing label. A dose reduction can change both. Mark morning and evening doses separately.",
+          "Start within eight weeks of the final platinum dose. Treatment lasts up to two years and may stop earlier if the cancer grows or side effects make continued treatment unsuitable."
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "The team checks your blood count, kidney and liver function and pregnancy status where relevant.",
+        "when": "Before starting",
+        "why": "Confirm your last platinum date and ask your pharmacist to check prescribed medicines, painkillers, supplements and herbal products.",
+        "clinical": "NCCP 00904",
+        "action": "Confirm your last platinum date and ask your pharmacist to check prescribed medicines, painkillers, supplements and herbal products.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "A full blood count checks for anaemia, infection risk and bruising. Kidney and liver blood tests help detect side effects you may not feel.",
+        "when": "Each month",
+        "why": "Keep the appointment even when you feel well. If a result changes, extra blood tests or a pause may be needed.",
+        "clinical": "NCCP 00904",
+        "action": "Keep the appointment even when you feel well. If a result changes, extra blood tests or a pause may be needed.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Persistent low blood counts need closer monitoring and can require haematology review. Your team sets the timing of tests before restarting.",
+        "when": "If treatment is paused",
+        "why": "Record the stop date. Wait for your team to give you a new dose and restart date.",
+        "clinical": "NCCP 00904",
+        "action": "Record the stop date. Wait for your team to give you a new dose and restart date.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Confirm complete or partial response after first-line platinum, stage III/IV high-grade epithelial disease, ECOG 0–1 and marrow and organ recovery. Record the last platinum date and discuss alternatives, tumour BRCA/HRD results, monitoring and patient preferences. NCCP 00904 does not require a BRCA mutation.",
+      "Call the oncology unit urgently for fever, shaking chills, unexpected bleeding, worsening breathlessness or vomiting that prevents drinking. Report unusual bruising or persistent fatigue promptly."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "NCCP 00904 v2",
+        "url": "https://healthservice.hse.ie/documents/6655/904_Rucaparib_monotherapy.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "ATHENA-MONO · first-line rucaparib maintenance",
+        "url": "https://doi.org/10.1016/j.annonc.2025.10.007"
+      },
+      {
+        "id": "ema",
+        "title": "EMA · Rubraca product information and patient leaflet",
+        "url": "https://www.ema.europa.eu/en/documents/product-information/rubraca-epar-product-information_en.pdf"
+      },
+      {
+        "id": "anti",
+        "title": "NCCP oral antiemetic classification v6, table 5",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ]
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

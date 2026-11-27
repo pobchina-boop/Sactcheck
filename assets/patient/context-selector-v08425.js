@@ -17,6 +17,6 @@
       link.setAttribute('href',route+file);
       return;
     }
-    link.setAttribute('href',(['prostate/','head_neck/','nasopharyngeal/','melanoma/','merkel_cell/','melanoma_advanced/','melanoma_adjuvant/','melanoma_perioperative/','./','lung/','colorectal/','neuroendocrine/','adjuvant/','adjuvant/','adjuvant/','adjuvant/'].includes(link.dataset.route)?link.dataset.route:link.dataset.context==='prostate'?'prostate/':link.dataset.context==='colorectal'?'colorectal/':link.dataset.context==='lung'?'lung/':'./')+file);
+    link.setAttribute('href',(['prostate/','sarcoma/','head_neck/','nasopharyngeal/','melanoma/','merkel_cell/','melanoma_advanced/','melanoma_adjuvant/','melanoma_perioperative/','./','lung/','colorectal/','neuroendocrine/','adjuvant/','adjuvant/','adjuvant/','adjuvant/'].includes(link.dataset.route)?link.dataset.route:link.dataset.context==='prostate'?'prostate/':link.dataset.context==='colorectal'?'colorectal/':link.dataset.context==='lung'?'lung/':'./')+file);
   });
 })();

@@ -13,11 +13,11 @@
     ],
     "title": "Etoposide and Cisplatin 20 mg/m² (EP) 5-day Therapy",
     "short_title": "Etoposide and Cisplatin 20 mg/m² (EP) 5-day Therapy",
-    "indication": "Good-prognosis metastatic germ-cell tumours.",
+    "indication": "Treatment of good-prognosis metastatic germ-cell tumours by IGCCCG criteria (seminoma or non-seminoma). The published indication is 00301a, ICD-10 C62.",
     "source_url": "https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf",
-    "source_document_pages": null,
-    "sactcheck_encoding_version": "0.45.1",
-    "source_checked_date": "2026-07-25",
+    "source_document_pages": 5,
+    "sactcheck_encoding_version": "0.84.71",
+    "source_checked_date": "2026-11-27",
     "partial_assessment_supported": true,
     "partial_assessment_note": "Any independently actionable entered value is assessed; omitted domains remain unassessed and do not block a partial result.",
     "gynaecology_subgroup": "ovarian_germ_cell",
@@ -62,18 +62,23 @@
     "regimen_card": {
       "contexts": [
         {
-          "id": "00301-gu",
-          "indication_id": "00301-gu",
-          "intent": "advanced_disease",
-          "cycle_length_days": 21,
-          "unresolved": [
-            "duration"
-          ],
-          "provenance": "official_nccp_catalogue_reconciled"
+          "id": "00301-gyn",
+          "indication_id": "00301-gyn",
+          "intent": "curative",
+          "provenance": "NCCP 00301 v5 p1",
+          "duration_text": "Four cycles unless progression or unacceptable toxicity occurs earlier",
+          "duration_type": "fixed_cycles",
+          "planned_cycles": 4,
+          "cycle_length_days": 21
         }
       ],
       "provenance": {
-        "source": "NCCP regimen PDF / GU catalogue",
+        "source": "https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf",
+        "source_sha256": "fd1b3c771d83f937cd55e8ca982352ec735a0ff7ec79715db88fcc254cb9b4f8",
+        "source_pages": [
+          1
+        ],
+        "checked_date": "2026-11-27",
         "reviewed": false
       }
     },
@@ -101,40 +106,52 @@
       "audit_date": "2026-08-15",
       "scope_note": "The protocol has executable SACTCheck content but has not yet completed the v0.68.0 full source fidelity review. Use the current NCCP source as authoritative."
     },
-    "canonical_protocol_id": "nccp-00301-v5"
+    "canonical_protocol_id": "nccp-00301-v5",
+    "review_date": "2029-12-09"
   },
   "clinical_governance": {
     "prescriptive_authority": "Treatment plan must be initiated by a Consultant Medical Oncologist or the specialist authority specified in the current NCCP source.",
     "dose_modification_note": "Use the most restrictive applicable component rule and confirm all dose changes against the current official NCCP PDF.",
-    "disclaimer": "Decision-support encoding includes NCCP 00301 Version 5. It does not replace the current official regimen, prescribing review, pharmacy verification or independent clinical judgement."
+    "disclaimer": "Decision support derived from NCCP 00301 v5. The prescriber must verify the current protocol and individual patient circumstances. Independent clinical and pharmacy validation is pending."
   },
   "indications": [
     {
       "indication_id": "00301-gyn",
       "code": "00301a",
-      "description": "Good-prognosis metastatic germ-cell tumours.",
+      "description": "Treatment of good-prognosis metastatic germ-cell tumours by IGCCCG criteria (seminoma or non-seminoma). The published indication is 00301a, ICD-10 C62.",
       "tumour_groups": [
-        "Gynaecology"
-      ]
-    },
-    {
-      "indication_id": "00301-gu",
-      "code": "00301g",
-      "description": "Curative treatment of good-risk germ-cell tumours where bleomycin is contraindicated or omitted.",
-      "tumour_groups": [
+        "Gynaecology",
         "Genitourinary"
       ]
     }
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Etoposide and Cisplatin 20 mg/m² (EP) 5-day Therapy",
+    "schedule_summary": "Etoposide then cisplatin on days 1–5 of a 21-day cycle. Plan four cycles, stopping earlier for progression or unacceptable toxicity.",
     "drugs": [
       "etoposide",
       "cisplatin"
     ]
   },
   "input_definitions": {
+    "treatment_visit": {
+      "type": "select",
+      "label": "Treatment visit",
+      "options": [
+        {
+          "value": "day1",
+          "label": "Day 1 · first EP infusion"
+        },
+        {
+          "value": "days2to5",
+          "label": "Days 2–5 · continuing EP infusions"
+        }
+      ],
+      "required": false,
+      "demo_value": "day1",
+      "input_role": "context",
+      "ui_section": "treatment_context"
+    },
     "assessment_phase": {
       "label": "Assessment phase",
       "type": "select",
@@ -155,6 +172,105 @@
       ],
       "demo_value": "pre_treatment",
       "input_role": "context"
+    },
+    "known_hypersensitivity": {
+      "type": "boolean",
+      "label": "Known hypersensitivity to treatment or its excipients",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "crcl_ml_min": {
+      "type": "number",
+      "label": "Creatinine clearance",
+      "unit": "mL/min",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 90,
+      "input_role": "decision",
+      "renal_input": {
+        "mode": "source_threshold_numeric",
+        "exact_value_required": false,
+        "source_url": "https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf",
+        "reason": "Use the measured result to compare the source-specific threshold for the selected treatment visit and individual drug."
+      }
+    },
+    "neuropathy_grade": {
+      "type": "select",
+      "label": "Peripheral neuropathy",
+      "required": false,
+      "demo_value": 0,
+      "input_role": "decision",
+      "grading_source_url": "https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf",
+      "grading_source_label": "NCCP 00301 v5",
+      "assessment_guidance": "Enter the clinically assessed grade for peripheral neuropathy. Use the baseline result and the local grading reference where relevant.",
+      "source_grading_note": "The NCCP management table does not define clinical grade descriptors.",
+      "options": [
+        {
+          "value": 0,
+          "label": "Grade 0",
+          "description": "No peripheral neuropathy reported."
+        },
+        {
+          "value": 1,
+          "label": "Grade 1",
+          "description": "Clinician-confirmed grade 1 peripheral neuropathy."
+        },
+        {
+          "value": 2,
+          "label": "Grade 2",
+          "description": "Clinician-confirmed grade 2 peripheral neuropathy."
+        },
+        {
+          "value": 3,
+          "label": "Grade 3",
+          "description": "Clinician-confirmed grade 3 peripheral neuropathy."
+        },
+        {
+          "value": 4,
+          "label": "Grade 4",
+          "description": "Clinician-confirmed grade 4 peripheral neuropathy."
+        }
+      ]
+    },
+    "major_hearing_symptoms": {
+      "type": "boolean",
+      "label": "Significant hearing impairment or tinnitus",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "severe_hepatic_disease": {
+      "type": "boolean",
+      "label": "Severe hepatic impairment",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "fever_or_infection": {
+      "type": "boolean",
+      "label": "Fever or suspected infection",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "bilirubin_umol_l": {
+      "type": "number",
+      "label": "Total bilirubin",
+      "unit": "µmol/L",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 12,
+      "input_role": "decision"
+    },
+    "hydration_ready": {
+      "type": "boolean",
+      "label": "Cisplatin prehydration confirmed",
+      "required": false,
+      "demo_value": true,
+      "input_role": "decision"
     },
     "ecog": {
       "label": "ECOG performance status",
@@ -205,211 +321,62 @@
       "unit": "×10⁹/L",
       "input_role": "decision"
     },
-    "haemoglobin": {
-      "label": "Haemoglobin",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.1,
-      "demo_value": 12,
-      "unit": "g/dL",
-      "input_role": "monitoring"
-    },
-    "alt_ast_uln_multiple": {
-      "label": "ALT / AST actual result (highest ×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "bilirubin_uln_multiple": {
-      "label": "Bilirubin actual result (×ULN calculated automatically)",
-      "type": "number",
-      "required": false,
-      "min": 0,
-      "step": 0.01,
-      "demo_value": 1,
-      "unit": "×ULN",
-      "input_role": "context"
-    },
-    "non_haematological_toxicity_grade": {
-      "label": "Other clinically relevant non-haematological toxicity grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No adverse event."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild or asymptomatic; observation only."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate; intervention may be indicated and instrumental activities may be limited."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe or medically significant; hospital care may be indicated and self-care may be limited."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences; urgent intervention required."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "other_nonhaematological",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Identify the named toxicity and grade it using the applicable CTCAE term rather than a generic impression.",
-      "input_role": "decision"
-    },
-    "febrile_neutropenia": {
-      "label": "Febrile neutropenia or neutropenic sepsis",
+    "pregnancy_or_breastfeeding": {
       "type": "boolean",
+      "label": "Pregnancy or breastfeeding",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
-    "hypersensitivity_grade": {
-      "label": "Infusion or hypersensitivity reaction grade",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No infusion reaction."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild transient reaction; interruption not indicated."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Therapy/interruption indicated with prompt response."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Prolonged or recurrent reaction; hospitalisation indicated."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "infusion",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess timing, treatment required, recurrence and airway or haemodynamic compromise.",
-      "input_role": "decision"
-    },
-    "cisplatin_renal_band": {
-      "label": "Renal function for cisplatin",
-      "type": "select",
-      "required": false,
-      "options": [
-        {
-          "value": "ge60",
-          "label": "CrCl ≥60 mL/min"
-        },
-        {
-          "value": "50_59",
-          "label": "CrCl 50–59 mL/min"
-        },
-        {
-          "value": "40_49",
-          "label": "CrCl 40–49 mL/min"
-        },
-        {
-          "value": "lt40",
-          "label": "CrCl <40 mL/min"
-        },
-        {
-          "value": "dialysis",
-          "label": "Haemodialysis"
-        }
-      ],
-      "demo_value": "ge60",
-      "renal_input": {
-        "mode": "protocol_specific_band",
-        "exact_value_required": false
-      },
-      "input_role": "decision"
-    },
-    "magnesium_low_or_unreplaced": {
-      "label": "Hypomagnesaemia not corrected / hydration plan incomplete",
+    "albumin_low": {
       "type": "boolean",
+      "label": "Albumin below local lower limit",
       "required": false,
       "demo_value": false,
       "input_role": "decision"
     },
-    "hearing_or_neuropathy_grade": {
-      "label": "Cisplatin-related hearing or neuropathy grade",
-      "type": "select",
+    "haemodialysis": {
+      "type": "boolean",
+      "label": "Receiving haemodialysis",
       "required": false,
-      "options": [
-        {
-          "value": 0,
-          "label": "Grade 0",
-          "ctcae_grade": 0,
-          "description": "No neuropathy."
-        },
-        {
-          "value": 1,
-          "label": "Grade 1",
-          "ctcae_grade": 1,
-          "description": "Mild symptoms without functional limitation."
-        },
-        {
-          "value": 2,
-          "label": "Grade 2",
-          "ctcae_grade": 2,
-          "description": "Moderate symptoms limiting instrumental activities of daily living."
-        },
-        {
-          "value": 3,
-          "label": "Grade 3",
-          "ctcae_grade": 3,
-          "description": "Severe symptoms limiting self-care activities of daily living."
-        },
-        {
-          "value": 4,
-          "label": "Grade 4",
-          "ctcae_grade": 4,
-          "description": "Life-threatening neurological consequences."
-        }
-      ],
-      "demo_value": 0,
-      "ctcae_version": "5.0",
-      "ctcae_category": "neuropathy",
-      "ctcae_source_url": "https://dctd.cancer.gov/research/ctep-trials/for-sites/adverse-events/ctcae-v5-5x7.pdf",
-      "assessment_guidance": "Assess hearing/tinnitus, sensory and motor symptoms and functional impact.",
+      "demo_value": false,
       "input_role": "decision"
+    },
+    "prior_febrile_neutropenia": {
+      "type": "boolean",
+      "label": "Prior episode of neutropenic fever",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "day5_recovery_failure": {
+      "type": "boolean",
+      "label": "Neutrophils failed to recover by day 5",
+      "required": false,
+      "demo_value": false,
+      "input_role": "decision"
+    },
+    "cycle_number": {
+      "type": "number",
+      "label": "Treatment cycle",
+      "unit": "cycles",
+      "required": false,
+      "min": 0,
+      "step": 0.01,
+      "demo_value": 1,
+      "input_role": "decision"
+    },
+    "original_etoposide_mg_m2": {
+      "type": "number",
+      "label": "Original prescribed etoposide dose per treatment day",
+      "unit": "mg/m²",
+      "min": 0.01,
+      "step": "any",
+      "required": false,
+      "demo_value": 100,
+      "input_role": "context",
+      "always_show": true,
+      "assessment_guidance": "Use the verified original prescription for this patient; it can differ from the full protocol dose."
     }
   },
   "required_inputs": [],
@@ -442,182 +409,41 @@
     ],
     "rules": [
       {
-        "id": "ECOG_3",
-        "priority": 8,
-        "when": {
-          "field": "ecog",
-          "operator": ">=",
-          "value": "3"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ECOG 3–4 requires Consultant review of indication, benefit and treatment tolerance."
-      },
-      {
-        "id": "NONHAEM_G3",
-        "priority": 9,
-        "when": {
-          "field": "non_haematological_toxicity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3 or worse non-haematological toxicity requires treatment interruption and protocol-specific review."
-      },
-      {
-        "id": "HSR_G3",
+        "id": "KNOWN_ALLERGY",
         "priority": 10,
         "when": {
-          "field": "hypersensitivity_grade",
-          "operator": ">=",
-          "value": 3
-        },
-        "action": {
-          "type": "permanently_discontinue",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Grade 3–4 hypersensitivity/infusion reaction requires the severe reaction pathway and usually permanent discontinuation."
-      },
-      {
-        "id": "ANC_LT1",
-        "priority": 9,
-        "when": {
-          "field": "anc",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "ANC below 1.0 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "PLT_LT75",
-        "priority": 9,
-        "when": {
-          "field": "platelets",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "Platelets below 75 ×10⁹/L: withhold and follow the regimen-specific haematology pathway."
-      },
-      {
-        "id": "FN",
-        "priority": 10,
-        "when": {
-          "field": "febrile_neutropenia",
+          "field": "known_hypersensitivity",
           "operator": "==",
           "value": true
         },
         "action": {
-          "type": "withhold_then_reduce",
+          "type": "contraindicated",
           "components": [
             "whole_regimen"
           ],
-          "message": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
+          "message": "Known hypersensitivity is an exclusion. Review the culprit medicine or excipient."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00301 v5",
+          "page": "p2"
         },
-        "explanation": "Febrile neutropenia requires withholding, acute management and subsequent dose/G-CSF review."
+        "explanation": "Known hypersensitivity is an exclusion. Review the culprit medicine or excipient."
       },
       {
-        "id": "CIS_50_59",
-        "priority": 9,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "50_59"
-        },
-        "action": {
-          "type": "consultant_review",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 50–59 mL/min requires the regimen-specific cisplatin dose/substitution pathway."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "CrCl 50–59 mL/min requires the regimen-specific cisplatin dose/substitution pathway."
-      },
-      {
-        "id": "CIS_40_49",
+        "id": "ENTRY_NEURO",
         "priority": 10,
         "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "==",
-          "value": "40_49"
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 40–49 mL/min requires withholding cisplatin and Consultant review of reduction or alternative treatment."
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
-        },
-        "explanation": "CrCl 40–49 mL/min requires withholding cisplatin and Consultant review of reduction or alternative treatment."
-      },
-      {
-        "id": "CIS_LT40",
-        "priority": 10,
-        "when": {
-          "field": "cisplatin_renal_band",
-          "operator": "in",
-          "value": [
-            "lt40",
-            "dialysis"
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 2
+            }
           ]
         },
         "action": {
@@ -625,19 +451,49 @@
           "components": [
             "cisplatin"
           ],
-          "message": "CrCl <40 mL/min or dialysis triggers the severe renal-impairment pathway; do not give cisplatin without specialist direction."
+          "message": "Pre-existing grade 2 or higher neuropathy is an exclusion."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00301 v5",
+          "page": "p2"
         },
-        "explanation": "CrCl <40 mL/min or dialysis triggers the severe renal-impairment pathway; do not give cisplatin without specialist direction."
+        "explanation": "Pre-existing grade 2 or higher neuropathy is an exclusion."
       },
       {
-        "id": "CIS_MG",
-        "priority": 9,
+        "id": "NEW_NEURO",
+        "priority": 10,
         "when": {
-          "field": "magnesium_low_or_unreplaced",
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "!=",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "neuropathy_grade",
+              "operator": ">=",
+              "value": 2
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Assess neuropathy and review cisplatin with the consultant before further exposure."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2"
+        },
+        "explanation": "Assess neuropathy and review cisplatin with the consultant before further exposure."
+      },
+      {
+        "id": "HEARING",
+        "priority": 10,
+        "when": {
+          "field": "major_hearing_symptoms",
           "operator": "==",
           "value": true
         },
@@ -646,46 +502,719 @@
           "components": [
             "cisplatin"
           ],
-          "message": "Correct electrolytes and confirm hydration before cisplatin."
+          "message": "Review significant hearing loss or tinnitus before cisplatin. Check whether audiology is required."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00301 v5",
+          "page": "p1–3"
         },
-        "explanation": "Correct electrolytes and confirm hydration before cisplatin."
+        "explanation": "Review significant hearing loss or tinnitus before cisplatin. Check whether audiology is required."
       },
       {
-        "id": "CIS_NEURO",
-        "priority": 9,
+        "id": "HYDRATE",
+        "priority": 10,
         "when": {
-          "field": "hearing_or_neuropathy_grade",
-          "operator": ">=",
-          "value": 2
+          "field": "hydration_ready",
+          "operator": "==",
+          "value": false
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Confirm the prescribed local cisplatin hydration and electrolyte plan before giving cisplatin."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p1"
+        },
+        "explanation": "Confirm the prescribed local cisplatin hydration and electrolyte plan before giving cisplatin."
+      },
+      {
+        "id": "FEBRILE",
+        "priority": 10,
+        "when": {
+          "field": "fever_or_infection",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Arrange immediate oncology assessment for possible infection or febrile neutropenia."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2–3"
+        },
+        "explanation": "Arrange immediate oncology assessment for possible infection or febrile neutropenia."
+      },
+      {
+        "id": "ENTRY_RENAL",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "==",
+              "value": "pre_treatment"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 40
+            }
+          ]
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "CrCl below 40 mL/min is a cisplatin entry exclusion. Contact the prescribing consultant."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2"
+        },
+        "explanation": "CrCl below 40 mL/min is a cisplatin entry exclusion. Contact the prescribing consultant."
+      },
+      {
+        "id": "RENAL_PHASE",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "missing"
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 60
+            }
+          ]
         },
         "action": {
           "type": "consultant_review",
           "components": [
             "cisplatin"
           ],
-          "message": "Grade 2 or worse hearing/neurological toxicity requires cisplatin dose or substitution review."
+          "message": "Select whether this is the starting assessment or an on-treatment review before interpreting cisplatin renal thresholds.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "Select whether this is the starting assessment or an on-treatment review before interpreting cisplatin renal thresholds."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "Dose modifications"
+          "document": "NCCP 00301 v5",
+          "page": "p1–3"
         },
-        "explanation": "Grade 2 or worse hearing/neurological toxicity requires cisplatin dose or substitution review."
+        "explanation": "Select whether this is the starting assessment or an on-treatment review before interpreting cisplatin renal thresholds."
+      },
+      {
+        "id": "SEVERE_LIVER",
+        "priority": 10,
+        "when": {
+          "field": "severe_hepatic_disease",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "The protocol specifies caution with severe hepatic impairment. Review etoposide with the consultant.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "The protocol specifies caution with severe hepatic impairment. Review etoposide with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p1"
+        },
+        "explanation": "The protocol specifies caution with severe hepatic impairment. Review etoposide with the consultant."
+      },
+      {
+        "id": "ECOG",
+        "priority": 10,
+        "when": {
+          "field": "ecog",
+          "operator": ">",
+          "value": 3
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Eligibility is ECOG 0–3. Reassess eligibility with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p1"
+        },
+        "explanation": "Eligibility is ECOG 0–3. Reassess eligibility with the consultant."
+      },
+      {
+        "id": "REPRODUCTIVE",
+        "priority": 10,
+        "when": {
+          "field": "pregnancy_or_breastfeeding",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Pregnancy and breastfeeding are exclusions."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2"
+        },
+        "explanation": "Pregnancy and breastfeeding are exclusions."
+      },
+      {
+        "id": "INTENSITY",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "anc",
+              "operator": "exists"
+            },
+            {
+              "field": "platelets",
+              "operator": "exists"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Interpret counts with the prescribing consultant. NCCP gives no numerical delay rule here; avoid routine dose reduction or delay in this curative regimen. Any delay requires consultant approval."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2"
+        },
+        "explanation": "Interpret counts with the prescribing consultant. NCCP gives no numerical delay rule here; avoid routine dose reduction or delay in this curative regimen. Any delay requires consultant approval."
+      },
+      {
+        "id": "SECONDARY_GCSF",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "cycle_number",
+              "operator": ">=",
+              "value": 2
+            },
+            {
+              "any": [
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "day5_recovery_failure",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Secondary G-CSF is indicated from cycle 2 following neutropenic fever or failure of neutrophil recovery by day 5."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2"
+        },
+        "explanation": "Secondary G-CSF is indicated from cycle 2 following neutropenic fever or failure of neutrophil recovery by day 5."
+      },
+      {
+        "id": "GCSF_HISTORY",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "prior_febrile_neutropenia",
+                  "operator": "==",
+                  "value": true
+                },
+                {
+                  "field": "day5_recovery_failure",
+                  "operator": "==",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "field": "cycle_number",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm cycle number and previous neutrophil recovery to assess the indication for secondary G-CSF."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2"
+        },
+        "explanation": "Confirm cycle number and previous neutrophil recovery to assess the indication for secondary G-CSF."
+      },
+      {
+        "id": "DIALYSIS",
+        "priority": 10,
+        "when": {
+          "field": "haemodialysis",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "In haemodialysis, the consultant may consider 75% etoposide and 50% cisplatin. Review exclusions and dialysis status with specialist pharmacy before prescribing.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "In haemodialysis, the consultant may consider 75% etoposide and 50% cisplatin. Review exclusions and dialysis status with specialist pharmacy before prescribing."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p2–3 Table 2"
+        },
+        "explanation": "In haemodialysis, the consultant may consider 75% etoposide and 50% cisplatin. Review exclusions and dialysis status with specialist pharmacy before prescribing."
+      },
+      {
+        "id": "ETO_10_50",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "between",
+              "value": [
+                10,
+                50
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Table 2 gives 75% of the original etoposide dose, with possible increase if tolerated. Confirm dialysis status.",
+          "dose_percent_of_original": 75,
+          "original_dose_field": "original_etoposide_mg_m2"
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "Table 2 gives 75% of the original etoposide dose, with possible increase if tolerated. Confirm dialysis status."
+      },
+      {
+        "id": "ETO_LT10",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 10
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "There is no non-dialysis etoposide dose specified below CrCl 10 mL/min. Confirm dialysis status and consultant plan.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "There is no non-dialysis etoposide dose specified below CrCl 10 mL/min. Confirm dialysis status and consultant plan."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "There is no non-dialysis etoposide dose specified below CrCl 10 mL/min. Confirm dialysis status and consultant plan."
+      },
+      {
+        "id": "ETO_HEP",
+        "priority": 10,
+        "when": {
+          "any": [
+            {
+              "field": "albumin_low",
+              "operator": "==",
+              "value": true
+            },
+            {
+              "field": "bilirubin_umol_l",
+              "operator": ">=",
+              "value": 50
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Consider 50% etoposide if bilirubin ≥50 µmol/L or albumin is reduced. The consultant may increase the dose if tolerated.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "Consider 50% etoposide if bilirubin ≥50 µmol/L or albumin is reduced. The consultant may increase the dose if tolerated."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "Consider 50% etoposide if bilirubin ≥50 µmol/L or albumin is reduced. The consultant may increase the dose if tolerated."
+      },
+      {
+        "id": "CIS_40_49",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "between",
+              "value": [
+                40,
+                49
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Table 2 gives 50% of original cisplatin. In the 40–59 band, the prescribing consultant may instead preserve dose intensity with extra hydration, a longer infusion and daily creatinine.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "Table 2 gives 50% of original cisplatin. In the 40–59 band, the prescribing consultant may instead preserve dose intensity with extra hydration, a longer infusion and daily creatinine."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "Table 2 gives 50% of original cisplatin. In the 40–59 band, the prescribing consultant may instead preserve dose intensity with extra hydration, a longer infusion and daily creatinine."
+      },
+      {
+        "id": "CIS_50_59",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "between",
+              "value": [
+                50,
+                59
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Table 2 gives 75% of original cisplatin. In the 40–59 band, the prescribing consultant may instead preserve dose intensity with extra hydration, a longer infusion and daily creatinine.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "Table 2 gives 75% of original cisplatin. In the 40–59 band, the prescribing consultant may instead preserve dose intensity with extra hydration, a longer infusion and daily creatinine."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "Table 2 gives 75% of original cisplatin. In the 40–59 band, the prescribing consultant may instead preserve dose intensity with extra hydration, a longer infusion and daily creatinine."
+      },
+      {
+        "id": "CIS_LT40",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "field": "assessment_phase",
+              "operator": "in",
+              "value": [
+                "on_treatment",
+                "toxicity_review"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "<",
+              "value": 40
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "Cisplatin is not recommended below CrCl 40 mL/min outside the separate haemodialysis pathway."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "Cisplatin is not recommended below CrCl 40 mL/min outside the separate haemodialysis pathway."
+      },
+      {
+        "id": "CIS_GAP",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">",
+                      "value": 49
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<",
+                      "value": 50
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": ">",
+                      "value": 59
+                    },
+                    {
+                      "field": "crcl_ml_min",
+                      "operator": "<",
+                      "value": 60
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "cisplatin"
+          ],
+          "message": "A decimal CrCl falls between printed bands. Confirm the intended cisplatin dose with the consultant.",
+          "dose_calculation": "specialist_review",
+          "show_in_dose_actions": true,
+          "block_numeric_dose": true,
+          "recommendation": "A decimal CrCl falls between printed bands. Confirm the intended cisplatin dose with the consultant."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "A decimal CrCl falls between printed bands. Confirm the intended cisplatin dose with the consultant."
+      },
+      {
+        "id": "COURSE",
+        "priority": 10,
+        "when": {
+          "field": "cycle_number",
+          "operator": ">",
+          "value": 4
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "The planned five-day EP course is four cycles. Confirm the indication before an additional cycle."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p1"
+        },
+        "explanation": "The planned five-day EP course is four cycles. Confirm the indication before an additional cycle."
+      },
+      {
+        "id": "ETO_ORIGINAL_NEEDED",
+        "priority": 10,
+        "when": {
+          "all": [
+            {
+              "any": [
+                {
+                  "field": "haemodialysis",
+                  "operator": "missing"
+                },
+                {
+                  "field": "haemodialysis",
+                  "operator": "==",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "field": "crcl_ml_min",
+              "operator": "between",
+              "value": [
+                10,
+                50
+              ]
+            },
+            {
+              "field": "original_etoposide_mg_m2",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "etoposide"
+          ],
+          "message": "Confirm the original individual etoposide prescription to calculate 75% for CrCl 10–50 mL/min. The starting protocol dose is not a substitute.",
+          "dose_calculation": "specialist_review",
+          "block_numeric_dose": true,
+          "show_in_dose_actions": true,
+          "recommendation": "Confirm the original individual etoposide prescription to calculate 75% for CrCl 10–50 mL/min. The starting protocol dose is not a substitute."
+        },
+        "source": {
+          "document": "NCCP 00301 v5",
+          "page": "p3 Table 2"
+        },
+        "explanation": "Confirm the original individual etoposide prescription to calculate 75% for CrCl 10–50 mL/min. The starting protocol dose is not a substitute."
       }
     ]
   },
   "eligibility": [
-    "Indication as listed in the current official NCCP regimen",
-    "Performance status and disease-specific eligibility appropriate to the selected indication",
-    "Organ function appropriate for the selected regimen"
+    "Treatment of good-prognosis metastatic germ-cell tumours by IGCCCG criteria (seminoma or non-seminoma). The published indication is 00301a, ICD-10 C62.",
+    "ECOG 0–3."
   ],
   "exclusions": [
-    "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source",
-    "Regimen-specific exclusions encoded in the assessment"
+    "Hypersensitivity to either drug or an excipient, pre-existing neuropathy grade ≥2, CrCl <40 mL/min, significant hearing impairment or tinnitus, pregnancy or breastfeeding.",
+    "Severe liver impairment requires caution."
   ],
   "supportive_care": {
     "emetogenic_risk": "high",
@@ -695,6 +1224,119 @@
     "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
     "validation_status": "pending_oncology_pharmacy_validation",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
-  }
+    "supportive_medications_label": "SACTCheck visit-specific antiemetic prescriptions",
+    "source_url": "https://healthservice.hse.ie/documents/6707/301_V5_EP.pdf",
+    "phase_specific_plan": "patient/00301/antiemetic-prescriptions.html",
+    "prescription_index": "patient/00301/antiemetic-prescriptions.html",
+    "phase_profiles": {
+      "day1": {
+        "label": "Day 1 · first EP infusion",
+        "level": "high",
+        "script_id": "nccp-parenteral-high",
+        "prescription": "patient/00301/antiemetic-day1.pdf"
+      },
+      "days2to5": {
+        "label": "Days 2–5 · continuing EP infusions",
+        "level": "high",
+        "script_id": "nccp-parenteral-high",
+        "prescription": "patient/00301/antiemetic-days2to5.pdf"
+      }
+    }
+  },
+  "regimen_components": [
+    "Etoposide",
+    "Cisplatin"
+  ],
+  "treatment_phases": [
+    {
+      "phase_id": "day1",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "etoposide",
+          "dose": {
+            "value": 100,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Infuse over 60 minutes. Monitor for hypotension; extend infusion according to tolerance.",
+          "order": 1
+        },
+        {
+          "drug": "cisplatin",
+          "dose": {
+            "value": 20,
+            "unit": "mg/m²"
+          },
+          "days": [
+            1
+          ],
+          "route": "IV infusion",
+          "note": "Infuse over 60 minutes. Give prehydration in accordance with local policy.",
+          "order": 2
+        }
+      ],
+      "active_drugs": [
+        "etoposide",
+        "cisplatin"
+      ],
+      "notes": [
+        "Etoposide then cisplatin on days 1–5 of a 21-day cycle. Plan four cycles, stopping earlier for progression or unacceptable toxicity."
+      ],
+      "label": "Day 1 · first EP infusion",
+      "duration_text": "Plan four 21-day cycles; stop earlier for progression or unacceptable toxicity."
+    },
+    {
+      "phase_id": "days2to5",
+      "cycle_length_days": 21,
+      "cycles": [],
+      "administration": [
+        {
+          "drug": "etoposide",
+          "dose": {
+            "value": 100,
+            "unit": "mg/m²"
+          },
+          "days": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "route": "IV infusion",
+          "note": "Infuse over 60 minutes. Monitor for hypotension; extend infusion according to tolerance.",
+          "order": 1
+        },
+        {
+          "drug": "cisplatin",
+          "dose": {
+            "value": 20,
+            "unit": "mg/m²"
+          },
+          "days": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "route": "IV infusion",
+          "note": "Infuse over 60 minutes. Give prehydration in accordance with local policy.",
+          "order": 2
+        }
+      ],
+      "active_drugs": [
+        "etoposide",
+        "cisplatin"
+      ],
+      "notes": [
+        "Etoposide then cisplatin on days 1–5 of a 21-day cycle. Plan four cycles, stopping earlier for progression or unacceptable toxicity."
+      ],
+      "label": "Days 2–5 · continuing EP infusions",
+      "duration_text": "Plan four 21-day cycles; stop earlier for progression or unacceptable toxicity."
+    }
+  ]
 }

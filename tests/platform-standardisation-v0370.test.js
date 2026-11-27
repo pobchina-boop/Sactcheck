@@ -230,7 +230,23 @@ for (const { file, data } of protocols) {
       assert.deepEqual(def.options.map(o=>o.value),[0,1,2,3,4]);
       assert(ctcae.guide({...def,id:field}).sourceSpecific);
     }
-    if (!gtnGrade && !bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
+    const finalGynaeGrade = (['00267','00301'].includes(code) && field === 'neuropathy_grade') ||
+      (code === '00904' && ['transaminase_grade','previous_transaminase_grade'].includes(field));
+    if (finalGynaeGrade) {
+      const reference = require('../validation/gynae-v08471/new-suite-sources.json')[code];
+      assert.equal(def.type, 'select');
+      assert.equal(def.grading_source_url, reference.url);
+      assert.equal(def.grading_source_label, 'NCCP ' + code + ' v' + reference.version);
+      assert.equal(def.ctcae_version, undefined);
+      assert.match(def.assessment_guidance, /clinically assessed grade/);
+      assert.deepEqual(def.options.map(row => row.value), [0,1,2,3,4]);
+      assert(def.options.every(row => row.description));
+      const guide = ctcae.guide({...def, id: field});
+      assert.equal(guide.sourceSpecific, true);
+      assert.equal(guide.calculable, false);
+      assert.equal(guide.sourceUrl, reference.url);
+    }
+    if (!finalGynaeGrade && !gtnGrade && !bevacizumabGrade && !sourceGrade && trueGradeField(field, def)) {
       ctcaeFields += 1;
       assert.equal(def.type, 'select', `${code}/${field} must be a CTCAE select, not ${def.type}`);
       const headNeckV45Source = HEADNECK45.applies(data);
@@ -411,7 +427,7 @@ for (const { file, data } of protocols) {
       assert.equal(def.renal_input?.exact_value_required, true, `${code}/${field} exact renal field must declare why a continuous value is required`);
       assert(String(def.renal_input?.reason || '').length >= 20, `${code}/${field} exact renal field lacks a source-specific rationale`);
     } else if (mode === 'source_threshold_numeric') {
-      assert(['00248','00249','00264','00266','00246','00300','00375','00344','00953','00385','00387','00706','00555','00783','00691','00214','00279','00309','00372','00456','00561','00284','00311','00388','00587','00614','00281','00310','00304','00339','00343','00621','00483','00484','00712','00792','00849','00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
+      assert(['00267','00301','00904','00248','00249','00264','00266','00246','00300','00375','00344','00953','00385','00387','00706','00555','00783','00691','00214','00279','00309','00372','00456','00561','00284','00311','00388','00587','00614','00281','00310','00304','00339','00343','00621','00483','00484','00712','00792','00849','00219','00220','00544','00592','00593','00823','00702','00221','00565','00340','00203','00226','00232','00259','00215','00353','00401','00562','00570','00243','00382','00831','00689','00908','00271','00280','00319','00222','00455','00558','00569','00579','00576','00655','00713','00714','00317','00318','00205','00217','00228','00230','00736','00743','00254','00371','00262','00263','00265','00269','00423','00377','00378','00381','00545','00605','00688','00720','00738','00947'].includes(code),`${code}: numeric threshold entry requires an audited source`);
       assert.equal(def.type,'number');assert.equal(def.renal_input.exact_value_required,false);
       const auditedSources=[metadata.source_url,...(metadata.source_supplements||[]).map(s=>s.url)];
       assert(auditedSources.includes(def.renal_input.source_url),`${code}/${field}: numeric renal source must be NCCP or an explicitly audited supplement`);assert(def.renal_input.reason.length>=20);

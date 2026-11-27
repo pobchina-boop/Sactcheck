@@ -61,6 +61,11 @@ sections.cisplatin = [
  ['Nerves, nausea and low counts','Report numbness, persistent vomiting or bleeding. Call urgently for fever or chills.']
 ];
 Object.assign(sections, {
+  rucaparib: [
+    ['Blood counts', 'Anaemia, bruising or infection can develop. Call urgently for fever, bleeding or new breathlessness. Persistent low counts need investigation. Rarely, a serious bone marrow disorder or leukaemia can occur.'],
+    ['Nausea and fatigue', 'Tell the team if sickness, poor appetite or tiredness interferes with drinking or taking your tablets.'],
+    ['Liver tests and sensitivity to sunlight', 'Attend blood tests, protect your skin from the sun, and report a new rash or yellowing of your eyes or skin.']
+  ],
   trabectedin: [
     ['Muscles and kidneys', 'Severe muscle pain, weakness or dark urine can signal muscle breakdown. Call the oncology unit urgently.'],
     ['Liver and blood counts', 'Attend blood tests. Call urgently for jaundice, fever or chills. The prescribed steroid also helps protect your liver.'],
@@ -83,7 +88,7 @@ const folinicRescue = [
   ['Timing of rescue', 'This medicine protects healthy cells after methotrexate. Take it exactly 24 hours after each injection. Ring the unit immediately for a missed, late or vomited tablet.'],
   ['Allergy', 'Seek emergency help for facial swelling, wheeze or difficulty breathing after a dose.']
 ];
-const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266']);
+const codes = new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
 const h = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const table=(headers,rows)=>'<table><thead><tr>'+headers.map(x=>'<th scope="col">'+h(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+h(x)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 const header=(p,name)=>'<header><div class="brand">SACT<span>Check</span></div><div class="reference">NCCP '+h(p.code)+' · v'+h(p.protocol_version)+'</div></header><h1>'+h(name)+'</h1><p class="regimen">'+h(p.title)+'</p>';
@@ -113,12 +118,17 @@ function rx(p,phase){
   const body = header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>FLOT infusion · cycles 1–8</strong><span>MODERATE EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies and reactions</span></div><h2>Day unit</h2>'+table(['Medicine','Dose and route','Directions'],[rows[0]])+'<h2>Scheduled steroid · one combined plan</h2>'+table(['Medicine','Dose and route','Directions'],rows.slice(1,3))+'<p class="note">Confirm at least three steroid doses before docetaxel. If missed, contact the consultant. Record the total steroid dose before signing.</p><h2>Take home · as needed</h2>'+table(['Medicine','Dose and route','Directions'],[rows[3]])+'<p class="note">'+h(phase.medicines[3].note)+'</p><div class="fields"><span>Duration / quantity</span><span>Prescriber amendments</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · NCCP 00344 v9 and NCIS Medical Oncology v8 · Requires signature.</footer>';
   return page(p,'Antiemetic prescription','antiemetic-flot.pdf','<article>'+body+'</article>');
  }
- if (trophoblasticCodes.has(p.code)) {
+ const finalGynae = ['00267','00301','00904'].includes(p.code);
+ if (trophoblasticCodes.has(p.code) || finalGynae) {
    const rows=phase.medicines.map(m=>[m.name,m.dose.replace(/\bPO\b/g,'by mouth'),m.timing.replace(/\bOD\b/g,'Once daily').replace(/\bTDS\b/g,'Up to three times daily').replace(/\bPRN\b/g,'as needed')]);
    const notes = [...phase.prescription_notes];
    if(rows.some(r=>r[0]==='Metoclopramide')) notes.push('Metoclopramide: space doses by at least 6 hours. Maximum 30 mg or 0.5 mg/kg daily, whichever is lower, for up to 5 days.');
-   const medicines = rows.length ? table(['Medicine','Dose and route','Directions'],rows) : '<p>No routine preventive antiemetic for this visit. Record individual rescue if needed.</p>';
-   const body=header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>'+h(phase.label)+'</strong><span>'+h(level.toUpperCase())+' EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies</span></div>'+medicines+notes.map(n=>'<p class="note">'+h(n)+'</p>').join('')+'<div class="fields"><span>Amendments / duration</span><span>Quantity to supply</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · NCCP '+h(p.code)+' · NCIS Medical Oncology v8 · Prescriber review and signature required.</footer>';
+   const prescriptionSource = p.code === '00904' ? 'NCCP 00904 v'+h(p.protocol_version)+' · Oral antiemesis per local policy' : 'NCCP '+h(p.code)+' · NCIS Medical Oncology v8'+(finalGynae ? ' · MASCC/ESMO multiday cisplatin guidance' : '');
+   const visitLabel = p.code === '00904' ? 'Daily anti-sickness medicine during rucaparib treatment' : phase.label;
+   const riskLabel = p.code === '00904' ? 'MODERATE TO HIGH · ORAL' : level.toUpperCase();
+   const oralPlan = '<p>Individual oral antiemetic prescription</p>'+table(['Medicine and strength', 'Dose and route', 'Directions and duration'],[['________________', '________________', '________________']]);
+   const medicines = rows.length ? table(['Medicine','Dose and route','Directions'],rows) : p.code === '00904' ? oralPlan : '<p>No routine preventive antiemetic for this visit. Record individual rescue if needed.</p>';
+   const body=header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>'+h(visitLabel)+'</strong><span>'+h(riskLabel)+' EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies</span></div>'+medicines+notes.map(n=>'<p class="note">'+h(n)+'</p>').join('')+'<div class="fields"><span>Amendments / duration</span><span>Quantity to supply</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · '+prescriptionSource+' · Prescriber review and signature required.</footer>';
    return page(p,'Antiemetic prescription','antiemetic-'+phase.id+'.pdf','<article>'+body+'</article>');
  }
  if ((p.code === '00300' && phase.id !== 'bleomycin') || p.code === '00375') {

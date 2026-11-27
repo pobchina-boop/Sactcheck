@@ -10,7 +10,7 @@ from weasyprint import HTML
 ROOT = Path(__file__).resolve().parents[1]
 ROUTES = ('00897', '00926', '00953')
 ILLUSTRATED_GI = ('00344',)
-GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819', '00620', '00716', '00769', '00771', '00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266')
+GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819', '00620', '00716', '00769', '00771', '00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904')
 DOCS = {
     'guide': 'guide', 'sactcard': 'sactcard', 'knowledge': 'knowledge-print',
     'handbook': 'handbook-print', 'passport': 'passport', 'consent-form': 'consent-form',
@@ -19,10 +19,13 @@ DOCS = {
 }
 
 
-def render_route(code):
+def render_route(code, selected=None):
     folder = ROOT / 'patient' / code
     mirror = ROOT / 'docs/patient' / code
-    for filename, route in [('qr.png', ''), ('oncowiki-qr.png', 'knowledge.html')]:
+    qr_files = [('qr.png', ''), ('oncowiki-qr.png', 'knowledge.html')]
+    for filename, route in qr_files:
+        if selected is not None and (folder / filename).exists():
+            continue
         qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=12, border=5)
         qr.add_data('https://sactcheck.com/patient/' + code + '/' + route)
         qr.make(fit=True)
@@ -35,7 +38,13 @@ def render_route(code):
     for source in sorted(folder.glob('antiemetic-*.html')):
         if source.stem != 'antiemetic-prescriptions':
             documents[source.stem] = source.stem
+    if selected is not None:
+        missing = selected - documents.keys()
+        if missing:
+            raise ValueError(f'{code}: unknown documents {sorted(missing)}')
     for name, html in documents.items():
+        if selected is not None and name not in selected:
+            continue
         source = folder / (html + '.html')
         pdf = folder / (name + '.pdf')
         data = HTML(filename=str(source)).write_pdf()
@@ -57,8 +66,10 @@ def render_route(code):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('codes', nargs='*')
+    parser.add_argument('--documents', help='Comma-separated PDF stems for a scoped rebuild')
     args = parser.parse_args()
+    selected = set(args.documents.split(',')) if args.documents else None
     for route in args.codes or ROUTES:
         if route not in (*ROUTES, *GYNAE, *ILLUSTRATED_GI):
             parser.error('Unknown combination: ' + route)
-        render_route(route)
+        render_route(route, selected)

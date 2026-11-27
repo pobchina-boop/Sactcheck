@@ -126,6 +126,9 @@ for(const p of [mono,combo]){
   let unchangedComponentLists=0;
   for(const row of json('protocols/index.json').protocols){const p=json(row.path);if(['00588','00746'].includes(p.metadata.nccp_regimen_code))continue;
     const reviewedGynae = {
+      '00267':['Etoposide','Cisplatin'],
+      '00301':['Etoposide','Cisplatin'],
+      '00904':['Rucaparib'],
       '00303':['Paclitaxel','Carboplatin'],
       '00306':['Gemcitabine','Carboplatin'],
       '00308':['Carboplatin','Paclitaxel'],

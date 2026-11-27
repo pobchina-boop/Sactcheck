@@ -5,7 +5,7 @@ const path = require('node:path');
 const {render} = require('./patient-pack-v08461.cjs');
 const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
-const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266']);
+const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
 const illustratedSuites = new Set([...gynaecology, '00344']);
 const codes = new Set([...illustratedSuites, '00897', '00926', '00953']);
@@ -35,7 +35,7 @@ function localisePack(html,d) {
   .replace('</head>','<style>@media print{.pt-card-phones{margin:.3mm 0!important}.pt-wallet-front .pt-card-urgent{padding:.45mm!important}.pt-card-regimen,.pt-card-schedule{margin:.3mm 0!important}}</style></head>');
 }
 function scheduleSection(profile) {
- return section('cycle',profile.code==='00862'?'Your tablet schedule':'Your infusion schedule',paragraphs(profile.phases.map(phase => ({title:phase.label,text:phase.detail}))));
+ return section('cycle',['00862','00904'].includes(profile.code)?'Your tablet schedule':'Your infusion schedule',paragraphs(profile.phases.map(phase => ({title:phase.label,text:phase.detail}))));
 }
 function renderPages(code, root = projectRoot) {
  if (!codes.has(code)) throw Error('Unknown dedicated suite: '+code);
@@ -82,8 +82,11 @@ function renderPages(code, root = projectRoot) {
   const phaseSheets=JSON.parse(fs.readFileSync(path.join(root,'data/phase-support-v0838.json'),'utf8')).regimens[code];
   for (const phase of phaseSheets) {
    const rows=phase.medicines.map(m=>[m.name,m.dose,m.timing,m.note||'']);
-   const pills=rows.length?table(['Medicine','Dose in reference plan','When','Additional instructions'],rows):'<p>No routine preventive anti-sickness medicine is specified. Follow the individually prescribed plan.</p>';
+   const emptyPlan = code === '00904' ? 'Your team will write which anti-sickness medicine to take, how much and when.' : 'No routine preventive anti-sickness medicine is specified. Follow the individually prescribed plan.';
+   const pills=rows.length?table(['Medicine','Dose in reference plan','When','Additional instructions'],rows):'<p>'+emptyPlan+'</p>';
    let timingNote='Ask your team to confirm your signed prescription. The day numbers on a support prescription are counted from this visit.';
+   if (['00267','00301'].includes(code)) timingNote='Use the dated anti-sickness plan for the whole treatment block. On a return visit, continue from the actual cycle day and confirm which medicines you have already taken.';
+   if (code==='00904') timingNote='Use the anti-sickness medicine and timing on your personal prescription. Tell your team if nausea is affecting eating, drinking or taking the tablets.';
    if (code==='00300' && phase.id!=='bleomycin') timingNote='Use one signed anti-sickness plan from day 1 of the five-day block. Keep the same day numbers on return visits.';
    if (code==='00248' && ['ema','ema2'].includes(phase.id)) timingNote='The EMA anti-sickness prescription counts from day 1. Continue the same course when you return on day 2.';
    const entry=section('written-plan-'+phase.id,'Support medicines for this visit','<p>'+timingNote+'</p>'+pills+list(phase.additional_support));
@@ -113,6 +116,15 @@ function renderPages(code, root = projectRoot) {
   for (const name of Object.keys(files)) {
    files[name]=files[name].replace(/<a href="([^"]+\.pdf)"(?! download)/g,'<a download href="$1"');
    if(gynaeBatch.has(code) && !['00819','00811','00817'].includes(code)) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
+   if(code === '00904') files[name]=files[name]
+     .replaceAll('My cycle record', 'My review record')
+     .replaceAll('<th>Cycle</th>', '<th>Review</th>')
+     .replaceAll('Cycle plan: team to confirm', 'Next review: __________')
+     .replaceAll('Latest treatment date:', 'Latest review date:')
+     .replaceAll('A cycle is complete after its final planned dose; a weekly-treatment stamp records that weekly dose.', 'Use this record for clinic or pharmacy reviews of your daily tablets.')
+     .replaceAll('A stamp records a visit or completed cycle; your team decides whether the next treatment goes ahead.', 'Record the current tablet dose, any pause, and your next review date.')
+     .replaceAll('Cycle / phase', 'Review / tablet dose')
+     .replaceAll('Medicines given or held', 'Dose or pause agreed');
    if(code==='00862') files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry this card and your latest prescription.').replaceAll('My cycle record','My review record');
   }
  }
