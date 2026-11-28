@@ -94,7 +94,7 @@ for (const item of register.records) {
   const v0836 = m.validation?.audit_release === '0.83.6';
   const superseded = (['00207','00447','00448','00732','00328','00585','00330','00331','00692','00733','00210','00213','00586','00623','00225'].includes(item.nccp_code) && m.validation?.audit_release === '0.84.21') || v0836 || (['00586','00623'].includes(item.nccp_code) && m.validation?.audit_release === '0.83.4') || (item.nccp_code === '00225' && m.validation?.audit_release === '0.83.5');
   assert(rec, `${item.nccp_code}: missing organ-function reconciliation metadata`);
-  assert.strictEqual(rec.release, migration37?migration37.reconciliation_release:migration36?migration36.reconciliation_release:migration25?migration25.release:migration24&&item.nccp_code==='00243'?'0.84.24':item.nccp_code === '00205' ? '0.84.1' : '0.59.0');
+  assert.strictEqual(rec.release, item.nccp_code==='00235'?'0.84.77':migration37?migration37.reconciliation_release:migration36?migration36.reconciliation_release:migration25?migration25.release:migration24&&item.nccp_code==='00243'?'0.84.24':item.nccp_code === '00205' ? '0.84.1' : '0.59.0');
   assert.strictEqual(rec.source_reconciled, true);
   assert.strictEqual(rec.partial_assessment_supported, true);
   assert.strictEqual(rec.consultant_reviewed, false);
@@ -148,6 +148,16 @@ for (const item of register.records) {
     } else if(superseded) {
       for(const id of (v0836 ? (['00207','00732'].includes(item.nccp_code)?['ORGAN_REVIEW']:['00213','00330','00331'].includes(item.nccp_code)?['RENAL_IRI','BILI_CI']:['FU_HEPATIC_CI','FU_HEPATIC_EQUALITY']) : ['RENAL_LT30','HEPATOTOXICITY'])) assert(p.rule_engine.rules.some(r=>r.rule_id===id && r.source.url===m.source_url && r.source.page), `${item.nccp_code}: missing replacement source-mapped rule ${id}`);
       assert.equal(releaseRules.length,0,'Superseded renal rules must not remain active');
+    } else if(item.nccp_code==='00235'){
+      assert.equal(releaseRules.length,0,'Superseded S-1 renal percentages are absent');
+      assert.equal(rec.additional_source_url,'https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf');
+      for(const [id,action] of [['S1_DIALYSIS','contraindicated'],['S1_SEVERE_RENAL','withhold'],['S1_RENAL_PLAN','consultant_review'],['S1_RENAL_INCOMPLETE','consultant_review']]){
+        const rule=p.rule_engine.rules.find(r=>r.id===id);
+        assert.equal(rule.action.type,action);
+        assert.equal(rule.source.url,rec.source_url);
+        assert.equal(rule.source.additional_source_url,rec.additional_source_url);
+        assert(!rule.action.component_changes);
+      }
     } else assert(releaseRules.length > 0, `${item.nccp_code}: structured resolution lacks v0.59.0 rules`);
   }
   else {
@@ -207,7 +217,7 @@ for (const p of allProtocols) {
     );
   }
 }
-assert.strictEqual(triggerableRuleCount, 178-3-2, 'Five fluorouracil/oxaliplatin legacy rules are superseded by v32 boundary and source cases. Six nintedanib/docetaxel legacy rules are superseded by v30 source cases. Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. Five obsolete NCCP00791 fluorouracil organ rules are replaced by v33 source cases. Four fruquintinib legacy rules are replaced by v35 source and dose-history cases, with the exact removed IDs and original PDF/JSON hashes retained. Ten CAPTEM/PRRT legacy rules are superseded by the v37 source cases with exact original IDs and hashes; three everolimus legacy IDs remain with dose-history guards. Three sorafenib legacy rules are replaced by the v50 current-source numeric renal and Child–Pugh rules with exact before-ID proof. Nine gemcitabine/docetaxel and dacarbazine legacy rules are replaced by the v60 source contracts with exact before-ID proof. Three imatinib/sunitinib legacy rules are replaced by the v61 source contracts with exact before-ID proof. Three PLD and two ifosfamide rules have source-specific successors. All 173 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
+assert.strictEqual(triggerableRuleCount, 178-3-2-6, 'Six previous 00235 renal rule IDs were replaced by the source-reviewed combination gates. Five fluorouracil/oxaliplatin legacy rules are superseded by v32 boundary and source cases. Six nintedanib/docetaxel legacy rules are superseded by v30 source cases. Six legacy gemcitabine/topotecan rules are superseded by source-specific v29 cases. Five obsolete NCCP00791 fluorouracil organ rules are replaced by v33 source cases. Four fruquintinib legacy rules are replaced by v35 source and dose-history cases, with the exact removed IDs and original PDF/JSON hashes retained. Ten CAPTEM/PRRT legacy rules are superseded by the v37 source cases with exact original IDs and hashes; three everolimus legacy IDs remain with dose-history guards. Three sorafenib legacy rules are replaced by the v50 current-source numeric renal and Child–Pugh rules with exact before-ID proof. Nine gemcitabine/docetaxel and dacarbazine legacy rules are replaced by the v60 source contracts with exact before-ID proof. Three imatinib/sunitinib legacy rules are replaced by the v61 source contracts with exact before-ID proof. Three PLD and two ifosfamide rules have source-specific successors. All 173 retained v0.59.0 rules remain executable; two ceritinib rules are replaced by four source-conflict review rules verified by v0.84.25 cases; six capecitabine rules and 46 v0.83.6 batch rules are superseded by source-mapped suites with independent boundary tests; nine ALK organ-function rules are superseded by v0.84.24 source tests; two pemetrexed monotherapy rules are superseded by the v0.84.23 source audit; PLD bilirubin >86 is superseded by its v0.84.1 source-mapped rule.');
 
 // Sentinel source pathways and single-value partial assessments.
 let result = assess('00205', { bilirubin_umol_l:51, original_pld_mg_m2:40, current_pld_mg_m2:40 });

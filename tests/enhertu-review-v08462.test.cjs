@@ -145,6 +145,7 @@ if(olaparib){
   assert.deepEqual(currentCatalogue.records.map(record=>record.entry.path).sort(),inheritedCatalogue.records.map(record=>record.entry.path).concat(additions).sort(),'Current catalogue retains every inherited protocol path and the two audited additions');
   const successors=new Set(['nccp-00588-v5b','nccp-00746-v2']);
   const gynaeCodes = ['00226', '00419', '00812', '00251', '00261', '00279', '00921', '00943',...require('./helpers/retrospective-v08465.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08466.cjs').NEW_ROUTES, ...require('./helpers/retrospective-v08467.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08468.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08469.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08470.cjs').NEW_ROUTES,...require('./helpers/retrospective-v08471.cjs').NEW_ROUTES];
+  const upperGiCodes = ['00235','00239','00240','00380','00429'];
   const giCodes = ['00329','00515','00384','00524'];
   const sarcomaCodes = require('./helpers/retrospective-v08464.cjs').releaseRoutes.map(route=>route.split('/')[0]);
   const priorAstra=new Map(JSON.parse(zlib.gunzipSync(release.astraBytes(bundlePath))).records.map(r=>[r.entry.path,r]));
@@ -153,11 +154,11 @@ if(olaparib){
     assert.deepEqual(current.entry,indexed,'Current bundle entry matches the actual index: '+current.entry.id);
     assert.deepEqual(current.protocol,JSON.parse(fs.readFileSync(path.join(root,indexed.path))),'Current bundle delivers the exact current protocol JSON: '+current.entry.id);
     const batchCode = current.protocol.metadata.nccp_regimen_code;
-    if (!successors.has(current.entry.id) && !['00862','00929','00391','00392',...sarcomaCodes,...gynaeCodes,...giCodes].includes(batchCode)) {
+    if (!successors.has(current.entry.id) && !['00862','00929','00391','00392',...sarcomaCodes,...gynaeCodes,...giCodes,...upperGiCodes].includes(batchCode)) {
       assert.deepEqual(current, priorAstra.get(current.entry.path), 'Unrelated current record equals the AstraZeneca release: ' + current.entry.id);
     }
-    if (giCodes.includes(batchCode)) {
-      const transition = release.gi76Inventory().record;
+    if (giCodes.includes(batchCode) || upperGiCodes.includes(batchCode)) {
+      const transition = (upperGiCodes.includes(batchCode) ? release.gi77Inventory() : release.gi76Inventory()).record;
       assert(transition.files[indexed.path], 'GI protocol has a reviewed transition');
       const before = JSON.parse(cp.execFileSync('git',['show',transition.base+':'+indexed.path],{cwd:root}));
       assert.deepEqual(before,priorAstra.get(indexed.path).protocol,'GI predecessor matches the AstraZeneca protocol');

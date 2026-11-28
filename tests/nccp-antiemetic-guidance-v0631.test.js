@@ -34,7 +34,7 @@ const dualImmuneV35 = {
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 // NCCP 00746 v2 distinguishes oral olaparib and bevacizumab on page 9.
 // Source-reviewed NCCP regimen classifications, including the four GI updates.
-const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate','00329':'high','00515':'high','00384':'low','00524':'low'};
+const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate','00329':'high','00515':'high','00384':'low','00524':'low','00239':'moderate','00429':'moderate'};
 const gynaePhases = {
   '00267': {level:'high',phases:{day1:'high',day2:'high'}},
   '00301': {level:'high',phases:{day1:'high',days2to5:'high'}},

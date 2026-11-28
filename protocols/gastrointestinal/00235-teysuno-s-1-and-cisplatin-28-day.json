@@ -71,8 +71,8 @@
       "clinical_use_authorised": false
     },
     "organ_function_reconciliation": {
-      "release": "0.59.0",
-      "checked_date": "2026-08-05",
+      "release": "0.84.77",
+      "checked_date": "2026-11-28",
       "source_url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
       "source_version": "5",
       "components": [
@@ -85,7 +85,8 @@
       "consultant_reviewed": false,
       "oncology_pharmacy_reviewed": false,
       "clinical_use_authorised": false,
-      "note": "Structured renal/hepatic component rules were reconciled to the current official NCCP regimen source. Independent Consultant and oncology-pharmacy validation remains pending."
+      "note": "NCCP 00235 table 4 and EMA SmPC sections 4.2 and 4.3 differ for renal impairment. The combination engine withholds for severe impairment and reports dialysis as contraindicated. Oncology and pharmacy review is required to reconcile other impaired renal bands; automated percentage recommendations have been removed.",
+      "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
@@ -105,7 +106,7 @@
   ],
   "treatment": {
     "cycle_length_days": 28,
-    "schedule_summary": "Teysuno (S-1) and Cisplatin – 28 day",
+    "schedule_summary": "Teysuno twice daily on days 1–21, then seven days off. Cisplatin on day 1 every 28 days. Cisplatin is planned for up to six cycles. If it stops early while the cancer is responding, the team may restart Teysuno alone once restart criteria are met.",
     "drugs": [
       "tegafur/gimeracil/oteracil",
       "cisplatin"
@@ -546,6 +547,30 @@
         "exact_value_required": false
       },
       "input_role": "decision"
+    },
+    "other_fluoropyrimidine": {
+      "label": "Taking another fluoropyrimidine concurrently",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "ui_section": "safety",
+      "demo_value": false
+    },
+    "recent_dpd_inhibitor": {
+      "label": "Brivudine, sorivudine or a related DPD inhibitor within the past four weeks",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "ui_section": "safety",
+      "demo_value": false
+    },
+    "prior_severe_unexpected_fluoropyrimidine_reaction": {
+      "label": "History of a severe unexpected reaction to a fluoropyrimidine",
+      "type": "boolean",
+      "required": false,
+      "input_role": "decision",
+      "ui_section": "safety",
+      "demo_value": false
     }
   },
   "required_inputs": [],
@@ -883,164 +908,194 @@
         "explanation": "Grade 2 or worse hearing toxicity requires cisplatin-specific review."
       },
       {
-        "id": "OF590_00235_CIS_50_59",
-        "priority": 20,
+        "id": "S1_DIALYSIS",
+        "priority": 9,
         "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "50_59"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 50–59 mL/min: administer 75% of the cisplatin dose.",
-          "recommendation": "CrCl 50–59 mL/min: administer 75% of the cisplatin dose.",
-          "component_changes": {
-            "cisplatin": {
-              "dose_percent_of_original": 75
+          "any": [
+            {
+              "field": "teysuno_renal_band",
+              "operator": "==",
+              "value": "dialysis"
+            },
+            {
+              "field": "cisplatin_crcl_band",
+              "operator": "==",
+              "value": "dialysis"
             }
-          }
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl 50–59 mL/min: administer 75% of the cisplatin dose."
-      },
-      {
-        "id": "OF590_00235_CIS_40_49",
-        "priority": 20,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "40_49"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "CrCl 40–49 mL/min: administer 50% of the cisplatin dose.",
-          "recommendation": "CrCl 40–49 mL/min: administer 50% of the cisplatin dose.",
-          "component_changes": {
-            "cisplatin": {
-              "dose_percent_of_original": 50
-            }
-          }
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "CrCl 40–49 mL/min: administer 50% of the cisplatin dose."
-      },
-      {
-        "id": "OF590_00235_CIS_LT40",
-        "priority": 20,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "lt40"
+          ]
         },
         "action": {
           "type": "contraindicated",
           "components": [
-            "cisplatin"
+            "whole_regimen"
           ],
-          "message": "CrCl <40 mL/min: cisplatin is not recommended in the routine source pathway.",
-          "recommendation": "CrCl <40 mL/min: cisplatin is not recommended in the routine source pathway."
+          "message": "End-stage renal disease requiring dialysis is a Teysuno contraindication in the EMA SmPC. Withhold the combination and refer to oncology and pharmacy. NCCP Table 4 lists a different dialysis approach."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
         },
-        "explanation": "CrCl <40 mL/min: cisplatin is not recommended in the routine source pathway."
+        "explanation": "End-stage renal disease requiring dialysis is a Teysuno contraindication in the EMA SmPC. Withhold the combination and refer to oncology and pharmacy. NCCP Table 4 lists a different dialysis approach."
       },
       {
-        "id": "OF590_00235_CIS_DIALYSIS",
-        "priority": 20,
-        "when": {
-          "field": "cisplatin_crcl_band",
-          "operator": "==",
-          "value": "dialysis"
-        },
-        "action": {
-          "type": "dose_reduce",
-          "components": [
-            "cisplatin"
-          ],
-          "message": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review.",
-          "recommendation": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review.",
-          "component_changes": {
-            "cisplatin": {
-              "dose_percent_of_original": 50
-            }
-          }
-        },
-        "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
-        },
-        "explanation": "Haemodialysis: a 50% cisplatin dose may be considered only with specialist dialysis timing and pharmacy review."
-      },
-      {
-        "id": "OF590_00235_TEYSUNO_30_50",
-        "priority": 20,
+        "id": "S1_SEVERE_RENAL",
+        "priority": 9,
         "when": {
           "field": "teysuno_renal_band",
           "operator": "==",
-          "value": "30_50"
+          "value": "lt30"
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "withhold",
           "components": [
-            "teysuno"
+            "whole_regimen"
           ],
-          "message": "CrCl 30–50 mL/min: administer 80% of the Teysuno dose.",
-          "recommendation": "CrCl 30–50 mL/min: administer 80% of the Teysuno dose.",
-          "component_changes": {
-            "teysuno": {
-              "dose_percent_of_original": 80
-            }
-          }
+          "message": "CrCl below 30 mL/min. Withhold this combination and seek oncology and pharmacy review of the current SmPC and NCCP Table 4. Confirm recovery and the restart prescription."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
         },
-        "explanation": "CrCl 30–50 mL/min: administer 80% of the Teysuno dose."
+        "explanation": "CrCl below 30 mL/min. Withhold this combination and seek oncology and pharmacy review of the current SmPC and NCCP Table 4. Confirm recovery and the restart prescription."
       },
       {
-        "id": "OF590_00235_TEYSUNO_LT30",
-        "priority": 20,
+        "id": "S1_RENAL_PLAN",
+        "priority": 9,
         "when": {
-          "field": "teysuno_renal_band",
-          "operator": "in",
-          "value": [
-            "lt30",
-            "dialysis"
+          "any": [
+            {
+              "field": "teysuno_renal_band",
+              "operator": "==",
+              "value": "30_50"
+            },
+            {
+              "field": "cisplatin_crcl_band",
+              "operator": "in",
+              "value": [
+                "50_59",
+                "40_49",
+                "lt40"
+              ]
+            }
           ]
         },
         "action": {
-          "type": "dose_reduce",
+          "type": "consultant_review",
           "components": [
-            "teysuno"
+            "whole_regimen"
           ],
-          "message": "CrCl <30 mL/min or dialysis: administer 40% of the Teysuno dose only with specialist review.",
-          "recommendation": "CrCl <30 mL/min or dialysis: administer 40% of the Teysuno dose only with specialist review.",
-          "component_changes": {
-            "teysuno": {
-              "dose_percent_of_original": 40
-            }
-          }
+          "message": "Verify the exact creatinine clearance, cycle and previous doses with pharmacy and the consultant. NCCP Table 4 labels its cisplatin bands curative. The gastric combination SmPC uses cycle-start thresholds and previous doses. Document the agreed doses before treatment."
         },
         "source": {
-          "document": "Current official NCCP regimen",
-          "page": "renal/hepatic dose-modification section"
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
         },
-        "explanation": "CrCl <30 mL/min or dialysis: administer 40% of the Teysuno dose only with specialist review."
+        "explanation": "Verify the exact creatinine clearance, cycle and previous doses with pharmacy and the consultant. NCCP Table 4 labels its cisplatin bands curative. The gastric combination SmPC uses cycle-start thresholds and previous doses. Document the agreed doses before treatment."
+      },
+      {
+        "id": "S1_RENAL_INCOMPLETE",
+        "priority": 9,
+        "when": {
+          "any": [
+            {
+              "field": "teysuno_renal_band",
+              "operator": "missing"
+            },
+            {
+              "field": "cisplatin_crcl_band",
+              "operator": "missing"
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm current creatinine clearance and dialysis status before assessing the combination."
+        },
+        "source": {
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
+        },
+        "explanation": "Confirm current creatinine clearance and dialysis status before assessing the combination."
+      },
+      {
+        "id": "S1_OTHER_FLUOROPYRIMIDINE",
+        "priority": 9,
+        "when": {
+          "field": "other_fluoropyrimidine",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Taking another fluoropyrimidine concurrently. Withhold Teysuno and reconcile treatment with oncology and pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
+        },
+        "explanation": "Taking another fluoropyrimidine concurrently. Withhold Teysuno and reconcile treatment with oncology and pharmacy."
+      },
+      {
+        "id": "S1_RECENT_DPD_INHIBITOR",
+        "priority": 9,
+        "when": {
+          "field": "recent_dpd_inhibitor",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Brivudine, sorivudine or a related DPD inhibitor within the past four weeks. Withhold Teysuno and reconcile treatment with oncology and pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
+        },
+        "explanation": "Brivudine, sorivudine or a related DPD inhibitor within the past four weeks. Withhold Teysuno and reconcile treatment with oncology and pharmacy."
+      },
+      {
+        "id": "S1_PRIOR_SEVERE_UNEXPECTED_FLUOROPYRIMIDINE_REACTION",
+        "priority": 9,
+        "when": {
+          "field": "prior_severe_unexpected_fluoropyrimidine_reaction",
+          "operator": "==",
+          "value": true
+        },
+        "action": {
+          "type": "contraindicated",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "History of a severe unexpected reaction to a fluoropyrimidine. Withhold Teysuno and reconcile treatment with oncology and pharmacy."
+        },
+        "source": {
+          "document": "NCCP 00235 v5 and EMA Teysuno product information",
+          "page": "NCCP pp. 2–5 and EMA SmPC sections 4.2–4.3",
+          "url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+          "additional_source_url": "https://www.ema.europa.eu/en/documents/product-information/teysuno-epar-product-information_en.pdf"
+        },
+        "explanation": "History of a severe unexpected reaction to a fluoropyrimidine. Withhold Teysuno and reconcile treatment with oncology and pharmacy."
       }
     ]
   },
@@ -1050,7 +1105,9 @@
   ],
   "exclusions": [
     "Known hypersensitivity to a regimen component",
-    "Pregnancy or breastfeeding where prohibited by the current source"
+    "Pregnancy or breastfeeding where prohibited by the current source",
+    "Concurrent fluoropyrimidine treatment; recent brivudine or related DPD inhibitor within four weeks; prior severe unexpected fluoropyrimidine reaction.",
+    "End-stage renal disease requiring dialysis (EMA Teysuno SmPC section 4.3)."
   ],
   "monitoring": [
     "FBC, renal and liver profile as specified by the current NCCP regimen",
@@ -1061,14 +1118,14 @@
   ],
   "supportive_care": {
     "emetogenic_risk": "high",
-    "script_id": "nccp-parenteral-high",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "script_id": "nccp-v8-high-v08420",
+    "mapping_source": "NCCP 00235",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6334/235_Teysuno_CISplatin.pdf",
+    "mapping_basis": "Day 1 uses the highest-risk active medicine in NCCP 00235 v5. Cisplatin has high emetic risk.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for high emetogenic risk"
+    "supportive_medications_label": "Day 1 high emetic risk. Select support for the prescribed visit."
   }
 }

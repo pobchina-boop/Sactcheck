@@ -37,7 +37,7 @@ assert.match(target[0].medicines.find(m => m.name === 'Ondansetron').note, /8 mg
 const otherRegimens = value => {
   const copy = structuredClone(value); delete copy.regimens['00776']; return copy;
 };
-const olaparib = ['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71','0.84.72','0.84.73','0.84.74','0.84.75','0.84.76'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
+const olaparib = ['0.84.63','0.84.64','0.84.65','0.84.66','0.84.67','0.84.68','0.84.69','0.84.70','0.84.71','0.84.72','0.84.73','0.84.74','0.84.75','0.84.76','0.84.77'].includes(json('package.json').version) ? require('./helpers/retrospective-v08463.cjs') : null;
 const inheritedPhase = olaparib ? olaparib.baselineJson('data/phase-support-v0838.json') : phase;
 assert.deepEqual(otherRegimens(inheritedPhase), otherRegimens(JSON.parse(old('data/phase-support-v0838.json'))), 'All other live support plans and registry metadata are unchanged in the authenticated Enhertu state');
 if (olaparib) {

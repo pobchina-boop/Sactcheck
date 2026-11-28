@@ -6,7 +6,7 @@ const patientVisualStandard=require('./patient-visual-standard-v08443.cjs');
 const patientPublication=require('./patient-publication-v08444.cjs');
 function publishPatient(file,html){return patientPublication.decorateGenerated(file,html,root);}
 const context=process.env.SACT_SUITE_CONTEXT||'';
-const gynaeRoutes = [...require('./lib/cervical-patient-routes-v08472.json'), ...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json'), ...require('./lib/gynae-patient-routes-v08475.json'), ...require('./lib/gi-patient-routes-v08476.json')];
+const gynaeRoutes = [...require('./lib/cervical-patient-routes-v08472.json'), ...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json'), ...require('./lib/gynae-patient-routes-v08475.json'), ...require('./lib/gi-patient-routes-v08476.json'), ...require('./lib/gi-patient-routes-v08477.json')];
 const gynaeContext = context && gynaeRoutes.some(route=>route.split('/')[1]===context);
 const hn45Contexts=['head_neck','nasopharyngeal'];
 const skin42Contexts=['melanoma','merkel_cell'];
