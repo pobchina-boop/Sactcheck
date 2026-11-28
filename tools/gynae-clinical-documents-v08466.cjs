@@ -99,7 +99,7 @@ const table=(headers,rows)=>'<table><thead><tr>'+headers.map(x=>'<th scope="col"
 const header=(p,name)=>'<header><div class="brand">SACT<span>Check</span></div><div class="reference">NCCP '+h(p.code)+' · v'+h(p.protocol_version)+'</div></header><h1>'+h(name)+'</h1><p class="regimen">'+h(p.title)+'</p>';
 const fields='<div class="fields"><span>Patient name</span><span>Date of birth</span><span>Hospital / MRN</span></div>';
 const page=(p,title,file,body)=>'<!doctype html><html lang="en-IE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+h(title)+' · NCCP '+h(p.code)+'</title><link rel="stylesheet" href="../../assets/gynae-clinical-documents.css"></head><body><nav><a href="./">Patient portal</a> <a href="'+h(file)+'" download>Download PDF</a></nav><main>'+body+'</main></body></html>\n';
-const currentGynaeRoutes = new Set([...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json')]);
+const currentGynaeRoutes = new Set([...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json'), ...require('./lib/gynae-patient-routes-v08475.json')]);
 const trophoblasticCodes = new Set(['00247','00248','00249','00264','00266']);
 const gtnRisks = {
   dactinomycin: [['Low counts, mouth sores and IV leakage','Phone urgently for fever or bleeding. Report painful ulcers. Tell the nurse immediately if the line burns or stings.']],

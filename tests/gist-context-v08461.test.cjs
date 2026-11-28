@@ -56,7 +56,7 @@ async function main(){
   for (const [code, sarcomaContext] of [['00205', 'sarcoma'], ['00228', 'liposarcoma']]) {
    const item = protocol(code);
    const contexts = K.regimenProfileForProtocol(item, payload).context_profiles;
-   assert.deepEqual(contexts.map(profile => profile.context_id), ['breast', sarcomaContext]);
+   assert.deepEqual(contexts.map(profile => profile.context_id), code === '00205' ? ['breast', sarcomaContext, 'ovarian', 'endometrial'] : ['breast', sarcomaContext]);
    K.open({...item, patient_context: 'sarcoma'});
    await new Promise(resolve => setImmediate(resolve));
    assert(norm(target.innerHTML).includes(norm(contexts[1].evidence_at_a_glance.trial)), code + ' sarcoma evidence');

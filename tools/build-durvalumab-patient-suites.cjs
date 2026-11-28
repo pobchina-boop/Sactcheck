@@ -7,7 +7,7 @@ const {buildOverview} = require('./patient-overview-v08445.cjs');
 const projectRoot = path.resolve(__dirname, '..');
 const gynaeBatch = new Set(['00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
 const gynaecology = new Set(['00862', '00929', ...gynaeBatch]);
-const newGynaeRoutes = [...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json')];
+const newGynaeRoutes = [...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json'), ...require('./lib/gynae-patient-routes-v08475.json')];
 const cervicalRoutes = new Set(require('./lib/cervical-patient-routes-v08472.json'));
 const contextRoutes = new Set([...cervicalRoutes, ...newGynaeRoutes.filter(route => route.includes('/'))]);
 const nativePrescriptionRoutes = new Set([...cervicalRoutes, ...newGynaeRoutes]);
@@ -190,6 +190,9 @@ function renderPages(route, root = projectRoot) {
    files[name]=files[name].replace('</main>',handoff+'</main>');
  }
  if (contextRoute) for (const name of Object.keys(files)) files[name]=contextAssets(files[name],code,route);
+ if (require('./lib/gynae-patient-routes-v08475.json').includes(route)) {
+  for (const file of Object.keys(files)) files[file]=files[file].replaceAll('Keep your hospital immunotherapy alert card too.','Keep your oncology contact card with you.');
+ }
  return {data:d,files};
 }
 // Shared publication uses the native source for every document this suite owns.

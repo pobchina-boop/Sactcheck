@@ -57244,6 +57244,406 @@ const definitions={
       }
     ],
     "context": "ovarian"
+  },
+  "00205:ovarian": {
+    "code": "00205",
+    "title": "PLD after platinum treatment for advanced ovarian cancer",
+    "release": "0.84.75",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced ovarian cancer after first-line platinum chemotherapy has failed.",
+    "summary": "One infusion on day 1 of each 28-day cycle. Six cycles are typical. Your consultant may continue treatment while it helps and side effects remain manageable.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "cells": [
+          "Advanced ovarian cancer after first-line platinum chemotherapy has failed.",
+          "One infusion on day 1 of each 28-day cycle. Six cycles are typical. Your consultant may continue treatment while it helps and side effects remain manageable.",
+          "Pegylated liposomal doxorubicin is being offered to slow the growth of advanced ovarian cancer. Your team will review symptoms and scan results with you to decide whether to continue."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The treating team confirms dates and doses."
+      },
+      {
+        "label": "Checks",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, ECG and an echo or MUGA scan to measure heart function.",
+          "Before each cycle: blood count, kidney and liver tests. The team also monitors ECG, hand–foot symptoms and mouth sores. Repeat heart imaging depends on symptoms and cumulative exposure.",
+          "Symptoms and imaging according to your consultant’s plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Your team may arrange additional checks based on your results and symptoms."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver tests, ECG and an echo or MUGA scan to measure heart function.",
+        "action": "Bring your medicines list and details of earlier anthracycline treatment. Tell the team about heart disease or breathlessness.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before and during treatment",
+        "when": "Before and during treatment",
+        "why": "Before each cycle: blood count, kidney and liver tests. The team also monitors ECG, hand–foot symptoms and mouth sores. Repeat heart imaging depends on symptoms and cumulative exposure.",
+        "action": "Keep your lab and clinic appointments. Report symptoms before the next infusion.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response review",
+        "when": "Response review",
+        "why": "Symptoms and imaging according to your consultant’s plan.",
+        "action": "Ask when you will discuss whether the treatment is helping.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team uses the pegylated liposomal formulation and starts the first infusion slowly. Tell the nurse immediately about flushing, chest tightness, back pain or breathing difficulty.",
+      "Fever, chills or sudden illness need an immediate call. Report new breathlessness, ankle swelling or chest pain promptly."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00205 v8",
+        "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Randomised ovarian cancer trial of PLD versus topotecan",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11454878/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "ovarian"
+  },
+  "00205:endometrial": {
+    "code": "00205",
+    "title": "PLD for recurrent or advanced endometrial cancer",
+    "release": "0.84.75",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Recurrent or advanced endometrial cancer.",
+    "summary": "One infusion on day 1 of each 28-day cycle. Six cycles are typical. Your consultant may continue treatment while it helps and side effects remain manageable.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "cells": [
+          "Recurrent or advanced endometrial cancer.",
+          "One infusion on day 1 of each 28-day cycle. Six cycles are typical. Your consultant may continue treatment while it helps and side effects remain manageable.",
+          "Pegylated liposomal doxorubicin is being offered to slow the growth of recurrent or advanced endometrial cancer. Your team will review symptoms and scan results with you to decide whether to continue."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The treating team confirms dates and doses."
+      },
+      {
+        "label": "Checks",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests, ECG and an echo or MUGA scan to measure heart function.",
+          "Before each cycle: blood count, kidney and liver tests. The team also monitors ECG, hand–foot symptoms and mouth sores. Repeat heart imaging depends on symptoms and cumulative exposure.",
+          "Symptoms and imaging according to your consultant’s plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Your team may arrange additional checks based on your results and symptoms."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver tests, ECG and an echo or MUGA scan to measure heart function.",
+        "action": "Bring your medicines list and details of earlier anthracycline treatment. Tell the team about heart disease or breathlessness.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before and during treatment",
+        "when": "Before and during treatment",
+        "why": "Before each cycle: blood count, kidney and liver tests. The team also monitors ECG, hand–foot symptoms and mouth sores. Repeat heart imaging depends on symptoms and cumulative exposure.",
+        "action": "Keep your lab and clinic appointments. Report symptoms before the next infusion.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response review",
+        "when": "Response review",
+        "why": "Symptoms and imaging according to your consultant’s plan.",
+        "action": "Ask when you will discuss whether the treatment is helping.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The team uses the pegylated liposomal formulation and starts the first infusion slowly. Tell the nurse immediately about flushing, chest tightness, back pain or breathing difficulty.",
+      "Fever, chills or sudden illness need an immediate call. Report new breathlessness, ankle swelling or chest pain promptly."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00205 v8",
+        "url": "https://healthservice.hse.ie/documents/6546/205_V8_Peg_Lipo_DOXO_28_day.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "GOG phase II study of PLD in previously treated endometrial cancer",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11981008/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "endometrial"
+  },
+  "00232:ovarian": {
+    "code": "00232",
+    "title": "IV vinorelbine for platinum-refractory ovarian cancer",
+    "release": "0.84.75",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced ovarian carcinoma that is refractory to platinum. This use of IV vinorelbine is unlicensed in Ireland.",
+    "summary": "IV vinorelbine on days 1 and 8 of a 21-day cycle. Week three is a break. Your team reviews benefit and tolerability before repeating the cycle.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "cells": [
+          "Advanced ovarian carcinoma that is refractory to platinum. This use of IV vinorelbine is unlicensed in Ireland.",
+          "IV vinorelbine on days 1 and 8 of a 21-day cycle. Week three is a break. Your team reviews benefit and tolerability before repeating the cycle.",
+          "Vinorelbine is being offered to slow the growth of platinum-refractory advanced ovarian cancer. Your team will review symptoms and scan results with you to decide whether to continue."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The treating team confirms dates and doses."
+      },
+      {
+        "label": "Checks",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count, kidney and liver tests and assessment of numbness, tingling or weakness.",
+          "Before each cycle: blood count, kidney and liver tests and neuropathy review. The day-8 dose depends on blood counts and how you are feeling.",
+          "Symptoms and imaging according to your consultant’s plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Your team may arrange additional checks based on your results and symptoms."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver tests and assessment of numbness, tingling or weakness.",
+        "action": "Tell the team about constipation, numbness and any infection. Confirm your blood test and day-8 appointment before leaving.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before and during treatment",
+        "when": "Before and during treatment",
+        "why": "Before each cycle: blood count, kidney and liver tests and neuropathy review. The day-8 dose depends on blood counts and how you are feeling.",
+        "action": "Keep your lab and clinic appointments. Report symptoms before the next infusion.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response review",
+        "when": "Response review",
+        "why": "Symptoms and imaging according to your consultant’s plan.",
+        "action": "Ask when you will discuss whether the treatment is helping.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The nurse gives vinorelbine into a vein over 15 minutes and then flushes the line with saline. Tell them immediately if the site stings, burns or swells.",
+      "Call immediately for fever, chills or feeling suddenly unwell. During the infusion, report any pain or leakage around the IV line straight away."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00232 v5",
+        "url": "https://healthservice.hse.ie/documents/6567/232_v5_Vinorelbine_IV.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Phase II study of vinorelbine in platinum-resistant ovarian cancer",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11277650/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "ovarian"
+  },
+  "00311:ovarian": {
+    "code": "00311",
+    "title": "Five-day topotecan for ovarian, fallopian tube or peritoneal cancer",
+    "release": "0.84.75",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic ovarian, fallopian tube or peritoneal carcinoma after earlier treatment has failed. The fallopian tube and peritoneal indications are unlicensed in Ireland.",
+    "summary": "A 30-minute infusion on each of five consecutive days, then a break through day 21. The standard plan is up to six cycles, stopping earlier for progression or unacceptable toxicity.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "kind": "treatment",
+        "cells": [
+          "Metastatic ovarian, fallopian tube or peritoneal carcinoma after earlier treatment has failed. The fallopian tube and peritoneal indications are unlicensed in Ireland.",
+          "A 30-minute infusion on each of five consecutive days, then a break through day 21. The standard plan is up to six cycles, stopping earlier for progression or unacceptable toxicity.",
+          "Topotecan is being offered to slow the growth of metastatic ovarian, fallopian tube or peritoneal cancer. Your team will review symptoms and scan results with you to decide whether to continue."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "The treating team confirms dates and doses."
+      },
+      {
+        "label": "Checks",
+        "kind": "monitoring",
+        "cells": [
+          "Blood count and kidney and liver tests before starting. Kidney function helps determine the starting dose.",
+          "Repeat blood count and kidney and liver tests before each cycle. Low neutrophils, platelets or haemoglobin may require delay, dose change or supportive treatment.",
+          "Symptoms and imaging according to your consultant’s plan."
+        ],
+        "source_ids": [
+          "nccp"
+        ],
+        "note": "Your team may arrange additional checks based on your results and symptoms."
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count and kidney and liver tests before starting. Kidney function helps determine the starting dose.",
+        "action": "Confirm all five visit dates and bring your anti-sickness medicines list. Tell your team about previous low blood counts, infection or kidney problems.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Before and during treatment",
+        "when": "Before and during treatment",
+        "why": "Repeat blood count and kidney and liver tests before each cycle. Low neutrophils, platelets or haemoglobin may require delay, dose change or supportive treatment.",
+        "action": "Keep your lab and clinic appointments. Report symptoms before the next infusion.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response review",
+        "when": "Response review",
+        "why": "Symptoms and imaging according to your consultant’s plan.",
+        "action": "Ask when you will discuss whether the treatment is helping.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "You attend the unit for each prescribed daily infusion. A consultant may shorten a course to three or four days for toxicity or after extensive previous treatment. Follow your written calendar.",
+      "Call immediately for fever, chills, sudden illness, uncontrolled bleeding or severe abdominal pain. New cough or breathlessness needs prompt assessment."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00311 v4",
+        "url": "https://healthservice.hse.ie/documents/6714/311_v4_Topotecan_Monotherapy_5day.pdf"
+      },
+      {
+        "id": "trial",
+        "title": "Randomised ovarian cancer trial of PLD versus topotecan",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11454878/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "ovarian"
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

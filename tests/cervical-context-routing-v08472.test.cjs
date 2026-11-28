@@ -118,7 +118,7 @@ const published = oldIndex.filter(entry=>[entry.tumour_group].flat().includes('G
 assert.equal(published.length,49);
 assert.equal(published.filter(entry=>[entry.tumour_group].flat()[0]==='Gynaecology').length,36);
 const oldGaps = ['00203','00205','00212','00215','00226','00232','00251','00261','00279','00311','00621'];
-const currentGaps = oldGaps.filter(code=>!['00251','00261','00279','00203','00212','00215','00226','00621'].includes(code));
+const currentGaps = oldGaps.filter(code=>!['00251','00261','00279','00203','00212','00215','00226','00621','00232','00311'].includes(code));
 function checkRemaining(entries,assets,load,expected) {
   const guarded=entries.map(load).filter(p=>assets.relativePath(p,'guide','Gynaecology').includes('/scope.html?')).map(p=>p.metadata.nccp_regimen_code);
   assert.deepEqual(guarded.sort(),[...expected,'00385','00588'].sort());

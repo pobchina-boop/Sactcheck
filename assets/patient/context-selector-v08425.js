@@ -15,9 +15,9 @@
     document.querySelectorAll('[data-other-settings]').forEach(section=>{section.hidden=true;});
   }
   const requested=params.get('asset')||'portal';
-  const ovarianCodes = ['00203','00212','00215','00226','00621'];
+  const ovarianCodes = ['00203','00212','00215','00226','00621','00205','00232','00311'];
   if (ovarianCodes.includes(code)) {
-    const choices = document.querySelector('.choices') || document.querySelector('main');
+    const choices = document.querySelector?.('.choices') || document.querySelector?.('main');
     if (choices && !choices.querySelector('[data-context="ovarian"]')) {
       const article = document.createElement('article');
       article.className = 'choice';
@@ -31,12 +31,24 @@
       choices.append(article);
     }
   }
+  if (code==='00205') {
+    const choices=document.querySelector?.('.choices') || document.querySelector?.('main');
+    if (choices && !choices.querySelector('[data-context="endometrial"]')) {
+      const article=document.createElement('article'), title=document.createElement('h2'), link=document.createElement('a');
+      title.textContent='Endometrial cancer';
+      link.dataset.context='endometrial'; link.dataset.route='endometrial/'; link.textContent='Open the endometrial treatment pathway';
+      article.append(title,link); choices.append(article);
+    }
+    if (params.get('group')==='gynaecology') for(const link of document.querySelectorAll('[data-context="breast"], [data-context="sarcoma"]')) {
+      const article=link.closest('article'); if(article) article.hidden=true;
+    }
+  }
   const file=Object.prototype.hasOwnProperty.call(assets,requested)?assets[requested]:'';
   document.querySelectorAll('[data-context]').forEach(link=>{
-    if (ovarianCodes.includes(code) && link.dataset.context === 'ovarian') {
+    if (ovarianCodes.includes(code) && (link.dataset.context === 'ovarian' || code==='00205' && link.dataset.context==='endometrial')) {
       const target = requested === 'antiemetic-prescription' ? 'antiemetic-prescriptions.html' :
         requested === 'handbook' ? 'handbook.pdf' : requested === 'consent-pdf' ? 'consent-form.pdf' : file;
-      link.setAttribute('href', 'ovarian/'+target);
+      link.setAttribute('href', link.dataset.context+'/'+target);
       if (target.endsWith('.pdf')) link.setAttribute('download',target);
       return;
     }

@@ -749,6 +749,8 @@
         <span class="workflow-eyebrow">One regimen · one clinical workflow</span>
         <h2 id="workflowPanelTitle">${esc(manifest.title)}</h2>
         <p>${esc(manifest.nccpCode?`NCCP ${manifest.nccpCode}${manifest.nccpVersion?` · v${manifest.nccpVersion}`:""}`:"Regimen source")}</p>
+        ${manifest.nccpCode==="00205" && (["gynaecology","gynecology"].includes(String(root.SACTCheckProtocolContext?.activeTumourGroup?.()).toLowerCase()) || ["ovarian","endometrial"].includes(activeProtocol?.patient_context)) ? `<label for="workflowPldSetting">Gynaecological indication</label>
+        <select id="workflowPldSetting"><option value="">Choose the indication</option><option value="ovarian" ${patientAssets().contextFor(activeProtocol)==="ovarian"?"selected":""}>00205b · Advanced ovarian cancer after platinum</option><option value="endometrial" ${patientAssets().contextFor(activeProtocol)==="endometrial"?"selected":""}>00205d · Recurrent or advanced endometrial cancer</option></select>` : ""}
         ${manifest.nccpCode==="00385" && (root.SACTCheckProtocolContext?.activeTumourGroup?.()==="Gynaecology" || activeProtocol?.patient_context?.startsWith("cervical_")) ? `<label for="workflowCervicalIntent">Cervical treatment setting</label>
           <select id="workflowCervicalIntent"><option value="">Choose the setting</option><option value="cervical_definitive" ${patientAssets().contextFor(activeProtocol)==="cervical_definitive"?"selected":""}>Definitive chemoradiation</option><option value="cervical_postoperative" ${patientAssets().contextFor(activeProtocol)==="cervical_postoperative"?"selected":""}>Postoperative chemoradiation</option></select>` : ""}
         <div class="workflow-component-line">${manifest.components.map(x=>`<span>${esc(x)}</span>`).join("")}</div>
@@ -839,6 +841,11 @@
       <div class="workflow-boundary"><strong>Clinician-controlled workflow.</strong> SACTCheck surfaces regimen-derived tools and source-linked guidance. It does not prescribe, authorise treatment or replace the current NCCP regimen, local policy or independent clinical judgement.</div>
     `;
 
+    body.querySelector("#workflowPldSetting")?.addEventListener("change",event=>{
+      const context=event.target.value;
+      const indication={ovarian:"00205b",endometrial:"00205d"}[context] || "";
+      open({...activeProtocol,patient_context:context,selected_indication_id:indication});
+    });
     body.querySelector("#workflowCervicalIntent")?.addEventListener("change",event=>{
       const context=event.target.value;
       const indication=context==="cervical_postoperative"?"00385e":context==="cervical_definitive"?"00385a":"";

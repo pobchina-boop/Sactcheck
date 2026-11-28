@@ -680,8 +680,8 @@
   function preferredAssessmentIndication() {
     const assets = root.SACTCheckPatientAssets;
     const code = activeProtocol?.metadata?.nccp_regimen_code;
-    const ovarianGroup = ['gynaecology','gynecology','ovarian'].includes(String(activeTumourGroup).toLowerCase());
-    if (['00251','00261','00203','00212','00215','00226','00621'].includes(code) && (ovarianGroup || assets?.contextFor(activeProtocol,activeTumourGroup) === 'ovarian')) {
+    const ovarianGroup = ['gynaecology','gynecology','ovarian','endometrial'].includes(String(activeTumourGroup).toLowerCase());
+    if (['00251','00261','00203','00212','00215','00226','00621','00205','00232','00311'].includes(code) && (ovarianGroup || assets?.contextFor(activeProtocol,activeTumourGroup) === 'ovarian')) {
       // A shared ovarian pack can cover several indications. Only a unique or explicitly selected
       // NCCP indication determines the assessment's stage, site and line.
       return assets?.gynaeAssessmentIndication?.(activeProtocol,activeTumourGroup) || '';
@@ -700,9 +700,15 @@
   function presentationInputDefinitions(protocol, profileId, rawInputs = {}) {
     // Remove the two routine immunotherapy cards from the form only.
     // The engine retains every rule and continues to mark omitted domains unassessed.
-    return Engine.getInputDefinitions(protocol, profileId, rawInputs).filter(definition =>
+    const definitions = Engine.getInputDefinitions(protocol, profileId, rawInputs).filter(definition =>
       !definition.ui_derived_from && !(isImmunotherapyBlood(definition) && ["glucose_mmol_l", "ketones_mmol_l"].includes(definition.id))
     );
+    const code=protocol.metadata?.nccp_regimen_code;
+    if (!['00205','00311'].includes(code) || !['gynaecology','gynecology','ovarian','endometrial'].includes(String(activeTumourGroup).toLowerCase())) return definitions;
+    const eligible=new Set(protocol.indications.filter(i=>i.tumour_groups?.includes('Gynaecology')).map(i=>i.indication_id));
+    return definitions.map(d=>d.id==='indication_id' ? {...d,demo_value:'',options:[
+      {value:'',label:'Choose the NCCP indication'},...d.options.filter(option=>eligible.has(option.value))
+    ]} : d);
   }
 
   function setLaboratoryDomain(domain, definitions) {
