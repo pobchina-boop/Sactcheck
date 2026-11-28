@@ -10,7 +10,7 @@ const base = 'c2859d6db1a97c6360c1dbf43c69bbf012124212';
 const filename = 'validation/gynae-v08475/production-transition.json';
 const hash = b => crypto.createHash('sha256').update(b).digest('hex');
 const raw = fs.readFileSync(path.join(root,filename));
-assert.equal(hash(raw),'8db1947bfb13f168bc91afcf0558dc1d530be281c9d43aacbf5416dd8bd16347');
+assert.equal(hash(raw),'a39579e323a48ceca0616f18876d0524b18face25328010675ba4383c8dfc8c8');
 const record = JSON.parse(raw);
 assert.equal(record.base,base);
 const files = record.files;

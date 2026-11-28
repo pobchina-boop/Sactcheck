@@ -169,6 +169,7 @@
   }
 
   function contextIdForProtocol(protocol, selectedContext) {
+    if (selectedContext === "" && ["00205","00232","00311"].includes(String(protocolCode(protocol)))) return "";
     if (String(protocolCode(protocol)) === "00588" && root.SACTCheckPatientAssets?.contextFor) {
       return root.SACTCheckPatientAssets.contextFor(protocol, selectedContext);
     }
