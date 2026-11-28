@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROUTES = ('00897', '00926', '00953')
 ROUTE_LISTS = ROOT / 'tools/lib'
 CERVICAL_ROUTES = tuple(json.loads((ROUTE_LISTS / 'cervical-patient-routes-v08472.json').read_text()))
-NEW_GYNAE_ROUTES = tuple(json.loads((ROUTE_LISTS / 'gynae-patient-routes-v08473.json').read_text()))
+NEW_GYNAE_ROUTES = tuple(json.loads((ROUTE_LISTS / 'gynae-patient-routes-v08473.json').read_text())) + tuple(json.loads((ROUTE_LISTS / 'ovarian-patient-routes-v08474.json').read_text()))
 AUTHORED_GYNAE = CERVICAL_ROUTES + NEW_GYNAE_ROUTES
 ILLUSTRATED_GI = ('00344',)
 GYNAE = ('00862', '00929', '00303', '00306', '00308', '00624', '00819', '00620', '00716', '00769', '00771', '00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904')
@@ -38,6 +38,8 @@ def render_route(code, selected=None):
     documents = dict(DOCS)
     if (folder / "port-pump.html").exists():
         documents["port-pump"] = "port-pump"
+    for source in sorted(folder.glob('consent-*.html')):
+        documents[source.stem] = source.stem
     for source in sorted(folder.glob('support-*.html')):
         documents[source.stem] = source.stem
     for source in sorted(folder.glob('antiemetic-*.html')):

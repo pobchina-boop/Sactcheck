@@ -1,3 +1,4 @@
+const gynae74 = require('./helpers/retrospective-v08474.cjs').inventory;
 const gynae73 = require('./helpers/retrospective-v08473.cjs').inventory;
 const gynae66 = require('./helpers/retrospective-v08466.cjs').inventory;
 'use strict';
@@ -8,7 +9,7 @@ const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f
 const A=require('../js/patient-asset-registry-v0810.js'),K=require('../js/regimen-knowledge-base.js'),IDs=require('../js/protocol-id-migrations.js'),pack=require('../tools/patient-pack-v08464.cjs');
 const referenceCourse=require('../tools/reference-course-v08463.cjs');
 const codes=['00675','00747','00504','00754','00757'],index=json('protocols/index.json').protocols;
-assert.equal(A.release,'0.84.73');assert.equal(A.codes.length,gynae73.codes);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,gynae73.routes);
+assert.equal(A.release,'0.84.74');assert.equal(A.codes.length,gynae74.codes);assert.equal(A.codes.flatMap(c=>A.bundleRoutes(c)).length,gynae74.routes);
 const script=read('404.html').match(/<script>([\s\S]*?)<\/script>/)[1];
 for(const code of codes){
  const entry=index.find(x=>x.path.includes('/'+code+'-'));assert(entry);const p=json(entry.path),d=json('data/patient-knowledge/'+code+'.json');

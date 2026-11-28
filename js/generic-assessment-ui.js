@@ -681,8 +681,8 @@
     const assets = root.SACTCheckPatientAssets;
     const code = activeProtocol?.metadata?.nccp_regimen_code;
     const ovarianGroup = ['gynaecology','gynecology','ovarian'].includes(String(activeTumourGroup).toLowerCase());
-    if (['00251','00261'].includes(code) && (ovarianGroup || assets?.contextFor(activeProtocol,activeTumourGroup) === 'ovarian')) {
-      // A single ovarian pack covers nine indications. Only an explicitly selected
+    if (['00251','00261','00203','00212','00215','00226','00621'].includes(code) && (ovarianGroup || assets?.contextFor(activeProtocol,activeTumourGroup) === 'ovarian')) {
+      // A shared ovarian pack can cover several indications. Only a unique or explicitly selected
       // NCCP indication determines the assessment's stage, site and line.
       return assets?.gynaeAssessmentIndication?.(activeProtocol,activeTumourGroup) || '';
     }

@@ -13,7 +13,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
   'use strict';
 
-  const RELEASE='0.84.73';
+  const RELEASE='0.84.74';
   const CONTENT_RELEASE='0.84.42';
   const PUBLIC_ORIGIN='https://sactcheck.com/';
   const DEFINITIONS=Object.freeze({
@@ -403,17 +403,36 @@
     '00943': ['concurrent_day1','cisplatin_weekly','optional_c2d15','pembro_q3w','pembro_q6w'],
     '00921': ['first_infusion','subsequent_infusion'],
     '00279': ['day1_platinum_etoposide','days23_iv_etoposide','days23_oral_etoposide','days23_fractionated_cisplatin'],
+    '00203': ["day1"],
+    '00212': ["paclitaxel", "topotecan", "pld", "bev_alone"],
+    '00215': ["firstline", "continuation", "topotecan"],
+    '00226': ["day1", "day8", "day15", "day22"],
+    '00621': ["day1", "day8", "day15"],
     '00251': ['day1'], '00261': ['day1']
   });
+  const ovarianIndications = {
+    '00203': ['00203e','00203f','00203g'],
+    '00212': ['00212b'], '00215': ['00215a','00215c'],
+    '00226': ['00226b'], '00621': ['00621c']
+  };
   const gynaeContext = {'00279':'cervical','00251':'ovarian','00261':'ovarian'};
   const gynaeGroups = ['gynaecology','gynecology'];
 
   function sharedGynaeSelection(code,value,selected) {
     const setting = gynaeContext[code];
-    if (!setting) return null;
+    if (!setting && !ovarianIndications[code]) return null;
     const indication = value?.selected_indication_id || value?.selected_indication || value?.indication_id || value?.reimbursement_code ||
       (typeof value === 'string' && /^\d{5}[a-z]$/i.test(value) ? value : '');
     const id = text(typeof indication === 'object' ? indication.code || indication.indication_id || indication.id : indication).toLowerCase();
+    if (ovarianIndications[code]) {
+      const entries = Array.isArray(value?.indications) ? value.indications : [];
+      const ovarian = token => ovarianIndications[code].includes(token) ||
+        entries.some(entry => entry.indication_id === token && ovarianIndications[code].includes(entry.code));
+      const requested = gynaeGroups.includes(selected) || selected === 'ovarian' || ovarian(selected);
+      if (requested) return id && !ovarian(id) ? '' : 'ovarian';
+      if (ovarian(id)) return !selected || selected === 'all' ? 'ovarian' : '';
+      return null;
+    }
     function fromId(token) {
       if (code === '00279') return token === '00279a' ? 'lung' : token === '00279b' ? 'cervical' : '';
       if (token === code + '-gyn' || (token.startsWith(code) && /^[a-i]$/.test(token.slice(code.length)))) return 'ovarian';
@@ -441,16 +460,23 @@
   function gynaeVisitContext(value,explicit='') {
     const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
     if (!gynaeVisits[code]) return null;
-    const context = gynaeContext[code];
+    const context = ovarianIndications[code] ? 'ovarian' : gynaeContext[code];
     if (context && contextFor(value,explicit) !== context) return null;
-    return {code, route:'patient/'+code+'/'+(context ? context+'/' : ''), visits:gynaeVisits[code]};
+    let visits = gynaeVisits[code];
+    if (code === '00215') {
+      const selection = value?.selected_indication_id || value?.selected_indication || value?.indication_id || value?.reimbursement_code;
+      const id = typeof selection === 'object' ? selection?.code || selection?.indication_id || selection?.id : selection;
+      if (['00215a','ovarian_frontline_or_continuation'].includes(id)) visits = ['firstline','continuation'];
+      if (['00215c','platinum_resistant_ovarian'].includes(id)) visits = ['topotecan'];
+    }
+    return {code, route:'patient/'+code+'/'+(context ? context+'/' : ''), visits};
   }
 
   function gynaeVisitPath(value,explicit='',phase='') {
     const setting = gynaeVisitContext(value,explicit);
     if (!setting) {
       const code = typeof value === 'string' ? normaliseCode(value) : codeFor(value);
-      return gynaeContext[code] && !contextFor(value,explicit) ? scopePath(code,'antiemetic-prescription',value,explicit) : null;
+      return (gynaeContext[code] || ovarianIndications[code]) && !contextFor(value,explicit) ? scopePath(code,'antiemetic-prescription',value,explicit) : null;
     }
     const visit = setting.visits.includes(phase) ? phase : !phase && setting.visits.length === 1 ? setting.visits[0] : '';
     return setting.route + (visit ? 'antiemetic-'+visit+'.pdf' : 'antiemetic-prescriptions.html');
@@ -460,11 +486,13 @@
     const setting = gynaeVisitContext(protocol,explicit);
     if (!setting) return '';
     if (setting.code === '00279') return '00279b';
-    if (!gynaeContext[setting.code]) return setting.code+'a';
+    if (!gynaeContext[setting.code] && !ovarianIndications[setting.code]) return setting.code+'a';
     const selected = protocol?.selected_indication_id || protocol?.indication_id || protocol?.selected_indication || protocol?.reimbursement_code;
     const id = typeof selected === 'object' ? selected?.code || selected?.id || selected?.indication_id : selected;
     const entry = protocol.indications?.find(item => item.code === id || item.indication_id === id);
-    return entry?.indication_id || '';
+    if (entry) return entry.indication_id;
+    const codes = ovarianIndications[setting.code];
+    return codes?.length === 1 ? protocol.indications?.find(item => item.code === codes[0])?.indication_id || '' : '';
   }
 
   function cervicalSelection(code, value, selected) {
@@ -573,7 +601,10 @@
     if(d.code==='00244')return [d.code,d.code+'/gist'];
     if (gynaeContext[d.code]) return [d.code,...(d.code==='00261'?[d.code+'/head_neck']:[]),d.code+'/'+gynaeContext[d.code]];
     if(d.code==='00588')return Object.values(OLAPARIB_ROUTES).map(suffix=>'00588'+(suffix?'/'+suffix.slice(0,-1):''));
-    if(d.code==='00203')return ['00203','00203/lung','00203/prostate'];
+    if (ovarianIndications[d.code]) {
+      const prior = d.code === '00203' ? [d.code, d.code+'/lung', d.code+'/prostate'] : [d.code];
+      return [...prior, d.code+'/ovarian'];
+    }
     if(MELANOMA_CODES.includes(d.code))return [d.code,d.code+'/head_neck',...(['00455','00558'].includes(d.code)?[d.code+'/colorectal']:[]),...MELANOMA_CONTEXTS.map(x=>d.code+'/'+x),...(d.code==='00455'?[d.code+'/melanoma_perioperative']:[]),...extra];
     if(['00419','00294'].includes(d.code))return [d.code+'/head_neck',...extra];
     if(d.code==='00385')return ['00385/head_neck','00385/nasopharyngeal',...extra];
@@ -590,6 +621,7 @@
     const def=definitionFor(value); if(!def) return null;
     const gynae = gynaeVisitContext(value,context);
     if (gynae) {
+      if (asset === 'consent-draft' && ['00212','00215'].includes(def.code)) return gynae.route+'consent.html';
       if (asset === 'antiemetic-prescription') return gynaeVisitPath(value,context);
       const file = asset === 'handbook' ? 'handbook.pdf' : asset === 'consent-pdf' ? 'consent-form.pdf' :
         Object.hasOwn(CONTEXT_ASSETS,asset) ? CONTEXT_ASSETS[asset] : null;

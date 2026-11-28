@@ -384,7 +384,9 @@
     if (!context && (patientAssets()?.cervicalSupportPath?.(protocol) || patientAssets()?.gynaeVisitPath?.(protocol)?.includes('/scope.html?'))) return [];
     const entry=data?.context_supportive_phase_selectors?.[code]?.[context]||data?.supportive_phase_selectors?.[code];
     // Exact protocol binding: an assessment-profile alias is not a prescribing phase.
-    return entry?.protocol_id===protocol?.protocol_id && String(entry.source_version)===String(protocol?.metadata?.nccp_version)?entry.phases:[];
+    if (!entry || entry.protocol_id!==protocol?.protocol_id || String(entry?.source_version)!==String(protocol?.metadata?.nccp_version)) return [];
+    const visit = patientAssets()?.gynaeVisitContext?.(protocol);
+    return visit ? entry.phases.filter(phase => visit.visits.includes(phase.id)) : entry.phases;
   }
 
   function buildManifest(protocol,data,riskRecord={},supportPhaseId=""){

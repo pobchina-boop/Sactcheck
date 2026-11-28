@@ -99,7 +99,7 @@ const table=(headers,rows)=>'<table><thead><tr>'+headers.map(x=>'<th scope="col"
 const header=(p,name)=>'<header><div class="brand">SACT<span>Check</span></div><div class="reference">NCCP '+h(p.code)+' · v'+h(p.protocol_version)+'</div></header><h1>'+h(name)+'</h1><p class="regimen">'+h(p.title)+'</p>';
 const fields='<div class="fields"><span>Patient name</span><span>Date of birth</span><span>Hospital / MRN</span></div>';
 const page=(p,title,file,body)=>'<!doctype html><html lang="en-IE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+h(title)+' · NCCP '+h(p.code)+'</title><link rel="stylesheet" href="../../assets/gynae-clinical-documents.css"></head><body><nav><a href="./">Patient portal</a> <a href="'+h(file)+'" download>Download PDF</a></nav><main>'+body+'</main></body></html>\n';
-const currentGynaeRoutes = new Set(require('./lib/gynae-patient-routes-v08473.json'));
+const currentGynaeRoutes = new Set([...require('./lib/gynae-patient-routes-v08473.json'), ...require('./lib/ovarian-patient-routes-v08474.json')]);
 const trophoblasticCodes = new Set(['00247','00248','00249','00264','00266']);
 const gtnRisks = {
   dactinomycin: [['Low counts, mouth sores and IV leakage','Phone urgently for fever or bleeding. Report painful ulcers. Tell the nurse immediately if the line burns or stings.']],
@@ -143,7 +143,9 @@ function rx(p,phase){
    const oralPlan = '<p>Individual oral antiemetic prescription</p>'+table(['Medicine and strength', 'Dose and route', 'Directions and duration'],[['________________', '________________', '________________']]);
    const localRegimen = Array.isArray(p.prescription_phases) && level !== 'minimal';
    const medicines = rows.length ? table(['Medicine','Dose and route','Directions'],rows) : p.code === '00904' ? oralPlan : localRegimen ? table(['Medicine','Dose and route','Directions and duration'],[['________________','________________','________________'],['________________','________________','________________']]) : '<p>No routine preventive antiemetic for this visit. Record individual rescue if needed.</p>';
-   const body=header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>'+h(visitLabel)+'</strong><span>'+h(riskLabel)+' EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies</span></div>'+medicines+notes.map(n=>'<p class="note">'+h(n)+'</p>').join('')+'<div class="fields"><span>Amendments / duration</span><span>Quantity to supply</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · '+prescriptionSource+' · Prescriber review and signature required.</footer>';
+   const local = phase.local_adjuncts?.length ? '<h2>CUH adjuncts · prescriber to select if appropriate</h2>'+
+     table(['Select / medicine','Dose','Directions'], phase.local_adjuncts.map(m=>['□ '+m.medicine,m.dose,m.directions])) : '';
+   const body=header(p,'Antiemetic prescription')+fields+'<div class="visit"><strong>'+h(visitLabel)+'</strong><span>'+h(riskLabel)+' EMETIC RISK</span></div><div class="fields"><span>Cycle / treatment date</span><span>Allergies</span></div>'+medicines+local+notes.map(n=>'<p class="note">'+h(n)+'</p>').join('')+'<div class="fields"><span>Amendments / duration</span><span>Quantity to supply</span></div><div class="fields"><span>Prescriber name / IMC number</span><span>Signature and date</span></div><footer>SACTCheck · '+prescriptionSource+' · Prescriber review and signature required.</footer>';
    return page(p,'Antiemetic prescription','antiemetic-'+phase.id+'.pdf','<article>'+body+'</article>');
  }
  if ((p.code === '00300' && phase.id !== 'bleomycin') || p.code === '00375') {
@@ -174,6 +176,23 @@ function rx(p,phase){
 }
 function build(p,phases){
  const files={'consent-form.html':consent(p),'consent.html':consent(p)};
+ if (p.consent_choices) {
+   const options = [];
+   for (const choice of p.consent_choices) {
+     const filename = 'consent-' + choice.id;
+     const selected = {...p, title:choice.title, purpose:choice.purpose, indication_text:'',
+       schedule_summary:choice.schedule, agents:choice.agents,
+       consent_support:'Record the selected combination, its expected benefit and alternatives. Document prior treatment reactions and any personal risks discussed.'};
+     files[filename+'.html'] = consent(selected).replaceAll('consent-form.pdf',filename+'.pdf');
+     options.push('<li><a download href="'+filename+'.pdf">'+h(choice.title)+'</a></li>');
+   }
+   const chooser = '<section><h2>Choose the medicines on the prescription</h2><ul>'+options.join('')+
+     '<li><a download href="consent-form.pdf">Bevacizumab component only</a></li></ul></section>';
+   files['consent.html'] = page(p,'Choose the treatment consent','consent-form.pdf',chooser);
+   files['consent-form.html'] = files['consent-form.html'].replace('<h2>Treatment and purpose</h2>',
+     '<h2>Bevacizumab component only</h2><p>For combination treatment, use the consent covering the prescribed chemotherapy partner.</p><h2>Treatment and purpose</h2>');
+ }
+
  for(const phase of phases)files['antiemetic-'+phase.id+'.html']=rx(p,phase);
  files['antiemetic-prescriptions.html']=page(p,'Antiemetic prescriptions','antiemetic-'+phases[0].id+'.pdf',header(p,'Antiemetic prescriptions')+'<p>Select the treatment being given at this visit.</p><ul class="downloads">'+phases.map(v=>'<li><a download href="antiemetic-'+h(v.id)+'.pdf">'+h(v.label)+' — prescription PDF</a></li>').join('')+'</ul>').replace(/ <a href="antiemetic-[^"]+\.pdf" download>Download PDF<\/a>/,'');
  return files;

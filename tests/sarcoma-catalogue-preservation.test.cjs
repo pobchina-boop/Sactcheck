@@ -94,6 +94,15 @@ for (const file of paths) {
       for (const key of ['when', 'source', 'action', 'explanation']) rule[key] = oldRule[key];
     }
     assert.deepEqual(current, original, 'Only the shared immunotherapy hepatitis changes may differ');
+  } else if (code === '00226') {
+    const corrected = JSON.parse(expected);
+    const aliases = new Set(['00226-gyn','00226-gu']);
+    assert.equal(corrected.indications.filter(row => aliases.has(row.indication_id)).length, 2);
+    corrected.indications = corrected.indications.filter(row => !aliases.has(row.indication_id));
+    for (const row of corrected.indications) row.code = row.indication_id.split('_')[0];
+    const card = corrected.metadata.regimen_card.contexts.find(row => row.indication_id === '00226-gu');
+    card.indication_id = card.id = '00226e_metastatic_bladder';
+    assert.deepEqual(JSON.parse(actual), corrected, 'Only the source indication aliases and bladder card may change');
   } else if (code === '00419') {
     const original = JSON.parse(expected);
     const current = JSON.parse(actual);

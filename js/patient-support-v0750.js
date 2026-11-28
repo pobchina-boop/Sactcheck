@@ -344,7 +344,7 @@
     const code=protocolCode(protocol);
     const maps=root.SACTCheckAnatomyData;
     let authored=maps?.[code];
-    if (["00251","00261","00279"].includes(code)) {
+    if (["00251","00261","00279","00203","00212","00215","00226","00621"].includes(code)) {
       const context=patientAssets()?.contextFor(protocol);
       if (!context) return `<section class="patient-bodymap-card"><h4>Choose your treatment setting</h4><p>The medicines and effects shown depend on the cancer being treated.</p><a href="patient/${code}/scope.html">Choose your treatment setting</a></section>`;
       authored=maps?.[`${code}:${context}`] || authored;

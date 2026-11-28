@@ -15,8 +15,31 @@
     document.querySelectorAll('[data-other-settings]').forEach(section=>{section.hidden=true;});
   }
   const requested=params.get('asset')||'portal';
+  const ovarianCodes = ['00203','00212','00215','00226','00621'];
+  if (ovarianCodes.includes(code)) {
+    const choices = document.querySelector('.choices') || document.querySelector('main');
+    if (choices && !choices.querySelector('[data-context="ovarian"]')) {
+      const article = document.createElement('article');
+      article.className = 'choice';
+      const title = document.createElement('h2');
+      title.textContent = 'Ovarian cancer';
+      const link = document.createElement('a');
+      link.dataset.context = 'ovarian';
+      link.dataset.route = 'ovarian/';
+      link.textContent = 'Open the ovarian treatment pathway';
+      article.append(title, link);
+      choices.append(article);
+    }
+  }
   const file=Object.prototype.hasOwnProperty.call(assets,requested)?assets[requested]:'';
   document.querySelectorAll('[data-context]').forEach(link=>{
+    if (ovarianCodes.includes(code) && link.dataset.context === 'ovarian') {
+      const target = requested === 'antiemetic-prescription' ? 'antiemetic-prescriptions.html' :
+        requested === 'handbook' ? 'handbook.pdf' : requested === 'consent-pdf' ? 'consent-form.pdf' : file;
+      link.setAttribute('href', 'ovarian/'+target);
+      if (target.endsWith('.pdf')) link.setAttribute('download',target);
+      return;
+    }
     if (['00251','00261','00279'].includes(code)) {
       const routes = code === '00279' ? {lung:'./',cervical:'cervical/'} :
         code === '00261' ? {breast:'./',head_neck:'head_neck/',ovarian:'ovarian/'} : {breast:'./',ovarian:'ovarian/'};

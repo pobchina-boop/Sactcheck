@@ -35,7 +35,7 @@ console.log("Cumulative public release and module version separation tests passe
   const protocolUrl = origin + "protocols/breast/example.json";
   const oldName = "sactcheck-runtime-previous";
   const priorRevisionName = `sactcheck-runtime-${pkg.version}`;
-  const revisions = {"0.84.61":"ribo-20261119","0.84.62":"enhertu-20261123","0.84.63":"olaparib-20261124","0.84.64":"sarcoma-20261125","0.84.65":"gynae-20261125","0.84.66":"gynae-batch2-20261125","0.84.67":"flot-20261126","0.84.68":"gynae-batch3-20261126","0.84.69":"gynae-batch4-20261126","0.84.70":"gynae-batch5-20261126","0.84.71":"gynae-batch6-20261127","0.84.72":"cervical-contexts-20261127","0.84.73":"gynae-cervical-ovarian-20261127"};
+  const revisions = {"0.84.61":"ribo-20261119","0.84.62":"enhertu-20261123","0.84.63":"olaparib-20261124","0.84.64":"sarcoma-20261125","0.84.65":"gynae-20261125","0.84.66":"gynae-batch2-20261125","0.84.67":"flot-20261126","0.84.68":"gynae-batch3-20261126","0.84.69":"gynae-batch4-20261126","0.84.70":"gynae-batch5-20261126","0.84.71":"gynae-batch6-20261127","0.84.72":"cervical-contexts-20261127","0.84.73":"gynae-cervical-ovarian-20261127","0.84.74":"ovarian-taxanes-bevacizumab-20261128"};
   const expectedRevision = revisions[pkg.version];
   assert(expectedRevision,"Review the cache revision for this release");
   const previousPublicCache = "sactcheck-runtime-0.84.61-" + revisions["0.84.61"];
