@@ -10,7 +10,7 @@ const base = 'fcb76f0354fc6b0b60abbc1aaca248946f3ee4a6';
 const filename = 'validation/gi-v08476/production-transition.json';
 const hash = b => crypto.createHash('sha256').update(b).digest('hex');
 const raw = fs.readFileSync(path.join(root,filename));
-assert.equal(hash(raw),'fcfe754e1a510eb97fa255af83d10ee02c1f393535cd0afa7edad1a20dd2f9cb');
+assert.equal(hash(raw),'dc99abcf17e9ed07505aced5eeacc0cb9498ea2d84e4571136a6f1cd80d10267');
 const record = JSON.parse(raw);
 assert.equal(record.base,base);
 const files = record.files;

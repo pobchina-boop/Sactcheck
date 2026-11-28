@@ -33,7 +33,8 @@ const dualImmuneV35 = {
 };
 // NCCP source-audited v0.84.0 phases replace legacy whole-course classifications.
 // NCCP 00746 v2 distinguishes oral olaparib and bevacizumab on page 9.
-const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate'};
+// Source-reviewed NCCP regimen classifications, including the four GI updates.
+const reviewedRisks={'00746':'oral_moderate_high','00374':'moderate','00329':'high','00515':'high','00384':'low','00524':'low'};
 const gynaePhases = {
   '00267': {level:'high',phases:{day1:'high',day2:'high'}},
   '00301': {level:'high',phases:{day1:'high',days2to5:'high'}},
@@ -233,6 +234,12 @@ for (const record of index.protocols || []) {
   protocolCount += 1;
   const relative = path.relative(path.join(root, "protocols"), file).replace(/\\/g, "/");
   const sc = protocol.supportive_care || {};
+  if (['00329','00515','00384','00524'].includes(protocol.metadata.nccp_regimen_code)) {
+    const code = protocol.metadata.nccp_regimen_code;
+    assert.equal(riskMap.protocols[code].source_url,protocol.metadata.source_url);
+    assert.equal(riskMap.protocols[code].script_id,reviewedRisks[code]==='high' ? 'nccp-v8-high-v08420' : 'nccp-parenteral-low');
+    require('./helpers/live-release-v08464.cjs').verifyFile(record.path);
+  }
   const md = protocol.metadata || {};
   const baseline = classificationBaseline.protocol_supportive_care_levels[relative];
   if(md.nccp_regimen_code==='00830'){
