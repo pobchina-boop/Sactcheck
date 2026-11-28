@@ -431,7 +431,7 @@
       </section>
 
       ${contextPicker}
-      ${String(protocolCode(protocol)) !== '00588' || contextId === 'prostate' ? prostatePathwayMarkup(protocol, payload) : ''}
+      ${!['00588','00203'].includes(String(protocolCode(protocol))) || contextId === 'prostate' ? prostatePathwayMarkup(protocol, payload) : ''}
       ${root.SACTCheckTreatmentEvidence?.render(regimenProfile)||""}
       ${overview}
       ${interactionMarkup(regimenProfile)}

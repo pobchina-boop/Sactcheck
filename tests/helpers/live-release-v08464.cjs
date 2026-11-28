@@ -10,7 +10,7 @@ const base = '15749dced473f0e3defab8f744a855e0fec08772';
 const filename = 'validation/ovarian-v08474/production-transition.json';
 const hash = b => crypto.createHash('sha256').update(b).digest('hex');
 const raw = fs.readFileSync(path.join(root,filename));
-assert.equal(hash(raw),'4d107b42452fe72b56784df7eb048d8f6f2e812ff3b8bfbb6cbb0c9c4c73591b');
+assert.equal(hash(raw),'7db2eb4bf8c5ae9cd88a324b995c4a6d2938e67e0df62b9629822e9080a53b5d');
 const record = JSON.parse(raw);
 assert.equal(record.base,base);
 const files = record.files;
