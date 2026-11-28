@@ -4,18 +4,18 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const cp = require('node:child_process');
-const prior = require('./gynae-batch10-checkpoint.cjs');
+const prior = require('./gi-previous-release-v08475.cjs');
 const root = path.resolve(__dirname, '../..');
-const base = 'c2859d6db1a97c6360c1dbf43c69bbf012124212';
-const filename = 'validation/gynae-v08475/production-transition.json';
+const base = 'fcb76f0354fc6b0b60abbc1aaca248946f3ee4a6';
+const filename = 'validation/gi-v08476/production-transition.json';
 const hash = b => crypto.createHash('sha256').update(b).digest('hex');
 const raw = fs.readFileSync(path.join(root,filename));
-assert.equal(hash(raw),'a39579e323a48ceca0616f18876d0524b18face25328010675ba4383c8dfc8c8');
+assert.equal(hash(raw),'981ac72ccaa080c4bb62fa6dbee121dbaf9f62aedec8b86386aaeb59c35958b5');
 const record = JSON.parse(raw);
 assert.equal(record.base,base);
 const files = record.files;
 const historic = (revision,file) => cp.execFileSync('git',['show',revision+':'+file],{cwd:root,maxBuffer:64*1024*1024});
-assert(fs.readFileSync(require.resolve('./gynae-batch10-checkpoint.cjs')).equals(historic(base,'tests/helpers/live-release-v08464.cjs')));
+assert(fs.readFileSync(require.resolve('./gi-previous-release-v08475.cjs')).equals(historic(base,'tests/helpers/live-release-v08464.cjs')));
 function verifyFile(file) {
   const transition = files[file];
   if (!transition) return prior.verifyFile(file);
@@ -51,11 +51,11 @@ function approvedJson(file) {
   return JSON.parse(archive(file,revision));
 }
 function owns(file) {
-  if (file===filename || file==='tests/helpers/gynae-batch10-checkpoint.cjs') return true;
+  if (file===filename || file==='tests/helpers/gi-previous-release-v08475.cjs') return true;
   if (!files[file]) return prior.owns(file);
   verifyFile(file); return true;
 }
-const addition = file => file===filename || file==='tests/helpers/gynae-batch10-checkpoint.cjs' || files[file]?.before===null || prior.addition(file);
+const addition = file => file===filename || file==='tests/helpers/gi-previous-release-v08475.cjs' || files[file]?.before===null || prior.addition(file);
 function checkedInventory(inventory) {
   return {...inventory,helper:{...inventory.helper,approvedPath(file) {
     if (files[file] && inventory.record.files[file]) {verifyFile(file); return true;}
@@ -76,5 +76,6 @@ const gynae71Inventory = () => checkedInventory(prior.gynae71Inventory());
 const gynae72Inventory = () => checkedInventory(prior.gynae72Inventory());
 const gynae73Inventory = () => checkedInventory(prior.gynae73Inventory());
 const gynae74Inventory = () => checkedInventory(prior.gynae74Inventory());
-const gynae75Inventory = () => ({version:75,record,helper:{approvedPath:file => !!files[file] && owns(file)}});
-module.exports = {...prior,verifyFile,expected,isCurrent,astraBytes,astraJson:file=>JSON.parse(astraBytes(file)),approvedJson,addition,owns,gynaecologyInventory,sarcomaInventory,gynae65Inventory,startupInventory,gynae66Inventory,flot67Inventory,gistPanelInventory,gynae68Inventory,gynae69Inventory,gynae70Inventory,gynae71Inventory,gynae72Inventory,gynae73Inventory,gynae74Inventory,gynae75Inventory};
+const gynae75Inventory = () => checkedInventory(prior.gynae75Inventory());
+const gi76Inventory = () => ({version:76,record,helper:{approvedPath:file => !!files[file] && owns(file)}});
+module.exports = {...prior,verifyFile,expected,isCurrent,astraBytes,astraJson:file=>JSON.parse(astraBytes(file)),approvedJson,addition,owns,gynaecologyInventory,sarcomaInventory,gynae65Inventory,startupInventory,gynae66Inventory,flot67Inventory,gistPanelInventory,gynae68Inventory,gynae69Inventory,gynae70Inventory,gynae71Inventory,gynae72Inventory,gynae73Inventory,gynae74Inventory,gynae75Inventory,gi76Inventory};

@@ -112,6 +112,12 @@ for (const file of paths) {
     assert.equal(additional.cycle_length_days, 7);
     assert.deepEqual(current, original, 'Only the reviewed cervical regimen card may change');
     require('./helpers/live-release-v08464.cjs').verifyFile(file);
+  } else if (['00329','00515','00384','00524'].includes(code)) {
+    const gi = release73.gi76Inventory().record;
+    assert(expected.equals(git('show',gi.base+':'+file)),file+' GI predecessor');
+    const digest = require('node:crypto').createHash('sha256').update(expected).digest('hex');
+    assert.equal(gi.files[file].before,digest,file+' baseline GI protocol');
+    release73.verifyFile(file);
   } else if (code === '00344') {
     const release = require('./helpers/live-release-v08464.cjs');
     const {record} = release.flot67Inventory();

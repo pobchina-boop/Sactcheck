@@ -522,7 +522,7 @@
     return viewer;
   }
 
-  const prescriptionCodes=new Set(['00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
+  const prescriptionCodes=new Set(['00329','00515','00256','00384','00524','00344','00303','00306','00308','00624','00819','00620','00716','00769','00771','00772','00817','00811','00799','00766','00499','00312','00375','00676','00300','00246','00247','00248','00249','00264','00266','00267','00301','00904']);
   async function openSupportivePdf(protocol,options={}){
     const code=nccpCodeFor(protocol);
     const contextual=patientAssets()?.gynaeVisitPath?.(protocol,'',options.supportPhase) || patientAssets()?.cervicalSupportPath?.(protocol);
@@ -857,6 +857,8 @@
       closePanel({restoreFocus:false});
       if((patientAssets()?.cervicalPrescription?.(protocol) || patientAssets()?.gynaeVisitContext?.(protocol)) && root.SACTCheckGenericAssessment?.open){
         root.SACTCheckGenericAssessment.open(protocol,{tumourGroup:"Gynaecology"});
+      } else if (["00329","00515","00256","00384","00524"].includes(manifest.nccpCode) && root.SACTCheckGenericAssessment?.open) {
+        root.SACTCheckGenericAssessment.open(protocol,{tumourGroup:"Gastrointestinal"});
       } else card?.querySelector(".json-assessment-launch")?.click();
     });
     body.querySelector("[data-workflow-nccp-tracker]")?.addEventListener("click",()=>{

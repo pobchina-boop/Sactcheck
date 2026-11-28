@@ -9,7 +9,7 @@
     "tumour_group": "Gastrointestinal",
     "title": "Gemcitabine 1000 mg/m² and Capecitabine 650 mg/m² – 21 day",
     "short_title": "Gemcitabine 1000 mg/m² and Capecitabine 650 mg/m² – 21 day",
-    "indication": "Locally advanced/metastatic pancreatic or biliary tree carcinoma.",
+    "indication": "Locally advanced or metastatic pancreatic carcinoma (00384a), or locally advanced biliary tree carcinoma (00384b).",
     "source_url": "https://healthservice.hse.ie/documents/6340/384_v7_Gemcitabine_1000_capecitabine_650_-21day_therapy.pdf",
     "source_document_pages": null,
     "sactcheck_encoding_version": "0.59.0",
@@ -89,7 +89,8 @@
     },
     "catalogue_source_checked_date": "2026-07-29",
     "catalogue_source_check_scope": "Catalogue presence and source link structure only; not rule level source fidelity.",
-    "canonical_protocol_id": "nccp-00384-v7"
+    "canonical_protocol_id": "nccp-00384-v7",
+    "review_date": "2030-10-20"
   },
   "clinical_governance": {
     "prescriptive_authority": "The treatment plan must be initiated by a Consultant Medical Oncologist or other appropriately authorised specialist named in the current NCCP source.",
@@ -100,12 +101,16 @@
   "indications": [
     {
       "indication_id": "00384a",
-      "description": "Locally advanced/metastatic pancreatic or biliary tree carcinoma."
+      "description": "Locally advanced or metastatic pancreatic carcinoma."
+    },
+    {
+      "indication_id": "00384b",
+      "description": "Locally advanced biliary tree carcinoma."
     }
   ],
   "treatment": {
     "cycle_length_days": 21,
-    "schedule_summary": "Gemcitabine 1000 mg/m² and Capecitabine 650 mg/m² – 21 day",
+    "schedule_summary": "Gemcitabine IV on days 1 and 8; capecitabine twice daily on days 1–14. Repeat every 21 days.",
     "drugs": [
       "gemcitabine",
       "capecitabine"
@@ -398,14 +403,10 @@
         {
           "value": "day8",
           "label": "Day 8"
-        },
-        {
-          "value": "day15",
-          "label": "Day 15"
         }
       ],
       "demo_value": "day1",
-      "input_role": "context"
+      "input_role": "decision"
     },
     "gemcitabine_renal_band": {
       "label": "Renal function for gemcitabine",
@@ -514,6 +515,24 @@
       "always_show": true,
       "unit": "×ULN",
       "input_role": "decision"
+    },
+    "prior_gemcap_haematologic_event": {
+      "label": "Prior event in NCCP Table 1 requiring subsequent-cycle dose review",
+      "type": "select",
+      "ui_section": "treatment_context",
+      "input_role": "decision",
+      "required": false,
+      "options": [
+        {
+          "value": "no",
+          "label": "No qualifying event documented"
+        },
+        {
+          "value": "yes",
+          "label": "ANC <0.5 for ≥5 days, ANC <0.1 for ≥3 days, febrile neutropenia, platelets <25, or cycle delayed >1 week for toxicity"
+        }
+      ],
+      "demo_value": "no"
     }
   },
   "required_inputs": [],
@@ -618,48 +637,6 @@
           "page": "eligibility/exclusions or dose-modification section"
         },
         "explanation": "Pregnancy or breastfeeding requires the protocol exclusion pathway."
-      },
-      {
-        "id": "ANC_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 1
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC is below the encoded minimum treatment range; withhold and reassess against the official regimen."
-      },
-      {
-        "id": "PLATELETS_BELOW_SAFE_TREATMENT_RANGE",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 75
-        },
-        "action": {
-          "type": "withhold",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets are below the encoded minimum treatment range; withhold and reassess against the official regimen."
       },
       {
         "id": "FEVER_OR_ACTIVE_INFECTION",
@@ -830,48 +807,6 @@
         "explanation": "Withhold oral fluoropyrimidine for grade 2 or worse hand-foot syndrome until improved and use the source dose-reduction pathway."
       },
       {
-        "id": "GEMCITABINE_ANC_LT05",
-        "priority": 9,
-        "when": {
-          "field": "anc_x10e9_l",
-          "operator": "<",
-          "value": 0.5
-        },
-        "action": {
-          "type": "omit",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "ANC <0.5 ×10⁹/L triggers omission/withholding of the within-cycle gemcitabine dose."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "ANC <0.5 ×10⁹/L triggers omission/withholding of the within-cycle gemcitabine dose."
-      },
-      {
-        "id": "GEMCITABINE_PLATELETS_LT50",
-        "priority": 9,
-        "when": {
-          "field": "platelets_x10e9_l",
-          "operator": "<",
-          "value": 50
-        },
-        "action": {
-          "type": "omit",
-          "components": [
-            "whole_regimen"
-          ],
-          "message": "Platelets <50 ×10⁹/L trigger omission/withholding of the within-cycle gemcitabine dose."
-        },
-        "source": {
-          "document": "Official NCCP regimen; component-specific decision pathway",
-          "page": "dose-modification section"
-        },
-        "explanation": "Platelets <50 ×10⁹/L trigger omission/withholding of the within-cycle gemcitabine dose."
-      },
-      {
         "id": "OF590_00384_GEM_RENAL_LT30",
         "priority": 20,
         "when": {
@@ -1000,6 +935,289 @@
           "page": "renal/hepatic dose-modification section"
         },
         "explanation": "Bilirubin >3 ×ULN or ALT/AST >2.5 ×ULN: withhold capecitabine and reassess according to the source pathway."
+      },
+      {
+        "id": "GEMCAP_CYCLE_START",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "==",
+              "value": "day1"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Delay the start of the cycle until ANC is at least 1 and platelets are at least 100 ×10⁹/L."
+        },
+        "source": {
+          "document": "NCCP 00384 v7",
+          "page": 2
+        },
+        "explanation": "Delay the start of the cycle until ANC is at least 1 and platelets are at least 100 ×10⁹/L."
+      },
+      {
+        "id": "GEMCAP_WITHIN_CYCLE_OMIT",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "omit",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "Omit this gemcitabine dose. Review before restarting. Counts must recover to ANC ≥0.5 and platelets ≥50 ×10⁹/L."
+        },
+        "source": {
+          "document": "NCCP 00384 v7",
+          "page": 2
+        },
+        "explanation": "Omit this gemcitabine dose. Review before restarting. Counts must recover to ANC ≥0.5 and platelets ≥50 ×10⁹/L."
+      },
+      {
+        "id": "GEMCAP_WITHIN_CYCLE_INTERRUPT",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 0.5
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 50
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "withhold",
+          "components": [
+            "capecitabine"
+          ],
+          "message": "Interrupt capecitabine and reassess until toxicity recovers to grade 1 or less."
+        },
+        "source": {
+          "document": "NCCP 00384 v7",
+          "page": 2
+        },
+        "explanation": "Interrupt capecitabine and reassess until toxicity recovers to grade 1 or less."
+      },
+      {
+        "id": "GEMCAP_WITHIN_CYCLE_INTERMEDIATE",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8"
+              ]
+            },
+            {
+              "field": "anc_x10e9_l",
+              "operator": ">=",
+              "value": 0.5
+            },
+            {
+              "field": "platelets_x10e9_l",
+              "operator": ">=",
+              "value": 50
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "dose_reduce",
+          "components": [
+            "gemcitabine"
+          ],
+          "message": "Give gemcitabine at 75% of the applicable dose. Counts in this band alone do not reduce capecitabine. Review concurrent toxicities and prior events."
+        },
+        "source": {
+          "document": "NCCP 00384 v7",
+          "page": 2
+        },
+        "explanation": "Give gemcitabine at 75% of the applicable dose. Counts in this band alone do not reduce capecitabine. Review concurrent toxicities and prior events."
+      },
+      {
+        "id": "GEMCAP_COUNTS_WITHOUT_DAY",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "missing"
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "<",
+                  "value": 1
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "<",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Confirm treatment day before interpreting low counts. Cycle-start and within-cycle actions differ."
+        },
+        "source": {
+          "document": "NCCP 00384 Table 1",
+          "page": 2
+        },
+        "explanation": "Confirm treatment day before interpreting low counts. Cycle-start and within-cycle actions differ."
+      },
+      {
+        "id": "GEMCAP_INCOMPLETE_COUNTS",
+        "priority": 9,
+        "when": {
+          "all": [
+            {
+              "field": "treatment_day",
+              "operator": "in",
+              "value": [
+                "day8"
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "missing"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "missing"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "field": "anc_x10e9_l",
+                  "operator": "exists"
+                },
+                {
+                  "field": "platelets_x10e9_l",
+                  "operator": "exists"
+                }
+              ]
+            }
+          ]
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "whole_regimen"
+          ],
+          "message": "Obtain both ANC and platelets before calculating this within-cycle dose. A severe value by itself still triggers omission and interruption."
+        },
+        "source": {
+          "document": "NCCP 00384 Table 1",
+          "page": 2
+        },
+        "explanation": "Obtain both ANC and platelets before calculating this within-cycle dose. A severe value by itself still triggers omission and interruption."
+      },
+      {
+        "id": "GEMCAP_SUBSEQUENT_CYCLE_HISTORY",
+        "priority": 9,
+        "when": {
+          "field": "prior_gemcap_haematologic_event",
+          "operator": "==",
+          "value": "yes"
+        },
+        "action": {
+          "type": "consultant_review",
+          "components": [
+            "gemcitabine",
+            "capecitabine"
+          ],
+          "message": "Review Table 1 with the consultant. For subsequent cycles gemcitabine is reduced to 75% of the original cycle initiation dose. Interrupt capecitabine until toxicity recovers to grade 1 or less. Reconcile all concurrent findings before prescribing."
+        },
+        "source": {
+          "document": "NCCP 00384 Table 1",
+          "page": 2
+        },
+        "explanation": "Review Table 1 with the consultant. For subsequent cycles gemcitabine is reduced to 75% of the original cycle initiation dose. Interrupt capecitabine until toxicity recovers to grade 1 or less. Reconcile all concurrent findings before prescribing."
       }
     ]
   },
@@ -1019,15 +1237,15 @@
     "Only the currently structured inputs and decision rules are operational in SACTCheck. Renal and hepatic source requirements may still require manual review of the current official NCCP PDF."
   ],
   "supportive_care": {
-    "emetogenic_risk": "moderate",
-    "script_id": "nccp-parenteral-moderate",
-    "mapping_source": "NCCP SACT Antiemetic Guidance V6 (2025)",
-    "mapping_source_url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf",
-    "mapping_basis": "Risk assigned from the most emetogenic active component and treatment phase.",
+    "emetogenic_risk": "low",
+    "script_id": "nccp-parenteral-low",
+    "mapping_source": "NCCP 00384 v7",
+    "mapping_source_url": "https://healthservice.hse.ie/documents/6340/384_v7_Gemcitabine_1000_capecitabine_650_-21day_therapy.pdf",
+    "mapping_basis": "NCCP 00384 v7 lists low IV gemcitabine risk. Oral capecitabine has minimal-to-low risk in NCCP classification Table 8. The IV visit uses the low-risk plan.",
     "mapping_confidence": "high",
     "validation_status": "source_mapped_pending_local_oncology_pharmacy_validation",
     "breakthrough_profile_id": "nccp-breakthrough-general",
     "supportive_medications_pdf_url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf",
-    "supportive_medications_label": "NCCP antiemetic guidance for moderate emetogenic risk"
+    "supportive_medications_label": "NCCP antiemetic guidance for low emetogenic risk"
   }
 }

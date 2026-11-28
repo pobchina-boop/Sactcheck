@@ -23,6 +23,8 @@ function registry(codes,prior){
   assert.deepEqual(gynaecology,['00862','00929']);
   const sarcoma = require('./retrospective-v08464.cjs').NEW_ROUTES;
   assert.deepEqual(sarcoma,['00374','00228/liposarcoma','00205/sarcoma','00462','00554']);
-  assert.deepEqual([...codes].sort(),[...expected,...gynaecology,...require('./retrospective-v08467.cjs').NEW_ROUTES,...require('./retrospective-v08468.cjs').NEW_ROUTES,...require('./retrospective-v08469.cjs').NEW_ROUTES,...require('./retrospective-v08470.cjs').NEW_ROUTES,...require('./retrospective-v08471.cjs').NEW_ROUTES,...require('./retrospective-v08473.cjs').NEW_ROUTES.filter(route=>!route.includes('/')),...require('./retrospective-v08466.cjs').NEW_ROUTES,...require('./retrospective-v08465.cjs').NEW_ROUTES,...sarcoma.filter(route=>!route.includes('/')),...require('./remaining-sarcoma-patient-files.cjs').NEW_ROUTES].sort(),'Every released root is present exactly once');
+  const pancreatic = require('./retrospective-v08476.cjs').NEW_ROUTES;
+  assert.deepEqual(pancreatic,['00329','00515','00256','00384','00524']);
+  assert.deepEqual([...codes].sort(),[...pancreatic,...expected,...gynaecology,...require('./retrospective-v08467.cjs').NEW_ROUTES,...require('./retrospective-v08468.cjs').NEW_ROUTES,...require('./retrospective-v08469.cjs').NEW_ROUTES,...require('./retrospective-v08470.cjs').NEW_ROUTES,...require('./retrospective-v08471.cjs').NEW_ROUTES,...require('./retrospective-v08473.cjs').NEW_ROUTES.filter(route=>!route.includes('/')),...require('./retrospective-v08466.cjs').NEW_ROUTES,...require('./retrospective-v08465.cjs').NEW_ROUTES,...sarcoma.filter(route=>!route.includes('/')),...require('./remaining-sarcoma-patient-files.cjs').NEW_ROUTES].sort(),'Every released root is present exactly once');
 }
 module.exports={registry,added};

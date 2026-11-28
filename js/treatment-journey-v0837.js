@@ -57644,6 +57644,501 @@ const definitions={
       }
     ],
     "context": "ovarian"
+  },
+  "00329": {
+    "code": "00329",
+    "title": "FOLFIRINOX for metastatic pancreatic cancer",
+    "release": "0.84.76",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Metastatic pancreatic cancer",
+    "summary": "Day 1 infusions, then a 46-hour fluorouracil pump. Disconnect around day 3. Repeat every 14 days for up to 12 cycles.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "The aim is to control cancer that has spread and help you live longer. Your team will review symptoms and scans with you.",
+          "Day 1 infusions, then a 46-hour fluorouracil pump. Disconnect around day 3. Repeat every 14 days for up to 12 cycles.",
+          "Oxaliplatin is followed by folinic acid and irinotecan. A short fluorouracil injection is given before the 46-hour pump."
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "label": "Monitoring",
+        "cells": [
+          "Blood count, kidney and liver function. A DPD test checks how your body handles fluorouracil.",
+          "Blood count, kidney and liver tests and a check for nerve symptoms before each cycle.",
+          "Clinical review and imaging as arranged for your treatment setting."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver function. A DPD test checks how your body handles fluorouracil.",
+        "action": "Bring your medicine list and 24-hour oncology contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "During treatment",
+        "when": "During treatment",
+        "why": "Blood count, kidney and liver tests and a check for nerve symptoms before each cycle.",
+        "action": "Report changes before the next dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response or follow-up",
+        "when": "Response or follow-up",
+        "why": "Clinical review and imaging as arranged for your treatment setting.",
+        "action": "Ask when results will be discussed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Oxaliplatin is followed by folinic acid and irinotecan. A short fluorouracil injection is given before the 46-hour pump.",
+      "Keep the pump line dry and unkinked. Phone for leaks, disconnection, swelling or a pump that empties early or late. Leave adjustments to your trained team."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00329 v9",
+        "url": "https://healthservice.hse.ie/documents/6774/329_v9_FOLFIRINOX.pdf"
+      },
+      {
+        "id": "study0",
+        "title": "PRODIGE 4 / ACCORD 11",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21561347/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "Gastrointestinal"
+  },
+  "00515": {
+    "code": "00515",
+    "title": "Modified FOLFIRINOX for pancreatic cancer",
+    "release": "0.84.76",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Resected pancreatic ductal adenocarcinoma or metastatic pancreatic cancer",
+    "summary": "Day 1 infusions, then a 46-hour fluorouracil pump. Disconnect around day 3. Repeat every 14 days for up to 12 cycles.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "After surgery the aim is to reduce the chance of pancreatic cancer returning. If the cancer has spread, the aim is to control it. Ask which aim applies to you.",
+          "Day 1 infusions, then a 46-hour fluorouracil pump. Disconnect around day 3. Repeat every 14 days for up to 12 cycles.",
+          "Oxaliplatin is followed by folinic acid and irinotecan. Fluorouracil runs by pump over 46 hours. This modified schedule omits the short fluorouracil injection."
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "label": "Monitoring",
+        "cells": [
+          "Blood count, kidney and liver function. A DPD test checks how your body handles fluorouracil.",
+          "Blood count, kidney and liver tests and a check for nerve symptoms before each cycle.",
+          "Clinical review and imaging as arranged for your treatment setting."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver function. A DPD test checks how your body handles fluorouracil.",
+        "action": "Bring your medicine list and 24-hour oncology contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "During treatment",
+        "when": "During treatment",
+        "why": "Blood count, kidney and liver tests and a check for nerve symptoms before each cycle.",
+        "action": "Report changes before the next dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response or follow-up",
+        "when": "Response or follow-up",
+        "why": "Clinical review and imaging as arranged for your treatment setting.",
+        "action": "Ask when results will be discussed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Oxaliplatin is followed by folinic acid and irinotecan. Fluorouracil runs by pump over 46 hours. This modified schedule omits the short fluorouracil injection.",
+      "Keep the pump line dry and unkinked. Phone for leaks, disconnection, swelling or a pump that empties early or late. Leave adjustments to your trained team."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00515 v7",
+        "url": "https://healthservice.hse.ie/documents/6516/515_v7_FOLFIRINOX_modified.pdf"
+      },
+      {
+        "id": "study0",
+        "title": "PRODIGE 24 / CCTG PA.6",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30575490/"
+      },
+      {
+        "id": "study1",
+        "title": "PRODIGE 4 / ACCORD 11",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21561347/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "Gastrointestinal"
+  },
+  "00256": {
+    "code": "00256",
+    "title": "Nab-paclitaxel and gemcitabine for metastatic pancreatic cancer",
+    "release": "0.84.76",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "First-line metastatic pancreatic adenocarcinoma",
+    "summary": "Two infusions on days 1, 8 and 15. Week four is a break. Repeat every 28 days while helping and tolerable.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "This first treatment for pancreatic cancer that has spread aims to slow its growth and relieve symptoms.",
+          "Two infusions on days 1, 8 and 15. Week four is a break. Repeat every 28 days while helping and tolerable.",
+          "The albumin-bound paclitaxel infusion takes 30 minutes. Gemcitabine follows immediately over 30 minutes. This formulation must not be interchanged with conventional paclitaxel."
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "label": "Monitoring",
+        "cells": [
+          "Blood count, kidney and liver function. Confirm the pancreatic tumour diagnosis and review any bile duct stent or active infection.",
+          "Blood count and kidney tests before treatment. Liver tests according to the protocol. Day 15 dose review takes account of blood counts and what happened on day 8.",
+          "Clinical review and imaging as arranged for your treatment setting."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver function. Confirm the pancreatic tumour diagnosis and review any bile duct stent or active infection.",
+        "action": "Bring your medicine list and 24-hour oncology contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "During treatment",
+        "when": "During treatment",
+        "why": "Blood count and kidney tests before treatment. Liver tests according to the protocol. Day 15 dose review takes account of blood counts and what happened on day 8.",
+        "action": "Report changes before the next dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response or follow-up",
+        "when": "Response or follow-up",
+        "why": "Clinical review and imaging as arranged for your treatment setting.",
+        "action": "Ask when results will be discussed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "The albumin-bound paclitaxel infusion takes 30 minutes. Gemcitabine follows immediately over 30 minutes. This formulation must not be interchanged with conventional paclitaxel.",
+      "Check your fingers and toes for numbness. Tell the team if you drop things, feel unsteady or have difficulty walking before another infusion."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00256 v7",
+        "url": "https://healthservice.hse.ie/documents/6360/256_v7_nab-PACLitaxel_and_Gemcitabine.pdf"
+      },
+      {
+        "id": "study0",
+        "title": "MPACT",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24131140/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "Gastrointestinal"
+  },
+  "00384": {
+    "code": "00384",
+    "title": "Gemcitabine and capecitabine · 21-day treatment",
+    "release": "0.84.76",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Advanced pancreatic cancer or locally advanced biliary cancer",
+    "summary": "Gemcitabine on days 1, 8. Take capecitabine twice daily on days 1–14, then seven tablet-free days. Repeat every 21 days while helping and tolerable.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "For locally advanced or metastatic pancreatic cancer, or locally advanced bile duct cancer, the aim is to control disease and symptoms.",
+          "Gemcitabine on days 1, 8. Take capecitabine twice daily on days 1–14, then seven tablet-free days. Repeat every 21 days while helping and tolerable.",
+          "Gemcitabine runs over 30 minutes. Swallow prescribed capecitabine tablets whole with water, with food or within 30 minutes of a meal. Follow the dated tablet calendar."
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "label": "Monitoring",
+        "cells": [
+          "Blood count, kidney and liver function. A DPD test checks how your body handles capecitabine.",
+          "Blood count, kidney and liver tests on day 1. Repeat blood counts on day 8.",
+          "Clinical review and imaging as arranged for your treatment setting."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver function. A DPD test checks how your body handles capecitabine.",
+        "action": "Bring your medicine list and 24-hour oncology contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "During treatment",
+        "when": "During treatment",
+        "why": "Blood count, kidney and liver tests on day 1. Repeat blood counts on day 8.",
+        "action": "Report changes before the next dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response or follow-up",
+        "when": "Response or follow-up",
+        "why": "Clinical review and imaging as arranged for your treatment setting.",
+        "action": "Ask when results will be discussed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Gemcitabine runs over 30 minutes. Swallow prescribed capecitabine tablets whole with water, with food or within 30 minutes of a meal. Follow the dated tablet calendar.",
+      "Keep a dated tablet diary. If you miss or vomit a dose, do not take an extra dose. Phone the team if unsure. Hold tablets and call for significant diarrhoea or painful mouth, hands or feet."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00384 v7",
+        "url": "https://healthservice.hse.ie/documents/6340/384_v7_Gemcitabine_1000_capecitabine_650_-21day_therapy.pdf"
+      },
+      {
+        "id": "study0",
+        "title": "SAKK / CECOG advanced pancreatic cancer trial",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17538165/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "Gastrointestinal"
+  },
+  "00524": {
+    "code": "00524",
+    "title": "Gemcitabine and capecitabine after pancreatic surgery",
+    "release": "0.84.76",
+    "checked": "2026-11-28",
+    "status": "Independent oncology, pharmacy and patient review pending.",
+    "schedule_type": "relative-educational",
+    "has_patient_dates": false,
+    "setting": "Pancreatic adenocarcinoma after macroscopically complete resection",
+    "summary": "Gemcitabine on days 1, 8, 15. Take capecitabine twice daily on days 1–21, then seven tablet-free days. Up to six 28-day cycles.",
+    "stages": [
+      "Before starting",
+      "Treatment visits",
+      "Ongoing review"
+    ],
+    "lanes": [
+      {
+        "label": "Treatment",
+        "cells": [
+          "After surgery has removed all visible pancreatic cancer, treatment aims to reduce the risk of the cancer returning.",
+          "Gemcitabine on days 1, 8, 15. Take capecitabine twice daily on days 1–21, then seven tablet-free days. Up to six 28-day cycles.",
+          "Gemcitabine runs over 30 minutes. Swallow prescribed capecitabine tablets whole with water, with food or within 30 minutes of a meal. Follow the dated tablet calendar."
+        ],
+        "kind": "treatment",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "label": "Monitoring",
+        "cells": [
+          "Blood count, kidney and liver function. A DPD test checks how your body handles capecitabine.",
+          "Blood count, kidney and liver tests on day 1. Repeat blood counts on days 8 and 15.",
+          "Clinical review and imaging as arranged for your treatment setting."
+        ],
+        "kind": "monitoring",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "milestones": [
+      {
+        "title": "Before starting",
+        "when": "Before starting",
+        "why": "Blood count, kidney and liver function. A DPD test checks how your body handles capecitabine.",
+        "action": "Bring your medicine list and 24-hour oncology contact details.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "During treatment",
+        "when": "During treatment",
+        "why": "Blood count, kidney and liver tests on day 1. Repeat blood counts on days 8 and 15.",
+        "action": "Report changes before the next dose.",
+        "source_ids": [
+          "nccp"
+        ]
+      },
+      {
+        "title": "Response or follow-up",
+        "when": "Response or follow-up",
+        "why": "Clinical review and imaging as arranged for your treatment setting.",
+        "action": "Ask when results will be discussed.",
+        "source_ids": [
+          "nccp"
+        ]
+      }
+    ],
+    "clinical_notes": [
+      "Gemcitabine runs over 30 minutes. Swallow prescribed capecitabine tablets whole with water, with food or within 30 minutes of a meal. Follow the dated tablet calendar.",
+      "Keep a dated tablet diary. If you miss or vomit a dose, do not take an extra dose. Phone the team if unsure. Hold tablets and call for significant diarrhoea or painful mouth, hands or feet."
+    ],
+    "sources": [
+      {
+        "id": "nccp",
+        "title": "HSE NCCP 00524 v5",
+        "url": "https://healthservice.hse.ie/documents/6521/524_v5_Gemcitabine_and_capecitabine-28_day.pdf"
+      },
+      {
+        "id": "study0",
+        "title": "ESPAC-4",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28129987/"
+      },
+      {
+        "id": "nccp_antiemetic_v8",
+        "title": "NCCP Supportive Care Antiemetic Medicines for inclusion in NCIS (Medical Oncology), V8 2025",
+        "url": "https://healthservice.hse.ie/documents/7180/Supportive_Care_Antiemetics_for_inclusion_NCIS_Medical_Oncology.pdf"
+      },
+      {
+        "id": "nccp_emetogenic_classification_v6",
+        "title": "NCCP Classification Document for SACT Induced Nausea and Vomiting, V6 2025",
+        "url": "https://healthservice.hse.ie/documents/7152/Classification_Document_for_Systemic_Anti-_Cancer_Therapy_SACT_Induced_Nausea__pWgDCrm.pdf"
+      }
+    ],
+    "context": "Gastrointestinal"
   }
 };
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
