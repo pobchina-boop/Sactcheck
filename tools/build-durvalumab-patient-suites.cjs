@@ -166,6 +166,9 @@ function renderPages(route, root = projectRoot) {
   const pump = section('pump-care',pumpTitle,paragraphs(d.pump_care));
   files['port-pump.html'] = document(d,'My line and pump',pump+action,'port-pump.pdf').replace('href="port-pump.pdf"','download href="port-pump.pdf"');
   files['handbook-print.html'] = files['handbook-print.html'].replace('</main>',sheet(pump)+'</main>');
+  // The portal overview discovers existing pump pages. Keep the dedicated
+  // 46-hour HTML and PDF links identical on first generation and subsequent builds.
+  if (d.pump_hours === 46) files['index.html'] = files['index.html'].replace('<li><a href="port-pump.html">My line and pump</a></li>', '');
   if (!files['index.html'].includes('href="port-pump.html"')) files['index.html'] = files['index.html'].replace('</main>','<p><a href="port-pump.html">'+esc(pumpTitle)+'</a> · <a download href="port-pump.pdf">Pump instructions PDF</a></p></main>');
   for (const name of Object.keys(files)) files[name]=files[name].replaceAll('Keep your hospital immunotherapy alert card too.','Carry your current treatment card.');
  }
